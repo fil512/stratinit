@@ -1,0 +1,74 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+    http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+
+	<persistence-unit name="stratinitdb" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>com.kenstevens.stratinit.model.City</class>
+		<class>com.kenstevens.stratinit.model.CityPK</class>
+		<class>com.kenstevens.stratinit.model.AirUnitBase</class>
+		<class>com.kenstevens.stratinit.model.AttackType</class>
+		<class>com.kenstevens.stratinit.model.BattleLog</class>
+		<class>com.kenstevens.stratinit.model.City</class>
+		<class>com.kenstevens.stratinit.model.CityCapturedBattleLog</class>
+		<class>com.kenstevens.stratinit.model.CityMove</class>
+		<class>com.kenstevens.stratinit.model.CityNukedBattleLog</class>
+		<class>com.kenstevens.stratinit.model.CityPK</class>
+		<class>com.kenstevens.stratinit.model.EventKey</class>
+		<class>com.kenstevens.stratinit.model.FlakBattleLog</class>
+		<class>com.kenstevens.stratinit.model.Game</class>
+		<class>com.kenstevens.stratinit.model.GameBuildAudit</class>
+		<class>com.kenstevens.stratinit.model.GameHistory</class>
+		<class>com.kenstevens.stratinit.model.GameHistoryNation</class>
+		<class>com.kenstevens.stratinit.model.GameHistoryTeam</class>
+		<class>com.kenstevens.stratinit.model.LandUnitBase</class>
+		<class>com.kenstevens.stratinit.model.LaunchedSatellite</class>
+		<class>com.kenstevens.stratinit.model.Mail</class>
+		<class>com.kenstevens.stratinit.model.Message</class>
+		<class>com.kenstevens.stratinit.model.Nation</class>
+		<class>com.kenstevens.stratinit.model.NationPK</class>
+		<class>com.kenstevens.stratinit.model.NavalUnitBase</class>
+		<class>com.kenstevens.stratinit.model.Player</class>
+		<class>com.kenstevens.stratinit.model.PlayerRole</class>
+		<class>com.kenstevens.stratinit.model.Relation</class>
+		<class>com.kenstevens.stratinit.model.RelationPK</class>
+		<class>com.kenstevens.stratinit.model.Sector</class>
+		<class>com.kenstevens.stratinit.model.SectorPK</class>
+		<class>com.kenstevens.stratinit.model.SectorSeen</class>
+		<class>com.kenstevens.stratinit.model.SectorSeenPK</class>
+		<class>com.kenstevens.stratinit.model.TechUnitBase</class>
+		<class>com.kenstevens.stratinit.model.Unit</class>
+		<class>com.kenstevens.stratinit.model.UnitAttackedBattleLog</class>
+		<class>com.kenstevens.stratinit.model.UnitBase</class>
+		<class>com.kenstevens.stratinit.model.UnitMove</class>
+		<class>com.kenstevens.stratinit.model.UnitSeen</class>
+		<class>com.kenstevens.stratinit.model.UnitSeenPK</class>
+		<class>com.kenstevens.stratinit.model.Updatable</class>
+		<class>com.kenstevens.stratinit.model.audit.UnitBuildAudit</class>
+		<class>com.kenstevens.stratinit.model.audit.RelationChangeAudit</class>
+		<properties>
+		<!-- 
+			<property name="hibernate.hbm2ddl.auto" value="create" />
+		 -->
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.connection.driver_class" value="org.postgresql.Driver" />
+			<property name="hibernate.connection.url" value="jdbc:postgresql://localhost/stratinit" />
+			<property name="hibernate.connection.username" value="postgres" />
+			<property name="hibernate.connection.password" value="postgr3S" />
+			<property name="hibernate.c3p0.min_size" value="5" />
+			<property name="hibernate.c3p0.max_size" value="20" />
+			<property name="hibernate.c3p0.timeout" value="300" />
+			<property name="hibernate.c3p0.max_statements" value="50" />
+			<property name="hibernate.c3p0.idle_test_period" value="3000" />
+			<!-- 
+			<property name="hibernate.cache.use_second_level_cache" value="true" /> 
+			<property name="hibernate.cache.use_query_cache" value="true" /> 
+			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
+			<property name="hibernate.generate_statistics" value="false" />
+			-->
+		</properties>
+	</persistence-unit>
+</persistence>
