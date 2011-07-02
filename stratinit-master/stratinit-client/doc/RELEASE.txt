@@ -1,0 +1,38 @@
+FIXME:
+swt for platform isn't being added to jnlp
+
+1. Check spring.xml points to 8080 server
+2. Check FIXMEs
+3. (Disable profiler, DEBUG = false, collect stats off)
+3. Edit CHANGE_LOG.txt
+4. Change ClientConstants.CLIENT_VERSION
+5. Change Constants.SERVER_VERSION if necessary
+6. Change pom.xml version if necessary
+7. mvn clean install in stratinit-master
+7. mvn -Pwin32 clean install in stratinit-client
+8. mvn gwt:eclipse in stratinit-server
+9. eclipse refresh
+10. project clean in stratinit-server and stratinit-client
+11. Commit to svn with version number
+11. Compile Console, Compile Register
+12. in stratinit-server type "mvn package"
+12. Check that stratinit.war contains WEB-INF/classes/db
+13. upload to /usr/local/tomcat/incoming
+14. build jnlp win32
+15. check that stratinit-images-1.1.jar contains images in classpath
+15. Shutdown server through web interface
+15. ./baclient.sh
+16. ./install.sh
+17. ./backup.sh
+18. upload jnlp to /home/stratinit/htdocs/client
+19. ./start.sh
+20. Modify release notes on google code
+21. Announce through web interface
+
+Mac release
+
+For linux:
+mvn -P linux32 clean package
+upload
+mvn -P linux64 clean package
+upload

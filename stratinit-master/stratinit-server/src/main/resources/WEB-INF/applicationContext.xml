@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.kenstevens.stratinit" />
+	<bean name="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost/stratinit" />
+		<property name="username" value="postgres" />
+		<property name="password" value="postgr3S" />
+	</bean>
+
+	<!-- Spring JPA Entity Manager Factory -->
+	<bean id="migrationManager" class="com.carbonfive.db.migration.DataSourceMigrationManager"
+		init-method="migrate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" depends-on="migrationManager">
+		<property name="persistenceUnitName" value="stratinitdb" />
+	</bean>
+
+	<!-- Spring JPA Transaction Manager -->
+
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+		>
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<aop:config>
+		<aop:pointcut id="serviceMethods"
+			expression="execution(* com.kenstevens.stratinit.server.daoservice.*.*(..))" />
+		<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="serviceMethods" />
+	</aop:config>
+
+	<tx:advice id="serviceTxAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:pointcut id="wsMethods"
+			expression="execution(* com.kenstevens.stratinit.server.remote.*.*(..))" />
+	</aop:config>
+
+	<aop:aspectj-autoproxy />
+</beans>
