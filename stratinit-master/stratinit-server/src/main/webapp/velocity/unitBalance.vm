@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Strategic Initiative</TITLE>
+<LINK REL=StyleSheet HREF="/stratinit/css/style.css" TYPE="text/css" MEDIA=screen>
+</HEAD>
+<BODY>
+#include ("/fragments/top.html")
+#include ("/fragments/menu.html")
+<H2>Strategic Initiative Unit Balance Stats</H2>
+Below are the results of attacks between different unit types on various sector types.  Each row is the average result of 100 attacks.
+<table border="1" cellspacing="0" bordercolor="#000000" cellpadding="3">
+      <tr>
+        <th>
+          Attacker
+        </th>
+        <th>
+          Defender
+        </th>
+        <th>
+        Def sector type
+        </th>
+        <th>
+          Avg num attacks
+        </th>
+        <th>
+          Avg att hp left
+        </th>
+        <th>
+          Avg def hp left
+        </th>
+        <th>
+        Perc attacker Died
+        </th>
+      </tr>
+#foreach( $record in $velocityService.listBalanceResults())
+      <tr>
+        <td align=right>
+          $record.attackerType
+        </td>
+        <td>
+          $record.defenderType
+        </td>
+        <td>
+          $record.defSector
+        </td>
+        <td>
+		  $record.avgNumAttacks
+        </td>
+        <td>
+        #set ($ahr = $record.avgAttHpRemaining)
+        #if ($ahr == "NaN")
+        	#set ($ahr = "-")
+        #end  
+		  $ahr
+        </td>
+        <td>
+        #set ($dhr = $record.avgDefHpRemaining)
+        #if ($dhr == "NaN")
+        	#set ($dhr = "-")
+        #end
+		  $dhr
+        </td>
+        <td>
+		  $record.percAttackerDied%
+        </td>
+      </tr>
+#end
+</table>
+  <!-- end right column -->
+</td>
+</tr>
+</table>
+</BODY>
+</HTML>

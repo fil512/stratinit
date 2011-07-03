@@ -1,0 +1,7 @@
+* checkin then...
+* replace autowired -> autowired private
+* reduce visibility of ui getters
+* more variety in island types
+* Make autowired fields final and add them to an autowired constructor
+* When switching to unittab, rebuild if dirty
+* get dijkstra on a repository somewhere (e.g. stratinit but preferably elsewhere)

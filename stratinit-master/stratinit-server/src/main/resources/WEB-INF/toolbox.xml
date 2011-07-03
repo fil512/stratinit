@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<toolbox>
+  <tool>
+     <key>leaderBoard</key>
+     <scope>application</scope>
+     <class>com.kenstevens.stratinit.server.velocity.LeaderBoard</class>
+  </tool>
+  <tool>
+     <key>velocityService</key>
+     <scope>application</scope>
+     <class>com.kenstevens.stratinit.server.velocity.VelocityService</class>
+  </tool>
+</toolbox>
