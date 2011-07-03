@@ -31,26 +31,6 @@
 	<listener>
 		<listener-class>com.kenstevens.stratinit.main.FlushCache</listener-class>
 	</listener>
-	<!-- GWT -->
-	<servlet>
-		<servlet-name>spring-gwt</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>spring-gwt</servlet-name>
-		<url-pattern>*.rpc</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>greetServlet</servlet-name>
-		<servlet-class>com.kenstevens.stratinit.server.gwtservice.GreetingServiceImpl</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>greetServlet</servlet-name>
-		<url-pattern>/testgwt/greet</url-pattern>
-	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>remoting</servlet-name>
