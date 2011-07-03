@@ -21119,3 +21119,105 @@ Caused by: java.sql.BatchUpdateException: Batch entry 0 insert into City (lastUp
 07-01@23:44:04 INFO  (GameLoaderImpl.java:39)     - Getting Nations
 07-01@23:44:04 INFO  (GameLoaderImpl.java:68)     - Game #3 loaded.
 07-01@23:44:04 INFO  (GameCreatorImpl.java:30)     - Created game 3
+07-02@18:12:10 INFO  (DataCache.java:64)     - Loading players into cache...
+07-02@18:12:11 INFO  (DataCache.java:69)     - ...done.
+07-02@18:12:11 INFO  (DataCache.java:54)     - Loading games into cache...
+07-02@18:12:11 INFO  (GameLoaderImpl.java:30)     - Loading game #137 into cache.
+07-02@18:12:11 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@18:12:11 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@18:12:11 INFO  (GameLoaderImpl.java:68)     - Game #137 loaded.
+07-02@18:12:11 INFO  (GameLoaderImpl.java:30)     - Loading game #136 into cache.
+07-02@18:12:11 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@18:12:11 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@18:12:11 INFO  (GameLoaderImpl.java:46)     - Getting World
+07-02@18:12:12 INFO  (GameLoaderImpl.java:48)     - Getting Cities
+07-02@18:12:12 INFO  (GameLoaderImpl.java:50)     - Getting Units
+07-02@18:12:12 INFO  (GameLoaderImpl.java:52)     - Getting Sectors Seen
+07-02@18:12:16 INFO  (GameLoaderImpl.java:55)     - Getting Units Seen
+07-02@18:12:16 INFO  (GameLoaderImpl.java:57)     - Getting Launched Satellites
+07-02@18:12:16 INFO  (GameLoaderImpl.java:60)     - Getting Units Move
+07-02@18:12:16 INFO  (GameLoaderImpl.java:63)     - Getting City Moves
+07-02@18:12:16 INFO  (GameLoaderImpl.java:68)     - Game #136 loaded.
+07-02@18:12:16 INFO  (DataCache.java:60)     - ...done.
+07-02@18:12:16 INFO  (EventScheduler.java:75)     - Server Lock File locked.
+
+07-02@18:12:16 INFO  (EventScheduler.java:76)     - Event Queue starting up.
+07-02@18:12:16 INFO  (EventScheduler.java:91)     - System properties:
+07-02@18:12:16 INFO  (EventScheduler.java:122)     - Updating technology.
+07-02@18:12:17 INFO  (EventScheduler.java:135)     - Starting up game #136 Brest.
+07-02@18:12:17 INFO  (IntegrityCheckerServiceImpl.java:48)     - Starting integrity check.
+07-02@18:12:17 INFO  (IntegrityCheckerServiceImpl.java:58)     - Integrity check complete:  0 errors
+07-02@18:12:17 INFO  (EventScheduler.java:158)     - Updating 10 cities
+07-02@18:12:18 INFO  (EventScheduler.java:172)     - 10 cities scheduled.
+07-02@18:12:18 INFO  (EventScheduler.java:215)     - Updating 92 units
+07-02@18:12:18 INFO  (EventScheduler.java:226)     - 92 units scheduled.
+07-02@18:12:18 INFO  (EventScheduler.java:206)     - Updating 0 relations
+07-02@18:12:18 INFO  (EventScheduler.java:210)     - 0 relation changes scheduled.
+07-02@18:12:18 INFO  (EventScheduler.java:177)     - Updating 0 units seen
+07-02@18:12:18 INFO  (EventScheduler.java:190)     - 0 unit disappearances scheduled.
+07-02@18:12:18 INFO  (EventQueueImpl.java:113)     - Scheduling game #136 Brest to end at 2011-07-04 23:49:10.104
+07-02@18:12:18 INFO  (EventQueueImpl.java:71)     - Skipping scheduling game Brest Fortress since it doesn't have a start time yet (probably not enough players).
+07-02@18:12:18 INFO  (EventScheduler.java:85)     - All events scheduled.  Server started.
+07-02@18:12:38 INFO  (FlushCache.java:21)     - Shutdown event received
+07-02@18:12:38 INFO  (FlushCache.java:21)     - Shutdown event received
+07-02@18:32:52 INFO  (DataCache.java:64)     - Loading players into cache...
+07-02@18:32:52 INFO  (DataCache.java:69)     - ...done.
+07-02@18:32:52 INFO  (DataCache.java:54)     - Loading games into cache...
+07-02@18:32:52 INFO  (DataCache.java:60)     - ...done.
+07-02@18:32:52 INFO  (EventScheduler.java:75)     - Server Lock File locked.
+
+07-02@18:32:52 INFO  (EventScheduler.java:76)     - Event Queue starting up.
+07-02@18:32:52 INFO  (EventScheduler.java:91)     - System properties:
+07-02@18:32:52 INFO  (GameLoaderImpl.java:30)     - Loading game #1 into cache.
+07-02@18:32:52 INFO  (GameCreatorImpl.java:30)     - Created game 1
+07-02@18:32:52 INFO  (EventScheduler.java:85)     - All events scheduled.  Server started.
+07-02@18:32:52 INFO  (GameLoaderImpl.java:30)     - Loading game #2 into cache.
+07-02@18:32:52 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@18:32:52 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@18:32:52 INFO  (GameLoaderImpl.java:68)     - Game #2 loaded.
+07-02@18:32:53 INFO  (GameLoaderImpl.java:30)     - Loading game #3 into cache.
+07-02@18:32:53 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@18:32:53 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@18:32:53 INFO  (GameLoaderImpl.java:68)     - Game #3 loaded.
+07-02@18:32:53 INFO  (GameCreatorImpl.java:30)     - Created game 3
+07-02@20:06:18 INFO  (DataCache.java:64)     - Loading players into cache...
+07-02@20:06:18 INFO  (DataCache.java:69)     - ...done.
+07-02@20:06:18 INFO  (DataCache.java:54)     - Loading games into cache...
+07-02@20:06:18 INFO  (GameLoaderImpl.java:30)     - Loading game #137 into cache.
+07-02@20:06:18 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@20:06:18 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@20:06:18 INFO  (GameLoaderImpl.java:68)     - Game #137 loaded.
+07-02@20:06:18 INFO  (GameLoaderImpl.java:30)     - Loading game #136 into cache.
+07-02@20:06:18 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@20:06:18 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@20:06:18 INFO  (GameLoaderImpl.java:46)     - Getting World
+07-02@20:06:19 INFO  (GameLoaderImpl.java:48)     - Getting Cities
+07-02@20:06:19 INFO  (GameLoaderImpl.java:50)     - Getting Units
+07-02@20:06:19 INFO  (GameLoaderImpl.java:52)     - Getting Sectors Seen
+07-02@20:06:20 INFO  (GameLoaderImpl.java:55)     - Getting Units Seen
+07-02@20:06:20 INFO  (GameLoaderImpl.java:57)     - Getting Launched Satellites
+07-02@20:06:20 INFO  (GameLoaderImpl.java:60)     - Getting Units Move
+07-02@20:06:20 INFO  (GameLoaderImpl.java:63)     - Getting City Moves
+07-02@20:06:20 INFO  (GameLoaderImpl.java:68)     - Game #136 loaded.
+07-02@20:06:20 INFO  (DataCache.java:60)     - ...done.
+07-02@20:06:20 INFO  (EventScheduler.java:75)     - Server Lock File locked.
+
+07-02@20:06:20 INFO  (EventScheduler.java:76)     - Event Queue starting up.
+07-02@20:06:20 INFO  (EventScheduler.java:91)     - System properties:
+07-02@20:06:20 INFO  (EventScheduler.java:122)     - Updating technology.
+07-02@20:06:21 INFO  (EventScheduler.java:135)     - Starting up game #136 Brest.
+07-02@20:06:21 INFO  (IntegrityCheckerServiceImpl.java:48)     - Starting integrity check.
+07-02@20:06:21 INFO  (IntegrityCheckerServiceImpl.java:58)     - Integrity check complete:  0 errors
+07-02@20:06:21 INFO  (EventScheduler.java:158)     - Updating 10 cities
+07-02@20:06:23 INFO  (EventScheduler.java:172)     - 10 cities scheduled.
+07-02@20:06:23 INFO  (EventScheduler.java:215)     - Updating 92 units
+07-02@20:06:23 INFO  (EventScheduler.java:226)     - 92 units scheduled.
+07-02@20:06:23 INFO  (EventScheduler.java:206)     - Updating 0 relations
+07-02@20:06:23 INFO  (EventScheduler.java:210)     - 0 relation changes scheduled.
+07-02@20:06:23 INFO  (EventScheduler.java:177)     - Updating 0 units seen
+07-02@20:06:23 INFO  (EventScheduler.java:190)     - 0 unit disappearances scheduled.
+07-02@20:06:23 INFO  (EventQueueImpl.java:113)     - Scheduling game #136 Brest to end at 2011-07-04 23:49:10.104
+07-02@20:06:23 INFO  (EventQueueImpl.java:71)     - Skipping scheduling game Brest Fortress since it doesn't have a start time yet (probably not enough players).
+07-02@20:06:23 INFO  (EventScheduler.java:85)     - All events scheduled.  Server started.
+07-02@20:08:18 INFO  (FlushCache.java:21)     - Shutdown event received
+07-02@20:08:18 INFO  (FlushCache.java:21)     - Shutdown event received
