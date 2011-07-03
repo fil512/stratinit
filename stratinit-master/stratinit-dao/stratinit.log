@@ -13369,3 +13369,133 @@
 07-01@23:19:26 INFO  (GameLoaderImpl.java:36)     - Getting Relations
 07-01@23:19:26 INFO  (GameLoaderImpl.java:39)     - Getting Nations
 07-01@23:19:26 INFO  (GameLoaderImpl.java:68)     - Game #31 loaded.
+07-02@14:52:54 INFO  (DataCache.java:64)     - Loading players into cache...
+07-02@14:52:54 INFO  (DataCache.java:69)     - ...done.
+07-02@14:52:54 INFO  (DataCache.java:54)     - Loading games into cache...
+07-02@14:52:54 INFO  (DataCache.java:60)     - ...done.
+07-02@14:52:54 INFO  (GameLoaderImpl.java:30)     - Loading game #1 into cache.
+07-02@14:52:54 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:54 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:54 INFO  (GameLoaderImpl.java:68)     - Game #1 loaded.
+07-02@14:52:54 INFO  (GameLoaderImpl.java:30)     - Loading game #2 into cache.
+07-02@14:52:54 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:54 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:54 INFO  (GameLoaderImpl.java:68)     - Game #2 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #2 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #3 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #3 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #4 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #4 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #4 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #5 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #5 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #6 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #6 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #7 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #7 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #8 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #8 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #9 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #9 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #10 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #10 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #11 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #11 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #12 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #12 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #13 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #13 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #14 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #14 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #15 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #15 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #16 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #16 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #17 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #17 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #18 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #18 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #19 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #19 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #20 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #20 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #21 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #21 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #22 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #22 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #23 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #23 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #24 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #24 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #25 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #25 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #26 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #26 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #27 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #27 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #28 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #28 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #29 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #29 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #30 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #30 loaded.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:30)     - Loading game #31 into cache.
+07-02@14:52:55 INFO  (GameLoaderImpl.java:36)     - Getting Relations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:39)     - Getting Nations
+07-02@14:52:55 INFO  (GameLoaderImpl.java:68)     - Game #31 loaded.
