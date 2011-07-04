@@ -20,6 +20,9 @@
 <p>Strategic Initiative is an online multiplayer military strategy game played over 10 days where the objective is for you and your ally to control the most cities on the map.</p>
 <p><a href="http://www.strategicinitiative.org:8080/stratinit/register/Register.html"><strong>REGISTER NOW</strong></a> to join one of the most exciting online strategy experiences available!</p>
 <p>Already registered? Then click <a href="../docs/play.shtml"><strong>PLAY NOW</strong></a> to enter the fray!</p>
+<p>
+				Please mention the correct Wicket version: <wicket:container wicket:id="version">1.5-SNAPSHOT</wicket:container>.
+			</p>
 <!--#include virtual="../fragments/bottom.html" -->
 </BODY>
 </HTML>

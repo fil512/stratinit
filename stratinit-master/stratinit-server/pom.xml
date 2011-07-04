@@ -78,10 +78,19 @@
 			<groupId>org.apache.velocity.tools</groupId>
 			<artifactId>velocity-tools</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
+			<version>1.5-RC5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>catalina</artifactId>
+			<version>6.0.32</version>
+		</dependency>
 	</dependencies>
 
 	<build>
-		<outputDirectory>war/WEB-INF/classes</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
