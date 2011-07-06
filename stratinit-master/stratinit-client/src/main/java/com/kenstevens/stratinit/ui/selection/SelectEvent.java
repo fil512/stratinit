@@ -71,7 +71,11 @@ public class SelectEvent {
 				return unit.getMobility() > 0;
 			}
 		}));
-		selectUnits(unitsWithMob, selectionSource, false);
+		if (unitsWithMob.isEmpty() && !selectedUnits.isEmpty()) {
+			selectSectorCoords(selectedUnits.getCoords(), selectionSource, false);
+		} else {
+			selectUnits(unitsWithMob, selectionSource, false);
+		}
 	}
 
 	public void selectUnits(List<UnitView> units, Selection.Source selectionSource, boolean fireEvent) {
