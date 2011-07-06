@@ -1,3 +1,6 @@
+Release 1.1.47
+  * Widened tech table so all users can see tech decimal places (thanks Trabi and Junta!)
+
 Release 1.1.46
   * The Support tab now helps you manage support across the entire map--displaying overlapping support
     and supply lines of your ports and supply ships.
