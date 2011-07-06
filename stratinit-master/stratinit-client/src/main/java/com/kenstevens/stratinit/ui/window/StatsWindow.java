@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.model.stats.Stats;
-import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.ui.shell.Window;
 
 @Component
