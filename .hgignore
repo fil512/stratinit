@@ -12,6 +12,10 @@ syntax: regexp
 syntax: regexp
 ^stratinit-master/stratinit-server/target$
 syntax: regexp
+^stratinit-master/stratinit-server/war/register$
+syntax: regexp
+^stratinit-master/stratinit-server/war/console$
+syntax: regexp
 ^stratinit-master/stratinit-server/war/console$
 syntax: regexp
 ^stratinit-master/stratinit-server/war/WEB-INF/lib$
