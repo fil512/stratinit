@@ -49,4 +49,9 @@ public class SetGameRequest extends PlayerWriteRequest<None>  {
 		sessionManager.setNation(getPlayer(), gameId);
 		return Result.trueInstance();
 	}
+	
+	@Override
+	protected void setLastAction() {
+		// Don't want to set our last action time for set game
+	}
 }
