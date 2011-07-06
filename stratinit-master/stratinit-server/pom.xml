@@ -42,23 +42,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core-tiger</artifactId>
 		</dependency>
-		<!-- GWT dependencies (from central repo) -->
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-servlet</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.gwt</groupId>
-			<artifactId>gwt-user</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>gwt-maven-plugin</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.smartgwt</groupId>
-			<artifactId>smartgwt</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -95,44 +78,31 @@
 			<groupId>org.apache.velocity.tools</groupId>
 			<artifactId>velocity-tools</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
+			<version>1.5-RC5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-extensions</artifactId>
+			<version>1.5-M3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>catalina</artifactId>
+			<version>6.0.32</version>
+		</dependency>
 	</dependencies>
 
 	<build>
-		<outputDirectory>war/WEB-INF/classes</outputDirectory>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generateAsync</goal>
-							<goal>compile</goal>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<systemProperties>
-						<com.kenstevens.stratinit.mail>disable</com.kenstevens.stratinit.mail>
-					</systemProperties>
-					<runTarget>/dev.html</runTarget>
-					<modules>
-						<!-- <module>com.kenstevens.stratinit.TestGWT</module> <module>com.kenstevens.stratinit.TestSmartGWT</module> -->
-						<module>com.kenstevens.stratinit.Register</module>
-						<module>com.kenstevens.stratinit.Console</module>
-					</modules>
-					<port>9999</port>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<warSourceDirectory>war</warSourceDirectory>
 					<warName>stratinit</warName>
-					<warSourceExcludes>.gwt-tmp/**</warSourceExcludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -153,23 +123,10 @@
 				</dependencies>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.0-beta-9</version>
-				<configuration>
-					<tagBase>https://stratinit.googlecode.com/svn/tags</tagBase>
-					<!-- See http://jira.codehaus.org/browse/SCM-406 -->
-					<remoteTagging>true</remoteTagging>
-				</configuration>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.0.0.M3</version>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/java</directory>
-			</resource>
-		</resources>
 	</build>
-	<scm>
-		<connection>scm:svn:https://stratinit.googlecode.com/svn/stratinit-master/stratinit-server</connection>
-	</scm>
 </project>
