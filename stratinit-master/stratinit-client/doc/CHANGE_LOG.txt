@@ -1,7 +1,9 @@
 Release 1.1.47
+  * Fixed exploit that allowed players to build a new city with less than 64 CP.
+  * Fixed bug that wasn't listing units that gained mobility since last login in red
+  * Fixed bug that crashed client when unit ceded
   * Widened tech table so all users can see tech decimal places (thanks Trabi and Junta!)
   * Stats details tab automatically picks the opponent you've fought the most with.
-  * Fixed bug that wasn't listing units that gained mobility since last login in red
 
 Release 1.1.46
   * The Support tab now helps you manage support across the entire map--displaying overlapping support
