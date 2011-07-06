@@ -12,7 +12,7 @@ public class DominanceMap {
 	protected List<String[]> getOpponentStats() {
 		List<String[]> retval = new ArrayList<String[]>();
 		Dominance total = new Dominance();
-		for (String opponent : dominanceMap.keySet()) {
+		for (String opponent : getOpponents()) {
 			Dominance dominance = dominanceMap.get(opponent);
 			total.add(dominance);
 			String[] line = new String[] { opponent, "" + dominance.iLostValue,
@@ -42,6 +42,20 @@ public class DominanceMap {
 			dominanceMap.put(opponent, dominance);
 		}
 		return dominance;
+	}
+
+	public String getWorstOpponent() {
+		String worstOpponent = null;
+		int worstTotal = -1;
+		for (String opponent : getOpponents()) {
+			Dominance dominance = getPlayerDominance(opponent);
+			int totalValue = dominance.iKilledValue + dominance.iLostValue;
+			if (totalValue > worstTotal) {
+				worstTotal = totalValue;
+				worstOpponent = opponent;
+			}
+		}
+		return worstOpponent;
 	}
 
 }
