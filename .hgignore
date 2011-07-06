@@ -1,0 +1,30 @@
+
+syntax: regexp
+^stratinit-master/stratinit-client/target$
+syntax: regexp
+^stratinit-master/stratinit-core/target$
+syntax: regexp
+^stratinit-master/stratinit-dao/target$
+syntax: regexp
+^stratinit-master/stratinit-images/target$
+syntax: regexp
+^stratinit-master/stratinit-remote/target$
+syntax: regexp
+^stratinit-master/stratinit-server/target$
+syntax: regexp
+^stratinit-master/stratinit-server/war/console$
+syntax: regexp
+^stratinit-master/stratinit-server/war/WEB-INF/lib$
+syntax: regexp
+^stratinit-master/stratinit-server/war/WEB-INF/lib$
+syntax: regexp
+^stratinit-master/stratinit-test/target$
+syntax: regexp
+^stratinit-master/stratinit-server/war/WEB-INF/classes$
+syntax: regexp
+^stratinit-master/stratinit-dao/stratinit\.log$
+syntax: regexp
+^stratinit-master/stratinit-dao/stratinit\.log$
+syntax: glob
+stratinit-master/stratinit-server/StratInit.lock
+stratinit-master/stratinit-server/stratinit.log
