@@ -53,4 +53,8 @@ public class Stats {
 	public List<String[]>  getUnitRecordStats() {
 		return statsHolder.getUnitRecordStats();
 	}
+
+	public String getWorstOpponent() {
+		return statsHolder.getWorstOpponent();
+	}
 }

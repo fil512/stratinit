@@ -78,7 +78,7 @@ public class GameInfoWindow extends TableControl implements Window {
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 4;
 		group.setLayout(gridLayout);
-		group.setSize(377, 164);
+		group.setSize(966, 164);
 
 		Label gametimeRemainingLabel;
 // 0,0
