@@ -1,5 +1,6 @@
 Release 1.1.47
   * Widened tech table so all users can see tech decimal places (thanks Trabi and Junta!)
+  * Stats details tab automatically picks the opponent you've fought the most with.
 
 Release 1.1.46
   * The Support tab now helps you manage support across the entire map--displaying overlapping support
