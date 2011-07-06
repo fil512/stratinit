@@ -16,6 +16,7 @@ import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.ui.shell.StatusReporter;
 
 @Scope("prototype")
 @Component
@@ -26,6 +27,8 @@ public class CedeWindowControl {
 	private ActionFactory actionFactory;
 	@Autowired
 	private Data db;
+	@Autowired
+	private StatusReporter statusReporter;
 
 	private final CedeWindow cedeWindow;
 	private City city = null;
@@ -56,8 +59,10 @@ public class CedeWindowControl {
 							}
 							if (city != null) {
 								actionFactory.cede(city, ally);
-							} else {
+							} else if (!units.isEmpty()) {
 								actionFactory.cede(units, ally);
+							} else {
+								statusReporter.reportError("Nothing to cede.");
 							}
 							cedeWindow.close();
 						} catch (Exception e1) {

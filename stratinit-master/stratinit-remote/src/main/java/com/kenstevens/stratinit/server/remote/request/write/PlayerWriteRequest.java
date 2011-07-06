@@ -43,6 +43,9 @@ public abstract class PlayerWriteRequest<T> extends PlayerRequest<T> implements
 			if (nation.getCommandPoints() <= 0) {
 				result = new Result<T>("You are out of command points.", false);
 				return;
+			} else if (nation.getCommandPoints() < getCommandCost()) {
+				result = new Result<T>("Insufficient command points.  Need "+getCommandCost()+" have "+nation.getCommandPoints()+".", false);
+				return;
 			}
 		}
 		setLastAction();

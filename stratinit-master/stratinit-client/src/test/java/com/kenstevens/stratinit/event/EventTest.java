@@ -11,7 +11,6 @@ import com.google.gwt.event.shared.GwtEvent.Type;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.StratInitClientTest;
 
-// FIXME remove hibernate-core from jnlp (maybe generate new jnlp?)
 public class EventTest extends StratInitClientTest {
 	public static final String TEST_STRING = "test";
 
