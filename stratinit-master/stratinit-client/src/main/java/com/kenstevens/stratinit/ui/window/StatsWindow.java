@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.model.stats.Stats;
+import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.ui.shell.Window;
 
 @Component
@@ -204,6 +205,17 @@ public class StatsWindow implements Window {
 		for (String opponent : stats.getOpponents()) {
 			combo.add(opponent);
 		}
+		
+		selectWorstOpponent();
+	}
+
+	private void selectWorstOpponent() {
+		String worstOpponent = stats.getWorstOpponent();
+		if (worstOpponent == null) {
+			return;
+		}
+		combo.select(combo.indexOf(worstOpponent));
+		selectOpponent();
 	}
 
 	private void selectOpponent() {

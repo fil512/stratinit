@@ -79,4 +79,8 @@ public class StatsHolder {
 	protected List<String[]>  getUnitRecordStats() {
 		return unitPreservationMap.getUnitRecordStats();
 	}
+
+	public String getWorstOpponent() {
+		return dominanceMap.getWorstOpponent();
+	}
 }
