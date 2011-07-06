@@ -17,6 +17,16 @@ You need to touch src/test/resources/META-INF/persistence.xml in order for it to
 will try to connect directly to postgres and you may get an error like:
 	Caused by: org.hibernate.HibernateException: Missing table: CityCapturedBattleLog
 
+HOW TO MERGE
+1) in C:\Users\Ken\released-workspace
+2) Commit changes
+3) push (or pull from parent--easier to push from child)
+
+4) in C:\Users\Ken\workspace
+5) hg merge r1.1.46
+6) hg commit
+7) hg push
+
 
 TRANSACTION GUIDELINES:
 If you're updating data, put it in a DaoService.
