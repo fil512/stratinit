@@ -1,3 +1,10 @@
+Release 1.1.48
+  * Fixed error that occurred when building a city.
+  * Fixed missing black line when setting move order on unit.
+  * Improved error logging.  Now when there's an error, the user will be told an error number.  This
+    number will be logged in the database along with the details of the error so they can be cross-referenced
+    later.
+
 Release 1.1.47
   * Fixed exploit that allowed players to build a new city with less than 64 CP.
   * Fixed bug that wasn't listing units that gained mobility since last login in red

@@ -9,5 +9,5 @@ public interface SMTPService {
 
 	public abstract void disable();
 
-	public abstract void sendException(String subject, Exception exception);
+	public abstract void sendException(String subject, String stackTrace);
 }

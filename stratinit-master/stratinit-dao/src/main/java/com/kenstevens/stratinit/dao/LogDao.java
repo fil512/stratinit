@@ -5,6 +5,7 @@ import java.util.List;
 import com.kenstevens.stratinit.model.BattleLog;
 import com.kenstevens.stratinit.model.CityCapturedBattleLog;
 import com.kenstevens.stratinit.model.CityNukedBattleLog;
+import com.kenstevens.stratinit.model.ErrorLog;
 import com.kenstevens.stratinit.model.FlakBattleLog;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -43,5 +44,7 @@ public interface LogDao {
 	public abstract List<FlakBattleLog> getFlakBattleLogs(Game game);
 
 	public abstract List<CityNukedBattleLog> getCityNukedBattleLogs(Game game);
+
+	public abstract void persist(ErrorLog errorLog);
 
 }

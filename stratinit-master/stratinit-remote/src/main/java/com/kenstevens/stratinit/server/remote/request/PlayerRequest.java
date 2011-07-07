@@ -9,35 +9,34 @@ import org.springframework.security.context.SecurityContextHolder;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
+import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
+import com.kenstevens.stratinit.server.remote.request.write.PostAnnouncementRequest;
+import com.kenstevens.stratinit.server.remote.session.PlayerSession;
 import com.kenstevens.stratinit.server.remote.session.StratInitSessionManager;
 import com.kenstevens.stratinit.server.remote.session.ThreadLocalContext;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
+import com.kenstevens.stratinit.util.StackTraceHelper;
 
 public abstract class PlayerRequest<T> {
 	private Logger logger = Logger.getLogger(getClass());
-	@Autowired
-	private PlayerDao playerDao;
-	@Autowired
-	private GameDao gameDao;
-	@Autowired
-	private ThreadLocalContext context;
-	@Autowired
-	private StratInitSessionManager sessionManager;
+
+
+
 	@Autowired
 	private ServerStatus serverStatus;
 	@Autowired
 	private SMTPService smtpService;
+	@Autowired
+	private Spring spring;
 
-	private Player player;
-	private Nation nation;
-	private Game game;
 	private T resultValue;
 	private boolean gameRequired = true;
+	private PlayerSession playerSession;
 
 	protected abstract T execute();
 
@@ -61,13 +60,18 @@ public abstract class PlayerRequest<T> {
 				message = e.getClass().getName();
 			}
 			logger.error(message, e);
+			Game game = getGame();
 			String subject = "Stratinit PlayerRequest Exception "
-				+ nation.getName() + " " + (game == null ? "NO_GAME" : game.getId());
-			smtpService.sendException(subject, e);
+				+ getNation().getName() + " " + (game == null ? "NO_GAME" : game.getId());
+			smtpService.sendException(subject, StackTraceHelper.getStackTrace(e));
 
 			retval = new Result<T>(message, false);
 		}
 		return retval;
+	}
+
+	protected Game getGame() {
+		return playerSession.getGame();
 	}
 
 	private void addCommandPoints(Result<T> result) {
@@ -78,7 +82,7 @@ public abstract class PlayerRequest<T> {
 
 	// Required for game joining where no nation exists yet
 	public Result<T> process(int gameId) {
-		game = gameDao.findGame(gameId);
+		playerSession.setGame(gameId);
 		return process();
 	}
 
@@ -94,40 +98,22 @@ public abstract class PlayerRequest<T> {
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void init() {
-		Authentication authentication = SecurityContextHolder.getContext()
-				.getAuthentication();
-		if (authentication == null) {
-			return;
-		}
-		String username = authentication.getName();
-		player = playerDao.find(username);
-		nation = setContext(player);
+		playerSession = spring.autowire(new PlayerSession());
 	}
 
 	protected Player getPlayer() {
-		return player;
+		return playerSession.getPlayer();
 	}
 
 	protected Nation getNation() {
-		return nation;
-	}
-
-	protected Game getGame() {
-		if (game != null) {
-			return game;
-		}
-		if (nation == null) {
-			return null;
-		}
-		return nation.getGame();
-	}
-
-	protected Nation setContext(Player player) {
-		context.initialize(player, sessionManager);
-		return context.getNation();
+		return playerSession.getNation();
 	}
 
 	public boolean isGameRequired() {
 		return gameRequired;
+	}
+	
+	protected void setContext(Player joiningPlayer) {
+		playerSession.setContext(joiningPlayer);
 	}
 }

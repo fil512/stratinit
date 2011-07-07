@@ -9,6 +9,7 @@ import com.kenstevens.stratinit.server.remote.helper.DataWriter;
 import com.kenstevens.stratinit.server.remote.helper.SynchronizedDataAccess;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
+import com.kenstevens.stratinit.util.StackTraceHelper;
 
 public abstract class EventUpdate implements DataWriter {
 	@Autowired
@@ -27,7 +28,7 @@ public abstract class EventUpdate implements DataWriter {
 			game = gameDao.findGame(gameId);
 			spring.autowire(new SynchronizedDataAccess(game, this)).write();
 		} catch (RuntimeException e) {
-			smtpService.sendException("Stratinit Update Exception "+gameId, e);
+			smtpService.sendException("Stratinit Update Exception "+gameId, StackTraceHelper.getStackTrace(e));
 			throw e;
 		}
 	}
