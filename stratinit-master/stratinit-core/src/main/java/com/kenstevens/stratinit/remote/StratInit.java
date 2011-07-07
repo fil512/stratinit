@@ -62,7 +62,7 @@ public interface StratInit {
 	Result<SIUpdate> disbandUnits(List<SIUnit> siUnits);
 	Result<List<SITeam>> getTeams();
 	Result<SIUpdate> concede();
-	Result<None> submitError(String subject, Exception exception);
+	Result<Integer> submitError(String subject, String stackTrace);
 	Result<SIUpdate> buildCity(List<SIUnit> siunits);
 	Result<SIUpdate> switchTerrain(List<SIUnit> siunits);
 	Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits);

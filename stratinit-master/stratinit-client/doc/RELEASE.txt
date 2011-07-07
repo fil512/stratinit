@@ -13,7 +13,7 @@ swt for platform isn't being added to jnlp
 8. mvn gwt:eclipse in stratinit-server
 9. eclipse refresh
 10. project clean in stratinit-server and stratinit-client
-11. Commit to svn with version number
+11. Commit, push (and if necessary, in head merge, commit, push)
 11. Compile Console, Compile Register
 12. in stratinit-server type "mvn package"
 12. Check that stratinit.war contains WEB-INF/classes/db

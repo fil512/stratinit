@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.remote.helper;
+package com.kenstevens.stratinit.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
