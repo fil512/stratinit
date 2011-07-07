@@ -88,12 +88,13 @@ public class EventScheduler {
 
 	private void processSystemProperties() {
 		Properties props = System.getProperties();
-		logger.info("System properties:");
+		logger.debug("System properties:");
 		for (String key : props.stringPropertyNames()) {
 			logger.debug(key + ": " + props.getProperty(key));
 		}
 		if ("disable".equals(System
 				.getProperty("com.kenstevens.stratinit.mail"))) {
+			logger.warn("Disabling SMTP Service.");
 			smtpService.disable();
 			// shortenGameCreationTime();
 		}
