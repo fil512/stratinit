@@ -17,6 +17,7 @@
 		<class>com.kenstevens.stratinit.model.CityNukedBattleLog</class>
 		<class>com.kenstevens.stratinit.model.CityPK</class>
 		<class>com.kenstevens.stratinit.model.EventKey</class>
+		<class>com.kenstevens.stratinit.model.ErrorLog</class>
 		<class>com.kenstevens.stratinit.model.FlakBattleLog</class>
 		<class>com.kenstevens.stratinit.model.Game</class>
 		<class>com.kenstevens.stratinit.model.GameBuildAudit</class>

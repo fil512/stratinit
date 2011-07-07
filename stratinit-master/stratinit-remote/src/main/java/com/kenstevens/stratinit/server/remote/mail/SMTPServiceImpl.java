@@ -11,8 +11,8 @@ import javax.mail.internet.MimeMessage;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.server.remote.helper.StackTraceHelper;
 import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.util.StackTraceHelper;
 
 @Service
 public class SMTPServiceImpl implements SMTPService {
@@ -63,9 +63,9 @@ public class SMTPServiceImpl implements SMTPService {
 	}
 
 	@Override
-	public void sendException(String subject, Exception exception) {
+	public void sendException(String subject, String stackTrace) {
 		sendEmail(Constants.EMAIL_ADMIN_ADDRESS,
 				Constants.EMAIL_FROM_ADDRESS, subject,
-				StackTraceHelper.getStackTrace(exception));
+				stackTrace);
 	}
 }

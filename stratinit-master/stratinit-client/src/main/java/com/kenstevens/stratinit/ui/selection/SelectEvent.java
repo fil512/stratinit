@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.ui.selection;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,19 +40,31 @@ public class SelectEvent {
 	@Autowired
 	private HandlerManager handlerManager;
 
-	public void selectSectorCoords(SectorCoords sectorCoords, Selection.Source selectionSource) {
+	public void selectSectorCoords(SectorCoords sectorCoords,
+			Selection.Source selectionSource) {
 		selectSectorCoords(sectorCoords, selectionSource, true);
 	}
-	
-	public void selectSectorCoordsNoFire(SectorCoords sectorCoords, Selection.Source selectionSource) {
+
+	public void selectSectorCoordsNoFire(SectorCoords sectorCoords,
+			Selection.Source selectionSource) {
 		selectSectorCoords(sectorCoords, selectionSource, false);
 	}
-	
-	public void reSelectSectorCoords(Selection.Source selectionSource) {
-		selectSectorCoords(selectedCoords.getCoords(), selectionSource, true);
+
+	public void reSelectSectorCoords(final Selection.Source selectionSource) {
+		Display display = Display.getDefault();
+
+		if (display.isDisposed())
+			return;
+		display.asyncExec(new Runnable() {
+			public void run() {
+				selectSectorCoords(selectedCoords.getCoords(), selectionSource,
+						true);
+			}
+		});
 	}
-	
-	public void selectSectorCoords(SectorCoords sectorCoords, Selection.Source selectionSource, boolean fireEvent) {
+
+	public void selectSectorCoords(SectorCoords sectorCoords,
+			Selection.Source selectionSource, boolean fireEvent) {
 		selectedUnits.clear();
 		selectCoords(sectorCoords);
 		if (fireEvent) {
@@ -59,25 +72,29 @@ public class SelectEvent {
 		}
 	}
 
-	public void selectUnits(List<UnitView> units, Selection.Source selectionSource) {
+	public void selectUnits(List<UnitView> units,
+			Selection.Source selectionSource) {
 		selectUnits(units, selectionSource, true);
 	}
 
 	public void selectUnitsWithMobNoFire(Selection.Source selectionSource) {
-		List<UnitView> unitsWithMob = Lists.newArrayList(Iterables.filter(selectedUnits, new Predicate<Unit>() {
-			@Override
-			public boolean apply(Unit unit) {
-				return unit.getMobility() > 0;
-			}
-		}));
+		List<UnitView> unitsWithMob = Lists.newArrayList(Iterables.filter(
+				selectedUnits, new Predicate<Unit>() {
+					@Override
+					public boolean apply(Unit unit) {
+						return unit.getMobility() > 0;
+					}
+				}));
 		if (unitsWithMob.isEmpty() && !selectedUnits.isEmpty()) {
-			selectSectorCoords(selectedUnits.getCoords(), selectionSource, false);
+			selectSectorCoords(selectedUnits.getCoords(), selectionSource,
+					false);
 		} else {
 			selectUnits(unitsWithMob, selectionSource, false);
 		}
 	}
 
-	public void selectUnits(List<UnitView> units, Selection.Source selectionSource, boolean fireEvent) {
+	public void selectUnits(List<UnitView> units,
+			Selection.Source selectionSource, boolean fireEvent) {
 		if (units == null || units.isEmpty()) {
 			return;
 		}
@@ -95,7 +112,7 @@ public class SelectEvent {
 	}
 
 	public void selectUnit(UnitView unit, Selection.Source selectionSource) {
-		List<UnitView>units = new ArrayList<UnitView>();
+		List<UnitView> units = new ArrayList<UnitView>();
 		units.add(unit);
 		selectUnits(units, selectionSource);
 	}

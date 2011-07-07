@@ -12,6 +12,7 @@ import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.model.BattleLog;
 import com.kenstevens.stratinit.model.CityCapturedBattleLog;
 import com.kenstevens.stratinit.model.CityNukedBattleLog;
+import com.kenstevens.stratinit.model.ErrorLog;
 import com.kenstevens.stratinit.model.FlakBattleLog;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -153,5 +154,10 @@ public class LogDaoImpl implements LogDao {
 		.createQuery(
 				"from CityNukedBattleLog b WHERE b.attacker.nationPK.game = :game")
 		.setParameter("game", game).getResultList();
+	}
+
+	@Override
+	public void persist(ErrorLog errorLog) {
+		entityManager.persist(errorLog);
 	}
 }

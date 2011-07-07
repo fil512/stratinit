@@ -32,6 +32,7 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.request.GetAnnouncementsRequest;
 import com.kenstevens.stratinit.server.remote.request.GetCitiesRequest;
@@ -82,7 +83,7 @@ public class StratInitImpl implements StratInit {
 	@Autowired
 	private ServerStatus serverStatus;
 	@Autowired
-	private SMTPService smtpService;
+	private ErrorProcessor errorProcessor;
 
 	/*
 	 * Non database requests
@@ -314,8 +315,7 @@ public class StratInitImpl implements StratInit {
 	}
 
 	@Override
-	public Result<None> submitError(String subject, Exception exception) {
-		smtpService.sendException(subject, exception);
-		return Result.trueInstance();
+	public Result<Integer> submitError(String subject, String stackTrace) {
+		return errorProcessor.processError(subject, stackTrace);
 	}
 }
