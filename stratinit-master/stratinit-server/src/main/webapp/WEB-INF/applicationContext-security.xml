@@ -33,7 +33,7 @@
 		"access denied" messages.
 	-->
 	<bean id="dummyEntryPoint"
-		class="com.kenstevens.stratinit.server.security.DummyEntryPoint" />
+		class="com.kenstevens.stratinit.security.DummyEntryPoint" />
 
 	<!--
 		An AuthenticationProvider must be present in order to specify Spring
@@ -48,7 +48,7 @@
 	-->
 	<!--
 		<bean id="dummyAuthenticationProvider"
-		class="com.kenstevens.stratinit.server.security.DummyAuthenticationProvider">
+		class="com.kenstevens.stratinit.security.DummyAuthenticationProvider">
 		<security:custom-authentication-provider /> </bean>
 	-->
 	<security:global-method-security

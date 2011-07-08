@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.velocity;
+package com.kenstevens.stratinit.spring;
 
 import org.springframework.context.ApplicationContext;
 

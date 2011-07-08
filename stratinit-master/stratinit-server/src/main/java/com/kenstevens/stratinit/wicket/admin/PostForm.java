@@ -4,15 +4,13 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.spring.StratInitContext;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 
 public class PostForm extends Form {
-	@Autowired
-	StratInit stratInit;
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("serial")
@@ -24,6 +22,7 @@ public class PostForm extends Form {
 		final TextArea body = new TextArea("body");
 		Button postButton = new Button("postButton") {
 			public void onSubmit() {
+				StratInit stratInit = StratInitContext.getStratInit();
 				Result<Integer> result = stratInit.postAnnouncement(subject.getInput(), body.getInput());
 				new InfoResult<Integer>(this).info(result);
 			}
