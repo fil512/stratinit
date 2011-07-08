@@ -3,11 +3,11 @@
   <tool>
      <key>leaderBoard</key>
      <scope>application</scope>
-     <class>com.kenstevens.stratinit.server.velocity.LeaderBoard</class>
+     <class>com.kenstevens.stratinit.velocity.LeaderBoard</class>
   </tool>
   <tool>
      <key>velocityService</key>
      <scope>application</scope>
-     <class>com.kenstevens.stratinit.server.velocity.VelocityService</class>
+     <class>com.kenstevens.stratinit.velocity.VelocityService</class>
   </tool>
 </toolbox>

@@ -15,6 +15,7 @@ import com.kenstevens.stratinit.balance.BalanceResult;
 import com.kenstevens.stratinit.balance.BalanceResultPersister;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.spring.SpringAware;
 
 public class VelocityService extends SpringAware {
 	Comparator<GameTable> gameByIdComparator = new Comparator<GameTable>() {

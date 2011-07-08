@@ -9,6 +9,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.spring.SpringAware;
 
 public class LeaderBoard extends SpringAware {
 	private static final int LEADER_GAMES = 5;

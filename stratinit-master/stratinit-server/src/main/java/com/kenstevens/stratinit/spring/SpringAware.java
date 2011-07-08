@@ -1,8 +1,10 @@
-package com.kenstevens.stratinit.velocity;
+package com.kenstevens.stratinit.spring;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
+import com.kenstevens.stratinit.velocity.GameActiveListProvider;
+import com.kenstevens.stratinit.velocity.GameArchiveListProvider;
 
 public class SpringAware {
 	protected GameDao getGameDao() {
