@@ -1,16 +1,16 @@
-package com.kenstevens.stratinit.web.admin;
+package com.kenstevens.stratinit.wicket.admin;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
-import com.kenstevens.stratinit.web.wicket.InfoResult;
+import com.kenstevens.stratinit.wicket.util.InfoResult;
 
 public class ShutdownForm extends Form {
-	@SpringBean
+	@Autowired
 	StratInit stratInit;
 	private static final long serialVersionUID = 1L;
 

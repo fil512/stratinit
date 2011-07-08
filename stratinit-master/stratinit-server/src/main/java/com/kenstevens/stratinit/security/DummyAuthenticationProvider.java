@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.security;
+package com.kenstevens.stratinit.security;
 
 import org.springframework.security.Authentication;
 import org.springframework.security.providers.AuthenticationProvider;

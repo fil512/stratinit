@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.velocity;
+package com.kenstevens.stratinit.velocity;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;

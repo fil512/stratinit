@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.velocity;
+package com.kenstevens.stratinit.velocity;
 
 import java.io.IOException;
 import java.util.ArrayList;

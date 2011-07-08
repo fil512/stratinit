@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.web.wicket;
+package com.kenstevens.stratinit.wicket.util;
 
 import org.apache.wicket.Component;
 

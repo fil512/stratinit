@@ -1,15 +1,14 @@
-package com.kenstevens.stratinit.web.admin;
+package com.kenstevens.stratinit.wicket.admin;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
-import com.kenstevens.stratinit.web.wicket.InfoResult;
+import com.kenstevens.stratinit.wicket.util.InfoResult;
 
 public class PostForm extends Form {
 	@Autowired
