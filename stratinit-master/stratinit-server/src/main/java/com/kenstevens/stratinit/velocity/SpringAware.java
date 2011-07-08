@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.velocity;
+package com.kenstevens.stratinit.velocity;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;

@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.security;
+package com.kenstevens.stratinit.security;
 
 import java.io.IOException;
 

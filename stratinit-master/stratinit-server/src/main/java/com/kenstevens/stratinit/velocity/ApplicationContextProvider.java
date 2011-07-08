@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.velocity;
+package com.kenstevens.stratinit.velocity;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
