@@ -7,11 +7,14 @@
 <img src="../images/Splash.jpg" align=texttop/>
 <h1>Admin Functions</h1>
 <p>
-StratInit version: <wicket:container wicket:id="version"></wicket:container>.
+StratInit version: <wicket:container wicket:id="version" />
 </p>
-<form wicket:id="adminForm">
-<input type="submit" value="shutdown server" />
+<p>
+<wicket:link><a href = "PostPage.html">Post</a></wicket:link>
+</p>
+<form wicket:id="shutdownForm">
+<input wicket:id="shutdownButton" type="submit" value="shutdown server" />
 </form>
-<span wicket:id="feedback">feedbackmessages will be put here</span>
+<span wicket:id="feedback" />
 </BODY>
 </HTML>
