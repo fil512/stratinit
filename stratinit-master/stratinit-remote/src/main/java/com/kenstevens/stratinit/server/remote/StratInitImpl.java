@@ -33,7 +33,6 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
-import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.request.GetAnnouncementsRequest;
 import com.kenstevens.stratinit.server.remote.request.GetCitiesRequest;
 import com.kenstevens.stratinit.server.remote.request.GetJoinedGamesRequest;

@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.util.StackTraceHelper;
 
 @Service
 public class SMTPServiceImpl implements SMTPService {

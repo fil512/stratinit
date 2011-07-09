@@ -4,21 +4,14 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContextHolder;
 
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
-import com.kenstevens.stratinit.server.remote.request.write.PostAnnouncementRequest;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
-import com.kenstevens.stratinit.server.remote.session.StratInitSessionManager;
-import com.kenstevens.stratinit.server.remote.session.ThreadLocalContext;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.util.StackTraceHelper;
 
