@@ -2,14 +2,16 @@ package com.kenstevens.stratinit.wicket.admin;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
-import com.kenstevens.stratinit.spring.StratInitContext;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 
 public class ShutdownForm extends Form {
+	@SpringBean
+	StratInit stratInit;
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("serial")
@@ -18,7 +20,6 @@ public class ShutdownForm extends Form {
 
 		Button shutdownButton = new Button("shutdownButton") {
 			public void onSubmit() {
-				StratInit stratInit = StratInitContext.getStratInit();
 				Result<None> result = stratInit.shutdown();
 				new InfoResult<None>(this).info(result);
 			}
