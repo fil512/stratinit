@@ -31,7 +31,6 @@ public class PostForm extends Form<ValueMap> {
 
 		String subject = (String) values.get("subject");
 		String body = (String) values.get("body");
-		System.out.println("Posting ["+subject+"] ["+body+"].");
 		Result<Integer> result = stratInit.postAnnouncement(
 				subject, body);
 		new InfoResult<Integer>(this).info(result);
