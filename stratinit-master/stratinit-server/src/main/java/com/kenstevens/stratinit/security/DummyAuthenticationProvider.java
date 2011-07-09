@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.security;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.providers.AuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.authentication.AuthenticationProvider;
 
 /**
  * A dummy {@link AuthenticationProvider} implementation.

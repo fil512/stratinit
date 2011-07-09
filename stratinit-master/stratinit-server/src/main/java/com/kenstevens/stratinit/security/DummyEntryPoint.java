@@ -3,11 +3,11 @@ package com.kenstevens.stratinit.security;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.AuthenticationException;
-import org.springframework.security.ui.AuthenticationEntryPoint;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 /**
  * A dummy {@link AuthenticationEntryPoint} implementation.
@@ -17,9 +17,9 @@ import org.springframework.security.ui.AuthenticationEntryPoint;
  */
 public class DummyEntryPoint implements AuthenticationEntryPoint {
 
-	public void commence(ServletRequest request, ServletResponse response, AuthenticationException e)
-			throws IOException, ServletException {
-
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException e) throws IOException, ServletException {
 		throw new IllegalStateException("This implementation is a dummy class, created purely so that "
 				+ "spring security namespace tags can be used in application context, and this method should "
 				+ "never be called");

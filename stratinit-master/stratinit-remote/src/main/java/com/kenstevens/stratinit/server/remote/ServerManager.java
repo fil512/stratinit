@@ -23,7 +23,7 @@ public class ServerManager {
 		logger.info("Server shutting down...");
 		serverStatus.setShutDown();
 		Cacheable.setFinalFlush(true);
-		Map<String, QuiesceService> beanMap = spring
+		Map<String, ? extends QuiesceService> beanMap = spring
 				.getBeansOfType(QuiesceService.class);
 		for (QuiesceService quiescer : beanMap.values()) {
 			quiescer.quiesce();
