@@ -9,6 +9,7 @@ import org.mortbay.jetty.webapp.WebAppContext;
 public class Start {
 
 	public static void main(String[] args) throws Exception {
+		System.setProperty("com.kenstevens.stratinit.mail", "disable");
 		Server server = new Server();
 		SocketConnector connector = new SocketConnector();
 
