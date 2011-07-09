@@ -57,10 +57,10 @@
     VelocityViewServlet will automatically look for these files in
     the following locations.
   -->
-  <init-param>
-    <param-name>org.apache.velocity.toolbox</param-name>
-    <param-value>/WEB-INF/toolbox.xml</param-value>
-  </init-param>
+	<init-param>
+		<param-name>org.apache.velocity.toolbox</param-name>
+		<param-value>/WEB-INF/toolbox.xml</param-value>
+	</init-param>
 
 </servlet>
 
@@ -81,12 +81,12 @@
 
 <!-- Map *.vm files to Velocity -->
 <servlet-mapping>
-  <servlet-name>velocity</servlet-name>
-  <url-pattern>*.vm</url-pattern>
+	<servlet-name>velocity</servlet-name>
+	<url-pattern>*.vm</url-pattern>
 </servlet-mapping>
 
 <!-- SSI  -->
-<servlet>
+	<servlet>
         <servlet-name>ssi</servlet-name>
         <servlet-class>
           org.apache.catalina.ssi.SSIServlet
