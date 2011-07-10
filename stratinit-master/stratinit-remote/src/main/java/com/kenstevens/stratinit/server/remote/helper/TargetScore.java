@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.Nation;
@@ -17,7 +18,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 public class TargetScore {
 	@SuppressWarnings("unused")
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	public static final int CITY_VALUE = 24 * 2;
 	private final WorldSeenMap worldSeenMap;

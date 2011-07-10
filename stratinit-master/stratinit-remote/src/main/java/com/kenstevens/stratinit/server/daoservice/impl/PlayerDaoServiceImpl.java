@@ -3,8 +3,9 @@ package com.kenstevens.stratinit.server.daoservice.impl;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 
 	private static final int RANDOM_PASSWORD_LENGTH = 8;
 	
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
 	private PlayerDao playerDao;
 	@Autowired

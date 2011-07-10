@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -16,7 +17,7 @@ import com.kenstevens.stratinit.model.Account;
 @Scope("prototype")
 @Component
 public class PrefsWindowControl {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
 	private Account account;
 	@Autowired
