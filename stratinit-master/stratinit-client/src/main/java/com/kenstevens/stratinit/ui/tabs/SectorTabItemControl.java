@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.ui.tabs;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.widgets.Label;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -29,7 +30,7 @@ import com.kenstevens.stratinit.util.Spring;
 public class SectorTabItemControl implements TopLevelController {
 
 	@SuppressWarnings("unused")
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
 	private Data db;
 	@Autowired

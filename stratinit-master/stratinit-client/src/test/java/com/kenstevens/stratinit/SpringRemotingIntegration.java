@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.httpclient.HttpException;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import com.kenstevens.stratinit.type.Constants;
 
 @Ignore
 public class SpringRemotingIntegration extends StratInitClientTest {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private StratInit stratInit;

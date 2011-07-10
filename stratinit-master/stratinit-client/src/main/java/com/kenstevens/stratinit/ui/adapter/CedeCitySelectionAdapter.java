@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
@@ -12,7 +13,7 @@ import com.kenstevens.stratinit.ui.tabs.CedeWindowControl;
 import com.kenstevens.stratinit.util.Spring;
 
 public class CedeCitySelectionAdapter extends SelectionAdapter {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	private final CedeWindow cedeWindow;
 	private final Spring spring;
 	private final SelectedCity selectedCity;
