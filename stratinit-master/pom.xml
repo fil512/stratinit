@@ -46,6 +46,7 @@
 		<wicket.version>1.5-M3</wicket.version>
 		<velocity.version>1.7</velocity.version>
 		<velocity.tools.version>2.0</velocity.tools.version>
+		<hibernate.version>3.6.5.Final</hibernate.version>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -162,24 +163,13 @@
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate</artifactId>
-				<version>3.2.6.ga</version>
-				<exclusions>
-					<exclusion>
-						<groupId>javax.transaction</groupId>
-						<artifactId>jta</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-annotations</artifactId>
-				<version>3.4.0.GA</version>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>3.4.0.GA</version>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>dijkstra-java</groupId>
@@ -400,8 +390,8 @@
 
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.4.2</version>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.6.1</version>
 			</dependency>
 			<dependency>
 				<groupId>postgresql</groupId>
@@ -453,6 +443,11 @@
 				<groupId>org.apache.wicket</groupId>
 				<artifactId>wicket-spring</artifactId>
 				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.transaction</groupId>
+				<artifactId>jta</artifactId>
+				<version>1.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jmock</groupId>

@@ -20,16 +20,6 @@
 			<artifactId>guava</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-annotations</artifactId>
-			<exclusions>
-				<exclusion>
-					<artifactId>hibernate-core</artifactId>
-					<groupId>org.hibernate</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
 			<groupId>dijkstra-java</groupId>
 			<artifactId>rollerjm-graphs</artifactId>
 		</dependency>
@@ -43,7 +33,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<artifactId>slf4j-simple</artifactId>
 		</dependency>
 	</dependencies>
 </project>
