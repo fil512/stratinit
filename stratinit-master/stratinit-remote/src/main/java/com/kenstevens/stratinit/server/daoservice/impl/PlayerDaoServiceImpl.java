@@ -24,21 +24,23 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 	private static final Random RANDOM = new Random();
 
 	private static final int RANDOM_PASSWORD_LENGTH = 8;
-	
+
 	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
 	private PlayerDao playerDao;
 	@Autowired
 	private MailService mailService;
 
-	public Result<Player> register(String username, String password, String email) {
+	public Result<Player> register(String username, String password,
+			String email) {
 
 		if (playerDao == null) {
 			return new Result<Player>("playerDao is null", false);
 		}
 		if (playerDao.find(username) != null) {
 			return new Result<Player>("Username '" + username
-					+ "' already exists.  Please choose a different username.", false);
+					+ "' already exists.  Please choose a different username.",
+					false);
 		}
 		Player player = new Player(username);
 		Result<Player> result = setPlayer(player, password, email, true);
@@ -54,15 +56,19 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		}
 
 		logger.info("REGISTERING USER [" + player.getUsername() + "].");
-		mailService.sendEmail(player, MailTemplateLibrary.getRegistration(username));
+		mailService.sendEmail(player,
+				MailTemplateLibrary.getRegistration(username));
 
-		return new Result<Player>("New user [" + username + "] saved.", true, player);
+		return new Result<Player>("New user [" + username + "] saved.", true,
+				player);
 	}
 
-	private Result<Player> setPlayer(Player player, String password, String email, boolean emailGameMail) {
+	private Result<Player> setPlayer(Player player, String password,
+			String email, boolean emailGameMail) {
 		EmailValidator emailValidator = EmailValidator.getInstance();
 		if (!emailValidator.isValid(email)) {
-			return new Result<Player>("Email ["+email+"] is an invalid email address.", false);
+			return new Result<Player>("Email [" + email
+					+ "] is an invalid email address.", false);
 		}
 		player.setEnabled(true);
 		if (password != null) {
@@ -71,7 +77,8 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		player.setEmail(email);
 		player.setEmailGameMail(emailGameMail);
 
-		return new Result<Player>("Account "+player.getUsername()+" updated", true, player);
+		return new Result<Player>("Account " + player.getUsername()
+				+ " updated", true, player);
 	}
 
 	public List<Player> getPlayers() {
@@ -84,16 +91,19 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 			return new Result<Player>("playerDao is null", false);
 		}
 
-		Result<Player> result = setPlayer(player, password, email, emailGameMail);
+		Result<Player> result = setPlayer(player, password, email,
+				emailGameMail);
 		if (!result.isSuccess()) {
 			return result;
 		}
 		playerDao.merge(player);
 
 		logger.info("UPDATING USER [" + player.getUsername() + "].");
-		mailService.sendEmail(player, MailTemplateLibrary.getUpdatePlayer(player, email));
+		mailService.sendEmail(player,
+				MailTemplateLibrary.getUpdatePlayer(player, email));
 
-		return new Result<Player>("Account [" + player.getUsername() + "] updated.", true, player);
+		return new Result<Player>("Account [" + player.getUsername()
+				+ "] updated.", true, player);
 
 	}
 
@@ -122,20 +132,22 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		}
 		if (player == null) {
 			return new Result<None>("No player with username [" + username
-					+ "] or e-mail address ["+email+"]found.", false);
+					+ "] or e-mail address [" + email + "]found.", false);
 		}
 
 		logger.info("PASSWORD RESET FOR USER [" + player.getUsername() + "].");
-		
+
 		String password = newRandomPassword();
-		
-		mailService.sendEmail(player, MailTemplateLibrary.getForgottenPassword(username, password));
+
+		mailService.sendEmail(player,
+				MailTemplateLibrary.getForgottenPassword(username, password));
 
 		ShaPasswordEncoder encoder = new ShaPasswordEncoder();
 		player.setPassword(encoder.encodePassword(password, null));
 		playerDao.merge(player);
 
-		return new Result<None>("Password reset for user [" + username + "].", true);
+		return new Result<None>("Password reset for user [" + username + "].",
+				true);
 	}
 
 	private String newRandomPassword() {
@@ -147,5 +159,23 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 			password += letter;
 		}
 		return password;
+	}
+
+	@Override
+	public boolean authorizePlayer(String username, String password) {
+		Player player = playerDao.find(username);
+		if (player == null) {
+			return false;
+		}
+		ShaPasswordEncoder encoder = new ShaPasswordEncoder();
+		String encodedPassword = encoder.encodePassword(password, null);
+
+		if (!player.getPassword().equals(encodedPassword)) {
+			return false;
+		}
+		if (!player.isEnabled()) {
+			return false;
+		}
+		return true;
 	}
 }

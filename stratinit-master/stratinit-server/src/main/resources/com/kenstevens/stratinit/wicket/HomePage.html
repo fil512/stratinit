@@ -1,65 +1,19 @@
-<!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org">
-	<head>
-		<meta charset="utf-8" />
-		<title>Apache Wicket Quickstart</title>
-		<link href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold' rel='stylesheet' type='text/css' />
-		<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="Stylesheet" />
-	</head>
-	<body>
-		<div id="hd">
-			<div id="logo">
-				<img src="logo.png" width="50px" height="50px" alt="Wicket Logo" />
-				<h1>Apache Wicket</h1>
-			</div>
-		</div>
-		<div id="bd">
-			<h2>Congratulations!</h2>
-			<p>
-				Your quickstart works! This project is especially useful to
-                start developing your Wicket application or to create a test
-                case for a bug report.
-			</p>
-			<h3>Get started</h3>
-			<p>
-				From here you can start hacking away at your application and
-                wow your clients:
-			</p>
-			<ul>
-				<li>work through <a href="http://wicket.apache.org/learn/examples" target="_blank" title="Hello world and friends">some examples</a></li>
-				<li>read <a href="http://wicket.apache.org/learn/books" target="_blank" title="Books about Wicket in English, German and Japanese">some books</a></li>
-				<li>find <a href="http://wicket.apache.org/learn/projects" target="_blank" title="Additional projects, components and libraries">additional components, projects and libraries</a></li>
-			</ul>
-			<h3>Get help</h3>
-			<p>
-				We are here to help!
-			</p>
-			<ul>
-				<li>join us on IRC on <a href="irc:%23%23wicket@irc.freenode.net">&#35;&#35;wicket@irc.freenode.net</a></li>
-				<li><a href="http://wicket-users.markmail.org/" target="_blank" title="Search the mailing list archives">search</a> our mailing list archives</li>
-				<li>ask a question on the <a href="http://wicket.apache.org/help/email.html">users list</a></li>
-			</ul>
-			<h3>Reporting a bug</h3>
-			<p>
-				Help us help you:
-			</p>
-			<ol>
-				<li>reproduce the bug with the <strong>least</strong> amount of code</li>
-				<li>create a unit test that shows the bug</li>
-				<li>fix the bug and create a patch</li>
-				<li>attach the result of step 1, 2 or 3 to a <a href="https://issues.apache.org/jira/browse/WICKET" target="_blank">JIRA issue</a></li>
-				<li>profit!</li>
-			</ol>
-			<p>
-				Please mention the correct Wicket version: <wicket:container wicket:id="version"></wicket:container>.
-			</p>
-	<p>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<wicket:extend>
+    
+ <img height="395" hspace="0" src=
+  "../images/Map.gif" width="472" border="0" align="right"/>
+
+<h2>Welcome <span wicket:id="username">Username goes here</span> to Strategic Initiative!</h2>
+
+<p>Strategic Initiative is an online multiplayer military strategy game played over 10 days where the objective is for you and your ally to control the most cities on the map.</p>
+<p><a href="http://www.strategicinitiative.org:8080/stratinit/register/Register.html"><strong>REGISTER NOW</strong></a> to join one of the most exciting online strategy experiences available!</p>
+<p>Already registered? Then click <a href="../docs/play.shtml"><strong>PLAY NOW</strong></a> to enter the fray!</p>
+Move this:
 			<wicket:link>
             <a href = "admin/AdminPage.html">Admin</a><br/>
             </wicket:link>
-            </p>
-		</div>
-		<div id="ft">
-		</div>
-	</body>
+</wicket:extend>
+
 </html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<HEAD><TITLE>Strategic Initiative</TITLE>
+<LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
+</HEAD>
+<BODY>
+
+<table class="menu">
+  <tr>
+	<td align="left" class="menu"><a class="menu" href="../docs/home.shtml">home</a></td>
+	<td width="100%" class="menu" />
+    <td align="right" class="menu">
+    <wicket:link>
+    <a class="menu" href="LoginPage.html">login</a>
+    </wicket:link>
+   </td>
+    <td align="right" class="menu"><a class="menu" href="../docs/play.shtml">play</a></td>
+  </tr>
+</table>
+
+<!--page table-->
+<table class="menu">
+<tr>
+<!-- left column -->
+<td valign="top" width=140>
+<table class="menu">
+<tr><td><a class="side" href="../docs/home.shtml"> </a></td></tr>
+<tr><td class="side"><a class="side" href="../docs/guide.shtml">help</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://www.strategicinitiative.org:8080/stratinit/register/Register.html">register</a></td>
+<tr><td class="sideitem"><a class="sideitem" href="../docs/guide.shtml">guide</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="../docs/rules.shtml">rules</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="../docs/FAQ.shtml">faq</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://groups.google.com/group/stratinit">support</a></td></tr>
+</tr>
+<tr><td><a class="side" href="../docs/home.shtml"> </a></td></tr>
+<tr><td class="side"><a class="side" href="../docs/guide.shtml">community</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://www.strategicinitiative.org:8080/stratinit/velocity/leaderboard.vm">leader board</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://www.strategicinitiative.org:8080/stratinit/velocity/games.vm?mode=active">games</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://groups.google.com/group/stratinit">forum</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://www.google.com/moderator/#16/e=59eb7">wish list</a></td></tr>
+<tr><td class="side"><a class="side" href="../docs/guide.shtml">technical</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://www.strategicinitiative.org:8080/stratinit/velocity/unitBalance.vm">unit balance</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/wiki/ChangeLog">change log</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/issues/list">issues</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/source/checkout">source</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="../docs/about.shtml">about us</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" href="../docs/contact.shtml">contact us</a></td></tr>
+</table>
+<!-- end left column -->
+</td>
+
+<!-- right column -->
+<td class="grey">
+<div wicket:id="signOutPanel"></div>
+
+<img src="../images/Splash.jpg" align=texttop/>
+
+<div role="main">
+ 	<wicket:child/>
+</div>
+
+
+  <p><em>Last updated: 18 June 2011</em></p>
+  <p><em>Release: <span wicket:id="version">X.X.X</span></em></p>
+  <!-- end right column -->
+</td>
+</tr>
+</table>
+
+</BODY>
+</html>
