@@ -9,14 +9,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 
 public class SectorTabItem extends Composite {
 	private BuildingCombos buildingCombos;
 	private Label sectorCoordsLabel;
 	private Label sectorType;
-	private Table unitTable;
+	private UnitTable unitTable;
 	private UnitButtons unitButtons;
 
 
@@ -75,43 +73,12 @@ public class SectorTabItem extends Composite {
 		unitsLabel.setLayoutData(fdUnitsLabel);
 		unitsLabel.setText("Units:");
 
-		unitTable = new Table(this, SWT.BORDER | SWT.MULTI
-				| SWT.FULL_SELECTION | SWT.NO_SCROLL | SWT.V_SCROLL);
+		
+		unitTable = new UnitTable(this, SWT.NONE, false);
 		final FormData fdUnitTable = new FormData();
 		fdUnitTable.top = new FormAttachment(unitsLabel, 10);
 		fdUnitTable.left = new FormAttachment(0, 5);
 		fdUnitTable.right = new FormAttachment(sectorGroup, 18, SWT.RIGHT);
-
-		final TableColumn typeColumn = new TableColumn(unitTable,
-				SWT.NONE);
-		typeColumn.setWidth(130);
-		typeColumn.setText("type");
-
-		final TableColumn movesColumn = new TableColumn(unitTable,
-				SWT.NONE);
-		movesColumn.setToolTipText("Moves Remaining (\"-\" indicates move order)");
-		movesColumn.setWidth(47);
-		movesColumn.setText("mob");
-
-		TableColumn tblclmnAmmo = new TableColumn(unitTable, SWT.RIGHT);
-		tblclmnAmmo.setWidth(54);
-		tblclmnAmmo.setText("ammo");
-
-		final TableColumn hpColumn = new TableColumn(unitTable, SWT.NONE);
-		hpColumn.setToolTipText("Hit Points");
-		hpColumn.setWidth(33);
-		hpColumn.setText("hp");
-
-		final TableColumn fuelColumn = new TableColumn(unitTable,
-				SWT.NONE);
-		fuelColumn.setWidth(41);
-		fuelColumn.setText("fuel");
-
-		final TableColumn hoursColumn = new TableColumn(unitTable,
-				SWT.NONE);
-		hoursColumn.setToolTipText("Next Move / Repair Time");
-		hoursColumn.setWidth(62);
-		hoursColumn.setText("ETA");
 
 		Group unitButtonsGroup = new Group(this, SWT.NONE);
 		fdUnitTable.bottom = new FormAttachment(unitButtonsGroup, -6);
@@ -140,9 +107,6 @@ public class SectorTabItem extends Composite {
 
 
 		unitTable.setLayoutData(fdUnitTable);
-		unitTable.setLinesVisible(true);
-		unitTable.setHeaderVisible(true);
-
 	}
 
 	@Override
@@ -150,7 +114,7 @@ public class SectorTabItem extends Composite {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	public Table getUnitTable() {
+	public UnitTable getUnitTable() {
 		return unitTable;
 	}
 

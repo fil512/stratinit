@@ -1,5 +1,7 @@
 package com.kenstevens.stratinit.ui.tabs;
 
+import java.util.Comparator;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.Predicate;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.control.UnitTableControl;
@@ -17,6 +20,8 @@ import com.kenstevens.stratinit.event.SelectUnitsEvent;
 import com.kenstevens.stratinit.event.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedCoords;
+import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ColourMap;
@@ -48,8 +53,34 @@ public class SectorTabItemControl implements TopLevelController {
 		this.sectorTabItem = sectorTabItem;
 	}
 
+	
+	
 	public void setControllers() {
-		spring.autowire(new UnitTableControl(sectorTabItem.getUnitTable()));
+		Comparator<UnitView> byTypeByMoves = new Comparator<UnitView>() {
+
+			@Override
+			public int compare(UnitView a, UnitView b) {
+				int typeComparison = a.getType().compareTo(b.getType());
+				if (typeComparison != 0) {
+					return typeComparison;
+				} else if (a.getMobility() < b.getMobility()) {
+					return 1;
+				} else if (a.getMobility() > b.getMobility()) {
+					return -1;
+				} else {
+					return 0;
+				}
+			}
+		};
+		
+		Predicate<Unit> selectedUnitsPredicate = new Predicate<Unit>() {
+			@Override
+			public boolean apply(Unit unit) {
+				return unit.getCoords().equals(selectedCoords.getCoords());
+			}
+			
+		};
+		spring.autowire(new UnitTableControl(sectorTabItem.getUnitTable(), selectedUnitsPredicate, byTypeByMoves, true));
 		spring.autowire(new BuildingCombosControl(sectorTabItem
 				.getBuildingCombos()));
 		unitButtonsControl = spring.autowire(new UnitButtonsControl(

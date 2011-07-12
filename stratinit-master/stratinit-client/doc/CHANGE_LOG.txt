@@ -1,6 +1,7 @@
 Release 1.1.49
   * Setting move order on unit with 0 mob now draws black line
   * Building new city now updates map
+  * Added supply unit list to Supply tab
 
 Release 1.1.48
   * Fixed error that occurred when building a city.

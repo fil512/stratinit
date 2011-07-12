@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.control;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -27,6 +28,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.event.SelectSectorEvent;
 import com.kenstevens.stratinit.event.SelectSectorEventHandler;
@@ -40,14 +44,44 @@ import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitList;
 import com.kenstevens.stratinit.model.UnitView;
+import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ColourMap;
 import com.kenstevens.stratinit.ui.selection.SelectEvent;
 import com.kenstevens.stratinit.ui.selection.Selection.Source;
+import com.kenstevens.stratinit.ui.tabs.UnitTable;
 
 @Scope("prototype")
 @Component
 public class UnitTableControl implements Controller {
+	private final Table table;
+	@Autowired
+	private SelectEvent selection;
+	@Autowired
+	private Data db;
+	@Autowired
+	private SelectedCoords selectedCoords;
+	@Autowired
+	private SelectedUnits selectedUnits;
+	@Autowired
+	private HandlerManager handlerManager;
+	private Predicate<Unit> unitFilter;
+	private final boolean listenToSectorSelects;
+	private final UnitTable unitTable;
+	private Comparator<UnitView> unitComparator;
+
+	public UnitTableControl(UnitTable unitTable, Predicate<Unit> unitFilter, Comparator<UnitView> unitComparator,
+			boolean listenToSectorSelects) {
+		this.unitTable = unitTable;
+		this.unitFilter = unitFilter;
+		this.unitComparator = unitComparator;
+		this.listenToSectorSelects = listenToSectorSelects;
+		this.table = unitTable.getTable();
+
+		setTableListeners();
+	}
+
 	private final class TableListener implements Listener {
 		private final Listener labelListener;
 		private final Display display;
@@ -102,24 +136,6 @@ public class UnitTableControl implements Controller {
 		}
 	}
 
-	private final Table table;
-	@Autowired
-	private SelectEvent selection;
-	@Autowired
-	private Data db;
-	@Autowired
-	private SelectedUnits selectedUnits;
-	@Autowired
-	private SelectedCoords selectedCoords;
-	@Autowired
-	private HandlerManager handlerManager;
-
-	public UnitTableControl(Table table) {
-		this.table = table;
-
-		setTableListeners();
-	}
-
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
@@ -130,20 +146,22 @@ public class UnitTableControl implements Controller {
 						unitsChanged();
 					}
 				});
-		handlerManager.addHandler(SelectSectorEvent.TYPE,
-				new SelectSectorEventHandler() {
+		if (listenToSectorSelects) {
+			handlerManager.addHandler(SelectSectorEvent.TYPE,
+					new SelectSectorEventHandler() {
 
-					@Override
-					public void selectSector(Source source) {
-						coordsSelected(selectedCoords.getCoords());
-					}
-				});
+						@Override
+						public void selectSector(Source source) {
+							coordsSelected();
+						}
+					});
+		}
 		handlerManager.addHandler(SelectUnitsEvent.TYPE,
 				new SelectUnitsEventHandler() {
 
 					@Override
 					public void selectUnits(Source source) {
-						coordsSelected(selectedCoords.getCoords());
+						coordsSelected();
 						unitsSelected();
 					}
 				});
@@ -177,9 +195,9 @@ public class UnitTableControl implements Controller {
 				if (unit == null) {
 					return;
 				}
-				selection.selectUnits(db.getUnitList().typedUnitsAt(
-						unit.getType(), selectedCoords.getCoords()),
-						Source.UNIT_TAB);
+				selection.selectUnits(
+						db.getUnitList().typedUnitsAt(unit.getType(),
+								selectedCoords.getCoords()), Source.UNIT_TAB);
 			}
 		});
 
@@ -213,8 +231,7 @@ public class UnitTableControl implements Controller {
 	}
 
 	private void unitsChanged() {
-		List<UnitView> unitList = db.getUnitList().unitsAt(
-				selectedCoords.getCoords());
+		Collection<UnitView> unitList = getFilteredUnits(db.getUnitList());
 
 		List<Integer> remove = new ArrayList<Integer>();
 		Set<Unit> found = new HashSet<Unit>();
@@ -223,7 +240,8 @@ public class UnitTableControl implements Controller {
 		for (TableItem item : table.getItems()) {
 			Unit unit = (Unit) item.getData();
 			if (unitList.contains(unit)) {
-				unitToItem(unit, item, unit.getNation().equals(db.getNation()), etaHelper);
+				unitToItem(unit, item, unit.getNation().equals(db.getNation()),
+						etaHelper);
 				found.add(unit);
 			} else {
 				remove.add(index);
@@ -239,6 +257,10 @@ public class UnitTableControl implements Controller {
 		}
 	}
 
+	private Collection<UnitView> getFilteredUnits(UnitList unitList) {
+		return Collections2.filter(unitList.getUnits(), unitFilter);
+	}
+
 	private void unitsSelected() {
 		List<TableItem> selectedItems = new ArrayList<TableItem>();
 		for (TableItem item : table.getItems()) {
@@ -250,40 +272,21 @@ public class UnitTableControl implements Controller {
 		table.setSelection(selectedItems.toArray(new TableItem[0]));
 	}
 
-	private void coordsSelected(SectorCoords coords) {
+	private void coordsSelected() {
 		table.removeAll();
-		addAllUnitsInSector(coords);
+		addAllUnits();
 		table.redraw();
 	}
 
-	private void addAllUnitsInSector(SectorCoords coords) {
-		if (coords == null) {
-			return;
-		}
-		addUnitsToTable(coords, db.getUnitList(), true);
-		addUnitsToTable(coords, db.getSeenUnitList(), false);
+	private void addAllUnits() {
+		addUnitsToTable(db.getUnitList(), true);
+		addUnitsToTable(db.getSeenUnitList(), false);
 	}
 
-	private void addUnitsToTable(SectorCoords coords, UnitList unitList,
-			boolean myUnit) {
-		Comparator<Unit> byTypeByMoves = new Comparator<Unit>() {
+	private void addUnitsToTable(UnitList unitList, boolean myUnit) {
 
-			@Override
-			public int compare(Unit a, Unit b) {
-				int typeComparison = a.getType().compareTo(b.getType());
-				if (typeComparison != 0) {
-					return typeComparison;
-				} else if (a.getMobility() < b.getMobility()) {
-					return 1;
-				} else if (a.getMobility() > b.getMobility()) {
-					return -1;
-				} else {
-					return 0;
-				}
-			}
-		};
-		List<UnitView> units = unitList.unitsAt(coords);
-		Collections.sort(units, byTypeByMoves);
+		List<UnitView> units = Lists.newArrayList(getFilteredUnits(unitList));
+		Collections.sort(units, unitComparator);
 		ETAHelper etaHelper = new ETAHelper(db);
 		for (Unit unit : units) {
 			addUnitToTable(unit, myUnit, etaHelper);
@@ -291,6 +294,7 @@ public class UnitTableControl implements Controller {
 	}
 
 	private void addUnitToTable(Unit unit, boolean myUnit, ETAHelper etaHelper) {
+
 		TableItem item = new TableItem(table, SWT.NONE);
 		unitToItem(unit, item, myUnit, etaHelper);
 		item.setData(unit);
@@ -301,11 +305,34 @@ public class UnitTableControl implements Controller {
 		}
 	}
 
-	private void unitToItem(Unit unit, TableItem item, boolean myUnit, ETAHelper etaHelper) {
-		item.setText(new String[] { unit.getType().toString(),
-				filter(myUnit, "" + unit.getMobility() + (unit.getUnitMove() == null ? "" : "-")), filter(myUnit, unit.getAmmoString()),
-				unit.getHpString(), filter(myUnit, unit.getFuelString()),
-				filter(myUnit, "" + etaHelper.getETA(unit)) });
+	private void unitToItem(Unit unit, TableItem item, boolean myUnit,
+			ETAHelper etaHelper) {
+		if (unitTable.isShowCoords()) {
+			item.setText(new String[] {
+					unit.getCoords().toString(),
+					unit.getType().toString(),
+					filter(myUnit,
+							"" + unit.getMobility()
+									+ (unit.getUnitMove() == null ? "" : "-")),
+					filter(myUnit, unit.getAmmoString()), unit.getHpString(),
+					filter(myUnit, isVulnerable(unit) ? "*" : ""),
+					filter(myUnit, "" + etaHelper.getETA(unit)) });
+		} else {
+			item.setText(new String[] {
+					unit.getType().toString(),
+					filter(myUnit,
+							"" + unit.getMobility()
+							+ (unit.getUnitMove() == null ? "" : "-")),
+							filter(myUnit, unit.getAmmoString()), unit.getHpString(),
+							filter(myUnit, unit.getFuelString()),
+							filter(myUnit, "" + etaHelper.getETA(unit)) });
+		}
+	}
+
+	private boolean isVulnerable(Unit unit) {
+		WorldView worldView = db.getWorld();
+		WorldSector worldSector = worldView.getWorldSector(unit);
+		return worldView.isVulnerable(worldSector);
 	}
 
 	private String filter(boolean myUnit, String string) {
