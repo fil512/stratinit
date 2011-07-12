@@ -85,7 +85,7 @@ public interface SectorDaoService {
 
 	public abstract Result<None> destroyCity(City city);
 
-	public abstract void cityChanged(Nation nation, City city);
+	public abstract void cityChanged(City city);
 
 	public abstract void merge(Sector sector);
 

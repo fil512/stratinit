@@ -85,9 +85,13 @@ public class SelectEvent {
 						return unit.getMobility() > 0;
 					}
 				}));
-		if (unitsWithMob.isEmpty() && !selectedUnits.isEmpty()) {
-			selectSectorCoords(selectedUnits.getCoords(), selectionSource,
-					false);
+		if (unitsWithMob.isEmpty()) {
+			if (selectedUnits.isEmpty()) {
+				selectSectorCoords(selectedUnits.getCoords(), selectionSource,
+						false);
+			} else {
+				selectUnits(Lists.newArrayList(selectedUnits), selectionSource, false);
+			}
 		} else {
 			selectUnits(unitsWithMob, selectionSource, false);
 		}
