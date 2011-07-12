@@ -14,7 +14,7 @@ import com.kenstevens.stratinit.wicket.components.SignOutPanel;
 public class BasePage extends WebPage {
 	private static final long serialVersionUID = 1L;
 	
-	private static final ResourceReference baseCSS = new PackageResourceReference(ErrorPage.class, "BasePage.css");
+	private static final ResourceReference baseCSS = new PackageResourceReference(BasePage.class, "BasePage.css");
 
 	public BasePage() {
 		this(null);
