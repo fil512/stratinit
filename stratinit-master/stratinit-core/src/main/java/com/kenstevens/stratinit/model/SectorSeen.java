@@ -41,4 +41,32 @@ public class SectorSeen implements Serializable {
 	public SectorSeenPK getSectorSeenPK() {
 		return sectorSeenPK;
 	}
+	public String toString() {
+		return getNation()+" "+getCoords();
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((sectorSeenPK == null) ? 0 : sectorSeenPK.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SectorSeen other = (SectorSeen) obj;
+		if (sectorSeenPK == null) {
+			if (other.sectorSeenPK != null)
+				return false;
+		} else if (!sectorSeenPK.equals(other.sectorSeenPK))
+			return false;
+		return true;
+	}
+	
 }

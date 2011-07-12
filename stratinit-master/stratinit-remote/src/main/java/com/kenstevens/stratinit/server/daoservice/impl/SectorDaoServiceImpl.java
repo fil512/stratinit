@@ -321,8 +321,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 				sector.getCoords());
 		citySector.setType(SectorType.PLAYER_CITY);
 		sectorDao.merge(citySector);
-		surveyFromCity(city);
-		explodeSupply(nation, sector.getCoords());
+		cityChanged(city);
 		return opponent;
 	}
 
@@ -540,6 +539,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		}
 		City city = new City(sector, nation, UnitType.BASE);
 		sectorDao.persist(city);
+		cityChanged(city);
 		sector.setType(SectorType.PLAYER_CITY);
 		sectorDao.merge(sector);
 		CityCapturedBattleLog battleLog = new CityCapturedBattleLog(AttackType.INITIAL_ATTACK, unit,
@@ -574,9 +574,9 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	}
 	
 	@Override
-	public void cityChanged(Nation nation, City city) {
+	public void cityChanged(City city) {
 		surveyFromCity(city);
-		explodeSupply(nation, city.getCoords());
+		explodeSupply(city.getNation(), city.getCoords());
 	}
 
 	@Override
