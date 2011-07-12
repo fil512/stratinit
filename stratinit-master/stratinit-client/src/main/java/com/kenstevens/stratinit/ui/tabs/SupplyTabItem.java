@@ -2,14 +2,15 @@ package com.kenstevens.stratinit.ui.tabs;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.layout.FillLayout;
 
 public class SupplyTabItem extends Composite {
 	private Table agenda;
 	private Table units;
 	private TableColumn eventsTableColumn;
+	private UnitTable unitTable;
 
 	public SupplyTabItem(Composite parent, int style) {
 		super(parent, style);
@@ -17,9 +18,8 @@ public class SupplyTabItem extends Composite {
 	}
 
 	private void createContents() {
-		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setBounds(10, 10, 92, 15);
-		lblNewLabel.setText("");
+		setLayout(new FillLayout());
+		this.unitTable = new UnitTable(this, SWT.NONE, true);
 	}
 
 	@Override
@@ -37,5 +37,9 @@ public class SupplyTabItem extends Composite {
 
 	public TableColumn getEventsTableColumn() {
 		return eventsTableColumn;
+	}
+
+	public UnitTable getUnitTable() {
+		return unitTable;
 	}
 }

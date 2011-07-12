@@ -82,15 +82,19 @@ public class NationView extends Nation {
 	}
 
 	public String getMyRelationString() {
-		if (myRelation == null) {
+		return asString(myRelation);
+	}
+	
+	private String asString(Relation relation) {
+		if (relation == null) {
 			return "";
-		} else if (myRelation.getType() == RelationType.WAR) {
+		} else if (relation.getType() == RelationType.WAR) {
 			return "W";
-		} else if (myRelation.getType() == RelationType.NEUTRAL) {
+		} else if (relation.getType() == RelationType.NEUTRAL) {
 			return "";
-		} else if (myRelation.getType() == RelationType.FRIENDLY) {
+		} else if (relation.getType() == RelationType.FRIENDLY) {
 			return "F";
-		} else if (myRelation.getType() == RelationType.ALLIED) {
+		} else if (relation.getType() == RelationType.ALLIED) {
 			return "A";
 		}
 		return "";
@@ -140,6 +144,10 @@ public class NationView extends Nation {
 		if (getNationId() != other.getNationId())
 			return false;
 		return true;
+	}
+
+	public String getTheirRelationString() {
+		return asString(theirRelation);
 	}
 
 }

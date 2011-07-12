@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 
 
 @Embeddable
-public class SectorCoords implements Serializable {
+public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 	private static final long serialVersionUID = 1593824949580976747L;
 	// TODO REF make final
 	public int x;
@@ -130,5 +130,16 @@ public class SectorCoords implements Serializable {
 
 	public SectorCoords shift(int size, SectorCoords coords) {
 		return new SectorCoords(size, this.x + coords.x, this.y + coords.y);
+	}
+
+	@Override
+	public int compareTo(SectorCoords other) {
+		if (y > other.y) {
+			return -1;
+		} else if (y < other.y) {
+			return 1;
+		} else {
+			return Integer.valueOf(x).compareTo(other.x);
+		}
 	}
 }

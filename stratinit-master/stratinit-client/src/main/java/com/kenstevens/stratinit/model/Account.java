@@ -98,5 +98,4 @@ public class Account {
 		this.width = point.x;
 		this.height = point.y;
 	}
-
 }
