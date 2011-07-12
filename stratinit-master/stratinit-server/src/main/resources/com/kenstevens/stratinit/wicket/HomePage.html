@@ -8,12 +8,10 @@
 <h2>Welcome <span wicket:id="username">Username goes here</span> to Strategic Initiative!</h2>
 
 <p>Strategic Initiative is an online multiplayer military strategy game played over 10 days where the objective is for you and your ally to control the most cities on the map.</p>
-<p><a href="http://www.strategicinitiative.org:8080/stratinit/register/Register.html"><strong>REGISTER NOW</strong></a> to join one of the most exciting online strategy experiences available!</p>
+<p><wicket:link><a href="RegistrationPage.html"><strong>REGISTER NOW</strong></a></wicket:link> to join one of the most exciting online strategy experiences available!</p>
 <p>Already registered? Then click <a href="../docs/play.shtml"><strong>PLAY NOW</strong></a> to enter the fray!</p>
 Move this:
-			<wicket:link>
-            <a href = "admin/AdminPage.html">Admin</a><br/>
-            </wicket:link>
+			<wicket:link><a href="admin/AdminPage.html">Admin</a></wicket:link>
 </wicket:extend>
 
 </html>
