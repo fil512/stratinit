@@ -86,7 +86,7 @@ public class PlayerTableControl {
 				perc = 100 * nation.getWins() / nation.getPlayed();
 			}
 			item.setText(new String[] { nation.isLoggedIn() ? "*" : "",
-					nation.getMyRelationString(), nation.getName(),
+					nation.getMyRelationString(), nation.getTheirRelationString(), nation.getName(),
 					"" + nation.getCities(), "" + nation.getPower(),
 					"" + nation.getPlayed(), "" + perc });
 			item.setData(nation);
