@@ -33,9 +33,9 @@ public class PlayerTabItem extends Composite {
 	private Combo yourRelationCombo;
 	private Table teamTable;
 
-
 	/**
 	 * Create the composite
+	 * 
 	 * @param tabFolder
 	 * @param style
 	 */
@@ -47,8 +47,6 @@ public class PlayerTabItem extends Composite {
 			yourRelationCombo.add(relationType.toString());
 		}
 
-
-
 	}
 
 	private void createContents() {
@@ -59,49 +57,49 @@ public class PlayerTabItem extends Composite {
 			}
 		});
 
-						Label teamsLabel = new Label(this, SWT.NONE);
-						FormData fdTeamsLabel = new FormData();
-						fdTeamsLabel.top = new FormAttachment(0, 2);
-						fdTeamsLabel.left = new FormAttachment(0, 2);
-						teamsLabel.setLayoutData(fdTeamsLabel);
-						teamsLabel.setText("Teams:");
+		Label teamsLabel = new Label(this, SWT.NONE);
+		FormData fdTeamsLabel = new FormData();
+		fdTeamsLabel.top = new FormAttachment(0, 2);
+		fdTeamsLabel.left = new FormAttachment(0, 2);
+		teamsLabel.setLayoutData(fdTeamsLabel);
+		teamsLabel.setText("Teams:");
 
-				teamTable = new Table(this, SWT.BORDER | SWT.HIDE_SELECTION);
-				FormData fdTeamTable = new FormData();
-				fdTeamTable.right = new FormAttachment(0, 414);
-				fdTeamTable.bottom = new FormAttachment(30);
-				fdTeamTable.top = new FormAttachment(teamsLabel, 1);
-				fdTeamTable.left = new FormAttachment(0);
-				teamTable.setLayoutData(fdTeamTable);
-				teamTable.setHeaderVisible(true);
-				teamTable.setLinesVisible(true);
+		teamTable = new Table(this, SWT.BORDER | SWT.HIDE_SELECTION);
+		FormData fdTeamTable = new FormData();
+		fdTeamTable.right = new FormAttachment(0, 414);
+		fdTeamTable.bottom = new FormAttachment(30);
+		fdTeamTable.top = new FormAttachment(teamsLabel, 1);
+		fdTeamTable.left = new FormAttachment(0);
+		teamTable.setLayoutData(fdTeamTable);
+		teamTable.setHeaderVisible(true);
+		teamTable.setLinesVisible(true);
 
-						// DISABLE selection in the team table
-						teamTable.addListener(SWT.EraseItem, new Listener() {
-							public void handleEvent(Event event) {
-								if((event.detail & SWT.SELECTED) != 0 ){
-									event.detail &= ~SWT.SELECTED;
-									TableItem item = (TableItem) event.item;
-									Rectangle r = item.getBounds(event.index);
-									event.gc.setBackground(item.getBackground(event.index));
-									event.gc.setForeground(item.getForeground(event.index));
-									event.gc.drawText(" ", r.x, r.y,false);
-								}
-							}
-						});
+		// DISABLE selection in the team table
+		teamTable.addListener(SWT.EraseItem, new Listener() {
+			public void handleEvent(Event event) {
+				if ((event.detail & SWT.SELECTED) != 0) {
+					event.detail &= ~SWT.SELECTED;
+					TableItem item = (TableItem) event.item;
+					Rectangle r = item.getBounds(event.index);
+					event.gc.setBackground(item.getBackground(event.index));
+					event.gc.setForeground(item.getForeground(event.index));
+					event.gc.drawText(" ", r.x, r.y, false);
+				}
+			}
+		});
 
-								TableColumn tblclmnPlayer = new TableColumn(teamTable, SWT.NONE);
-								tblclmnPlayer.setWidth(165);
-								tblclmnPlayer.setText("player");
+		TableColumn tblclmnPlayer = new TableColumn(teamTable, SWT.NONE);
+		tblclmnPlayer.setWidth(165);
+		tblclmnPlayer.setText("player");
 
-										TableColumn tblclmnPlayer_1 = new TableColumn(teamTable, SWT.NONE);
-										tblclmnPlayer_1.setWidth(165);
-										tblclmnPlayer_1.setText("player");
+		TableColumn tblclmnPlayer_1 = new TableColumn(teamTable, SWT.NONE);
+		tblclmnPlayer_1.setWidth(165);
+		tblclmnPlayer_1.setText("player");
 
-												TableColumn tblclmnScore = new TableColumn(teamTable, SWT.NONE);
-												tblclmnScore.setToolTipText("Total number of cities");
-												tblclmnScore.setWidth(75);
-												tblclmnScore.setText("score");
+		TableColumn tblclmnScore = new TableColumn(teamTable, SWT.NONE);
+		tblclmnScore.setToolTipText("Total number of cities");
+		tblclmnScore.setWidth(75);
+		tblclmnScore.setText("score");
 
 		playerTable = new Table(this, SWT.BORDER | SWT.SINGLE
 				| SWT.FULL_SELECTION);
@@ -119,14 +117,23 @@ public class PlayerTabItem extends Composite {
 		loggedOnColumn.setWidth(23);
 		loggedOnColumn.setText("*");
 
-		final TableColumn newColumnTableColumn = new TableColumn(playerTable, SWT.NONE);
-		newColumnTableColumn.setToolTipText("A = ally, F = friendly, N = NAP, W = war");
-		newColumnTableColumn.setWidth(31);
-		newColumnTableColumn.setText("A");
+		final TableColumn myColumnTableColumn = new TableColumn(playerTable,
+				SWT.NONE);
+		myColumnTableColumn
+				.setToolTipText("My Relation: A = ally, F = friendly, N = NAP, W = war");
+		myColumnTableColumn.setWidth(31);
+		myColumnTableColumn.setText("M");
+
+		final TableColumn theirColumnTableColumn = new TableColumn(playerTable,
+				SWT.NONE);
+		theirColumnTableColumn
+				.setToolTipText("Their Relation: A = ally, F = friendly, N = NAP, W = war");
+		theirColumnTableColumn.setWidth(31);
+		theirColumnTableColumn.setText("T");
 
 		final TableColumn nameColumnTableColumn = new TableColumn(playerTable,
 				SWT.NONE);
-		nameColumnTableColumn.setWidth(159);
+		nameColumnTableColumn.setWidth(128);
 		nameColumnTableColumn.setText("name");
 
 		final TableColumn citiesColumnTableColumn = new TableColumn(
@@ -137,7 +144,8 @@ public class PlayerTabItem extends Composite {
 
 		final TableColumn powerColumnTableColumn = new TableColumn(playerTable,
 				SWT.NONE);
-		powerColumnTableColumn.setToolTipText("Total value (hours) of all units");
+		powerColumnTableColumn
+				.setToolTipText("Total value (hours) of all units");
 		powerColumnTableColumn.setWidth(59);
 		powerColumnTableColumn.setText("power");
 
@@ -147,8 +155,8 @@ public class PlayerTabItem extends Composite {
 		playedColumnTableColumn.setWidth(43);
 		playedColumnTableColumn.setText("play");
 
-
-		final TableColumn winPercColumnTableColumn = new TableColumn(playerTable, SWT.NONE);
+		final TableColumn winPercColumnTableColumn = new TableColumn(
+				playerTable, SWT.NONE);
 		winPercColumnTableColumn.setToolTipText("Percentage of Games Won");
 		winPercColumnTableColumn.setWidth(54);
 		winPercColumnTableColumn.setText("win%");
@@ -164,7 +172,7 @@ public class PlayerTabItem extends Composite {
 		refreshButton.setToolTipText("Refresh player data");
 
 		Group group = new Group(this, SWT.NONE);
-		group.setLayout(new GridLayout(4,false));
+		group.setLayout(new GridLayout(4, false));
 		FormData fdGroup = new FormData();
 		fdGroup.left = new FormAttachment(refreshButton, 6);
 		fdGroup.right = new FormAttachment(100, 5);
@@ -237,21 +245,27 @@ public class PlayerTabItem extends Composite {
 	public Combo getMyRelationCombo() {
 		return yourRelationCombo;
 	}
+
 	public Text getSwitchesText() {
 		return switchesText;
 	}
+
 	public Text getTheirRelationText() {
 		return theirRelationText;
 	}
+
 	public Text getTheirSwitchesText() {
 		return theirSwitchesText;
 	}
+
 	public Text getTheirNextRelationText() {
 		return theirNextRelationText;
 	}
+
 	public Text getNextRelation() {
 		return nextRelation;
 	}
+
 	public Table getTeamTable() {
 		return teamTable;
 	}

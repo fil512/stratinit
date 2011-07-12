@@ -90,6 +90,20 @@ public class PrefsWindowControl {
 			}
 		});
 
+		final Button canvasScrollButton = prefsWindow.getCanvasScrollButton();
+		canvasScrollButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				try {
+					account.getPreferences().setCanvasScroll(
+							canvasScrollButton.getSelection());
+				} catch (Exception e1) {
+					logger.error(e1.getMessage(), e1);
+				}
+			}
+		});
+
 		final Button showFOWButton = prefsWindow.getShowFOWButton();
 		showFOWButton.addSelectionListener(new SelectionAdapter() {
 
@@ -120,6 +134,8 @@ public class PrefsWindowControl {
 		liberatorButton.setSelection(account.getPreferences().isLiberator());
 		Button switchMouseButton = prefsWindow.getSwitchMouseButton();
 		switchMouseButton.setSelection(account.getPreferences().isSwitchMouse());
+		Button canvasScrollButton = prefsWindow.getCanvasScrollButton();
+		canvasScrollButton.setSelection(account.getPreferences().isCanvasScroll());
 		Button showFOWButton = prefsWindow.getShowFOWButton();
 		showFOWButton.setSelection(account.getPreferences().isShowFOW());
 	}

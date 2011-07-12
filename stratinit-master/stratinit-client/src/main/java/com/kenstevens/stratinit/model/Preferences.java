@@ -17,6 +17,8 @@ public class Preferences {
 	private boolean switchMouse = false;
 	@Element(required=false)
 	private boolean showFOW = true;
+	@Element(required=false)
+	private boolean canvasScroll = true;
 	
 	public void setShowBuilding(boolean showBuilding) {
 		this.showBuilding = showBuilding;
@@ -47,6 +49,12 @@ public class Preferences {
 	}
 	public boolean isShowFOW() {
 		return showFOW;
+	}
+	public boolean isCanvasScroll() {
+		return canvasScroll;
+	}
+	public void setCanvasScroll(boolean canvasScroll) {
+		this.canvasScroll = canvasScroll;
 	}
 	
 
