@@ -1,18 +1,13 @@
 package com.kenstevens.stratinit.wicket.admin;
 
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import com.kenstevens.stratinit.wicket.BasePage;
 
-import com.kenstevens.stratinit.type.Constants;
-
-public class AdminPage extends WebPage {
+public class AdminPage extends BasePage {
 	private static final long serialVersionUID = 1L;
 
-	public AdminPage(final PageParameters parameters) {
-		add(new Label("version", Constants.SERVER_VERSION));
+	public AdminPage() {
+		super();
+
 		add(new ShutdownForm("shutdownForm"));
-		add(new FeedbackPanel("feedback"));
 	}
 }

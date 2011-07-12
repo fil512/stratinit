@@ -34,6 +34,9 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		mountPage("/admin/AdminPage", AdminPage.class);
 		mountPage("/admin/PostPage", PostPage.class);
+//		mountPage("/registration", RegistrationPage.class);
+//		mountPage("/", HomePage.class);
+//		mountPage("/login", LoginPage.class);
 		
 		getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 		getApplicationSettings().setPageExpiredErrorPage(PageExpired.class);

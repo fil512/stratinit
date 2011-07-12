@@ -1,14 +1,12 @@
 package com.kenstevens.stratinit.wicket.admin;
 
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import com.kenstevens.stratinit.wicket.BasePage;
 
-public class PostPage extends WebPage {
+public class PostPage extends BasePage {
 	private static final long serialVersionUID = 1L;
 
-	public PostPage(final PageParameters parameters) {
+	public PostPage() {
+		super();
 		add(new PostForm("postForm"));
-		add(new FeedbackPanel("feedback"));
 	}
 }
