@@ -91,6 +91,7 @@ public class MapCanvasControl implements TopLevelController {
 	private HandlerManager handlerManager;
 	@Autowired
 	SelectedNation selectedNation;
+
 	// TODO REF this class too big
 
 	public MapCanvasControl(Canvas canvas) {
@@ -306,7 +307,11 @@ public class MapCanvasControl implements TopLevelController {
 		}
 		boolean switchToSectorTab = true;
 		if (!sector.isMine()) {
-			selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT);
+			if (sector.getNation() == null && account.getPreferences().isCanvasScroll()) {
+				selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT_OTHER);
+			} else {
+				selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT);
+			}
 		} else {
 			if (db.getCity(sectorCoords) != null && tabManager.cityTabSelected()) {
 				selectEvent.selectSectorCoords(sectorCoords,

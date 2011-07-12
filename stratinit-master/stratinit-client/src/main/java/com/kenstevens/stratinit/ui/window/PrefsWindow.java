@@ -14,6 +14,7 @@ public class PrefsWindow implements Window {
 	private Button showBuildingButton;
 	private Button playSoundsButton;
 	private Button switchMouseButton;
+	private Button canvasScrollButton;
 	private Button showFOWButton;
 	
 	private Shell dialog;
@@ -32,7 +33,7 @@ public class PrefsWindow implements Window {
 	 * Create contents of the window
 	 */
 	protected void createContents(Shell dialog) {
-		dialog.setSize(169, 168);
+		dialog.setSize(200, 180);
 		dialog.setText("Preferences");
 		dialog.setLayout(new GridLayout());
 
@@ -49,6 +50,10 @@ public class PrefsWindow implements Window {
 		switchMouseButton = new Button(dialog, SWT.CHECK);
 		switchMouseButton.setToolTipText("Switch the meaning of right and left mouse buttons on the map.");
 		switchMouseButton.setText("Switch mouse buttons");
+
+		canvasScrollButton = new Button(dialog, SWT.CHECK);
+		canvasScrollButton.setToolTipText("Scroll selected sqare to centre when you select a land or water square on the map.");
+		canvasScrollButton.setText("Scroll map on water/land selection");
 
 		showFOWButton = new Button(dialog, SWT.CHECK);
 		showFOWButton.setToolTipText("Display // on sectors that are outside your line of sight.");
@@ -75,5 +80,13 @@ public class PrefsWindow implements Window {
 
 	public boolean isDisposed() {
 		return dialog.isDisposed();
+	}
+
+	public Button getCanvasScrollButton() {
+		return canvasScrollButton;
+	}
+
+	public void setCanvasScrollButton(Button canvasScrollButton) {
+		this.canvasScrollButton = canvasScrollButton;
 	}
 }

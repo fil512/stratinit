@@ -98,11 +98,7 @@ public class BuildingCombos extends Composite {
 	@Override
 	public void setVisible(boolean visible) {
 		buildingCombo.setVisible(visible);
-		if (buildingCombo.getText().equals(UnitType.BASE.toString())) {
-			nextBuildCombo.setVisible(false);
-		} else {
-			nextBuildCombo.setVisible(visible);
-		}
+		nextBuildCombo.setVisible(visible);
 		super.setVisible(visible);
 	}
 
