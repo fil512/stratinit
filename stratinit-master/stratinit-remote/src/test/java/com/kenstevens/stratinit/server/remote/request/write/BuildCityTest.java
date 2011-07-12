@@ -1,14 +1,17 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.City;
+import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
@@ -17,8 +20,9 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class BuildCityTest extends TwoPlayerBase {
-	private static final SectorCoords LAND = new SectorCoords(1,1);
-	private static final SectorCoords PORT = new SectorCoords(2,2);
+	private static final SectorCoords LAND = new SectorCoords(1,11);
+	private static final SectorCoords NEAR = new SectorCoords(1,13);
+	private static final SectorCoords PORT = new SectorCoords(2,11);
 
 	@Test
 	public void buildCityNotEnoughMob() {
@@ -54,7 +58,14 @@ public class BuildCityTest extends TwoPlayerBase {
 		List<City> cities = sectorDao.getCities(nationMe);
 		assertEquals(2, cities.size());
 		int cp = nationMe.getCommandPoints();
+		Collection<SectorSeen> sectors = sectorDao.getSectorsSeen(nationMe);
+		assertEquals(58, sectors.size());
+		SectorSeen near = new SectorSeen(nationMe, NEAR);
+		assertFalse(sectors.contains(near));
 		Result<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
+		sectors = sectorDao.getSectorsSeen(nationMe);
+		assertEquals(84, sectors.size());
+		assertTrue(sectors.contains(near));
 		assertEquals(cp - Constants.COMMAND_COST_BUILD_CITY, nationMe.getCommandPoints());
 		assertResult(result);
 		assertEquals(0, eng.getMobility());

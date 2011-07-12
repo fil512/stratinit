@@ -83,7 +83,7 @@ public class CityBuilderServiceImpl implements CityBuilderService {
 		}
 		
 		if (city.getType() != origCityType) {
-			sectorDaoService.cityChanged(city.getNation(), city);
+			sectorDaoService.cityChanged(city);
 		}
 		return true;
 	}
