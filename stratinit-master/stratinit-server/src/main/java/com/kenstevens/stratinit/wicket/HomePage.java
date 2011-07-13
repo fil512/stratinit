@@ -6,7 +6,7 @@ public class HomePage extends BasePage {
 	private static final long serialVersionUID = 1L;
 
     public HomePage() {
-    	add(new Label("username", getAuthenticatedSession().getPlayer().getUsername()));
+    	add(new Label("username", getAuthenticatedSession().getUsername()));
     }
     
 	public AuthenticatedSession getAuthenticatedSession() {

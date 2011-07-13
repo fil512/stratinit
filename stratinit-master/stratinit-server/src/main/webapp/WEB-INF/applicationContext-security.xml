@@ -11,15 +11,15 @@
                         http://www.springframework.org/schema/security
                          http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
-	<http auto-config="false" xmlns="http://www.springframework.org/schema/security">
-		<http-basic />
+	<http create-session="never" auto-config="true" xmlns="http://www.springframework.org/schema/security">
+		<remember-me />
 		<intercept-url pattern="/remoting/**" access="ROLE_USER" />
 		<intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
 		<intercept-url pattern="/**" filters="none" />
-		<form-login />
+		<form-login login-page="/wicket/bookmarkable/com.kenstevens.stratinit.wicket.LoginPage" />
 	</http>
 
-	<security:authentication-manager>
+	<security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider>
 			<security:password-encoder hash="sha" />
 			<security:jdbc-user-service

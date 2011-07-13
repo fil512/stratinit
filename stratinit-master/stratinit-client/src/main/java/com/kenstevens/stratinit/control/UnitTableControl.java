@@ -46,7 +46,6 @@ import com.kenstevens.stratinit.model.UnitList;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ColourMap;
 import com.kenstevens.stratinit.ui.selection.SelectEvent;
 import com.kenstevens.stratinit.ui.selection.Selection.Source;

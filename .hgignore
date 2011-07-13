@@ -33,5 +33,6 @@ syntax: glob
 stratinit-master/stratinit-server/StratInit.lock
 stratinit-master/stratinit-server/stratinit.log
 
+stratinit-master/stratinit-client/.classpath
 syntax: regexp
 ^stratinit-master/stratinit-server/\.classpath$
