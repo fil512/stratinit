@@ -8,8 +8,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.kenstevens.stratinit.type.UnitType;
-
 public class BuildingCombos extends Composite {
 	private Combo nextBuildCombo;
 	private Combo buildingCombo;
