@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.wicket;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.authentication.AuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
@@ -32,11 +32,8 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		super.init();
 		
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
-		mountPage("/admin/AdminPage", AdminPage.class);
-		mountPage("/admin/PostPage", PostPage.class);
-//		mountPage("/registration", RegistrationPage.class);
-//		mountPage("/", HomePage.class);
-//		mountPage("/login", LoginPage.class);
+		mountPackage("/", HomePage.class);
+		mountPackage("/admin", AdminPage.class);
 		
 		getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 		getApplicationSettings().setPageExpiredErrorPage(PageExpired.class);
