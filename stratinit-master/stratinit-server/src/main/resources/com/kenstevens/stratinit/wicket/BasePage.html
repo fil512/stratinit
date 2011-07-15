@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <HEAD><TITLE>Strategic Initiative</TITLE>
-<LINK REL=StyleSheet HREF="css/style.css" TYPE="text/css" MEDIA=screen>
+<LINK REL=StyleSheet HREF="/css/style.css" TYPE="text/css" MEDIA=screen>
 </HEAD>
 <BODY>
 
 <table class="menu">
   <tr>
-	<td align="left" class="menu"><wicket:link><a class="menu" href="HomePage.html">home</a></wicket:link></td>
+	<td align="left" class="menu"><a class="menu" wicket:id="HomePage">home</a></td>
 	<td width="100%" class="menu" />
     <td align="right" class="menu">
-    <wicket:link><a class="menu" href="LoginPage.html">login</a></wicket:link>
+    <a class="menu" wicket:id="LoginPage">login</a>
    </td>
     <td align="right" class="menu"><a class="menu" href="../docs/play.shtml">play</a></td>
   </tr>
@@ -23,7 +23,7 @@
 <td valign="top" width=140>
 <table class="menu">
 <tr><td class="side"><a class="side" href="/docs/guide.shtml">help</a></td></tr>
-<tr><td class="sideitem"><wicket:link><a class="sideitem" href="RegistrationPage.html">register</a></wicket:link></td>
+<tr><td class="sideitem"><a class="sideitem" wicket:id="RegistrationPage">register</a></td>
 <tr><td class="sideitem"><a class="sideitem" href="/docs/guide.shtml">guide</a></td></tr>
 <tr><td class="sideitem"><a class="sideitem" href="/docs/rules.shtml">rules</a></td></tr>
 <tr><td class="sideitem"><a class="sideitem" href="/docs/FAQ.shtml">faq</a></td></tr>
@@ -40,8 +40,8 @@
 <tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/wiki/ChangeLog">change log</a></td></tr>
 <tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/issues/list">issues</a></td></tr>
 <tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/source/checkout">source</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="../docs/about.shtml">about us</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="../docs/contact.shtml">contact us</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" wicket:id="AboutPage">about us</a></td></tr>
+<tr><td class="sideitem"><a class="sideitem" wicket:id="ContactPage">contact us</a></td></tr>
 </table>
 <!-- end left column -->
 </td>
