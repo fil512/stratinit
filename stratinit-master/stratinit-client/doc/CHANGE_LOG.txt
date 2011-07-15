@@ -5,6 +5,7 @@ Release 1.1.48 interim
   * Show both my relation and their relation on player tab
   * Allow next build for BASE (which makes sense when switch on tech gain is checked)
   * Added configurable option (default on) that scrolls the map when you select a land or water square (thanks SuperNovaSS)
+  * Fixed a couple of minor NullPointer bugs that crashed the client every now and then
 
 Release 1.1.48
   * Fixed error that occurred when building a city.
