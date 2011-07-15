@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.server.daoservice.impl;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,7 @@ import com.kenstevens.stratinit.server.daoservice.GameCreator;
 
 @Service
 public class GameCreatorImpl implements GameCreator {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private GameDao gameDao;

@@ -7,7 +7,8 @@ import java.util.TreeMap;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -31,7 +32,7 @@ import com.kenstevens.stratinit.type.Constants;
 public class DataCache extends Updatable {
 	private static final long serialVersionUID = 1L;
 
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private GameLoader gameLoader;

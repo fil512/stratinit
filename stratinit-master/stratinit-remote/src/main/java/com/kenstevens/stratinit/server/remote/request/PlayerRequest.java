@@ -2,28 +2,22 @@ package com.kenstevens.stratinit.server.remote.request;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.Authentication;
-import org.springframework.security.context.SecurityContextHolder;
 
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
-import com.kenstevens.stratinit.server.remote.request.write.PostAnnouncementRequest;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
-import com.kenstevens.stratinit.server.remote.session.StratInitSessionManager;
-import com.kenstevens.stratinit.server.remote.session.ThreadLocalContext;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.util.StackTraceHelper;
 
 public abstract class PlayerRequest<T> {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 
 

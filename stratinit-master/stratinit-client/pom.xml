@@ -3,13 +3,13 @@
 	<parent>
 		<artifactId>stratinit-master</artifactId>
 		<groupId>com.kenstevens.stratinit</groupId>
-		<version>1.1.0-SNAPSHOT</version>
+		<version>1.2.0-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>stratinit-client</artifactId>
 	<name>Strategic Initiative</name>
 	<packaging>jar</packaging>
-	<version>1.1</version>
+	<version>1.2</version>
 	<description>The client for playing the online strategy game Strategic Initiative</description>
 	<url>${jnlp.url}</url>
 
@@ -89,7 +89,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
+			<artifactId>spring-context</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -141,9 +141,6 @@
 			<artifactId>jmock</artifactId>
 		</dependency>
 	</dependencies>
-	<scm>
-		<connection>scm:svn:https://stratinit.googlecode.com/svn/stratinit-master/stratinit-client</connection>
-	</scm>
 	<build>
 		<plugins>
 			<plugin>
@@ -237,17 +234,7 @@
 					<verbose>true</verbose>
 
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.0-beta-9</version>
-				<configuration>
-					<tagBase>https://stratinit.googlecode.com/svn/tags</tagBase>
-					<!-- See http://jira.codehaus.org/browse/SCM-406 -->
-					<remoteTagging>true</remoteTagging>
-				</configuration>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 </project>

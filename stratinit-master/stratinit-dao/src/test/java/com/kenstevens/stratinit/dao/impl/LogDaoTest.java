@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.TransactionSystemException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.LogDao;
@@ -58,7 +58,7 @@ public class LogDaoTest extends StratInitTest {
 		assertEquals(log.getId(), logs.get(0).getId());
 	}
 	
-	@Test(expected=TransactionSystemException.class)
+	@Test(expected=InvalidDataAccessApiUsageException.class)
 	public void testDetachedUnitLogPersistence() {
 		createUnit1();
 		Unit unit2 = new Unit(testNation1, UnitType.INFANTRY, testCoords);

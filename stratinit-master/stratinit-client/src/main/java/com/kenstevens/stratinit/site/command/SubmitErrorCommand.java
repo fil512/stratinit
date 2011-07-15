@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.site.command;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import com.kenstevens.stratinit.util.StackTraceHelper;
 @Scope("prototype")
 @Component
 public class SubmitErrorCommand extends Command<Integer> {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
 	Account account;
 	@Autowired
