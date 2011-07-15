@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.model.BattleLogList;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.Command;
@@ -29,20 +30,26 @@ public class BattleLogAction extends Action {
 	private void initialize() {
 		getBattleLogCommand = spring.getBean(GetBattleLogCommand.class);
 	}
-	
+
 	@Override
 	public Command<? extends Object> getCommand() {
 		return getBattleLogCommand;
 	}
-	
+
 	@Override
 	public void postRequest() {
-		statusReporter.reportResult(db.getBattleLogList().size()+" battle log entries loaded.");
+		BattleLogList battleLogList = db.getBattleLogList();
+		if (battleLogList == null) {
+			statusReporter.reportResult("No battle log entries loaded.");
+		} else {
+			statusReporter.reportResult(battleLogList.size()
+					+ " battle log entries loaded.");
+		}
 	}
 
 	@Override
 	public boolean canRepeat() {
 		return false;
 	}
-	
+
 }
