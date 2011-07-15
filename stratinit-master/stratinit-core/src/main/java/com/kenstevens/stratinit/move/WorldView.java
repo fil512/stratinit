@@ -20,7 +20,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.SectorSuppliesUnitPredicate;
 import com.kenstevens.stratinit.world.predicate.SectorToWorldSectorFunction;
 public class WorldView implements CoordMeasure {
-	private World world;
+	private final World world;
 	private final Nation nation;
 	private final Map<Nation, RelationType> myRelationMap;
 	private final Map<Nation, RelationType> theirRelationMap;
