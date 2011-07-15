@@ -184,7 +184,11 @@ public class Data {
 	}
 
 	public CityView getCity(SectorCoords sectorCoords) {
-		return getCity(getWorld().getWorldSector(sectorCoords));
+		WorldView world = getWorld();
+		if (world == null) {
+			return null;
+		}
+		return getCity(world.getWorldSector(sectorCoords));
 	}
 
 	public void setLoggedIn(boolean loggedIn) {
