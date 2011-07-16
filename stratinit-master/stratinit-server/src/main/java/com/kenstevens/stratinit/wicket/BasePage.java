@@ -12,6 +12,10 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.wicket.components.SignOutPanel;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
 import com.kenstevens.stratinit.wicket.docs.ContactPage;
+import com.kenstevens.stratinit.wicket.docs.FAQPage;
+import com.kenstevens.stratinit.wicket.docs.GuidePage;
+import com.kenstevens.stratinit.wicket.docs.PlayPage;
+import com.kenstevens.stratinit.wicket.docs.RulesPage;
 
 public class BasePage extends WebPage {
 	private static final long serialVersionUID = 1L;
@@ -34,5 +38,9 @@ public class BasePage extends WebPage {
 		add(new BookmarkablePageLink<Page>("AboutPage", AboutPage.class));
 		add(new BookmarkablePageLink<Page>("RegistrationPage", RegistrationPage.class));
 		add(new BookmarkablePageLink<Page>("LoginPage", LoginPage.class));
+		add(new BookmarkablePageLink<Page>("FAQPage", FAQPage.class));
+		add(new BookmarkablePageLink<Page>("GuidePage", GuidePage.class));
+		add(new BookmarkablePageLink<Page>("PlayPage", PlayPage.class));
+		add(new BookmarkablePageLink<Page>("RulesPage", RulesPage.class));
 	}
 }
