@@ -1,22 +1,10 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
-
-
-<html>
-
-<HEAD><TITLE>Strategic Initiative</TITLE>
-<LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
-</HEAD>
-<BODY>
-<!--#include virtual="../fragments/menu.html" -->
-<!--#include virtual="../fragments/top.html" -->
-
-
-
-<img src="../images/Splash.jpg" width="495" height="194"/>
-
-
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>Play</title>
+	</head>
+	<body>
+		<wicket:extend>
 <h2>Rules</h2>
 
 
@@ -105,10 +93,6 @@ land or a city.  The edges of the map wrap around, so if you sail off one edge o
 
 
 
-	</li>
-
-
-
 	<li><img src="../images/city/base.gif"/>
 
 
@@ -118,7 +102,6 @@ land or a city.  The edges of the map wrap around, so if you sail off one edge o
 
 
 	Bases do not build units.  Specifically, a Base has the following attributes:
-
 
 
 	<ul>
@@ -1753,11 +1736,11 @@ A supply ship or transport only provides supply if it has at least one ammo on b
 
 
 
-	<li>Have normal movement.
+	<li>Have normal movement.</li>
 
 
 
-	<li>Ammo automatically replenished.
+	<li>Ammo automatically replenished.</li>
 
 
 
@@ -1777,7 +1760,7 @@ A supply ship or transport only provides supply if it has at least one ammo on b
 
 
 
-	<li>Pay twice the cost to attack or move.
+	<li>Pay twice the cost to attack or move.</li>
 
 
 
@@ -2116,8 +2099,6 @@ the table below:</p>
 
 
 
-</p>
-
 
 
 
@@ -2260,12 +2241,6 @@ The maximum technology a nation can have is 16.</p>
 
 <p>A typical Strategic Initiative game lasts 10 days. When the game end time is reached, the winning team is the team of allies whose combined number of cities is higher than all the other teams. Both players on the winning team score 1 win.</p>
 
-  <!--#include virtual="../fragments/bottom.html" -->
-</body>
-
-
-
+		</wicket:extend>
+	</body>
 </html>
-
-
-
