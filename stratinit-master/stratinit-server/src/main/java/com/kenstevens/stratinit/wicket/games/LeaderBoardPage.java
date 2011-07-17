@@ -25,8 +25,7 @@ public class LeaderBoardPage extends BasePage {
 		super();
 		// Add table of players
 				final PageableListView<Player> playerView;
-				add(playerView = new PageableListView<Player>("players", new PropertyModel<List<Player>>(this,
-					"players"), 20)
+				add(playerView = new PageableListView<Player>("players", new PlayerListModel(this), 20)
 				{
 					@Override
 					public void populateItem(final ListItem<Player> listItem)

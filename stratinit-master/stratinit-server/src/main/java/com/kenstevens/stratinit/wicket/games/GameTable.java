@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.velocity;
+package com.kenstevens.stratinit.wicket.games;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;

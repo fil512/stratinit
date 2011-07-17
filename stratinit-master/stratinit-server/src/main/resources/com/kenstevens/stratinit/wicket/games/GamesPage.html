@@ -1,7 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <wicket:extend>
-  <h2>Leader Board</h2>
+  <h2>Strategic Initiative <span wicket:id="title"/> Games</h2>
+<p align=left class="teams">
+See Also: <a wicket:id="seeAlsoLink"><span wicket:id="otherTitle"/> Games</a>
+</p>
   <table class="games">
     <div wicket:id="games">
       <tr class="games">
@@ -37,13 +40,10 @@
             </tr>
           </table>
           </p>
-          <!--
-          <p align=left class="teams"> <a wicket:id="MessageBoardPage" href="#">Message Board</a> </p>
-          -->
+          <p align=left class="teams"> <a wicket:id="messageBoardLink" href="#">Message Board</a> </p>
           </td>
       </tr>
     </div>
   </table>
-  <div style="margin-top: 1em"> <span wicket:id = "navigator"/> </div>
 </wicket:extend>
 </HTML>
