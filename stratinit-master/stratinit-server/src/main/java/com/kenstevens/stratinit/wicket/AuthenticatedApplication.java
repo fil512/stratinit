@@ -8,6 +8,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import com.kenstevens.stratinit.wicket.admin.AdminPage;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
+import com.kenstevens.stratinit.wicket.games.LeaderBoardPage;
 
 /**
  * AuthenticatedApplication object for your web application. If you want to run
@@ -27,6 +28,7 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		mountPackage("/admin", AdminPage.class);
 		mountPackage("/docs", AboutPage.class);
+		mountPackage("/games", LeaderBoardPage.class);
 		getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 		getApplicationSettings().setPageExpiredErrorPage(PageExpired.class);
 	}

@@ -153,6 +153,13 @@ public class Player implements Serializable {
 	public boolean isEmailGameMail() {
 		return emailGameMail;
 	}
+	
+	public int getWinPerc() {
+		if (played == 0) {
+			return 0;
+		}
+		return 100 * wins / played;
+	}
 
 	public void copyFrom(Player player) {
 		this.email = player.email;
