@@ -32,6 +32,7 @@ public class BasePage extends WebPage {
 	}
 
 	public BasePage(final PageParameters parameters) {
+		super(parameters);
 		add(new SignOutPanel("signOutPanel"));
 		add(new Label("version", Constants.SERVER_VERSION));
 		add(new FeedbackPanel("feedback"));
@@ -45,6 +46,9 @@ public class BasePage extends WebPage {
 		add(new BookmarkablePageLink<Page>("PlayPage", PlayPage.class));
 		add(new BookmarkablePageLink<Page>("RulesPage", RulesPage.class));
 		add(new BookmarkablePageLink<Page>("LeaderBoardPage", LeaderBoardPage.class));
-		add(new BookmarkablePageLink<Page>("GamesPage", GamesPage.class));
+		BookmarkablePageLink<Page> gamesPageLink = new BookmarkablePageLink<Page>("GamesPage", GamesPage.class);
+		// FIXME
+		gamesPageLink.getPageParameters().add("mode", "active");
+		add(gamesPageLink);
 	}
 }

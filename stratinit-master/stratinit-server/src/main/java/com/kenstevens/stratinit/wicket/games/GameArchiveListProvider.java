@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.velocity;
+package com.kenstevens.stratinit.wicket.games;
 
 import java.util.ArrayList;
 import java.util.List;
