@@ -2,26 +2,27 @@
 <HTML>
 <wicket:extend>
 <h2>Leader Board</h2>
- <table class="game" >
-	<tr class="game" >
-	  <th class="game">Name</th>
-	  <th class="game">Won</th>
-	  <th class="game">Played</th>
-	  <th class="game">Win%</th>
+<span>
+ <table class="games" >
+	<tr class="games" >
+	  <th class="games">Name</th>
+	  <th class="games">Won</th>
+	  <th class="games">Played</th>
+	  <th class="games">Win%</th>
     </tr>
-    <tr  class="game" wicket:id = "players">
-      <td class="game">
+    <tr  class="games" wicket:id = "players">
+      <td class="games">
         <span wicket:id = "name">hydrogen</span>
       </td>
-      <td class="game">
+      <td class="games">
         <span wicket:id = "won">
         20
         </span>
       </td>
-      <td class="game">
+      <td class="games">
         <span wicket:id = "played" href="#">20</span>
       </td>
-      <td class="game">
+      <td class="games">
         <span wicket:id = "winperc" href="#">100%</span>
       </td>
     </tr>
@@ -29,5 +30,6 @@
   <div style="margin-top: 1em">
   <span wicket:id = "navigator"/>
   </div>
+  </span>
 </wicket:extend>
 </HTML>
