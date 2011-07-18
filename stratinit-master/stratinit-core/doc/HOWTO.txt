@@ -17,6 +17,12 @@ You need to touch src/test/resources/META-INF/persistence.xml in order for it to
 will try to connect directly to postgres and you may get an error like:
 	Caused by: org.hibernate.HibernateException: Missing table: CityCapturedBattleLog
 
+HOW TO DEPLOY TO TOMCAT
+1) Remove webapp/ROOT
+2) Remove webapp/stratinit
+3) Rename stratinit.war to ROOT.war
+4) in server.xml change 8080 to 80
+
 HOW TO MERGE
 1) in C:\Users\Ken\released-workspace
 2) Commit changes
