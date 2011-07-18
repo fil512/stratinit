@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.wicket.admin;
+package com.kenstevens.stratinit.wicket.components;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -29,8 +29,8 @@ public class RegistrationForm extends Form<ValueMap> {
 	public RegistrationForm(String id) {
 		super(id, new CompoundPropertyModel<ValueMap>(new ValueMap()));
 
-		add(new RequiredTextField<String>("username"));
-		add(new RequiredTextField<String>("email").add(EmailAddressValidator.getInstance()));
+		add(new RequiredTextField<String>("username", String.class));
+		add(new RequiredTextField<String>("email", String.class).add(EmailAddressValidator.getInstance()));
 
 		Label pwdLabel = new Label("pwdLabel", "Password:");
 		PasswordTextField passwordTextField = new PasswordTextField("password");
