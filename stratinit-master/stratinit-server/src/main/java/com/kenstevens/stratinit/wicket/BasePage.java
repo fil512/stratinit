@@ -18,6 +18,7 @@ import com.kenstevens.stratinit.wicket.docs.PlayPage;
 import com.kenstevens.stratinit.wicket.docs.RulesPage;
 import com.kenstevens.stratinit.wicket.games.GamesPage;
 import com.kenstevens.stratinit.wicket.games.LeaderBoardPage;
+import com.kenstevens.stratinit.wicket.games.UnitsBuiltPage;
 
 public class BasePage extends WebPage {
 	private static final long serialVersionUID = 1L;
@@ -46,6 +47,7 @@ public class BasePage extends WebPage {
 		add(new BookmarkablePageLink<Page>("PlayPage", PlayPage.class));
 		add(new BookmarkablePageLink<Page>("RulesPage", RulesPage.class));
 		add(new BookmarkablePageLink<Page>("LeaderBoardPage", LeaderBoardPage.class));
+		add(new BookmarkablePageLink<Page>("UnitsBuiltPage", UnitsBuiltPage.class));
 		BookmarkablePageLink<Page> gamesPageLink = new BookmarkablePageLink<Page>("GamesPage", GamesPage.class);
 		gamesPageLink.getPageParameters().add("mode", "active");
 		add(gamesPageLink);

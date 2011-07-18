@@ -9,15 +9,18 @@ import com.kenstevens.stratinit.model.Mail;
 public class MessageListModel extends LoadableDetachableModel<List<Mail>> {
 	private static final long serialVersionUID = 1L;
 
-	private final MessageBoardPage messageBoardPage;
+	private final MessageListProvider messageListProvider;
 
-	public MessageListModel(MessageBoardPage messageBoardPage) {
-		this.messageBoardPage = messageBoardPage;
+	private final int gameId;
+
+	public MessageListModel(MessageListProvider messageListProvider, int gameId) {
+		this.messageListProvider = messageListProvider;
+		this.gameId = gameId;
 	}
 
 	@Override
 	protected List<Mail> load() {
-		return messageBoardPage.getMessages();
+		return messageListProvider.getMessages(gameId);
 	}
 
 }

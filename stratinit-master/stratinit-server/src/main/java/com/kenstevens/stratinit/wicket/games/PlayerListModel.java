@@ -9,15 +9,15 @@ import com.kenstevens.stratinit.model.Player;
 public class PlayerListModel extends LoadableDetachableModel<List<Player>> {
 	private static final long serialVersionUID = 1L;
 
-	private final LeaderBoardPage leaderBoardPage;
+	private final PlayerListProvider playerListProvider;
 
-	public PlayerListModel(LeaderBoardPage leaderBoardPage) {
-		this.leaderBoardPage = leaderBoardPage;
+	public PlayerListModel(PlayerListProvider playerListProvider) {
+		this.playerListProvider = playerListProvider;
 	}
 
 	@Override
 	protected List<Player> load() {
-		return leaderBoardPage.getPlayers();
+		return playerListProvider.getPlayers();
 	}
 
 }

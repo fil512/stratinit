@@ -1,9 +1,5 @@
 package com.kenstevens.stratinit.wicket.games;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -35,28 +31,15 @@ public class GamesPage extends BasePage {
 			gamesPageLink.getPageParameters().add("mode", "archive");
 		}
 		add(gamesPageLink);
-		final ListView<GameTable> gameView = new GameListView("games",
-				new GameListModel(this));
-		add(gameView);
-	}
-
-	private static Comparator<GameTable> gameByIdComparator = new Comparator<GameTable>() {
-		@Override
-		public int compare(GameTable game1, GameTable game2) {
-			return Integer.valueOf(game2.getId()).compareTo(game1.getId());
-		}
-	};
-
-	public List<GameTable> getGames() {
 		GameListProvider gameListProvider;
-		String mode = getPageParameters().get("mode").toString();
 		if ("archive".equals(mode)) {
 			gameListProvider = gameArchiveListProvider;
 		} else {
 			gameListProvider = gameActiveListProvider;
 		}
-		List<GameTable> gameList = gameListProvider.getGameTableList();
-		Collections.sort(gameList, gameByIdComparator);
-		return gameList;
+		final ListView<GameTable> gameView = new GameListView("games",
+				new GameListModel(gameListProvider));
+		add(gameView);
 	}
+
 }
