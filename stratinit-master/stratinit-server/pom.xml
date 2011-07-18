@@ -32,14 +32,6 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>jstl</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>taglibs</groupId>
-			<artifactId>standard</artifactId>
-		</dependency>
 		<!-- Needed for org.springframework.security.annotation.SecuredMethodDefinitionSource -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
