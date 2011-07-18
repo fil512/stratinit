@@ -98,11 +98,7 @@
 		<dependency>
 			<groupId>${swt.groupId}</groupId>
 			<artifactId>${swt.artifactId}</artifactId>
-			<version>3.4.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>ui</artifactId>
+			<version>3.5.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.simpleframework</groupId>

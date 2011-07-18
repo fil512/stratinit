@@ -273,61 +273,6 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.eclipse</groupId>
-				<artifactId>ui</artifactId>
-				<version>3.3.0-I20070614-0800</version>
-				<exclusions>
-					<exclusion>
-						<artifactId>help</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>expressions</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>expressions</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jface</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jface</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jface</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>osgi</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jobs</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>databinding</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>databinding</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>databinding</artifactId>
-						<groupId>org.eclipse.jface</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>workbench</artifactId>
-						<groupId>org.eclipse.ui</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
 				<groupId>org.simpleframework</groupId>
 				<artifactId>simple-xml</artifactId>
 				<version>2.5.3</version>
@@ -378,17 +323,6 @@
 				<version>1.6.6</version>
 			</dependency>
 			<dependency>
-				<groupId>jstl</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.1.2</version>
-			</dependency>
-			<dependency>
-				<groupId>taglibs</groupId>
-				<artifactId>standard</artifactId>
-				<version>1.1.2</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-simple</artifactId>
 				<version>1.6.1</version>
@@ -410,35 +344,9 @@
 				<version>1.8.0.7</version>
 			</dependency>
 			<dependency>
-				<groupId>net.sf.ehcache</groupId>
-				<artifactId>ehcache</artifactId>
-				<version>1.8.0</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>c3p0</groupId>
-				<artifactId>c3p0</artifactId>
-				<version>0.9.1.2</version>
-			</dependency>
-			<dependency>
 				<groupId>com.carbonfive.db-support</groupId>
 				<artifactId>db-migration</artifactId>
 				<version>0.9.9-m5</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity</artifactId>
-				<version>${velocity.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity-tools</artifactId>
-				<version>${velocity.tools.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.tomcat</groupId>
-				<artifactId>tomcat-catalina</artifactId>
-				<version>7.0.16</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.wicket</groupId>
@@ -530,12 +438,6 @@
 		<repository>
 			<id>mvn</id>
 			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-		</repository>
-		<!-- <repository> <id>jboss</id> <url>http://repository.jboss.com/maven2</url> 
-			</repository> -->
-		<repository>
-			<id>smartgwt</id>
-			<url>http://www.smartclient.com/maven2</url>
 		</repository>
 		<repository>
 			<id>c5-public-repository</id>
