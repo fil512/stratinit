@@ -40,7 +40,7 @@ th.games {
 	background-color: #e3e3e3;
 }
 
-table.teams, tr.teams, td.teams, th.teams { 
+table.teams, tr.teams, td.teams, th.teams, td.narrow { 
 	border-width: 2px;
 	border-color: gray;
 	border-style: outset;
