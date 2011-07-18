@@ -47,8 +47,13 @@ public class BasePage extends WebPage {
 		add(new BookmarkablePageLink<Page>("RulesPage", RulesPage.class));
 		add(new BookmarkablePageLink<Page>("LeaderBoardPage", LeaderBoardPage.class));
 		BookmarkablePageLink<Page> gamesPageLink = new BookmarkablePageLink<Page>("GamesPage", GamesPage.class);
-		// FIXME
 		gamesPageLink.getPageParameters().add("mode", "active");
 		add(gamesPageLink);
+		// FIXME top nav should be a list view thing
+	}
+	
+    
+	public AuthenticatedSession getAuthenticatedSession() {
+		return (AuthenticatedSession) AuthenticatedSession.get();
 	}
 }

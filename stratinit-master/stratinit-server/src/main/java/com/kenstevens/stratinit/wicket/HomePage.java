@@ -15,8 +15,5 @@ public class HomePage extends BasePage {
 		// FIXME Really??
 		add(new BookmarkablePageLink<Page>("RegistrationPage2", RegistrationPage.class));
     }
-    
-	public AuthenticatedSession getAuthenticatedSession() {
-		return (AuthenticatedSession) AuthenticatedSession.get();
-	}
+
 }

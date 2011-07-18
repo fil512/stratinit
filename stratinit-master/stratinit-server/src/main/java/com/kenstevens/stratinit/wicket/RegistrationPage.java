@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.wicket;
 
 import org.apache.wicket.markup.html.IHeaderResponse;
 
-import com.kenstevens.stratinit.wicket.admin.RegistrationForm;
+import com.kenstevens.stratinit.wicket.components.RegistrationForm;
 
 
 public class RegistrationPage extends BasePage {
