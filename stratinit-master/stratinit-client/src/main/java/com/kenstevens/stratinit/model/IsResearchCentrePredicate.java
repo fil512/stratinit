@@ -2,12 +2,13 @@ package com.kenstevens.stratinit.model;
 
 import com.google.common.base.Predicate;
 import com.kenstevens.stratinit.type.CityType;
+import com.kenstevens.stratinit.type.UnitType;
 
-public class IsTechCentrePredicate implements Predicate<CityView> {
+public class IsResearchCentrePredicate implements Predicate<CityView> {
 
 	@Override
 	public boolean apply(CityView city) {
-		return city.getType() == CityType.TECH;
+		return city.getBuild() == UnitType.RESEARCH;
 	}
 
 }

@@ -15,7 +15,7 @@ public class CityList implements Iterable<CityView> {
 	public CityView get(SectorCoords coords) {
 		return cityMap.get(coords);
 	}
-	
+
 	public void add(CityView city) {
 		CityView newCity = city;
 		if (cityMap.get(city.getCoords()) != null) {
@@ -25,7 +25,7 @@ public class CityList implements Iterable<CityView> {
 		}
 		cityMap.put(newCity.getCoords(), newCity);
 	}
-	
+
 	public void addAll(List<CityView> cities) {
 		markDeleted();
 		for (CityView city : cities) {
@@ -33,8 +33,8 @@ public class CityList implements Iterable<CityView> {
 		}
 		deleteMarked();
 	}
-	
-// TODO REF too much copy paste with unitview and possibly others
+
+	// TODO REF too much copy paste with unitview and possibly others
 	private void deleteMarked() {
 		List<CityView> citiesToDelete = Lists.newArrayList();
 		for (CityView city : this) {
@@ -46,7 +46,7 @@ public class CityList implements Iterable<CityView> {
 			cityMap.remove(city.getCoords());
 		}
 	}
-	
+
 	public void markDeleted() {
 		for (CityView city : this) {
 			city.setDeleted(true);
@@ -67,9 +67,11 @@ public class CityList implements Iterable<CityView> {
 	}
 
 	public int countMyTechCentres() {
-		return Collections2.filter(cityMap.values(), new IsTechCentrePredicate()).size();
+		return Collections2.filter(cityMap.values(),
+				new IsTechCentrePredicate()).size()
+				+ Collections2.filter(cityMap.values(),
+						new IsResearchCentrePredicate()).size();
 	}
-
 
 	public List<CityView> getCities() {
 		// Safe copy to avoid concurrent modification exceptions
