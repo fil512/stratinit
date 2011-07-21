@@ -31,7 +31,8 @@ import com.kenstevens.stratinit.util.BuildHelper;
 @Component
 public class GameInfoWindow extends TableControl implements Window {
 	// TODO REF move this to clientConstants
-	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("MM/dd HH:mm");
+	private static final SimpleDateFormat FORMAT = new SimpleDateFormat(
+			"MM/dd HH:mm");
 
 	private Label gameDay;
 	private Shell dialog;
@@ -58,6 +59,7 @@ public class GameInfoWindow extends TableControl implements Window {
 
 	/**
 	 * Open the window
+	 * 
 	 * @wbp.parser.entryPoint
 	 */
 	public void open(Shell shell) {
@@ -81,114 +83,129 @@ public class GameInfoWindow extends TableControl implements Window {
 		group.setSize(966, 164);
 
 		Label gametimeRemainingLabel;
-// 0,0
+		// 0,0
 		final Label dayLabel = new Label(group, SWT.NONE);
-		dayLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		dayLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 		dayLabel.setText("Day:");
 
 		gameDay = new Label(group, SWT.NONE);
 		gameDay.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-// 0,1
+		// 0,1
 		Label techLabel;
 		techLabel = new Label(group, SWT.NONE);
 		techLabel.setText("Tech Level:");
-		techLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		techLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 
 		tech = new Label(group, SWT.NONE);
 		tech.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-// 1,0
+		// 1,0
 		Label lblGameStarts = new Label(group, SWT.NONE);
-		lblGameStarts.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblGameStarts.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 		lblGameStarts.setText("Game Starts:");
 
 		gameStarts = new Label(group, SWT.NONE);
-// 1,1
+		// 1,1
 		Label lblDailyTechGain = new Label(group, SWT.NONE);
-		lblDailyTechGain.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblDailyTechGain.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
 		lblDailyTechGain.setText("Daily Tech Gain:");
 
 		dailyTechGain = new Label(group, SWT.NONE);
-// 2,0
+		// 2,0
 		gametimeRemainingLabel = new Label(group, SWT.NONE);
-		gametimeRemainingLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		gametimeRemainingLabel.setLayoutData(new GridData(SWT.RIGHT,
+				SWT.CENTER, false, false, 1, 1));
 		gametimeRemainingLabel.setText("Game Ends:");
 
 		gameEnds = new Label(group, SWT.NONE);
 		gameEnds.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-// 2,1
+		// 2,1
 		Label lblMyTechGain = new Label(group, SWT.NONE);
-		lblMyTechGain.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblMyTechGain.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 		lblMyTechGain.setText("Tech from Tech Centres:");
 
 		myTechGain = new Label(group, SWT.NONE);
-		myTechGain.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-// 3,0
+		myTechGain.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false));
+		// 3,0
 		Label serverLabel;
 		serverLabel = new Label(group, SWT.NONE);
-		serverLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		serverLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 		serverLabel.setText("Server Version:");
 
 		serverVersion = new Label(group, SWT.NONE);
-		serverVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-// 3,1
+		serverVersion.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				false));
+		// 3,1
 		Label lblDailyTechBleed = new Label(group, SWT.NONE);
-		lblDailyTechBleed.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblDailyTechBleed.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
 		lblDailyTechBleed.setText("Tech from Bleed:");
 
 		dailyTechBleed = new Label(group, SWT.NONE);
-// 4,0
+		// 4,0
 		Label lblCommandPonts = new Label(group, SWT.NONE);
-		lblCommandPonts.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblCommandPonts.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
 		lblCommandPonts.setText("Command Ponts:");
 
 		commandPoints = new Label(group, SWT.NONE);
-// 4,1
+		// 4,1
 		Label lblUnitTypeLimit = new Label(group, SWT.NONE);
-		lblUnitTypeLimit.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblUnitTypeLimit.setToolTipText("Your current power / the max power you can build");
+		lblUnitTypeLimit.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
+		lblUnitTypeLimit
+				.setToolTipText("Your current power / the max power you can build");
 		lblUnitTypeLimit.setText("Power / Limit:");
 
 		powerLimit = new Label(group, SWT.NONE);
 		powerLimit.setText("");
-		powerLimit.setToolTipText("The Maximum number of units you can build of each type");
-// 5,0		
+		powerLimit
+				.setToolTipText("The Maximum number of units you can build of each type");
+		// 5,0
 		Label lblCpHour = new Label(group, SWT.NONE);
-		lblCpHour.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblCpHour.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 		lblCpHour.setText("CP / hour:");
-		
+
 		cpPerHour = new Label(group, SWT.NONE);
 
-// 5,1
+		// 5,1
 		Label lblRadarDistance = new Label(group, SWT.NONE);
-		lblRadarDistance.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblRadarDistance.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
+				false, false, 1, 1));
 		lblRadarDistance.setText("Radar Distance:");
-		
+
 		radar = new Label(group, SWT.NONE);
-		
-// 6,0		
+
+		// 6,0
 		Label lblally = new Label(group, SWT.NONE);
-		lblally.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblally.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false,
+				1, 1));
 		lblally.setText("Ally:");
-		
+
 		ally = new Label(group, SWT.NONE);
 
-// 6,1
+		// 6,1
 		Label lblAllyTech = new Label(group, SWT.NONE);
-		lblAllyTech.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblAllyTech.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false,
+				false, 1, 1));
 		lblAllyTech.setText("Ally Tech:");
-		
+
 		allyTech = new Label(group, SWT.NONE);
-		
-		
-		
 
 		table = new Table(dialog, SWT.BORDER | SWT.FULL_SELECTION);
 		table.setBounds(0, 170, 966, 421);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		
-//		TableColumn imageColumn = new TableColumn(table, SWT.NONE);
-//		imageColumn.setWidth(22);
+
+		// TableColumn imageColumn = new TableColumn(table, SWT.NONE);
+		// imageColumn.setWidth(22);
 
 		TableColumn tblclmnType = new TableColumn(table, SWT.NONE);
 		tblclmnType.setWidth(130);
@@ -197,7 +214,8 @@ public class GameInfoWindow extends TableControl implements Window {
 		TableColumn tblclmnCount = new TableColumn(table, SWT.NONE);
 		tblclmnCount.setWidth(55);
 		tblclmnCount.setText("count");
-		tblclmnCount.setToolTipText("Number of units of this type.  May not exceed Unit Type Limit above.");
+		tblclmnCount
+				.setToolTipText("Number of units of this type.  May not exceed Unit Type Limit above.");
 
 		TableColumn tblclmnAttack = new TableColumn(table, SWT.NONE);
 		tblclmnAttack.setWidth(77);
@@ -240,13 +258,12 @@ public class GameInfoWindow extends TableControl implements Window {
 		tblclmnNotes.setText("notes");
 	}
 
-
 	public void setContents() {
 		long powerMax = 0;
 		NationView nation = db.getNation();
 		if (db != null && db.getCityList() != null) {
 			powerMax = BuildHelper.powerLimit(db.getCityList().size());
-			powerLimit.setText(nation.getPower()+" / "+powerMax);
+			powerLimit.setText(nation.getPower() + " / " + powerMax);
 		}
 
 		if (gameStarts != null && db.getGameStarts() != null) {
@@ -254,26 +271,35 @@ public class GameInfoWindow extends TableControl implements Window {
 		}
 		if (gameEnds != null) {
 			gameEnds.setText(FORMAT.format(db.getGameEnds()));
-			gameDay.setText(""+db.getGameDay());
+			gameDay.setText("" + db.getGameDay());
 		}
 		if (db.getServerVersion() != null) {
 			serverVersion.setText(db.getServerVersion());
 		}
 		if (nation != null) {
-			commandPoints.setText(""+nation.getCommandPoints());
+			commandPoints.setText("" + nation.getCommandPoints());
 			String maxString = "";
 			if (nation.getHourlyCPGain() / 4 <= Constants.MIN_COMMAND_POINTS_GAINED_PER_TICK) {
 				maxString = " (min)";
 			} else if (nation.getHourlyCPGain() / 4 >= Constants.MAX_COMMAND_POINTS_GAINED_PER_TICK) {
 				maxString = " (max)";
 			}
-			cpPerHour.setText(""+nation.getHourlyCPGain()+maxString);
+			cpPerHour.setText("" + nation.getHourlyCPGain() + maxString);
 			tech.setText(String.format("%2.2f", nation.getTech()));
-			radar.setText(""+nation.getRadarRadius());
-			double techCentreContribution = techCentreContribution();
-			myTechGain.setText(String.format("%2.2f", techCentreContribution));
-			dailyTechBleed.setText(String.format("%2.2f", nation.getDailyTechBleed()));
-			dailyTechGain.setText(String.format("%2.2f", techCentreContribution + nation.getDailyTechBleed()));
+			radar.setText("" + nation.getRadarRadius());
+			int techCentreCount = countTechCentres();
+			double techCentreContribution = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES[techCentreCount];
+
+			myTechGain
+					.setText(String
+							.format("%2.2f (%s%d centres)",
+									techCentreContribution,
+									techCentreCount == Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length - 1 ? "max "
+											: "", techCentreCount));
+			dailyTechBleed.setText(String.format("%2.2f",
+					nation.getDailyTechBleed()));
+			dailyTechGain.setText(String.format("%2.2f", techCentreContribution
+					+ nation.getDailyTechBleed()));
 			NationView allyNation = db.getAlly();
 			if (allyNation != null) {
 				ally.setText(allyNation.toString());
@@ -284,12 +310,12 @@ public class GameInfoWindow extends TableControl implements Window {
 		group.layout();
 	}
 
-	private double techCentreContribution() {
+	private int countTechCentres() {
 		int techCentres = db.getCityList().countMyTechCentres();
 		if (techCentres >= Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length) {
 			techCentres = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length - 1;
 		}
-		return Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES[techCentres];
+		return techCentres;
 	}
 
 	// TODO REF move to a controller
@@ -307,10 +333,10 @@ public class GameInfoWindow extends TableControl implements Window {
 
 			Color color;
 			double myTech = db.getNation().getTech();
-			int myTechInt = (int)myTech;
+			int myTechInt = (int) myTech;
 			if (unitBase.getTech() <= myTech) {
 				color = ColourMap.WIDGET_HIGHLIGHT_SHADOW;
-			} else if (unitBase.getTech() <= myTech + Constants.TECH_NEXT_BUILD){
+			} else if (unitBase.getTech() <= myTech + Constants.TECH_NEXT_BUILD) {
 				color = ColourMap.WIDGET_LIGHT_SHADOW;
 			} else {
 				color = ColourMap.WIDGET_NORMAL_SHADOW;
@@ -320,30 +346,22 @@ public class GameInfoWindow extends TableControl implements Window {
 			}
 			item.setBackground(color);
 			if (unitTypeMax != 0 && count >= unitTypeMax) {
-					item.setForeground(ColourMap.RED);
+				item.setForeground(ColourMap.RED);
 			}
 		}
 		table.redraw();
 	}
 
 	private void unitBaseToItem(UnitBase unitBase, TableItem item, int count) {
-		item.setText(
-				new String[] {
-						unitBase.getType().toString(),
-						""+count,
-						unitBase.getBuiltIn().toString(),
-						""+unitBase.getTech(),
-						""+unitBase.getProductionTime(),
-						""+unitBase.getMobility(),
-						""+unitBase.getSight(),
-						""+unitBase.getAttack(),
-						""+unitBase.getAmmo(),
-						""+unitBase.getFlak(),
-						""+unitBase.getHp(),
-						unitBase.getNotes()
-				});
-		item.setImage(imageLibrary.getUnitImage(RelationType.NEUTRAL, unitBase.getType()));
-		}
+		item.setText(new String[] { unitBase.getType().toString(), "" + count,
+				unitBase.getBuiltIn().toString(), "" + unitBase.getTech(),
+				"" + unitBase.getProductionTime(), "" + unitBase.getMobility(),
+				"" + unitBase.getSight(), "" + unitBase.getAttack(),
+				"" + unitBase.getAmmo(), "" + unitBase.getFlak(),
+				"" + unitBase.getHp(), unitBase.getNotes() });
+		item.setImage(imageLibrary.getUnitImage(RelationType.NEUTRAL,
+				unitBase.getType()));
+	}
 
 	public boolean isDisposed() {
 		return dialog.isDisposed();
