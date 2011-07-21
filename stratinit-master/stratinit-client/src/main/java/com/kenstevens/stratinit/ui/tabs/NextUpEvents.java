@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.UpdateManager;
 
@@ -33,7 +34,7 @@ public class NextUpEvents {
 		for (City city : db.getCityList()) {
 			UpdateManager updateManager = new UpdateManager(city);
 			Date buildTime = roundTime(updateManager.getNextFutureUpdate());
-			if (city.getBuild() == UnitType.BASE) {
+			if (UnitBase.isNotUnit(city.getBuild())) {
 				continue;
 			}
 			UnitEvent unitEvent = new UnitEvent(updateManager.getNextFutureUpdate(), city.getCoords(), city.getBuild(), UnitEvent.Type.CREATE);

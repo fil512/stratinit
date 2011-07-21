@@ -110,12 +110,12 @@ public class StratInitWebBase extends StratInitDaoBase {
 
 	protected void assertShortFuel(Result<MoveCost> result, Unit plane) {
 		assertTrue(result.toString(),
-				plane.getUnitBase().getMobility() > plane.getFuel());
+				plane.getUnitBase().getMaxFuel() > plane.getFuel());
 	}
 
 	protected void assertFullFuel(Result<MoveCost> result, Unit plane) {
 		assertEquals(result.toString(),
-				plane.getUnitBase().getMobility(), plane.getFuel());
+				plane.getUnitBase().getMaxFuel(), plane.getFuel());
 	}
 
 	protected void assertFiredOnce(Result<MoveCost> result, Unit itank) {

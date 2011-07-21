@@ -55,10 +55,8 @@ public abstract class UnitBase {
 		//
 		LandUnitBase infantry = new LandUnitBase(UnitType.INFANTRY, 0, 8, 2, 1,
 				2, 1, 5);
-		LandUnitBase antiTank = new LandUnitBase(UnitType.ANTI_TANK, 5, 10, 2, 1, 3, 1,
-				6);
-		LandUnitBase tank = new LandUnitBase(UnitType.TANK, 6, 12, 3, 1, 3, 1,
-				8);
+		LandUnitBase tank = new LandUnitBase(UnitType.TANK, 6, 10, 3, 1, 3, 1,
+				9);
 		NavalUnitBase transport = new NavalUnitBase(UnitType.TRANSPORT, 0, 12,
 				6, 1, 0, 6, 8);
 		NavalUnitBase supply = new NavalUnitBase(UnitType.SUPPLY, 0, 6, 6, 1,
@@ -75,18 +73,25 @@ public abstract class UnitBase {
 				1, 4, 2, 24);
 		NavalUnitBase cruiser = new NavalUnitBase(UnitType.CRUISER, 9, 20, 8,
 				2, 8, 6, 30);
+		// t c       a
+		// e o m s a m
+		// c s o e t m h
+		// h t b e t o p
+		//
 		AirUnitBase fighter = new AirUnitBase(UnitType.FIGHTER, 6, 8, 16, 1,
 				2, 2, 4);
+		AirUnitBase cargoPlane = new AirUnitBase(UnitType.CARGO_PLANE, 7, 14,
+				30, 1, 0, 0, 8);
 		AirUnitBase heavyBomber = new AirUnitBase(UnitType.HEAVY_BOMBER, 7, 18,
 				30, 1, 0, 2, 8);
 		AirUnitBase navalBomber = new AirUnitBase(UnitType.NAVAL_BOMBER, 8, 12,
 				20, 1, 8, 1, 7);
 		AirUnitBase helicopter = new AirUnitBase(UnitType.HELICOPTER, 9, 8,
 				12, 2, 3, 1, 5);
-		LandUnitBase engineer = new LandUnitBase(UnitType.ENGINEER, 0, 12, 3, 1,
+		LandUnitBase engineer = new LandUnitBase(UnitType.ENGINEER, 0, 16, 3, 1,
 				0, 10, 4);
-		AirUnitBase zeppelin = new AirUnitBase(UnitType.ZEPPELIN, 0, 18, 4, 3,
-				0, 0, 2);
+		AirUnitBase zeppelin = new AirUnitBase(UnitType.ZEPPELIN, 0, 12, 5, 3,
+				0, 4, 2);
 		TechUnitBase satellite = new TechUnitBase(UnitType.SATELLITE, 10, 24,
 				100, 0, 0, 0, 4);
 		TechUnitBase icbm1 = new TechUnitBase(UnitType.ICBM_1, 12, 36, 30, 0,
@@ -97,11 +102,12 @@ public abstract class UnitBase {
 				0, 0, 4);
 		BaseUnitBase base = new BaseUnitBase(UnitType.BASE, 0, 24, 0, 0, 0, 0,
 				1);
+		TechUnitBase research = new TechUnitBase(UnitType.RESEARCH, 0, 24, 0, 0, 0, 0,
+				1);
 		// Weight
 		engineer.setWeight(1);
 		infantry.setWeight(1);
 		tank.setWeight(1);
-		antiTank.setWeight(1);
 		fighter.setWeight(1);
 		helicopter.setWeight(1);
 		navalBomber.setWeight(1);
@@ -115,6 +121,7 @@ public abstract class UnitBase {
 		supply.setSuppliesNavy(true);
 		// Carries Units
 		transport.setCapacity(6);
+		cargoPlane.setCapacity(4);
 		carrier.setCapacity(8);
 		helicopter.setCapacity(2);
 		engineer.setCapacity(1);
@@ -126,6 +133,7 @@ public abstract class UnitBase {
 		navalBomber.setCanSeeSubs(true);
 		helicopter.setCanSeeSubs(true);
 		// Bomber
+		zeppelin.setBombPercentage(10);
 		navalBomber.setBombPercentage(25);
 		heavyBomber.setBombPercentage(50);
 		// Capital
@@ -156,7 +164,6 @@ public abstract class UnitBase {
 		icbm2.setDevastates(true);
 		icbm3.setDevastates(true);
 		// Exceptions
-		zeppelin.setRequiresFuel(false);
 		zeppelin.setBuiltIn(CityType.TECH);
 		engineer.setBuiltIn(CityType.TECH);
 		// Patrol boat exception
@@ -166,7 +173,6 @@ public abstract class UnitBase {
 		base.setBase(true);
 
 		UNIT_BASE_MAP.put(UnitType.INFANTRY, infantry);
-		UNIT_BASE_MAP.put(UnitType.ANTI_TANK, antiTank);
 		UNIT_BASE_MAP.put(UnitType.TANK, tank);
 		UNIT_BASE_MAP.put(UnitType.TRANSPORT, transport);
 		UNIT_BASE_MAP.put(UnitType.SUPPLY, supply);
@@ -177,6 +183,7 @@ public abstract class UnitBase {
 		UNIT_BASE_MAP.put(UnitType.CARRIER, carrier);
 		UNIT_BASE_MAP.put(UnitType.CRUISER, cruiser);
 		UNIT_BASE_MAP.put(UnitType.FIGHTER, fighter);
+		UNIT_BASE_MAP.put(UnitType.CARGO_PLANE, cargoPlane);
 		UNIT_BASE_MAP.put(UnitType.HEAVY_BOMBER, heavyBomber);
 		UNIT_BASE_MAP.put(UnitType.NAVAL_BOMBER, navalBomber);
 		UNIT_BASE_MAP.put(UnitType.HELICOPTER, helicopter);
@@ -187,9 +194,9 @@ public abstract class UnitBase {
 		UNIT_BASE_MAP.put(UnitType.ICBM_2, icbm2);
 		UNIT_BASE_MAP.put(UnitType.ICBM_3, icbm3);
 		UNIT_BASE_MAP.put(UnitType.BASE, base);
+		UNIT_BASE_MAP.put(UnitType.RESEARCH, research);
 		
 		ORDERED_UNIT_TYPES.add(UnitType.INFANTRY);
-		ORDERED_UNIT_TYPES.add(UnitType.ANTI_TANK);
 		ORDERED_UNIT_TYPES.add(UnitType.TANK);
 		ORDERED_UNIT_TYPES.add(UnitType.TRANSPORT);
 		ORDERED_UNIT_TYPES.add(UnitType.SUPPLY);
@@ -200,6 +207,7 @@ public abstract class UnitBase {
 		ORDERED_UNIT_TYPES.add(UnitType.CARRIER);
 		ORDERED_UNIT_TYPES.add(UnitType.CRUISER);
 		ORDERED_UNIT_TYPES.add(UnitType.FIGHTER);
+		ORDERED_UNIT_TYPES.add(UnitType.CARGO_PLANE);
 		ORDERED_UNIT_TYPES.add(UnitType.HEAVY_BOMBER);
 		ORDERED_UNIT_TYPES.add(UnitType.NAVAL_BOMBER);
 		ORDERED_UNIT_TYPES.add(UnitType.HELICOPTER);
@@ -210,6 +218,7 @@ public abstract class UnitBase {
 		ORDERED_UNIT_TYPES.add(UnitType.ICBM_2);
 		ORDERED_UNIT_TYPES.add(UnitType.ICBM_3);
 		ORDERED_UNIT_TYPES.add(UnitType.BASE);
+		ORDERED_UNIT_TYPES.add(UnitType.RESEARCH);
 
 		for (UnitType type : UnitType.values()) {
 			UnitBase unitBase = getUnitBase(type);
@@ -318,15 +327,7 @@ public abstract class UnitBase {
 				return 2;
 			}
 		} else if (attacker.type == UnitType.FIGHTER) {
-			if (defender.isBomber() || defender.type == UnitType.HELICOPTER) {
-				return 2;
-			}
-		} else if (attacker.type == UnitType.INFANTRY) {
-			if (defender.type == UnitType.ANTI_TANK) {
-				return 2;
-			}
-		} else if (attacker.type == UnitType.ANTI_TANK) {
-			if (defender.type == UnitType.TANK) {
+			if (defender.isAir() && defender.type != UnitType.FIGHTER) {
 				return 2;
 			}
 		} else if (attacker.type == UnitType.DESTROYER || attacker.type == UnitType.CRUISER) {
@@ -569,5 +570,21 @@ public abstract class UnitBase {
 
 	public static List<UnitType> orderedUnitTypes() {
 		return ORDERED_UNIT_TYPES;
+	}
+
+	public static boolean isNotUnit(UnitType unitType) {
+		return unitType.BASE == unitType || unitType.RESEARCH == unitType;
+	}
+
+	public static boolean isUnit(UnitType unitType) {
+		return !isNotUnit(unitType);
+	}
+
+	public int getMaxFuel() {
+		if (type == UnitType.ZEPPELIN) {
+			return mobility * 6;
+		} else {
+			return mobility;
+		}
 	}
 }

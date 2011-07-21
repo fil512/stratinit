@@ -106,6 +106,8 @@ public class WorldSector extends Sector {
 	public boolean canRefuel(Unit air) {
 		if (air.getType() == UnitType.HELICOPTER) {
 			return onMyTeam() && (isPlayerCity() || holdsMyCapital);
+		} else if (air.getType() == UnitType.ZEPPELIN) {
+			return onMyTeam() && isPlayerCity();
 		}
 		if (!isFuelingStation()) {
 			return false;

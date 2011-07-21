@@ -129,5 +129,25 @@ public class AttackSupplyTest extends TwoPlayerBase {
 	}
 
 
+	
+	@Test
+	public void zepMoveIntoAllyCityRefillsAmmo() {
+		declareAlliance();
+		allianceDeclared();
+		Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+				UnitType.ZEPPELIN);
+		zep.decreaseAmmo();
+		sectorDaoService.captureCity(nationThem, PORT);
+		setBuild(PORT, UnitType.TRANSPORT);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), PORT);
+		assertResult(result);
+		assertNotFired(result, zep);
+		assertFullFuel(result, zep);
+	}
+
+
+
+
 
 }

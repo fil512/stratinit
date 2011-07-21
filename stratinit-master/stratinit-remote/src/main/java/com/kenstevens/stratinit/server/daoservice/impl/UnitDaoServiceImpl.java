@@ -24,6 +24,7 @@ import com.kenstevens.stratinit.model.LaunchedSatellite;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.UnitMove;
 import com.kenstevens.stratinit.model.UnitSeen;
 import com.kenstevens.stratinit.model.UnitSeenPK;
@@ -125,7 +126,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 
 	public Unit buildUnit(Nation nation, SectorCoords coords,
 			UnitType unitType, Date buildTime) {
-		if (unitType == UnitType.BASE) {
+		if (UnitBase.isNotUnit(unitType)) {
 			return null;
 		}
 		Unit unit = new Unit(nation, unitType, coords, buildTime);
@@ -330,11 +331,11 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 				+ oldOwner + " to " + unit.getNation(), true);
 	}
 
-	public List<Unit> getPassengers(Unit holder, WorldSector holderSector) {
+	public List<Unit> getPassengers(Unit holder, WorldSector fromSector) {
 		Collection<Unit> units = unitDao.getUnits(holder.getGame(),
-				holder.getCoords());
+				fromSector.getCoords());
 		List<Unit> passengers = new ContainerUnit(holder, units)
-				.getPassengers(holderSector);
+				.getPassengers(fromSector);
 		return passengers;
 	}
 
