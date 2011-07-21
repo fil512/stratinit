@@ -29,14 +29,14 @@ public class UnitMoves {
 	@Autowired
 	private SectorDaoService sectorDaoService;
 
-	private final AttackType attackType;
 	private final Unit unit;
 	private final WorldSector targetSector;
 	private final SectorCoords targetCoords;
 	private final WorldView worldView;
+	private final UnitsToMove unitsToMove;
 
-	public UnitMoves(AttackType attackType, Unit unit, WorldSector targetSector, WorldView worldView) {
-		this.attackType = attackType;
+	public UnitMoves(UnitsToMove unitsToMove, Unit unit, WorldSector targetSector, WorldView worldView) {
+		this.unitsToMove = unitsToMove;
 		this.unit = unit;
 		this.worldView = worldView;
 		this.targetSector = targetSector;
@@ -44,7 +44,7 @@ public class UnitMoves {
 	}
 
 	public Result<None> moveOneSector() {
-		Result<None> result = new Movement(unit, worldView).canEnter(attackType, targetSector, unit, false);
+		Result<None> result = new Movement(unit, worldView).canEnter(unitsToMove.getAttackType(), targetSector, unit, false);
 		if (!result.isSuccess()) {
 			return result;
 		}
@@ -65,23 +65,12 @@ public class UnitMoves {
 			}
 			unit.decreaseFuel();
 		}
-		carryUnits();
 
 		unit.decreaseMobility(cost);
 		unit.setCoords(targetCoords);
 		unitDaoService.merge(unit);
 		postMoveActions(unit);
 		return Result.trueInstance();
-	}
-
-	private void carryUnits() {
-		if (unit.carriesUnits()) {
-			List<Unit> passengers = unitDaoService.getPassengers(unit, worldView.getWorldSector(unit));
-			for (Unit passenger : passengers) {
-				passenger.setCoords(targetCoords);
-				unitDaoService.merge(passenger);
-			}
-		}
 	}
 
 	private boolean landUnitMovingOntoFullTransport() {

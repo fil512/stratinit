@@ -19,7 +19,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class SupplyTest extends StratInitWebBase {
-	@Autowired protected SectorDaoService sectorDaoServiceImpl;
+	@Autowired protected SectorDaoService sectorDaoService;
 	private static final SectorCoords IN_SUPPLY = new SectorCoords(0, 0);
 	private static final SectorCoords OUT_SUPPLY = new SectorCoords(0, 12);
 	private static final SectorCoords ENGINEER = new SectorCoords(0, 7);
@@ -44,7 +44,7 @@ public class SupplyTest extends StratInitWebBase {
 	public void unitInSupply() {
 		Unit inf = unitDaoService.buildUnit(nationMe, IN_SUPPLY,
 				UnitType.INFANTRY);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertTrue(supply.inSupply(inf));
 	}
@@ -53,7 +53,7 @@ public class SupplyTest extends StratInitWebBase {
 	public void unitOutSupply() {
 		Unit inf = unitDaoService.buildUnit(nationMe, OUT_SUPPLY,
 				UnitType.INFANTRY);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(inf));
 	}
@@ -64,7 +64,7 @@ public class SupplyTest extends StratInitWebBase {
 				UnitType.INFANTRY);
 		unitDaoService.buildUnit(nationMe, ENGINEER,
 				UnitType.ENGINEER);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertTrue(supply.inSupply(inf));
 	}
@@ -75,7 +75,7 @@ public class SupplyTest extends StratInitWebBase {
 
 		Unit inf = unitDaoService.buildUnit(nationMe, IN_TSUPPLY,
 				UnitType.INFANTRY);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertTrue(supply.inSupply(inf));
 	}
@@ -87,7 +87,7 @@ public class SupplyTest extends StratInitWebBase {
 		Unit inf = unitDaoService.buildUnit(nationMe, OUT_TSUPPLY,
 				UnitType.INFANTRY);
 		unitDao.persist(inf);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(inf));
 	}
@@ -97,7 +97,7 @@ public class SupplyTest extends StratInitWebBase {
 		unitDaoService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
 		Unit inf = unitDaoService.buildUnit(nationMe, IN_TSUPPLY,
 				UnitType.INFANTRY);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertTrue(supply.inSupply(inf));
 
@@ -108,7 +108,7 @@ public class SupplyTest extends StratInitWebBase {
 		unitDaoService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
 		Unit inf = unitDaoService.buildUnit(nationMe, OUT_TSUPPLY,
 				UnitType.INFANTRY);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(inf));
 	}
@@ -118,7 +118,7 @@ public class SupplyTest extends StratInitWebBase {
 		Unit inf = unitDaoService.buildUnit(nationMe, SEA_OUT_OF_REACH,
 				UnitType.INFANTRY);
 		unitDaoService.buildUnit(nationMe, SEA_OUT_OF_REACH, UnitType.TRANSPORT);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(inf);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertTrue(supply.inSupply(inf));
 	}
@@ -127,12 +127,12 @@ public class SupplyTest extends StratInitWebBase {
 	public void shipNearPortSupply() {
 		Unit dest = unitDaoService.buildUnit(nationMe, NEAR_PORT,
 				UnitType.DESTROYER);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(dest);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(dest));
-		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		sectorDaoService.captureCity(nationMe, PORT);
 		setBuild(PORT, UnitType.TRANSPORT);
-		worldView = sectorDaoServiceImpl.getSupplyWorldView(dest);
+		worldView = sectorDaoService.getSupplyWorldView(dest);
 		supply = new Supply(worldView);
 		assertTrue(supply.inSupply(dest));
 	}
@@ -141,11 +141,11 @@ public class SupplyTest extends StratInitWebBase {
 	public void shipFarPortSupply() {
 		Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
 				UnitType.DESTROYER);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(dest);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(dest));
-		sectorDaoServiceImpl.captureCity(nationMe, PORT);
-		worldView = sectorDaoServiceImpl.getSupplyWorldView(dest);
+		sectorDaoService.captureCity(nationMe, PORT);
+		worldView = sectorDaoService.getSupplyWorldView(dest);
 		supply = new Supply(worldView);
 		assertFalse(supply.inSupply(dest));
 	}
@@ -154,15 +154,15 @@ public class SupplyTest extends StratInitWebBase {
 	public void destMoveIntoSupply() {
 		Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
 				UnitType.DESTROYER);
-		WorldView worldView = sectorDaoServiceImpl.getSupplyWorldView(dest);
+		WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(dest));
-		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		sectorDaoService.captureCity(nationMe, PORT);
 		setBuild(PORT, UnitType.TRANSPORT);
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(dest), CLOSE_ENOUGH_TO_PORT);
 		assertResult(result);
-		worldView = sectorDaoServiceImpl.getSupplyWorldView(dest);
+		worldView = sectorDaoService.getSupplyWorldView(dest);
 		supply = new Supply(worldView);
 		assertTrue(supply.inSupply(dest));
 	}
@@ -172,7 +172,7 @@ public class SupplyTest extends StratInitWebBase {
 		Unit supply = unitDaoService.buildUnit(nationMe, FAR_PORT,
 				UnitType.SUPPLY);
 		supply.decreaseAmmo();
-		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		sectorDaoService.captureCity(nationMe, PORT);
 		setBuild(PORT, UnitType.TRANSPORT);
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(supply), CLOSE_ENOUGH_TO_PORT);
@@ -185,7 +185,7 @@ public class SupplyTest extends StratInitWebBase {
 		Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
 				UnitType.DESTROYER);
 		dest.decreaseAmmo();
-		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		sectorDaoService.captureCity(nationMe, PORT);
 		setBuild(PORT, UnitType.TRANSPORT);
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(dest), CLOSE_ENOUGH_TO_PORT);
@@ -197,7 +197,7 @@ public class SupplyTest extends StratInitWebBase {
 		Unit supply = unitDaoService.buildUnit(nationMe, FAR_PORT,
 				UnitType.SUPPLY);
 		supply.decreaseAmmo();
-		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		sectorDaoService.captureCity(nationMe, PORT);
 		setBuild(PORT, UnitType.TRANSPORT);
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(supply), CLOSE_ENOUGH_TO_PORT);
@@ -213,7 +213,7 @@ public class SupplyTest extends StratInitWebBase {
 				UnitType.INFANTRY);
 		Unit xport = unitDaoService.buildUnit(nationMe, FARXPORT,
 				UnitType.TRANSPORT);
-		Supply supply = new Supply(sectorDaoServiceImpl.getSupplyWorldView(xport));
+		Supply supply = new Supply(sectorDaoService.getSupplyWorldView(xport));
 		assertFalse(supply.inSupply(xport));
 		assertTrue(supply.inSupply(inf));
 		assertTrue(supply.inSupply(inf2));
@@ -227,7 +227,7 @@ public class SupplyTest extends StratInitWebBase {
 	public void supplyFarSupMove() {
 		Unit sup = unitDaoService.buildUnit(nationMe, FARXPORT,
 				UnitType.SUPPLY);
-		Supply supply = new Supply(sectorDaoServiceImpl.getSupplyWorldView(sup));
+		Supply supply = new Supply(sectorDaoService.getSupplyWorldView(sup));
 		assertTrue(supply.inSupply(sup));
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(sup), FARXPORT1);
@@ -240,11 +240,40 @@ public class SupplyTest extends StratInitWebBase {
 		Unit sup = unitDaoService.buildUnit(nationMe, FARXPORT,
 				UnitType.SUPPLY);
 		sup.setAmmo(0);
-		Supply supply = new Supply(sectorDaoServiceImpl.getSupplyWorldView(sup));
+		Supply supply = new Supply(sectorDaoService.getSupplyWorldView(sup));
 		assertTrue(supply.inSupply(sup));
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(sup), FARXPORT1);
 		assertResult(result);
 		assertEquals(sup.getUnitBase().getMobility() - 1, sup.getMobility());
 	}
+	
+	@Test
+	public void zepMoveIntoMyCityRefillsAmmo() {
+		Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+				UnitType.ZEPPELIN);
+		zep.decreaseAmmo();
+		sectorDaoService.captureCity(nationMe, PORT);
+		setBuild(PORT, UnitType.TRANSPORT);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), PORT);
+		assertResult(result);
+		assertNotFired(result, zep);
+		assertFullFuel(result, zep);
+	}
+	
+	@Test
+	public void zepMoveNoRefillsAmmo() {
+		Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+				UnitType.ZEPPELIN);
+		zep.decreaseAmmo();
+		sectorDaoService.captureCity(nationMe, PORT);
+		setBuild(PORT, UnitType.TRANSPORT);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), CLOSE_ENOUGH_TO_PORT);
+		assertResult(result);
+		assertFired(result, zep);
+		assertShortFuel(result, zep);
+	}
+
 }

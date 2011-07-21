@@ -10,6 +10,7 @@ import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.SelectedNation;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.RelationType;
@@ -72,7 +73,7 @@ public class SectorDrawerService {
 							.getTabControl().cityTabSelected())) {
 				mapDrawer.drawSquare(gc, sector.getCoords(), imageLibrary.getBlankCity());
 				UnitType unitType = city.getBuild();
-				if (unitType != UnitType.BASE) {
+				if (UnitBase.isUnit(unitType)) {
 					Image buildTypeImage = imageLibrary.getUnitImage(null,
 							unitType);
 					mapDrawer.drawSquare(gc, coords, buildTypeImage);

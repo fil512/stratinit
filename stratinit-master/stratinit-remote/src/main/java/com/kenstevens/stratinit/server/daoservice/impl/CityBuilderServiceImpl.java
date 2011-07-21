@@ -56,7 +56,7 @@ public class CityBuilderServiceImpl implements CityBuilderService {
 
 		retval.addMessage("Canceled " + city.getBuild() + " build");
 
-		if (build != UnitType.BASE) {
+		if (UnitBase.isUnit(build)) {
 			retval.addMessage("Set build in " + city.getCoords() + " to "
 					+ build);
 
@@ -78,7 +78,7 @@ public class CityBuilderServiceImpl implements CityBuilderService {
 
 		eventQueue.cancel(city);
 		city.setBuild(build, lastUpdated);
-		if (build != UnitType.BASE) {
+		if (UnitBase.isUnit(build)) {
 			eventQueue.schedule(city);
 		}
 		
@@ -115,7 +115,7 @@ public class CityBuilderServiceImpl implements CityBuilderService {
 	@Override
 	public void buildUnit(City city, Date buildTime) {
 		UnitType unitType = city.getBuild();
-		if (unitType == UnitType.BASE) {
+		if (UnitBase.isNotUnit(unitType)) {
 			city.setLastUpdated(buildTime);
 			sectorDao.merge(city);
 			return;

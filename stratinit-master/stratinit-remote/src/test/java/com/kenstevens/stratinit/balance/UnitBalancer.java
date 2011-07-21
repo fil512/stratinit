@@ -68,8 +68,8 @@ public class UnitBalancer extends TwoPlayerBase {
 	private void measureAttack(BalanceResultList balanceResultList,
 			UnitType attackerUnitType, UnitType defenderUnitType,
 			SectorCoords defCoords) {
-		if (UnitType.BASE.equals(attackerUnitType)
-				|| UnitType.BASE.equals(defenderUnitType)) {
+		if (UnitBase.isNotUnit(attackerUnitType)
+				|| UnitBase.isNotUnit(defenderUnitType)) {
 			return;
 		}
 		List<AttackBalanceResult> results = Lists.newArrayList();

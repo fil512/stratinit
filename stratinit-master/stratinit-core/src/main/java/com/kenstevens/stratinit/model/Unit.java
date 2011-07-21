@@ -163,7 +163,7 @@ public class Unit extends GameUpdatable {
 	public final void resupply() {
 		this.ammo = getUnitBase().getAmmo();
 		if (requiresFuel()) {
-			this.fuel = getUnitBase().getMobility();
+			this.fuel = getUnitBase().getMaxFuel();
 		}
 	}
 

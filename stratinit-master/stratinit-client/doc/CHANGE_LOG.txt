@@ -1,3 +1,24 @@
+Release 1.1.49
+  * BALANCE CHANGE New build option: RESEARCH.  Counts as 2 tech centres for tech production.
+  * BALANCE CHANGE A BASE no longer produces tech.
+  * BALANCE CHANGE CP Cost to build city increased from 64 to 128.
+  * BALANCE CHANGE Engineer cost increased from 12 to 16.
+  * BALANCE CHANGE Added CARGO_PLANE unit.  Similar stats to HEAVY_BOMBER.  Carries 4 infantry. 
+    Same rules as helicopter for picking up inf (i.e. won't pick up wounded or zero-mob units
+    from a player city.)
+  * BALANCE CHANGE Tank cost reduced from 12 to 10.
+  * Balance Change Tank hp increased from 8 to 9.
+  * BALANCE CHANGE Removed ANTI_TANK unit.  Existing ANTI_TANK units converted to infantry.
+  * BALANCE CHANGE Zeppelin cost reduced from 18 to 12.
+  * BALANCE CHANGE Zeppelin is now considered a bomber, inflicting 10% damage (minimum 1 hp) with each bomb.
+  * BALANCE CHANGE Zeppelin ammo increased from 0 to 4.  Resupplies in any allied city.
+  * BALANCE CHANGE Zeppelin now requires fuel.  However unlike other air units, it can hold enough fuel for 30 moves
+  before needing to refuel in an allied city.
+  * BALANCE CHANGE Zeppelin mobility increased from 4 to 5.
+  * Carrying units (transports, helicopters, cargo planes, carriers, engineer, sub) no longer accidentally
+    "scoop" up other units along their path.  Passengers need to be in the unit the carrier started in to get carried.
+  * Cleaned up icbm image
+
 Release 1.1.48 interim
   * Setting move order on unit with 0 mob now draws black line
   * Building new city now updates map

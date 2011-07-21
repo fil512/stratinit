@@ -85,6 +85,7 @@ public abstract class StratInitDaoBase {
 			UnitType.ENGINEER).getCapacity();
 	protected static final int SUB_CAPACITY = UnitBase.getUnitBase(
 			UnitType.SUBMARINE).getCapacity();
+	protected static final int CARGO_CAPACITY = UnitBase.getUnitBase(UnitType.CARGO_PLANE).getCapacity();
 	protected static final SectorCoords TEST_COORDS = new SectorCoords(0, 0);
 	private static final int TIME_TOLERANCE = 100;
 

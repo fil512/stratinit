@@ -184,6 +184,9 @@ public class Data {
 	}
 
 	public CityView getCity(SectorCoords sectorCoords) {
+		if (sectorCoords == null) {
+			return null;
+		}
 		WorldView world = getWorld();
 		if (world == null) {
 			return null;

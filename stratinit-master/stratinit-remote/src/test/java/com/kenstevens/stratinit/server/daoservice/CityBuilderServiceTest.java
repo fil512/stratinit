@@ -99,6 +99,18 @@ public class CityBuilderServiceTest extends StratInitWebBase {
 	}
 
 	@Test
+	public void cityResearchBuild() {
+		context.checking(new Expectations() {
+			{
+				oneOf(eventQueue).cancel(city);
+			}
+		});
+		cityBuilderService.updateBuild(nationMe, city, UnitType.RESEARCH);
+		assertFalse(city.getLastUpdated().equals(started));
+		context.assertIsSatisfied();
+	}
+
+	@Test
 	public void cityCapturedBuildChange() {
 		context.checking(new Expectations() {
 			{
@@ -132,6 +144,20 @@ public class CityBuilderServiceTest extends StratInitWebBase {
 			}
 		});
 		city.setNextBuild(UnitType.BASE);
+		cityBuilderService.buildUnit(city, now);
+		context.assertIsSatisfied();
+	}
+	
+	@Test
+	public void cityBuildNextResearch() {
+		context.checking(new Expectations() {
+			{
+				oneOf(unitDaoService).getPower(nationMe);
+				oneOf(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+				oneOf(eventQueue).cancel(city);
+			}
+		});
+		city.setNextBuild(UnitType.RESEARCH);
 		cityBuilderService.buildUnit(city, now);
 		context.assertIsSatisfied();
 	}
@@ -179,6 +205,23 @@ public class CityBuilderServiceTest extends StratInitWebBase {
 		
 		city.setSwitchOnTechChange(true);
 		city.setNextBuild(UnitType.BASE);
+		cityBuilderService.buildUnit(city, now);
+		assertFalse(city.isSwitchOnTechChange());
+		context.assertIsSatisfied();
+	}
+	
+	@Test
+	public void cityBuildNextResearchSOTG() {
+		context.checking(new Expectations() {
+			{
+				oneOf(unitDaoService).getPower(nationMe);
+				oneOf(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+				oneOf(eventQueue).cancel(city);
+			}
+		});
+		
+		city.setSwitchOnTechChange(true);
+		city.setNextBuild(UnitType.RESEARCH);
 		cityBuilderService.buildUnit(city, now);
 		assertFalse(city.isSwitchOnTechChange());
 		context.assertIsSatisfied();

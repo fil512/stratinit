@@ -5,7 +5,7 @@ public final class Constants {
 	public static final String EMAIL_FROM_ADDRESS = "hq@strategicinitiative.org";
 	public static final String EMAIL_ADMIN_ADDRESS = "ken.stevens@sympatico.ca";
 	
-	public static final String SERVER_VERSION = "1.2.0";
+	public static final String SERVER_VERSION = "1.1.49";
 	public static final int UNASSIGNED = -1;
 	public static final int HOURS_BETWEEN_UNIT_UPDATES = 4;
 	public static final int TECH_UPDATE_INTERVAL_SECONDS = 15 * 60;
@@ -65,7 +65,7 @@ public final class Constants {
 	public static final int COMMAND_COST_LAUNCH_SATELLITE = 8;
 	public static final int COMMAND_COST_SWITCH_TERRAIN = 16;
 	public static final int COMMAND_COST_LAUNCH_ICBM = 32;
-	public static final int COMMAND_COST_BUILD_CITY = 64;
+	public static final int COMMAND_COST_BUILD_CITY = 128;
 	public static final int COMMAND_POINT_FACTOR = 4;
 	public static final int START_COMMAND_POINTS = 512;
 	public static final int MAX_COMMAND_POINTS = 1024;

@@ -15,6 +15,7 @@ import com.kenstevens.stratinit.model.EventKeyed;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.UnitSeen;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitType;
@@ -39,7 +40,7 @@ public class EventQueueImpl implements EventQueue {
 	}
 
 	public void schedule(City city) {
-		if (city.getBuild() == UnitType.BASE) {
+		if (UnitBase.isNotUnit(city.getBuild())) {
 			return;
 		}
 		if (!city.getGame().hasStarted()) {
