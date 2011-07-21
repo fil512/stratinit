@@ -3,7 +3,8 @@ package com.kenstevens.stratinit.cache;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.google.common.collect.Collections2;
 import com.kenstevens.stratinit.dal.GameDal;
@@ -23,7 +24,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 
 public class NationCache extends Cacheable {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	private final Nation nation;
 	private final SectorSeenCache sectorSeenCache = new SectorSeenCache();

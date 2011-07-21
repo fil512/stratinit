@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.server.remote.event;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ import com.kenstevens.stratinit.util.GameScheduleHelper;
 
 @Service
 public class EventQueueImpl implements EventQueue {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private Spring spring;

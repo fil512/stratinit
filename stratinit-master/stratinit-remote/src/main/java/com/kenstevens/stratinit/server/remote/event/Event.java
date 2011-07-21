@@ -3,7 +3,8 @@ package com.kenstevens.stratinit.server.remote.event;
 import java.util.Date;
 import java.util.TimerTask;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.kenstevens.stratinit.model.EventKey;
 import com.kenstevens.stratinit.model.EventKeyed;
@@ -12,7 +13,7 @@ import com.kenstevens.stratinit.util.UpdateCalculator;
 import com.kenstevens.stratinit.util.UpdateManager;
 
 public abstract class Event {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	public static final int NO_PERIOD = -1;
 	private final TimerTask timerTask;
 	private final Date time;

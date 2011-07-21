@@ -86,4 +86,6 @@ public interface GameDao {
 	public abstract void remove(City city);
 
 	public abstract Collection<Nation> getFriendsAndAllies(Nation nation);
+
+	public abstract List<Game> getAllStartedGames();
 }

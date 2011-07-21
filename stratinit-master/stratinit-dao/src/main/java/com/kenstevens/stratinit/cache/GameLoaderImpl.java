@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.cache;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.kenstevens.stratinit.dal.GameDal;
 import com.kenstevens.stratinit.dal.SectorDal;
@@ -15,7 +16,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitMove;
 
 public class GameLoaderImpl implements GameLoader {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	private final GameDal gameDal;
 	private final SectorDal sectorDal;
 	private final UnitDal unitDal;

@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.site;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.remoting.RemoteAccessException;
 import org.springframework.remoting.RemoteConnectFailureException;
@@ -20,7 +21,7 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.ui.shell.StatusReporter;
 
 public abstract class Command<T> {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
 	protected StratInit stratInit;
 	@Autowired

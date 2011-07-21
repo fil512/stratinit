@@ -1,0 +1,27 @@
+<html xmlns:wicket>
+	<head>
+		<title>Registration Page</title>
+	</head>
+	<body>
+		<wicket:extend>
+			<h2>Strategic Initiative Registration</h2>
+			<form wicket:id="registrationForm">
+				<dl class="panel ui-corner-all">
+					<dt>Username:</dt>
+					<dd><input type="text" wicket:id="username" /></dd>
+					<dt>Email:</dt>
+					<dd><input type="text" wicket:id="email" /></dd>
+					<dt class="password" wicket:id="pwdLabel">Password:</dt>
+					<dd class="password"><input type="password" wicket:id="password" /></dd>
+					<dt class="password"wicket:id="confPwdLabel">Password:</dt>
+					<dd class="password"><input type="password" wicket:id="passwordConfirm" /></dd>
+					<dd>
+						<ul>
+							<li><input type="submit" value="Save" /></li>
+						</ul>
+					</dd>
+				</dl>
+			</form>
+		</wicket:extend>
+	</body>
+</html>

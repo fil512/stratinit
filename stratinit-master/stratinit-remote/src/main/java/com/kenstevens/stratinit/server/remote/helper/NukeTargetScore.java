@@ -4,7 +4,6 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 public class NukeTargetScore {
-	private static final long serialVersionUID = 1L;
 	private SectorCoords coords;
 	private int score;
 	private final Unit nuke;

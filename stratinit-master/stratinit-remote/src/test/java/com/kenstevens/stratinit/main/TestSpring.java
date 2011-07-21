@@ -20,13 +20,13 @@ public class TestSpring {
 
 	@Test
 	public void canFindBeansOfTypeUnitDao() {
-		Map<String, UnitDaoService> beanMap = spring.getBeansOfType(UnitDaoService.class);
+		Map<String, ? extends UnitDaoService> beanMap = spring.getBeansOfType(UnitDaoService.class);
 		assertTrue(beanMap.containsKey("unitDaoServiceImpl"));
 	}
 
 	@Test
 	public void canFindBeansOfTypeQuiesceService() {
-		Map<String, QuiesceService> beanMap = spring.getBeansOfType(QuiesceService.class);
+		Map<String, ? extends QuiesceService> beanMap = spring.getBeansOfType(QuiesceService.class);
 		assertTrue(beanMap.containsKey("cacheQuiescer"));
 		assertTrue(beanMap.containsKey("eventQueueQuiescer"));
 	}

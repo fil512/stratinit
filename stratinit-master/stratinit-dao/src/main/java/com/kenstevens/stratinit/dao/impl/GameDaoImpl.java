@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.cache.GameLoader;
@@ -309,5 +310,16 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	public Collection<Nation> getFriendsAndAllies(Nation nation) {
 		Set<RelationType> relations = Sets.immutableEnumSet(RelationType.ALLIED, RelationType.FRIENDLY);
 		return getRelations(nation, relations);
+	}
+
+	@Override
+	public List<Game> getAllStartedGames() {
+		List<Game> allGames = dataCache.getAllGames();
+		return Lists.newArrayList(Collections2.filter(allGames, new Predicate<Game>() {
+			@Override
+			public boolean apply(Game game) {
+				return game.hasStarted();
+			}
+		}));
 	}
 }
