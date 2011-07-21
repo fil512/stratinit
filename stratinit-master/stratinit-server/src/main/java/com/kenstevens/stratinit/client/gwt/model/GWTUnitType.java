@@ -21,5 +21,7 @@ public enum GWTUnitType {
 	ICBM_2,
 	ICBM_3,
     BASE,
-    ENGINEER
+    ENGINEER,
+    CARGO_PLANE,
+    RESEARCH
 }

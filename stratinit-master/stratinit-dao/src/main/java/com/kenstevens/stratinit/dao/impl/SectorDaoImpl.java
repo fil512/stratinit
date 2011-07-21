@@ -31,6 +31,7 @@ import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
+import com.kenstevens.stratinit.type.UnitType;
 
 @Service
 public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
@@ -100,8 +101,11 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		List<City> cities = getCities(nation);
 		int retval = 0;
 		for (City city : cities) {
-			if (city.getType() == CityType.TECH || city.getType() == CityType.BASE) {
+			if (city.getType() == CityType.TECH) {
 				++retval;
+				if (city.getBuild() == UnitType.RESEARCH) {
+					++retval;
+				}
 			}
 		}
 		return retval;
@@ -243,7 +247,7 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void clearCityMove(City city) {
 		List<CityMove> cityMoves = sectorDal.findCityMoves(city);
@@ -261,13 +265,11 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		}
 		return retval;
 	}
-	
 
 	@Override
 	public void merge(CityMove cityMove) {
 		sectorDal.flush(cityMove);
 	}
-	
 
 	@Override
 	public void persist(CityMove cityMove) {
@@ -278,7 +280,6 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		sectorDal.persist(cityMove);
 		getNationCache(city.getNation()).add(cityMove);
 	}
-	
 
 	@Override
 	public void remove(CityMove cityMove) {

@@ -53,6 +53,9 @@ public class UnitsToMove implements Iterable<Unit> {
 	}
 
 	public SectorCoords getFirstCoords() {
+		if (units.isEmpty()) {
+			return null;
+		}
 		return units.get(0).getCoords();
 	}
 

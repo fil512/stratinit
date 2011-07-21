@@ -22,7 +22,8 @@ public class CounterAttackTest extends ThreePlayerBase {
 	private static final SectorCoords SEA61 = new SectorCoords(6, 1);
 	private static final SectorCoords SEA31 = new SectorCoords(3, 1);
 	private static final SectorCoords SUPPLY = new SectorCoords(4, 1);
-
+	private static final SectorCoords ATT = new SectorCoords (0, 0);
+	private static final SectorCoords DEF = new SectorCoords (1, 1);
 	@Test
 	public void destCounterAttacks() {
 		declareWar();
@@ -274,4 +275,87 @@ public class CounterAttackTest extends ThreePlayerBase {
 		assertNotFired(result, bb3);
 		assertDamaged(result, mdest);
 	}
+	
+	@Test
+	public void infNoCounterAttackZep() {
+		declareWar();
+		Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+				UnitType.ZEPPELIN);
+		Unit inf = unitDaoService.buildUnit(nationThem, DEF,
+				UnitType.INFANTRY);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), DEF);
+		assertResult(result);
+		assertNotDamaged(result, zep);
+		assertFiredOnce(result, zep);
+		assertDamaged(result, inf);
+		assertNotFired(result, inf);
+	}
+
+	
+	@Test
+	public void tankNoCounterAttackZep() {
+		declareWar();
+		Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+				UnitType.ZEPPELIN);
+		Unit tank = unitDaoService.buildUnit(nationThem, DEF,
+				UnitType.TANK);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), DEF);
+		assertResult(result);
+		assertNotDamaged(result, zep);
+		assertFiredOnce(result, zep);
+		assertDamaged(result, tank);
+		assertNotFired(result, tank);
+	}
+	
+	@Test
+	public void patrolNoCounterAttackZep() {
+		declareWar();
+		Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+				UnitType.ZEPPELIN);
+		Unit patrol = unitDaoService.buildUnit(nationThem, DEF,
+				UnitType.PATROL);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), DEF);
+		assertResult(result);
+		assertNotDamaged(result, zep);
+		assertFiredOnce(result, zep);
+		assertDamaged(result, patrol);
+		assertNotFired(result, patrol);
+	}
+	
+	@Test
+	public void destNoCounterAttackZep() {
+		declareWar();
+		Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+				UnitType.ZEPPELIN);
+		Unit dest = unitDaoService.buildUnit(nationThem, DEF,
+				UnitType.DESTROYER);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), DEF);
+		assertResult(result);
+		assertNotDamaged(result, zep);
+		assertFiredOnce(result, zep);
+		assertDamaged(result, dest);
+		assertNotFired(result, dest);
+	}
+	
+	@Test
+	public void flakHitsZep() {
+		declareWar();
+		Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+				UnitType.ZEPPELIN);
+		Unit bat = unitDaoService.buildUnit(nationThem, DEF,
+				UnitType.BATTLESHIP);
+		Result<MoveCost> result = moveUnits(
+				makeUnitList(zep), DEF);
+		assertDamaged(result, zep);
+		if (zep.isAlive()) {
+			assertFiredOnce(result, zep);
+			assertDamaged(result, bat);
+		}
+		assertNotFired(result, bat);
+	}
+
 }

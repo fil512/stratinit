@@ -80,9 +80,9 @@ public class UnitCommandFactory {
 				unit, enemyUnit, targetSector , moveSeen));
 	}
 
-	public UnitMoves getUnitMoves(AttackType attackType, Unit unit, WorldSector worldSector,
+	public UnitMoves getUnitMoves(UnitsToMove unitsToMove, Unit unit, WorldSector worldSector,
 			WorldView worldView) {
-		return spring.autowire(new UnitMoves( attackType, unit, worldSector,
+		return spring.autowire(new UnitMoves( unitsToMove, unit, worldSector,
 				worldView));
 	}
 
