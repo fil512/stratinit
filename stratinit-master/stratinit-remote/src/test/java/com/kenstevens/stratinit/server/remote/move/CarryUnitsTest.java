@@ -111,6 +111,57 @@ public class CarryUnitsTest extends StratInitWebBase {
 	}
 
 	@Test
+	public void twoHeliDragsTwiceInf() {
+		Unit[] inf = new Unit[2*HELICOPTER_CAPACITY + 1];
+		for (int i = 0; i < 2*HELICOPTER_CAPACITY + 1; ++i) {
+			inf[i] = unitDaoService
+					.buildUnit(nationMe, PORT, UnitType.INFANTRY);
+		}
+		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		Unit heli1 = unitDaoService.buildUnit(nationMe, PORT,
+				UnitType.HELICOPTER);
+		Unit heli2 = unitDaoService.buildUnit(nationMe, PORT,
+				UnitType.HELICOPTER);
+		Result<MoveCost> result = moveUnits(makeUnitList(heli1, heli2), SEA1);
+		assertResult(result);
+		assertEquals(result.toString(), heli1.getCoords(), SEA1);
+		assertEquals(result.toString(), heli2.getCoords(), SEA1);
+		for (int i = 0; i < HELICOPTER_CAPACITY * 2; ++i) {
+			assertEquals(result.toString(), inf[i].getCoords(), SEA1);
+		}
+		assertEquals(result.toString(), inf[2*HELICOPTER_CAPACITY].getCoords(),
+				PORT);
+	}
+
+	@Test
+	public void twoHeliinsufMobDragsSomeInf() {
+		Unit[] inf = new Unit[2*HELICOPTER_CAPACITY + 1];
+		for (int i = 0; i < 2*HELICOPTER_CAPACITY + 1; ++i) {
+			inf[i] = unitDaoService
+					.buildUnit(nationMe, PORT, UnitType.INFANTRY);
+		}
+		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		Unit heli1 = unitDaoService.buildUnit(nationMe, PORT,
+				UnitType.HELICOPTER);
+		heli1.setMobility(1);
+		Unit heli2 = unitDaoService.buildUnit(nationMe, PORT,
+				UnitType.HELICOPTER);
+		Result<MoveCost> result = moveUnits(makeUnitList(heli1, heli2), SEA1);
+		assertResult(result);
+		assertFalse(result.toString(), heli1.getCoords().equals(SEA1));
+		assertEquals(result.toString(), heli2.getCoords(), SEA1);
+		int atDest = 0;
+		for (int i = 0; i < HELICOPTER_CAPACITY * 2; ++i) {
+			if (inf[i].getCoords().equals(SEA1)) {
+				++atDest;
+			} else {
+				assertEquals(inf[i].getCoords(), heli1.getCoords());
+			}
+		}
+		assertEquals(HELICOPTER_CAPACITY, atDest);
+	}
+
+	@Test
 	public void helicopterDragsInfFromCity() {
 		Unit inf = unitDaoService.buildUnit(nationMe, PORT, UnitType.INFANTRY);
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);
@@ -226,6 +277,32 @@ public class CarryUnitsTest extends StratInitWebBase {
 			assertEquals(i + ": " + result.toString(), TARGET, inf[i].getCoords());
 		}
 		assertEquals(result.toString(), PORT, inf[CARGO_CAPACITY].getCoords());
+	}
+
+	@Test
+	public void cargoNoCarriesTank() {
+		Unit cargo = unitDaoService.buildUnit(nationMe, PORT,
+				UnitType.CARGO_PLANE);
+			Unit tank = unitDaoService
+					.buildUnit(nationMe, PORT, UnitType.TANK);
+		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
+		assertResult(result);
+		assertEquals(result.toString(), cargo.getCoords(), TARGET);
+		assertEquals(result.toString(), PORT, tank.getCoords());
+	}
+
+	@Test
+	public void cargoNoCarriesEng() {
+		Unit cargo = unitDaoService.buildUnit(nationMe, PORT,
+				UnitType.CARGO_PLANE);
+			Unit eng = unitDaoService
+					.buildUnit(nationMe, PORT, UnitType.ENGINEER);
+		sectorDaoServiceImpl.captureCity(nationMe, PORT);
+		Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
+		assertResult(result);
+		assertEquals(result.toString(), cargo.getCoords(), TARGET);
+		assertEquals(result.toString(), PORT, eng.getCoords());
 	}
 
 	@Test

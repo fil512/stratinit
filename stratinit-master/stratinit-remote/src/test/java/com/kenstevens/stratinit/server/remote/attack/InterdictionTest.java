@@ -24,6 +24,7 @@ public class InterdictionTest extends TwoPlayerBase {
 	protected SectorDaoService sectorDaoServiceImpl;
 	private static final SectorCoords TANK = new SectorCoords(2, 0);
 	private static final SectorCoords MOV = new SectorCoords(3, 0);
+	private static final SectorCoords MOV2 = new SectorCoords(3, 6);
 	private static final SectorCoords BETWEEN = new SectorCoords(4, 0);
 	private static final SectorCoords CLOSER = new SectorCoords(5, 0);
 	private static final SectorCoords INT = new SectorCoords(5, 1);
@@ -222,6 +223,44 @@ public class InterdictionTest extends TwoPlayerBase {
 		assertInterdiction(mdest, idest, result);
 	}
 
+	@Test
+	public void interdictionMovesXportInf() {
+		Unit mxport = unitDaoService
+				.buildUnit(nationMe, MOV2, UnitType.TRANSPORT);
+		Unit minf = unitDaoService
+				.buildUnit(nationMe, MOV2, UnitType.INFANTRY);
+		Unit idest = unitDaoService.buildUnit(nationThem, INT,
+				UnitType.DESTROYER);
+		sectorDaoServiceImpl.captureCity(nationThem, PORT);
+		setBuild(PORT, UnitType.TRANSPORT);
+		Result<MoveCost> result = moveUnits(makeUnitList(mxport),
+				CLOSER);
+		assertFalseResult(result);
+		assertFalse(mxport.getCoords().equals(CLOSER));
+		assertFalse(mxport.getCoords().equals(MOV2));
+		assertFalse(minf.getCoords().equals(MOV2));
+		assertTrue(minf.getCoords().equals(mxport.getCoords()));
+		assertInterdiction(mxport, idest, result);
+	}
+
+	@Test
+	public void interdictionMovesDeadXportKillsInf() {
+		Unit mxport = unitDaoService
+				.buildUnit(nationMe, MOV2, UnitType.TRANSPORT);
+		mxport.setHp(1);
+		Unit minf = unitDaoService
+				.buildUnit(nationMe, MOV2, UnitType.INFANTRY);
+		unitDaoService.buildUnit(nationThem, INT,
+				UnitType.DESTROYER);
+		sectorDaoServiceImpl.captureCity(nationThem, PORT);
+		setBuild(PORT, UnitType.TRANSPORT);
+		Result<MoveCost> result = moveUnits(makeUnitList(mxport),
+				CLOSER);
+		assertFalseResult(result);
+		assertFalse(mxport.isAlive());
+		assertFalse(minf.isAlive());
+	}
+	
 	@Test
 	public void friendlyDestInSupplyNoInterdictsDest() {
 		friendlyDeclared();

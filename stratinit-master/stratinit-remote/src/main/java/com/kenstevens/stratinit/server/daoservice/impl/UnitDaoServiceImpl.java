@@ -331,14 +331,18 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 				+ oldOwner + " to " + unit.getNation(), true);
 	}
 
-	public List<Unit> getPassengers(Unit holder, WorldSector fromSector) {
+	public List<Unit> getPassengers(Unit holder, WorldSector fromSector, Collection<Unit> exclude) {
 		Collection<Unit> units = unitDao.getUnits(holder.getGame(),
 				fromSector.getCoords());
 		List<Unit> passengers = new ContainerUnit(holder, units)
-				.getPassengers(fromSector);
+				.getPassengers(fromSector, exclude);
 		return passengers;
 	}
 
+	public List<Unit> getPassengers(Unit holder, WorldSector fromSector) {
+		return getPassengers(holder, fromSector, null);
+	}
+	
 	@Override
 	public Result<None> disbandUnit(Unit unit) {
 		killUnit(unit);
