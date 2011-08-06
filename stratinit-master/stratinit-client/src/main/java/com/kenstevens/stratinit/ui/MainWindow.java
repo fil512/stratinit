@@ -156,19 +156,42 @@ public class MainWindow implements MapControl, GameManager {
 	 * Open the window
 	 */
 	public void open() {
-		// TODO REF these should be three separate widgets
-		widgetContainer.setMapControl(this);
-		widgetContainer.setTabControl(tabManager);
-		widgetContainer.setGameManager(this);
+		setWidgetContainerValues();
 		final Display display = Display.getDefault();
+
+		try {
+			buildInterface();
+			setShellSize();
+			shell.layout();
+			shell.open();
+			newbHelper.openNextWindow();
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch())
+					display.sleep();
+			}
+		} finally {
+			persistAccount();
+			if (display.isDisposed()) {
+				display.dispose();
+			}
+		}
+	}
+
+	private void buildInterface() {
+		loadFiles();
+		createContents();
+		controllerManager.setControllers();
+		addHandlers();
+		supplyTabItemControl.setContents();
+		controllerManager.setTitle(shell);
+		mapImageManager.buildImage();
+	}
+
+	private void loadFiles() {
 		String loadResult;
 		try {
 			loadResult = accountPersister.load();
 			imageLibrary.loadImages();
-			createContents();
-			controllerManager.setControllers();
-			addHandlers();
-			supplyTabItemControl.setContents();
 			statusReporter.reportResult(loadResult);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -176,20 +199,13 @@ public class MainWindow implements MapControl, GameManager {
 			statusReporter.reportError(loadResult);
 			submitError(e);
 		}
+	}
 
-		controllerManager.setTitle(shell);
-
-		mapImageManager.buildImage();
-		setShellSize();
-		shell.layout();
-		shell.open();
-		newbHelper.openNextWindow();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		persistAccount();
-		display.dispose();
+	private void setWidgetContainerValues() {
+		// TODO REF these should be three separate widgets
+		widgetContainer.setMapControl(this);
+		widgetContainer.setTabControl(tabManager);
+		widgetContainer.setGameManager(this);
 	}
 
 	private void addHandlers() {

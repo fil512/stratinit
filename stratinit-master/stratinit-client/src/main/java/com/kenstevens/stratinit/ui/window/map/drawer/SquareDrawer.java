@@ -20,10 +20,13 @@ public class SquareDrawer extends Drawer {
 	
 	@Override
 	public void drawWithGC(GC gc) {
+		if (sectorCoords == null) {
+			return;
+		}
 		drawSquare(gc, sectorCoords, image);
 	}
 	
-	public void drawSquare(GC gc, SectorCoords coords, Image image) {
+	private void drawSquare(GC gc, SectorCoords coords, Image image) {
 		int boardSize = mapImageManager.getBoardSize();
 		SectorCoords shiftedCoords = new SectorCoords(coords).shift(boardSize,
 				mapImageManager.getDrawShift());
