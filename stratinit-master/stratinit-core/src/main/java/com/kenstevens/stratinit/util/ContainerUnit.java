@@ -18,12 +18,19 @@ public class ContainerUnit {
 	}
 
 	public List<Unit> getPassengers(WorldSector worldSector) {
+		return getPassengers(worldSector, null);
+	}
+
+	public List<Unit> getPassengers(WorldSector worldSector, Collection<Unit> exclude) {
 		List<Unit> passengers = new ArrayList<Unit>();
 		if (!holder.carriesUnits()) {
 			return passengers;
 		}
 		int weight = 0;
 		for (Unit unit : units) {
+			if (exclude != null && exclude.contains(unit)) {
+				continue;
+			}
 			if (UnitHelper.canCarry(holder, unit, worldSector)) {
 				weight += unit.getWeight();
 				if (weight > holder.getCapacity()) {
