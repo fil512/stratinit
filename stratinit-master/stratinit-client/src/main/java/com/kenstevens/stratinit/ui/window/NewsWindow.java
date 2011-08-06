@@ -24,10 +24,10 @@ import com.kenstevens.stratinit.ui.news.FirstsPrinter;
 import com.kenstevens.stratinit.ui.news.ForeignAffairsPrinter;
 import com.kenstevens.stratinit.ui.news.NeutralConquestPrinter;
 import com.kenstevens.stratinit.ui.news.VersusPrinter;
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 @Component
-public class NewsWindow implements Window {
+public class NewsWindow implements StratInitWindow {
 	private StyledText styledText;
 	private Shell dialog;
 

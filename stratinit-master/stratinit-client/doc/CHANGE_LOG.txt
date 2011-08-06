@@ -1,6 +1,7 @@
 Release 1.1.50
   * Fixed a bug that stranded passengers when the unit carrying them is intercepted / interdicted.
   * Fixed a bug that prevented move orders from being set on units out of supply.
+  * Fixed a bug that crashed the client if the player closed the News window before news fully loaded.
   * Improved error logging if there is a crash at startup.
   * Improved complete client shutdown in case there was a crash.
   * Added null-checking to prevent crashes on certain select events.

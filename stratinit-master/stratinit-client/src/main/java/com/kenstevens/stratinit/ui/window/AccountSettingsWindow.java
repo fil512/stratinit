@@ -16,12 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.model.Account;
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 import com.kenstevens.stratinit.util.AccountPersister;
 import com.kenstevens.stratinit.util.XMLException;
 
 @Component
-public class AccountSettingsWindow implements Window {
+public class AccountSettingsWindow implements StratInitWindow {
 	private Logger logger = Logger.getLogger(getClass());
 
 	private Text username;

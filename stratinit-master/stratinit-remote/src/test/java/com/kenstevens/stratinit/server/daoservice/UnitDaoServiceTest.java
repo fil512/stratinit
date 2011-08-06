@@ -74,4 +74,20 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
 		assertEquals(PORT, dest.getCoords());
 	}
 
+	@Test
+	public void updateXportWithMove() {
+		Unit xport = unitDaoService.buildUnit(nationMe, SEA,
+				UnitType.TRANSPORT);
+		Unit inf = unitDaoService.buildUnit(nationMe, SEA,
+				UnitType.INFANTRY);
+		sectorDaoService.captureCity(nationMe, PORT);
+		xport.setMobility(0);
+		unitDaoService.setUnitMove(xport, PORT);
+		unitDaoService.updateUnit(xport, new Date());
+		assertEquals(xport.getUnitBase().getMobility() - 1, xport.getMobility());
+		assertEquals(PORT, xport.getCoords());
+		assertEquals(PORT, inf.getCoords());
+	}
+
+	// FIXME test that xport with move order drags inf
 }
