@@ -111,6 +111,9 @@ public class SelectEvent {
 	}
 
 	private void selectCoords(SectorCoords coords) {
+		if (coords == null) {
+			return;
+		}
 		selectedCoords.setCoords(coords);
 		selectedCity.setCity(db.getCity(coords));
 	}

@@ -131,7 +131,9 @@ public class SectorDrawerService {
 
 
 	public void displayActiveLocation() {
-		mapDrawer.drawSquare(imageLibrary.getActiveBox(), selectedCoords.getCoords());
+		if (selectedCoords.getCoords() != null) {
+			mapDrawer.drawSquare(imageLibrary.getActiveBox(), selectedCoords.getCoords());
+		}
 	}
 
 

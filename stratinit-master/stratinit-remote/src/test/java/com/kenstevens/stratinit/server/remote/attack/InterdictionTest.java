@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
@@ -227,6 +228,8 @@ public class InterdictionTest extends TwoPlayerBase {
 	public void interdictionMovesXportInf() {
 		Unit mxport = unitDaoService
 				.buildUnit(nationMe, MOV2, UnitType.TRANSPORT);
+		mxport.setMobility(UnitBase.getUnitBase(UnitType.TRANSPORT).getMaxMobility());
+
 		Unit minf = unitDaoService
 				.buildUnit(nationMe, MOV2, UnitType.INFANTRY);
 		Unit idest = unitDaoService.buildUnit(nationThem, INT,
@@ -247,6 +250,7 @@ public class InterdictionTest extends TwoPlayerBase {
 	public void interdictionMovesDeadXportKillsInf() {
 		Unit mxport = unitDaoService
 				.buildUnit(nationMe, MOV2, UnitType.TRANSPORT);
+		mxport.setMobility(UnitBase.getUnitBase(UnitType.TRANSPORT).getMaxMobility());
 		mxport.setHp(1);
 		Unit minf = unitDaoService
 				.buildUnit(nationMe, MOV2, UnitType.INFANTRY);
