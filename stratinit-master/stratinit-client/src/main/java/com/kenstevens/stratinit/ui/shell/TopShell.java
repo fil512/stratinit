@@ -22,7 +22,7 @@ public final class TopShell {
 		return shell;
 	}
 
-	public void open(Window window) {
+	public void open(StratInitWindow window) {
 		window.open(shell);
 	}
 

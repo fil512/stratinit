@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 import com.kenstevens.stratinit.util.Spring;
 
 @Component
-public class MessageWindow implements Window {
+public class MessageWindow implements StratInitWindow {
 	private MessageBoardTabItem messageBoardTabItem;
 	private Shell dialog;
 	private InboxTabItem inboxTabItem;
