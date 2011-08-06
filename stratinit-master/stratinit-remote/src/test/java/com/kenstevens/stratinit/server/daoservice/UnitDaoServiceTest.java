@@ -89,5 +89,4 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
 		assertEquals(PORT, inf.getCoords());
 	}
 
-	// FIXME test that xport with move order drags inf
 }
