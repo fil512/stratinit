@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
@@ -32,6 +33,7 @@ public class AmmoTest extends StratInitWebBase {
 	public void shipMoveIntoSupplyToGetAmmo() {
 		Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
 				UnitType.DESTROYER);
+		dest.setMobility(UnitBase.getUnitBase(UnitType.DESTROYER).getMaxMobility());
 		dest.decreaseAmmo();
 		assertEquals(dest.getUnitBase().getAmmo() - 1, dest.getAmmo());
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);

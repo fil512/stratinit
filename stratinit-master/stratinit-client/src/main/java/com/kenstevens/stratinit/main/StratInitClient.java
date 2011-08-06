@@ -6,6 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.site.ActionQueue;
+import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.MainWindow;
 
 public final class StratInitClient {
@@ -16,8 +17,10 @@ public final class StratInitClient {
 	public static void main(String[] args) {
 		ActionQueue actionQueue = null;
 		WavPlayer wavPlayer = null;
+		ActionFactory actionFactory = null;
 		try {
 			ApplicationContext context = new ClassPathXmlApplicationContext("/spring.xml");
+			actionFactory = (ActionFactory) context.getBean("actionFactory");
 			MainWindow window = (MainWindow) context.getBean("MainWindow");
 			actionQueue = (ActionQueue) context.getBean("ActionQueue");
 			actionQueue.start();
@@ -25,6 +28,9 @@ public final class StratInitClient {
 			window.open();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			if (actionFactory != null) {
+				actionFactory.submitError(e);
+			}
 		} finally {
 			logger.info("Shutting down.");
 			if (actionQueue != null) {
