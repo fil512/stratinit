@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.SectorSeen;
@@ -40,6 +41,8 @@ public class UnitsMove {
 	private UnitDaoService unitDaoService;
 	@Autowired
 	private SectorDao sectorDao;
+	@Autowired
+	private Spring spring;
 
 	private final WorldView worldView;
 	private boolean unknown;
@@ -48,6 +51,7 @@ public class UnitsMove {
 	private UnitsToMove unitsToMove;
 	private WorldSector targetSector;
 	private Attack attack;
+	private Passengers passengers;
 
 	public UnitsMove(UnitsToMove unitsToMove, WorldView worldView) {
 		this.unitsToMove = unitsToMove;
@@ -63,6 +67,8 @@ public class UnitsMove {
 		this.unknown = checkUnknown();
 		this.moveSeen = new MoveSeen(unitsToMove.getNation(), sectorDaoService,
 				unitDaoService);
+		this.passengers = spring
+				.autowire(new Passengers(unitsToMove, worldView));
 	}
 
 	private boolean checkUnknown() {
@@ -91,9 +97,7 @@ public class UnitsMove {
 		Result<None> result;
 		MoveType moveType = MoveType.MOVE;
 		unitsToMove.clearMovedFlag();
-		SectorCoords startCoords = unitsToMove.getFirstCoords();
 		result = moveUnits();
-		carryUnits(startCoords);
 		if (result.isSuccess()
 				&& attack.isAttackable(unitsToMove.getAttackType())) {
 			Result<MoveType> attackResult = attack();
@@ -104,26 +108,6 @@ public class UnitsMove {
 		return new Result<MoveCost>(result.getMessages(), result.isSuccess(),
 				new MoveCost(moveType), result.getBattleLogs(),
 				result.isMoveSuccess());
-	}
-
-	private void carryUnits(SectorCoords startCoords) {
-		if (startCoords == null) {
-			return;
-		}
-		for (Unit unit : unitsToMove) {
-			carryUnits(startCoords, unit);
-		}
-	}
-
-	private void carryUnits(SectorCoords startCoords, Unit unit) {
-		if (unit.carriesUnits()) {
-			List<Unit> passengers = unitDaoService.getPassengers(unit,
-					worldView.getWorldSector(startCoords));
-			for (Unit passenger : passengers) {
-				passenger.setCoords(unit.getCoords());
-				unitDaoService.merge(passenger);
-			}
-		}
 	}
 
 	private Result<None> interdictShipThatDidntMove() {
@@ -197,6 +181,7 @@ public class UnitsMove {
 					moveSeen);
 			moveSeen.persistSeen(); // Intermediate persist so enemies can see
 									// me to interdict me
+			movePassengers(coords);
 			AttackType attackType = unitsToMove.getAttackType();
 			if (attackType == AttackType.INITIAL_ATTACK) {
 				Result<None> interdictResult = interdict(coords, null);
@@ -223,6 +208,13 @@ public class UnitsMove {
 			}
 		}
 		return retval;
+	}
+
+	private void movePassengers(SectorCoords coords) {
+		for (Unit passenger : passengers) {
+			passenger.setCoords(coords);
+			unitDaoService.merge(passenger);
+		}
 	}
 
 	private void filterOutOfRangeUnits(Result<None> moveResult) {
@@ -359,6 +351,7 @@ public class UnitsMove {
 			newUnits.remove(unit);
 		}
 		unitsToMove = UnitsToMove.copyFrom(unitsToMove, newUnits);
+		passengers = Passengers.copyFrom(passengers, unitsToMove);
 	}
 
 	private Result<MoveType> attack() {
