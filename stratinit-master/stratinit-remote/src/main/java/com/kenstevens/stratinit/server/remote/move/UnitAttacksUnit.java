@@ -125,7 +125,6 @@ public class UnitAttacksUnit {
 		} else {
 			unitAttackedBattleLog.setDefenderDied(true);
 		}
-
 		killPassengers(unitAttackedBattleLog, defender);
 	}
 
