@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.model.stats.Stats;
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 @Component
-public class StatsWindow implements Window {
+public class StatsWindow implements StratInitWindow {
 	private Table opponentsTable;
 	private Table detailsTable;
 	private Combo combo;

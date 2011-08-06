@@ -12,11 +12,11 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 import com.kenstevens.stratinit.ui.tabs.GameTable;
 
 @Component
-public class ManageGamesWindow implements Window {
+public class ManageGamesWindow implements StratInitWindow {
 	private Shell dialog;
 	private Button joinButton;
 	private GameTable joinGameTable;

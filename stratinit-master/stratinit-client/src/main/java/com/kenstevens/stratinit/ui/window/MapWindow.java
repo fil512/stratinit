@@ -8,11 +8,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 
 @Component
-public class MapWindow implements Window {
+public class MapWindow implements StratInitWindow {
 	@Autowired
 	private SmallMapImageManager smallMapImageManager;
 

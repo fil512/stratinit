@@ -115,7 +115,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 		clearUnitMove(unit);
 		UnitsMove unitMover = unitCommandFactory.getUnitsMove(unitsToMove,
 				worldView);
-		@SuppressWarnings("unused") // For now remove the output of this command.  Maybe archive it later.
+		@SuppressWarnings("unused") // TODO ENH For now remove the output of this command.  Maybe archive it later.
 		Result<MoveCost> result = unitMover.move();
 	}
 	

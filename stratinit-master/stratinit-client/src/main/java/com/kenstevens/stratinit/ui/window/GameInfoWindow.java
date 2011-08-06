@@ -24,12 +24,12 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ColourMap;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 import com.kenstevens.stratinit.ui.tabs.TableControl;
 import com.kenstevens.stratinit.util.BuildHelper;
 
 @Component
-public class GameInfoWindow extends TableControl implements Window {
+public class GameInfoWindow extends TableControl implements StratInitWindow {
 	// TODO REF move this to clientConstants
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat(
 			"MM/dd HH:mm");
