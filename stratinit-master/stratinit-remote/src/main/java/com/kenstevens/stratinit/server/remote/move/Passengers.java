@@ -74,8 +74,6 @@ public class Passengers implements Iterable<Unit> {
 		for (Unit unit : newUnitsToMove) {
 			Collection<Unit> children = passengers.passengerMap.get(unit);
 			if (children != null && !children.isEmpty()) {
-				// FIXME write a test that exercises this code
-				System.err.println("YIPEE");
 				retval.passengerMap.putAll(unit, children);
 			}
 		}

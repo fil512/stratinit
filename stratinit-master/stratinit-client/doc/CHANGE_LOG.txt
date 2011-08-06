@@ -1,3 +1,10 @@
+Release 1.1.50
+  * Fixed a bug that stranded passengers when the unit carrying them is intercepted / interdicted.
+  * Fixed a bug that prevented move orders from being set on units out of supply.
+  * Improved error logging if there is a crash at startup.
+  * Improved complete client shutdown in case there was a crash.
+  * Added null-checking to prevent crashes on certain select events.
+
 Release 1.1.49
   * BALANCE CHANGE New build option: RESEARCH.  Counts as 2 tech centres for tech production.
   * BALANCE CHANGE A BASE no longer produces tech.

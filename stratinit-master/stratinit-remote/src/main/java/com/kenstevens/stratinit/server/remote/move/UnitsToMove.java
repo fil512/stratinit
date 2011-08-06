@@ -13,7 +13,9 @@ import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.util.AttackHelper;
 
 public class UnitsToMove implements Iterable<Unit> {
 
@@ -159,10 +161,11 @@ public class UnitsToMove implements Iterable<Unit> {
 
 		Result<None> allFailures = Result.trueInstance();
 		List<Unit> unitsOutOfRange = Lists.newArrayList();
+		Supply supply = new Supply(worldView);
 		for (Unit unit : units) {
 			Movement movement = new Movement(unit, worldView);
 			Result<None> lastResult = movement.inRange(unit,
-					targetSector.getCoords());
+					targetSector.getCoords(), AttackHelper.costToMove(unit, supply.inSupply(unit)));
 			if (lastResult.isSuccess()) {
 				lastResult.and(movement.canEnter(attackType, targetSector,
 						unit, unknown));

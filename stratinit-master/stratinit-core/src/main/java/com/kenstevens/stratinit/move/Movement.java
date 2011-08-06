@@ -178,8 +178,8 @@ public class Movement {
 		return true;
 	}
 
-	public Result<None> inRange(Unit unit, SectorCoords targetCoords) {
-		int distance = worldView.distance(unit.getCoords(), targetCoords);
+	public Result<None> inRange(Unit unit, SectorCoords targetCoords, int moveCost) {
+		int distance = moveCost * worldView.distance(unit.getCoords(), targetCoords);
 		return canTravelTo(unit, targetCoords, UnitHelper.range(unit), distance);
 	}
 	
