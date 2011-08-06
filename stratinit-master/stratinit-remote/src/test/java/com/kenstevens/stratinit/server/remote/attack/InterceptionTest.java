@@ -1,6 +1,8 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ public class InterceptionTest extends TwoPlayerBase {
 	private static final SectorCoords DEF = new SectorCoords(7, 0);
 	private static final SectorCoords BETWEEN = new SectorCoords(8, 0);
 	private static final SectorCoords ATT = new SectorCoords(9, 0);
+	private static final SectorCoords ATT2 = new SectorCoords(10, 0);
 	private static final SectorCoords CITY = new SectorCoords(8, 4);
 	private static final SectorCoords BYCITY = new SectorCoords(7, 4);
 
@@ -190,6 +193,58 @@ public class InterceptionTest extends TwoPlayerBase {
 		assertDamaged(result, heli);
 	}
 
+	@Test
+	public void fighterInterceptsHeliKillsBoth() {
+		unitDaoService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
+		Unit heli = unitDaoService
+				.buildUnit(nationMe, ATT, UnitType.HELICOPTER);
+		heli.setHp(1);
+		Unit inf = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+		unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+
+		Result<MoveCost> result = moveUnits(makeUnitList(heli),
+				BETWEEN);
+		assertFalseResult(result);
+		assertFalse(heli.isAlive());
+		assertFalse(inf.isAlive());
+	}
+
+
+	@Test
+	public void fighterIntercepts2HeliKillsOne() {
+		unitDaoService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
+		Unit heli1 = unitDaoService
+				.buildUnit(nationMe, ATT2, UnitType.HELICOPTER);
+		Unit heli2 = unitDaoService
+				.buildUnit(nationMe, ATT2, UnitType.HELICOPTER);
+		heli1.setHp(1);
+		Unit[] inf = new Unit[2*HELICOPTER_CAPACITY + 1];
+		for (int i = 0; i < 2*HELICOPTER_CAPACITY + 1; ++i) {
+			inf[i] = unitDaoService
+					.buildUnit(nationMe, ATT2, UnitType.INFANTRY);
+		}
+		unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+
+		Result<MoveCost> result = moveUnits(makeUnitList(heli1, heli2),
+				BETWEEN);
+		assertFalseResult(result);
+		assertFalse(result.toString(), heli1.isAlive());
+		assertTrue(heli2.isAlive());
+		int deadCount = 0;
+		for (int i = 0; i < 2*HELICOPTER_CAPACITY; ++i) {
+			if (inf[i].isAlive()) {
+				assertEquals(heli2.getCoords(), inf[i].getCoords());
+			} else {
+				++deadCount;
+			}
+		}
+		assertEquals(ATT2, inf[2*HELICOPTER_CAPACITY].getCoords());
+		assertEquals(HELICOPTER_CAPACITY, deadCount);
+	}
+
+	
+
+	
 	@Test
 	public void oneFighterInterceptsOneBomber() {
 		declareWar();

@@ -89,4 +89,7 @@ public interface UnitDaoService {
 	public abstract Result<None> cancelMoveOrder(Unit unit);
 
 	void executeCityMove(Unit unit, City city);
+
+	public abstract List<Unit> getPassengers(Unit unit,
+			WorldSector worldSector, Collection<Unit> values);
 }
