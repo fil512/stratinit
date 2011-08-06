@@ -31,6 +31,9 @@ public class NewsWindowControl {
 				new NewsListArrivedEventHandler() {
 					@Override
 					public void dataArrived() {
+						if (newsWindow.isDisposed()) {
+							return;
+						}
 						newsWindow.updateNews(db.getNewsLogList());
 					}
 				});

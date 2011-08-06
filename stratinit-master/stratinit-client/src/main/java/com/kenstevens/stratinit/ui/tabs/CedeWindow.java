@@ -10,10 +10,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.ui.shell.Window;
+import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 @Component
-public class CedeWindow implements Window {
+public class CedeWindow implements StratInitWindow {
 	private Shell dialog;
 	private Label recipientLabel;
 	private Button cedeButton;
