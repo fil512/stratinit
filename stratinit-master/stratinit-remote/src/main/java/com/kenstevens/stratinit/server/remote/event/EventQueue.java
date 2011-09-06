@@ -25,5 +25,5 @@ public interface EventQueue {
 
 	public abstract boolean cancel(EventKeyed eventKeyed);
 
-	public abstract void scheduleFlushCache(Date startTime);
+	public abstract void scheduleFlushCache();
 }

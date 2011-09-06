@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
@@ -55,7 +56,7 @@ public abstract class StratInitTest {
 	protected Nation testNation1;
 	protected Nation testNation2;
 	protected Unit testUnit1;
-	protected SectorCoords testCoords = new SectorCoords(1,2);
+	protected SectorCoords testCoords = new SectorCoords(0,1);
 	protected Sector testSector;
 	protected Sector testSector2;
 

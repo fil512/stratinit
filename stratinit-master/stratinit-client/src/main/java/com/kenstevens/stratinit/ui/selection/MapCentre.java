@@ -24,6 +24,9 @@ public class MapCentre {
 	}
 
 	public void setShifts(SectorCoords coords) {
+		if (coords == null) {
+			return;
+		}
 		int size = db.getBoardSize();
 		int midpoint = size / 2;
 		shift = new SectorCoords(size, coords.x - midpoint, coords.y - midpoint);
