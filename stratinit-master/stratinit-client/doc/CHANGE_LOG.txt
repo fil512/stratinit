@@ -1,3 +1,7 @@
+Release 1.1.51
+  * Fixed a bug that caused a lot of game data to get corrupted when the server goes down (e.g. when there is a power
+    outage).  Now only the last 15 minutes of data will be lost.
+
 Release 1.1.50
   * Fixed a bug that stranded passengers when the unit carrying them is intercepted / interdicted.
   * Fixed a bug that prevented move orders from being set on units out of supply.

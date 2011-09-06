@@ -141,8 +141,8 @@ public class EventQueueImpl implements EventQueue {
 		return eventTimer.cancel(new EventKey(eventKeyed));
 	}
 
-	public void scheduleFlushCache(Date startTime) {
-		FlushCacheEvent flushCacheEvent = new FlushCacheEvent(dataCache, startTime);
+	public void scheduleFlushCache() {
+		FlushCacheEvent flushCacheEvent = new FlushCacheEvent(dataCache);
 		eventTimer.schedule(flushCacheEvent);
 	}
 }
