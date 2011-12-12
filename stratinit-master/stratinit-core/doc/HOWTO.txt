@@ -43,6 +43,9 @@ was not included in the se of types which can be serialized by this Serializatio
 * don't use list inside gwtresult
 * (mvn gwt:generateAsync gwt:compile gwt:eclipse)
 
+Can't find db/migrations when run Console...
+* ensure src/main/resources is a source folder
+
 Run client as standalone jar...
 
 			<plugin>
