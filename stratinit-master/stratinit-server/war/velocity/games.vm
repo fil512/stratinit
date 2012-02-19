@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Strategic Initiative</TITLE>
+<LINK REL=StyleSheet HREF="/stratinit/css/style.css" TYPE="text/css" MEDIA=screen>
+<LINK REL=StyleSheet HREF="/css/style.css" TYPE="text/css" MEDIA=screen>
+</HEAD>
+<BODY>
+#include ("/fragments/top.html")
+#include ("/fragments/menu.html")
+#set($mode = $request.getParameter("mode"))
+#if($mode == "archive")
+#set($title = "Past")
+#set($ends = "Ended")
+#set($otherMode = "active")
+#set($otherTitle = "Active")
+#else
+#set($title = "Active")
+#set($otherMode = "archive")
+#set($otherTitle = "Past")
+#set($ends = "Ends")
+#end
+
+<H2>Strategic Initiative $title Games</H2>
+<p align=left class="teams">
+See Also: <a href="games.vm?mode=$otherMode">$otherTitle Games</a>
+</p>
+<table class="games">
+	#foreach( $game in $velocityService.listGames($mode))
+      <tr class="games">
+      <th class="games">
+          $game.name ($game.id)
+      </th>
+        <th class="games">
+        $ends $game.ends
+        </th>
+        </tr>
+      <tr class="games">
+        <td class="games" colspan=2>
+        <p class="teams">
+			<table class="teams">
+				<tr class="teams">
+					<th class="teams">
+						Player
+					</th>
+					<th class="teams">
+						Player
+					</th>
+					<th class="teams">
+						Score
+					</th>
+				<tr>
+			#foreach( $team in $game.teams)
+				<tr class="teams">
+					<td  class="teams">
+						$team.nation1
+					</td>
+					<td  class="teams">
+					#if ($team.nation2)
+						$team.nation2
+					#end
+					</td>
+					<td  class="teams">
+						$team.score
+					</td>
+				</tr>
+			#end
+			</table>
+			</p>
+			<p class="teams">
+			<table class="teams">
+				<tr class="teams">
+					<th class="teams">
+						Player
+					</th>
+					<th class="teams">
+						Cities
+					</th>
+					<th class="teams">
+						Power
+					</th>
+				<tr class="teams">
+			#foreach( $nation in $game.nations)
+				<tr class="teams">
+					<td class="teams">
+						$nation.name
+					</td>
+					<td class="teams">
+						$nation.cities
+					</td>
+					<td class="teams">
+						$nation.power
+					</td>
+				</tr>
+			#end
+			</table>
+			</p>
+			<p align=left class="teams">
+			<a href="messageBoard.vm?gameId=$game.id&gameName=$game.name">Message Board</a>
+			</p>
+
+		</td>
+	</tr>
+#end
+</table>
+  <!-- end right column -->
+</td>
+</tr>
+</table>
+</BODY>
+</HTML>

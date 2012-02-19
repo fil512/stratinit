@@ -1,0 +1,34 @@
+Follow these instructions to make a dmg file
+
+(Instructions below were derived from here: http://www.eclipse.org/swt/macosx/)
+
+stratinit-master> mvn clean install
+
+in eclipse, stratinit-client, project clean
+in eclipse, Launcher, check that the client works
+in eclipse, mvn webstart:jnlp (which is the "jnlp" launch target)
+
+In documents, "Strategic Initiative" -> Show Package Contents
+
+Copy stratinit*.jar files from jnlp folder to Show Package Contents in the folder where those jar files already are
+  Documents> rm StrategicInitiative.dmg
+  Documents> hdiutil create -srcfolder StrategicInitative.app StrategicInitiative.dmg
+  Documents> hdiutil internet-enable -yes StrategicInitiative.dmg 
+
+ssh root@strategicinitiative.org
+ ensure temp folder is empty
+
+  scp StrategicInitiative.dmg root@strategicinitiative.org:temp
+  
+ssh root@strategicinitiative.org
+cp -i temp/StrategicInitiative.dmg /home/stratinit/htdocs/mac
+
+----
+
+On windows
+1. in stratinit-client: mvn -P mac webstart:jnlp
+2. in stratinit-mac: copy jars from
+		stratinit-client/target/jnlp
+	to
+		stratinit-mac/lib/stratinit-mac-1.1/StrategicInitative.app/Contents/MacOS
+3. zip stratinit-mac-1.1 and upload to server

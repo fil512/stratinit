@@ -1,0 +1,74 @@
+To add an entity to the system:
+1) Add the class with javax.persistence annotations (see an existing model class).
+2) Set name="hibernate.hbm2ddl.auto" value="create" in persistence.xml in server
+2.5) Add a line like this for the new table: <class>com.kenstevens.stratinit.model.UnitMove</class>
+3) Run the server.  The  will automatically create the table for you.
+4) Start up pgAdmin III, open up the table it created, and copy the "CREATE TABLE" statement to a new db migration.
+5) Run mvn db-migration:new
+6) This will create a new empty sql file in src/main/db/migrations with today's date and time
+7) Paste the "CREATE TABLE" statement into this sql file
+
+To test the ddl sql:
+1) Set name="hibernate.hbm2ddl.auto" value="validate" in persistence.xml
+2) Run mvn db-migration:reset
+3) Run the tests
+
+You need to touch src/test/resources/META-INF/persistence.xml in order for it to be used.  Else the tests
+will try to connect directly to postgres and you may get an error like:
+	Caused by: org.hibernate.HibernateException: Missing table: CityCapturedBattleLog
+
+HOW TO MERGE
+1) in C:\Users\Ken\released-workspace
+2) Commit changes
+3) push (or pull from parent--easier to push from child)
+
+4) in C:\Users\Ken\workspace
+5) hg merge r1.1.46
+6) hg commit
+7) hg push
+
+
+TRANSACTION GUIDELINES:
+If you're updating data, put it in a DaoService.
+Otherwise it can go in the Dao.
+
+to restore a toccata.ca backup:
+"C:\Program Files\PostgreSQL\9.0\bin\psql.exe" -d stratinit -f 2012 postgres
+
+Password setting:
+http://sha1-hash-online.waraxe.us/
+
+GWT Serialization error...
+was not included in the se of types which can be serialized by this SerializationPolicy or its Class object could not be loaded
+* don't use list inside gwtresult
+* (mvn gwt:generateAsync gwt:compile gwt:eclipse)
+
+Can't find db/migrations when run Console...
+* ensure src/main/resources is a source folder
+
+Run client as standalone jar...
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>package-jar-with-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+							<archive>
+								<manifest>
+									<mainClass>com.kenstevens.stratinit.main.Launcher</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>

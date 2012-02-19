@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Strategic Initiative</TITLE>
+<LINK REL=StyleSheet HREF="../css/style.css" TYPE="text/css" MEDIA=screen>
+</HEAD>
+<BODY>
+<!--#include virtual="../fragments/menu.html" -->
+<!--#include virtual="../fragments/top.html" -->
+<img src="../images/Splash.jpg" align=texttop/>
+<h1>About Us</h1>
+<p><img src="../images/KenStevens.jpg" alt="Ken Stevens" width="200" height="208" align="left">Strategic Initiative is a free, Open-Source game created by me, Ken Stevens. I pay for the <a href="http://www.strategicinitiative.org">www.strategicinitiative.org</a> game servers out of my own pocket. I'm currently hosting the servers at <a href="http://rimuhosting.com/">Rimu Hosting</a> which I highly recommend to anyone looking for a server hosting. The cost for me to run the servers is $55.29 per month.</p>
+<p>If I ever end up getting so many players that I need to increase my server capacity, then I'll run a short donation campaign to raise the funds to pay for the increased capacity. But for now, I'm happy to pay for the servers myself.</p>
+<p>The full source code for Strategic Initiative is available on the <a href="http://code.google.com/p/stratinit/">stratinit project</a> hosted by Google Code. Anyone is free to download the source code and host games on their own servers if they like.  The code is licensed under the   <a href="http://www.gnu.org/licenses/gpl.html" rel="nofollow">GNU General Public License v3</a>, so if you make improvements to the game I'd like to know about them so I can incorporate your changes back into the project (if they're good changes :-).</p>
+<p>A bit about me... Back in the 90's, I was one of the key coders on an old, text-based online strategy game called <a href="http://www.wolfpackempire.com/history.html">Empire</a> which continues to live on to this day as <a href="http://www.wolfpackempire.com/">Wolfpack Empire</a>. Many of the ideas (supply, interdiction, interception...) in Strategic Initiative are drawn from this game. However Strategic Initiative is considerably simpler than Empire. Empire was the ultimate micro-management game.</p>
+<p>I now work for a software consulting firm in Toronto, Canada, mostly as a Project Manager for software development projects. I don't get to code much at my day job, so for fun I write game software in my spare time.</p>
+<p>I also create and publish board games, which you can check out over at <a href="www.toccatagames.com">Toccata Games</a>.</p>
+<p>&nbsp;</p>
+<p><a href="http://www.theonlinegamesdir.com/">Online Games Directory</a>. We are listed under <a href="http://www.theonlinegamesdir.com/Online_Games/Online_Games_Strategy/19967.html">Online Games Strategy</a> category</p>
+<p><a href="http://www.directoryofgames.com/main.php?view=topgames&action=vote&v_tgame=1792" target="_blank">Vote for Strategic Initiative!</a></p>
+<!--#include virtual="../fragments/bottom.html" -->
+</BODY>
+</HTML>
