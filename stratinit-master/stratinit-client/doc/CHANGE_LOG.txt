@@ -1,3 +1,7 @@
+Release 1.1.52
+  * Fixed a bug that prevented game data from flushing to disc every 15 minutes.  This resulted
+    in a corrupt database if the server was shut down ungracefully (e.g. due to a power failure)
+
 Release 1.1.51
   * Fixed a bug that caused a lot of game data to get corrupted when the server goes down (e.g. when there is a power
     outage).  Now only the last 15 minutes of data will be lost.

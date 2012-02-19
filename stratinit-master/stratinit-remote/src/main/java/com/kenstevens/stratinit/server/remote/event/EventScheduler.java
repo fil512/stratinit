@@ -30,7 +30,6 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
-import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.UpdateManager;
 
 @Service

@@ -1,12 +1,9 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.WorldSector;

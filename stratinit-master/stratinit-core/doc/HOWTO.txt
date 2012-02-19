@@ -39,7 +39,7 @@ If you're updating data, put it in a DaoService.
 Otherwise it can go in the Dao.
 
 to restore a toccata.ca backup:
-"C:\Program Files\PostgreSQL\9.0\bin\psql.exe" -d stratinit -f 2011 postgres
+"C:\Program Files\PostgreSQL\9.0\bin\psql.exe" -d stratinit -f 2012 postgres
 
 Password setting:
 http://sha1-hash-online.waraxe.us/

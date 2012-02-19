@@ -94,6 +94,8 @@ public class WorldManagerTest extends EventTimerMockedBase {
 	@Test
 	public void setNextBuildSatAndBuild() {
 		createNation();
+		// FIXME can this fail sometimes?
+		assertEquals(0, sectorDao.getCities(nation).size());
 		context.checking(new Expectations() {
 			{
 				exactly(3).of(eventTimer).schedule((Event)with(a(CityBuildEvent.class)));
@@ -124,6 +126,9 @@ public class WorldManagerTest extends EventTimerMockedBase {
 	@Test
 	public void buildThenSetNextBuildSat() {
 		createNation();
+		// FIXME can this fail sometimes?
+		assertEquals(0, sectorDao.getCities(nation).size());
+
 		context.checking(new Expectations() {
 			{
 				exactly(3).of(eventTimer).schedule((Event)with(a(CityBuildEvent.class)));

@@ -164,7 +164,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		setRelations(nation);
 		if (game.isMapped()) {
 			worldManager.addPlayerToMap(nationId, nation);
-		} else if (game.getPlayers() >= Constants.MIN_PLAYERS_TO_SCHEDULE) {
+		} else if (game.getPlayers() >= Constants.getMinPlayersToSchedule()) {
 			scheduleGame(game);
 		}
 		return new Result<Nation>(nation);

@@ -48,7 +48,6 @@ public class Game extends GameUpdatable implements Serializable {
 
     public Game(String name) {
     	this.name = name;
-		this.setLastUpdated(new Date());
     }
 
     public Game(String name, int size) {

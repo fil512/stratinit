@@ -1,15 +1,21 @@
 package com.kenstevens.stratinit.type;
 
 public final class Constants {
-	private Constants() {}
+	private Constants() {
+	}
+
+	private static RunMode runMode = RunMode.PRODUCTION;
+
 	public static final String EMAIL_FROM_ADDRESS = "hq@strategicinitiative.org";
 	public static final String EMAIL_ADMIN_ADDRESS = "ken.stevens@sympatico.ca";
-	
-	public static final String SERVER_VERSION = "1.1.51";
+
+	public static final String SERVER_VERSION = "1.1.52";
 	public static final int UNASSIGNED = -1;
 	public static final int HOURS_BETWEEN_UNIT_UPDATES = 4;
 	public static final int TECH_UPDATE_INTERVAL_SECONDS = 15 * 60;
-	public static final double[] TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES = {0, 0.8, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5};
+	public static final double[] TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES = { 0,
+			0.8, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4,
+			2.5 };
 	public static final int MAX_RANGE = 24;
 	public static final int NO_FUEL_REQUIRED = -1;
 	public static final int START_INFANTRY = 4;
@@ -19,7 +25,7 @@ public final class Constants {
 	public static final int BATTLE_GROUP_RADIUS = 5;
 	public static final int SECONDS_PER_DAY = 24 * 60 * 60;
 	public static final int UNIT_VISIBLE_INTERVAL = SECONDS_PER_DAY; // 24 hours
-	public static final int SUB_VISIBLE_INTERVAL = 8*60*60; // 8 hours
+	public static final int SUB_VISIBLE_INTERVAL = 8 * 60 * 60; // 8 hours
 	public static final int CITY_VIEW_DISTANCE = 1;
 	public static final int ALLIED_FRIENDLY_CANCEL_TIME_HOURS = 24;
 	public static final int BASE_FLAK = 1;
@@ -27,34 +33,37 @@ public final class Constants {
 	public static final int FORT_FLAK = 2;
 	public static final int FORT_CANNONS = 2;
 	public static final int AIRPORT_FLAK = 4;
-	public static final int PORT_CANNONS= 4;
+	public static final int PORT_CANNONS = 4;
 	public static final int SATELLITE_SIGHT = 6;
 	public static final int AIR_IN_CITY_MULTIPLIER = 2;
 	public static final int SHIP_IN_CITY_MULTIPLIER = 3;
 	public static final int TECH_NEXT_BUILD = 2;
 	public static final int MIN_ATTACK = 2;
 	public static final int MAP_EXTRA_SLOTS = 2;
-	public static final int MIN_PLAYERS_TO_SCHEDULE = 4; // hopefully this will increase over time
-	
+	public static final int MIN_PLAYERS_TO_SCHEDULE = 4; // hopefully this will
+															// increase over
+															// time
+
 	private static final long SCHEDULED_TO_MAPPED_HOURS = 16;
 	private static final long MAPPED_TO_STARTED_HOURS = 8;
-	
+
 	private static final long SCHEDULED_TO_MAPPED_MILLIS = 1000 * 60 * 60 * SCHEDULED_TO_MAPPED_HOURS;
 	private static final long MAPPED_TO_STARTED_MILLIS = 1000 * 60 * 60 * MAPPED_TO_STARTED_HOURS;
-	
+
 	private static long scheduledToMappedMillis = SCHEDULED_TO_MAPPED_MILLIS;
 	private static long mappedToStartedMillis = MAPPED_TO_STARTED_MILLIS;
-	
+	private static final int FLUSH_CACHE_MILLIS = 15 * 60 * 1000;
+
 	public static final String DEFAULT_BATTLELOG_FILENAME = "battles.txt";
 	public static final int AIRPORT_VIEW_RADIUS = 3;
-	public static final int FLUSH_CACHE_MILLIS = 15 * 60 * 1000;
 	public static final double MAX_TECH = 16.0;
 	public static final double OTHER_TECH_BLEED = 4.0;
 	public static final double ALLY_TECH_BLEED = 2.0;
 	public static final int RADAR_BASE = 2;
 	public static final int MAX_MOBILITY_MULTIPLIER = 3;
 	public static final int MAX_PLAYERS_PER_GAME = 10;
-	public static final int MAX_ALLIES = 1; // Maximum number of allies per player
+	public static final int MAX_ALLIES = 1; // Maximum number of allies per
+											// player
 	public static final int RADAR_FACTOR = 3;
 	public static final String SERVER_MESSAGE = "HQ";
 	public static final int CITY_CAPTURE_DAMAGE = 4;
@@ -75,29 +84,66 @@ public final class Constants {
 	public static final String MESSAGE_BOARD = "Message Board";
 	public static final int CITY_HEAL_PERCENT = 40;
 	public static final int SUPPLY_HEAL_PERCENT = 20;
-	public static final int MOB_COST_TO_CREATE_CITY = 9; // == Engineer max mobility
+	public static final int MOB_COST_TO_CREATE_CITY = 9; // == Engineer max
+															// mobility
 	public static final int MOB_COST_TO_SWITCH_TERRAIN = 6;
 	public static final int SHIP_COUNTERFIRE_RANGE = 1;
 	public static final int ESCORT_RADIUS = 2;
-	
-	public static void setScheduledToMappedMillis(long scheduledToMappedMillis) {
-		Constants.scheduledToMappedMillis = scheduledToMappedMillis;
-	}
-	public static long getScheduledToMappedMillis() {
-		return scheduledToMappedMillis;
-	}
 
-	public static void setMappedToStartedMillis(long mappedToStartedMillis) {
-		Constants.mappedToStartedMillis = mappedToStartedMillis;
+	// TEST values
+
+	private static final long SCHEDULED_TO_MAPPED_MILLIS_TEST = 10 * 1000;
+	private static final long MAPPED_TO_STARTED_MILLIS_TEST = 10 * 1000;
+	private static int FLUSH_CACHE_MILLIS_TEST = 15 * 1000;
+
+	public static long getScheduledToMappedMillis() {
+		if (getRunMode() == RunMode.TEST) {
+			return SCHEDULED_TO_MAPPED_MILLIS_TEST;
+		} else {
+			return scheduledToMappedMillis;
+		}
 	}
 
 	public static long getMappedToStartedMillis() {
-		return mappedToStartedMillis;
+		if (getRunMode() == RunMode.TEST) {
+			return MAPPED_TO_STARTED_MILLIS_TEST;
+		} else {
+			return mappedToStartedMillis;
+		}
 	}
 
 	public static long getScheduledToStartedMillis() {
-		return Constants.scheduledToMappedMillis + Constants.mappedToStartedMillis;
+		if (getRunMode() == RunMode.TEST) {
+			return SCHEDULED_TO_MAPPED_MILLIS_TEST
+					+ MAPPED_TO_STARTED_MILLIS_TEST;
+		} else {
+			return Constants.scheduledToMappedMillis
+					+ Constants.mappedToStartedMillis;
+		}
 	}
 
+	public static int getFlushCacheMillis() {
+		if (getRunMode() == RunMode.TEST) {
+			return FLUSH_CACHE_MILLIS_TEST;
+		} else {
+			return FLUSH_CACHE_MILLIS;
+		}
+	}
+
+	public static int getMinPlayersToSchedule() {
+		if (getRunMode() == RunMode.TEST) {
+			return 1;
+		} else {
+			return MIN_PLAYERS_TO_SCHEDULE;
+		}
+	}
+
+	public static RunMode getRunMode() {
+		return runMode;
+	}
+
+	public static void setRunMode(RunMode runMode) {
+		Constants.runMode = runMode;
+	}
 
 }

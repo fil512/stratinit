@@ -43,7 +43,7 @@ public class DataCache extends Updatable {
 
 	private final Map<Integer, GameCache> gameMap = new TreeMap<Integer, GameCache>();
 	private final Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
-
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void load() {
@@ -181,7 +181,7 @@ public class DataCache extends Updatable {
 
 	@Override
 	public int getUpdatePeriodMilliseconds() {
-		return Constants.FLUSH_CACHE_MILLIS;
+		return Constants.getFlushCacheMillis();
 	}
 
 	@Override
