@@ -35,6 +35,8 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.RunMode;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
@@ -157,6 +159,7 @@ public abstract class StratInitDaoBase {
 
 	@Before
 	public void stratInit() {
+		Constants.setRunMode(RunMode.PRODUCTION);
 		if (!initialized) {
 			SessionImpl session = getSession();
 			assertTrue("Running in HSQL", session.getFactory().getSettings()

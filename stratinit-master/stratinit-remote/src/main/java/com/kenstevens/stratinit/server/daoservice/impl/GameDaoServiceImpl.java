@@ -15,7 +15,6 @@ import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameBuildAudit;
 import com.kenstevens.stratinit.model.Nation;
@@ -165,7 +164,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		setRelations(nation);
 		if (game.isMapped()) {
 			worldManager.addPlayerToMap(nationId, nation);
-		} else if (game.getPlayers() >= Constants.MIN_PLAYERS_TO_SCHEDULE) {
+		} else if (game.getPlayers() >= Constants.getMinPlayersToSchedule()) {
 			scheduleGame(game);
 		}
 		return new Result<Nation>(nation);

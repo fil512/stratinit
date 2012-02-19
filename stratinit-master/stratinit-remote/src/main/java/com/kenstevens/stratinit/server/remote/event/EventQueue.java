@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import java.util.Date;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.EventKeyed;
 import com.kenstevens.stratinit.model.Game;

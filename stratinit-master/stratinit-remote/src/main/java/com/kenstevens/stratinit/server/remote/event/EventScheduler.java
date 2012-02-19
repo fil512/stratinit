@@ -29,7 +29,6 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
-import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.UpdateManager;
 
 @Service
@@ -85,7 +84,7 @@ public class EventScheduler {
 
 	private void processSystemProperties() {
 		Properties props = System.getProperties();
-		logger.info("System properties:");
+		logger.debug("System properties:");
 		for (String key : props.stringPropertyNames()) {
 			logger.debug(key + ": " + props.getProperty(key));
 		}
