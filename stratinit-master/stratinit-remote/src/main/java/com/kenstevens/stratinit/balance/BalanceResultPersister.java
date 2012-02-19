@@ -6,7 +6,8 @@ import java.io.InputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.xml.sax.SAXException;
@@ -14,8 +15,8 @@ import org.xml.sax.SAXException;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class BalanceResultPersister {
-	private Logger logger = Logger.getLogger(getClass());
-	
+	private final Log log = LogFactory.getLog(getClass());
+
 	static final String SAVE_NAME = "unitBalancer.xml";
 	static final String SAVE_FILE = "src/main/resources/com/kenstevens/stratinit/balance/"+SAVE_NAME;
 
@@ -42,7 +43,7 @@ public class BalanceResultPersister {
 			try {
 				retval = deserialize(serializer, source);
 			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
+				log.error(e.getMessage(), e);
 				throw e;
 			}
 			

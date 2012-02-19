@@ -20,4 +20,5 @@ public interface PlayerDaoService {
 
 	public abstract Result<None> forgottenPassword(String username, String email);
 
+	public abstract boolean authorizePlayer(String userName, String password);
 }

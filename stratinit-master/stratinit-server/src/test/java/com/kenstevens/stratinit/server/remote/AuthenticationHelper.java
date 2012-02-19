@@ -1,9 +1,13 @@
 package com.kenstevens.stratinit.server.remote;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.context.SecurityContextHolder;
+import java.util.Collection;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import com.google.common.collect.Lists;
 
 public class AuthenticationHelper {
 
@@ -16,9 +20,9 @@ public class AuthenticationHelper {
 		}
 
 		@Override
-		public GrantedAuthority[] getAuthorities() {
-			GrantedAuthority[] retval = new GrantedAuthority[1];
-			retval[0] = new GrantedAuthorityImpl("ROLE_ADMIN");
+		public Collection<GrantedAuthority> getAuthorities() {
+			Collection<GrantedAuthority> retval = Lists.newArrayList();
+			retval.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
 			return retval;
 		}
 

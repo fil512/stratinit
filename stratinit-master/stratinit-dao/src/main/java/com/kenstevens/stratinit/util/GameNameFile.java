@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public final class GameNameFile {
-	private static Logger logger = Logger.getLogger(GameNameFile.class);
+	private static Log logger = LogFactory.getLog(GameNameFile.class);
 
 	private static final String BATTLES_FILENAME = "battles.txt";
 	private static final int MAX_GAMES = 4096;

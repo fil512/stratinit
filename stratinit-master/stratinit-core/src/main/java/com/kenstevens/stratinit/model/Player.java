@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 
+import org.apache.commons.lang.StringUtils;
+
 
 @Entity
 public class Player implements Serializable {
@@ -38,6 +40,13 @@ public class Player implements Serializable {
 	public Player(String username, int id) {
 		this(username);
 		this.id = id;
+	}
+	
+	public static Player makeNonActivePlayer() {
+		Player player = new Player();
+		player.setPassword(StringUtils.EMPTY);
+		player.setEnabled(false);
+		return player;
 	}
 
 	@Override
@@ -143,6 +152,13 @@ public class Player implements Serializable {
 
 	public boolean isEmailGameMail() {
 		return emailGameMail;
+	}
+	
+	public int getWinPerc() {
+		if (played == 0) {
+			return 0;
+		}
+		return 100 * wins / played;
 	}
 
 	public void copyFrom(Player player) {

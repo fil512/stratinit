@@ -100,5 +100,4 @@ public class PlayerDaoImpl implements PlayerDao {
 	public Player find(Integer id) {
 		return dataCache.getPlayer(id);
 	}
-
 }

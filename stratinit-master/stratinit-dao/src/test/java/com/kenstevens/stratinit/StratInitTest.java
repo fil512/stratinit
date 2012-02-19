@@ -7,7 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.impl.SessionImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +35,7 @@ import com.kenstevens.stratinit.util.GameScheduleHelper;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/spring.xml")
 public abstract class StratInitTest {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	protected GameDao gameDao;
