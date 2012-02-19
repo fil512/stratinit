@@ -77,10 +77,7 @@ public class EventScheduler {
 		logger.info("Event Queue starting up.");
 		processSystemProperties();
 		updateGames();
-		long time = new Date().getTime();
-		time += Constants.FLUSH_CACHE_MILLIS;
-		Date startTime = new Date(time);
-		eventQueue.scheduleFlushCache(startTime);
+		eventQueue.scheduleFlushCache();
 		// TODO is this a race condition?
 		gameCreator.createGameIfAllMapped();
 		logger.info("All events scheduled.  Server started.");

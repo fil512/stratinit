@@ -268,4 +268,8 @@ public class GameCache extends Cacheable {
 			setWorldModified(false);
 		}
 	}
+	
+	public boolean isWorldModified() {
+		return worldCache.isModified();
+	}
 }
