@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.ui.adapter;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
@@ -14,7 +15,7 @@ import com.kenstevens.stratinit.ui.shell.TopShell;
 import com.kenstevens.stratinit.util.Spring;
 
 public class BuildCitySelectionAdapter extends StratinitSelectionAdapter {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	public BuildCitySelectionAdapter(SelectEvent selectEvent, Spring spring,
 			ActionFactory actionFactory, TopShell topShell) {

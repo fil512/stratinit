@@ -31,24 +31,8 @@ syntax: regexp
 ^stratinit-master/stratinit-dao/stratinit\.log$
 syntax: glob
 stratinit-master/stratinit-server/StratInit.lock
-stratinit-master/stratinit-client/.project
-stratinit-master/stratinit-test/.project
-stratinit-master/stratinit-test/.classpath
-stratinit-master/stratinit-server/.project
-stratinit-master/stratinit-server/.classpath
-stratinit-master/stratinit-remote/.project
-stratinit-master/stratinit-remote/.classpath
-stratinit-master/stratinit-images/.project
-stratinit-master/stratinit-images/.classpath
-stratinit-master/stratinit-dao/.project
-stratinit-master/stratinit-dao/.classpath
-stratinit-master/stratinit-core/.project
-stratinit-master/stratinit-core/.classpath
-stratinit-master/stratinit-client/.settings/org.maven.ide.eclipse.prefs
-syntax: glob
 stratinit-master/stratinit-server/stratinit.log
-syntax: glob
-stratinit-master/stratinit-client/.classpath
-syntax: glob
-stratinit-master/stratinit-client/bin
 
+stratinit-master/stratinit-client/.classpath
+syntax: regexp
+^stratinit-master/stratinit-server/\.classpath$

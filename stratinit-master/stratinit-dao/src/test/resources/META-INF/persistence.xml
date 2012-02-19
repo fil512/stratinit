@@ -17,12 +17,6 @@
 			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:stratinit" />
 			<property name="hibernate.connection.username" value="sa" />
 			<property name="hibernate.connection.password" value="" />
-			<!-- 
-			<property name="hibernate.cache.use_query_cache" value="true" /> 
-			<property name="hibernate.cache.use_second_level_cache" value="true" /> 
-			<property name="hibernate.cache.provider_class" value="net.sf.ehcache.hibernate.SingletonEhCacheProvider" />
-			<property name="hibernate.generate_statistics" value="true" />
-			-->		
 		</properties>
 	</persistence-unit>
 

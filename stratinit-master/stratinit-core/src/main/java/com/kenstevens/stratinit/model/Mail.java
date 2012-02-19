@@ -3,14 +3,12 @@ package com.kenstevens.stratinit.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 import javax.persistence.Transient;
 
 import com.kenstevens.stratinit.type.NewsCategory;
 
 @Entity
 public class Mail extends Message {
-	@Lob
 	private String body = "";
 	@Transient
 	private boolean post = false;

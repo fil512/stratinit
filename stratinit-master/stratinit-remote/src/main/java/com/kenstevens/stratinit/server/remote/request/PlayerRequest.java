@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.server.remote.request;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.main.Spring;
@@ -16,7 +17,7 @@ import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.util.StackTraceHelper;
 
 public abstract class PlayerRequest<T> {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 
 

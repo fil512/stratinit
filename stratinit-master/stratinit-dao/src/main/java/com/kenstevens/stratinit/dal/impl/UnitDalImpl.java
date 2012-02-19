@@ -74,13 +74,18 @@ public class UnitDalImpl implements UnitDal {
 				.setParameter("gameId", gameId).setParameter("username",
 						username).getResultList();
 	}
-
+	
 	@Override
 	public List<UnitBuildAudit> getBuildAudits(Game game) {
+		return getBuildAudits(game.getId());
+	}
+
+	@Override
+	public List<UnitBuildAudit> getBuildAudits(int gameId) {
 			return entityManager
 					.createQuery(
 							"from UnitBuildAudit u WHERE u.gameId = :gameId")
-					.setParameter("gameId", game.getId()).getResultList();
+					.setParameter("gameId", gameId).getResultList();
 	}
 	
 	@Override

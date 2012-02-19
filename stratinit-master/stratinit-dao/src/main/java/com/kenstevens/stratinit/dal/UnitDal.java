@@ -55,4 +55,6 @@ public interface UnitDal {
 
 	List<UnitMove> findUnitMoves(Unit unit);
 
+	List<UnitBuildAudit> getBuildAudits(int gameId);
+
 }

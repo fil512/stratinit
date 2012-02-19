@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -82,7 +83,7 @@ import com.kenstevens.stratinit.util.Spring;
 
 @Component("MainWindow")
 public class MainWindow implements MapControl, GameManager {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	private Label distanceValueLabel;
 	private Label coordsLabel;

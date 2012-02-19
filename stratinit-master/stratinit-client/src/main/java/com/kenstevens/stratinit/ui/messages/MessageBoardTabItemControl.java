@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.messages;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,7 +22,7 @@ import com.kenstevens.stratinit.util.Spring;
 @Scope("prototype")
 @Component
 public class MessageBoardTabItemControl extends MessageViewerControl implements TopLevelController {
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private MessageWindow messageWindow;
