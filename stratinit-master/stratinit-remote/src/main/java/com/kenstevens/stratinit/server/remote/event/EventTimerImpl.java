@@ -3,7 +3,8 @@ package com.kenstevens.stratinit.server.remote.event;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.model.EventKey;
@@ -11,7 +12,7 @@ import com.kenstevens.stratinit.model.Updatable;
 
 @Service
 public class EventTimerImpl implements EventTimer {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	private final JavaTimer javaTimer = new JavaTimerImpl();
 	private final Map<EventKey, Event> eventMap = new HashMap<EventKey, Event>();

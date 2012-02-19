@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.shell;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BrowserWindow {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	private Browser browser;
 

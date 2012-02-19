@@ -34,6 +34,7 @@ public class UnitView extends Unit {
 	public boolean isNew() {
 		return isNew;
 	}
+	// FIXME moveIncreased = false is clobbering our login info
 	public UnitView copyFrom(UnitView unit) {
 		this.setCoords(unit.getCoords());
 		if (unit.getMobility() < this.getMobility()) {

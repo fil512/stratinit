@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,8 +22,8 @@ import com.kenstevens.stratinit.util.AccountPersister;
 import com.kenstevens.stratinit.util.XMLException;
 
 @Component
-public class AccountSettingsWindow implements StratInitWindow {
-	private Logger logger = Logger.getLogger(getClass());
+public class AccountSettingsWindow implements Window {
+	private final Log logger = LogFactory.getLog(getClass());
 
 	private Text username;
 	private Text password;

@@ -3,8 +3,6 @@ package com.kenstevens.stratinit.world;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.World;
@@ -12,7 +10,6 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnassignedAndIsolatedPredicate;
 
 public class IslandSeeder {
-	private Logger logger = Logger.getLogger(getClass());
 	protected static final Random RANDOM = new Random();
 	private static final int MAX_ATTEMPTS = 64;
 	private final SectorCoords startCoord;
@@ -52,7 +49,6 @@ public class IslandSeeder {
 				return sector;
 			}
 		}
-		logger.error("Unable to situate nearby volcano.");
 		return null;
 	}
 }

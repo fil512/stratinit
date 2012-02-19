@@ -8,11 +8,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public final class Profiler
-{
-	private static Logger logger = Logger.getLogger(Profiler.class);
+{	private final static Log logger = LogFactory.getLog(Profiler.class);
+
 	private static final String PROFILE_FILENAME = "profile.txt";
 
 	private static final Map<ProfilerID, TimerClass> TIMERS = Collections.synchronizedMap(new HashMap<ProfilerID, TimerClass>());

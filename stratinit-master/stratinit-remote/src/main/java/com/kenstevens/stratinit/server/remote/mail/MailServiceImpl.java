@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.remote.mail;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import com.kenstevens.stratinit.type.Constants;
 
 @Service
 public class MailServiceImpl implements MailService {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
 	private SMTPService smtpService;
@@ -27,7 +28,7 @@ public class MailServiceImpl implements MailService {
 
 	@Override
 	public void sendEmail(Player player, MailTemplate template) {
-		logger.info("Sending "+template.getType()+" email to "+player.getUsername());
+		log.info("Sending "+template.getType()+" email to "+player.getUsername());
 		smtpService.sendEmail(player.getEmail(), from, template.getSubject(), template.getBody());
 	}
 }

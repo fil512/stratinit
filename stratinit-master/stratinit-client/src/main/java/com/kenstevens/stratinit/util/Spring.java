@@ -11,7 +11,6 @@ public class Spring {
 	@Autowired
 	private ApplicationContext context;
 
-	@SuppressWarnings("unchecked")
 	public <T> T getBean(Class<? extends T> type) {
 		return (T) context.getBean(getBeanName(type), type);
 	}
@@ -22,8 +21,7 @@ public class Spring {
 				+ beanName.substring(1);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T> Map<String, T> getBeansOfType(Class<? extends T> type) {
+	public <T> Map<String, ? extends T> getBeansOfType(Class<? extends T> type) {
 		return context.getBeansOfType(type);
 	}
 

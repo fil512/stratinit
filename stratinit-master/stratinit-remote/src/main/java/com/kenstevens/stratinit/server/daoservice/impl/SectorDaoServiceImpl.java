@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ import com.kenstevens.stratinit.type.UnitType;
 @Service
 public class SectorDaoServiceImpl implements SectorDaoService {
 	@SuppressWarnings("unused")
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private GameDao gameDao;

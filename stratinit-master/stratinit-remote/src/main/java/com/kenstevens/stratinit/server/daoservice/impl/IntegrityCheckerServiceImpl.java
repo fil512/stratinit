@@ -3,7 +3,8 @@ package com.kenstevens.stratinit.server.daoservice.impl;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 public class IntegrityCheckerServiceImpl implements IntegrityCheckerService {
 	private static final int MAX_ALLOWABLE_DEPTH = 1024;
 
-	private final Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 	
 	@Autowired
 	UnitDao unitDao;

@@ -264,7 +264,7 @@ public class StratInitImpl implements StratInit {
 			return new Result<None>("The server is not running.", false);
 		}
 		serverManager.shutdown();
-		return Result.trueInstance();
+		return new Result<None>("SERVER SHUTDOWN COMPLETE", true);
 	}
 
 	@Override

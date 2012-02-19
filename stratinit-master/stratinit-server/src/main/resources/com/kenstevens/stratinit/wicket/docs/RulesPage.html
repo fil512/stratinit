@@ -1,0 +1,2246 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>Play</title>
+	</head>
+	<body>
+		<wicket:extend>
+<h2>Rules</h2>
+
+
+
+<h3>1. The Map</h3>
+
+
+
+<p>The map consists of islands and water.  Islands are either
+
+
+
+land or a city.  The edges of the map wrap around, so if you sail off one edge of the map, you will arrive on the opposite edge of the map. A player may designate a city to be one of five city types:</p>
+
+
+
+<ul>
+
+
+
+	<li><img src="../images/city/fort.gif"/>
+
+
+
+	<b>Fort.</b>  This is where land units are built.  Land units in
+
+
+
+	forts take half damage from all attacks, rounded down (minimum 1 damage).
+
+
+
+	</li>
+
+
+
+	<li><img src="../images/city/port.gif"/>
+
+
+
+	<b>Port.</b>  Ports must be designated next to water.
+
+
+
+	Ports are where ships are built.  Ports  provide supply to
+
+
+
+	ships (see "Supply" below). Ships can sail into ports.
+
+
+
+  </li>
+
+
+
+	<li><img src="../images/city/airport.gif"/>
+
+
+
+	<b>Airport.</b>  Airports are where planes are built.
+
+
+
+	Air units are resupplied in airports.
+
+
+
+	</li>
+
+
+
+	<li><img src="../images/city/tech.gif"/>
+
+
+
+	<b>Technology Center.</b>  Tech centres are where zeppelins, engineers, satellites and
+
+
+
+	missiles are built.  Tech centres also increase a nation's
+
+
+
+	technology level (see "Technology" below).  Lastly, tech centres have radar dishes that can  see all sectors and units within a radius equal to 2 plus  the nation's technology level divided by 3.</li>
+
+
+
+	<li><img src="../images/city/base.gif"/>
+
+
+
+	<b> Base.</b>  A Base is like a fort, port, airport and tech centre all in one, with one important difference:
+
+
+
+	Bases do not build units.  Specifically, a Base has the following attributes:
+
+
+	<ul>
+
+
+
+	<li>flak 1, cannon 1.</li>
+
+
+
+	<li>Like a fort, half damage to land units.</li>
+
+
+
+	<li>Like a port, provides supply to ships. If coastal, also provides ship passage.</li>
+
+
+
+	<li>Like a carrier, provides supply to light planes.</li>
+
+
+
+	<li>Like a tech centre, generates technology and provides radar visibility with a distance equal to your tech level / 3.</li>
+
+	<li>Produces twice as many Command Points as other cities (see &quot;Command Points&quot;) below.</li>
+
+
+
+	</ul>
+
+
+
+	</li>
+
+
+
+</ul>
+
+
+
+<h3>2. Units</h3>
+
+
+
+<p>Strategic Initiative has the following units.</p>
+
+
+
+<p>
+
+
+
+<table border="1" cellspacing="0" bordercolor="#000000" cellpadding="3"
+
+
+
+	width="100%" align=center>
+
+
+
+	<tbody>
+
+
+
+		<tr><td>Icon</td>
+
+
+
+			<td>Unit</td>
+
+
+
+			<td>Built in</td>
+
+
+
+			<td>Tech</td>
+
+
+
+			<td>Cost (hrs)</td>
+
+
+
+			<td>Mobility</td>
+
+
+
+			<td>Sight</td>
+
+
+
+			<td>Attack</td>
+
+
+
+			<td>Ammo</td>
+
+
+
+			<td>Flak</td>
+			<td>Cannon</td>
+
+
+
+			<td>HP</td>
+
+
+
+			<td>Notes</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/city/base.gif"/></td>
+
+
+
+			<td>Base</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td>1</td>
+			<td>1</td>
+
+
+
+			<td></td>
+
+
+
+			<td>Double command points.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/city/fort.gif"/></td>
+
+
+
+			<td>Fort</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td>2</td>
+			<td>2</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+		</tr>
+
+
+
+		<tr>
+		  <td><img src="../images/city/port.gif" alt=""/></td>
+		  <td>Port</td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td></td>
+		  <td>&nbsp;</td>
+		  <td>4</td>
+		  <td></td>
+		  <td></td>
+	  </tr>
+		<tr><td><img src="../images/city/airport.gif"/></td>
+
+
+
+			<td>Airport</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td>4</td>
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+
+
+
+		</tr>
+		<tr><td><img src="../images/unit/infantry.gif"/></td>
+
+
+
+			<td>Infantry</td>
+
+
+
+			<td>Fort</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>5</td>
+
+
+
+			<td>Can be loaded onto a helicopter.</td>
+
+
+
+		</tr>
+
+
+
+		<tr>
+		  <td><img src="../images/unit/anti_tank.gif" alt="anti-tank"/></td>
+		  <td>Anti Tank</td>
+		  <td>Fort</td>
+		  <td>5</td>
+		  <td>10</td>
+		  <td>2</td>
+		  <td>1</td>
+		  <td>3</td>
+		  <td>1</td>
+		  <td></td>
+		  <td>&nbsp;</td>
+		  <td>6</td>
+		  <td>&nbsp;</td>
+		  </tr>
+		<tr><td><img src="../images/unit/tank.gif"/></td>
+
+
+
+			<td>Tank</td>
+
+
+
+			<td>Fort</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>3</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>3</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>Can attack ships at sea.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/transport.gif"/></td>
+
+
+
+			<td>Transport</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>Can carry land units.  Supplies land units.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/supply.gif"/></td>
+
+
+
+			<td>Supply ship</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>10</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>10</td>
+
+
+
+			<td>Supplies nearby ships.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/patrol.gif"/></td>
+
+
+
+			<td>Patrol boat</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>Does not require supply.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/destroyer.gif"/></td>
+
+
+
+			<td>Destroyer</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>3</td>
+
+
+
+			<td>14</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>5</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>14</td>
+			<td>Can see subs with range of 1.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/battleship.gif"/></td>
+
+
+
+		<td>Battleship</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>20</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>4</td>
+			<td>&nbsp;</td>
+
+
+
+			<td>40</td>
+
+
+
+			<td>Capital ship.  Can attack units on land.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/submarine.gif"/></td>
+
+
+
+
+
+
+
+			<td>Submarine</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>16</td>
+
+
+
+			<td>10</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>5</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>Stealth. See &quot;Sight and Subs&quot; below.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/carrier.gif"/></td>
+
+
+
+			<td>Aircraft Carrier</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>7</td>
+
+
+
+			<td>20</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>*</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>4</td>
+			<td>&nbsp;</td>
+
+
+
+			<td>24</td>
+
+
+
+			<td>Capital ship. Acts as mobile airport.  Can carry light planes. Sight is radar range.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/cruiser.gif"/></td>
+
+
+
+			<td>Cruiser</td>
+
+
+
+			<td>Port</td>
+
+
+
+			<td>9</td>
+
+
+
+			<td>20</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>6</td>
+			<td>&nbsp;</td>
+
+
+
+			<td>30</td>
+
+
+
+			<td>Sees subs with a range of 2.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/fighter.gif"/></td>
+
+
+
+			<td>Fighter</td>
+
+
+
+			<td>Airport</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>16</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>Intercepts enemy units.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/naval_bomber.gif"/></td>
+
+
+
+			<td>Naval bomber</td>
+
+
+
+			<td>Airport</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>20</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>8*</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>7</td>
+
+
+
+			<td>25% damage to all land units in target.  Can attack ships at sea.  Can see subs.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/helicopter.gif"/></td>
+
+
+
+			<td>Helicopter</td>
+
+
+
+			<td>Airport</td>
+
+
+
+			<td>9</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td>3</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>5</td>
+
+
+
+			<td>Carries 2 infantry.  Can refuel in any city or on any capital ship. Can see subs.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/heavy_bomber.gif"/></td>
+
+
+
+			<td>Heavy Bomber</td>
+
+
+
+			<td>Airport</td>
+
+
+
+			<td>7</td>
+
+
+
+			<td>18</td>
+
+
+
+			<td>30</td>
+
+
+
+			<td>1</td>
+
+
+
+			<td>*</td>
+
+
+
+			<td>2</td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>8</td>
+
+
+
+			<td>50% damage to all units in target.</td>
+
+
+
+		</tr>
+
+
+
+		<tr>
+		  <td><img src="../images/unit/engineer.gif" alt=""/></td>
+		  <td>Engineer</td>
+		  <td>Tech</td>
+		  <td>0</td>
+		  <td>12</td>
+		  <td>3</td>
+		  <td>1</td>
+		  <td>0</td>
+		  <td>10</td>
+		  <td></td>
+		  <td>&nbsp;</td>
+		  <td>4</td>
+		  <td>Supplies land, can change land to water and water to land. Can create a new city.</td>
+		  </tr>
+		<tr>
+		  <td><img src="../images/unit/zeppelin.gif" alt="zep"/></td>
+		  <td>Zeppelin</td>
+		  <td>Tech</td>
+		  <td>0</td>
+		  <td>18</td>
+		  <td>4</td>
+		  <td>3</td>
+		  <td>0</td>
+		  <td></td>
+		  <td></td>
+		  <td>&nbsp;</td>
+		  <td>2</td>
+		  <td>Does not require fuel.</td>
+		  </tr>
+		<tr><td><img src="../images/unit/satellite.gif" alt="zep"/></td>
+
+
+
+			<td>Spy Satellite</td>
+
+
+
+			<td>Tech</td>
+
+
+
+			<td>10</td>
+
+
+
+			<td>24</td>
+
+
+
+			<td>100</td>
+
+
+
+			<td>6</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>invulnerable once launched.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/icbm_1.gif" alt="zep"/></td>
+
+
+
+			<td>ICBM 1</td>
+
+
+
+			<td>Tech</td>
+
+
+
+			<td>12</td>
+
+
+
+			<td>36</td>
+
+
+
+			<td>30</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>*</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>100% dam to all units in target.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/icbm_1.gif" alt="zep"/></td>
+
+
+
+			<td>ICBM 2</td>
+
+
+
+			<td>Tech</td>
+
+
+
+			<td>14</td>
+
+
+
+			<td>30</td>
+
+
+
+			<td>40</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>*</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>100% dam to all units radius 1 of target.</td>
+
+
+
+		</tr>
+
+
+
+		<tr><td><img src="../images/unit/icbm_1.gif" alt="zep"/></td>
+
+
+
+			<td>ICBM 3</td>
+
+
+
+			<td>Tech</td>
+
+
+
+			<td>16</td>
+
+
+
+			<td>24</td>
+
+
+
+			<td>50</td>
+
+
+
+			<td>0</td>
+
+
+
+			<td>*</td>
+
+
+
+			<td></td>
+
+
+
+			<td></td>
+			<td>&nbsp;</td>
+
+
+
+			<td>4</td>
+
+
+
+			<td>100% dam all units radius 2 of target.</td>
+
+
+
+		</tr>
+
+
+
+	</tbody>
+
+
+
+</table>
+
+
+
+</p>
+
+
+
+<h3>3. Cities</h3>
+
+
+
+<p>At any given time, a city will have one of five designations as
+
+
+
+listed in "The Map" above.  A player may change the designation of
+
+
+
+a city at any time by changing the type of unit built in the city.
+
+
+
+  Any time spent constructing the current unit
+
+
+
+will be lost when the build unit is changed.  Cities have a unit
+
+
+
+currently being built in that city and, optionally, a unit specified to
+
+
+
+build in the city after the current build is completed.  You may only build
+
+
+
+units in a city for which you have sufficient technology.  The "Next build"
+
+
+
+of a city can have a tech value of up to 2 higher than your current tech.
+
+
+
+If your tech is not high enough to build the next build unit when it is time
+
+
+
+to start building it, you will keep building units of the current built type
+
+
+
+until your tech is high enough to build the next type.
+
+
+
+Units in
+
+
+
+cities heal at a rate of 40% every 4 hours.</p>
+<p>At a cost of 9 mobility, an engineer can create a new city. New cities may be created on any land or water square not adjacent to another player's city. New cities created on water must be adjacent to land.</p>
+<p>At a cost of 6 mobility, an engineer can change water to land or land to water. Land must be created next to land, and water next to water.</p>
+
+
+
+<h3>4. Moving</h3>
+
+
+
+<p>At any given time, units will have a certain amount of
+
+
+
+mobility.  This is the number of squares they can move on the
+
+
+
+map.  Ships can only move through sea,  ports and coastal bases, land units can only move
+
+
+
+across land, and air units can fly anywhere.  Engineers can move across land and sea. Units may not move
+
+
+
+into an enemy square unless the enemy is first defeated.  Every 4
+
+
+
+hours, mobility is added to each unit per the "Mobility" chart above to
+
+
+
+a maximum of 3 times this number.  So, for example, a naval bomber can
+
+
+
+have a maximum of 60 mobility.</p>
+
+
+
+<p>When a unit is out of supply, it costs 2 mobility to enter each
+
+
+
+sector (see "Supply" below).</p>
+
+
+
+<p>Note that air units require fuel to move.  See &quot;Supply&quot; below.</p>
+
+
+
+<p>Units can be intercepted by fighters while moving
+
+
+
+(see "Interception" below).<br><br>Ships can be interdicted by other ships while moving (see
+
+
+
+"Interdiction" below).  Only one ship may occupy a sea square at any given time.</p>
+
+
+
+<p>If your units are interdicted or intercepted while they're moving, they'll automatically stop in the first square
+
+
+
+they're interdicted / intercepted in to give you a chance to reconsider your approach.</p>
+<p>If your unit has insufficient mobility to reach the target square, it will be given a move order to move there as soon as it has enough mobility.</p>
+
+
+
+<h3>5. Attacking</h3>
+
+
+
+<p>When a group of units is selected and a square containing enemy
+  
+  
+  
+  units is targeted, then all selected units will move adjacent to the
+  
+  
+  
+  target and  attack it.  Note that in the process of moving towards
+  
+  
+  
+  the enemy, the attacking units may be intercepted or interdicted (see
+  
+  
+  
+  below). If the unit is already adjacent to the target
+  
+  
+  
+  and does not need to move,  then it will be neither intercepted nor interdicted. A
+  
+  
+  
+  unit can only attack if it has mobility and ammo.  Fuel is not required to attack.  Each attack
+  
+  
+  
+  reduces mobility and ammo by 1.  Units in supply have their ammo
+  
+  
+  
+  automatically replenished.  Damage is random, ranging from half the
+  
+  
+  
+  Attack value to the full Attack value.  After the attack damage is
+  
+  
+  
+  dealt, the defending unit counter-attacks.  Note that counter-attacks consume ammo but do not cost mobility; the only thing that will prevent a unit from counter-attacking is if it is out of ammo.</p>
+<p>In naval battles, in addition to the defending ship counter-attacking, all enemy ships adjacent to the attacker will also counter-attack.<br>
+  <br>Due to the ship stacking limit, only one ship may be moved at a time.<br><br>
+  Neutral or empty enemy cities may only be captured by land units.  Other units may not enter them. When a land unit captures a neutral or enemy city, it loses 4 hp.</p>
+<p> Any ship can attack units in a coastal city. Battleships are the only ships that can attack land units on a non-city land square.  Tanks are the only land units that may attack ships at sea.  Units being carried (e.g. land units on a transport or planes on a carrier) may not attack or be attacked, the exception to this being  a land unit taking an empty port.
+</p>
+<p>If more than one unit is in a square, the most recently built
+  
+  
+  
+  unit  with the highest attack multiplier will be attacked first.  In order to attack an enemy unit or capture an enemy city, you must first be at war with that nation.  However, your units will intercept and interdict units belonging any  player you are not Friendly or Allied towards.  Below are the attack multipliers.</p>
+
+
+
+<ul>
+
+
+
+	<li>Infantry do double-damage against anti-tank</li>
+	<li>Anti-tanks do double-damage against tanks</li>
+	<li>Fighters do double-damage against bombers and helicopters</li>
+
+
+
+	<li>Light bombers do double-damage against ships</li>
+
+
+
+	<li>Helecopters do double-damage against land units and submarines.</li>
+
+
+
+	<li>Destroyers and Cruisers do triple damage against subs.</li>
+
+
+
+	<li>Submarines do triple damage against non-capital ships.</li>
+
+
+
+	<li>Submarines do quadruple damage against capital ships.</li>
+
+	<li>Planes in cities receive double-damage.</li>
+
+    <li>Ships in port receive triple damage.</li>
+
+</ul>
+
+<p>Under the following circumstances, units  attack with the &quot;Minimal Attack&quot; value of 2:</p>
+
+<ul>
+
+  <li>Bomber counter-attacks</li>
+
+  <li>Naval counter-attacks against air units</li>
+
+  <li>Naval counter-attacks against subs (when the naval unit can't see subs)</li>
+
+  <li>Subs attacking air units</li>
+
+  <li>Naval bombers attacking air units at sea</li>
+
+</ul>
+
+<p>If a tank fires on a ship, then the ship will only counter-attack if that ship is able to hit units on land.</p>
+<p>When a ship attacks a city, that city will first fire on the ship with an attack value equal to its &quot;Cannon&quot; (see Unit table above). This functions in the same way as city flak firing on attacking planes.</p>
+
+<h3>6. Bombers, Flak, Satellites and ICBMs</h3>
+
+
+
+<p>When a bomber attacks a land sector, instead of attacking a single unit, all units in the sector are damaged.  The amount of damage done to the unit is a percentage of the unit's remaining hp (as indicated in the chart above) rounded up.  For example, a heavy bomber does 50% damage to infantry.  One heavy bomber attack will take the infantry down to 2 hp.  The next heavy bomber attack will take it to 1 hp, and a third heavy bomber will kill the infantry.<br><br>Note that only naval bombers can bomb enemy ships at sea, in
+
+
+
+	which case the attack value listed above is used instead of the bombing
+
+
+
+	percentage.<br>Whenever an air unit attacks a fort, the fort will first fire flak against the air unit before the air unit can attack the fort.  Similarly, certain ships are armed with anti-air flak.</p>
+
+
+
+	<p>Satellites and ICBMs are only ever launched once.  When launching these units, the player indicates the target sector and then the satellite/icbm unit that was on the ground disappears.  In the case of ICBMs, the result is devastation on and around the target sector.  In the case of satellites, the result is a new launched satellite unit in space that provides permanent visibility in a wide radius centred on its square.  Launched satellites may not be attacked and are invisible to all players except for their owners.</p>
+	<p>Mutually Assured Destruction (&quot;MAD&quot;). If any cities were devastated by the launched ICBM, then each player who had at least one city devastated will automatically declare WAR and launch one retaliatory ICBM if they have one. Below are the rules the game follows when choosing a target for this automatic counter-launch:</p>
+	<ul>
+	  <li>Each sector the player can currently see is given a score.</li>
+	  <li>The sector score starts with the total cost (in hours) of all units in sector</li>
+	  <li>If the sector contains a player city, 48 is added to the score.</li>
+	  <li>The sector value is then multiplied by a relation modifier: ally/me = -2, friendly -1, neutral = 0, war = 2.</li>
+	  <li>The game then chooses the target with the highest score. (If the blast radius of the nuke &gt; 0 then the score of all devastated targets is added together).</li>
+	  <li>If a target is found with score &gt;= 96 (i.e. at least 1 enemy city or the equivalent of 48 hours worth of enemy units) then the counter-launch is triggered. Note it is possible that a different enemy will be attacked from the one who fired the initial ICBM: "All is fair in love and war."</li>
+	</ul>
+<h3>7. Sight and Subs</h3>
+
+
+
+<p>Normally all units can see within the sight range indicated in
+
+
+
+the table above. Most cities have a sight range of 1.  Tech centres have a sight radius equal to 2 plus half the nation's technology level.
+
+
+
+The one exception to this is subs.  Subs can only be seen by
+
+
+
+naval bombers, destroyers, cruisers, and other subs.  If the sub
+
+
+
+attacks, however, it will become visible to the nation it attacked.  Once a unit has been
+
+
+
+seen, it will remain visible for 24 hours, except for subs which only
+
+
+
+remain visible for 8 hours.  An enemy sub will become visible
+
+
+
+to a player's ship or plane that tries to move onto the square the
+
+
+
+enemy sub occupies.</p>
+
+
+
+
+
+
+
+
+
+
+
+<h3>8. Supply</h3>
+
+
+
+<p>Ships are supplied by allied ports and supply ships.  Land units are supplied by supply ships, transports, enginers, or allied cities.
+
+
+
+A supply ship or transport only provides supply if it has at least one ammo on board. A ship or land unit is in supply if it is within 5 squares of supply.</p>
+
+<p>Units in supply:</p>
+
+
+
+<ul>
+
+
+
+	<li>Have normal movement.</li>
+
+
+
+	<li>Ammo automatically replenished.</li>
+
+
+
+	<li>Regain hit points at a rate of 20% every 4 hours.</li>
+
+
+
+</ul>
+
+
+
+<p>Units out of supply:</p>
+
+
+
+<ul>
+
+
+
+	<li>Pay twice the cost to attack or move.</li>
+
+
+
+	<li>Run out of ammo and can't attack any more.</li>
+</ul>
+<p>Air units don't have supply per se, but they do top up their ammo and fuel in any allied airport or carrier (or in the case of helicopters, in any allied city or capital ship).  When an air unit is refueled, it gains fuel equal to the mobility value listed in the chart above.  Heavy bombers may not refuel on carriers.</p>
+<h3>9 Ammunition</h3>
+
+<p>Attacking requires ammunition. Every  unit can hold a certain amount of ammunition as listed under &quot;Ammo&quot; in the &quot;Units&quot; table above. When a unit attacks, it uses up one ammo. If that unit is out of supply, then it will keep using up ammo until it can't attack any more.</p>
+
+<p>If a land or naval unit is in supply, then when it attacks it will automatically pull ammo from a nearby source of supply. For example, a destroyer with 2 ammo on board attacks an enemy patrol boat. This reduces the destroyer to 1 ammo. If there is a supply ship within 5 squares that has, say, 10 ammo on board, then the destroyer ammo will go back up to 2 and the supply ship ammo will be reduced from 10 to 9. Now if, in turn, there is a second supply ship within range of that first supply ship, then 1 ammo will be automatically pulled from the second supply ship on to the first supply ship, and so on until a port is reached. Allied ports have infinite ammo.</p>
+
+<p>You will want to maintain supply chains linking your front-line units back to your home ports so that your attacks are always fully supplied. Once that chain is broken, you will only be able to keep attacking so long as there remains ammo in what's left of your supply chain.</p>
+
+<h3>10. Transport</h3>
+
+
+
+<p>Per the chart above, some units may carry other units.<br><br>
+  Transports carry 6 land units and carriers carry 8 air units. Engineers and subs can carry 1 icbm.<br><br>
+
+Helicopters can carry 2 infantry units. Normally, when a helicopter moves, it will automatically pick up the top infantry from the square it left. The exception to this is that helicopters will not pick up infantry in an allied city if that infantry has 0 mobility or only 1 or 2 hp.</p>
+
+<p>If a helicopter carries  infantry onto a carrier, then that carrier will transport that infantry when the carrier moves.</p>
+
+<h3>11. Naval Interdiction</h3>
+
+
+
+<p>When a ship is in Supply and has ammo, it will
+
+
+
+  automatically close in on and fire upon any enemy ship (except an
+
+
+
+  invisible sub) that moves within its line of sight, provided the ship
+
+
+
+has sufficient mobility to move, has ammo, and has at least 3 hp.</p>
+
+<p>Thus an aircraft carrier can be protected from subs by a
+
+
+
+  ring of destroyers.  Or a port can be protected against invading
+
+
+
+transports by one or two destroyers.</p>
+
+
+
+<p>Battleships, cruisers, and destroyers have a
+
+
+
+sight radius of 2.  When one of these ships sees an enemy ship
+
+
+
+move within 2 squares of it, the battleship or cruiser tries to move so
+
+
+
+it is adjacent to the enemy ship and then fires once on it. However, destroyers and cruisers that are escorting a capital ship (i.e. within 2 squares of the capital ship) will only move to intercept an enemy ship if it is a sub.</p>
+
+<p>Destroyers and Naval Bombers interdict subs with a sight radius of 1.</p>
+
+<p>Carriers see with a radius equal to radar distance, but only interdict with a sight radius of 1.</p>
+
+<p>Note that interdiction movement never triggers interdiction
+
+
+
+itself.</p>
+
+<p>A tank on a coast will fire on an enemy ship sailing past it.</p>
+<p>Naval bombers interdict any ships within interception range. The return flight is free for this kind of interdiction. Interdicting naval bombers can be intercepted by fighters per &quot;Fighter Interception&quot; below.</p>
+
+<h3>12.  Fighter Interception</h3>
+
+
+
+<p>When any land or air unit moves within 5 squares of your
+
+
+
+ fighters,   and you are able to see the enemy unit, then your  fighters will scramble to defend your  air space.
+
+
+
+The number of fighters scrambled will be equal to the number of enemy units approaching.  Note that when fighters intercept, they are only charged for the mobility to fly out.
+
+
+
+The mobility cost for intercepters to return to where they started is free.  If the target sector contains flak (e.g. if the enemy units are moving into a fort), then no interception will occur.  Planes with only 1 or 2 hp will not intercept.</p>
+
+<p>When the fighters intercept, they each intercept a different moving unit, with priority given to enemy fighters over enemy bombers. This means that you can &quot;escort&quot; your bombers with fighters and have your fighters &quot;absorb&quot; the defending interceptors. Land units do not counter-attack when they are intercepted.</p>
+
+
+
+
+
+
+
+<p>Note that interception never triggers interception itself.  However, after interception, if the intercepted unit is still alive, it will automatically counter-attack the fighter that intercepted it.</p>
+
+
+
+<p>It is generally a good idea to probe air defenses with fighters
+
+
+
+before sending bombers or helecopters in.</p>
+
+
+
+<h3>13.  Technology</h3>
+
+
+
+<p>All nations start the game with a technology value of 0.
+
+
+
+Each day, that technology level increases according to the number of
+
+
+
+cities the player has designated to be Technology Centres according to
+
+
+
+the table below:</p>
+
+<table border="1" cellspacing="0" bordercolor="#000000" cellpadding="3"
+
+
+
+	align="left">
+
+
+
+<tbody>
+
+
+
+		<tr>
+
+
+
+			<td>
+
+
+
+			<div align="left">
+
+
+
+			<address>Number of Technology Centres:</address>
+
+
+
+			</div>
+
+
+
+			</td>
+
+
+
+			<td>
+
+
+
+			<address>0</address>
+
+
+
+			</td>
+
+
+
+			<td>
+
+
+
+			<address>1</address>
+
+
+
+			</td>
+
+
+
+			<td>
+
+
+
+			<address>2</address>
+
+
+
+			</td>
+
+
+
+			<td>3</td>
+
+
+
+			<td>
+
+
+
+			<address>
+			4
+			</address>
+
+
+
+			</td>
+			<td>5</td>
+			<td>6</td>
+			<td>7</td>
+			<td>8</td>
+			<td>9</td>
+			<td>10</td>
+			<td>11</td>
+			<td>12</td>
+			<td>13</td>
+			<td>14</td>
+
+
+
+		</tr>
+
+
+
+		<tr>
+
+
+
+			<td>
+
+
+
+			<address>Technology increase</address>
+
+
+
+			</td>
+
+
+
+			<td>
+
+
+
+			<address>0</address>
+
+
+
+			</td>
+
+
+
+			<td>
+
+
+
+			<address>
+			0.8
+			</address>
+
+
+
+			</td>
+
+
+
+			<td>
+
+
+
+			<address>
+			1.2
+			</address>
+
+
+
+			</td>
+
+
+
+			<td>1.4</td>
+
+
+
+			<td>
+
+
+
+			<address>
+			1.5
+			</address>
+
+
+
+			</td>
+			<td>1.6</td>
+			<td>1.7</td>
+			<td>1.8</td>
+			<td>1.9</td>
+			<td>2.0</td>
+			<td>2.1</td>
+			<td>2.2</td>
+			<td>2.3</td>
+			<td>2.4</td>
+			<td>2.5</td>
+
+
+
+		</tr>
+
+
+
+	</tbody>
+
+
+
+</table>
+
+
+
+
+
+
+
+
+
+<p>&nbsp;</p>
+
+<p>Note that technology accrues gradually (calculated every 15
+
+
+
+  minutes) throughout the day based on the number of Technology Centres.</p>
+
+
+
+<p>Players may only build units for which their nation has
+
+
+
+sufficient technology.  Per the "Map" section above, tech level also increases the sight radius of tech centres.</p>
+
+
+
+<p>Technology is "leaked" from the technologically most advanced
+
+
+
+player to the rest of the players according to the following formula.</p>
+
+
+
+<p>Ally Tech Leak = ((ally tech) - (my tech)) / 2 per day</p>
+
+<p>Other Tech Leak = ((top tech) - (my tech)) / 4 per day</p>
+
+My Tech Leak = Maximum of Ally Tech Leak and Other Tech Leak.
+
+<p>For example, if my allie's tech is 5 and my tech is 3, then my tech
+
+
+
+leak will be (5 - 3) / 2 = 1 per day<br><br>
+
+The maximum technology a nation can have is 16.</p>
+
+
+
+<h3>14. Command Points and Power Limit</h3>
+
+<p>Each action you take in the game costs you a certain number of command points per the following table.</p>
+<table width="228" border="1">
+  <tr>
+    <th width="141" scope="col">Action</th>
+    <th width="71" scope="col">Command Point Cost</th>
+  </tr>
+  <tr>
+    <td>Move Units</td>
+    <td>1</td>
+  </tr>
+  <tr>
+    <td>Attack</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>Capture City</td>
+    <td>4</td>
+  </tr>
+  <tr>
+    <td>Launch Satellite</td>
+    <td>8</td>
+  </tr>
+  <tr>
+    <td>Switch Terrain</td>
+    <td>16</td>
+  </tr>
+  <tr>
+    <td>Launch ICBM</td>
+    <td>32</td>
+  </tr>
+  <tr>
+    <td>Build New City</td>
+    <td>64</td>
+  </tr>
+</table>
+<p>You start the game with 512 Command Points. Command points regenerate at the following rate every 15 minutes, to a maximum of 1024.</p>
+
+<blockquote>
+  <p>number of  cities + 2 times number of base cities + number of capital ships</p>
+</blockquote>
+<p>You will gain a minimum of 2 command points every 15 minutes, and a maximum of 15 command points every 15 minutes.</p>
+<p>Your nation's power is equal to the total cost of all your units (excluding zeppelins).  Your nation's power is limited by the number of cities you have. If building a unit would increase your power past 5 * your number of cities, that unit build will be skipped and the server will send you a message informing you that a unit build was skipped.</p>
+<h3>15.  Diplomacy</h3>
+
+<p>Nations can have 4 different levels of diplomacy.  Whenever your relations towards another nation are downgraded, their relations towards you will also automatically downgrade so that their relation towards you is at least as low as your relation towards them.</p>
+
+
+
+<ul>
+
+
+
+<li>War.  You may only attack cities and units belonging to nations you are at war with.</li>
+
+
+
+	<li>Neutral.  Players start with neutral relations towards one another.  May not attack cities or units.  There is, however, interdiction and interception to protect territorial boundaries.</li>
+
+
+
+	<li>Friendly.  Players may not attack one another.  May
+	  
+	  
+	  
+	  be cancelled with 24 hours notice.  No interdiction or
+	  
+	  
+	  
+	  interception. If a nation friendly to you sees an enemy unit, you will see it as well.</li>
+
+
+
+	<li>Allied.  Same as friendly except players share supply and
+
+
+
+	air refueling.  May be degraded to Friendly without notice.  Allies automatically share maps and lines of sight.  If your ally sees an enemy unit, you will see it as well. </li>
+
+
+
+</ul>
+
+
+
+<p>You can always downgrade your relations towards an opponent to match their relation towards you without notice.</p>
+
+<p>If you devastate a player's city with an icbm, you will immediately go toWar with that player. This is even the case if you were Friendly or Allied with that player, or if the icbm launch was automatically triggered by MAD.</p>
+<p>Note also that when you declare war against another player, if you had friendly relations with their ally, those relations will  immediately go to neutral. Similarly, if you declare an alliance with another player, you will immediately lose friendly relations with all the nations he is at war with.</p>
+<h3>16. Score</h3>
+
+<p>A typical Strategic Initiative game lasts 10 days. When the game end time is reached, the winning team is the team of allies whose combined number of cities is higher than all the other teams. Both players on the winning team score 1 win.</p>
+
+		</wicket:extend>
+	</body>
+</html>

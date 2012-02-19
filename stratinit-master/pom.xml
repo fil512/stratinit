@@ -6,7 +6,7 @@
 	<artifactId>stratinit-master</artifactId>
 	<packaging>pom</packaging>
 	<name>Strategic Initiative Master</name>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<developers>
 		<developer>
 			<id>khstevens</id>
@@ -39,9 +39,14 @@
 		<gwtmaven.version>1.2</gwtmaven.version>
 		<maven.compiler.source>1.5</maven.compiler.source>
 		<maven.compiler.target>1.5</maven.compiler.target>
-		<stratinit.version>1.1.0-SNAPSHOT</stratinit.version>
+		<stratinit.version>1.2.0-SNAPSHOT</stratinit.version>
 		<stratinit.client.version>1.1</stratinit.client.version>
 		<jetty.version>6.1.25</jetty.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
+		<wicket.version>1.5-RC5.1</wicket.version>
+		<velocity.version>1.7</velocity.version>
+		<velocity.tools.version>2.0</velocity.tools.version>
+		<hibernate.version>3.6.5.Final</hibernate.version>
 	</properties>
 	<build>
 		<pluginManagement>
@@ -53,7 +58,8 @@
 						<target>1.6</target>
 					</configuration>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -148,7 +154,7 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>r06</version>
+				<version>r09</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.persistence</groupId>
@@ -157,24 +163,13 @@
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate</artifactId>
-				<version>3.2.6.ga</version>
-				<exclusions>
-					<exclusion>
-						<groupId>javax.transaction</groupId>
-						<artifactId>jta</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-annotations</artifactId>
-				<version>3.4.0.GA</version>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>3.4.0.GA</version>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>dijkstra-java</groupId>
@@ -191,12 +186,6 @@
 				<groupId>commons-collections</groupId>
 				<artifactId>commons-collections</artifactId>
 				<version>3.2.1</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.4</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
@@ -222,36 +211,55 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>jetty</artifactId>
-				<version>${jetty.version}</version>
-				<scope>test</scope>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring</artifactId>
-				<version>2.5.6</version>
+				<artifactId>spring-tx</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-test</artifactId>
-				<version>2.5.6</version>
+				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
-				<version>2.5.6</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-core</artifactId>
-				<version>2.0.4</version>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-core-tiger</artifactId>
-				<version>2.0.4</version>
+				<version>2.0.6.RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -265,64 +273,9 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.eclipse</groupId>
-				<artifactId>ui</artifactId>
-				<version>3.3.0-I20070614-0800</version>
-				<exclusions>
-					<exclusion>
-						<artifactId>help</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>expressions</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>expressions</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jface</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jface</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jface</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>osgi</artifactId>
-						<groupId>org.eclipse</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>jobs</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>databinding</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>databinding</artifactId>
-						<groupId>org.eclipse.core</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>databinding</artifactId>
-						<groupId>org.eclipse.jface</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>workbench</artifactId>
-						<groupId>org.eclipse.ui</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
 				<groupId>org.simpleframework</groupId>
 				<artifactId>simple-xml</artifactId>
-				<version>2.0.4</version>
+				<version>2.5.3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jasypt</groupId>
@@ -370,25 +323,20 @@
 				<version>1.6.6</version>
 			</dependency>
 			<dependency>
-				<groupId>jstl</groupId>
-				<artifactId>jstl</artifactId>
-				<version>1.1.2</version>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>1.6.1</version>
+				<scope>test</scope>
 			</dependency>
-			<dependency>
-				<groupId>taglibs</groupId>
-				<artifactId>standard</artifactId>
-				<version>1.1.2</version>
-			</dependency>
-
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
-				<version>1.4.2</version>
+				<version>1.6.1</version>
 			</dependency>
 			<dependency>
 				<groupId>postgresql</groupId>
 				<artifactId>postgresql</artifactId>
-				<version>8.2-504.jdbc3</version>
+				<version>9.0-801.jdbc4</version>
 			</dependency>
 			<dependency>
 				<groupId>hsqldb</groupId>
@@ -396,50 +344,29 @@
 				<version>1.8.0.7</version>
 			</dependency>
 			<dependency>
-				<groupId>net.sf.ehcache</groupId>
-				<artifactId>ehcache</artifactId>
-				<version>1.8.0</version>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>c3p0</groupId>
-				<artifactId>c3p0</artifactId>
-				<version>0.9.1.2</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.gwt</groupId>
-				<artifactId>gwt-servlet</artifactId>
-				<version>${gwt.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.gwt</groupId>
-				<artifactId>gwt-user</artifactId>
-				<version>${gwt.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>gwt-maven-plugin</artifactId>
-				<version>${gwtmaven.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.smartgwt</groupId>
-				<artifactId>smartgwt</artifactId>
-				<version>${smartgwt.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.carbonfive.db-support</groupId>
 				<artifactId>db-migration</artifactId>
-				<version>0.9.8</version>
+				<version>0.9.9-m5</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity</artifactId>
-				<version>1.6.4</version>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-extensions</artifactId>
+				<version>${wicket.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.velocity.tools</groupId>
-				<artifactId>velocity-tools</artifactId>
-				<version>2.0-alpha1</version>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-spring</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.wicket</groupId>
+				<artifactId>wicket-auth-roles</artifactId>
+				<version>${wicket.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.transaction</groupId>
+				<artifactId>jta</artifactId>
+				<version>1.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.jmock</groupId>
@@ -447,6 +374,19 @@
 				<version>2.5.1</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.8.2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty</artifactId>
+				<version>${jetty.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<repositories>
@@ -498,14 +438,6 @@
 		<repository>
 			<id>mvn</id>
 			<url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-		</repository>
-		<repository>
-			<id>jboss</id>
-			<url>http://repository.jboss.com/maven2</url>
-		</repository>
-		<repository>
-			<id>smartgwt</id>
-			<url>http://www.smartclient.com/maven2</url>
 		</repository>
 		<repository>
 			<id>c5-public-repository</id>

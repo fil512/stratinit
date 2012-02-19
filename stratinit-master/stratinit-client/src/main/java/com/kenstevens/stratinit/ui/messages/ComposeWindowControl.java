@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.ui.messages;
 
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
@@ -20,7 +21,7 @@ import com.kenstevens.stratinit.ui.shell.StatusReporter;
 @Scope("prototype")
 @Component
 public class ComposeWindowControl implements Controller {
-	private Logger logger = Logger.getLogger(getClass());
+	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private ActionFactory actionFactory;

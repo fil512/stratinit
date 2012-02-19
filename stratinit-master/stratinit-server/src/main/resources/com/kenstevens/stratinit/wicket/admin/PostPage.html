@@ -1,0 +1,16 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>Post</title>
+	</head>
+	<body>
+<wicket:extend>
+<h2>Post to Game Message Boards</h2>
+<form wicket:id="postForm">
+Subject: <input type="text" wicket:id="subject" />
+Body: <textarea wicket:id="body" rows="20" cols="60" ></textarea>
+<input id="postButton" type="submit" value="post" />
+</form>
+		</wicket:extend>
+	</body>
+</html>
