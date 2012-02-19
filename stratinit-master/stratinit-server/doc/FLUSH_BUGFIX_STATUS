@@ -1,0 +1,201 @@
+1) Restore C:\Users\kstevens\dev\backup\stratinit_bugfix_players.backup
+2) Run server
+3) Run client
+4) join game
+5) take city
+6) wait 15 seconds
+7) shut down server
+8) start server
+9) see bug:
+
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.kenstevens.stratinit:stratinit-server:war:1.1.0-SNAPSHOT
+[WARNING] 'build.plugins.plugin.version' for org.apache.maven.plugins:maven-war-plugin is missing. @ line 129, column 12
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Strategic Initiative Server 1.1.0-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] >>> gwt-maven-plugin:1.2:run (default-cli) @ stratinit-server >>>
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-remote/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-remote:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-remote/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-remote/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-remote:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-remote/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-master/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-master:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-master/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-dao/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-dao:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-dao/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-dao/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-dao:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-dao/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-core/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-core:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-core/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-core/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-core:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-core/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-test/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-test:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-test/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+Downloading: http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-test/1.1.0-SNAPSHOT/maven-metadata.xml
+[WARNING] Could not transfer metadata com.kenstevens.stratinit:stratinit-test:1.1.0-SNAPSHOT/maven-metadata.xml from/to jboss (http://repository.jboss.com/maven2): Access denied to http://repository.jboss.com/maven2/com/kenstevens/stratinit/stratinit-test/1.1.0-SNAPSHOT/maven-metadata.xml. Error code 403, Forbidden
+[WARNING] The artifact jstl:jstl:jar:1.1.2 has been relocated to javax.servlet:jstl:jar:1.1.2
+[INFO] 
+[INFO] --- gwt-maven-plugin:1.2:generateAsync (default) @ stratinit-server ---
+[INFO] using GWT jars from project dependencies : 2.0.4
+[INFO] 
+[INFO] --- maven-resources-plugin:2.4.3:resources (default-resources) @ stratinit-server ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 149 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ stratinit-server ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< gwt-maven-plugin:1.2:run (default-cli) @ stratinit-server <<<
+[WARNING] The artifact jstl:jstl:jar:1.1.2 has been relocated to javax.servlet:jstl:jar:1.1.2
+[INFO] 
+[INFO] --- gwt-maven-plugin:1.2:run (default-cli) @ stratinit-server ---
+[INFO] using GWT jars from project dependencies : 2.0.4
+[INFO] establishing classpath list (scope = runtime)
+[INFO]  com.kenstevens.stratinit.mail=disable
+[INFO] create exploded Jetty webapp in C:\Users\kstevens\released-workspace\stratinit\stratinit-master\stratinit-server\war
+[INFO] INFO-Loading players into cache...
+[INFO] INFO-...done.
+[INFO] INFO-Loading games into cache...
+[INFO] INFO-Loading game #172 into cache.
+[INFO] INFO-Getting Relations
+[INFO] INFO-Getting Nations
+[INFO] INFO-Game #172 loaded.
+[INFO] INFO-Loading game #173 into cache.
+[INFO] INFO-Getting Relations
+[INFO] INFO-Getting Nations
+[INFO] INFO-Game #173 loaded.
+[INFO] INFO-...done.
+[INFO] INFO-Server Lock File locked.
+[INFO] 
+[INFO] INFO-Event Queue starting up.
+[INFO] INFO-System properties:
+[INFO] WARN-Game #172 Crucifix Hill should have been mapped by now.  Mapping now and changing start time from 2012-02-18 16:05:03.385 to Sat Feb 18 16:42:39 EST 2012
+[INFO] INFO-Scheduling game #172 Crucifix Hill to start at Sat Feb 18 16:42:39 EST 2012
+[INFO] INFO-Skipping scheduling game Crusader since it doesn't have a start time yet (probably not enough players).
+[INFO] INFO-Cache Flush Period set to 15000ms
+[INFO] INFO-Cache Flush Period set to 15000ms
+[INFO] INFO-All events scheduled.  Server started.
+[INFO] INFO-Sending GAME_MAPPED email to trickstirr
+[INFO] INFO-Sending GAME_MAPPED email to meadowwood
+[INFO] INFO-Sending GAME_MAPPED email to hydrogen
+[INFO] WARN-SQL Error: 0, SQLState: null
+[INFO] ERROR-Batch entry 0 insert into Sector (island, type, x, y, game_id) values (-1, 0, 0, 0, 172) was aborted.  Call getNextException to see the cause.
+[INFO] WARN-SQL Error: 0, SQLState: 23505
+[INFO] ERROR-ERROR: duplicate key value violates unique constraint "sector_pkey"
+[INFO]   Detail: Key (x, y, game_id)=(0, 0, 172) already exists.
+[INFO] ERROR-Could not synchronize database state with session
+[INFO] org.hibernate.exception.ConstraintViolationException: could not insert: [com.kenstevens.stratinit.model.Sector]
+[INFO] 	at org.hibernate.exception.SQLStateConverter.convert(SQLStateConverter.java:71)
+[INFO] 	at org.hibernate.exception.JDBCExceptionHelper.convert(JDBCExceptionHelper.java:43)
+[INFO] 	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2272)
+[INFO] 	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2665)
+[INFO] 	at org.hibernate.action.EntityInsertAction.execute(EntityInsertAction.java:60)
+[INFO] 	at org.hibernate.engine.ActionQueue.execute(ActionQueue.java:279)
+[INFO] 	at org.hibernate.engine.ActionQueue.executeActions(ActionQueue.java:263)
+[INFO] 	at org.hibernate.engine.ActionQueue.executeActions(ActionQueue.java:167)
+[INFO] 	at org.hibernate.event.def.AbstractFlushingEventListener.performExecutions(AbstractFlushingEventListener.java:298)
+[INFO] 	at org.hibernate.event.def.DefaultFlushEventListener.onFlush(DefaultFlushEventListener.java:27)
+[INFO] 	at org.hibernate.impl.SessionImpl.flush(SessionImpl.java:1000)
+[INFO] 	at org.hibernate.impl.SessionImpl.managedFlush(SessionImpl.java:338)
+[INFO] 	at org.hibernate.transaction.JDBCTransaction.commit(JDBCTransaction.java:106)
+[INFO] 	at org.hibernate.ejb.TransactionImpl.commit(TransactionImpl.java:54)
+[INFO] 	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:456)
+[INFO] 	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:732)
+[INFO] 	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:701)
+[INFO] 	at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:321)
+[INFO] 	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:116)
+[INFO] 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+[INFO] 	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:89)
+[INFO] 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+[INFO] 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:204)
+[INFO] 	at $Proxy38.mapGame(Unknown Source)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.MapGameEventUpdate.executeWrite(MapGameEventUpdate.java:17)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.EventUpdate.writeData(EventUpdate.java:37)
+[INFO] 	at com.kenstevens.stratinit.server.remote.helper.SynchronizedDataAccess.write(SynchronizedDataAccess.java:27)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.EventUpdate.update(EventUpdate.java:29)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.StratInitUpdaterImpl.mapGame(StratInitUpdaterImpl.java:56)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.GameMapEvent.execute(GameMapEvent.java:22)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.Event$1.run(Event.java:35)
+[INFO] 	at java.util.TimerThread.mainLoop(Unknown Source)
+[INFO] 	at java.util.TimerThread.run(Unknown Source)
+[INFO] Caused by: java.sql.BatchUpdateException: Batch entry 0 insert into Sector (island, type, x, y, game_id) values (-1, 0, 0, 0, 172) was aborted.  Call getNextException to see the cause.
+[INFO] 	at org.postgresql.jdbc2.AbstractJdbc2Statement$BatchResultHandler.handleError(AbstractJdbc2Statement.java:2530)
+[INFO] 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:1317)
+[INFO] 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:350)
+[INFO] 	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeBatch(AbstractJdbc2Statement.java:2592)
+[INFO] 	at com.mchange.v2.c3p0.impl.NewProxyPreparedStatement.executeBatch(NewProxyPreparedStatement.java:1723)
+[INFO] 	at org.hibernate.jdbc.BatchingBatcher.doExecuteBatch(BatchingBatcher.java:48)
+[INFO] 	at org.hibernate.jdbc.BatchingBatcher.addToBatch(BatchingBatcher.java:34)
+[INFO] 	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2252)
+[INFO] 	... 30 more
+[INFO] ERROR-Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Error while commiting the transaction
+[INFO] org.springframework.transaction.TransactionSystemException: Could not commit JPA transaction; nested exception is javax.persistence.RollbackException: Error while commiting the transaction
+[INFO] 	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:465)
+[INFO] 	at org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:732)
+[INFO] 	at org.springframework.transaction.support.AbstractPlatformTransactionManager.commit(AbstractPlatformTransactionManager.java:701)
+[INFO] 	at org.springframework.transaction.interceptor.TransactionAspectSupport.commitTransactionAfterReturning(TransactionAspectSupport.java:321)
+[INFO] 	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:116)
+[INFO] 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+[INFO] 	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:89)
+[INFO] 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:171)
+[INFO] 	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:204)
+[INFO] 	at $Proxy38.mapGame(Unknown Source)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.MapGameEventUpdate.executeWrite(MapGameEventUpdate.java:17)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.EventUpdate.writeData(EventUpdate.java:37)
+[INFO] 	at com.kenstevens.stratinit.server.remote.helper.SynchronizedDataAccess.write(SynchronizedDataAccess.java:27)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.EventUpdate.update(EventUpdate.java:29)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.StratInitUpdaterImpl.mapGame(StratInitUpdaterImpl.java:56)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.GameMapEvent.execute(GameMapEvent.java:22)
+[INFO] 	at com.kenstevens.stratinit.server.remote.event.Event$1.run(Event.java:35)
+[INFO] 	at java.util.TimerThread.mainLoop(Unknown Source)
+[INFO] 	at java.util.TimerThread.run(Unknown Source)
+[INFO] Caused by: javax.persistence.RollbackException: Error while commiting the transaction
+[INFO] 	at org.hibernate.ejb.TransactionImpl.commit(TransactionImpl.java:71)
+[INFO] 	at org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:456)
+[INFO] 	... 18 more
+[INFO] Caused by: org.hibernate.exception.ConstraintViolationException: could not insert: [com.kenstevens.stratinit.model.Sector]
+[INFO] 	at org.hibernate.exception.SQLStateConverter.convert(SQLStateConverter.java:71)
+[INFO] 	at org.hibernate.exception.JDBCExceptionHelper.convert(JDBCExceptionHelper.java:43)
+[INFO] 	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2272)
+[INFO] 	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2665)
+[INFO] 	at org.hibernate.action.EntityInsertAction.execute(EntityInsertAction.java:60)
+[INFO] 	at org.hibernate.engine.ActionQueue.execute(ActionQueue.java:279)
+[INFO] 	at org.hibernate.engine.ActionQueue.executeActions(ActionQueue.java:263)
+[INFO] 	at org.hibernate.engine.ActionQueue.executeActions(ActionQueue.java:167)
+[INFO] 	at org.hibernate.event.def.AbstractFlushingEventListener.performExecutions(AbstractFlushingEventListener.java:298)
+[INFO] 	at org.hibernate.event.def.DefaultFlushEventListener.onFlush(DefaultFlushEventListener.java:27)
+[INFO] 	at org.hibernate.impl.SessionImpl.flush(SessionImpl.java:1000)
+[INFO] 	at org.hibernate.impl.SessionImpl.managedFlush(SessionImpl.java:338)
+[INFO] 	at org.hibernate.transaction.JDBCTransaction.commit(JDBCTransaction.java:106)
+[INFO] 	at org.hibernate.ejb.TransactionImpl.commit(TransactionImpl.java:54)
+[INFO] 	... 19 more
+[INFO] Caused by: java.sql.BatchUpdateException: Batch entry 0 insert into Sector (island, type, x, y, game_id) values (-1, 0, 0, 0, 172) was aborted.  Call getNextException to see the cause.
+[INFO] 	at org.postgresql.jdbc2.AbstractJdbc2Statement$BatchResultHandler.handleError(AbstractJdbc2Statement.java:2530)
+[INFO] 	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:1317)
+[INFO] 	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:350)
+[INFO] 	at org.postgresql.jdbc2.AbstractJdbc2Statement.executeBatch(AbstractJdbc2Statement.java:2592)
+[INFO] 	at com.mchange.v2.c3p0.impl.NewProxyPreparedStatement.executeBatch(NewProxyPreparedStatement.java:1723)
+[INFO] 	at org.hibernate.jdbc.BatchingBatcher.doExecuteBatch(BatchingBatcher.java:48)
+[INFO] 	at org.hibernate.jdbc.BatchingBatcher.addToBatch(BatchingBatcher.java:34)
+[INFO] 	at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2252)
+[INFO] 	... 30 more
+[INFO] INFO-Starting up game #172 Crucifix Hill.
+[INFO] INFO-Starting integrity check.
+[INFO] INFO-Integrity check complete:  0 errors
+[INFO] INFO-Updating 6 cities
+[INFO] INFO-6 cities scheduled.
+[INFO] INFO-Updating 15 units
+[INFO] INFO-15 units scheduled.
+[INFO] INFO-Updating 0 relations
+[INFO] INFO-0 relation changes scheduled.
+[INFO] INFO-Updating 0 units seen
+[INFO] INFO-0 unit disappearances scheduled.
+[INFO] INFO-Scheduling game #172 Crucifix Hill to end at Tue Feb 28 16:42:39 EST 2012
