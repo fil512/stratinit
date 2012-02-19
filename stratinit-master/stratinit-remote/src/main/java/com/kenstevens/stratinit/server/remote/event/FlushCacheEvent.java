@@ -7,8 +7,8 @@ import com.kenstevens.stratinit.cache.DataCache;
 public class FlushCacheEvent extends Event {
 	private DataCache dataCache;
 
-	FlushCacheEvent(DataCache dataCache, Date startTime) {
-		super(dataCache, startTime);
+	FlushCacheEvent(DataCache dataCache) {
+		super(dataCache);
 		this.dataCache = dataCache;
 	}
 
