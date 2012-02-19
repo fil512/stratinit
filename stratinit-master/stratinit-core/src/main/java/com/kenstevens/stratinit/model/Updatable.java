@@ -9,11 +9,12 @@ import javax.persistence.MappedSuperclass;
 public abstract class Updatable implements EventKeyed, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Date lastUpdated;
+	// FIXME this will duplicate lots of code elsewhere that is calling setLastUpdated(new Date()) after construction.
+	private Date lastUpdated = new Date();
 
 	public abstract int getUpdatePeriodMilliseconds();
 
-
+	
 	public Date getLastUpdated() {
 		return lastUpdated;
 	}

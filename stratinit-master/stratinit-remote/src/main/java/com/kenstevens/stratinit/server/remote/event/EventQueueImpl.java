@@ -17,7 +17,6 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.UnitSeen;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 
 @Service
@@ -143,6 +142,7 @@ public class EventQueueImpl implements EventQueue {
 
 	public void scheduleFlushCache() {
 		FlushCacheEvent flushCacheEvent = new FlushCacheEvent(dataCache);
+		logger.info("Cache Flush Period set to "+flushCacheEvent.getPeriodMilliseconds()+"ms");
 		eventTimer.schedule(flushCacheEvent);
 	}
 }

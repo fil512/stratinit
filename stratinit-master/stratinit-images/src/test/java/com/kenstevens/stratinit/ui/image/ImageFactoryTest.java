@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.ui.image;
 
 import java.io.FileNotFoundException;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ImageFactoryTest {

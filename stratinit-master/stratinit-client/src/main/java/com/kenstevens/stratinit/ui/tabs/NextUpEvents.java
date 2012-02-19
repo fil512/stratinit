@@ -12,7 +12,6 @@ import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.UpdateManager;
 
 public class NextUpEvents {
