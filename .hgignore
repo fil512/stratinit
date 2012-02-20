@@ -47,5 +47,6 @@ stratinit-master/stratinit-test/.classpath
 stratinit-master/stratinit-server/.project
 stratinit-master/stratinit-images/.classpath
 stratinit-master/stratinit-core/.classpath
+stratinit-master/.settings/org.eclipse.core.resources.prefs
 syntax: regexp
 ^stratinit-master/stratinit-server/\.classpath$
