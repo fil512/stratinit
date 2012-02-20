@@ -22,7 +22,7 @@ import com.kenstevens.stratinit.util.AccountPersister;
 import com.kenstevens.stratinit.util.XMLException;
 
 @Component
-public class AccountSettingsWindow implements Window {
+public class AccountSettingsWindow implements StratInitWindow {
 	private final Log logger = LogFactory.getLog(getClass());
 
 	private Text username;
