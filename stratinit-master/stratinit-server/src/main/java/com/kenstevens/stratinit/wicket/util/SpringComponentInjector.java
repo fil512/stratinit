@@ -16,6 +16,7 @@ public class SpringComponentInjector implements IComponentInstantiationListener 
 			return;
 		}
 		ApplicationContext context = SpringContext.getContext();
+		context.getAutowireCapableBeanFactory();
 		context.getAutowireCapableBeanFactory().configureBean(component,
 				getBeanName(component.getClass()));
 	}

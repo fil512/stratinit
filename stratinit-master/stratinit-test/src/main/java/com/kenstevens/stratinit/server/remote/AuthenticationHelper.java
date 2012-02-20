@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.google.common.collect.Lists;
@@ -22,7 +22,7 @@ public class AuthenticationHelper {
 		@Override
 		public Collection<GrantedAuthority> getAuthorities() {
 			Collection<GrantedAuthority> retval = Lists.newArrayList();
-			retval.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+			retval.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			return retval;
 		}
 

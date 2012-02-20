@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import java.util.Date;
-
 import com.kenstevens.stratinit.cache.DataCache;
 
 public class FlushCacheEvent extends Event {

@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.hibernate.HibernateException;
-import org.hibernate.impl.SessionImpl;
+import org.hibernate.internal.SessionImpl;
 import org.junit.Test;
 
 import com.kenstevens.stratinit.StratInitTest;
@@ -20,7 +20,7 @@ public class EntityManagerTest extends StratInitTest {
 	@Test
 	public void isHSQL() throws HibernateException, SQLException {
 		SessionImpl session = (SessionImpl)entityManager.getDelegate();
-		assertTrue(session.getFactory().getSettings().getDialect() instanceof 
+		assertTrue(session.getFactory().getDialect() instanceof 
 				org.hibernate.dialect.HSQLDialect);
 	}
 }

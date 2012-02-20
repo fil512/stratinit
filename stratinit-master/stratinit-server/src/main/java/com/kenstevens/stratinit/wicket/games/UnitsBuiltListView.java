@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 
 import com.kenstevens.stratinit.server.remote.helper.UnitsBuilt;
-import com.kenstevens.stratinit.type.UnitType;
 
 public class UnitsBuiltListView extends PageableListView<UnitsBuilt> {
 
