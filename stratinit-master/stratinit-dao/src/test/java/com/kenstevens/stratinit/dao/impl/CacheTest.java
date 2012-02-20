@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import org.hibernate.impl.SessionImpl;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.stat.Statistics;
 import org.junit.Assert;
 import org.junit.Ignore;

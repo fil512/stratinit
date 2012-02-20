@@ -9,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.impl.SessionImpl;
+import org.hibernate.internal.SessionImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -64,7 +64,7 @@ public abstract class StratInitTest {
 	public void stratInit() {
 		if (!initialized) {
 			SessionImpl session = (SessionImpl) entityManager.getDelegate();
-			Assert.assertTrue("RUNNING IN HSQL", session.getFactory().getSettings().getDialect() instanceof org.hibernate.dialect.HSQLDialect);
+			Assert.assertTrue("RUNNING IN HSQL", session.getFactory().getDialect() instanceof org.hibernate.dialect.HSQLDialect);
 			initialized = true;
 			testPlayer1 = new Player("a");
 			testPlayer1.setEmail("foo@foo.com");

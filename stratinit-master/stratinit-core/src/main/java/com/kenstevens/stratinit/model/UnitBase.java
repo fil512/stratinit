@@ -573,7 +573,7 @@ public abstract class UnitBase {
 	}
 
 	public static boolean isNotUnit(UnitType unitType) {
-		return unitType.BASE == unitType || unitType.RESEARCH == unitType;
+		return UnitType.BASE == unitType || UnitType.RESEARCH == unitType;
 	}
 
 	public static boolean isUnit(UnitType unitType) {

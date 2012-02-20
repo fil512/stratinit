@@ -10,7 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.impl.SessionImpl;
+import org.hibernate.internal.SessionImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -162,7 +162,7 @@ public abstract class StratInitDaoBase {
 		Constants.setRunMode(RunMode.PRODUCTION);
 		if (!initialized) {
 			SessionImpl session = getSession();
-			assertTrue("Running in HSQL", session.getFactory().getSettings()
+			assertTrue("Running in HSQL", session.getFactory()
 					.getDialect() instanceof org.hibernate.dialect.HSQLDialect);
 			initialized = true;
 		}
@@ -181,7 +181,7 @@ public abstract class StratInitDaoBase {
 	}
 
 	private SessionImpl getSession() {
-		return (SessionImpl) entityManager.getDelegate();
+		return  (SessionImpl) entityManager.getDelegate();
 	}
 
 	private void populate(World world, String[] types, String[] islands) {

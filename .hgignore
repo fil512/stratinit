@@ -48,5 +48,20 @@ stratinit-master/stratinit-server/.project
 stratinit-master/stratinit-images/.classpath
 stratinit-master/stratinit-core/.classpath
 stratinit-master/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-test/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-test/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-server/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-server/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-remote/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-remote/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-images/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-images/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-dao/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-dao/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-core/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-core/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-client/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/stratinit-client/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-client/.settings/org.eclipse.core.resources.prefs
 syntax: regexp
 ^stratinit-master/stratinit-server/\.classpath$
