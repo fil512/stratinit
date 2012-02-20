@@ -43,5 +43,9 @@ stratinit-master/stratinit-dao/.classpath
 stratinit-master/stratinit-core/.project
 stratinit-master/stratinit-client/.project
 stratinit-master/stratinit-client/.settings/org.maven.ide.eclipse.prefs
+stratinit-master/stratinit-test/.classpath
+stratinit-master/stratinit-server/.project
+stratinit-master/stratinit-images/.classpath
+stratinit-master/stratinit-core/.classpath
 syntax: regexp
 ^stratinit-master/stratinit-server/\.classpath$
