@@ -9,7 +9,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.wicket.components.SignOutPanel;
+import com.kenstevens.stratinit.wicket.components.AdminPanel;
+import com.kenstevens.stratinit.wicket.components.LoginLogoutPanel;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
 import com.kenstevens.stratinit.wicket.docs.ContactPage;
 import com.kenstevens.stratinit.wicket.docs.FAQPage;
@@ -34,14 +35,14 @@ public class BasePage extends WebPage {
 
 	public BasePage(final PageParameters parameters) {
 		super(parameters);
-		add(new SignOutPanel("signOutPanel"));
+		add(new LoginLogoutPanel("loginLogoutPanel"));
+		add(new AdminPanel("adminPanel"));
 		add(new Label("version", Constants.SERVER_VERSION));
 		add(new FeedbackPanel("feedback"));
 		add(new BookmarkablePageLink<Page>("HomePage", HomePage.class));
 		add(new BookmarkablePageLink<Page>("ContactPage", ContactPage.class));
 		add(new BookmarkablePageLink<Page>("AboutPage", AboutPage.class));
 		add(new BookmarkablePageLink<Page>("RegistrationPage", RegistrationPage.class));
-		add(new BookmarkablePageLink<Page>("LoginPage", LoginPage.class));
 		add(new BookmarkablePageLink<Page>("FAQPage", FAQPage.class));
 		add(new BookmarkablePageLink<Page>("GuidePage", GuidePage.class));
 		add(new BookmarkablePageLink<Page>("PlayPage", PlayPage.class));
