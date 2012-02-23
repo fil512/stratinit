@@ -2,6 +2,8 @@ package com.kenstevens.stratinit.rank;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.kenstevens.stratinit.dto.SITeam;
@@ -12,11 +14,23 @@ public class TeamHelper {
 
 	private final TeamProvider teamProvider;
 
+	private static final Comparator<SITeam> BY_SCORE = new Comparator<SITeam>() {
+		public int compare(SITeam p1, SITeam p2) {
+			return Integer.valueOf(p2.score).compareTo(p1.score);
+		}
+	};;
+
+	public List<SITeam> findTeams(Game game) {
+		List<SITeam> retval = findUnsortedTeams(game);
+		Collections.sort(retval, BY_SCORE);
+		return retval;
+	}
+
 	public TeamHelper(TeamProvider teamProvider) {
 		this.teamProvider = teamProvider;
 	}
-	
-	public List<SITeam> findTeams(Game game) {
+
+	private List<SITeam> findUnsortedTeams(Game game) {
 		List<Nation> nations = teamProvider.getNations(game);
 
 		List<SITeam> teams = new ArrayList<SITeam>();
@@ -33,13 +47,14 @@ public class TeamHelper {
 				// TODO REF generalize to support multiple players on a team
 				Nation ally = allies.iterator().next();
 				int allyCityCount = teamProvider.getNumberOfCities(ally);
-				siteam = new SITeam(nation.getName(), ally.getName(), nationCityCount+allyCityCount);
+				siteam = new SITeam(nation.getName(), ally.getName(),
+						nationCityCount + allyCityCount);
 			}
 			teams.add(siteam);
 		}
 		return teams;
 	}
-	
+
 	private boolean contains(List<SITeam> teams, Nation nation) {
 		for (SITeam team : teams) {
 			// TODO OPT switch from name to nationId

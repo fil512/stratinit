@@ -29,4 +29,14 @@ public class SITeam implements Serializable {
 	public int getScore() {
 		return score;
 	}
+
+	public String getName() {
+		if (nation2 == null) {
+			return nation1;
+		}
+		if (nation1.compareTo(nation2) < 0) {
+			return nation1+" "+nation2;
+		}
+		return nation2+" "+nation1;
+	}
 }
