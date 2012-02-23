@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.rank.TeamProvider;
 
@@ -32,6 +34,11 @@ public class TeamProviderImpl implements TeamProvider {
 	@Override
 	public int getNumberOfCities(Nation nation) {
 		return sectorDao.getNumberOfCities(nation);
+	}
+
+	@Override
+	public List<SITeam> findTeams(GameHistory game) {
+//		pull this down from GameArchiteListProvider
 	}
 
 }

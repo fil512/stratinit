@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 
@@ -84,6 +86,12 @@ public class TestTeamProvider implements TeamProvider {
 			return 50;
 		}
 		return 10;
+	}
+
+	@Override
+	public List<SITeam> findTeams(GameHistory game) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
