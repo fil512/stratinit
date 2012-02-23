@@ -11,34 +11,34 @@ package com.kenstevens.stratinit.server.remote.rank;
 //				W = percentage of win (currently only 100% for win, 0% for loss)
 public class ELOCalculator {
 
-	private static final int RANGE = 400;
-	public static final int WEIGHT = 32;
-	private final int winStartELO;
-	private final int loseStartELO;
-	private final int winNewELO;
-	private final int loseNewELO;
+	private static final double RANGE = 400;
+	public static final double WEIGHT = 32;
+	private final double winStartELO;
+	private final double loseStartELO;
+	private final double winNewELO;
+	private final double loseNewELO;
 
-	public ELOCalculator(int winStartELO, int loseStartELO) {
+	public ELOCalculator(double winStartELO, double loseStartELO) {
 		this.winStartELO = winStartELO;
 		this.loseStartELO = loseStartELO;
 		double e = 1.0 / (1.0 + Math.pow(10, (((double)loseStartELO - (double)winStartELO) / RANGE)));
-		this.winNewELO = winStartELO + (int)(WEIGHT * (1.0 - e));;
-		this.loseNewELO = loseStartELO - (int)(WEIGHT * e);
+		this.winNewELO = winStartELO + (WEIGHT * (1.0 - e));;
+		this.loseNewELO = loseStartELO - (WEIGHT * e);
 	}
 
-	public int getWinNewELO() {
+	public double getWinNewELO() {
 		return winNewELO;
 	}
 
-	public int getLoseNewELO() {
+	public double getLoseNewELO() {
 		return loseNewELO;
 	}
 
-	public int getWinStartELO() {
+	public double getWinStartELO() {
 		return winStartELO;
 	}
 
-	public int getLoseStartELO() {
+	public double getLoseStartELO() {
 		return loseStartELO;
 	}
 
