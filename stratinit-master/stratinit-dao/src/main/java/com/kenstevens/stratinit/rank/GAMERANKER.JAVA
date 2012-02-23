@@ -1,10 +1,15 @@
 package com.kenstevens.stratinit.rank;
 
 import java.util.List;
-import java.util.SortedMap;
+import java.util.Map.Entry;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.GameHistory;
+import com.kenstevens.stratinit.model.PlayerRank;
 
 public class GameRanker {
 
@@ -15,8 +20,17 @@ public class GameRanker {
 		this.teamHelper = teamHelper;
 	}
 
+	public void rank(GameHistory game) {
+		List<SITeam> teams = teamHelper.findTeams(game);
+		rankTeams(teams);
+	}
+	
 	public void rank(Game game) {
 		List<SITeam> teams = teamHelper.findTeams(game);
+		rankTeams(teams);
+	}
+	
+	private void rankTeams(List<SITeam> teams) {
 		if (teams.size() < 2) {
 			return;
 		}
@@ -31,7 +45,15 @@ public class GameRanker {
 		}
 	}
 	
-	public SortedMap<String, Double> getRanks() {
-		return playerRanks.getRanks();
+	public List<PlayerRank> getRanks() {
+		return Lists.newArrayList(Collections2.transform(playerRanks.getRanks().entrySet(), new Function<Entry<String, Double>, PlayerRank>() {
+
+			@Override
+			public PlayerRank apply(Entry<String, Double> entry) {
+				return new PlayerRank(entry.getKey(), entry.getValue());
+			}
+
+			
+		}));
 	}
 }

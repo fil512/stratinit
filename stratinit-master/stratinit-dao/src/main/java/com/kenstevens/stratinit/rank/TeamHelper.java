@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.Nation;
 
 public class TeamHelper {
@@ -66,6 +67,10 @@ public class TeamHelper {
 			}
 		}
 		return false;
+	}
+
+	public List<SITeam> findTeams(GameHistory game) {
+		return teamProvider.findTeams(game);
 	}
 
 }
