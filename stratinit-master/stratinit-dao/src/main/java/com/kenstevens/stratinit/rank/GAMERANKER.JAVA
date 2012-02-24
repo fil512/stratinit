@@ -5,12 +5,12 @@ import java.util.List;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.model.PlayerRank;
+import com.kenstevens.stratinit.model.TeamRank;
 
 public class GameRanker {
 
 	private final TeamHelper teamHelper;
-	private final PlayerRanks playerRanks = new PlayerRanks();
+	private final TeamRanks teamRanks = new TeamRanks();
 
 	public GameRanker(TeamHelper teamHelper) {
 		this.teamHelper = teamHelper;
@@ -37,11 +37,11 @@ public class GameRanker {
 			return;
 		}
 		for (int i = 1; i < teams.size(); ++i) {
-			playerRanks.recordWin(teamWin, teams.get(i));
+			teamRanks.recordWin(teamWin, teams.get(i));
 		}
 	}
 	
-	public List<PlayerRank> getRanks() {
-		return playerRanks.getRanks();
+	public List<TeamRank> getTeamRanks() {
+		return teamRanks.getTeamRanks();
 	}
 }
