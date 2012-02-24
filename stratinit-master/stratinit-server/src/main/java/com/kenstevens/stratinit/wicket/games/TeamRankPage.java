@@ -5,19 +5,19 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.wicket.BasePage;
 
-public class PlayerRankPage extends BasePage {
+public class TeamRankPage extends BasePage {
 	@SpringBean
-	PlayerRankProvider playerRankProvider;
+	TeamRankProvider teamRankProvider;
 	
 	private static final long serialVersionUID = 1L;
 
-	public PlayerRankPage() {
+	public TeamRankPage() {
 		super();
-		PlayerRankView playerRankView = new PlayerRankView("teams",
-				new PlayerRankModel(playerRankProvider), 20);
+		TeamRankView teamRankView = new TeamRankView("teams",
+				new TeamRankModel(teamRankProvider), 20);
 
-		add(playerRankView);
-		add(new PagingNavigator("navigator", playerRankView));
+		add(teamRankView);
+		add(new PagingNavigator("navigator", teamRankView));
 	}
 
 }
