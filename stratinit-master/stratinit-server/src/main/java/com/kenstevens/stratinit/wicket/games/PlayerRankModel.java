@@ -4,22 +4,22 @@ import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import com.kenstevens.stratinit.model.TeamRank;
+import com.kenstevens.stratinit.model.PlayerRank;
 import com.kenstevens.stratinit.rank.GameRanker;
 
-public class TeamRankModel extends LoadableDetachableModel<List<TeamRank>> {
+public class PlayerRankModel extends LoadableDetachableModel<List<PlayerRank>> {
 	private static final long serialVersionUID = 1L;
 
 	private final GameRankerProvider gameRankerProvider;
 
-	public TeamRankModel(GameRankerProvider gameRankerProvider) {
+	public PlayerRankModel(GameRankerProvider gameRankerProvider) {
 		this.gameRankerProvider = gameRankerProvider;
 	}
 
 	@Override
-	protected List<TeamRank> load() {
+	protected List<PlayerRank> load() {
 		GameRanker gameRanker = gameRankerProvider.getGameRanker();
-		return gameRanker.getTeamRanks();
+		return gameRanker.getPlayerRanks();
 	}
 
 }

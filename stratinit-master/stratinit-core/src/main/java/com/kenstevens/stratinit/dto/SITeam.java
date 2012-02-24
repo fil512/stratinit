@@ -74,7 +74,4 @@ public class SITeam implements Serializable {
 			return false;
 		return true;
 	}
-
-
-
 }

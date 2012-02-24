@@ -5,6 +5,7 @@ import java.util.List;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
+import com.kenstevens.stratinit.model.PlayerRank;
 import com.kenstevens.stratinit.model.TeamRank;
 
 public class GameRanker {
@@ -43,5 +44,9 @@ public class GameRanker {
 	
 	public List<TeamRank> getTeamRanks() {
 		return teamRanks.getTeamRanks();
+	}
+
+	public List<PlayerRank> getPlayerRanks() {
+		return teamRanks.getPlayerRanks();		
 	}
 }
