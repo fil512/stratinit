@@ -20,6 +20,9 @@ public class TeamRankView extends PageableListView<TeamRank> {
 		final TeamRank teamRank = listItem.getModelObject();
 		listItem.add(new Label("name", teamRank.getName()));
 		listItem.add(new Label("rank", "" + teamRank.getRank().intValue()));
+		listItem.add(new Label("won", "" + teamRank.getWins()));
+		listItem.add(new Label("played", "" + teamRank.getPlayed()));
+		listItem.add(new Label("winperc", "" + teamRank.getWinPerc()));
 	}
 
 }

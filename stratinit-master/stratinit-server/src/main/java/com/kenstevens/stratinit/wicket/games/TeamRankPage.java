@@ -7,14 +7,14 @@ import com.kenstevens.stratinit.wicket.BasePage;
 
 public class TeamRankPage extends BasePage {
 	@SpringBean
-	TeamRankProvider teamRankProvider;
+	GameRankerProvider gameRankerProvider;
 	
 	private static final long serialVersionUID = 1L;
 
 	public TeamRankPage() {
 		super();
 		TeamRankView teamRankView = new TeamRankView("teams",
-				new TeamRankModel(teamRankProvider), 20);
+				new TeamRankModel(gameRankerProvider), 20);
 
 		add(teamRankView);
 		add(new PagingNavigator("navigator", teamRankView));
