@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.rank;
 import java.util.Collection;
 import java.util.List;
 
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
@@ -17,5 +18,8 @@ public interface TeamProvider {
 	int getNumberOfCities(Nation nation);
 
 	List<SITeam> findTeams(GameHistory game);
+
+	void getTeamsAndNations(GameHistory gameHistory, List<SITeam> teams,
+			List<SINation> nations);
 
 }

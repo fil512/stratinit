@@ -3,7 +3,10 @@ package com.kenstevens.stratinit.rank;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
+
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
@@ -92,6 +95,12 @@ public class TestTeamProvider implements TeamProvider {
 	public List<SITeam> findTeams(GameHistory game) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void getTeamsAndNations(GameHistory gameHistory, List<SITeam> teams,
+			List<SINation> nations) {
+		throw new NotImplementedException();
 	}
 
 }

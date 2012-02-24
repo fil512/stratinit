@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.wicket.games;
 
-import java.util.Map.Entry;
-
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
