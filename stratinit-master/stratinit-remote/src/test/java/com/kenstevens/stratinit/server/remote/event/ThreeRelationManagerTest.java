@@ -17,7 +17,7 @@ import com.kenstevens.stratinit.server.remote.ThreePlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
 
 @Ignore
-public class ThreeRelationManagerTest extends ThreePlayerBase {
+public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
 	@Autowired
 	private EventQueue eventQueue;
 

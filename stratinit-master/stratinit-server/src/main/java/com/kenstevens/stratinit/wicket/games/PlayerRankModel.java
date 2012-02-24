@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.PlayerRank;
 
 public class PlayerRankModel extends LoadableDetachableModel<List<PlayerRank>> {

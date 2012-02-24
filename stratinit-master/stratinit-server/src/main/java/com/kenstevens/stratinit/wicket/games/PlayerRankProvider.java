@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.dal.GameHistoryDal;
-import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.PlayerRank;
 import com.kenstevens.stratinit.rank.GameRanker;
