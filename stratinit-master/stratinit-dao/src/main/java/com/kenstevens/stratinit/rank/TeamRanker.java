@@ -8,12 +8,12 @@ import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.PlayerRank;
 import com.kenstevens.stratinit.model.TeamRank;
 
-public class GameRanker {
+public class TeamRanker {
 
 	private final TeamHelper teamHelper;
 	private final TeamRanks teamRanks = new TeamRanks();
 
-	public GameRanker(TeamHelper teamHelper) {
+	public TeamRanker(TeamHelper teamHelper) {
 		this.teamHelper = teamHelper;
 	}
 
