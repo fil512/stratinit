@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 import com.kenstevens.stratinit.model.TeamRank;
-import com.kenstevens.stratinit.rank.GameRanker;
+import com.kenstevens.stratinit.rank.TeamRanker;
 
 public class TeamRankModel extends LoadableDetachableModel<List<TeamRank>> {
 	private static final long serialVersionUID = 1L;
@@ -18,7 +18,7 @@ public class TeamRankModel extends LoadableDetachableModel<List<TeamRank>> {
 
 	@Override
 	protected List<TeamRank> load() {
-		GameRanker gameRanker = gameRankerProvider.getGameRanker();
+		TeamRanker gameRanker = gameRankerProvider.getGameRanker();
 		return gameRanker.getTeamRanks();
 	}
 
