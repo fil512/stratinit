@@ -51,10 +51,10 @@ public class TeamRanksTest {
 		assertEquals("f", playerRanks.get(5).getName());
 		assertEquals(TeamRankMap.START_RANK + ELOCalculator.WEIGHT, playerRanks.get(0).getRank(), 1.0);
 		assertEquals(TeamRankMap.START_RANK + ELOCalculator.WEIGHT, playerRanks.get(1).getRank(), 1.0);
-		assertEquals(TeamRankMap.START_RANK - ELOCalculator.WEIGHT / 2, playerRanks.get(2).getRank(), 1.0);
-		assertEquals(TeamRankMap.START_RANK - ELOCalculator.WEIGHT / 2, playerRanks.get(3).getRank(), 1.0);
-		assertEquals(TeamRankMap.START_RANK - ELOCalculator.WEIGHT / 2, playerRanks.get(4).getRank(), 1.0);
-		assertEquals(TeamRankMap.START_RANK - ELOCalculator.WEIGHT / 2, playerRanks.get(5).getRank(), 1.0);
+		assertEquals(0.0, playerRanks.get(2).getRank(), 1.0);
+		assertEquals(0.0, playerRanks.get(3).getRank(), 1.0);
+		assertEquals(0.0, playerRanks.get(4).getRank(), 1.0);
+		assertEquals(0.0, playerRanks.get(5).getRank(), 1.0);
 	}
 
 	@Test
@@ -96,7 +96,7 @@ public class TeamRanksTest {
 		assertEquals(TeamRankMap.START_RANK + ELOCalculator.WEIGHT / 2, playerRanks.get(1).getRank(), 1.0);
 		assertEquals(TeamRankMap.START_RANK + ELOCalculator.WEIGHT / 2, playerRanks.get(2).getRank(), 1.0);
 		assertEquals(TeamRankMap.START_RANK + ELOCalculator.WEIGHT / 2, playerRanks.get(3).getRank(), 1.0);
-		assertEquals(TeamRankMap.START_RANK - ELOCalculator.WEIGHT, playerRanks.get(4).getRank(), 1.0);
-		assertEquals(TeamRankMap.START_RANK - ELOCalculator.WEIGHT, playerRanks.get(5).getRank(), 1.0);
+		assertEquals(0.0, playerRanks.get(4).getRank(), 1.0);
+		assertEquals(0.0, playerRanks.get(5).getRank(), 1.0);
 	}
 }

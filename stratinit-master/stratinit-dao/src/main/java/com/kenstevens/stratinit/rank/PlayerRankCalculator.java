@@ -37,19 +37,13 @@ public class PlayerRankCalculator {
 		for (SITeam team : teams) {
 			TeamRank teamRank = teamRankMap.get(team);
 			victories += teamRank.getVictories();
-			int weight;
-			if (team.isSolo()) {
-				weight = teamRank.getVictories();
-			} else {
-				weight = teamRank.getOpponents();
-			}
-			opponents += weight;
+			opponents += teamRank.getOpponents();
 			wins += teamRank.getWins();
 			played += teamRank.getPlayed();
-			totalRank += teamRank.getRank() * weight;
+			totalRank += teamRank.getRank() * teamRank.getVictories();
 		}
 		
-		double rank = opponents == 0 ? 0 : totalRank / opponents;
+		double rank = victories == 0 ? 0 : totalRank / victories;
 		return new PlayerRank(nation, rank, victories, opponents, wins, played);
 	}
 	
