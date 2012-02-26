@@ -2,14 +2,7 @@ package com.kenstevens.stratinit.model;
 
 
 public class PlayerRank extends Rankable {
-	final String name;
-	public PlayerRank(String name, Double rank, int played, int wins) {
-		super(rank, played, wins);
-		this.name = name;
+	public PlayerRank(String name, Double rank, int victories, int opponents, int wins, int played) {
+		super(name, rank, victories, opponents, wins, played);
 	}
-
-	public String getName() {
-		return name;
-	}
-
 }

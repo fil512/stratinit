@@ -18,8 +18,11 @@ public class TeamRankView extends PageableListView<TeamRank> {
 	@Override
 	protected void populateItem(ListItem<TeamRank> listItem) {
 		final TeamRank teamRank = listItem.getModelObject();
-		listItem.add(new Label("name", teamRank.getName()));
+		listItem.add(new Label("itemName", teamRank.getName()));
 		listItem.add(new Label("rank", "" + teamRank.getRank().intValue()));
+		listItem.add(new Label("victories", "" + teamRank.getVictories()));
+		listItem.add(new Label("opponents", "" + teamRank.getOpponents()));
+		listItem.add(new Label("vicperc", "" + teamRank.getVicPerc()));
 		listItem.add(new Label("won", "" + teamRank.getWins()));
 		listItem.add(new Label("played", "" + teamRank.getPlayed()));
 		listItem.add(new Label("winperc", "" + teamRank.getWinPerc()));

@@ -17,7 +17,7 @@ public class HomePage extends BasePage {
     		add(new Label("username", ""));
     	}
 
-		// FIXME Really??
+		// TODO Really??
 		add(new BookmarkablePageLink<Page>("RegistrationPage2", RegistrationPage.class));
 		add(new BookmarkablePageLink<Page>("PlayPage2", PlayPage.class));
     }

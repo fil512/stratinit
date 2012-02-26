@@ -12,14 +12,17 @@ public class TeamRankModel extends LoadableDetachableModel<List<TeamRank>> {
 
 	private final GameRankerProvider gameRankerProvider;
 
-	public TeamRankModel(GameRankerProvider gameRankerProvider) {
+	private final String playerName;
+
+	public TeamRankModel(GameRankerProvider gameRankerProvider, String playerName) {
 		this.gameRankerProvider = gameRankerProvider;
+		this.playerName = playerName;
 	}
 
 	@Override
 	protected List<TeamRank> load() {
 		TeamRanker gameRanker = gameRankerProvider.getGameRanker();
-		return gameRanker.getTeamRanks();
+		return gameRanker.getTeamRanks(playerName);
 	}
 
 }
