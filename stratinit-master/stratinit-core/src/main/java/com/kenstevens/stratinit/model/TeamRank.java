@@ -6,6 +6,7 @@ public class TeamRank extends Rankable {
 	final SITeam team;
 	
 	public TeamRank(SITeam team, Double rank) {
+		super(team.getName());
 		this.team = team;
 		this.setRank(rank);
 	}
@@ -14,7 +15,7 @@ public class TeamRank extends Rankable {
 		return team;
 	}
 
-	public String getName() {
-		return this.team.getName();
+	public boolean contains(String playerName) {
+		return team.contains(playerName);
 	}
 }

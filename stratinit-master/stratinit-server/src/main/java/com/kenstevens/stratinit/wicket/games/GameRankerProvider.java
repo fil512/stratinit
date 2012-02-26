@@ -20,11 +20,11 @@ public class GameRankerProvider {
 	
 	public TeamRanker getGameRanker() {
 		TeamHelper teamHelper = new TeamHelper(teamProvider);
-		TeamRanker gameRanker = new TeamRanker(teamHelper);
+		TeamRanker teamRanker = new TeamRanker(teamHelper);
 		List<GameHistory> games = gameHistoryDal.getAllGameHistories();
 		for (GameHistory game : games) {
-			gameRanker.rank(game);
+			teamRanker.rank(game);
 		}
-		return gameRanker;
+		return teamRanker;
 	}
 }

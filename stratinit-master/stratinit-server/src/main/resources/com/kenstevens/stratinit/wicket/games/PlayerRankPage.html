@@ -1,49 +1,27 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
-<wicket:extend>
-<h2>Leader Board</h2>
-<span>
-<p>
-Player Rank is the weighted average of their <a wicket:id="TeamRankPage2">Team Ranks</a> (weighted by number of games
-played on each team).  The original <a wicket:id="LeaderBoardPage">Leader Board</a> is still available, although I consider the
-Elo ranking to be a better measurement of player skill as it takes into consideration the skill level of the players
-you beat.
-</p>
- <table class="games" >
-	<tr class="games" >
-	  <th class="games">Player</th>
-	  <th class="games">Rank</th>
-	  <th class="games">Won</th>
-	  <th class="games">Played</th>
-	  <th class="games">Win%</th>
-    </tr>
-    <tr  class="games" wicket:id = "players">
-      <td class="games">
-        <span wicket:id = "name">hydrogen</span>
-      </td>
-      <td class="games">
-        <span wicket:id = "rank">
-        2000
-        </span>
-      </td>
-            <td class="games">
-        <span wicket:id = "won">
-        20
-        </span>
-      </td>
-      <td class="games">
-        <span wicket:id = "played" href="#">20</span>
-      </td>
-      <td class="games">
-        <span wicket:id = "winperc" href="#">100%</span>
-      </td>
-      
-    </tr>
-  </table>	
-  <div style="margin-top: 1em">
-  <span wicket:id = "navigator"/>
-  </div>  
+	<wicket:extend>
+		<h2>Leader Board</h2>
+		<span>
+			<p>
+				Player Rank is the weighted average of a player's
+				<a wicket:id="TeamRankPage2">Team Ranks</a>.
+				Rank is weighted by number of opponent teams played against
+				for each team.  In the case of solo teams (where the player did not have an ally),
+				only wins are counted when calculating the weighted average.
+			</p>
+			<p>
+				The original
+				<a wicket:id="LeaderBoardPage">Leader Board</a>
+				is still available, although I consider the
+				Elo ranking to be a
+				better measurement of player skill as it takes into
+				consideration the
+				skill level of the players
+				you beat.
+			</p>
+			<span wicket:id="rankedPanel" />
 
-  </span>
-</wicket:extend>
+		</span>
+	</wicket:extend>
 </HTML>

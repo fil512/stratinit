@@ -19,28 +19,15 @@ public class TeamRanker {
 
 	public void rank(GameHistory game) {
 		List<SITeam> teams = teamHelper.findTeams(game);
-		rankTeams(teams);
+		teamRanks.rankTeams(teams);
 	}
 	
 	public void rank(Game game) {
 		List<SITeam> teams = teamHelper.findTeams(game);
-		rankTeams(teams);
+		teamRanks.rankTeams(teams);
 	}
 	
-	private void rankTeams(List<SITeam> teams) {
-		if (teams.size() < 2) {
-			return;
-		}
-		// two teams won.  ignore
-		// FIXME test
-		SITeam teamWin = teams.get(0);
-		if (teamWin.score == teams.get(1).score) {
-			return;
-		}
-		for (int i = 1; i < teams.size(); ++i) {
-			teamRanks.recordWin(teamWin, teams.get(i));
-		}
-	}
+
 	
 	public List<TeamRank> getTeamRanks() {
 		return teamRanks.getTeamRanks();
@@ -48,5 +35,9 @@ public class TeamRanker {
 
 	public List<PlayerRank> getPlayerRanks() {
 		return teamRanks.getPlayerRanks();		
+	}
+
+	public List<TeamRank> getTeamRanks(String playerName) {
+		return teamRanks.getTeamRanks(playerName);
 	}
 }

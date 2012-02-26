@@ -1,45 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
-<wicket:extend>
-<h2>Team Rank</h2>
-<span>
-<p>
-Team Rank is calculated using the <a href="http://en.wikipedia.org/wiki/Elo_rating_system">Elo Ranking System</a> with
-a starting rank of 1500, an algorithm of 400 and a K-factor of 32.
-</p>
- <table class="games" >
-	<tr class="games" >
-	  <th class="games">Team</th>
-	  <th class="games">Rank</th>
-	  <th class="games">Won</th>
-	  <th class="games">Played</th>
-	  <th class="games">Win%</th>
-    </tr>
-    <tr  class="games" wicket:id = "teams">
-      <td class="games">
-        <span wicket:id = "name">hydrogen chapper</span>
-      </td>
-      <td class="games">
-        <span wicket:id = "rank">
-        2000
-        </span>
-      </td>
-      <td class="games">
-        <span wicket:id = "won">
-        20
-        </span>
-      </td>
-      <td class="games">
-        <span wicket:id = "played" href="#">20</span>
-      </td>
-      <td class="games">
-        <span wicket:id = "winperc" href="#">100%</span>
-      </td>
-    </tr>
-  </table>	
-  <div style="margin-top: 1em">
-  <span wicket:id = "navigator"/>
-  </div>
-  </span>
-</wicket:extend>
+	<wicket:extend>
+		<h2><span wicket:id="title" /></h2>
+		<span>
+			<p>
+				Team Rank is calculated using the
+				<a href="http://en.wikipedia.org/wiki/Elo_rating_system">Elo Ranking System</a>
+				with
+				a starting rank of 1500, an algorithm of 400 and a K-factor of 32.
+			</p>
+			<span wicket:id="rankedPanel" />
+		</span>
+	</wicket:extend>
 </HTML>

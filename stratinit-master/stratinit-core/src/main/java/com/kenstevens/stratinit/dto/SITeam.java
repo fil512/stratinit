@@ -37,6 +37,10 @@ public class SITeam implements Serializable {
 		}
 		return name;
 	}
+	
+	public String toString() {
+		return name;
+	}
 
 	private String buildName() {
 		if (nation2 == null) {
@@ -73,5 +77,16 @@ public class SITeam implements Serializable {
 		} else if (!name.equals(other.getName()))
 			return false;
 		return true;
+	}
+
+	public boolean contains(String nation) {
+		if (nation1.equals(nation)) {
+			return true;
+		}
+		return (nation2 != null && nation2.equals(nation));
+	}
+
+	public boolean isSolo() {
+		return nation2 == null;
 	}
 }

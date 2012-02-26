@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 
 import com.kenstevens.stratinit.model.PlayerRank;
+import com.kenstevens.stratinit.wicket.components.PlayerTeamsPanel;
 
 public class PlayerRankView extends PageableListView<PlayerRank> {
 
@@ -18,11 +19,14 @@ public class PlayerRankView extends PageableListView<PlayerRank> {
 	@Override
 	protected void populateItem(ListItem<PlayerRank> listItem) {
 		final PlayerRank playerRank = listItem.getModelObject();
-		listItem.add(new Label("name", playerRank.getName()));
+		listItem.add(new PlayerTeamsPanel("itemName", playerRank.getName()));
 		listItem.add(new Label("rank", "" + playerRank.getRank().intValue()));
+		listItem.add(new Label("victories", "" + playerRank.getVictories()));
+		listItem.add(new Label("opponents", "" + playerRank.getOpponents()));
 		listItem.add(new Label("won", "" + playerRank.getWins()));
 		listItem.add(new Label("played", "" + playerRank.getPlayed()));
 		listItem.add(new Label("winperc", "" + playerRank.getWinPerc()));
+		listItem.add(new Label("vicperc", "" + playerRank.getVicPerc()));
 		
 	}
 

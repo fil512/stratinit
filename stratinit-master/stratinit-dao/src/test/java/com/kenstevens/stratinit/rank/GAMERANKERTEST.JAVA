@@ -13,10 +13,10 @@ public class GameRankerTest {
 
 	@Test
 	public void rankTeams() {
-		GameRanker gameRanker = new GameRanker(teamHelper);
-		gameRanker.rank(TestTeamProvider.game1);
-		gameRanker.rank(TestTeamProvider.game2);
-		List<TeamRank> teams = gameRanker.getTeamRanks();
+		TeamRanker teamRanker = new TeamRanker(teamHelper);
+		teamRanker.rank(TestTeamProvider.game1);
+		teamRanker.rank(TestTeamProvider.game2);
+		List<TeamRank> teams = teamRanker.getTeamRanks();
 		assertEquals(4, teams.size());
 		assertEquals("playerc", teams.get(0).getName());
 		assertEquals("playere playerf", teams.get(3).getName());
