@@ -54,7 +54,6 @@ public class BasePage extends WebPage {
 		BookmarkablePageLink<Page> gamesPageLink = new BookmarkablePageLink<Page>("GamesPage", GamesPage.class);
 		gamesPageLink.getPageParameters().add("mode", "active");
 		add(gamesPageLink);
-		// FIXME top nav should be a list view thing
 	}
 	
     

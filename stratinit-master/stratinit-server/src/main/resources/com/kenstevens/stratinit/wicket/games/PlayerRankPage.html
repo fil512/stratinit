@@ -6,9 +6,8 @@
 			<p>
 				Player Rank is the weighted average of a player's
 				<a wicket:id="TeamRankPage2">Team Ranks</a>.
-				Rank is weighted by number of opponent teams played against
-				for each team.  In the case of solo teams (where the player did not have an ally),
-				only wins are counted when calculating the weighted average.
+				Ranks are weighted by the number of opponent teams defeated by each team you played on.
+				To be precise, Player Rank = sum((team rank) * (team victories)) / (total team victories).
 			</p>
 			<p>
 				The original

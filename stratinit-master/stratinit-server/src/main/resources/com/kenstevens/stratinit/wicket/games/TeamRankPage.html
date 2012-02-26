@@ -7,7 +7,10 @@
 				Team Rank is calculated using the
 				<a href="http://en.wikipedia.org/wiki/Elo_rating_system">Elo Ranking System</a>
 				with
-				a starting rank of 1500, an algorithm of 400 and a K-factor of 32.
+				a starting rank of 1500, an algorithm of 400 and a K-factor of 32.  For each game,
+				an ELO is recalculated for all (winner, loser) pairs.  So if there is a game with
+				4 teams, then the ELO would be recalculated 3 times, adding to the winning team's rank
+				3 times, and subtracting from each of the losing teams' rank once.
 			</p>
 			<span wicket:id="rankedPanel" />
 		</span>

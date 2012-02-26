@@ -5,7 +5,6 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-// FIXME why is this using the test persistance.xml and not the prod one?
 public class Start {
 
 	public static void main(String[] args) throws Exception {

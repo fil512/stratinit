@@ -1,3 +1,13 @@
+Release 1.2.0
+  * Added Team ranking.  Teams are ranked using the ELO Rating system.  http://en.wikipedia.org/wiki/Elo_rating_system
+  * Changed Leader Board to rank players using a weighted average of their team rankings.  (Weighted by wins.)
+  * Replaced GWT 2.0.4 and Velocity 1.7 with Wicket 1.5.4.
+  * Upgraded Spring 2.5.6 to Spring 3.1
+  * Upgraded Hibernate 3.2.6 to Hibernate 4.0
+  * Upgraded postgres jdbc3 version 8.2 to jdbc4 version 9
+  * Upgraded swt 3.4.2 to swt 3.5.4
+  * Switched logging to commons-logging
+
 Release 1.1.52
   * Fixed a bug that prevented game data from flushing to disc every 15 minutes.  This resulted
     in a corrupt database if the server was shut down ungracefully (e.g. due to a power failure)

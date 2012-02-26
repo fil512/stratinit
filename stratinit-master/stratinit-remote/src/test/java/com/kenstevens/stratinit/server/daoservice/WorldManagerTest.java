@@ -24,7 +24,7 @@ import com.kenstevens.stratinit.server.remote.event.UnitUpdateEvent;
 import com.kenstevens.stratinit.server.remote.helper.WorldManagerHelper;
 import com.kenstevens.stratinit.type.UnitType;
 
-// FIXME these tests fail sometimes in the group
+// TODO TEST these tests fail sometimes in the group
 @SuppressWarnings("deprecation")
 public class WorldManagerTest extends EventTimerMockedBase {
 	@Autowired
