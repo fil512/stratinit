@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 
 import com.kenstevens.stratinit.model.TeamRank;
-import com.kenstevens.stratinit.wicket.components.PlayerTeamsPanel;
 
 public class TeamRankView extends PageableListView<TeamRank> {
 
