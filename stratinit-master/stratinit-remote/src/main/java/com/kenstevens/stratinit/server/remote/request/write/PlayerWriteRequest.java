@@ -11,6 +11,7 @@ import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.server.remote.helper.DataWriter;
 import com.kenstevens.stratinit.server.remote.helper.SynchronizedDataAccess;
 import com.kenstevens.stratinit.server.remote.request.PlayerRequest;
@@ -21,6 +22,8 @@ public abstract class PlayerWriteRequest<T> extends PlayerRequest<T> implements
 		DataWriter {
 	@Autowired
 	protected GameDaoService gameDaoService;
+	@Autowired
+	protected PlayerDaoService playerDaoService;
 	@Autowired
 	private Spring spring;
 	@Autowired
@@ -70,7 +73,9 @@ public abstract class PlayerWriteRequest<T> extends PlayerRequest<T> implements
 		if (nation == null || dataCache.getGameCache(nation.getGame()) == null) {
 			return;
 		}
-		nation.setLastAction(new Date());
+		Date now = new Date();
+		nation.setLastAction(now);
 		gameDaoService.merge(nation);
+		playerDaoService.setLastLogin(nation.getPlayer(), now);
 	}
 }
