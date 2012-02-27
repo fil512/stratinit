@@ -11,13 +11,24 @@ public class PlayerListModel extends LoadableDetachableModel<List<Player>> {
 
 	private final PlayerListProvider playerListProvider;
 
-	public PlayerListModel(PlayerListProvider playerListProvider) {
+	private final boolean admin;
+
+	public PlayerListModel(PlayerListProvider playerListProvider, boolean admin) {
 		this.playerListProvider = playerListProvider;
+		this.admin = admin;
 	}
 
 	@Override
 	protected List<Player> load() {
-		return playerListProvider.getPlayers();
+		if (isAdmin()) {
+			return playerListProvider.getPlayersByDate();
+		} else {
+			return playerListProvider.getPlayersByWon();
+		}
+	}
+
+	public boolean isAdmin() {
+		return admin;
 	}
 
 }

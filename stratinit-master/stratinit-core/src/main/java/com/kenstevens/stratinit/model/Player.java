@@ -29,6 +29,7 @@ public class Player implements Serializable {
 	private int played;
 	private Date created;
 	private boolean emailGameMail = true;
+	private Date lastLogin;
 
 	public Player() {}
 
@@ -168,5 +169,16 @@ public class Player implements Serializable {
 		this.password = player.password;
 		this.played = player.played;
 		this.wins = player.wins;
+	}
+
+	public Date getLastLogin() {
+		if (lastLogin == null) {
+			return created;
+		}
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 }

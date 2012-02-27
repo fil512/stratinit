@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import java.util.Date;
 import java.util.List;
 
 import com.kenstevens.stratinit.model.Player;
@@ -21,4 +22,6 @@ public interface PlayerDaoService {
 	public abstract Result<None> forgottenPassword(String username, String email);
 
 	public abstract boolean authorizePlayer(String userName, String password);
+
+	public abstract void setLastLogin(Player player, Date now);
 }

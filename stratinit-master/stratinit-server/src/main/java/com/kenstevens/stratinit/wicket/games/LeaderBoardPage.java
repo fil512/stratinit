@@ -14,7 +14,7 @@ public class LeaderBoardPage extends BasePage {
 	public LeaderBoardPage() {
 		super();
 		PlayerListView playerListView = new PlayerListView("players",
-				new PlayerListModel(playerListProvider), 20);
+				new PlayerListModel(playerListProvider, false), 20);
 
 		add(playerListView);
 		add(new PagingNavigator("navigator", playerListView));

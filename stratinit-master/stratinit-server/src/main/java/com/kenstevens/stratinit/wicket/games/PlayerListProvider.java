@@ -14,8 +14,8 @@ import com.kenstevens.stratinit.model.Player;
 public class PlayerListProvider {
 	@Autowired
 	PlayerDao playerDao;
-	
-	public List<Player> getPlayers() {
+
+	public List<Player> getPlayersByWon() {
 		List<Player> players = playerDao.getAllPlayers();
 		Comparator<Player> byWon = new Comparator<Player>() {
 
@@ -29,4 +29,19 @@ public class PlayerListProvider {
 		Collections.sort(players, byWon);
 		return players;
 	}
+
+	public List<Player> getPlayersByDate() {
+		List<Player> players = playerDao.getAllPlayers();
+		Comparator<Player> byDate = new Comparator<Player>() {
+
+			@Override
+			public int compare(Player player1, Player player2) {
+				return player2.getLastLogin().compareTo(player1.getLastLogin());
+			}
+
+		};
+		Collections.sort(players, byDate);
+		return players;
+	}
+
 }

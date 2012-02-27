@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -177,5 +178,12 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void setLastLogin(Player playerIn, Date now) {
+		Player player = playerDao.find(playerIn.getId());
+		player.setLastLogin(now);
+		playerDao.merge(player);
 	}
 }

@@ -10,11 +10,9 @@ swt for platform isn't being added to jnlp
 6. Change pom.xml version if necessary
 7. mvn clean install in stratinit-master
 7. mvn -Pwin32 clean install in stratinit-client
-8. mvn gwt:eclipse in stratinit-server
 9. eclipse refresh
 10. project clean in stratinit-server and stratinit-client
 11. Commit, push (and if necessary, in head hg merge released, hg commit, hg push)
-11. Compile Console, Compile Register
 12. in stratinit-server type "mvn package"
 12. Check that stratinit.war contains WEB-INF/classes/db
 13. upload to /usr/local/tomcat/incoming
