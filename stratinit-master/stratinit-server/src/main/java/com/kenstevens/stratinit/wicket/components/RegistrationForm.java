@@ -30,14 +30,16 @@ public class RegistrationForm extends Form<ValueMap> {
 		super(id, new CompoundPropertyModel<ValueMap>(new ValueMap()));
 
 		add(new RequiredTextField<String>("username", String.class));
-		add(new RequiredTextField<String>("email", String.class).add(EmailAddressValidator.getInstance()));
+		add(new RequiredTextField<String>("email", String.class)
+				.add(EmailAddressValidator.getInstance()));
 
 		Label pwdLabel = new Label("pwdLabel", "Password:");
 		PasswordTextField passwordTextField = new PasswordTextField("password");
 		Label confPwdLabel = new Label("confPwdLabel", "Confirm password:");
-		PasswordTextField passwordConfirmTextField = new PasswordTextField("passwordConfirm", new Model<String>());
-		add(new EqualPasswordInputValidator(passwordTextField, passwordConfirmTextField));
-
+		PasswordTextField passwordConfirmTextField = new PasswordTextField(
+				"passwordConfirm", new Model<String>());
+		add(new EqualPasswordInputValidator(passwordTextField,
+				passwordConfirmTextField));
 		add(passwordTextField);
 		add(passwordConfirmTextField);
 		add(pwdLabel);
@@ -47,12 +49,15 @@ public class RegistrationForm extends Form<ValueMap> {
 	@Override
 	public final void onSubmit() {
 		ValueMap values = getModelObject();
-		ShaPasswordEncoder encoder = new ShaPasswordEncoder(); 
-		
+		ShaPasswordEncoder encoder = new ShaPasswordEncoder();
+
 		String username = (String) values.get("username");
 		String email = (String) values.get("email");
 		String password = (String) values.get("password");
-		Result<Player> result = playerDaoService.register(username, encoder.encodePassword(password, null), email);
+		String userAgent = this.getWebRequest().getHeader("User-Agent");
+
+		Result<Player> result = playerDaoService.register(username,
+				encoder.encodePassword(password, null), email, userAgent);
 		new InfoResult<Player>(this).info(result);
 	}
 }

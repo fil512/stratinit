@@ -33,7 +33,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 	private MailService mailService;
 
 	public Result<Player> register(String username, String password,
-			String email) {
+			String email, String userAgent) {
 
 		if (playerDao == null) {
 			return new Result<Player>("playerDao is null", false);
@@ -44,7 +44,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 					false);
 		}
 		Player player = new Player(username);
-		Result<Player> result = setPlayer(player, password, email, true);
+		Result<Player> result = setPlayer(player, password, email, userAgent, true);
 		PlayerRole playerRole = new PlayerRole();
 		playerRole.setPlayer(player);
 		playerRole.setRoleName("ROLE_USER");
@@ -65,7 +65,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 	}
 
 	private Result<Player> setPlayer(Player player, String password,
-			String email, boolean emailGameMail) {
+			String email, String userAgent, boolean emailGameMail) {
 		EmailValidator emailValidator = EmailValidator.getInstance();
 		if (!emailValidator.isValid(email)) {
 			return new Result<Player>("Email [" + email
@@ -77,6 +77,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		}
 		player.setEmail(email);
 		player.setEmailGameMail(emailGameMail);
+		player.setUserAgent(userAgent);
 
 		return new Result<Player>("Account " + player.getUsername()
 				+ " updated", true, player);
@@ -87,12 +88,12 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 	}
 
 	public Result<Player> updatePlayer(Player player, String password,
-			String email, boolean emailGameMail) {
+			String email, String userAgent, boolean emailGameMail) {
 		if (playerDao == null) {
 			return new Result<Player>("playerDao is null", false);
 		}
 
-		Result<Player> result = setPlayer(player, password, email,
+		Result<Player> result = setPlayer(player, password, email, userAgent,
 				emailGameMail);
 		if (!result.isSuccess()) {
 			return result;
