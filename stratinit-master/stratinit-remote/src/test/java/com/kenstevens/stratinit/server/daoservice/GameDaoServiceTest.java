@@ -77,7 +77,7 @@ public class GameDaoServiceTest extends StratInitWebBase {
 		// TODO TEST why does this throw an exception with numPlayers >= 5?
 		for (int i = 0; i < numPlayers ; ++i) {
 			System.out.println("Player "+i);
-			Result<Player> rresult = playerDaoService.register("testPlayer"+i, "testy", "tesyt@test.com");
+			Result<Player> rresult = playerDaoService.register("testPlayer"+i, "testy", "tesyt@test.com", "Test User Agent");
 			assertResult(rresult);
 			Player player = rresult.getValue();
 			players.add(player);

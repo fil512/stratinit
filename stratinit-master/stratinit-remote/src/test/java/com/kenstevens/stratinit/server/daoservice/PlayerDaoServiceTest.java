@@ -15,21 +15,21 @@ public class PlayerDaoServiceTest extends StratInitWebBase {
 
 	@Test
 	public void testRegister() {
-		Result<Player> result = playerDaoServiceImpl.register("uname", "pwd", "foo@foo.com");
+		Result<Player> result = playerDaoServiceImpl.register("uname", "pwd", "foo@foo.com", "Test User Agent");
 		assertResult(result);
 		assertNotNull(playerDao.find("uname"));
 	}
 
 	@Test
 	public void testRegisterUserExists() {
-		Result<Player> result = playerDaoServiceImpl.register("uname", "pwd", "foo@foo.com");
-		result = playerDaoServiceImpl.register("uname", "pwd", "foo@foo.com");
+		Result<Player> result = playerDaoServiceImpl.register("uname", "pwd", "foo@foo.com", "Test User Agent");
+		result = playerDaoServiceImpl.register("uname", "pwd", "foo@foo.com", "Test User Agent");
 		assertFalseResult(result);
 	}
 
 	@Test
 	public void testRegisterBadEmail() {
-		Result<Player> result = playerDaoServiceImpl.register("uname", "pwd", "foofoo.com");
+		Result<Player> result = playerDaoServiceImpl.register("uname", "pwd", "foofoo.com", "Test User Agent");
 		assertFalseResult(result);
 	}
 

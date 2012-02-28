@@ -10,12 +10,12 @@ import com.kenstevens.stratinit.remote.Result;
 public interface PlayerDaoService {
 
 	public abstract Result<Player> register(String username, String password,
-			String email);
+			String email, String userAgent);
 
 	public abstract List<Player> getPlayers();
 
 	public abstract Result<Player> updatePlayer(Player player, String password,
-			String email, boolean emailGameMail);
+			String email, String userAgent, boolean emailGameMail);
 
 	public abstract boolean isAdmin(Player player);
 

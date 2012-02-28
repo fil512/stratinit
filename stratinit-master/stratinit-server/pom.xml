@@ -122,6 +122,10 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>nl.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

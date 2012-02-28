@@ -30,6 +30,7 @@ public class Player implements Serializable {
 	private Date created;
 	private boolean emailGameMail = true;
 	private Date lastLogin;
+	private String userAgent;
 
 	public Player() {}
 
@@ -180,5 +181,13 @@ public class Player implements Serializable {
 
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
+	}
+
+	public String getUserAgent() {
+		return userAgent;
+	}
+
+	public void setUserAgent(String userAgent) {
+		this.userAgent = userAgent;
 	}
 }
