@@ -28,6 +28,7 @@ public class GameView extends Game {
 		this.setName(sigame.name);
 		this.setSize(sigame.size);
 		this.setPlayers(sigame.players);
+		this.setNoAlliancesVote(sigame.noAlliancesVote);
 		this.setIslands(sigame.islands);
 		this.setCreated(sigame.created);
 		this.setMapped(sigame.mapped);
