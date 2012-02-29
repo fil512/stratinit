@@ -4,13 +4,15 @@
 		<title>Post</title>
 	</head>
 	<body>
-<wicket:extend>
-<h2>Post to Game Message Boards</h2>
-<form wicket:id="postForm">
-Subject: <input type="text" wicket:id="subject" />
-Body: <textarea wicket:id="body" rows="20" cols="60" ></textarea>
-<input id="postButton" type="submit" value="post" />
-</form>
+		<wicket:extend>
+			<h2>Post to Game Message Boards</h2>
+			<form wicket:id="postForm">
+				Subject:
+				<input type="text" wicket:id="subject" />
+				Body:
+				<textarea wicket:id="body" rows="20" cols="60"></textarea>
+				<input id="postButton" type="submit" value="post" />
+			</form>
 		</wicket:extend>
 	</body>
 </html>

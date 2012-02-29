@@ -82,6 +82,8 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		}
 		player.setEmail(newPlayer.getEmail());
 		player.setEmailGameMail(newPlayer.isEmailGameMail());
+		player.setUserAgent(newPlayer.getUserAgent());
+		player.setLastLogin(new Date());
 		playerDao.merge(player);
 
 		logger.info("UPDATING USER [" + player.getUsername() + "].");

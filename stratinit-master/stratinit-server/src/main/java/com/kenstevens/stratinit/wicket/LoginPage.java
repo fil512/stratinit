@@ -1,6 +1,8 @@
 package com.kenstevens.stratinit.wicket;
 
+import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class LoginPage extends BasePage {
@@ -15,5 +17,6 @@ public class LoginPage extends BasePage {
 	public LoginPage(final PageParameters parameters) {
 		super(parameters);
 		add(new SignInPanel("signInPanel"));
+		add (new BookmarkablePageLink<Page>("ForgottenPasswordPage", ForgottenPasswordPage.class));
 	}
 }
