@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<wicket:extend>
+<h2>Units Built</h2>
+<span>
+ <table class="teams" >
+	<tr class="games" >
+	  <th class="teams">Game</th>
+	  <th class="teams">Unit</th>
+	  <th class="teams">Built</th>
+	  <th class="teams">Love</th>
+    </tr>
+    <tr  class="games" wicket:id = "unitsBuilt">
+      <td class="narrow">
+        <span wicket:id = "game">1</span>
+      </td>
+      <td class="narrow">
+        <span wicket:id = "unitType">
+        INFANTRY
+        </span>
+      </td>
+      <td class="narrow">
+        <span wicket:id = "built" href="#">20</span>
+      </td>
+      <td class="narrow">
+        <span wicket:id = "love" href="#">30</span>
+      </td>
+    </tr>
+  </table>	
+  <div style="margin-top: 1em">
+  <span wicket:id = "navigator"/>
+  </div>
+  </span>
+</wicket:extend>
+</HTML>
