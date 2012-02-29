@@ -6,13 +6,12 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 import com.kenstevens.stratinit.wicket.docs.PlayPage;
 
-public class HomePage extends BasePage {
+public class HomePage extends AuthenticatedPage {
 	private static final long serialVersionUID = 1L;
 
     public HomePage() {
-    	AuthenticatedSession authenticatedSession = getAuthenticatedSession();
-    	if (authenticatedSession.isSignedIn()) {
-    		add(new Label("username", authenticatedSession.getUsername()));
+    	if (isSignedIn()) {
+    		add(new Label("username", getUsername()));
     	} else {
     		add(new Label("username", ""));
     	}

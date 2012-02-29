@@ -32,19 +32,26 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 	@Autowired
 	private MailService mailService;
 
-	public Result<Player> register(String username, String password,
-			String email, String userAgent) {
-
-		if (playerDao == null) {
-			return new Result<Player>("playerDao is null", false);
+	private Result<Player> validatePlayer(Player player) {
+		EmailValidator emailValidator = EmailValidator.getInstance();
+		if (!emailValidator.isValid(player.getEmail())) {
+			return new Result<Player>("Email [" + player.getEmail()
+					+ "] is an invalid email address.", false);
 		}
-		if (playerDao.find(username) != null) {
-			return new Result<Player>("Username '" + username
+		return new Result<Player>(true);
+	}
+
+	public Result<Player> register(Player player) {
+		Result<Player> result = validatePlayer(player);
+		if (!result.isSuccess()) {
+			return result;
+		}
+		if (playerDao.find(player.getUsername()) != null) {
+			return new Result<Player>("Username '" + player.getUsername()
 					+ "' already exists.  Please choose a different username.",
 					false);
 		}
-		Player player = new Player(username);
-		Result<Player> result = setPlayer(player, password, email, userAgent, true);
+
 		PlayerRole playerRole = new PlayerRole();
 		playerRole.setPlayer(player);
 		playerRole.setRoleName("ROLE_USER");
@@ -52,61 +59,41 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		playerDao.persist(player);
 		playerDao.persist(playerRole);
 
-		if (!result.isSuccess()) {
-			return result;
-		}
-
 		logger.info("REGISTERING USER [" + player.getUsername() + "].");
 		mailService.sendEmail(player,
-				MailTemplateLibrary.getRegistration(username));
+				MailTemplateLibrary.getRegistration(player.getUsername()));
 
-		return new Result<Player>("New user [" + username + "] saved.", true,
-				player);
+		return new Result<Player>("New user [" + player.getUsername()
+				+ "] saved.", true, player);
 	}
 
-	private Result<Player> setPlayer(Player player, String password,
-			String email, String userAgent, boolean emailGameMail) {
-		EmailValidator emailValidator = EmailValidator.getInstance();
-		if (!emailValidator.isValid(email)) {
-			return new Result<Player>("Email [" + email
-					+ "] is an invalid email address.", false);
+	public Result<Player> updatePlayer(Player newPlayer) {
+		Player player = playerDao.find(newPlayer.getUsername());
+		if (player == null) {
+			return new Result<Player>("No player with username [" + newPlayer.getUsername()
+					+ "]found.", false);
 		}
-		player.setEnabled(true);
-		if (password != null) {
-			player.setPassword(password);
-		}
-		player.setEmail(email);
-		player.setEmailGameMail(emailGameMail);
-		player.setUserAgent(userAgent);
-
-		return new Result<Player>("Account " + player.getUsername()
-				+ " updated", true, player);
-	}
-
-	public List<Player> getPlayers() {
-		return playerDao.getAllPlayers();
-	}
-
-	public Result<Player> updatePlayer(Player player, String password,
-			String email, String userAgent, boolean emailGameMail) {
-		if (playerDao == null) {
-			return new Result<Player>("playerDao is null", false);
-		}
-
-		Result<Player> result = setPlayer(player, password, email, userAgent,
-				emailGameMail);
+		Result<Player> result = validatePlayer(newPlayer);
 		if (!result.isSuccess()) {
 			return result;
 		}
+		if (newPlayer.getPassword() != null) {
+			player.setPassword(newPlayer.getPassword());
+		}
+		player.setEmail(newPlayer.getEmail());
+		player.setEmailGameMail(newPlayer.isEmailGameMail());
 		playerDao.merge(player);
 
 		logger.info("UPDATING USER [" + player.getUsername() + "].");
 		mailService.sendEmail(player,
-				MailTemplateLibrary.getUpdatePlayer(player, email));
+				MailTemplateLibrary.getUpdatePlayer(player, player.getEmail()));
 
 		return new Result<Player>("Account [" + player.getUsername()
 				+ "] updated.", true, player);
+	}
 
+	public List<Player> getPlayers() {
+		return playerDao.getAllPlayers();
 	}
 
 	@Override
@@ -125,9 +112,6 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 
 	@Override
 	public Result<None> forgottenPassword(String username, String email) {
-		if (playerDao == null) {
-			return new Result<None>("playerDao is null", false);
-		}
 		Player player = playerDao.find(username);
 		if (player == null) {
 			player = playerDao.findByEmail(email);
@@ -186,5 +170,10 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		Player player = playerDao.find(playerIn.getId());
 		player.setLastLogin(now);
 		playerDao.merge(player);
+	}
+
+	@Override
+	public Player findPlayer(String username) {
+		return playerDao.find(username);
 	}
 }

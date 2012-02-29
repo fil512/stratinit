@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.wicket.components.AccountPanel;
 import com.kenstevens.stratinit.wicket.components.AdminPanel;
 import com.kenstevens.stratinit.wicket.components.LoginLogoutPanel;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
@@ -36,6 +37,7 @@ public class BasePage extends WebPage {
 
 	public BasePage(final PageParameters parameters) {
 		super(parameters);
+		add(new AccountPanel("accountPanel"));
 		add(new LoginLogoutPanel("loginLogoutPanel"));
 		add(new AdminPanel("adminPanel"));
 		add(new Label("version", Constants.SERVER_VERSION));
@@ -54,10 +56,5 @@ public class BasePage extends WebPage {
 		BookmarkablePageLink<Page> gamesPageLink = new BookmarkablePageLink<Page>("GamesPage", GamesPage.class);
 		gamesPageLink.getPageParameters().add("mode", "active");
 		add(gamesPageLink);
-	}
-	
-    
-	public AuthenticatedSession getAuthenticatedSession() {
-		return (AuthenticatedSession) AuthenticatedSession.get();
 	}
 }

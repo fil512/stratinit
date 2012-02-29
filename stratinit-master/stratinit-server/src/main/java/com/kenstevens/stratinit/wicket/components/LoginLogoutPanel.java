@@ -13,7 +13,7 @@ public class LoginLogoutPanel extends AuthenticatedPanel {
 		super(id);	
 		BookmarkablePageLink<Page> loginLink = new BookmarkablePageLink<Page>("LoginPage", LoginPage.class);
 		add(loginLink);
-		loginLink.setVisible(!isSignedIn());		
+		loginLink.setVisible(!isSignedIn());	
 		HomeLink homeLink = new HomeLink("signOut") {
 			private static final long serialVersionUID = -6317024681157531298L;
 
