@@ -42,6 +42,8 @@ public class Game extends GameUpdatable implements Serializable {
     private int duration = 10; // days
     private int islands;
     private int players = 0;
+    private int noAlliancesVote = 0;
+    private boolean noAlliances = false;
     private boolean blitz = false;
 
     public Game() {}
@@ -231,12 +233,15 @@ public class Game extends GameUpdatable implements Serializable {
 		return players >= Constants.MAX_PLAYERS_PER_GAME || isMapped() && players >= islands;
 	}
 
-	public int addPlayer() {
+	public int addPlayer(boolean noAlliances) {
 		if (isFullyBooked()) {
 			return -1;
 		}
 		int retval = players;
 		++players;
+		if (noAlliances) {
+			setNoAlliancesVote(getNoAlliancesVote() + 1);
+		}
 		return retval;
 	}
 
@@ -276,6 +281,7 @@ public class Game extends GameUpdatable implements Serializable {
 			retval = "" + players + "/"
 			+ Constants.MAX_PLAYERS_PER_GAME;
 		}
+		retval += " ("+noAlliancesVote+")";
 		return retval;
 	}
 
@@ -286,5 +292,21 @@ public class Game extends GameUpdatable implements Serializable {
 	@Override
 	public boolean isKeyUnique() {
 		return false;
+	}
+
+	public int getNoAlliancesVote() {
+		return noAlliancesVote;
+	}
+
+	public void setNoAlliancesVote(int noAlliancesVote) {
+		this.noAlliancesVote = noAlliancesVote;
+	}
+
+	public boolean isNoAlliances() {
+		return noAlliances;
+	}
+
+	public void setNoAlliances(boolean noAlliances) {
+		this.noAlliances = noAlliances;
 	}
 }

@@ -23,7 +23,7 @@ public interface GameDaoService {
 
 	public abstract void scheduleGame(Game game);
 
-	public abstract Result<Nation> joinGame(Player player, int gameId);
+	public abstract Result<Nation> joinGame(Player player, int gameId, boolean noAlliances);
 
 	public abstract List<Game> getUnjoinedGames(Player player);
 
@@ -54,4 +54,6 @@ public interface GameDaoService {
 	public abstract void updateGame(Game game, Date lastUpdated);
 
 	public abstract List<SITeam> getTeams(Game game);
+
+	public abstract void setNoAlliances(Game game);
 }

@@ -30,7 +30,7 @@ public interface StratInit {
 	Result<List<SIUnitBase>> getUnitBases();
 	Result<Properties> getServerConfig();
 	Result<None> setGame(int gameId);
-	Result<Nation> joinGame(int gameId);
+	Result<Nation> joinGame(int gameId, boolean noAlliances);
 	Result<List<SIGame>> getJoinedGames();
 	Result<List<SIGame>> getUnjoinedGames();
 	Result<List<SISector>> getSectors();
@@ -57,7 +57,7 @@ public interface StratInit {
 	Result<List<SINewsLogsDay>> getNewsLogs();
 	Result<List<SIUnitBuilt>> getUnitsBuilt();
 	Result<SINation> getMyNation();
-	Result<Nation> joinGame(Player player, int gameId);
+	Result<Nation> joinGame(Player player, int gameId, boolean noAlliances);
 	Result<None> shutdown();
 	Result<SIUpdate> disbandUnits(List<SIUnit> siUnits);
 	Result<List<SITeam>> getTeams();

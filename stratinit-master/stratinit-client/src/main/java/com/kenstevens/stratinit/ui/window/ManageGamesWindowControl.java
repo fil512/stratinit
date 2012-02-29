@@ -86,17 +86,17 @@ public class ManageGamesWindowControl implements TopLevelController {
 						}
 					}
 				});
-		window.getJoinButton().addSelectionListener(
-				new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						try {
-							joinGame();
-						} catch (Exception e1) {
-							logger.error(e1.getMessage(), e1);
-						}
-					}
-				});
+		window.getJoinButton().addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				try {
+					joinGame(window.isNoAlliancesAllowedSelected());
+					window.selectGamesTab();
+				} catch (Exception e1) {
+					logger.error(e1.getMessage(), e1);
+				}
+			}
+		});
 	}
 
 	protected final void selectGame() {
@@ -118,21 +118,22 @@ public class ManageGamesWindowControl implements TopLevelController {
 	}
 
 	private boolean alertGameNotMapped(Game game) {
-		MessageBox messageBox = new MessageBox(window.getShell(), SWT.OK | SWT.CANCEL
-				| SWT.ICON_WARNING);
-		messageBox.setMessage("Cannot load game "+game+" since it is not open yet.");
+		MessageBox messageBox = new MessageBox(window.getShell(), SWT.OK
+				| SWT.CANCEL | SWT.ICON_WARNING);
+		messageBox.setMessage("Cannot load game " + game
+				+ " since it is not open yet.");
 		int button = messageBox.open();
 		return button == SWT.OK;
 	}
 
 	public void setControllers() {
-		gameTableControl = spring.autowire(new GameTableControl( window.getMyGamesTable(), db.getGameList() ));
-		spring.autowire(new GameTableControl( window.getJoinGameTable(), db.getUnjoinedGameList() ));
+		gameTableControl = spring.autowire(new GameTableControl(window
+				.getMyGamesTable(), db.getGameList()));
+		spring.autowire(new GameTableControl(window.getJoinGameTable(), db
+				.getUnjoinedGameList()));
 	}
 
-
-
-	private void joinGame() {
+	private void joinGame(boolean noAlliances) {
 		GameTable table = window.getJoinGameTable();
 		TableItem[] items = table.getSelection();
 		if (items.length < 1) {
@@ -143,7 +144,7 @@ public class ManageGamesWindowControl implements TopLevelController {
 			return;
 		}
 		int gameId = game.getId();
-		actionFactory.joinGame(gameId);
+		actionFactory.joinGame(gameId, noAlliances);
 	}
 
 	public void setContents() {

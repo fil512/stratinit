@@ -137,6 +137,7 @@ public class EventScheduler {
 		updateRelations(game);
 		updateUnitSeen(game);
 		survey(game);
+		gameDaoService.setNoAlliances(game);
 		eventQueue.schedule(game, true);
 	}
 

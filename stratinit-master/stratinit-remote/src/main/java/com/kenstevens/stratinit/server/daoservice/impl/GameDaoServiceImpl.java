@@ -143,7 +143,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 	}
 
 	@Override
-	public Result<Nation> joinGame(Player player, int gameId) {
+	public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
 		Game game = gameDao.findGame(gameId);
 		if (game == null) {
 			return new Result<Nation>("no game with id [" + gameId + "].",
@@ -156,9 +156,10 @@ public class GameDaoServiceImpl implements GameDaoService {
 		if (game.isFullyBooked()) {
 			return new Result<Nation>("game is full.", false);
 		}
-		int nationId = game.addPlayer();
+		int nationId = game.addPlayer(noAlliances);
 		gameDao.merge(game);
 		nation = new Nation(game, player);
+		nation.setNoAlliances(noAlliances);
 		nation.setNationId(nationId);
 		gameDao.persist(nation);
 		setRelations(nation);
@@ -484,5 +485,13 @@ public class GameDaoServiceImpl implements GameDaoService {
 	@Override
 	public List<SITeam> getTeams(Game game) {
 		return teamCalculator.getTeams(game);
+	}
+
+	@Override
+	public void setNoAlliances(Game game) {
+		if (game.getNoAlliancesVote() > game.getPlayers() / 2) {
+			game.setNoAlliances(true);
+		}
+		gameDao.merge(game);
 	}
 }
