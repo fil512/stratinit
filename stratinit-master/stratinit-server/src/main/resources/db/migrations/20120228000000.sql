@@ -1,1 +1,1 @@
-ALTER TABLE player ADD COLUMN useragent varchar(255);
+ALTER TABLE player ADD COLUMN userAgent varchar(255);

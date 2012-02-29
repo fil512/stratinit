@@ -14,20 +14,22 @@ import com.kenstevens.stratinit.util.Spring;
 @Scope("prototype")
 @Component
 public class JoinGameAction extends Action {
-	private final int gameId;
 	@Autowired
 	private Spring spring;
 
+	private final int gameId;
+	private final boolean noAlliances;
 	private JoinGameCommand joinGameCommand;
 
-	public JoinGameAction(Integer gameId) {
+	public JoinGameAction(Integer gameId, boolean noAlliances) {
 		this.gameId = gameId;
+		this.noAlliances = noAlliances;
 	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void initialize() {
-		joinGameCommand = spring.autowire(new JoinGameCommand( gameId ));
+		joinGameCommand = spring.autowire(new JoinGameCommand( gameId, noAlliances ));
 	}
 
 	@Override

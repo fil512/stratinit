@@ -252,8 +252,8 @@ public class StratInitImpl implements StratInit {
 	}
 
 	@Override
-	public Result<Nation> joinGame(Player player, int gameId) {
-		return spring.autowire(new JoinGameRequest(player, gameId)).process(
+	public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
+		return spring.autowire(new JoinGameRequest(player, gameId, noAlliances)).process(
 				gameId);
 	}
 
@@ -268,8 +268,8 @@ public class StratInitImpl implements StratInit {
 	}
 
 	@Override
-	public Result<Nation> joinGame(int gameId) {
-		return spring.autowire(new JoinGameRequest(null, gameId)).process(
+	public Result<Nation> joinGame(int gameId, boolean noAlliances) {
+		return spring.autowire(new JoinGameRequest(null, gameId, noAlliances)).process(
 				gameId);
 	}
 

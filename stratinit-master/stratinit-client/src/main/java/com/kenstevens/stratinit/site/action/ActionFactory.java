@@ -161,8 +161,8 @@ public class ActionFactory {
 		getUnjoinedGamesAction.addToActionQueue();
 	}
 
-	public void joinGame(int gameId) {
-		JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(gameId));
+	public void joinGame(int gameId, boolean noAlliances) {
+		JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(gameId, noAlliances));
 		joinGameAction.addToActionQueue();
 		getUnjoinedGames();
 		getGames();

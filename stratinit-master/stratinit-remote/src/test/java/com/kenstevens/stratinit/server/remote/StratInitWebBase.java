@@ -65,7 +65,7 @@ public class StratInitWebBase extends StratInitDaoBase {
 	}
 
 	protected Result<Nation> joinGame(Player player) {
-		Result<Nation> result = stratInit.joinGame(player, testGameId);
+		Result<Nation> result = stratInit.joinGame(player, testGameId, false);
 		assertResult(result);
 		return result;
 	}

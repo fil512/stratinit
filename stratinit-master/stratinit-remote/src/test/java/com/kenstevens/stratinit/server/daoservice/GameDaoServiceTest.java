@@ -29,7 +29,7 @@ public class GameDaoServiceTest extends StratInitWebBase {
 	public void testNoDup() {
 		Player player = createPlayer();
 		joinGame(player);
-		Result<Nation> result = gameDaoService.joinGame(player, testGameId);
+		Result<Nation> result = gameDaoService.joinGame(player, testGameId, false);
 		assertFalseResult(result);
 	}
 
@@ -81,7 +81,7 @@ public class GameDaoServiceTest extends StratInitWebBase {
 			assertResult(rresult);
 			Player player = rresult.getValue();
 			players.add(player);
-			Result<Nation> jresult = gameDaoService.joinGame(player, gameId);
+			Result<Nation> jresult = gameDaoService.joinGame(player, gameId, false);
 			// TODO what's causing the fail is that the 4th player to join the game is triggering the game start
 			assertResult(jresult);
 			Nation nation = jresult.getValue();

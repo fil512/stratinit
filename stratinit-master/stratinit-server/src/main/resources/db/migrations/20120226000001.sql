@@ -1,1 +1,1 @@
-ALTER TABLE player ADD COLUMN lastlogin timestamp;
+ALTER TABLE player ADD COLUMN lastLogin timestamp;

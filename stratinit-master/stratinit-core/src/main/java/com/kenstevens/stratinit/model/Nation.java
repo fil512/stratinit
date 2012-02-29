@@ -29,6 +29,7 @@ public class Nation implements Serializable {
 	@Embedded
 	protected SectorCoords startCoords = new SectorCoords(0,0);
 	private int commandPoints = Constants.START_COMMAND_POINTS;
+	private boolean noAlliances; // preference vote whether player prefers alliances or not
 
 	public Nation() {}
 
@@ -190,5 +191,13 @@ public class Nation implements Serializable {
 
 	public int getHourlyCPGain() {
 		return hourlyCPGain;
+	}
+
+	public boolean isNoAlliances() {
+		return noAlliances;
+	}
+
+	public void setNoAlliances(boolean noAlliances) {
+		this.noAlliances = noAlliances;
 	}
 }
