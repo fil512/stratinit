@@ -240,7 +240,7 @@ public class Game extends GameUpdatable implements Serializable {
 		int retval = players;
 		++players;
 		if (noAlliances) {
-			setNoAlliancesVote(getNoAlliancesVote() + 1);
+			++noAlliancesVote;
 		}
 		return retval;
 	}
