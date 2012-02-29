@@ -58,6 +58,7 @@ public class RegistrationForm extends Form<Player> {
 		if (player.getPassword() != null) {
 			player.setPassword(encoder.encodePassword(player.getPassword(), null));
 		}
+		player.setUserAgent(this.getWebRequest().getHeader("User-Agent"));
 		Result<Player> result;
 		if (authenticator.isSignedIn()) {
 			result = playerDaoService.updatePlayer(player);

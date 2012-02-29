@@ -1,4 +1,3 @@
-* put back in account page to manage player (email, pwd, etc)
 
 * replace autowired -> autowired private
 * reduce visibility of ui getters
