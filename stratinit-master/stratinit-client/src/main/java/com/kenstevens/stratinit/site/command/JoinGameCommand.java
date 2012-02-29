@@ -11,14 +11,16 @@ import com.kenstevens.stratinit.site.Command;
 @Component
 public class JoinGameCommand extends Command<Nation> {
 	private final int gameId;
+	private final boolean noAlliances;
 
-	public JoinGameCommand(int gameId) {
+	public JoinGameCommand(int gameId, boolean noAlliances) {
 		this.gameId = gameId;
+		this.noAlliances = noAlliances;
 	}
 
 	@Override
 	public Result<Nation> execute() {
-		return stratInit.joinGame(gameId);
+		return stratInit.joinGame(gameId, noAlliances);
 	}
 
 	@Override

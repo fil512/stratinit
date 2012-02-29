@@ -41,6 +41,7 @@ public class GameTable extends Composite {
 		TableColumn tblclmnPlayers = new TableColumn(table, SWT.NONE);
 		tblclmnPlayers.setWidth(100);
 		tblclmnPlayers.setText("players");
+		tblclmnPlayers.setToolTipText("Players / Max (votes for no alliances)");
 
 		TableColumn tblclmnCreated = new TableColumn(table, SWT.NONE);
 		tblclmnCreated.setWidth(121);

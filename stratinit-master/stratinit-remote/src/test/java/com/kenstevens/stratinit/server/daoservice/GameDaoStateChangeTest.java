@@ -161,7 +161,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 	public void scheduleGameOnePlayer() {
 		final Game game = makeGame();
 		final Player player = createPlayer();
-		gameDaoService.joinGame(player, game.getId());
+		gameDaoService.joinGame(player, game.getId(), false);
 
 		context.checking(new Expectations() {
 			{
@@ -221,7 +221,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		final Game game = makeGame();
 		final Player player = createPlayer();
 		final Result<Nation> result = gameDaoService.joinGame(player, game
-				.getId());
+				.getId(), false);
 
 		context.checking(new Expectations() {
 			{
@@ -260,7 +260,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		playersJoinGame(game, 2);
 		gameDaoService.mapGame(game);
 		final Result<Nation> result = gameDaoService.joinGame(player, game
-				.getId());
+				.getId(), false);
 		assertResult(result);
 		assertNotNull(game.getCreated());
 		assertNotNull(game.getStartTime());
@@ -291,7 +291,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 
 		final Player player = createPlayer();
 		final Result<Nation> result = gameDaoService.joinGame(player, game
-				.getId());
+				.getId(), false);
 		assertFalseResult(result);
 
 		assertNotNull(game.getCreated());
@@ -305,7 +305,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		for (int i = 0; i < numPlayers; ++i) {
 			final Player player = createPlayer();
 			final Result<Nation> result = gameDaoService.joinGame(player, game
-					.getId());
+					.getId(), false);
 			assertResult(result);
 		}
 	}

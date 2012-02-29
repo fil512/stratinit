@@ -13,10 +13,12 @@ public class JoinGameRequest extends PlayerWriteRequest<Nation> {
 
 	private final Player player;
 	private final int gameId;
+	private final boolean noAlliances;
 
-	public JoinGameRequest(Player player, int gameId) {
+	public JoinGameRequest(Player player, int gameId, boolean noAlliances) {
 		this.player = player;
 		this.gameId = gameId;
+		this.noAlliances = noAlliances;
 	}
 
 	@Override
@@ -27,7 +29,7 @@ public class JoinGameRequest extends PlayerWriteRequest<Nation> {
 		} else {
 			setContext(joiningPlayer);
 		}
-		return gameDaoService.joinGame(joiningPlayer, gameId);
+		return gameDaoService.joinGame(joiningPlayer, gameId, noAlliances);
 	}
 
 	@Override
