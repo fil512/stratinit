@@ -389,8 +389,6 @@
 			</dependency>
 			<dependency>
 				<groupId>nl.bitwalker</groupId>
-				<name>User-Agent-Utils</name>
-				<url>http://java.net/projects/user-agent-utils</url>
 				<artifactId>UserAgentUtils</artifactId>
 				<version>1.2.4</version>
 			</dependency>

@@ -1,3 +1,9 @@
+Release 1.2.1
+  * Added forgotten password page to reset password
+  * Added account management page where players can change their password and e-mail settings
+  * Added last-login field to player, record browser version when player registers (to
+  get a better sense of the balance of windows / mac / linux players out there)
+
 Release 1.2.0
   * Added Team ranking.  Teams are ranked using the ELO Rating system.  http://en.wikipedia.org/wiki/Elo_rating_system
   * Changed Leader Board to rank players using a weighted average of their team rankings.  (Weighted by wins.)
