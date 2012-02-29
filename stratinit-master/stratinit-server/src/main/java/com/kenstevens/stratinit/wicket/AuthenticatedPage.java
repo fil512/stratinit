@@ -1,15 +1,13 @@
-package com.kenstevens.stratinit.wicket.security;
+package com.kenstevens.stratinit.wicket;
 
-import org.apache.wicket.markup.html.panel.Panel;
+import com.kenstevens.stratinit.wicket.security.AuthenticatedComponent;
+import com.kenstevens.stratinit.wicket.security.Authenticator;
 
-public class AuthenticatedPanel extends Panel implements AuthenticatedComponent {
+public class AuthenticatedPage extends BasePage implements AuthenticatedComponent {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8358571925296406622L;
+	
 	private static final Authenticator authenticator = new Authenticator();
-
-	public AuthenticatedPanel(String id) {
-		super(id);
-	}
 
 	@Override
 	public boolean isSignedIn() {
@@ -25,4 +23,5 @@ public class AuthenticatedPanel extends Panel implements AuthenticatedComponent 
 	public String getUsername() {
 		return authenticator.getUsername();
 	}
+
 }
