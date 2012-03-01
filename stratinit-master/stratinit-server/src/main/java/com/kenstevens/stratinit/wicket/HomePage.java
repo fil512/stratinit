@@ -16,8 +16,7 @@ public class HomePage extends AuthenticatedPage {
     		add(new Label("username", ""));
     	}
 
-		// TODO Really??
-		add(new BookmarkablePageLink<Page>("RegistrationPage2", RegistrationPage.class));
+		add(new BookmarkablePageLink<Page>("RegistrationPage", RegistrationPage.class));
 		add(new BookmarkablePageLink<Page>("PlayPage2", PlayPage.class));
     }
 

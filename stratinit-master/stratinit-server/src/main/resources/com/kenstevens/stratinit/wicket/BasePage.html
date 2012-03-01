@@ -1,69 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
-<HEAD><TITLE>Strategic Initiative</TITLE>
-<LINK REL=StyleSheet HREF="/css/style.css" TYPE="text/css" MEDIA=screen>
-</HEAD>
-<BODY>
+	<HEAD>
+		<TITLE>Strategic Initiative</TITLE>
+		<LINK REL=StyleSheet HREF="/css/style.css" TYPE="text/css" MEDIA=screen>
+	</HEAD>
+	<BODY>
+		<span wicket:id="topNavPanel" />
+		<!--page table -->
+		<table class="menu">
+			<tr>
+				<td valign="top" width=140>
+					<span wicket:id="leftNavPanel" />
+				</td>
 
-<table class="menu">
-  <tr>
-	<td align="left" class="menu"><a class="menu" wicket:id="HomePage">home</a></td>
-	<td width="100%" class="menu" />
-    <td align="right" class="menu"><span wicket:id="adminPanel" /></td>
-    <td align="right" class="menu"><a class="menu" wicket:id="PlayPage">play</a></td>
-    <td align="right" class="menu"><span wicket:id="accountPanel" /></td>
-    <td align="right" class="menu"><span wicket:id="loginLogoutPanel" /></td>
-  </tr>
-</table>
+				<td class="grey">
+					<img src="/images/Splash.jpg" align=texttop />
+					<span wicket:id="feedback" />
+					<div role="main">
+						<wicket:child />
+					</div>
+					<p>
+						<em>Last updated: 26 Feb 2012</em>
+					</p>
+					<p>
+						<em>
+							Release:
+							<span wicket:id="version">X.X.X</span>
+						</em>
+					</p>
+				</td>
+			</tr>
+		</table>
 
-<!--page table-->
-<table class="menu">
-<tr>
-<!-- left column -->
-<td valign="top" width=140>
-<table class="menu">
-<tr><td class="side"><a class="side" href="/docs/guide.shtml">help</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="RegistrationPage">register</a></td>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="GuidePage">guide</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="RulesPage">rules</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="FAQPage">faq</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="http://groups.google.com/group/stratinit">support</a></td></tr>
-</tr>
-<tr><td><a class="side" href="../docs/home.shtml"> </a></td></tr>
-<tr><td class="side"><a class="side" href="http://groups.google.com/group/stratinit">community</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="PlayerRankPage">leader board</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="TeamRankPage">team ranks</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="GamesPage">games</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="UnitsBuiltPage">units built</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="http://groups.google.com/group/stratinit">forum</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="http://www.google.com/moderator/#16/e=59eb7">wish list</a></td></tr>
-<tr><td class="side"><a class="side" href="../docs/guide.shtml">technical</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/wiki/ChangeLog">change log</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/issues/list">issues</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" href="http://code.google.com/p/stratinit/source/checkout">source</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="AboutPage">about us</a></td></tr>
-<tr><td class="sideitem"><a class="sideitem" wicket:id="ContactPage">contact us</a></td></tr>
-</table>
-<!-- end left column -->
-</td>
-
-<!-- right column -->
-<td class="grey">
-
-
-<img src="/images/Splash.jpg" align=texttop/>
-<span wicket:id="feedback" />
-<div role="main">
- 	<wicket:child/>
-</div>
-
-
-  <p><em>Last updated: 26 Feb 2012</em></p>
-  <p><em>Release: <span wicket:id="version">X.X.X</span></em></p>
-  <!-- end right column -->
-</td>
-</tr>
-</table>
-
-</BODY>
+	</BODY>
 </html>

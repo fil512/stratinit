@@ -1,27 +1,26 @@
 package com.kenstevens.stratinit.wicket;
 
 import com.kenstevens.stratinit.wicket.security.AuthenticatedComponent;
-import com.kenstevens.stratinit.wicket.security.Authenticator;
 
 public class AuthenticatedPage extends BasePage implements AuthenticatedComponent {
 
 	private static final long serialVersionUID = -8358571925296406622L;
 	
-	private static final Authenticator authenticator = new Authenticator();
+	private static final AuthenticatedSession session = (AuthenticatedSession) AuthenticatedSession.get();
 
 	@Override
 	public boolean isSignedIn() {
-		return authenticator.isSignedIn();
+		return session.isSignedIn();
 	}
 
 	@Override
 	public boolean isAdmin() {
-		return authenticator.isAdmin();
+		return session.isAdmin();
 	}
 
 	@Override
 	public String getUsername() {
-		return authenticator.getUsername();
+		return session.getUsername();
 	}
 
 }
