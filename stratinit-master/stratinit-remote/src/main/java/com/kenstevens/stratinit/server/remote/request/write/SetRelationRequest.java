@@ -41,6 +41,10 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 			return new Result<SIRelation>(
 					"You may not change relations to the ME status", false);
 		}
+		if (relationType == RelationType.ALLIED && nation.getGame().isNoAlliances()) {
+			return new Result<SIRelation>(
+					"Alliances are not allowed in this game.", false);
+		}
 		Result<Relation> result = gameDaoService.setRelation(nation, target,
 				relationType, false);
 		// TODO REF

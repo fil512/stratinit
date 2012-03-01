@@ -20,8 +20,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.kenstevens.stratinit.type.RelationType;
-
 public class PlayerTabItem extends Composite {
 	private Table playerTable;
 	private Button refreshButton;
@@ -42,11 +40,6 @@ public class PlayerTabItem extends Composite {
 	public PlayerTabItem(Composite parent, int style) {
 		super(parent, style);
 		createContents();
-
-		for (RelationType relationType : RelationType.values()) {
-			yourRelationCombo.add(relationType.toString());
-		}
-
 	}
 
 	private void createContents() {
