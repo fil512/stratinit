@@ -23,10 +23,13 @@ import org.springframework.stereotype.Component;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.control.PlayerTableControl;
 import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.event.GameChangedEvent;
+import com.kenstevens.stratinit.event.GameChangedEventHandler;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
 import com.kenstevens.stratinit.event.SelectNationEvent;
 import com.kenstevens.stratinit.event.SelectNationEventHandler;
+import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedNation;
 import com.kenstevens.stratinit.site.action.ActionFactory;
@@ -53,6 +56,8 @@ public class PlayerTabItemControl implements TopLevelController {
 	private StatusReporter statusReporter;
 	@Autowired
 	private SelectedNation selectedNation;
+	@Autowired
+	private Data db;
 
 	private final PlayerTabItem playerTabItem;
 
@@ -84,6 +89,24 @@ public class PlayerTabItemControl implements TopLevelController {
 						}
 					}
 				});
+		handlerManager.addHandler(GameChangedEvent.TYPE, new GameChangedEventHandler() {
+
+			@Override
+			public void gameChanged() {
+				boolean noAlliances = db.getSelectedGame().isNoAlliances();
+				Combo combo = playerTabItem.getMyRelationCombo();
+				combo.removeAll();
+				for (RelationType relationType : RelationType.values()) {
+					if (relationType == RelationType.ALLIED && noAlliances) {
+						continue;
+					}
+					combo.add(relationType.toString());
+				}
+
+
+			}
+			
+		});
 	}
 
 	private void setRelations() {

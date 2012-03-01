@@ -12,6 +12,7 @@ public class SIGame implements Serializable {
 	public String name;
 	public int players;
 	public int noAlliancesVote;
+	public boolean noAlliances;
 	public int islands;
 	public int size;
 	public Date started;
@@ -28,6 +29,7 @@ public class SIGame implements Serializable {
 		size = game.getSize();
 		players = game.getPlayers();
 		noAlliancesVote = game.getNoAlliancesVote();
+		noAlliances = game.isNoAlliances();
 		islands = game.getIslands();
 		started = game.getStartTime();
 		mapped = game.getMapped();
