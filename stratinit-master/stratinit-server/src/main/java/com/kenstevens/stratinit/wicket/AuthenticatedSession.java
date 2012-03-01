@@ -14,6 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.kenstevens.stratinit.model.PlayerRole;
+
 public class AuthenticatedSession extends AuthenticatedWebSession {
     
     private static final long serialVersionUID = 1L;
@@ -79,6 +81,10 @@ public class AuthenticatedSession extends AuthenticatedWebSession {
 			return "";
 		}
 		return authentication.getName();
+	}
+	
+	public boolean isAdmin() {
+		return getRoles().contains(PlayerRole.ROLE_ADMIN);
 	}
 
 }
