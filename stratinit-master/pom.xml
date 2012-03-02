@@ -25,7 +25,6 @@
 	</organization>
 	<modules>
 		<module>stratinit-core</module>
-		<module>stratinit-images</module>
 		<module>stratinit-server</module>
 		<module>stratinit-dao</module>
 		<module>stratinit-test</module>
@@ -62,26 +61,6 @@
 					<configuration>
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											gwt-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.2,)
-										</versionRange>
-										<goals>
-											<goal>compile</goal>
-											<goal>generateAsync</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
