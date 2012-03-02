@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.wicket;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.kenstevens.stratinit.wicket.components.ForgottenPasswordForm2;
+import com.kenstevens.stratinit.wicket.components.ForgottenPasswordForm;
 
 public class ForgottenPasswordPage extends BasePage {
 	private static final long serialVersionUID = 1L;
@@ -15,6 +15,6 @@ public class ForgottenPasswordPage extends BasePage {
 
 	public ForgottenPasswordPage(final PageParameters parameters) {
 		super(parameters);
-		add(new ForgottenPasswordForm2("forgottenPasswordForm"));
+		add(new ForgottenPasswordForm("forgottenPasswordForm"));
 	}
 }
