@@ -7,10 +7,10 @@ import com.kenstevens.stratinit.wicket.HomePage;
 import com.kenstevens.stratinit.wicket.docs.PlayPage;
 import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
 
-public class TopNavPanel2 extends AuthenticatedPanel {
+public class TopNavPanel extends AuthenticatedPanel {
 	private static final long serialVersionUID = 4303067574741765294L;
 
-	public TopNavPanel2(String id) {
+	public TopNavPanel(String id) {
 		super(id);
 		add(new BookmarkablePageLink<Page>("HomePage", HomePage.class));
 		add(new AdminPanel("adminPanel"));
