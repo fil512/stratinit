@@ -8,8 +8,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.wicket.components.GoogleAnalyticsPanel;
-import com.kenstevens.stratinit.wicket.components.LeftNavPanel;
-import com.kenstevens.stratinit.wicket.components.TopNavPanel;
+import com.kenstevens.stratinit.wicket.components.LeftNavPanel2;
+import com.kenstevens.stratinit.wicket.components.TopNavPanel2;
 
 public class BasePage extends WebPage {
 	private static final long serialVersionUID = 1L;
@@ -25,8 +25,8 @@ public class BasePage extends WebPage {
 
 	public BasePage(final PageParameters parameters) {
 		super(parameters);
-		add(new TopNavPanel("topNavPanel"));
-		add(new LeftNavPanel("leftNavPanel"));
+		add(new TopNavPanel2("topNavPanel"));
+		add(new LeftNavPanel2("leftNavPanel"));
 		add(new FeedbackPanel("feedback"));
 		add(new GoogleAnalyticsPanel("googleAnalyticsPanel"));
 		add(new Label("version", Constants.SERVER_VERSION));
