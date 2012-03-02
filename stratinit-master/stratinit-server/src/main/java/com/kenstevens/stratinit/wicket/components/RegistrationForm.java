@@ -25,7 +25,6 @@ public class RegistrationForm extends Form<Player> {
 	StratInit stratInit;
 	@SpringBean
 	PlayerDaoService playerDaoService;
-	private static final AuthenticatedSession session = (AuthenticatedSession) AuthenticatedSession.get();
 
 	public RegistrationForm(String id, Player player) {
 		super(id, new CompoundPropertyModel<Player>(player));
@@ -33,7 +32,7 @@ public class RegistrationForm extends Form<Player> {
 
 		RequiredTextField<String> usernameField = new RequiredTextField<String>("username", String.class);
 		add(usernameField);
-		if (session.isSignedIn()) {
+		if (AuthenticatedSession.get().isSignedIn()) {
 			usernameField.setEnabled(false);
 		}
 		add(new RequiredTextField<String>("email", String.class)
@@ -60,7 +59,7 @@ public class RegistrationForm extends Form<Player> {
 		}
 		player.setUserAgent(this.getWebRequest().getHeader("User-Agent"));
 		Result<Player> result;
-		if (session.isSignedIn()) {
+		if (AuthenticatedSession.get().isSignedIn()) {
 			result = playerDaoService.updatePlayer(player);
 		} else {
 			result = playerDaoService.register(player);

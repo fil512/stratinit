@@ -7,7 +7,6 @@ import com.kenstevens.stratinit.wicket.AuthenticatedSession;
 public class AuthenticatedPanel extends Panel implements AuthenticatedComponent {
 
 	private static final long serialVersionUID = 1L;
-	private static final AuthenticatedSession session = (AuthenticatedSession) AuthenticatedSession.get();
 
 	public AuthenticatedPanel(String id) {
 		super(id);
@@ -16,16 +15,16 @@ public class AuthenticatedPanel extends Panel implements AuthenticatedComponent 
 
 	@Override
 	public boolean isSignedIn() {
-		return session.isSignedIn();
+		return AuthenticatedSession.get().isSignedIn();
 	}
 
 	@Override
 	public boolean isAdmin() {
-		return session.isAdmin();
+		return AuthenticatedSession.getSession().isAdmin();
 	}
 
 	@Override
 	public String getUsername() {
-		return session.getUsername();
+		return AuthenticatedSession.getSession().getUsername();
 	}
 }

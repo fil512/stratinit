@@ -6,21 +6,19 @@ public class AuthenticatedPage extends BasePage implements AuthenticatedComponen
 
 	private static final long serialVersionUID = -8358571925296406622L;
 	
-	private static final AuthenticatedSession session = (AuthenticatedSession) AuthenticatedSession.get();
-
 	@Override
 	public boolean isSignedIn() {
-		return session.isSignedIn();
+		return AuthenticatedSession.get().isSignedIn();
 	}
 
 	@Override
 	public boolean isAdmin() {
-		return session.isAdmin();
+		return AuthenticatedSession.getSession().isAdmin();
 	}
 
 	@Override
 	public String getUsername() {
-		return session.getUsername();
+		return AuthenticatedSession.getSession().getUsername();
 	}
 
 }

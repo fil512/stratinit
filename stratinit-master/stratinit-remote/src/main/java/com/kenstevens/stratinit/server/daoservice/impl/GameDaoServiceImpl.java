@@ -138,6 +138,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 			worldManager.addPlayerToMap(island, nation);
 			++island;
 		}
+		setNoAlliances(game);
 		gameDao.merge(game);
 		gameCreator.createGameIfAllMapped();
 	}
