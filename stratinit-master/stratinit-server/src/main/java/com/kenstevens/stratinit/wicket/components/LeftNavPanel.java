@@ -15,10 +15,10 @@ import com.kenstevens.stratinit.wicket.games.TeamRankPage;
 import com.kenstevens.stratinit.wicket.games.UnitsBuiltPage;
 import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
 
-public class LeftNavPanel2 extends AuthenticatedPanel {
+public class LeftNavPanel extends AuthenticatedPanel {
 	private static final long serialVersionUID = 4303067574741765294L;
 
-	public LeftNavPanel2(String id) {
+	public LeftNavPanel(String id) {
 		super(id);
 		add(new BookmarkablePageLink<Page>("ContactPage", ContactPage.class));
 		add(new BookmarkablePageLink<Page>("AboutPage", AboutPage.class));
