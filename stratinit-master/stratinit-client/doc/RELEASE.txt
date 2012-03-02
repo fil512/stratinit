@@ -23,11 +23,11 @@ swt for platform isn't being added to jnlp
 16. ./install.sh
 17. ./backup.sh
 18. upload jnlp to /home/stratinit/htdocs/client
-19. in stratinit-mac: copy jars from
+19. in C:\Users\Ken\workspace\stratinit-mac-1.2: copy jars from
 		stratinit-client/target/jnlp
 	to
-		stratinit-mac/lib/stratinit-mac-1.1/StrategicInitative.app/Contents/MacOS
-19. zip stratinit-mac-1.1 and upload to server
+		stratinit-mac/lib/stratinit-mac-1.2/StrategicInitative.app/Contents/MacOS
+19. zip stratinit-mac-1.2 and upload to server
 19. ./start.sh
 20. Modify release notes on google code
 21. Announce through web interface

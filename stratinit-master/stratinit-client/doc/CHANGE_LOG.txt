@@ -1,4 +1,5 @@
 Release 1.2.1
+  * Added option for players to chose "no alliances" when joining a game
   * Added forgotten password page to reset password
   * Added account management page where players can change their password and e-mail settings
   * Added last-login field to player, record browser version when player registers (to

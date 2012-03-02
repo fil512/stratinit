@@ -86,5 +86,9 @@ public class AuthenticatedSession extends AuthenticatedWebSession {
 	public boolean isAdmin() {
 		return getRoles().contains(PlayerRole.ROLE_ADMIN);
 	}
+	
+	public static AuthenticatedSession getSession() {
+		return (AuthenticatedSession)get();
+	}
 
 }
