@@ -17,6 +17,6 @@ public class LoginPage extends BasePage {
 	public LoginPage(final PageParameters parameters) {
 		super(parameters);
 		add(new SignInPanel("signInPanel"));
-		add (new BookmarkablePageLink<Page>("ForgottenPasswordPage", ForgottenPasswordPage.class));
+		add (new BookmarkablePageLink<Page>("ForgottenPasswordPage", ForgottenPasswordPage2.class));
 	}
 }
