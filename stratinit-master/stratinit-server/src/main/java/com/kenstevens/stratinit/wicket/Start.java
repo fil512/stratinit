@@ -20,38 +20,17 @@ public class Start {
 
 		WebAppContext webAppContext = new WebAppContext();
 		webAppContext.setServer(server);
-//		webAppContext.setContextPath("/");
 		webAppContext.setWar("src/main/webapp");
 
-		// START JMX SERVER
-		// MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-		// MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-		// server.getContainer().addEventListener(mBeanContainer);
-		// mBeanContainer.start();
-
 		server.addHandler(webAppContext);
-		
-//		setupInitialContextFactory();
 
-		try {
-			System.out.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
-			server.start();
-			System.in.read();
-			System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
-            // while (System.in.available() == 0) {
-			//   Thread.sleep(5000);
-			// }
-			server.stop();
-			server.join();
-		} catch (Throwable t) {
-			t.printStackTrace();
-			System.exit(100);
-		}
+		System.out
+				.println(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
+		server.start();
+		System.in.read();
+		System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
+		server.stop();
+		server.join();
 	}
-//
-//	private static void setupInitialContextFactory() {
-//		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "ca.intelliware.kinetic.wicket.jndi.InitialContextFactory");
-//	}
-	
 
 }
