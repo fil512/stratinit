@@ -1,0 +1,74 @@
+
+syntax: regexp
+^stratinit-master/stratinit-client/target$
+syntax: regexp
+^stratinit-master/stratinit-core/target$
+syntax: regexp
+^stratinit-master/stratinit-dao/target$
+syntax: regexp
+^stratinit-master/stratinit-images/target$
+syntax: regexp
+^stratinit-master/stratinit-remote/target$
+syntax: regexp
+^stratinit-master/stratinit-server/target$
+syntax: regexp
+^stratinit-master/stratinit-server/war/register$
+syntax: regexp
+^stratinit-master/stratinit-server/war/console$
+syntax: regexp
+^stratinit-master/stratinit-server/war/console$
+syntax: regexp
+^stratinit-master/stratinit-server/war/WEB-INF/lib$
+syntax: regexp
+^stratinit-master/stratinit-server/war/WEB-INF/lib$
+syntax: regexp
+^stratinit-master/stratinit-test/target$
+syntax: regexp
+^stratinit-master/stratinit-server/war/WEB-INF/classes$
+syntax: regexp
+^stratinit-master/stratinit-dao/stratinit\.log$
+syntax: regexp
+^stratinit-master/stratinit-dao/stratinit\.log$
+syntax: glob
+stratinit-master/stratinit-server/StratInit.lock
+stratinit-master/stratinit-server/stratinit.log
+
+stratinit-master/stratinit-client/.classpath
+stratinit-master/stratinit-test/.project
+stratinit-master/stratinit-remote/.project
+stratinit-master/stratinit-remote/.classpath
+stratinit-master/stratinit-images/.project
+stratinit-master/stratinit-dao/.project
+stratinit-master/stratinit-dao/.classpath
+stratinit-master/stratinit-core/.project
+stratinit-master/stratinit-client/.project
+stratinit-master/stratinit-client/.settings/org.maven.ide.eclipse.prefs
+stratinit-master/stratinit-test/.classpath
+stratinit-master/stratinit-server/.project
+stratinit-master/stratinit-images/.classpath
+stratinit-master/stratinit-core/.classpath
+stratinit-master/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-test/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-test/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-server/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-server/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-remote/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-remote/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-images/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-images/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-dao/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-dao/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-core/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-core/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-client/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/stratinit-client/.settings/org.eclipse.jdt.core.prefs
+stratinit-master/stratinit-client/.settings/org.eclipse.core.resources.prefs
+stratinit-master/stratinit-test/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/stratinit-server/.settings/org.eclipse.ltk.core.refactoring.prefs
+stratinit-master/stratinit-remote/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/stratinit-images/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/stratinit-dao/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/stratinit-core/.settings/org.eclipse.m2e.core.prefs
+stratinit-master/.settings/org.eclipse.m2e.core.prefs
+syntax: regexp
+^stratinit-master/stratinit-server/\.classpath$

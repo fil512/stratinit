@@ -1,0 +1,62 @@
+<html xmlns:wicket>
+	<body>
+		<wicket:panel>
+		<p>
+		The Victories / Teams column measures how you performed against the total number of teams (alliances + solo players) you
+		fought against in all games.  The "Victories" number indicates the number of those teams you
+		defeated.  E.g. if your game had 4 teams and you won, then Victories / Teams would read "3/3"
+		indicating that you had 3 opponent teams and you were victorious against all of them.
+		</p>
+			<table class="games">
+				<tr class="games">
+					<th class="games">#</th>
+					<th class="games"><span wicket:id="type">type</span>
+					</th>
+					<th class="games">Rank</th>
+					<th class="games">Victories / Teams</th>
+					<th class="games">Team Win%</th>
+					<th class="games">Won / Games</th>
+					<th class="games">Game Win%</th>
+				</tr>
+				<tr class="games" wicket:id="rankables">
+					<td class="games">
+						<span wicket:id="index">
+							1
+						</span>
+					</td>
+					<td class="games">
+						<span wicket:id="itemName">chapper hydrogen</span>
+					</td>
+					<td class="games">
+						<span wicket:id="rank">
+							2000
+						</span>
+					</td>
+
+					<td class="games">
+						<span wicket:id="victories">20</span>
+						/
+						<span wicket:id="opponents" href="#">30</span>
+					</td>
+					<td class="games">
+						<span wicket:id="vicperc" href="#">80</span>
+						%
+					</td>
+					<td class="games">
+						<span wicket:id="won">10</span>
+						/
+						<span wicket:id="played" href="#">20</span>
+					</td>
+					<td class="games">
+						<span wicket:id="winperc" href="#">100</span>
+						%
+					</td>
+
+				</tr>
+			</table>
+			<div style="margin-top: 1em">
+				<span wicket:id="navigator" />
+			</div>
+		</wicket:panel>
+	</body>
+</html>
