@@ -1,12 +1,12 @@
 
 syntax: regexp
-^stratinit-master/stratinit-client/target$
+^stratinit-master/stratinit-client-master/stratinit-client/target$
 syntax: regexp
 ^stratinit-master/stratinit-core/target$
 syntax: regexp
 ^stratinit-master/stratinit-dao/target$
 syntax: regexp
-^stratinit-master/stratinit-images/target$
+^stratinit-master/stratinit-client-master/stratinit-images/target$
 syntax: regexp
 ^stratinit-master/stratinit-remote/target$
 syntax: regexp
