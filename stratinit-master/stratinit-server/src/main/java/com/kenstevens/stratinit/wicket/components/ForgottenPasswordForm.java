@@ -11,13 +11,13 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 
-public class ForgottenPasswordForm2 extends Form<ValueMap> {
+public class ForgottenPasswordForm extends Form<ValueMap> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	PlayerDaoService playerDaoService;
 
-	public ForgottenPasswordForm2(String id) {
+	public ForgottenPasswordForm(String id) {
 		super(id, new CompoundPropertyModel<ValueMap>(new ValueMap()));
 
 		add(new TextField<String>("username"));
