@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.wicket;
 
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -32,11 +31,6 @@ public class RegistrationPage extends AuthenticatedPage {
 		} else {
 			add(new Label("playerStatPanel"));
 		}
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
 	}
 
 	@Override

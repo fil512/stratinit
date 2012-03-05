@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.wicket;
 
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -16,11 +15,6 @@ public class BasePage extends WebPage {
 
 	public BasePage() {
 		this(null);
-	}
-
-	@Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
 	}
 
 	public BasePage(final PageParameters parameters) {
