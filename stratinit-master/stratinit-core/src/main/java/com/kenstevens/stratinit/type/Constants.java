@@ -94,7 +94,7 @@ public final class Constants {
 
 	private static final long SCHEDULED_TO_MAPPED_MILLIS_TEST = 10 * 1000;
 	private static final long MAPPED_TO_STARTED_MILLIS_TEST = 10 * 1000;
-	private static int FLUSH_CACHE_MILLIS_TEST = 15 * 1000;
+	private static final int FLUSH_CACHE_MILLIS_TEST = 15 * 1000;
 
 	public static long getScheduledToMappedMillis() {
 		if (getRunMode() == RunMode.TEST) {
