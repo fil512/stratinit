@@ -7,7 +7,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
-public class Start {
+public final class Start {
 	private static final Log logger = LogFactory.getLog(Start.class);
 
 	private Start() {
@@ -37,7 +37,7 @@ public class Start {
 			server.stop();
 			server.join();
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e.getMessage(), e);
 		}
 	}
 
