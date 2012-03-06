@@ -58,48 +58,14 @@ public class UnitsInterceptor {
 			if (!attack.isAttackable(AttackType.INTERDICTION)) {
 				break;
 			}
-			if (!attack.canAttack(worldView, AttackType.INTERDICTION, unit)) {
+			if (!canIntercept(unit, attack, targetSector)) {
 				continue;
 			}
-			if (unit.isHurt()) {
-				continue;
-			}
-			if (unit.getAmmo() <= 0) {
-				continue;
-			}
-			// TODO REF magic number
-			// For patrol boats
-			if (unit.getAttack() == 1) {
-				if (targetUnit.getAttack() > 1 && targetUnit.getHp() > 1) {
-					continue;
-				}
-			}
-			// TODO REF excludeCoords is overloaded to mean a different
-			// attack type
-			if (unit.isNavy() && excludeCoords == null) {
-				Supply supply = new Supply(worldView);
-				if (!supply.inSupply(unit)) {
-					continue;
-				}
-				if (isEscort(worldView, unit)) {
-					continue;
-				}
-			} else if (unit.isAir()) {
-				if (targetSector.getFlak() >= unit.getHp()) {
-					continue;
-				}
-			}
-			List<Unit> unitList = new ArrayList<Unit>();
-			unitList.add(unit);
-			if (unit.isAir()) {
-				interceptors.add(unit);
-			}
+
+			UnitsToMove unitsToIntercept = getUnitsToMove(interceptors, unit);
 			WorldSector oldSector = worldView.getWorldSector(unit);
-			UnitsToMove unitsToInterdict = new UnitsToMove(
-					targetUnit.getNation(), AttackType.INTERDICTION, nation,
-					unitList, targetUnit.getCoords());
 			UnitsMove unitsMove = unitCommandFactory.getUnitsMove(
-					unitsToInterdict, worldView);
+					unitsToIntercept, worldView);
 			Result<None> interdictResult = new Result<None>(unitsMove.move());
 			worldView.setWorldSector(sectorDaoService.refreshWorldSector(
 					nation, worldView, oldSector));
@@ -109,6 +75,54 @@ public class UnitsInterceptor {
 			retval.and(interdictResult);
 			interceptors.flyBack(unitDaoService, worldView);
 		}
+	}
+
+	private UnitsToMove getUnitsToMove(Interceptors interceptors, Unit unit) {
+		List<Unit> unitList = new ArrayList<Unit>();
+
+		unitList.add(unit);
+		if (unit.isAir()) {
+			interceptors.add(unit);
+		}
+		UnitsToMove unitsToInterdict = new UnitsToMove(
+				targetUnit.getNation(), AttackType.INTERDICTION, nation,
+				unitList, targetUnit.getCoords());
+		return unitsToInterdict;
+	}
+
+	private boolean canIntercept(Unit unit, Attack attack, WorldSector targetSector) {
+		if (!attack.canAttack(worldView, AttackType.INTERDICTION, unit)) {
+			return false;
+		}
+		if (unit.isHurt()) {
+			return false;
+		}
+		if (unit.getAmmo() <= 0) {
+			return false;
+		}
+		// TODO REF magic number
+		// For patrol boats
+		if (unit.getAttack() == 1) {
+			if (targetUnit.getAttack() > 1 && targetUnit.getHp() > 1) {
+				return false;
+			}
+		}
+		// TODO REF excludeCoords is overloaded to mean a different
+		// attack type
+		if (unit.isNavy() && excludeCoords == null) {
+			Supply supply = new Supply(worldView);
+			if (!supply.inSupply(unit)) {
+				return false;
+			}
+			if (isEscort(worldView, unit)) {
+				return false;
+			}
+		} else if (unit.isAir()) {
+			if (targetSector.getFlak() >= unit.getHp()) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private boolean isEscort(WorldView worldView, Unit unit) {
