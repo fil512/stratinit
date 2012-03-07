@@ -10,8 +10,6 @@ public class UnitListTranslator extends ListTranslator<SIUnit, UnitView> {
 
 	@Override
 	public UnitView translate(SIUnit input) {
-		UnitView unitView = new UnitView(db.getNation(input.nationId), input);
-		return unitView;
+		return new UnitView(db.getNation(input.nationId), input);
 	}
-
 }

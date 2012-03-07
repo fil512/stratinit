@@ -97,16 +97,17 @@ public class BrowserWindow {
 			public void handleEvent(Event event) {
 				ToolItem item = (ToolItem) event.widget;
 				String string = item.getText();
-				if (string.equals("Back"))
+				if (string.equals("Back")) {
 					browser.back();
-				else if (string.equals("Forward"))
+				} else if (string.equals("Forward")) {
 					browser.forward();
-				else if (string.equals("Stop"))
+				} else if (string.equals("Stop")) {
 					browser.stop();
-				else if (string.equals("Refresh"))
+				} else if (string.equals("Refresh")) {
 					browser.refresh();
-				else if (string.equals("Go"))
+				} else if (string.equals("Go")) {
 					browser.setUrl(location.getText());
+				}
 			}
 		};
 		browser.addProgressListener(new ProgressListener() {
@@ -128,8 +129,9 @@ public class BrowserWindow {
 		});
 		browser.addLocationListener(new LocationListener() {
 			public void changed(LocationEvent event) {
-				if (event.top)
+				if (event.top) {
 					location.setText(event.location);
+				}
 			}
 
 			public void changing(LocationEvent event) {
