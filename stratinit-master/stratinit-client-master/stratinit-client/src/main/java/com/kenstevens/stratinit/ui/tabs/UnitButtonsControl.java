@@ -164,7 +164,7 @@ public class UnitButtonsControl {
 				new UpdateUnitsSelectionAdapter(actionFactory));
 	}
 
-	public void setInitialImages() {
+	private final void setInitialImages() {
 		Display display = Display.getDefault();
 		if (display.isDisposed())
 			return;
@@ -188,7 +188,7 @@ public class UnitButtonsControl {
 		});
 	}
 
-	public void setCentreHomeEnabled(boolean enabled) {
+	public final void setCentreHomeEnabled(boolean enabled) {
 		unitButtons.getCentreHomeButton().setEnabled(enabled);
 	}
 

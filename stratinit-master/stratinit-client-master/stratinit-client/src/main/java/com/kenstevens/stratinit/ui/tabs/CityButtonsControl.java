@@ -76,7 +76,7 @@ public class CityButtonsControl {
 				new UpdateCitiesSelectionAdapter(actionFactory));
 	}
 
-	public void setInitialImages() {
+	private final void setInitialImages() {
 		Display display = Display.getDefault();
 		if (display.isDisposed())
 			return;
