@@ -40,7 +40,7 @@ public class SubmitErrorCommand extends Command<Integer> {
 		} catch (Exception e) {
 			logger.error(exception.getMessage(), exception);
 			logger.error(e.getMessage(), e);
-			retval = new Result<Integer>(exception.getMessage(), false, new Integer(-1));
+			retval = new Result<Integer>(exception.getMessage(), false, -1);
 		}
 		return retval;
 	}
