@@ -77,25 +77,25 @@ public class ManageGamesWindow implements StratInitWindow {
 		
 		Label label = new Label(joinGroup, SWT.NONE);
 		label.setText("Game Type Preference:");
-		FormData fd_label = new FormData();
-		fd_label.top = new FormAttachment(joinButton, 5, SWT.TOP);
-		label.setLayoutData(fd_label);
+		FormData fdLabel = new FormData();
+		fdLabel.top = new FormAttachment(joinButton, 5, SWT.TOP);
+		label.setLayoutData(fdLabel);
 		
 		Button alliancesAllowedButton = new Button(joinGroup, SWT.RADIO);
-		fd_label.right = new FormAttachment(alliancesAllowedButton, -13);
+		fdLabel.right = new FormAttachment(alliancesAllowedButton, -13);
 		alliancesAllowedButton.setText("Alliances Allowed");
 		alliancesAllowedButton.setSelection(true);
-		FormData fd_button = new FormData();
-		fd_button.left = new FormAttachment(0, 208);
-		fd_button.top = new FormAttachment(joinButton, 4, SWT.TOP);
-		alliancesAllowedButton.setLayoutData(fd_button);
+		FormData fdButton = new FormData();
+		fdButton.left = new FormAttachment(0, 208);
+		fdButton.top = new FormAttachment(joinButton, 4, SWT.TOP);
+		alliancesAllowedButton.setLayoutData(fdButton);
 		
 		noAlliancesButton = new Button(joinGroup, SWT.RADIO);
 		noAlliancesButton.setText("No Alliances");
-		FormData fd_button_1 = new FormData();
-		fd_button_1.top = new FormAttachment(joinButton, 4, SWT.TOP);
-		fd_button_1.left = new FormAttachment(alliancesAllowedButton, 6);
-		noAlliancesButton.setLayoutData(fd_button_1);
+		FormData fdButton1 = new FormData();
+		fdButton1.top = new FormAttachment(joinButton, 4, SWT.TOP);
+		fdButton1.left = new FormAttachment(alliancesAllowedButton, 6);
+		noAlliancesButton.setLayoutData(fdButton1);
 		dialog.open();
 	}
 

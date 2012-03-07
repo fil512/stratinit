@@ -39,7 +39,7 @@ public class TreeItemList {
 		return boldTreeFont;
 	}
 	
-	public void addHeaders() {
+	public final void addHeaders() {
 		// TODO REF refactor to use UnitBaseType
 		navyItem = new TreeItem(tree, 0);
 		airItem = new TreeItem(tree, 0);

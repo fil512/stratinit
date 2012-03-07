@@ -8,7 +8,7 @@ import org.mortbay.jetty.bio.SocketConnector;
 import org.mortbay.jetty.webapp.WebAppContext;
 
 public final class Start {
-	private static final Log logger = LogFactory.getLog(Start.class);
+	private static final Log LOGGER = LogFactory.getLog(Start.class);
 
 	private Start() {
 	}
@@ -30,14 +30,14 @@ public final class Start {
 
 		server.addHandler(webAppContext);
 		try {
-			logger.info(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
+			LOGGER.info(">>> STARTING EMBEDDED JETTY SERVER, PRESS ANY KEY TO STOP");
 			server.start();
 			System.in.read();
-			logger.info(">>> STOPPING EMBEDDED JETTY SERVER");
+			LOGGER.info(">>> STOPPING EMBEDDED JETTY SERVER");
 			server.stop();
 			server.join();
 		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+			LOGGER.error(e.getMessage(), e);
 		}
 	}
 

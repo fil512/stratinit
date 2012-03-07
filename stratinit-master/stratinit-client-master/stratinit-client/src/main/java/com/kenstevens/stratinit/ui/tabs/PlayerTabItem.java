@@ -85,9 +85,9 @@ public class PlayerTabItem extends Composite {
 		tblclmnPlayer.setWidth(165);
 		tblclmnPlayer.setText("player");
 
-		TableColumn tblclmnPlayer_1 = new TableColumn(teamTable, SWT.NONE);
-		tblclmnPlayer_1.setWidth(165);
-		tblclmnPlayer_1.setText("player");
+		TableColumn tblclmnPlayer1 = new TableColumn(teamTable, SWT.NONE);
+		tblclmnPlayer1.setWidth(165);
+		tblclmnPlayer1.setText("player");
 
 		TableColumn tblclmnScore = new TableColumn(teamTable, SWT.NONE);
 		tblclmnScore.setToolTipText("Total number of cities");

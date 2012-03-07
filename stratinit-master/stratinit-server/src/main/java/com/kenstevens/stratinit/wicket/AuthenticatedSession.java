@@ -20,7 +20,7 @@ public class AuthenticatedSession extends AuthenticatedWebSession {
     
     private static final long serialVersionUID = 1L;
 
-	private static final Log logger = LogFactory.getLog(AuthenticatedSession.class);
+	private static final Log LOGGER = LogFactory.getLog(AuthenticatedSession.class);
 
     @SpringBean(name="authenticationManager")
     private AuthenticationManager authenticationManager;
@@ -49,7 +49,7 @@ public class AuthenticatedSession extends AuthenticatedWebSession {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             authenticated = authentication.isAuthenticated();
         } catch (AuthenticationException e) {
-            logger.warn("User '"+username+"' failed to login. Reason: "+ e.getMessage());
+            LOGGER.warn("User '"+username+"' failed to login. Reason: "+ e.getMessage());
             authenticated = false;
         }
         return authenticated;

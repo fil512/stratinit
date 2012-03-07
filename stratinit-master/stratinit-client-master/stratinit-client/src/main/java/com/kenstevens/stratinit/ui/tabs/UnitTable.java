@@ -16,7 +16,7 @@ public class UnitTable extends Composite {
 		createContents();
 	}
 
-	private void createContents() {
+	private final void createContents() {
 		setLayout(new FillLayout());
 		table = new Table(this, SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION
 				| SWT.NO_SCROLL | SWT.V_SCROLL);

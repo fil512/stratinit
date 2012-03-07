@@ -22,7 +22,7 @@ public class ELOCalculator {
 		this.winStartELO = winStartELO;
 		this.loseStartELO = loseStartELO;
 		double e = 1.0 / (1.0 + Math.pow(10, (((double)loseStartELO - (double)winStartELO) / RANGE)));
-		this.winNewELO = winStartELO + (WEIGHT * (1.0 - e));;
+		this.winNewELO = winStartELO + (WEIGHT * (1.0 - e));
 		this.loseNewELO = loseStartELO - (WEIGHT * e);
 	}
 
