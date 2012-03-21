@@ -94,4 +94,6 @@ public interface SectorDaoService {
 	void setCityMove(City city, SectorCoords targetCoords);
 	
 	public abstract void remove(City city);
+
+	WorldSector getSectorView(Unit unit);
 }

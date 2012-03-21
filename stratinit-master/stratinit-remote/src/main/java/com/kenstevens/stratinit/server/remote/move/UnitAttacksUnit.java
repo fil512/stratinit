@@ -45,8 +45,9 @@ public class UnitAttacksUnit {
 	private final Nation actor;
 	private final WorldView worldView;
 
-	public UnitAttacksUnit(WorldView worldView, Nation actor, AttackType attackType, Unit attacker,
-			Unit defender, WorldSector targetSector, MoveSeen moveSeen) {
+	public UnitAttacksUnit(WorldView worldView, Nation actor,
+			AttackType attackType, Unit attacker, Unit defender,
+			WorldSector targetSector, MoveSeen moveSeen) {
 		this.worldView = worldView;
 		this.actor = actor;
 		this.attackType = attackType;
@@ -63,12 +64,12 @@ public class UnitAttacksUnit {
 		UnitAttackedBattleLog unitAttackedBattleLog = previousUnitAttackedattleLog;
 		if (attackType != AttackType.COUNTER_ATTACK) {
 			attacker.decreaseMobility(attackReadiness.costToAttack());
-			if (unitAttackedBattleLog  != null) {
+			if (unitAttackedBattleLog != null) {
 				throw new IllegalStateException(
 						"A unitAttackedBattleLog should not be in progress");
 			}
-			unitAttackedBattleLog = new UnitAttackedBattleLog(attackType, attacker,
-					defender, targetSector.getCoords(), flakDamage);
+			unitAttackedBattleLog = new UnitAttackedBattleLog(attackType,
+					attacker, defender, targetSector.getCoords(), flakDamage);
 		}
 		damage(unitAttackedBattleLog);
 		counterAttackIfDefenderAlive(unitAttackedBattleLog);
@@ -144,7 +145,8 @@ public class UnitAttacksUnit {
 		WorldSector attackerSector = enemyWorldView.getWorldSector(unit);
 		UnitAttacksUnit unitsAttackUnit = unitCommandFactory
 				.getUnitAttacksUnit(worldView, actor,
-						AttackType.COUNTER_ATTACK, enemyUnit, unit, attackerSector, moveSeen);
+						AttackType.COUNTER_ATTACK, enemyUnit, unit,
+						attackerSector, moveSeen);
 		AttackReadiness attackReadiness = new AttackReadiness(
 				AttackType.COUNTER_ATTACK, enemyUnit, attackerSector,
 				enemyWorldView);
@@ -166,7 +168,13 @@ public class UnitAttacksUnit {
 			return;
 		}
 
-		List<Unit> passengers = unitDaoService.getPassengers(holder, targetSector);
+		if (holder.isAir()
+				&& sectorDaoService.getSectorView(holder).canRefuel(holder)) {
+			return;
+		}
+
+		List<Unit> passengers = unitDaoService.getPassengers(holder,
+				targetSector);
 		for (Unit passenger : passengers) {
 			unitDaoService.killUnit(passenger);
 			passengerBattleLog(unitAttackedBattleLog, passenger);
@@ -183,9 +191,9 @@ public class UnitAttacksUnit {
 
 	private void passengerBattleLog(UnitAttackedBattleLog parentLog,
 			Unit passenger) {
-		UnitAttackedBattleLog childLog = new UnitAttackedBattleLog(parentLog
-				.getAttackType(), parentLog.getAttackerUnit(), passenger,
-				passenger.getCoords());
+		UnitAttackedBattleLog childLog = new UnitAttackedBattleLog(
+				parentLog.getAttackType(), parentLog.getAttackerUnit(),
+				passenger, passenger.getCoords());
 		childLog.setDefenderDied(true);
 		logDaoService.persist(childLog);
 	}
@@ -212,8 +220,8 @@ public class UnitAttacksUnit {
 
 	private int multiplyDamage(Unit attacker, Unit defender, int initialDamage) {
 		int damage = initialDamage;
-		damage *= UnitBase.getMultiplier(attacker.getUnitBase(), defender
-				.getUnitBase());
+		damage *= UnitBase.getMultiplier(attacker.getUnitBase(),
+				defender.getUnitBase());
 		if (defender.isNavy() && targetSector.isPlayerCity()) {
 			damage *= Constants.SHIP_IN_CITY_MULTIPLIER;
 		} else if (defender.isAir() && targetSector.isPlayerCity()) {
@@ -229,13 +237,15 @@ public class UnitAttacksUnit {
 				attack = Constants.MIN_ATTACK;
 			} else if (attacker.isNavy() && defender.isAir()) {
 				attack = Constants.MIN_ATTACK;
-			} else if (attacker.isNavy() && !attacker.isCanSeeSubs() && defender.isSubmarine()) {
+			} else if (attacker.isNavy() && !attacker.isCanSeeSubs()
+					&& defender.isSubmarine()) {
 				attack = Constants.MIN_ATTACK;
 			}
 		}
 		if (attacker.getType() == UnitType.SUBMARINE && defender.isAir()) {
 			attack = Constants.MIN_ATTACK;
-		} else if (attacker.getType() == UnitType.NAVAL_BOMBER && !defender.isNavy()) {
+		} else if (attacker.getType() == UnitType.NAVAL_BOMBER
+				&& !defender.isNavy()) {
 			attack = Constants.MIN_ATTACK;
 		}
 		return attack;

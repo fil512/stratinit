@@ -148,6 +148,11 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		return getRadiusWorldView(unit, Constants.SUPPLY_RADIUS);
 	}
 
+	@Override
+	public WorldSector getSectorView(Unit unit) {
+		return getRadiusWorldView(unit, 1).getWorldSector(unit);
+	}
+	
 	private WorldView getRadiusWorldView(Unit unit, int distance) {
 		return getRadiusWorldView(unit.getCoords(), unit.getNation(), distance);
 	}

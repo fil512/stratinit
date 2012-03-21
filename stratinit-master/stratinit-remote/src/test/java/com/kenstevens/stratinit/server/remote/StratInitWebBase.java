@@ -15,6 +15,7 @@ import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
@@ -123,4 +124,7 @@ public class StratInitWebBase extends StratInitDaoBase {
 				itank.getUnitBase().getAmmo() - 1, itank.getAmmo());
 	}
 
+	protected int getCapacity(UnitType unitType) {
+		return UnitBase.getUnitBase(unitType).getCapacity();
+	}
 }
