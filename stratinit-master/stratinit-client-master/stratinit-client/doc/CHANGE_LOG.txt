@@ -1,3 +1,7 @@
+Release 1.2.2
+  * Passengers on aircraft are not considered to be on board if that aircraft is in
+  a sector that can refuel it.
+
 Release 1.2.1
   * Added option for players to chose "no alliances" when joining a game
   * Added forgotten password page to reset password

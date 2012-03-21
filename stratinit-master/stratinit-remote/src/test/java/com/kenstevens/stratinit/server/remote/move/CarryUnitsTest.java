@@ -2,12 +2,17 @@ package com.kenstevens.stratinit.server.remote.move;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
@@ -112,8 +117,8 @@ public class CarryUnitsTest extends StratInitWebBase {
 
 	@Test
 	public void twoHeliDragsTwiceInf() {
-		Unit[] inf = new Unit[2*HELICOPTER_CAPACITY + 1];
-		for (int i = 0; i < 2*HELICOPTER_CAPACITY + 1; ++i) {
+		Unit[] inf = new Unit[2 * HELICOPTER_CAPACITY + 1];
+		for (int i = 0; i < 2 * HELICOPTER_CAPACITY + 1; ++i) {
 			inf[i] = unitDaoService
 					.buildUnit(nationMe, PORT, UnitType.INFANTRY);
 		}
@@ -129,14 +134,14 @@ public class CarryUnitsTest extends StratInitWebBase {
 		for (int i = 0; i < HELICOPTER_CAPACITY * 2; ++i) {
 			assertEquals(result.toString(), inf[i].getCoords(), SEA1);
 		}
-		assertEquals(result.toString(), inf[2*HELICOPTER_CAPACITY].getCoords(),
-				PORT);
+		assertEquals(result.toString(),
+				inf[2 * HELICOPTER_CAPACITY].getCoords(), PORT);
 	}
 
 	@Test
 	public void twoHeliinsufMobDragsSomeInf() {
-		Unit[] inf = new Unit[2*HELICOPTER_CAPACITY + 1];
-		for (int i = 0; i < 2*HELICOPTER_CAPACITY + 1; ++i) {
+		Unit[] inf = new Unit[2 * HELICOPTER_CAPACITY + 1];
+		for (int i = 0; i < 2 * HELICOPTER_CAPACITY + 1; ++i) {
 			inf[i] = unitDaoService
 					.buildUnit(nationMe, PORT, UnitType.INFANTRY);
 		}
@@ -274,7 +279,8 @@ public class CarryUnitsTest extends StratInitWebBase {
 		assertResult(result);
 		assertEquals(result.toString(), cargo.getCoords(), TARGET);
 		for (int i = 0; i < CARGO_CAPACITY; ++i) {
-			assertEquals(i + ": " + result.toString(), TARGET, inf[i].getCoords());
+			assertEquals(i + ": " + result.toString(), TARGET,
+					inf[i].getCoords());
 		}
 		assertEquals(result.toString(), PORT, inf[CARGO_CAPACITY].getCoords());
 	}
@@ -283,8 +289,7 @@ public class CarryUnitsTest extends StratInitWebBase {
 	public void cargoNoCarriesTank() {
 		Unit cargo = unitDaoService.buildUnit(nationMe, PORT,
 				UnitType.CARGO_PLANE);
-			Unit tank = unitDaoService
-					.buildUnit(nationMe, PORT, UnitType.TANK);
+		Unit tank = unitDaoService.buildUnit(nationMe, PORT, UnitType.TANK);
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);
 		Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
 		assertResult(result);
@@ -296,8 +301,7 @@ public class CarryUnitsTest extends StratInitWebBase {
 	public void cargoNoCarriesEng() {
 		Unit cargo = unitDaoService.buildUnit(nationMe, PORT,
 				UnitType.CARGO_PLANE);
-			Unit eng = unitDaoService
-					.buildUnit(nationMe, PORT, UnitType.ENGINEER);
+		Unit eng = unitDaoService.buildUnit(nationMe, PORT, UnitType.ENGINEER);
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);
 		Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
 		assertResult(result);
@@ -320,5 +324,4 @@ public class CarryUnitsTest extends StratInitWebBase {
 		assertEquals(result.toString(), TARGET, infPort.getCoords());
 		assertEquals(result.toString(), BETWEEN, infMiddle.getCoords());
 	}
-
 }

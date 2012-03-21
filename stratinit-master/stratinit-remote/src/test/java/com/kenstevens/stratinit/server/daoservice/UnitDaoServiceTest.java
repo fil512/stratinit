@@ -1,16 +1,22 @@
 package com.kenstevens.stratinit.server.daoservice;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitSeen;
+import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -89,4 +95,76 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
 		assertEquals(PORT, inf.getCoords());
 	}
 
+	@Test
+	public void getCargoPassengersTest() {
+		UnitType holderType = UnitType.CARGO_PLANE;
+		SectorCoords coords = SEA;
+		List<Unit> units = Lists.newArrayList();
+
+		List<Unit> passengers = getPassengers(holderType, coords, units);
+		assertAllButOnePassengers(holderType, units, passengers);
+	}
+
+	@Test
+	public void getCargoPassengersInAirportTest() {
+		UnitType holderType = UnitType.CARGO_PLANE;
+		SectorCoords coords = PORT;
+		sectorDaoService.captureCity(nationMe, PORT);
+		setBuild(PORT, UnitType.FIGHTER);
+		List<Unit> units = Lists.newArrayList();
+
+		List<Unit> passengers = getPassengers(holderType, coords, units);
+		assertAllButOnePassengers(holderType, units, passengers);
+
+	}
+
+
+	private void assertAllButOnePassengers(UnitType holderType,
+			List<Unit> units, List<Unit> passengers) {
+		int capacity = getCapacity(holderType);
+		for (int i = 0; i < capacity; ++i) {
+			assertTrue(passengers.contains(units.get(i)));
+		}
+		assertFalse(passengers.contains(units.get(capacity)));
+		
+	}
+
+	@Test
+	public void getXportPassengersTest() {
+		UnitType holderType = UnitType.TRANSPORT;
+		SectorCoords coords = SEA;
+		List<Unit> units = Lists.newArrayList();
+
+		List<Unit> passengers = getPassengers(holderType, coords, units);
+		assertAllButOnePassengers(holderType, units, passengers);
+	}
+
+	@Test
+	public void getXportPassengersInPortTest() {
+		UnitType holderType = UnitType.TRANSPORT;
+		SectorCoords coords = PORT;
+		sectorDaoService.captureCity(nationMe, PORT);
+		setBuild(PORT, UnitType.TRANSPORT);
+		List<Unit> units = Lists.newArrayList();
+
+		List<Unit> passengers = getPassengers(holderType, coords, units);
+		assertAllButOnePassengers(holderType, units, passengers);
+	}
+
+	private List<Unit> getPassengers(UnitType holderType,
+			SectorCoords coords, List<Unit> units) {
+		int capacity = getCapacity(holderType);
+		Unit holder = unitDaoService.buildUnit(nationThem, coords,
+				holderType);
+		for (int i = 0; i < capacity + 1; ++i) {
+			Unit inf = unitDaoService.buildUnit(nationThem, coords,
+				UnitType.INFANTRY);
+			units.add(inf);
+		}
+		WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
+		WorldSector worldSector = WORLD.getWorldSector(coords);
+
+		List<Unit> passengers = unitDaoService.getPassengers(holder, worldSector);
+		return passengers;
+	}
 }
