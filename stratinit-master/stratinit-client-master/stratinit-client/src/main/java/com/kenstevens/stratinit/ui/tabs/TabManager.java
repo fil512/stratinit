@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
+import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
+import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.shell.TabControl;
 import com.kenstevens.stratinit.ui.window.MapCanvasControl;
@@ -22,6 +24,8 @@ public class TabManager implements TabControl {
 	ActionFactory actionFactory;
 	@Autowired
 	MapImageManager mapImageManager;
+	@Autowired
+	ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 
 	int tabIndex = 0;
 	int tabSelected;
@@ -29,6 +33,7 @@ public class TabManager implements TabControl {
 	private final Map<String, TabItem> tabMap = Maps.newHashMap();
 	private final Map<String, Integer> tabIndexMap = Maps.newHashMap();
 	private TabFolder tabFolder;
+	private int unitTabIndex;
 	private int battleTabIndex;
 	private int cityTabIndex;
 	private int playerTabIndex;
@@ -67,6 +72,9 @@ public class TabManager implements TabControl {
 					actionFactory.battleLog();
 				} else if (playerTabSelected()) {
 					actionFactory.getNations();
+				} else if (unitTabSelected()) {
+					arrivedDataEventAccumulator.addEvent(new UnitListReplacementArrivedEvent());
+					arrivedDataEventAccumulator.fireEvents();
 				}
 			}
 		});
@@ -118,6 +126,11 @@ public class TabManager implements TabControl {
 	}
 
 	@Override
+	public boolean unitTabSelected() {
+		return tabSelected == unitTabIndex;
+	}
+
+	@Override
 	public boolean playerTabSelected() {
 		return tabSelected == playerTabIndex;
 	}
@@ -150,6 +163,14 @@ public class TabManager implements TabControl {
 
 	public void setBattleTabIndex(int battleTabIndex) {
 		this.battleTabIndex = battleTabIndex;
+	}
+
+	public int getUnitTabIndex() {
+		return unitTabIndex;
+	}
+
+	public void setUnitTabIndex(int unitTabIndex) {
+		this.unitTabIndex = unitTabIndex;
 	}
 	
 }

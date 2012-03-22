@@ -85,11 +85,7 @@ public class UnitListTreeControl implements Controller {
 				new UnitListReplacementArrivedEventHandler() {
 					@Override
 					public void dataArrived() {
-						treeItemListControl.clear();
-						treeItemListControl.treeifyUnits();
-						expandTree();
-						treeItemListControl.addSatellites();
-						tree.redraw();
+						rebuildTree();
 					}
 				});
 		handlerManager.addHandler(SelectUnitsEvent.TYPE,
@@ -190,5 +186,14 @@ public class UnitListTreeControl implements Controller {
 				treeItemListControl.updateHeader(db, item, listUnit);
 			}
 		}
+	}
+
+
+	public void rebuildTree() {
+		treeItemListControl.clear();
+		treeItemListControl.treeifyUnits();
+		expandTree();
+		treeItemListControl.addSatellites();
+		tree.redraw();
 	}
 }

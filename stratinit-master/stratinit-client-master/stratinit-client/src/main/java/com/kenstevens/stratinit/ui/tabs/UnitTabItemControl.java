@@ -34,7 +34,7 @@ public class UnitTabItemControl implements TopLevelController {
 				unitTabItem));
 		unitButtonsControl = spring.autowire(new UnitButtonsControl(unitTabItem.getUnitButtons()));
 	}
-	
+
 	public UnitButtonsControl getUnitButtonsControl() {
 		return unitButtonsControl;
 	}

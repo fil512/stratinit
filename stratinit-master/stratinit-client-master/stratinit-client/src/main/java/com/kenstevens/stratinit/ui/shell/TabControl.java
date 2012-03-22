@@ -11,4 +11,6 @@ public interface TabControl {
 	public boolean cityTabSelected();
 
 	public boolean supplyTabSelected();
+
+	public boolean unitTabSelected();
 }

@@ -1,6 +1,8 @@
 Release 1.2.2
   * Passengers on aircraft are not considered to be on board if that aircraft is in
   a sector that can refuel it.
+  * When switching the "Units" Tab, it is now automatically refreshed.  I hope this is an improvement, but I'm not sure yet.
+  
 
 Release 1.2.1
   * Added option for players to chose "no alliances" when joining a game

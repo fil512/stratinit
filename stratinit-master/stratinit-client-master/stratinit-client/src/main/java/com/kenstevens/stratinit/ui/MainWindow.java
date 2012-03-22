@@ -324,7 +324,7 @@ public class MainWindow implements MapControl, GameManager {
 		controllerManager.add(sectorTabItemControl);
 
 		final TabItem uTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.register(ClientConstants.UNIT_TAB_TITLE, uTabItem);
+		tabManager.setUnitTabIndex(tabManager.register(ClientConstants.UNIT_TAB_TITLE, uTabItem));
 		UnitTabItem unitTabItem = new UnitTabItem(tabFolder, SWT.NONE);
 		uTabItem.setControl(unitTabItem);
 		unitTabItemControl = spring
