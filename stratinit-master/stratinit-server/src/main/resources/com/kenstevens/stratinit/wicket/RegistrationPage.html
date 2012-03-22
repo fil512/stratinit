@@ -1,0 +1,50 @@
+<html xmlns:wicket>
+	<head>
+		<title>Registration Page</title>
+	</head>
+	<body>
+		<wicket:extend>
+			<h2>
+				<span wicket:id="title">Title</span>
+			</h2>
+
+			<table>
+				<tr>
+					<td width="300">
+
+						<form wicket:id="registrationForm">
+							<dl class="panel ui-corner-all">
+								<dt>Username:</dt>
+								<dd>
+									<input type="text" wicket:id="username" size="30" />
+								</dd>
+								<dt>Email:</dt>
+								<dd>
+									<input type="text" wicket:id="email" size="30" />
+								</dd>
+								<dt>Password:</dt>
+								<dd class="password">
+									<input type="password" wicket:id="password" size="30" />
+								</dd>
+								<dt>Confirm Password:</dt>
+								<dd class="password">
+									<input type="password" wicket:id="passwordConfirm" size="30" />
+								</dd>
+								<dt>Receive Game Email?</dt>
+								<dd>
+									<input type="checkbox" wicket:id="emailGameMail" />
+								</dd>
+								<dd>
+									<input type="submit" value="Save" />
+								</dd>
+							</dl>
+						</form>
+					</td>
+					<td valign="top">
+						<span wicket:id="playerStatPanel" />
+					</td>
+				</tr>
+			</table>
+		</wicket:extend>
+	</body>
+</html>
