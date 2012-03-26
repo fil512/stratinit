@@ -63,7 +63,6 @@ public class ManageGamesWindowControl implements TopLevelController {
 			}
 		});
 		
-		// FIXME test that this button is set when a game is selected
 		myGamesTable.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				TableItem[] items = myGamesTable.getSelection();

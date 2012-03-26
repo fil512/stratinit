@@ -9,7 +9,7 @@ swt for platform isn't being added to jnlp
 5. Change Constants.SERVER_VERSION if necessary
 6. Change pom.xml version if necessary
 7. mvn clean install in stratinit-master
-7. mvn -Pwin32 clean install in stratinit-client
+7. mvn -Pwin32 clean install in stratinit-client-master
 9. eclipse refresh
 10. project clean in stratinit-server and stratinit-client
 11. Commit, push (and if necessary, in head hg merge released, hg commit, hg push)

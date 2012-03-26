@@ -97,7 +97,7 @@
 			<dependency>
 				<groupId>com.kenstevens.stratinit</groupId>
 				<artifactId>stratinit-images</artifactId>
-				<version>${stratinit.version}</version>
+				<version>${stratinit.client.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.kenstevens.stratinit</groupId>
