@@ -1,8 +1,10 @@
 Release 1.2.2
   * Passengers on aircraft are not considered to be on board if that aircraft is in
-  a sector that can refuel it.
+  a sector that can refuel it.  So if an aircraft in an airport is destroyed, it won't kill any passengers.
+  * Players can now change their alliance vote between the time a game is mapped and before it starts.  This means that
+  alliances are now forbidden until a game starts.
   * When switching the "Units" Tab, it is now automatically refreshed.  I hope this is an improvement, but I'm not sure yet.
-  
+  * Added some youtube tutorial sites to the home page
 
 Release 1.2.1
   * Added option for players to chose "no alliances" when joining a game
