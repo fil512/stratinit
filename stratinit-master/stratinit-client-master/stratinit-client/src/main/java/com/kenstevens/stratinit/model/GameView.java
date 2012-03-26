@@ -22,6 +22,7 @@ public class GameView extends Game {
 	private final MessageList sentItems = new MessageList();
 	private final NewsLogList newsLogList = new NewsLogList();
 	private int nationId;
+	private boolean myNoAlliances;
 
 	public GameView(SIGame sigame) {
 		this.setId(sigame.id);
@@ -36,6 +37,7 @@ public class GameView extends Game {
 		this.setStartTime(sigame.started);
 		this.setEnds(sigame.ends);
 		this.setBlitz(sigame.blitz);
+		this.setMyNoAlliances(sigame.myNoAlliances);
 	}
 
 	public void setWorld(WorldView world) {
@@ -108,5 +110,13 @@ public class GameView extends Game {
 
 	public NationView getAlly() {
 		return nationList.getAlly();
+	}
+
+	public boolean isMyNoAlliances() {
+		return myNoAlliances;
+	}
+
+	public void setMyNoAlliances(boolean myNoAlliances) {
+		this.myNoAlliances = myNoAlliances;
 	}
 }

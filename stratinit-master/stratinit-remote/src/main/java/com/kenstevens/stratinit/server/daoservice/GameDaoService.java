@@ -56,4 +56,8 @@ public interface GameDaoService {
 	public abstract List<SITeam> getTeams(Game game);
 
 	public abstract void setNoAlliances(Game game);
+
+	public abstract void merge(Game game);
+
+	void calculateAllianceVote(Game game);
 }

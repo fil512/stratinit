@@ -121,8 +121,8 @@ public class StratInitImpl implements StratInit {
 		return Result.make(properties);
 	}
 
-	public Result<None> setGame(int gameId) {
-		return spring.autowire(new SetGameRequest(gameId)).process(gameId);
+	public Result<None> setGame(int gameId, boolean noAlliances) {
+		return spring.autowire(new SetGameRequest(gameId, noAlliances)).process(gameId);
 	}
 
 	/*

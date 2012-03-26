@@ -158,11 +158,12 @@ public class GameDaoServiceImpl implements GameDaoService {
 			return new Result<Nation>("game is full.", false);
 		}
 		int nationId = game.addPlayer(noAlliances);
-		gameDao.merge(game);
 		nation = new Nation(game, player);
 		nation.setNoAlliances(noAlliances);
 		nation.setNationId(nationId);
 		gameDao.persist(nation);
+		calculateAllianceVote(game);
+		gameDao.merge(game);
 		setRelations(nation);
 		if (game.isMapped()) {
 			worldManager.addPlayerToMap(nationId, nation);
@@ -170,6 +171,17 @@ public class GameDaoServiceImpl implements GameDaoService {
 			scheduleGame(game);
 		}
 		return new Result<Nation>(nation);
+	}
+
+	@Override
+	public void calculateAllianceVote(Game game) {
+		int noAlliancesVote = 0;
+		for (Nation nation : gameDao.getNations(game)) {
+			if (nation.isNoAlliances()) {
+				++noAlliancesVote;
+			}
+		}
+		game.setNoAlliancesVote(noAlliancesVote);
 	}
 
 	private void setRelations(Nation me) {
@@ -493,6 +505,11 @@ public class GameDaoServiceImpl implements GameDaoService {
 		if (game.getNoAlliancesVote() > game.getPlayers() / 2) {
 			game.setNoAlliances(true);
 		}
+		gameDao.merge(game);
+	}
+
+	@Override
+	public void merge(Game game) {
 		gameDao.merge(game);
 	}
 }

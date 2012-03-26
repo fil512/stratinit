@@ -30,6 +30,7 @@ import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
 import com.kenstevens.stratinit.event.SelectNationEvent;
 import com.kenstevens.stratinit.event.SelectNationEventHandler;
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedNation;
 import com.kenstevens.stratinit.site.action.ActionFactory;
@@ -93,7 +94,8 @@ public class PlayerTabItemControl implements TopLevelController {
 
 			@Override
 			public void gameChanged() {
-				boolean noAlliances = db.getSelectedGame().isNoAlliances();
+				GameView selectedGame = db.getSelectedGame();
+				boolean noAlliances = !selectedGame.hasStarted() || selectedGame.isNoAlliances();
 				Combo combo = playerTabItem.getMyRelationCombo();
 				combo.removeAll();
 				for (RelationType relationType : RelationType.values()) {

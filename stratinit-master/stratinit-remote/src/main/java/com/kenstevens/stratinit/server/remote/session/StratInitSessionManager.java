@@ -21,12 +21,15 @@ public class StratInitSessionManager {
 		return getSession(player).getNation();
 	}
 	
-	public void setNation(Player player, int gameId) {
+	public Nation setNation(Player player, int gameId) {
 		StratInitSession session = getSession(player);
 		GameCache gameCache = dataCache.getGameCache(gameId);
+		Nation nation = null;
 		if (gameCache != null) {
-			session.setNation(gameCache.getNation(player));
+			nation = gameCache.getNation(player);
+			session.setNation(nation);
 		}
+		return nation;
 	}
 	
 	private StratInitSession getSession(Player player) {
