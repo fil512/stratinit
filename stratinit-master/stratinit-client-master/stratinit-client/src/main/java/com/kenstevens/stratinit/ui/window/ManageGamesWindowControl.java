@@ -7,6 +7,8 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.Table;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 import com.kenstevens.stratinit.ui.tabs.GameTable;
@@ -59,6 +62,21 @@ public class ManageGamesWindowControl implements TopLevelController {
 				selectGame();
 			}
 		});
+		
+		// FIXME test that this button is set when a game is selected
+		myGamesTable.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				TableItem[] items = myGamesTable.getSelection();
+				if (items == null || items.length != 1) {
+					return;
+				}
+				GameView game = (GameView) items[0].getData();
+				if (game == null) {
+					return;
+				}
+				window.setNoAlliancesButton(game);
+			}
+		});
 	}
 
 	private final void setTabFolderListeners() {
@@ -69,6 +87,7 @@ public class ManageGamesWindowControl implements TopLevelController {
 			public void widgetSelected(final SelectionEvent e) {
 				if (tabFolder.getSelectionIndex() == 1) {
 					actionFactory.getUnjoinedGames();
+					window.setNoAlliancesButton(null);
 				}
 			}
 		});
@@ -113,8 +132,9 @@ public class ManageGamesWindowControl implements TopLevelController {
 			alertGameNotMapped(game);
 			return;
 		}
+		boolean noAlliancesAllowedSelected = window.isNoAlliancesAllowedSelected();
 		window.close();
-		widgetContainer.getGameManager().selectGame(game);
+		widgetContainer.getGameManager().selectGame(game, noAlliancesAllowedSelected);
 	}
 
 	private boolean alertGameNotMapped(Game game) {

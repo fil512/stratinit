@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.session.StratInitSessionManager;
@@ -20,9 +21,11 @@ public class SetGameRequest extends PlayerWriteRequest<None>  {
 	private DataCache dataCache;
 	
 	private final int gameId;
+	private final boolean noAlliances;
 	
-	public SetGameRequest(int gameId) {
+	public SetGameRequest(int gameId, boolean noAlliances) {
 		this.gameId = gameId;
+		this.noAlliances = noAlliances;
 	}
 
 	@Override
@@ -46,7 +49,16 @@ public class SetGameRequest extends PlayerWriteRequest<None>  {
 		if (!game.isMapped()) {
 			return new Result<None>("The game "+gameId+" is not open yet.", false);
 		}
-		sessionManager.setNation(getPlayer(), gameId);
+		Nation nation = sessionManager.setNation(getPlayer(), gameId);
+		if (nation == null || dataCache.getGameCache(nation.getGame()) == null) {
+			return new Result<None>("You have not joined game #"+gameId+" (This error should never happen!)", false);
+		}
+		if (!game.hasStarted()) {
+			nation.setNoAlliances(noAlliances);
+			gameDaoService.merge(nation);
+			gameDaoService.calculateAllianceVote(game);
+			gameDaoService.merge(game);
+		}
 		return Result.trueInstance();
 	}
 	

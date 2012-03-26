@@ -25,11 +25,11 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 @WebService
 public interface StratInit {
-// TODO * Return incremental battle logs and nation with all commands
+// TODO Return incremental battle logs and nation with all commands
 	Result<String> getVersion();
 	Result<List<SIUnitBase>> getUnitBases();
 	Result<Properties> getServerConfig();
-	Result<None> setGame(int gameId);
+	Result<None> setGame(int gameId, boolean noAlliances);
 	Result<Nation> joinGame(int gameId, boolean noAlliances);
 	Result<List<SIGame>> getJoinedGames();
 	Result<List<SIGame>> getUnjoinedGames();

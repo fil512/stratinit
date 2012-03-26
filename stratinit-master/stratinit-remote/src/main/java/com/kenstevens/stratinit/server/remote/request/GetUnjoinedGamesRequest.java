@@ -23,7 +23,7 @@ public class GetUnjoinedGamesRequest extends PlayerRequest<List<SIGame>>  {
 	protected List<SIGame> execute() {
 		return Lists.newArrayList(Collections2.transform(gameDaoService.getUnjoinedGames(getPlayer()), new Function<Game, SIGame>() {
 			public SIGame apply(Game game) {
-				return new SIGame(game);
+				return new SIGame(game, false);
 			}
 		}));
 	}

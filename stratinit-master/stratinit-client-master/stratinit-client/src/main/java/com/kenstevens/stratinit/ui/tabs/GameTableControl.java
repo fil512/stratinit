@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.event.GameListArrivedEvent;
 import com.kenstevens.stratinit.event.GameListArrivedEventHandler;
-import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameList;
+import com.kenstevens.stratinit.model.GameView;
 
 @Scope("prototype")
 @Component
@@ -47,7 +47,7 @@ public class GameTableControl {
 			return;
 		if (gameList != null) {
 			table.removeAll();
-			for (Game game : gameList) {
+			for (GameView game : gameList) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setText(new String[] { "" + game.getId(), game.getName(),
 						"" + game.getSize(), game.getPlayersString(),

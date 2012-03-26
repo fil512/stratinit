@@ -68,7 +68,7 @@ public class PlayerNationList {
 		return Lists.newArrayList(Collections2.transform(nations,
 				new Function<Nation, SIGame>() {
 					public SIGame apply(Nation nation) {
-						return new SIGame(nation.getGame());
+						return new SIGame(nation.getGame(), nation.isNoAlliances());
 					}
 				}));
 	}

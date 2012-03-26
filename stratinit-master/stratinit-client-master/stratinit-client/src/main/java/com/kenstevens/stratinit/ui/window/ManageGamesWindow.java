@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 import com.kenstevens.stratinit.ui.tabs.GameTable;
 import org.eclipse.swt.widgets.Label;
@@ -26,6 +27,7 @@ public class ManageGamesWindow implements StratInitWindow {
 	private TabFolder tabFolder;
 	private TabItem myGamesTab;
 	private Button noAlliancesButton;
+	private Button alliancesAllowedButton;
 
 	/**
 	 * @wbp.parser.entryPoint
@@ -33,7 +35,7 @@ public class ManageGamesWindow implements StratInitWindow {
 	public void open(Shell shell) {
 		dialog = new Shell(shell);
 		dialog.setMinimumSize(new Point(700, 400));
-		dialog.setSize(912, 405);
+		dialog.setSize(912, 413);
 		dialog.setLayout(null);
 		shell.setText("Games");
 
@@ -75,27 +77,18 @@ public class ManageGamesWindow implements StratInitWindow {
 		joinButton.setLayoutData(fdJoinButton);
 		joinButton.setText("Join");
 		
-		Label label = new Label(joinGroup, SWT.NONE);
+		Label label = new Label(dialog, SWT.NONE);
+		label.setBounds(10, 364, 122, 15);
 		label.setText("Game Type Preference:");
-		FormData fdLabel = new FormData();
-		fdLabel.top = new FormAttachment(joinButton, 5, SWT.TOP);
-		label.setLayoutData(fdLabel);
 		
-		Button alliancesAllowedButton = new Button(joinGroup, SWT.RADIO);
-		fdLabel.right = new FormAttachment(alliancesAllowedButton, -13);
+		alliancesAllowedButton = new Button(dialog, SWT.RADIO);
+		alliancesAllowedButton.setBounds(138, 363, 114, 16);
 		alliancesAllowedButton.setText("Alliances Allowed");
 		alliancesAllowedButton.setSelection(true);
-		FormData fdButton = new FormData();
-		fdButton.left = new FormAttachment(0, 208);
-		fdButton.top = new FormAttachment(joinButton, 4, SWT.TOP);
-		alliancesAllowedButton.setLayoutData(fdButton);
 		
-		noAlliancesButton = new Button(joinGroup, SWT.RADIO);
+		noAlliancesButton = new Button(dialog, SWT.RADIO);
+		noAlliancesButton.setBounds(258, 363, 87, 16);
 		noAlliancesButton.setText("No Alliances");
-		FormData fdButton1 = new FormData();
-		fdButton1.top = new FormAttachment(joinButton, 4, SWT.TOP);
-		fdButton1.left = new FormAttachment(alliancesAllowedButton, 6);
-		noAlliancesButton.setLayoutData(fdButton1);
 		dialog.open();
 	}
 
@@ -133,5 +126,24 @@ public class ManageGamesWindow implements StratInitWindow {
 	
 	public boolean isNoAlliancesAllowedSelected() {
 		return noAlliancesButton.getSelection();
+	}
+	
+	public void setNoAlliancesButton(GameView game) {
+		if (game == null) {
+			alliancesAllowedButton.setEnabled(true);
+			noAlliancesButton.setEnabled(true);
+			alliancesAllowedButton.setSelection(true);
+			noAlliancesButton.setSelection(false);
+			return;
+		}
+		if (game.hasStarted() || !game.isMapped()) {
+			alliancesAllowedButton.setEnabled(false);
+			noAlliancesButton.setEnabled(false);
+		} else {
+			alliancesAllowedButton.setEnabled(true);
+			noAlliancesButton.setEnabled(true);
+		}
+		alliancesAllowedButton.setSelection(!game.isMyNoAlliances());
+		noAlliancesButton.setSelection(game.isMyNoAlliances());
 	}
 }

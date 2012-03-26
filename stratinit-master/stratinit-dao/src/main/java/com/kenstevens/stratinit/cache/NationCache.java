@@ -179,19 +179,19 @@ public class NationCache extends Cacheable {
 
 	public void flush(int gameId, GameDal gameDal, SectorDal sectorDal, UnitDal unitDal) {
 		if (isModified()) {
-			logger.info("Flushing " + nation + " nation for game #"
+			logger.debug("Flushing " + nation + " nation for game #"
 					+ gameId);
 			gameDal.flush(nation);
 			setModified(false);
 		}
 		if (sectorSeenCache.isModified()) {
-			logger.info("Flushing sectors seen for " + nation
+			logger.debug("Flushing sectors seen for " + nation
 					+ " nation for game #" + gameId);
 			sectorDal.flushSectorsSeen(getSectorsSeen());
 			setSectorSeenModified(false);
 		}
 		if (cityCache.isModified()) {
-			logger.info("Flushing cities for " + nation
+			logger.debug("Flushing cities for " + nation
 					+ " nation for game #" + gameId);
 			for (City city : getCities()) {
 				sectorDal.flush(city);
@@ -199,7 +199,7 @@ public class NationCache extends Cacheable {
 			setCityCacheModified(false);
 		}
 		if (unitCache.isModified()) {
-			logger.info("Flushing units for " + nation
+			logger.debug("Flushing units for " + nation
 					+ " nation for game #" + gameId);
 			for (Unit unit : getUnits()) {
 				unitDal.flush(unit);
@@ -207,19 +207,19 @@ public class NationCache extends Cacheable {
 			setUnitCacheModified(false);
 		}
 		if (unitSeenCache.isModified()) {
-			logger.info("Flushing units seen for " + nation
+			logger.debug("Flushing units seen for " + nation
 					+ " nation for game #" + gameId);
 			unitDal.flushUnitsSeen(getUnitsSeen());
 			setUnitSeenModified(false);
 		}
 		if (unitMoveCache.isModified()) {
-			logger.info("Flushing units move for " + nation
+			logger.debug("Flushing units move for " + nation
 					+ " nation for game #" + gameId);
 			unitDal.flushUnitsMove(getUnitsMove());
 			setUnitMoveModified(false);
 		}
 		if (launchedSatelliteCache.isModified()) {
-			logger.info("Flushing launched satellites for " + nation
+			logger.debug("Flushing launched satellites for " + nation
 					+ " nation for game #" + gameId);
 			unitDal.flushLaunchedSatellites(getLaunchedSatellites());
 			setLaunchedSatelliteModified(false);
