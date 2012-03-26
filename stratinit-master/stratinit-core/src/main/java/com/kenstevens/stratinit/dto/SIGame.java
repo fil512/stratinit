@@ -13,6 +13,7 @@ public class SIGame implements Serializable {
 	public int players;
 	public int noAlliancesVote;
 	public boolean noAlliances;
+	public boolean myNoAlliances;
 	public int islands;
 	public int size;
 	public Date started;
@@ -23,7 +24,7 @@ public class SIGame implements Serializable {
 
 	public SIGame() {}
 
-	public SIGame(Game game) {
+	public SIGame(Game game, boolean myNoAlliances) {
 		id = game.getId();
 		name = game.getName();
 		size = game.getSize();
@@ -36,5 +37,6 @@ public class SIGame implements Serializable {
 		created = game.getCreated();
 		ends = game.getEnds();
 		blitz = game.isBlitz();
+		this.myNoAlliances = myNoAlliances;
 	}
 }

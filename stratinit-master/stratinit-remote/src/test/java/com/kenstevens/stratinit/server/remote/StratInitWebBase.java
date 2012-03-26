@@ -62,7 +62,7 @@ public class StratInitWebBase extends StratInitDaoBase {
 	}
 	protected void setAuthentication(String username) {
 		new AuthenticationHelper().setAuthentication(username);
-		stratInit.setGame(testGameId);
+		stratInit.setGame(testGameId, false);
 	}
 
 	protected Result<Nation> joinGame(Player player) {

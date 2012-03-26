@@ -608,7 +608,7 @@ public class MainWindow implements MapControl, GameManager {
 		}
 	}
 
-	public void selectGame(Game game) {
+	public void selectGame(Game game, boolean noAlliances) {
 		int gameId = game.getId();
 		selectedUnits.clear();
 		db.setSelectedGameId(gameId);
@@ -618,7 +618,7 @@ public class MainWindow implements MapControl, GameManager {
 		statusReporter.reportResult("Game " + gameId + " selected.");
 		wavPlayer.playIntro();
 		actionFactory.getVersion();
-		actionFactory.setGame(gameId);
+		actionFactory.setGame(gameId, noAlliances);
 		actionFactory.updateAll(true);
 		actionFactory.startupGame();
 		windowDirector.openNewsWindow();

@@ -257,13 +257,13 @@ public class GameCache extends Cacheable {
 
 	public void flush(GameDal gameDal, SectorDal sectorDal) {
 		if (isModified()) {
-			log.info("Flushing game #" + getGameId());
+			log.debug("Flushing game #" + getGameId());
 			gameDal.flush(getGame());
 			gameDal.flushRelations(getRelations());
 			setModified(false);
 		}
 		if (worldCache != null && worldCache.isModified()) {
-			log.info("Flushing world for game #" + getGameId());
+			log.debug("Flushing world for game #" + getGameId());
 			sectorDal.flushSectors(getSectors());
 			setWorldModified(false);
 		}

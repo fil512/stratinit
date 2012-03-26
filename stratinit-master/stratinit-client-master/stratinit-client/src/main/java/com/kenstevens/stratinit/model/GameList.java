@@ -37,7 +37,7 @@ public class GameList implements Iterable<GameView> {
 		gameMap.clear();
 	}
 
-	public Game get(String gameIdString) {
+	public GameView get(String gameIdString) {
 		return get(Integer.valueOf(gameIdString));
 	}
 
