@@ -23,8 +23,7 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 	private final int nationId;
 	private final RelationType relationType;
 
-	public SetRelationRequest(int nationId,
-			RelationType relationType) {
+	public SetRelationRequest(int nationId, RelationType relationType) {
 		this.nationId = nationId;
 		this.relationType = relationType;
 	}
@@ -41,9 +40,14 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 			return new Result<SIRelation>(
 					"You may not change relations to the ME status", false);
 		}
-		if (relationType == RelationType.ALLIED && nation.getGame().isNoAlliances()) {
-			return new Result<SIRelation>(
-					"Alliances are not allowed in this game.", false);
+		if (relationType == RelationType.ALLIED) {
+			if (!nation.getGame().hasStarted()) {
+				return new Result<SIRelation>(
+						"Alliances are not allowed in this game yet.  Alliances will be permitted once the game has started.", false);
+			} else if (nation.getGame().isNoAlliances()) {
+				return new Result<SIRelation>(
+						"Alliances are not allowed in this game.", false);
+			}
 		}
 		Result<Relation> result = gameDaoService.setRelation(nation, target,
 				relationType, false);

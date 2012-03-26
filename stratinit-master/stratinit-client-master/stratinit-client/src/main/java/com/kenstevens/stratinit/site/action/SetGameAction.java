@@ -19,15 +19,17 @@ public class SetGameAction extends Action {
 	private Spring spring;
 
 	private SetGameCommand setGameCommand;
+	private final boolean noAlliances;
 
-	public SetGameAction(Integer gameId) {
+	public SetGameAction(Integer gameId, boolean noAlliances) {
 		this.gameId = gameId;
+		this.noAlliances = noAlliances;
 	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void initialize() {
-		setGameCommand = spring.autowire(new SetGameCommand( gameId ));
+		setGameCommand = spring.autowire(new SetGameCommand( gameId , noAlliances ));
 	}
 
 	@Override

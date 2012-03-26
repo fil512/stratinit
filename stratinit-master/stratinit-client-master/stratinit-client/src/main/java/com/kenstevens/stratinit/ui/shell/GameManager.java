@@ -4,6 +4,6 @@ import com.kenstevens.stratinit.model.Game;
 
 public interface GameManager {
 
-	void selectGame(Game game);
+	void selectGame(Game game, boolean noAlliances);
 
 }

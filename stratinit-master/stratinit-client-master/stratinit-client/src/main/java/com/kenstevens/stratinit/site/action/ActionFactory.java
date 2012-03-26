@@ -124,8 +124,8 @@ public class ActionFactory {
 		startupAction.addToActionQueue();
 	}
 
-	public void setGame(int gameId) {
-		SetGameAction setGameAction = spring.autowire(new SetGameAction(gameId));
+	public void setGame(int gameId, boolean noAlliances) {
+		SetGameAction setGameAction = spring.autowire(new SetGameAction(gameId, noAlliances));
 		setGameAction.addToActionQueue();
 		getMyNation();
 	}
