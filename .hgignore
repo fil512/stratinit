@@ -35,6 +35,7 @@ syntax: regexp
 ^stratinit-master/stratinit-dao/stratinit\.log$
 syntax: glob
 */.classpath
+kenstevens.jks
 syntax: glob
 */.project
 syntax: glob
