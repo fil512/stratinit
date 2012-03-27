@@ -2,6 +2,8 @@ package com.kenstevens.stratinit.ui.tabs;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -28,15 +30,15 @@ public class CedeWindowControl {
 	public CedeWindowControl(CedeWindow cedeWindow, City city) {
 		this.cedeWindow = cedeWindow;
 		this.city = city;
-		setButtonListeners();
 	}
 
 	public CedeWindowControl(CedeWindow cedeWindow, List<UnitView> units) {
 		this.cedeWindow = cedeWindow;
 		this.units = units;
-		setButtonListeners();
 	}
 
+	@SuppressWarnings("unused")
+	@PostConstruct
 	private void setButtonListeners() {
 		cedeWindow.getCedeButton().addSelectionListener( spring.autowire(new CedeWindowSelectionAdapter(city, units, cedeWindow)));
 		
@@ -45,6 +47,7 @@ public class CedeWindowControl {
 
 
 	public void setContents() {
+		// FIXME why this no get called?
 		if (city == null) {
 		    if (units.size() == 0) {
 		    	return;

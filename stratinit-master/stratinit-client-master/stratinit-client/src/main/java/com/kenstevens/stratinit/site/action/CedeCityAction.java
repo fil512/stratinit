@@ -33,8 +33,7 @@ public class CedeCityAction extends Action {
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void initialize() {
-			cedeCommand = spring.autowire(new CedeCityCommand(
-					city, nation ));
+		cedeCommand = spring.autowire(new CedeCityCommand(city, nation));
 	}
 
 	@Override
