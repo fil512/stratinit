@@ -47,7 +47,6 @@ public class CedeWindowControl {
 
 
 	public void setContents() {
-		// FIXME why this no get called?
 		if (city == null) {
 		    if (units.size() == 0) {
 		    	return;
