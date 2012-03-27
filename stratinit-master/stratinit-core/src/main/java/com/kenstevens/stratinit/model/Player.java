@@ -27,7 +27,7 @@ public class Player implements Serializable {
 	private boolean enabled = true;
 	private int wins;
 	private int played;
-	private Date created;
+	private Date created = new Date();
 	private boolean emailGameMail = true;
 	private Date lastLogin;
 	private String userAgent;
@@ -36,7 +36,6 @@ public class Player implements Serializable {
 
     public Player(String username) {
     	this.username = username;
-    	this.created = new Date();
     }
 
 	public Player(String username, int id) {
