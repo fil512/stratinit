@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.wicket;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.RuntimeConfigurationType;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
@@ -31,6 +32,7 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		mountPackage("/games", LeaderBoardPage.class);
 		getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 		getApplicationSettings().setPageExpiredErrorPage(PageExpired.class);
+		
 	}
 
 	public Class<HomePage> getHomePage() {
@@ -47,4 +49,8 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		return AuthenticatedSession.class;
 	}
 
+	@Override
+	public RuntimeConfigurationType getConfigurationType() {
+		return RuntimeConfigurationType.DEPLOYMENT;
+	}
 }
