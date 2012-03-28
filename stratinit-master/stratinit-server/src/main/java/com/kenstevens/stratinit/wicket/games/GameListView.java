@@ -36,11 +36,17 @@ final class GameListView extends ListView<GameTable> {
 				new PropertyModel<List<SINation>>(listItem.getModel(),
 						"nations"));
 		listItem.add(nationView);
+		BookmarkablePageLink<MessageBoardPage> messageBoardLink = getMessageBoardLink(game);
+		listItem.add(messageBoardLink);
+	}
+
+	private BookmarkablePageLink<MessageBoardPage> getMessageBoardLink(
+			final GameTable game) {
 		BookmarkablePageLink<MessageBoardPage> messageBoardLink = new BookmarkablePageLink<MessageBoardPage>(
 				"messageBoardLink", MessageBoardPage.class);
 		PageParameters pageParameters = messageBoardLink.getPageParameters();
 		pageParameters.set("id", game.getId());
 		pageParameters.set("name", game.getName());
-		listItem.add(messageBoardLink);
+		return messageBoardLink;
 	}
 }
