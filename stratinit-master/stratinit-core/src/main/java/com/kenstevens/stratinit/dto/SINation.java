@@ -26,6 +26,7 @@ public class SINation implements Serializable {
 	public boolean newBattle;
 	public SectorCoords startCoords;
 	public int commandPoints;
+	public int gameId;
 
 	public SINation() {}
 	
@@ -35,6 +36,7 @@ public class SINation implements Serializable {
 		lastAction = nation.getLastAction();
 		wins = nation.getPlayer().getWins();
 		played = nation.getPlayer().getPlayed();
+		gameId = nation.getGameId();
 	}
 
 	public void addPrivateData(Nation me, Nation nation) {

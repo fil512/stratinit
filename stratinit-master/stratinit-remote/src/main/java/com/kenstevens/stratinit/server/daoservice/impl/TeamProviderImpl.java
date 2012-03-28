@@ -60,6 +60,7 @@ public class TeamProviderImpl implements TeamProvider {
 			nation.cities = gameHistoryNation.getCities();
 			nation.name = gameHistoryNation.getName();
 			nation.power = gameHistoryNation.getPower();
+			nation.gameId = gameHistoryNation.getGameHistoryTeam().getGameHistory().getGameId();
 			nations.add(nation);
 		}
 
