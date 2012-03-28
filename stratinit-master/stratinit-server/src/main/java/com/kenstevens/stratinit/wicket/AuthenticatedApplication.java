@@ -51,6 +51,6 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 
 	@Override
 	public RuntimeConfigurationType getConfigurationType() {
-		return RuntimeConfigurationType.DEPLOYMENT;
+		return RuntimeConfigurationType.DEVELOPMENT;
 	}
 }

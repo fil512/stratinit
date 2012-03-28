@@ -1,33 +1,36 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
-	<wicket:extend>
-		<h2>Player Units</h2>
-		<table class="games">
-			<tr class="games">
-				<th class="games">day</th>
-				<th class="games">unit type</th>
-				<th class="games">built</th>
-				<th class="games">cost</th>
-			</tr>
-			<tr class="games" wicket:id="playerUnits">
-				<td class="games">
-					<span wicket:id="day">
-						1
-					</span>
-				</td>
-				<td class="games">
-					<span wicket:id="unitType">infantry</span>
-				</td>
-				<td class="games">
-					<span wicket:id="count">
-						4
-					</span>
-				</td>
+	<body>
+		<wicket:extend>
+			<h2>Player Units</h2>
+			<img wicket:id="venn" />
+			<table class="games">
+				<tr class="games">
+					<th class="games">day</th>
+					<th class="games">unit type</th>
+					<th class="games">built</th>
+					<th class="games">cost</th>
+				</tr>
+				<tr class="games" wicket:id="playerUnits">
+					<td class="games">
+						<span wicket:id="day">
+							1
+						</span>
+					</td>
+					<td class="games">
+						<span wicket:id="unitType">infantry</span>
+					</td>
+					<td class="games">
+						<span wicket:id="count">
+							4
+						</span>
+					</td>
 
-				<td class="games">
-					<span wicket:id="cost">240</span>
-				</td>
-			</tr>
-		</table>
-	</wicket:extend>
+					<td class="games">
+						<span wicket:id="cost">240</span>
+					</td>
+				</tr>
+			</table>
+		</wicket:extend>
+	</body>
 </HTML>
