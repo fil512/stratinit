@@ -13,8 +13,8 @@ public class UnitsBuiltPage extends BasePage {
 
 	public UnitsBuiltPage() {
 		super();
-		UnitsBuiltListView unitsBuiltListView = new UnitsBuiltListView("unitsBuilt",
-				new UnitsBuiltListModel(unitsBuiltProvider), 200);
+		GameUnitsBuiltListView unitsBuiltListView = new GameUnitsBuiltListView("gameUnitsBuilt",
+				new GameUnitsBuiltListModel(unitsBuiltProvider), 10);
 
 		add(unitsBuiltListView);
 		add(new PagingNavigator("navigator", unitsBuiltListView));
