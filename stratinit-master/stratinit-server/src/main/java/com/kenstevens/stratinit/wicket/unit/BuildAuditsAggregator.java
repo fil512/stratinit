@@ -60,23 +60,26 @@ public class BuildAuditsAggregator {
 		for (int day = 0; day < 10; ++day) {
 			List<Object> list = Lists.newArrayList();
 			list.add("'"+(day+1)+"'");
-			addUnitTypes(unitBaseType, day, list);
+			for (UnitType unitType : UnitBase.orderedUnitTypes(unitBaseType)) {
+				list.add(unitDaySet.count(new UnitDay(day, unitType)));
+			}
 			retval.add(list);
 		}
 		return retval;
 	}
-
-	private void addUnitTypes(UnitBaseType unitBaseType, int day, List<Object> list) {
-		for (UnitType unitType : UnitBase.orderedUnitTypes()) {
-			if (unitBaseType != UnitBase.getUnitBase(unitType).getUnitBaseType()) {
-				continue;
+	
+	public List<DayUnitsListRow> getDayUnitsListRows(UnitBaseType unitBaseType) {
+		analyzeBuildAudits();
+		List<DayUnitsListRow> retval = Lists.newArrayList();
+		for (UnitType unitType : UnitBase.orderedUnitTypes(unitBaseType)) {
+			List<Integer> list = Lists.newArrayList();
+			for (int day = 0; day < 10; ++day) {
+				list.add(unitDaySet.count(new UnitDay(day, unitType)));
 			}
-			if (unitType == UnitType.RESEARCH) {
-				continue;
-			}
-			UnitDay unitDay = new UnitDay(day, unitType);
-			list.add(unitDaySet.count(unitDay));
+			DayUnitsListRow row = new DayUnitsListRow(unitType, list);
+			retval.add(row);
 		}
+		return retval;
 	}
 
 }

@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.wicket.components;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
 
 import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
 
-public class PlayerStatPanel extends AuthenticatedPanel {
+public class PlayerStatPanel extends Panel {
 	private static final long serialVersionUID = 4303067574741765294L;
 
 	public PlayerStatPanel(String id, Player player) {

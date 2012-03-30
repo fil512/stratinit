@@ -1,23 +1,27 @@
 package com.kenstevens.stratinit.wicket.components;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
+import com.kenstevens.stratinit.wicket.unit.DayUnitsListView;
+import com.kenstevens.stratinit.wicket.unit.DayUnitsModel;
 import com.kenstevens.stratinit.wicket.unit.PlayerUnitsProvider;
 
 @SuppressWarnings("serial")
-public class UnitChartsPanel extends AuthenticatedPanel {
+public class UnitChartsPanel extends Panel {
 
 	private final int gameId;
 	private final String username;
@@ -28,6 +32,18 @@ public class UnitChartsPanel extends AuthenticatedPanel {
 		this.playerUnitsProvider = playerUnitsProvider;
 		this.gameId = gameId;
 		this.username = username;
+		DayUnitsListView landUnitsListView = new DayUnitsListView("unitRow",
+				new DayUnitsModel(playerUnitsProvider, gameId, username, UnitBaseType.LAND));
+		DayUnitsListView navyUnitsListView = new DayUnitsListView("unitRow",
+				new DayUnitsModel(playerUnitsProvider, gameId, username, UnitBaseType.NAVY));
+		DayUnitsListView airUnitsListView = new DayUnitsListView("unitRow",
+				new DayUnitsModel(playerUnitsProvider, gameId, username, UnitBaseType.AIR));
+		DayUnitsListView techUnitsListView = new DayUnitsListView("unitRow",
+				new DayUnitsModel(playerUnitsProvider, gameId, username, UnitBaseType.TECH));
+		add(new UnitTablePanel("landTable", landUnitsListView));
+		add(new UnitTablePanel("navyTable", navyUnitsListView));
+		add(new UnitTablePanel("airTable", airUnitsListView));
+		add(new UnitTablePanel("techTable", techUnitsListView));
 	}
 
 	public void renderHead(IHeaderResponse response) {
@@ -59,18 +75,13 @@ public class UnitChartsPanel extends AuthenticatedPanel {
 		return playerUnitsProvider.getFullUnitsByNation(unitBaseType, gameId, username);
 	}
 
-	private List<String> getUnitTypes(UnitBaseType unitBaseType) {
-		List<String> retval = Lists.newArrayList();
-		for (UnitType unitType :  UnitBase.orderedUnitTypes()) {
-			if (unitBaseType != UnitBase.getUnitBase(unitType).getUnitBaseType()) {
-				continue;
+	private Collection<String> getUnitTypes(UnitBaseType unitBaseType) {
+		return Collections2.transform(UnitBase.orderedUnitTypes(unitBaseType), new Function<UnitType, String>() {
+			@Override
+			public String apply(UnitType unitType) {
+				return quote(capitalize(unitType.toString()));
 			}
-			if (unitType == UnitType.RESEARCH) {
-				continue;
-			}
-			retval.add(quote(capitalize(unitType.toString())));
-		}
-		return retval;
+		});
 	}
 
 	private String quote(String string) {

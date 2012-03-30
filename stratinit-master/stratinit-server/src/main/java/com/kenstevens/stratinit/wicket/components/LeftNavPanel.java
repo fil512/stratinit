@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.wicket.components;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.panel.Panel;
 
 import com.kenstevens.stratinit.wicket.RegistrationPage;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
@@ -12,10 +13,9 @@ import com.kenstevens.stratinit.wicket.docs.RulesPage;
 import com.kenstevens.stratinit.wicket.game.GamesPage;
 import com.kenstevens.stratinit.wicket.rank.PlayerRankPage;
 import com.kenstevens.stratinit.wicket.rank.TeamRankPage;
-import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
 import com.kenstevens.stratinit.wicket.unit.UnitsBuiltPage;
 
-public class LeftNavPanel extends AuthenticatedPanel {
+public class LeftNavPanel extends Panel {
 	private static final long serialVersionUID = 4303067574741765294L;
 
 	public LeftNavPanel(String id) {

@@ -37,4 +37,12 @@ public class PlayerUnitsProvider {
 		return getBuildUnitsAggregator(game, username).getFullUnitsBuiltByDay(unitBaseType);
 	}
 
+	public List<DayUnitsListRow> getDayUnitsListRows(int gameId, String username, UnitBaseType unitBaseType) {
+		Game game = gameDao.findGame(gameId);
+		if (!game.hasEnded()) {
+			return Lists.newArrayList();
+		}
+		return getBuildUnitsAggregator(game, username).getDayUnitsListRows(unitBaseType);
+	}
+
 }

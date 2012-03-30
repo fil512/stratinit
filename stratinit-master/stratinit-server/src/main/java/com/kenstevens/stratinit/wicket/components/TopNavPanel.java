@@ -2,12 +2,12 @@ package com.kenstevens.stratinit.wicket.components;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.panel.Panel;
 
 import com.kenstevens.stratinit.wicket.HomePage;
 import com.kenstevens.stratinit.wicket.docs.PlayPage;
-import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
 
-public class TopNavPanel extends AuthenticatedPanel {
+public class TopNavPanel extends Panel {
 	private static final long serialVersionUID = 4303067574741765294L;
 
 	public TopNavPanel(String id) {

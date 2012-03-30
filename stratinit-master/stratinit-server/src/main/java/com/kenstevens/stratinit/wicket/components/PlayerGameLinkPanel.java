@@ -2,13 +2,13 @@ package com.kenstevens.stratinit.wicket.components;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
 import com.kenstevens.stratinit.wicket.unit.PlayerUnitsPage;
 
-public class PlayerGameLinkPanel extends AuthenticatedPanel {
+public class PlayerGameLinkPanel extends Panel {
 	private static final long serialVersionUID = 4303067574741765294L;
 
 	public PlayerGameLinkPanel(String id, SINation nation) {
