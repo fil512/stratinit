@@ -6,7 +6,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.wicket.BasePage;
 import com.kenstevens.stratinit.wicket.game.GameArchiveListProvider;
-import com.kenstevens.stratinit.wicket.game.GameListProvider;
 import com.kenstevens.stratinit.wicket.game.GamePlayerTablePanel;
 import com.kenstevens.stratinit.wicket.game.NationListView;
 

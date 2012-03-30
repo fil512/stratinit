@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.remote.helper;
+package com.kenstevens.stratinit.wicket.unit;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,18 +27,21 @@ public class UnitsBuiltService {
 	UnitDal unitDal;
 	Map<String, Integer> buildCount = Maps.newHashMap();
 
-	public List<UnitsBuilt> getUnitsBuilt() {
-		List<UnitsBuilt> retval = Lists.newArrayList();
+	public List<GameUnitsBuilt> getUnitsBuilt() {
+		List<GameUnitsBuilt> retval = Lists.newArrayList();
 		List<GameHistory> games = gameHistoryDal.getAllGameHistories();
 		Collections.reverse(games);
 		for (GameHistory game : games) {
+			GameUnitsBuilt gameUnitsBuilt = new GameUnitsBuilt(game);
 			Map<UnitType, UnitsBuilt> unitsBuiltMap = newMap(game.getGameId());
-			List<UnitBuildAudit> buildAudits = unitDal.getBuildAudits(game.getGameId());
+			List<UnitBuildAudit> buildAudits = unitDal.getBuildAudits(game
+					.getGameId());
 			for (UnitBuildAudit buildAudit : buildAudits) {
 				UnitsBuilt unitsBuilt = unitsBuiltMap.get(buildAudit.getType());
 				unitsBuilt.increment();
 			}
-			retval.addAll(sort(unitsBuiltMap));
+			gameUnitsBuilt.addAll(sort(unitsBuiltMap));
+			retval.add(gameUnitsBuilt);
 		}
 		return retval;
 	}
@@ -49,13 +52,14 @@ public class UnitsBuiltService {
 		public int compare(UnitsBuilt o1, UnitsBuilt o2) {
 			return Integer.valueOf(o2.getLove()).compareTo(o1.getLove());
 		}
-		
+
 	};
-	
+
 	private Collection<? extends UnitsBuilt> sort(
 			Map<UnitType, UnitsBuilt> unitsBuiltMap) {
 
-		ArrayList<UnitsBuilt> retval = Lists.newArrayList(unitsBuiltMap.values());
+		ArrayList<UnitsBuilt> retval = Lists.newArrayList(unitsBuiltMap
+				.values());
 		Collections.sort(retval, byLove);
 		return retval;
 	}

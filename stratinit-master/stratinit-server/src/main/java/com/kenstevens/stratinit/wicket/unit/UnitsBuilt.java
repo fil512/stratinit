@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.remote.helper;
+package com.kenstevens.stratinit.wicket.unit;
 
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitType;
