@@ -3,8 +3,8 @@ package com.kenstevens.stratinit.spring;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.wicket.games.GameActiveListProvider;
-import com.kenstevens.stratinit.wicket.games.GameArchiveListProvider;
+import com.kenstevens.stratinit.wicket.game.GameActiveListProvider;
+import com.kenstevens.stratinit.wicket.game.GameArchiveListProvider;
 
 public class SpringAware {
 	protected GameDao getGameDao() {

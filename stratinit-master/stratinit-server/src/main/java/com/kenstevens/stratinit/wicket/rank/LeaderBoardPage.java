@@ -1,7 +1,6 @@
-package com.kenstevens.stratinit.wicket.admin;
+package com.kenstevens.stratinit.wicket.rank;
 
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.wicket.BasePage;
@@ -9,15 +8,16 @@ import com.kenstevens.stratinit.wicket.game.PlayerListModel;
 import com.kenstevens.stratinit.wicket.player.PlayerListProvider;
 import com.kenstevens.stratinit.wicket.player.PlayerListView;
 
-public class PlayerListPage extends BasePage {
-	private static final long serialVersionUID = 1L;
+public class LeaderBoardPage extends BasePage {
 	@SpringBean
 	PlayerListProvider playerListProvider;
+	
+	private static final long serialVersionUID = 1L;
 
-	public PlayerListPage(final PageParameters parameters) {
-		super(parameters);
+	public LeaderBoardPage() {
+		super();
 		PlayerListView playerListView = new PlayerListView("players",
-				new PlayerListModel(playerListProvider, true), 20);
+				new PlayerListModel(playerListProvider, false), 20);
 
 		add(playerListView);
 		add(new PagingNavigator("navigator", playerListView));

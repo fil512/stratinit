@@ -250,7 +250,7 @@ public abstract class UnitBase {
 		this.unitBaseType = getUnitBaseType();
 	}
 
-	protected abstract UnitBaseType getUnitBaseType();
+	public abstract UnitBaseType getUnitBaseType();
 
 	public UnitType getType() {
 		return type;

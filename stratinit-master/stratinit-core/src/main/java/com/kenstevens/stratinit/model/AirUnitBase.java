@@ -14,7 +14,7 @@ public class AirUnitBase extends UnitBase {
 	}
 
 	@Override
-	protected UnitBaseType getUnitBaseType() {
+	public UnitBaseType getUnitBaseType() {
 		return UnitBaseType.AIR;
 	}
 

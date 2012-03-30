@@ -12,7 +12,7 @@ public class TechUnitBase extends UnitBase {
 	}
 
 	@Override
-	protected UnitBaseType getUnitBaseType() {
+	public UnitBaseType getUnitBaseType() {
 		return UnitBaseType.TECH;
 	}
 

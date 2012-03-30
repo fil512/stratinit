@@ -11,7 +11,7 @@ public class BaseUnitBase extends UnitBase {
 	}
 
 	@Override
-	protected UnitBaseType getUnitBaseType() {
+	public UnitBaseType getUnitBaseType() {
 		return null;
 	}
 }
