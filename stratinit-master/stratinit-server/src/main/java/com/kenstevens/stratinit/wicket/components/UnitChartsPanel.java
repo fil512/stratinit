@@ -61,7 +61,7 @@ public class UnitChartsPanel extends AuthenticatedPanel {
 
 	private List<String> getUnitTypes(UnitBaseType unitBaseType) {
 		List<String> retval = Lists.newArrayList();
-		for (UnitType unitType : UnitType.values()) {
+		for (UnitType unitType :  UnitBase.orderedUnitTypes()) {
 			if (unitBaseType != UnitBase.getUnitBase(unitType).getUnitBaseType()) {
 				continue;
 			}

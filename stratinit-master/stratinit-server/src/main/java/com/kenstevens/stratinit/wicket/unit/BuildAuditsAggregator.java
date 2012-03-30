@@ -33,15 +33,6 @@ public class BuildAuditsAggregator {
 		this.buildAudits = buildAudits;
 	}
 
-	public List<PlayerUnitCount> getUnitsBuiltByDay() {
-		analyzeBuildAudits();
-		List<PlayerUnitCount> unitsBuilt = Lists.newArrayList();
-		for (UnitDay unitDay : unitDaySet.elementSet()) {
-			unitsBuilt.add(new PlayerUnitCount(unitDay.day, unitDay.unitType, unitDaySet.count(unitDay)));
-		}
-		return unitsBuilt;
-	}
-
 	private void analyzeBuildAudits() {
 		for (UnitBuildAudit buildAudit: buildAudits) {
 			categorize(gameStart, buildAudit);
@@ -76,7 +67,7 @@ public class BuildAuditsAggregator {
 	}
 
 	private void addUnitTypes(UnitBaseType unitBaseType, int day, List<Object> list) {
-		for (UnitType unitType : UnitType.values()) {
+		for (UnitType unitType : UnitBase.orderedUnitTypes()) {
 			if (unitBaseType != UnitBase.getUnitBase(unitType).getUnitBaseType()) {
 				continue;
 			}

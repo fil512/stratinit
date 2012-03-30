@@ -14,11 +14,6 @@ public class PlayerUnitsPage extends BasePage {
 
 	public PlayerUnitsPage(PageParameters pageParameters) {
 		super(pageParameters);
-		PlayerUnitsView playerUnitsView = new PlayerUnitsView("playerUnits",
-				new PlayerUnitsModel(playerUnitsProvider, pageParameters.get(
-						"gameId").toInt(), pageParameters.get("name")
-						.toString()));
-		add(playerUnitsView);
 		add(new UnitChartsPanel("unitCharts", playerUnitsProvider, pageParameters.get(
 				"gameId").toInt(), pageParameters.get("name")
 				.toString()));
