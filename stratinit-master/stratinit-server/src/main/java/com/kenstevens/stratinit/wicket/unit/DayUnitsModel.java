@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.wicket.unit;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -24,7 +25,9 @@ public class DayUnitsModel extends LoadableDetachableModel<List<DayUnitsListRow>
 
 	@Override
 	protected List<DayUnitsListRow> load() {
-		return playerUnitsProvider.getDayUnitsListRows(gameId, username, unitBaseType);
+		List<DayUnitsListRow> rows = playerUnitsProvider.getDayUnitsListRows(gameId, username, unitBaseType);
+		Collections.reverse(rows);
+		return rows;
 	}
 
 }

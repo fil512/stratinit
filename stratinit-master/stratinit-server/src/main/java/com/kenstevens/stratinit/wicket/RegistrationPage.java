@@ -5,8 +5,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
-import com.kenstevens.stratinit.wicket.components.PlayerStatPanel;
 import com.kenstevens.stratinit.wicket.components.RegistrationForm;
+import com.kenstevens.stratinit.wicket.game.PlayerStatPanel;
 
 public class RegistrationPage extends AuthenticatedPage {
 

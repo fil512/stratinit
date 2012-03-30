@@ -6,9 +6,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
 
 import com.kenstevens.stratinit.wicket.BasePage;
-import com.kenstevens.stratinit.wicket.components.PlayerTeamsPanel;
-import com.kenstevens.stratinit.wicket.components.RankedPanel;
 import com.kenstevens.stratinit.wicket.game.GameRankerProvider;
+import com.kenstevens.stratinit.wicket.game.PlayerTeamsPanel;
 
 public class TeamRankPage extends BasePage {
 	@SpringBean

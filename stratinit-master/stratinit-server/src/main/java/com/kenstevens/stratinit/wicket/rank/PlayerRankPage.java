@@ -5,7 +5,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.wicket.BasePage;
-import com.kenstevens.stratinit.wicket.components.RankedPanel;
 import com.kenstevens.stratinit.wicket.game.GameRankerProvider;
 
 public class PlayerRankPage extends BasePage {

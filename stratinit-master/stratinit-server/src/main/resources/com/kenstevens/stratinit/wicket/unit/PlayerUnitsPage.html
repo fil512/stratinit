@@ -5,8 +5,18 @@
 			<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 		</wicket:head>
 		<wicket:extend>
-			<h2><span wicket:id="username"/> Units in game "<span wicket:id="game"/></h2>
-			<span wicket:id="unitCharts"></span>
+			<h2>
+				<span wicket:id="username" />
+				Units in game "
+				<span wicket:id="game" />
+			</h2>
+			<table>
+				<tr>
+					<td><span wicket:id="unitCharts"/></td>
+					<td valign="top"><span wicket:id="gamePlayerTablePanel"/></td>
+				</tr>
+			</table>
+			
 		</wicket:extend>
 	</body>
 </HTML>

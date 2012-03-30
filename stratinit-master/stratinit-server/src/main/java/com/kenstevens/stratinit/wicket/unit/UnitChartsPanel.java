@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.wicket.components;
+package com.kenstevens.stratinit.wicket.unit;
 
 import java.util.Collection;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
@@ -16,20 +17,17 @@ import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.wicket.unit.DayUnitsListView;
-import com.kenstevens.stratinit.wicket.unit.DayUnitsModel;
-import com.kenstevens.stratinit.wicket.unit.PlayerUnitsProvider;
 
 @SuppressWarnings("serial")
 public class UnitChartsPanel extends Panel {
 
 	private final int gameId;
 	private final String username;
-	private final PlayerUnitsProvider playerUnitsProvider;
+	@SpringBean
+	private PlayerUnitsProvider playerUnitsProvider;
 
-	public UnitChartsPanel(String id, PlayerUnitsProvider playerUnitsProvider, int gameId, String username) {
+	public UnitChartsPanel(String id, int gameId, String username) {
 		super(id);
-		this.playerUnitsProvider = playerUnitsProvider;
 		this.gameId = gameId;
 		this.username = username;
 		DayUnitsListView landUnitsListView = new DayUnitsListView("unitRow",

@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.wicket.components;
+package com.kenstevens.stratinit.wicket.rank;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.PageableListView;
