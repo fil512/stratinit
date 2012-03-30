@@ -19,15 +19,6 @@ public class PlayerUnitsProvider {
 	@Autowired
 	GameDao gameDao;
 
-	public List<PlayerUnitCount> getUnitsByNation(int gameId, String username) {
-		Game game = gameDao.findGame(gameId);
-		if (!game.hasEnded()) {
-			return Lists.newArrayList();
-		}
-
-		return getBuildUnitsAggregator(game, username).getUnitsBuiltByDay();
-	}
-
 	private BuildAuditsAggregator getBuildUnitsAggregator(Game game,
 			String username) {
 		List<UnitBuildAudit> buildAudits = unitDao.getBuildAudits(game.getId(),

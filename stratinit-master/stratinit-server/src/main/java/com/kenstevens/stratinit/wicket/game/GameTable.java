@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.wicket.game;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import com.kenstevens.stratinit.dto.SINation;
@@ -73,9 +74,9 @@ public class GameTable {
 		return nations;
 	}
 
-	public void sort() {
-		// TODO Auto-generated method stub
-		
+	public boolean hasEnded() {
+		Date now = new Date();
+		return gameHistory.getEnds().before(now);
 	}
 
 

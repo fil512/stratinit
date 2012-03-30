@@ -3,21 +3,21 @@ package com.kenstevens.stratinit.wicket.game;
 import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.wicket.unit.PlayerUnitsPage;
+import com.kenstevens.stratinit.wicket.components.PlayerGameLinkPanel;
 
 final class NationListView extends ListView<SINation> {
 
 	private static final long serialVersionUID = 1L;
+	private final boolean hasEnded;
 
-	NationListView(String id, IModel<? extends List<? extends SINation>> model) {
+	NationListView(String id, IModel<? extends List<? extends SINation>> model, boolean hasEnded) {
 		super(id, model);
+		this.hasEnded = hasEnded;
 	}
 
 	@Override
@@ -25,18 +25,11 @@ final class NationListView extends ListView<SINation> {
 		final SINation nation = item.getModelObject();
 		item.add(new Label("cities", "" + nation.cities));
 		item.add(new Label("power", "" + nation.power));
-		BookmarkablePageLink<PlayerUnitsPage> playerUnitsLink = getPlayerUnitsLink(nation);
-		playerUnitsLink.add(new Label("name", nation.name));
-		item.add(playerUnitsLink);
+		if (hasEnded) {
+			item.add(new PlayerGameLinkPanel("playerGameLink", nation));
+		} else {
+			item.add(new Label("playerGameLink", nation.name));
+		}
 	}
 
-	private BookmarkablePageLink<PlayerUnitsPage> getPlayerUnitsLink(
-			final SINation nation) {
-		BookmarkablePageLink<PlayerUnitsPage> playerUnitsLink = new BookmarkablePageLink<PlayerUnitsPage>(
-				"playerUnitsLink", PlayerUnitsPage.class);
-		PageParameters pageParameters = playerUnitsLink.getPageParameters();
-		pageParameters.set("gameId", nation.gameId);
-		pageParameters.set("name", nation.name);
-		return playerUnitsLink;
-	}
 }
