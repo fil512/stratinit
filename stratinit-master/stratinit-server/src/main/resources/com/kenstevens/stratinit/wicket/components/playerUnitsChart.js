@@ -14,10 +14,11 @@ function draw${unitBaseType}Chart() {
 	var options = {
 		title : '${unitBaseType} Units Built by Day',
 		hAxis : {
-			title : 'Day',
-			titleTextStyle : {
-				color : 'red'
-			}
+			title : 'Day'
+		},
+		backgroundColor: '#F3F3F3',
+		chartArea: {
+			left: '50'
 		},
 		isStacked : true
 	};
