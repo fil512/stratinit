@@ -8,14 +8,13 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.wicket.components.PlayerGameLinkPanel;
 
-final class NationListView extends ListView<SINation> {
+public final class NationListView extends ListView<SINation> {
 
 	private static final long serialVersionUID = 1L;
 	private final boolean hasEnded;
 
-	NationListView(String id, IModel<? extends List<? extends SINation>> model, boolean hasEnded) {
+	public NationListView(String id, IModel<? extends List<? extends SINation>> model, boolean hasEnded) {
 		super(id, model);
 		this.hasEnded = hasEnded;
 	}

@@ -1,8 +1,7 @@
-package com.kenstevens.stratinit.wicket.components;
+package com.kenstevens.stratinit.wicket.unit;
 
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.kenstevens.stratinit.wicket.unit.DayUnitsListView;
 
 @SuppressWarnings("serial")
 public class UnitTablePanel extends Panel {

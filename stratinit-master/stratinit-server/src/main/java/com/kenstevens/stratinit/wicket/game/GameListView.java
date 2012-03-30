@@ -36,7 +36,8 @@ final class GameListView extends ListView<GameTable> {
 		NationListView nationView = new NationListView("nations",
 				new PropertyModel<List<SINation>>(listItem.getModel(),
 						"nations"), game.hasEnded());
-		listItem.add(nationView);
+		GamePlayerTablePanel playerTable = new GamePlayerTablePanel("gamePlayerTablePanel", nationView);
+		listItem.add(playerTable);
 		BookmarkablePageLink<MessageBoardPage> messageBoardLink = getMessageBoardLink(game);
 		listItem.add(messageBoardLink);
 	}

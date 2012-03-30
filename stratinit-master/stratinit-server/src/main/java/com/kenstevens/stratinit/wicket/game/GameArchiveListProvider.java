@@ -31,6 +31,15 @@ public class GameArchiveListProvider implements GameListProvider {
 		}
 		return retval;
 	}
+	
+	@Override
+	public List<SINation> getNations(int gameId) {
+		List<SINation> nations = Lists.newArrayList();
+		List<SITeam> teams = Lists.newArrayList();
+		GameHistory gameHistory = gameHistoryDal.getGameHistoryByGameId(gameId);
+		teamProvider.getTeamsAndNations(gameHistory, teams, nations);
+		return nations;
+	}
 
 	private void setTeams(GameHistory gameHistory, GameTable gameTable) {
 		List<SITeam> teams = Lists.newArrayList();
