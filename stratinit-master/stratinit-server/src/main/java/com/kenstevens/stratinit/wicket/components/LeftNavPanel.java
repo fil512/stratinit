@@ -9,11 +9,11 @@ import com.kenstevens.stratinit.wicket.docs.ContactPage;
 import com.kenstevens.stratinit.wicket.docs.FAQPage;
 import com.kenstevens.stratinit.wicket.docs.GuidePage;
 import com.kenstevens.stratinit.wicket.docs.RulesPage;
-import com.kenstevens.stratinit.wicket.games.GamesPage;
-import com.kenstevens.stratinit.wicket.games.PlayerRankPage;
-import com.kenstevens.stratinit.wicket.games.TeamRankPage;
-import com.kenstevens.stratinit.wicket.games.UnitsBuiltPage;
+import com.kenstevens.stratinit.wicket.game.GamesPage;
+import com.kenstevens.stratinit.wicket.rank.PlayerRankPage;
+import com.kenstevens.stratinit.wicket.rank.TeamRankPage;
 import com.kenstevens.stratinit.wicket.security.AuthenticatedPanel;
+import com.kenstevens.stratinit.wicket.unit.UnitsBuiltPage;
 
 public class LeftNavPanel extends AuthenticatedPanel {
 	private static final long serialVersionUID = 4303067574741765294L;

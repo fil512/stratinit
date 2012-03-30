@@ -9,7 +9,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import com.kenstevens.stratinit.wicket.admin.AdminPage;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
-import com.kenstevens.stratinit.wicket.games.LeaderBoardPage;
+import com.kenstevens.stratinit.wicket.rank.LeaderBoardPage;
 
 /**
  * AuthenticatedApplication object for your web application. If you want to run
@@ -49,6 +49,7 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		return AuthenticatedSession.class;
 	}
 
+	// FIXME
 	@Override
 	public RuntimeConfigurationType getConfigurationType() {
 		return RuntimeConfigurationType.DEVELOPMENT;

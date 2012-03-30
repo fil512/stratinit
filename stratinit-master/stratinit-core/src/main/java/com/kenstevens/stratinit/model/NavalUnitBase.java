@@ -12,7 +12,7 @@ public class NavalUnitBase extends UnitBase {
 	}
 
 	@Override
-	protected UnitBaseType getUnitBaseType() {
+	public UnitBaseType getUnitBaseType() {
 		return UnitBaseType.NAVY;
 	}
 
