@@ -1,3 +1,7 @@
+Release 1.2.3
+  * Modified Web Site "games" -> Past Games.  Now you can click on a player name and see charts of their unit build orders for that game.
+  * Modified Web Site "units built" added pie charts to indicate preferred units in each game.
+
 Release 1.2.2
   * Passengers on aircraft are not considered to be on board if that aircraft is in
   a sector that can refuel it.  So if an aircraft in an airport is destroyed, it won't kill any passengers.

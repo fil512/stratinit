@@ -1,5 +1,8 @@
 package com.kenstevens.stratinit.server.remote.event;
 
+import java.util.Date;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import com.kenstevens.stratinit.dto.SIRelation;
@@ -7,6 +10,15 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
 
 public class TwoPlayerRelationChangeTest extends RelationManagerTest {
+	
+	@Before
+	public void startGame() {
+		Date now = new Date();
+		Date then = new Date(now.getTime() - 1000);
+		testGame.setStartTime(then);
+		testGame.setMapped(then);
+	}
+	
 	@Test
 	public void neutralToWar() {
 		changedTo(RelationType.WAR);
