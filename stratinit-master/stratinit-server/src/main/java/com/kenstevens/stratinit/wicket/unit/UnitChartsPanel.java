@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
@@ -61,12 +60,8 @@ public class UnitChartsPanel extends Panel {
 
 		parameters.put("unitTypes", getUnitTypes(unitBaseType));
 		parameters.put("unitTypesBuilt", getUnitTypesBuilt(unitBaseType));
-		parameters.put("unitBaseType", capitalize(unitBaseType.toString()));
+		parameters.put("unitBaseType", JavaScriptHelper.capitalize(unitBaseType.toString()));
 		return jsTemplate.asString(parameters);
-	}
-
-	private String capitalize(String string) {
-		return Strings.capitalize(string.toLowerCase());
 	}
 
 	private List<List<Object>> getUnitTypesBuilt(UnitBaseType unitBaseType) {
@@ -77,12 +72,9 @@ public class UnitChartsPanel extends Panel {
 		return Collections2.transform(UnitBase.orderedUnitTypes(unitBaseType), new Function<UnitType, String>() {
 			@Override
 			public String apply(UnitType unitType) {
-				return quote(capitalize(unitType.toString()));
+				return JavaScriptHelper.unitTypeAsJSString(unitType);
 			}
-		});
-	}
 
-	private String quote(String string) {
-		return "'" + string + "'";
+		});
 	}
 }

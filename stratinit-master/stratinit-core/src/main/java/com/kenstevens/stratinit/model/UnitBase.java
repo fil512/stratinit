@@ -14,7 +14,8 @@ import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
 
 public abstract class UnitBase {
-	public static int largestInterdictsSight = -1;
+	private static int LARGEST_INTERDICTS_SIGHT = -1;
+	private static int MAX_TECH = -1;
 	private CityType builtIn;
 	private final UnitType type;
 	private final int attack;
@@ -223,11 +224,14 @@ public abstract class UnitBase {
 
 		for (UnitType type : UnitType.values()) {
 			UnitBase unitBase = getUnitBase(type);
+			if (unitBase.tech > MAX_TECH) {
+				MAX_TECH = unitBase.tech;
+			}
 			if (!unitBase.canInterdict()) {
 				continue;
 			}
-			if (unitBase.sight > largestInterdictsSight) {
-				largestInterdictsSight = unitBase.sight;
+			if (unitBase.sight > LARGEST_INTERDICTS_SIGHT) {
+				LARGEST_INTERDICTS_SIGHT = unitBase.sight;
 			}
 		}
 	}
@@ -603,5 +607,13 @@ public abstract class UnitBase {
 			retval.add(unitType);
 		}
 		return retval;
+	}
+
+	public static int getLargestInterdictsSight() {
+		return LARGEST_INTERDICTS_SIGHT;
+	}
+	
+	public static int getMaxTech() {
+		return MAX_TECH;
 	}
 }

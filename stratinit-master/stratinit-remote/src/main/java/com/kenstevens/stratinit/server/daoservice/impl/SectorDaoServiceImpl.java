@@ -169,7 +169,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		// Need to get a big enough world view to see all surrounding units and
 		// their supply
 		return getRadiusWorldView(unit.getCoords(), nation,
-				Constants.SUPPLY_RADIUS + UnitBase.largestInterdictsSight);
+				Constants.SUPPLY_RADIUS + UnitBase.getLargestInterdictsSight());
 	}
 
 	public WorldView getInterceptionWorldView(SectorCoords coords, Nation nation) {
