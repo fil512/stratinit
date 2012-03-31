@@ -4,13 +4,17 @@ google.load("visualization", "1", {
 google.setOnLoadCallback(drawChart);
 function drawChart() {
 	var data = new google.visualization.DataTable();
-	data.addColumn('string', 'Task');
-	data.addColumn('number', 'Hours per Day');
-	data.addRows([ [ 'Work', 11 ], [ 'Eat', 2 ], [ 'Commute', 2 ],
-			[ 'Watch TV', 2 ], [ 'Sleep', 7 ] ]);
+	data.addColumn('string', 'Unit');
+	data.addColumn('number', 'Love');
+	data.addRows(${unitLove});
 
 	var options = {
-		title : 'My Daily Activities'
+		title : 'Units Built in Game #${gameId}',
+		chartArea: {
+			left: '50',
+			top: '50'
+		},
+		backgroundColor: '#F3F3F3'
 	};
 
 	var chart = new google.visualization.PieChart(document

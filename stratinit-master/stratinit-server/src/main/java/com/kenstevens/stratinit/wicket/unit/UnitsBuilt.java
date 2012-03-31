@@ -31,8 +31,9 @@ public class UnitsBuilt {
 	}
 	public int getLove() {
 		UnitBase unitBase = UnitBase.getUnitBase(type);
+		int topTech = UnitBase.getMaxTech() + 1;
 		int tech = unitBase.getTech();
-		int techFactor = 20 / (20 - tech);
+		int techFactor = topTech / (topTech - tech);
 		int cost = unitBase.getProductionTime();
 		return count * techFactor * cost;
 	}
