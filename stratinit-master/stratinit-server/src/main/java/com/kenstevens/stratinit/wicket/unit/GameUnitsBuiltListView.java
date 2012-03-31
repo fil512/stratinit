@@ -19,11 +19,13 @@ public class GameUnitsBuiltListView extends PageableListView<GameUnitsBuilt> {
 	@Override
 	protected void populateItem(ListItem<GameUnitsBuilt> listItem) {
 		final GameUnitsBuilt gub = listItem.getModelObject();
-		listItem.add(new Label("gamdId", "" + gub.getGame().getGameId()));
+		int gameId = gub.getGame().getGameId();
+		listItem.add(new Label("gamdId", "" + gameId));
 		UnitsBuiltListView unitsBuiltListView = new UnitsBuiltListView(
 				"unitsBuilt", new PropertyModel<List<UnitsBuilt>>(
 						listItem.getModel(), "unitsBuilt"));
 		listItem.add(unitsBuiltListView);
+		listItem.add(new GameUnitsChartPanel("gameUnitsChartPanel", gameId));
 	}
 
 }
