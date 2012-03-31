@@ -46,14 +46,14 @@ public class UnitChartsPanel extends Panel {
 
 	public void renderHead(IHeaderResponse response) {
 		String js = "";
-		js += getChartJS(response, UnitBaseType.LAND);
-		js += getChartJS(response, UnitBaseType.NAVY);
-		js += getChartJS(response, UnitBaseType.AIR);
-		js += getChartJS(response, UnitBaseType.TECH);
+		js += getChartJS(UnitBaseType.LAND);
+		js += getChartJS(UnitBaseType.NAVY);
+		js += getChartJS(UnitBaseType.AIR);
+		js += getChartJS(UnitBaseType.TECH);
 		response.renderString(js);
 	}
 
-	private String getChartJS(IHeaderResponse response, UnitBaseType unitBaseType) {
+	private String getChartJS(UnitBaseType unitBaseType) {
 		PackageTextTemplate ptTemplate = new PackageTextTemplate(
 				this.getClass(), "playerUnitsChart.js");
 		JavaScriptTemplate jsTemplate = new JavaScriptTemplate(ptTemplate);

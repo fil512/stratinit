@@ -20,7 +20,6 @@ public class UnitsBuiltListView extends ListView<UnitsBuilt> {
 	protected void populateItem(ListItem<UnitsBuilt> listItem) {
 		final UnitsBuilt unitsBuilt = listItem.getModelObject();
 
-		listItem.add(new Label("game", "" + unitsBuilt.getGameId()));
 		listItem.add(new Label("unitType", "" + unitsBuilt.getType()));
 		listItem.add(new Label("built", "" + unitsBuilt.getCount()));
 		listItem.add(new Label("love", "" + unitsBuilt.getLove()));

@@ -49,8 +49,9 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		return AuthenticatedSession.class;
 	}
 
+	// FIXME
 	@Override
 	public RuntimeConfigurationType getConfigurationType() {
-		return RuntimeConfigurationType.DEPLOYMENT;
+		return RuntimeConfigurationType.DEVELOPMENT;
 	}
 }
