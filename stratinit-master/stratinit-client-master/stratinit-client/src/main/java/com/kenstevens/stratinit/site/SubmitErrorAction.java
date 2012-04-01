@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.site.action;
+package com.kenstevens.stratinit.site;
 
 import javax.annotation.PostConstruct;
 
@@ -6,8 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.site.command.SubmitErrorCommand;
 import com.kenstevens.stratinit.util.Spring;
 
@@ -16,6 +15,8 @@ import com.kenstevens.stratinit.util.Spring;
 public class SubmitErrorAction extends Action {
 	@Autowired
 	private Spring spring;
+	@Autowired
+	private ActionFactory actionFactory;
 	private SubmitErrorCommand submitErrorCommand;
 	private final Exception exception;
 
@@ -32,5 +33,9 @@ public class SubmitErrorAction extends Action {
 	@Override
 	public Command<? extends Object> getCommand() {
 		return submitErrorCommand;
+	}
+
+	public void submitError(Exception e) {
+		actionFactory.submitError(e);
 	}
 }

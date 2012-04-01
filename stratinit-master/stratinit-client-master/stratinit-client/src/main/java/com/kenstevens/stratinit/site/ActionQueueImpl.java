@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.site.action.SubmitErrorAction;
 import com.kenstevens.stratinit.ui.shell.StatusReporter;
 import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 
@@ -27,8 +25,6 @@ public class ActionQueueImpl implements ActionQueue {
 	private StatusReporter statusReporter;
 	@Autowired
 	private WidgetContainer widgetContainer;
-	@Autowired
-	private ActionFactory actionFactory;
 
 	private boolean shuttingDown = false;
 
@@ -144,7 +140,7 @@ public class ActionQueueImpl implements ActionQueue {
 			statusReporter.reportError(e);
 			logger.error(e.getMessage(), e);
 			if (!(action instanceof SubmitErrorAction)) {
-				actionFactory.submitError(e);
+				((SubmitErrorAction)action).submitError(e);
 			}
 		} finally {
 			if (action instanceof UnitAwareAction) {

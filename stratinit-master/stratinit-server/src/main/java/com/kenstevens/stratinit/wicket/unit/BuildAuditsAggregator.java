@@ -50,8 +50,7 @@ public class BuildAuditsAggregator {
 
 	private int getDay(Date gameStart, UnitBuildAudit buildAudit) {
 		long timeDeltaMillis = buildAudit.getDate().getTime() - gameStart.getTime();
-		long days = timeDeltaMillis / (24 * 3600 * 1000);
-		return (int)days;
+		return (int)(timeDeltaMillis / (24 * 3600 * 1000));
 	}
 
 	public List<List<Object>> getFullUnitsBuiltByDay(UnitBaseType unitBaseType) {

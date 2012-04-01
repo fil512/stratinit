@@ -23,10 +23,10 @@ public class GameUnitsChartPanel extends Panel {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderString(getChartJS(response));
+		response.renderString(getChartJS());
 	}
 
-	private String getChartJS(IHeaderResponse response) {
+	private String getChartJS() {
 		PackageTextTemplate ptTemplate = new PackageTextTemplate(
 				this.getClass(), "gameUnitsChart.js");
 		JavaScriptTemplate jsTemplate = new JavaScriptTemplate(ptTemplate);
