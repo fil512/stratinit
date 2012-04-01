@@ -10,6 +10,7 @@ import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.UnitView;
+import com.kenstevens.stratinit.site.SubmitErrorAction;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
