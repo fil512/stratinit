@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.ui.shell.Message;
-import com.kenstevens.stratinit.ui.shell.StatusReportEvent;
-import com.kenstevens.stratinit.ui.shell.StatusReportEventHandler;
-import com.kenstevens.stratinit.ui.shell.Message.Type;
+import com.kenstevens.stratinit.shell.Message;
+import com.kenstevens.stratinit.shell.StatusReportEvent;
+import com.kenstevens.stratinit.shell.StatusReportEventHandler;
+import com.kenstevens.stratinit.shell.Message.Type;
 
 @Scope("prototype")
 @Component

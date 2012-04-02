@@ -17,14 +17,14 @@ import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Message;
 import com.kenstevens.stratinit.model.NewsLogList;
+import com.kenstevens.stratinit.shell.ColourMap;
+import com.kenstevens.stratinit.shell.StratInitWindow;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.ui.image.ColourMap;
 import com.kenstevens.stratinit.ui.news.BulletinPrinter;
 import com.kenstevens.stratinit.ui.news.FirstsPrinter;
 import com.kenstevens.stratinit.ui.news.ForeignAffairsPrinter;
 import com.kenstevens.stratinit.ui.news.NeutralConquestPrinter;
 import com.kenstevens.stratinit.ui.news.VersusPrinter;
-import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 @Component
 public class NewsWindow implements StratInitWindow {

@@ -21,9 +21,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 
 @Scope("prototype")
 @Component

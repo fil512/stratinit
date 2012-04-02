@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.ui.shell.StratInitWindow;
+import com.kenstevens.stratinit.shell.StratInitWindow;
 
 @Component
 public class PrefsWindow implements StratInitWindow {

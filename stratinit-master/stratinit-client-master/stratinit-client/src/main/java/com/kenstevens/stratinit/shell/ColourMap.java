@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.image;
+package com.kenstevens.stratinit.shell;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;

@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.TableItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.shell.StratInitWindow;
 import com.kenstevens.stratinit.site.processor.StatsManager;
-import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 @Component
 public class StatsWindow implements StratInitWindow {

@@ -5,8 +5,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 
 final class HomeSelectionAdapter extends SelectionAdapter {
 	final Logger logger = Logger.getLogger(getClass());

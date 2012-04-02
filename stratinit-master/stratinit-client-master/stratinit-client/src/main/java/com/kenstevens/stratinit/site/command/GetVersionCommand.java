@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 
 @Scope("prototype")
 @Component

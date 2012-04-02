@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.selection;
+package com.kenstevens.stratinit.control.selection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

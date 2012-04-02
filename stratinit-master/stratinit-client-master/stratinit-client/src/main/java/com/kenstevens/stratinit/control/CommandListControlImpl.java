@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 
-import com.kenstevens.stratinit.ui.shell.CommandListControl;
+import com.kenstevens.stratinit.shell.CommandListControl;
 
 public class CommandListControlImpl implements CommandListControl {
 	private final org.eclipse.swt.widgets.List list;

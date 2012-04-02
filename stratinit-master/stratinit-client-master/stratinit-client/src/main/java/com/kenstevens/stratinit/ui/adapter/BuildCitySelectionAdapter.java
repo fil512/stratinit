@@ -8,10 +8,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
+import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.model.UnitView;
+import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.shell.TopShell;
 import com.kenstevens.stratinit.util.Spring;
 
 public class BuildCitySelectionAdapter extends StratinitSelectionAdapter {

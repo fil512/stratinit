@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.shell;
+package com.kenstevens.stratinit.shell;
 
 public class Message {
 	private final String text;

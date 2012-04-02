@@ -16,6 +16,11 @@ import org.springframework.stereotype.Component;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.control.ETAHelper;
+import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
+import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.CityListArrivedEvent;
 import com.kenstevens.stratinit.event.CityListArrivedEventHandler;
 import com.kenstevens.stratinit.main.ClientConstants;
@@ -30,11 +35,6 @@ import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEventHandler;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 import com.kenstevens.stratinit.util.BuildHelper;
 
 @Scope("prototype")

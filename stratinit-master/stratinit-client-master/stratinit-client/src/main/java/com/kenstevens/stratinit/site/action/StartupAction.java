@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.audio.WavPlayer;
+import com.kenstevens.stratinit.control.selection.MapCentre;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.CityListReplacementArrivedEvent;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
@@ -16,9 +19,6 @@ import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.DescriptionCommand;
-import com.kenstevens.stratinit.ui.selection.MapCentre;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 import com.kenstevens.stratinit.util.Spring;
 
 @Scope("prototype")

@@ -23,6 +23,9 @@ import org.springframework.stereotype.Component;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.control.PlayerTableControl;
 import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.control.selection.SelectNationEvent;
+import com.kenstevens.stratinit.control.selection.SelectNationEventHandler;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.GameChangedEvent;
 import com.kenstevens.stratinit.event.GameChangedEventHandler;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
@@ -31,12 +34,9 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedNation;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.ui.selection.SelectNationEvent;
-import com.kenstevens.stratinit.ui.selection.SelectNationEventHandler;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 import com.kenstevens.stratinit.util.Spring;
 
 @Scope("prototype")

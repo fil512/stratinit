@@ -13,8 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.ui.shell.ProgressBarControl;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
+import com.kenstevens.stratinit.shell.ProgressBarControl;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 
 
 @Ignore

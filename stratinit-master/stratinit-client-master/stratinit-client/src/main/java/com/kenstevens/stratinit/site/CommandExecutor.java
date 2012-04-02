@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.site;
 
-import com.kenstevens.stratinit.ui.shell.ProgressBarControl;
+import com.kenstevens.stratinit.shell.ProgressBarControl;
 
 
 

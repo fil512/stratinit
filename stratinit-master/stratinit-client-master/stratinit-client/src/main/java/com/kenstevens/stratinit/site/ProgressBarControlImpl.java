@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.site;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 
-import com.kenstevens.stratinit.ui.shell.ProgressBarControl;
+import com.kenstevens.stratinit.shell.ProgressBarControl;
 
 public class ProgressBarControlImpl implements ProgressBarControl {
 	private final ProgressBar progressBar;

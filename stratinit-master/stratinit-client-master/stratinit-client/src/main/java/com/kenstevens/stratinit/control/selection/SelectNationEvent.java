@@ -1,7 +1,7 @@
-package com.kenstevens.stratinit.ui.selection;
+package com.kenstevens.stratinit.control.selection;
 
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.StratInitEvent;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 
 public class SelectNationEvent extends StratInitEvent<SelectNationEventHandler> {
 	public static final Type<SelectNationEventHandler> TYPE = new Type<SelectNationEventHandler>();

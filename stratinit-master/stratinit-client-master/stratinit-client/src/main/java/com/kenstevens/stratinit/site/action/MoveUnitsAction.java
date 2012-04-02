@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.ActionQueue;
@@ -15,8 +17,6 @@ import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.UnitAwareAction;
 import com.kenstevens.stratinit.site.command.MoveUnitsCommand;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 import com.kenstevens.stratinit.util.Spring;
 
 @Scope("prototype")

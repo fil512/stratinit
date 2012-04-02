@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.selection;
+package com.kenstevens.stratinit.control.selection;
 
 
 public abstract class Selection {

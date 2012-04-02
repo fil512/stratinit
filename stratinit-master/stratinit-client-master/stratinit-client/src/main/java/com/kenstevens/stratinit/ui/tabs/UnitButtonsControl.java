@@ -9,6 +9,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.gwt.event.shared.HandlerManager;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
+import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
 import com.kenstevens.stratinit.model.Data;
@@ -17,6 +23,8 @@ import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.shell.TopShell;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.adapter.BuildCitySelectionAdapter;
@@ -28,14 +36,6 @@ import com.kenstevens.stratinit.ui.adapter.DisbandSelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.SwitchTerrainSelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.UpdateUnitsSelectionAdapter;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEventHandler;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
-import com.kenstevens.stratinit.ui.shell.TopShell;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 import com.kenstevens.stratinit.util.Spring;
 
 @Scope("prototype")

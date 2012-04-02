@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
+import com.kenstevens.stratinit.shell.StatusReporter;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 
 @Service
 public class CommandProcessor {

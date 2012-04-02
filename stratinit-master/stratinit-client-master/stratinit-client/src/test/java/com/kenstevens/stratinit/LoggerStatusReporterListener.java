@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.ui.shell.Message;
-import com.kenstevens.stratinit.ui.shell.StatusReportEvent;
-import com.kenstevens.stratinit.ui.shell.StatusReportEventHandler;
+import com.kenstevens.stratinit.shell.Message;
+import com.kenstevens.stratinit.shell.StatusReportEvent;
+import com.kenstevens.stratinit.shell.StatusReportEventHandler;
 
 @Service
 public final class LoggerStatusReporterListener {

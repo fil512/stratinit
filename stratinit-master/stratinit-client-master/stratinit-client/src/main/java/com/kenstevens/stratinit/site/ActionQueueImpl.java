@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
+import com.kenstevens.stratinit.shell.StatusReporter;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 
 @Component("ActionQueue")
 public class ActionQueueImpl implements ActionQueue {

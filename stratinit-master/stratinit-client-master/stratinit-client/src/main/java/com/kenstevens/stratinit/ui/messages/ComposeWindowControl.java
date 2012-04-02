@@ -15,8 +15,8 @@ import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 
 @Scope("prototype")
 @Component

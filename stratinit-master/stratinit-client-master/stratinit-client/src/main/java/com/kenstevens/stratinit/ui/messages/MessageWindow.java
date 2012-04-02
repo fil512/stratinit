@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.ui.shell.StratInitWindow;
+import com.kenstevens.stratinit.shell.StratInitWindow;
 import com.kenstevens.stratinit.util.Spring;
 
 @Component
