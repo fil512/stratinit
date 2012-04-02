@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.window;
+package com.kenstevens.stratinit.ui.window.map;
 
 import java.util.List;
 
@@ -49,8 +49,6 @@ import com.kenstevens.stratinit.site.action.UnitMover;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.tabs.TabManager;
-import com.kenstevens.stratinit.ui.window.map.SectorDrawerService;
-import com.kenstevens.stratinit.ui.window.map.UnitDrawerService;
 
 @Scope("prototype")
 @Component
@@ -141,7 +139,7 @@ public class MapCanvasControl implements MapController {
 		handlerManager.addHandler(WorldArrivedEvent.TYPE, new WorldArrivedEventHandler() {
 			@Override
 			public void dataArrived() {
-				buildImage(db.getWorld());
+				buildImage();
 			}
 		});
 		handlerManager.addHandler(GameChangedEvent.TYPE,
@@ -192,9 +190,10 @@ public class MapCanvasControl implements MapController {
 		
 	}
 
-	private void buildImage(Object observable) {
+	@Override
+	public void buildImage() {
 		mapImageManager.buildImage();
-		if (gameSwitched && observable instanceof WorldView) {
+		if (gameSwitched) {
 			setScrollBars();
 			gameSwitched = false;
 		}

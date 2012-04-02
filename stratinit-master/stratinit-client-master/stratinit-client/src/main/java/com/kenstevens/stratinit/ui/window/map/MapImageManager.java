@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.window;
+package com.kenstevens.stratinit.ui.window.map;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -18,9 +18,6 @@ import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.window.map.MapImageBuilderService;
-import com.kenstevens.stratinit.ui.window.map.drawer.Drawer;
-import com.kenstevens.stratinit.ui.window.map.drawer.MapDrawerManager;
 
 @Component
 public class MapImageManager {

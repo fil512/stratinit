@@ -1,11 +1,10 @@
-package com.kenstevens.stratinit.ui.window.map.drawer;
+package com.kenstevens.stratinit.ui.window.map;
 
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
 
 public class SquareDrawer extends Drawer {
 	private final Image image;

@@ -1,8 +1,7 @@
-package com.kenstevens.stratinit.ui.window.map.drawer;
+package com.kenstevens.stratinit.ui.window.map;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.kenstevens.stratinit.ui.window.MapImageManager;
 
 public abstract class Drawer {
 	protected final MapImageManager mapImageManager;

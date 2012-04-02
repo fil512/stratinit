@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.window.map.drawer;
+package com.kenstevens.stratinit.ui.window.map;
 
 import java.util.Set;
 
@@ -13,11 +13,6 @@ import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
-import com.kenstevens.stratinit.ui.window.map.BattleLogDrawerService;
-import com.kenstevens.stratinit.ui.window.map.MapDrawerService;
-import com.kenstevens.stratinit.ui.window.map.SectorDrawerService;
-import com.kenstevens.stratinit.ui.window.map.SupplyDrawerService;
-import com.kenstevens.stratinit.ui.window.map.UnitDrawerService;
 
 @Service
 public class MapDrawerManager {
