@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.model.stats.Stats;
+import com.kenstevens.stratinit.site.processor.StatsManager;
 import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 
 @Component
@@ -30,7 +30,7 @@ public class StatsWindow implements StratInitWindow {
 	private Table unitTable;
 	private Shell dialog;
 	@Autowired
-	private Stats stats;
+	private StatsManager statsManager;
 
 	/**
 	 * Open the window
@@ -191,17 +191,17 @@ public class StatsWindow implements StratInitWindow {
 	}
 
 	public void setContents(int gameId) {
-		stats.update(gameId);
-		for (String[] unitRow : stats.getUnitRecordStats()) {
+		statsManager.update(gameId);
+		for (String[] unitRow : statsManager.getUnitRecordStats()) {
 			TableItem item = new TableItem(unitTable, SWT.NONE);
 			item.setText(unitRow);
 		}
-		for (String[] opponentRow : stats.getOpponentStats()) {
+		for (String[] opponentRow : statsManager.getOpponentStats()) {
 			TableItem item = new TableItem(opponentsTable, SWT.NONE);
 			item.setText(opponentRow);
 		}
 
-		for (String opponent : stats.getOpponents()) {
+		for (String opponent : statsManager.getOpponents()) {
 			combo.add(opponent);
 		}
 		
@@ -209,7 +209,7 @@ public class StatsWindow implements StratInitWindow {
 	}
 
 	private void selectWorstOpponent() {
-		String worstOpponent = stats.getWorstOpponent();
+		String worstOpponent = statsManager.getWorstOpponent();
 		if (worstOpponent == null) {
 			return;
 		}
@@ -223,7 +223,7 @@ public class StatsWindow implements StratInitWindow {
 			return;
 		}
 		detailsTable.removeAll();
-		for (String[] opponentRow : stats.getOpponentStats(opponent)) {
+		for (String[] opponentRow : statsManager.getOpponentStats(opponent)) {
 			TableItem item = new TableItem(detailsTable, SWT.NONE);
 			item.setText(opponentRow);
 		}

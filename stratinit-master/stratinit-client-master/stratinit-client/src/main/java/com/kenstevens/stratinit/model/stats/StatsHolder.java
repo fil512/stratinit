@@ -13,17 +13,17 @@ public class StatsHolder {
 	private final UnitDeltaMap unitDelta = new UnitDeltaMap();
 	private final UnitPreservationMap unitPreservationMap = new UnitPreservationMap();
 
-	protected void clear() {
+	public void clear() {
 		dominanceMap.clear();
 		unitDelta.clear();
 		unitPreservationMap.clear();
 	}
 
-	protected void addBuilt(List<SIUnitBuilt> unitsBuilt) {
+	public void addBuilt(List<SIUnitBuilt> unitsBuilt) {
 		unitPreservationMap.addBuilt(unitsBuilt);
 	}
 
-	protected void rebuildStats(BattleLogList battleLogList) {
+	public void rebuildStats(BattleLogList battleLogList) {
 		for (BattleLogEntry entry : battleLogList) {
 			if (!entry.isIDied() && !entry.isOtherDied()) {
 				continue;
@@ -64,19 +64,19 @@ public class StatsHolder {
 		}
 	}
 	
-	protected Set<String> getOpponents() {
+	public Set<String> getOpponents() {
 		return dominanceMap.getOpponents();
 	}
 
-	protected List<String[]> getOpponentStats() {
+	public List<String[]> getOpponentStats() {
 		return dominanceMap.getOpponentStats();
 	}
 
-	protected List<String[]>  getOpponentStats(String opponent) {
+	public List<String[]>  getOpponentStats(String opponent) {
 		return unitDelta.getOpponentStats(opponent);
 	}
 
-	protected List<String[]>  getUnitRecordStats() {
+	public List<String[]>  getUnitRecordStats() {
 		return unitPreservationMap.getUnitRecordStats();
 	}
 

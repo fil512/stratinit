@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.event.StatusReportEvent;
 import com.kenstevens.stratinit.remote.Result;
 
 @Service

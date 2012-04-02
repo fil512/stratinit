@@ -11,9 +11,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.event.SelectNationEvent;
-import com.kenstevens.stratinit.event.SelectSectorEvent;
-import com.kenstevens.stratinit.event.SelectUnitsEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCity;
@@ -90,7 +87,8 @@ public class SelectEvent {
 				selectSectorCoords(selectedUnits.getCoords(), selectionSource,
 						false);
 			} else {
-				selectUnits(Lists.newArrayList(selectedUnits), selectionSource, false);
+				selectUnits(Lists.newArrayList(selectedUnits), selectionSource,
+						false);
 			}
 		} else {
 			selectUnits(unitsWithMob, selectionSource, false);
@@ -132,4 +130,5 @@ public class SelectEvent {
 	public List<UnitView> getSelectedUnits() {
 		return Lists.newArrayList(selectedUnits);
 	}
+
 }

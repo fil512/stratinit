@@ -18,15 +18,15 @@ import com.kenstevens.stratinit.event.CityListArrivedEvent;
 import com.kenstevens.stratinit.event.CityListArrivedEventHandler;
 import com.kenstevens.stratinit.event.CityListReplacementArrivedEvent;
 import com.kenstevens.stratinit.event.CityListReplacementArrivedEventHandler;
-import com.kenstevens.stratinit.event.SelectSectorEvent;
-import com.kenstevens.stratinit.event.SelectSectorEventHandler;
-import com.kenstevens.stratinit.event.SelectUnitsEvent;
-import com.kenstevens.stratinit.event.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.model.CityView;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedCity;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.ui.selection.SelectEvent;
+import com.kenstevens.stratinit.ui.selection.SelectSectorEvent;
+import com.kenstevens.stratinit.ui.selection.SelectSectorEventHandler;
+import com.kenstevens.stratinit.ui.selection.SelectUnitsEvent;
+import com.kenstevens.stratinit.ui.selection.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.ui.selection.Selection.Source;
 
 @Scope("prototype")

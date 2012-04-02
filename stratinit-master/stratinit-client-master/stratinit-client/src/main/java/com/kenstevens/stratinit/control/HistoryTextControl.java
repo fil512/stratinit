@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.event.StatusReportEvent;
-import com.kenstevens.stratinit.event.StatusReportEventHandler;
 import com.kenstevens.stratinit.ui.shell.Message;
+import com.kenstevens.stratinit.ui.shell.StatusReportEvent;
+import com.kenstevens.stratinit.ui.shell.StatusReportEventHandler;
 import com.kenstevens.stratinit.ui.shell.Message.Type;
 
 @Scope("prototype")

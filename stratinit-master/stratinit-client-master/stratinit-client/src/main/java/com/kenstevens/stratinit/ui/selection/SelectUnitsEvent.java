@@ -1,6 +1,6 @@
-package com.kenstevens.stratinit.event;
+package com.kenstevens.stratinit.ui.selection;
 
-import com.kenstevens.stratinit.ui.selection.Selection;
+import com.kenstevens.stratinit.event.StratInitEvent;
 import com.kenstevens.stratinit.ui.selection.Selection.Source;
 
 //TODO REF this should probably be a type of selectSector event

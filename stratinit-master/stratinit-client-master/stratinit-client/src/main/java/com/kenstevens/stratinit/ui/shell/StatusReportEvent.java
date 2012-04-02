@@ -1,6 +1,6 @@
-package com.kenstevens.stratinit.event;
+package com.kenstevens.stratinit.ui.shell;
 
-import com.kenstevens.stratinit.ui.shell.Message;
+import com.kenstevens.stratinit.event.StratInitEvent;
 
 public class StatusReportEvent extends StratInitEvent<StatusReportEventHandler> {
 	public static final Type<StatusReportEventHandler> TYPE = new Type<StatusReportEventHandler>();
