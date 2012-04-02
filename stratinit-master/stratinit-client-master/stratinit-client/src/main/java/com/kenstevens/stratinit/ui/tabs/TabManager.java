@@ -16,13 +16,14 @@ import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.shell.TabControl;
 import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.ui.window.MapImageManager;
 
 @Service
 public class TabManager implements TabControl {
 	@Autowired
 	ActionFactory actionFactory;
 	@Autowired
-	MapImageManagerRename mapImageManager;
+	MapImageManager mapImageManager;
 	@Autowired
 	ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 
