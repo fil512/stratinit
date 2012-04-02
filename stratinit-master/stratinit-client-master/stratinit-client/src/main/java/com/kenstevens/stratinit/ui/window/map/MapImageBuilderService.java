@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.supply.Supply;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
-import com.kenstevens.stratinit.ui.window.map.drawer.MapBuilder;
 
 @Service
 public class MapImageBuilderService {

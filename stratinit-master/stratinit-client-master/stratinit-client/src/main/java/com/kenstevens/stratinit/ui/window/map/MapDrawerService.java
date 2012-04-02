@@ -11,11 +11,6 @@ import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.window.LineStyle;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
-import com.kenstevens.stratinit.ui.window.map.drawer.LineDrawer;
-import com.kenstevens.stratinit.ui.window.map.drawer.MapBuilder;
-import com.kenstevens.stratinit.ui.window.map.drawer.ReachDrawer;
-import com.kenstevens.stratinit.ui.window.map.drawer.SquareDrawer;
 
 @Service
 public class MapDrawerService {

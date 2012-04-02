@@ -75,9 +75,9 @@ import com.kenstevens.stratinit.ui.tabs.SupplyTabItemControl;
 import com.kenstevens.stratinit.ui.tabs.TabManager;
 import com.kenstevens.stratinit.ui.tabs.UnitTabItem;
 import com.kenstevens.stratinit.ui.tabs.UnitTabItemControl;
-import com.kenstevens.stratinit.ui.window.MapCanvasControl;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
 import com.kenstevens.stratinit.ui.window.WindowDirector;
+import com.kenstevens.stratinit.ui.window.map.MapCanvasControl;
+import com.kenstevens.stratinit.ui.window.map.MapImageManager;
 import com.kenstevens.stratinit.util.AccountPersister;
 import com.kenstevens.stratinit.util.Spring;
 

@@ -16,14 +16,11 @@ import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.shell.TabControl;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
 
 @Service
 public class TabManager implements TabControl {
 	@Autowired
 	ActionFactory actionFactory;
-	@Autowired
-	MapImageManager mapImageManager;
 	@Autowired
 	ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 
@@ -88,8 +85,7 @@ public class TabManager implements TabControl {
 				|| toOrFrom(lastTabSelected, cityTabIndex)
 				|| toOrFrom(lastTabSelected, playerTabIndex)
 				|| toOrFrom(lastTabSelected, supplyTabIndex)) {
-			mapImageManager.buildImage();
-			mapController.redraw();
+			mapController.buildImage();
 		}
 	}
 	

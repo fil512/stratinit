@@ -22,7 +22,6 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.window.LineStyle;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
 
 @Service
 public class UnitDrawerService {
