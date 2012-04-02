@@ -11,19 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
+import com.kenstevens.stratinit.control.MapController;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.shell.TabControl;
-import com.kenstevens.stratinit.ui.window.MapCanvasControl;
-import com.kenstevens.stratinit.ui.window.MapImageManager;
 
 @Service
 public class TabManager implements TabControl {
 	@Autowired
 	ActionFactory actionFactory;
 	@Autowired
-	MapImageManager mapImageManager;
+	MapImageManagerRename mapImageManager;
 	@Autowired
 	ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 
@@ -40,7 +39,7 @@ public class TabManager implements TabControl {
 	private int futureTabIndex;
 	private int supplyTabIndex;
 	private FutureTabItemControl futureTabItemControl;
-	private MapCanvasControl mapCanvasControl;
+	private MapController mapController;
 
 	public int register(String title, TabItem tabItem) {
 		tabMap.put(title, tabItem);
@@ -54,9 +53,9 @@ public class TabManager implements TabControl {
 	}
 	
 	public void setControllers(FutureTabItemControl futureTabItemControl,
-			MapCanvasControl mapCanvasControl) {
+			MapController mapController) {
 		this.futureTabItemControl = futureTabItemControl;
-		this.mapCanvasControl = mapCanvasControl;
+		this.mapController = mapController;
 		addListeners();
 	}
 
@@ -89,7 +88,7 @@ public class TabManager implements TabControl {
 				|| toOrFrom(lastTabSelected, playerTabIndex)
 				|| toOrFrom(lastTabSelected, supplyTabIndex)) {
 			mapImageManager.buildImage();
-			mapCanvasControl.redraw();
+			mapController.redraw();
 		}
 	}
 	

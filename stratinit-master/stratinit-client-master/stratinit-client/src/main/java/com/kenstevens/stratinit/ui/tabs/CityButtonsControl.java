@@ -16,6 +16,7 @@ import com.kenstevens.stratinit.model.SelectedCity;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.adapter.CancelCitySelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.CedeCitySelectionAdapter;
+import com.kenstevens.stratinit.ui.adapter.CedeWindow;
 import com.kenstevens.stratinit.ui.adapter.UpdateCitiesSelectionAdapter;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.shell.TopShell;

@@ -26,6 +26,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.adapter.BuildCitySelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.CancelMoveSelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.CedeUnitsSelectionAdapter;
+import com.kenstevens.stratinit.ui.adapter.CedeWindow;
 import com.kenstevens.stratinit.ui.adapter.CentreHomeSelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.DisbandSelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.SwitchTerrainSelectionAdapter;

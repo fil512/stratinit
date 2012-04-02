@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.tabs;
+package com.kenstevens.stratinit.ui.adapter;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;

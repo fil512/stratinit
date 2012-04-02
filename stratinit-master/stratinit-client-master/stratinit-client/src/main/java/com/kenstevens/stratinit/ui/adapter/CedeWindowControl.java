@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.tabs;
+package com.kenstevens.stratinit.ui.adapter;
 
 import java.util.List;
 

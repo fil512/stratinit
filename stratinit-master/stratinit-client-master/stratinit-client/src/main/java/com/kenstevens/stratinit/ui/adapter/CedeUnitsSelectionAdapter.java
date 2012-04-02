@@ -10,8 +10,6 @@ import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.selection.SelectEvent;
 import com.kenstevens.stratinit.ui.shell.TopShell;
-import com.kenstevens.stratinit.ui.tabs.CedeWindow;
-import com.kenstevens.stratinit.ui.tabs.CedeWindowControl;
 import com.kenstevens.stratinit.util.Spring;
 
 public class CedeUnitsSelectionAdapter extends StratinitSelectionAdapter {

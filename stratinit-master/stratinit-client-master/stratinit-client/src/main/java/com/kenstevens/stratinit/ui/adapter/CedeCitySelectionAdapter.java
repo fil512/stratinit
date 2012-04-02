@@ -8,8 +8,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.SelectedCity;
 import com.kenstevens.stratinit.ui.shell.TopShell;
-import com.kenstevens.stratinit.ui.tabs.CedeWindow;
-import com.kenstevens.stratinit.ui.tabs.CedeWindowControl;
 import com.kenstevens.stratinit.util.Spring;
 
 public class CedeCitySelectionAdapter extends SelectionAdapter {

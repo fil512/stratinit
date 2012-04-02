@@ -139,8 +139,8 @@ public class ActionQueueImpl implements ActionQueue {
 		} catch (Exception e) {
 			statusReporter.reportError(e);
 			logger.error(e.getMessage(), e);
-			if (!(action instanceof SubmitErrorAction)) {
-				((SubmitErrorAction)action).submitError(e);
+			if (!(action instanceof ErrorSubmitter)) {
+				((ErrorSubmitter)action).submitError(e);
 			}
 		} finally {
 			if (action instanceof UnitAwareAction) {

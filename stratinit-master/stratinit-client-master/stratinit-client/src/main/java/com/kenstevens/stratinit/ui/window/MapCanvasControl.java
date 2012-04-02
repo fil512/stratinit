@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.control.MapController;
 import com.kenstevens.stratinit.event.GameChangedEvent;
 import com.kenstevens.stratinit.event.GameChangedEventHandler;
 import com.kenstevens.stratinit.event.SelectNationEvent;
@@ -54,7 +54,7 @@ import com.kenstevens.stratinit.ui.window.map.UnitDrawerService;
 
 @Scope("prototype")
 @Component
-public class MapCanvasControl implements TopLevelController {
+public class MapCanvasControl implements MapController {
 	private final Canvas canvas;
 	private Point origin = new Point(0, 0);
 	private boolean gameSwitched = false;
