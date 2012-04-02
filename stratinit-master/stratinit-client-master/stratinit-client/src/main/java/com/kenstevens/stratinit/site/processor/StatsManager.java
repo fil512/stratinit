@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.model.stats;
+package com.kenstevens.stratinit.site.processor;
 
 import java.util.List;
 import java.util.Set;
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.dto.SIUnitBuilt;
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.stats.StatsHolder;
 import com.kenstevens.stratinit.remote.StratInit;
-import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
 
 @Component
-public class Stats {
+public class StatsManager {
 	@Autowired
 	private Data db;
 	@Autowired

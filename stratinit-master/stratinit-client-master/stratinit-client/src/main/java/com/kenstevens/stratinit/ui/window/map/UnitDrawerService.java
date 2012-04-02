@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.SelectedNation;
 import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
@@ -20,6 +19,7 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
+import com.kenstevens.stratinit.ui.selection.SelectEvent;
 import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 import com.kenstevens.stratinit.ui.window.LineStyle;
 import com.kenstevens.stratinit.ui.window.MapImageManager;
@@ -41,7 +41,7 @@ public class UnitDrawerService {
 	@Autowired
 	MapDrawerService mapDrawer;
 	@Autowired
-	SelectedNation selectedNation;
+	SelectEvent selectEvent;
 	@Autowired
 	MapImageManager mapImageManager;
 	
@@ -54,7 +54,7 @@ public class UnitDrawerService {
 			return;
 		}
 		Image image;
-		if (selectedNation.nationSelected(sector.getNation())) {
+		if (sectorDrawer.isNationSelected(sector.getNation())) {
 			image = imageLibrary.getDestroyed(topUnitType);
 		} else {
 			RelationType relationType = sector.getMyRelation();

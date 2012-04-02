@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.SelectedNation;
 import com.kenstevens.stratinit.model.UnitBase;
@@ -18,6 +20,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
+import com.kenstevens.stratinit.ui.selection.SelectEvent;
 import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 import com.kenstevens.stratinit.ui.window.LineStyle;
 import com.kenstevens.stratinit.ui.window.MapImageManager;
@@ -42,6 +45,8 @@ public class SectorDrawerService {
 	WidgetContainer widgetContainer;
 	@Autowired
 	SelectedNation selectedNation;
+	@Autowired
+	SelectEvent selectEvent;
 	
 	public void drawSectors(int boardSize, GC gc) {
 		for (int x = 0; x < boardSize; ++x) {
@@ -91,7 +96,7 @@ public class SectorDrawerService {
 		CityType cityType = sector.getCityType();
 		if (cityType != null) {
 			Image image;
-			if (selectedNation.nationSelected(sector.getNation())) {
+			if (isNationSelected(sector.getNation())) {
 				image = imageLibrary.getDestroyed(cityType);
 			} else {
 				RelationType relationType = sector.getMyRelation();
@@ -101,6 +106,11 @@ public class SectorDrawerService {
 		}
 	}
 
+	protected boolean isNationSelected(Nation theNation) {
+		NationView nation = selectedNation.getPlayer();
+		return widgetContainer.getTabControl().playerTabSelected()
+				&& nation != null && nation.equals(theNation);
+	}
 
 	public void drawCityMove(City city) {
 		if (city == null || city.getCityMove() == null) {
