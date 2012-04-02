@@ -1,0 +1,23 @@
+package com.kenstevens.stratinit.ui.adapter;
+
+import org.eclipse.swt.events.SelectionAdapter;
+
+import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.ui.selection.SelectEvent;
+import com.kenstevens.stratinit.ui.shell.TopShell;
+import com.kenstevens.stratinit.util.Spring;
+
+public class StratinitSelectionAdapter extends SelectionAdapter {
+	protected final SelectEvent selectEvent;
+	protected final Spring spring;
+	protected final TopShell topShell;
+	protected final ActionFactory actionFactory;
+	
+	public StratinitSelectionAdapter(SelectEvent selectEvent, Spring spring,
+			ActionFactory actionFactory, TopShell topShell) {
+				this.selectEvent = selectEvent;
+				this.spring = spring;
+				this.actionFactory = actionFactory;
+				this.topShell = topShell;
+	}
+}
