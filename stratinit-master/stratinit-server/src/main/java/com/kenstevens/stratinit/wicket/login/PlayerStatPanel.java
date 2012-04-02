@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.wicket.game;
+package com.kenstevens.stratinit.wicket.login;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;

@@ -9,6 +9,7 @@ import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 
 import com.kenstevens.stratinit.wicket.admin.AdminPage;
 import com.kenstevens.stratinit.wicket.docs.AboutPage;
+import com.kenstevens.stratinit.wicket.login.LoginPage;
 import com.kenstevens.stratinit.wicket.rank.LeaderBoardPage;
 
 /**

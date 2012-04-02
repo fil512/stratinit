@@ -1,7 +1,8 @@
-package com.kenstevens.stratinit.wicket;
+package com.kenstevens.stratinit.wicket.login;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import com.kenstevens.stratinit.wicket.BasePage;
 import com.kenstevens.stratinit.wicket.components.ForgottenPasswordForm;
 
 public class ForgottenPasswordPage extends BasePage {
