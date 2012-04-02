@@ -6,6 +6,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
 import com.kenstevens.stratinit.wicket.docs.PlayPage;
 import com.kenstevens.stratinit.wicket.docs.VideoPage;
+import com.kenstevens.stratinit.wicket.login.RegistrationPage;
 
 public class HomePage extends AuthenticatedPage {
 	private static final long serialVersionUID = 1L;

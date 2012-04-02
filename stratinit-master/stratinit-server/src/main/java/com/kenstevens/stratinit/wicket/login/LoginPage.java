@@ -1,9 +1,11 @@
-package com.kenstevens.stratinit.wicket;
+package com.kenstevens.stratinit.wicket.login;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.authroles.authentication.panel.SignInPanel;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import com.kenstevens.stratinit.wicket.BasePage;
 
 public class LoginPage extends BasePage {
 	private static final long serialVersionUID = 1L;
