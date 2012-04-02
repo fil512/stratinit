@@ -46,7 +46,8 @@ public class SupplyTabItemControl implements TopLevelController {
 			}
 		};
 		
-		spring.autowire(new UnitTableControl(supplyTabItem.getUnitTable(), supplyPredicate, byCoords, false));
+		UnitTable unitTable = supplyTabItem.getUnitTable();
+		spring.autowire(new UnitTableControl(unitTable.getTable(), supplyPredicate, byCoords, false, unitTable.isShowCoords()));
 
 	}
 

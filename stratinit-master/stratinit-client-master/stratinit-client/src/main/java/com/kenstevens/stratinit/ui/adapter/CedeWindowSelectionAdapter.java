@@ -14,8 +14,8 @@ import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.UnitView;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 
 @Scope("prototype")
 @Component

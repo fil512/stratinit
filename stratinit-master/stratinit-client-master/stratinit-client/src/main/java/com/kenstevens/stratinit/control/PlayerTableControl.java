@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.gwt.event.shared.HandlerManager;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
@@ -22,8 +24,6 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationList;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.TeamList;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 
 @Scope("prototype")
 @Component

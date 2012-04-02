@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.ui;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 
-import com.kenstevens.stratinit.ui.shell.TopShell;
+import com.kenstevens.stratinit.shell.TopShell;
 
 public class PlayerCommandPointWarner {
 

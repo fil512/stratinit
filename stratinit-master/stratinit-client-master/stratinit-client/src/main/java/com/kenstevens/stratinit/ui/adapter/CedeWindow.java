@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.ui.shell.StratInitWindow;
+import com.kenstevens.stratinit.shell.StratInitWindow;
 
 @Component
 public class CedeWindow implements StratInitWindow {

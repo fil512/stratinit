@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.control.Controller;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.Selection;
 import com.kenstevens.stratinit.event.BattleLogListArrivedEvent;
 import com.kenstevens.stratinit.event.BattleLogListArrivedEventHandler;
 import com.kenstevens.stratinit.model.BattleLogEntry;
 import com.kenstevens.stratinit.model.BattleLogList;
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.Selection;
 
 @Scope("prototype")
 @Component

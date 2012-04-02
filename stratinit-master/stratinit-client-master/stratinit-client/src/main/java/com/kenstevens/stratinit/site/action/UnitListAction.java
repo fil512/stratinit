@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.GetUnitsCommand;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 import com.kenstevens.stratinit.util.Spring;
 
 @Scope("prototype")

@@ -15,18 +15,18 @@ import com.google.common.base.Predicate;
 import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.control.UnitTableControl;
+import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
+import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.shell.ColourMap;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.image.ColourMap;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEventHandler;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 import com.kenstevens.stratinit.util.Spring;
 
 // TODO split off two controls: target sector and build dropdowns
@@ -81,7 +81,8 @@ public class SectorTabItemControl implements TopLevelController {
 			}
 			
 		};
-		spring.autowire(new UnitTableControl(sectorTabItem.getUnitTable(), selectedUnitsPredicate, byTypeByMoves, true));
+		UnitTable unitTable = sectorTabItem.getUnitTable();
+		spring.autowire(new UnitTableControl(unitTable.getTable(), selectedUnitsPredicate, byTypeByMoves, true, unitTable.isShowCoords()));
 		spring.autowire(new BuildingCombosControl(sectorTabItem
 				.getBuildingCombos()));
 		unitButtonsControl = spring.autowire(new UnitButtonsControl(

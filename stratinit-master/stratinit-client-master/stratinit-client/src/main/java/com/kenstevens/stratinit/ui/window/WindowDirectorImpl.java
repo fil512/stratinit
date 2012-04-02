@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kenstevens.stratinit.model.Account;
+import com.kenstevens.stratinit.shell.StatusReporter;
+import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
-import com.kenstevens.stratinit.ui.shell.TopShell;
 import com.kenstevens.stratinit.util.Spring;
 
 @Service

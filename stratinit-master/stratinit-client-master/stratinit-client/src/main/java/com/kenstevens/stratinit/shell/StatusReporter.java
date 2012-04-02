@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.shell;
+package com.kenstevens.stratinit.shell;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

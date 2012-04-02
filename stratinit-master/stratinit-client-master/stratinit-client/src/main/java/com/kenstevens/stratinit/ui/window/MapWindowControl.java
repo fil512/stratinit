@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.control.selection.MapCentre;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.selection.MapCentre;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 
 @Scope("prototype")
 @Component

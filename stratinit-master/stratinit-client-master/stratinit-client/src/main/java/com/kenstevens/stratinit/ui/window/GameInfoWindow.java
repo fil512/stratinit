@@ -19,12 +19,12 @@ import org.springframework.stereotype.Component;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.UnitBase;
+import com.kenstevens.stratinit.shell.ColourMap;
+import com.kenstevens.stratinit.shell.StratInitWindow;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.ui.image.ColourMap;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
-import com.kenstevens.stratinit.ui.shell.StratInitWindow;
 import com.kenstevens.stratinit.ui.tabs.TableControl;
 import com.kenstevens.stratinit.util.BuildHelper;
 

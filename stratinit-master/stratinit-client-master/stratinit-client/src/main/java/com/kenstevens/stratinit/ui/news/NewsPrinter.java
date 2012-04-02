@@ -6,7 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 
-import com.kenstevens.stratinit.ui.image.ColourMap;
+import com.kenstevens.stratinit.shell.ColourMap;
 
 public class NewsPrinter {
 

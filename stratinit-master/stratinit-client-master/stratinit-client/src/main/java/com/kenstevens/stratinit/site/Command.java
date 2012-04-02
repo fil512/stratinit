@@ -15,10 +15,10 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
 import com.kenstevens.stratinit.site.processor.ResultBattleLogProcessor;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 
 public abstract class Command<T> {
 	private final Log logger = LogFactory.getLog(getClass());

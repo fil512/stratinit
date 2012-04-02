@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.selection;
+package com.kenstevens.stratinit.control.selection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.gwt.event.shared.HandlerManager;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCity;
@@ -20,7 +21,6 @@ import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
 
 @Service
 public class SelectEvent {

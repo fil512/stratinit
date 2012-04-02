@@ -32,6 +32,12 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.gwt.event.shared.HandlerManager;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
+import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
+import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.UnitListArrivedEvent;
 import com.kenstevens.stratinit.event.UnitListArrivedEventHandler;
 import com.kenstevens.stratinit.model.Data;
@@ -42,14 +48,7 @@ import com.kenstevens.stratinit.model.UnitList;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.ui.image.ColourMap;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.ui.selection.SelectSectorEventHandler;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.ui.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.ui.selection.Selection.Source;
-import com.kenstevens.stratinit.ui.tabs.UnitTable;
+import com.kenstevens.stratinit.shell.ColourMap;
 
 @Scope("prototype")
 @Component
@@ -67,16 +66,16 @@ public class UnitTableControl implements Controller {
 	private HandlerManager handlerManager;
 	private Predicate<Unit> unitFilter;
 	private final boolean listenToSectorSelects;
-	private final UnitTable unitTable;
+	private final boolean isShowCoords;
 	private Comparator<UnitView> unitComparator;
 
-	public UnitTableControl(UnitTable unitTable, Predicate<Unit> unitFilter, Comparator<UnitView> unitComparator,
-			boolean listenToSectorSelects) {
-		this.unitTable = unitTable;
+	public UnitTableControl(Table unitTable, Predicate<Unit> unitFilter, Comparator<UnitView> unitComparator,
+			boolean listenToSectorSelects, boolean isShowCoords) {
 		this.unitFilter = unitFilter;
 		this.unitComparator = unitComparator;
 		this.listenToSectorSelects = listenToSectorSelects;
-		this.table = unitTable.getTable();
+		this.table = unitTable;
+		this.isShowCoords = isShowCoords;
 
 		setTableListeners();
 	}
@@ -306,7 +305,7 @@ public class UnitTableControl implements Controller {
 
 	private void unitToItem(Unit unit, TableItem item, boolean myUnit,
 			ETAHelper etaHelper) {
-		if (unitTable.isShowCoords()) {
+		if (isShowCoords) {
 			item.setText(new String[] {
 					unit.getCoords().toString(),
 					unit.getType().toString(),

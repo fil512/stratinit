@@ -14,8 +14,8 @@ import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.control.MapController;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
+import com.kenstevens.stratinit.shell.TabControl;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.shell.TabControl;
 
 @Service
 public class TabManager implements TabControl {

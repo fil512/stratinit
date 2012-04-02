@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.GetSectorsCommand;
-import com.kenstevens.stratinit.ui.shell.StatusReporter;
 import com.kenstevens.stratinit.util.Spring;
 
 @Scope("prototype")

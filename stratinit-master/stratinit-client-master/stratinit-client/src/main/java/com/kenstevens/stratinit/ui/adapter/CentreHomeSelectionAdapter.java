@@ -6,10 +6,10 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.model.UnitView;
+import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.selection.SelectEvent;
-import com.kenstevens.stratinit.ui.shell.WidgetContainer;
 
 final public class CentreHomeSelectionAdapter extends SelectionAdapter {
 	final Logger logger = Logger.getLogger(getClass());

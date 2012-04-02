@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.control.selection.MapCentre;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Sector;
@@ -16,7 +17,6 @@ import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.image.ImageUtils;
-import com.kenstevens.stratinit.ui.selection.MapCentre;
 
 @Component
 public class SmallMapImageManager {
