@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import jdepend.framework.JDepend;
 import jdepend.framework.JavaPackage;
@@ -12,34 +13,39 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 @RunWith(Parameterized.class)
 public class JDependTest {
 
-	private static JDepend jdepend = null;
-	private static Collection<JavaPackage> packages = null;
-	private JavaPackage pack1 = null;
+	private JavaPackage javaPackage = null;
 
 	@SuppressWarnings("unchecked")
 	@Parameterized.Parameters
-	public static Collection<JavaPackage[]> data() throws IOException {
-		Collection<JavaPackage[]> result = Lists.newArrayList();
-		jdepend = new JDepend();
+	public static List<JavaPackage[]> data() throws IOException {
+		JDepend jdepend = new JDepend();
 		jdepend.addDirectory("target/classes");
-		packages = jdepend.analyze();
-		for (JavaPackage p : packages) {
-			result.add(new JavaPackage[] { p });
-		}
-		return result;
+		
+		return arrayIze(jdepend.analyze());
 	}
 
-	public JDependTest(JavaPackage pack) {
-		pack1 = pack;
+	private static List<JavaPackage[]> arrayIze(Collection<JavaPackage> packages) {
+		return Lists.newArrayList(Collections2.transform(packages, new Function<JavaPackage, JavaPackage[]>() {
+			@Override
+			public JavaPackage[] apply(JavaPackage pkg) {
+				return new JavaPackage[] { pkg };
+			}
+		}));
+	}
+
+	public JDependTest(JavaPackage javaPackage) {
+		this.javaPackage = javaPackage;
 	}
 
 	@Test
 	public void cycleTest() {
-		assertFalse(pack1.getName() + " failed", pack1.containsCycle());
+		assertFalse(javaPackage.getName() + " failed", javaPackage.containsCycle());
 	}
 }
