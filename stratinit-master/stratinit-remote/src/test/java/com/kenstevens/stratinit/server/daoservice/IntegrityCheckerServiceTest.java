@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.server.daoservice.impl.IntegrityCheckerServiceImpl;
+import com.kenstevens.stratinit.server.daoserviceimpl.IntegrityCheckerServiceImpl;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;

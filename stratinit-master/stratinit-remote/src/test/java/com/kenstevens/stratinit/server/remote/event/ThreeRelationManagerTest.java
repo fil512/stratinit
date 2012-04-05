@@ -13,6 +13,7 @@ import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.remote.ThreePlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
 

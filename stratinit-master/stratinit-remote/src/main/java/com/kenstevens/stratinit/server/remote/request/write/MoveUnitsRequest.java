@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MoveService;
 import com.kenstevens.stratinit.server.remote.helper.PlayerWorldViewUpdate;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 

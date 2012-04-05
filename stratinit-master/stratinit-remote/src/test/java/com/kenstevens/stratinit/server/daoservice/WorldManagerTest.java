@@ -17,11 +17,11 @@ import com.kenstevens.stratinit.model.EventKey;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.server.remote.event.CityBuildEvent;
-import com.kenstevens.stratinit.server.remote.event.Event;
-import com.kenstevens.stratinit.server.remote.event.EventQueue;
+import com.kenstevens.stratinit.server.event.CityBuildEvent;
+import com.kenstevens.stratinit.server.event.Event;
+import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.UnitUpdateEvent;
 import com.kenstevens.stratinit.server.remote.event.EventTimerMockedBase;
-import com.kenstevens.stratinit.server.remote.event.UnitUpdateEvent;
 import com.kenstevens.stratinit.server.remote.helper.WorldManagerHelper;
 import com.kenstevens.stratinit.type.UnitType;
 

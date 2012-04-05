@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
 

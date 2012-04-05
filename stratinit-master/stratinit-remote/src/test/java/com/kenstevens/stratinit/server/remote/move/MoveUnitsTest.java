@@ -11,11 +11,11 @@ import org.junit.Test;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.WithUnitsBase;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveType;
+import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 

@@ -11,7 +11,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.wicket.BasePage;
+import com.kenstevens.stratinit.wicket.base.BasePage;
+import com.kenstevens.stratinit.wicket.model.MessageListModel;
+import com.kenstevens.stratinit.wicket.provider.MessageListProvider;
 
 public class MessageBoardPage extends BasePage {
 	private static final long serialVersionUID = 1L;

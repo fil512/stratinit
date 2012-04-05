@@ -3,10 +3,10 @@ package com.kenstevens.stratinit.rank;
 import java.util.List;
 
 import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.PlayerRank;
-import com.kenstevens.stratinit.model.TeamRank;
 
 public class TeamRanker {
 
@@ -29,7 +29,7 @@ public class TeamRanker {
 	
 
 	
-	public List<TeamRank> getTeamRanks() {
+	public List<SITeamRank> getTeamRanks() {
 		return teamRanks.getTeamRanks();
 	}
 
@@ -37,7 +37,7 @@ public class TeamRanker {
 		return teamRanks.getPlayerRanks();		
 	}
 
-	public List<TeamRank> getTeamRanks(String playerName) {
+	public List<SITeamRank> getTeamRanks(String playerName) {
 		return teamRanks.getTeamRanks(playerName);
 	}
 }

@@ -7,7 +7,12 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.kenstevens.stratinit.wicket.BasePage;
+import com.kenstevens.stratinit.wicket.base.BasePage;
+import com.kenstevens.stratinit.wicket.model.GameListModel;
+import com.kenstevens.stratinit.wicket.provider.GameActiveListProvider;
+import com.kenstevens.stratinit.wicket.provider.GameArchiveListProvider;
+import com.kenstevens.stratinit.wicket.provider.GameListProvider;
+import com.kenstevens.stratinit.wicket.provider.GameTable;
 
 public class GamesPage extends BasePage {
 	private static final long serialVersionUID = 1L;

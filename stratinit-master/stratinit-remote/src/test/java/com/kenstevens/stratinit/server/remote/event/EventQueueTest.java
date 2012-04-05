@@ -8,6 +8,11 @@ import org.junit.Test;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.server.event.CityBuildEvent;
+import com.kenstevens.stratinit.server.event.Event;
+import com.kenstevens.stratinit.server.event.GameMapEvent;
+import com.kenstevens.stratinit.server.event.GameStartEvent;
+import com.kenstevens.stratinit.server.event.UnitUpdateEvent;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 

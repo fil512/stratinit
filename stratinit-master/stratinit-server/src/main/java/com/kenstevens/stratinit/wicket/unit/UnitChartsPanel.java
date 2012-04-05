@@ -16,6 +16,9 @@ import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
+import com.kenstevens.stratinit.wicket.model.DayUnitsModel;
+import com.kenstevens.stratinit.wicket.provider.JavaScriptHelper;
+import com.kenstevens.stratinit.wicket.provider.PlayerUnitsProvider;
 
 @SuppressWarnings("serial")
 public class UnitChartsPanel extends Panel {

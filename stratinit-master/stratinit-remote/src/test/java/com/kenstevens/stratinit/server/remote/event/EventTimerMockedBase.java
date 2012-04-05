@@ -7,6 +7,8 @@ import org.junit.Ignore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.EventTimer;
 import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
 
 @Ignore

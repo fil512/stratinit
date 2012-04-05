@@ -7,8 +7,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.PlayerRank;
-import com.kenstevens.stratinit.model.TeamRank;
 
 public class PlayerRankCalculator {
 
@@ -35,12 +35,12 @@ public class PlayerRankCalculator {
 		int played = 0;
 		double totalRank = 0.0;
 		for (SITeam team : teams) {
-			TeamRank teamRank = teamRankMap.get(team);
-			victories += teamRank.getVictories();
-			opponents += teamRank.getOpponents();
-			wins += teamRank.getWins();
-			played += teamRank.getPlayed();
-			totalRank += teamRank.getRank() * teamRank.getVictories();
+			SITeamRank sITeamRank = teamRankMap.get(team);
+			victories += sITeamRank.getVictories();
+			opponents += sITeamRank.getOpponents();
+			wins += sITeamRank.getWins();
+			played += sITeamRank.getPlayed();
+			totalRank += sITeamRank.getRank() * sITeamRank.getVictories();
 		}
 		
 		double rank = victories == 0 ? 0 : totalRank / victories;

@@ -7,6 +7,9 @@ import static org.junit.Assert.assertTrue;
 import org.jmock.Expectations;
 import org.junit.Test;
 
+import com.kenstevens.stratinit.server.event.CityBuildEvent;
+import com.kenstevens.stratinit.server.event.Event;
+
 public class EventTimerTest extends JavaTimerMockedBase {
 	@Test
 	public void shutdown() {

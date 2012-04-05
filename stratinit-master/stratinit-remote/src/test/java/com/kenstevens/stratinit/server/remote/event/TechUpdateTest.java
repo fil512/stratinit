@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.server.event.TechUpdateEvent;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
 

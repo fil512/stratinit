@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.kenstevens.stratinit.model.City;
+import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
-import com.kenstevens.stratinit.server.remote.event.EventQueue;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
