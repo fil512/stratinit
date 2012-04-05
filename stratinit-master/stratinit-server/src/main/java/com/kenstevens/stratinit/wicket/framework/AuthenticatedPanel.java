@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.wicket.framework;
 import org.apache.wicket.markup.html.panel.Panel;
 
 
-public class AuthenticatedPanel extends Panel implements AuthenticatedComponent {
+public abstract class AuthenticatedPanel extends Panel implements AuthenticatedComponent {
 
 	private static final long serialVersionUID = 1L;
 

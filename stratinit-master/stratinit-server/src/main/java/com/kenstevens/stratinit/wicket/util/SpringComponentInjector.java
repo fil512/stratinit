@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.kenstevens.stratinit.spring.SpringContext;
 
+// FIXME try the one available with wicket
 public class SpringComponentInjector implements IComponentInstantiationListener {
 
 	@Override
