@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.kenstevens.stratinit.dto.SITeamRank;
 
-public class GameRankerTestX {
+public class GameRankerTest {
 	TeamHelper teamHelper = new TeamHelper(new TestTeamProvider());
 
 	@Test
