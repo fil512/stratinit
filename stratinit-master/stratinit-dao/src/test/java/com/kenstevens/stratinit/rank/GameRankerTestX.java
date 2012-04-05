@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.kenstevens.stratinit.model.TeamRank;
+import com.kenstevens.stratinit.dto.SITeamRank;
 
-public class GameRankerTest {
+public class GameRankerTestX {
 	TeamHelper teamHelper = new TeamHelper(new TestTeamProvider());
 
 	@Test
@@ -16,7 +16,7 @@ public class GameRankerTest {
 		TeamRanker teamRanker = new TeamRanker(teamHelper);
 		teamRanker.rank(TestTeamProvider.game1);
 		teamRanker.rank(TestTeamProvider.game2);
-		List<TeamRank> teams = teamRanker.getTeamRanks();
+		List<SITeamRank> teams = teamRanker.getTeamRanks();
 		assertEquals(4, teams.size());
 		assertEquals("playerc", teams.get(0).getName());
 		assertEquals("playere playerf", teams.get(3).getName());
