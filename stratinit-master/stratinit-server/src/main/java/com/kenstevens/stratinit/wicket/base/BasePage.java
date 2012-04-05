@@ -8,7 +8,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import com.kenstevens.stratinit.type.Constants;
 
-public class BasePage extends WebPage {
+public abstract class BasePage extends WebPage {
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	NavProvider navProvider;

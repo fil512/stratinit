@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.wicket.framework;
 
 import com.kenstevens.stratinit.wicket.base.BasePage;
 
-public class AuthenticatedPage extends BasePage implements AuthenticatedComponent {
+public abstract class AuthenticatedPage extends BasePage implements AuthenticatedComponent {
 
 	private static final long serialVersionUID = -8358571925296406622L;
 	
