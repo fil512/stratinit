@@ -7,14 +7,14 @@ import java.util.Set;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.Rankable;
-import com.kenstevens.stratinit.model.TeamRank;
 import com.kenstevens.stratinit.server.remote.rank.ELOCalculator;
 
 public class TeamRankMap {
 	public static final double START_RANK = 1500;
 	private Set<String> nations = Sets.newHashSet();
-	private Map<SITeam, TeamRank> teamRankMap = Maps.newHashMap();
+	private Map<SITeam, SITeamRank> teamRankMap = Maps.newHashMap();
 
 
 	public void recordWin(SITeam team) {
@@ -44,7 +44,7 @@ public class TeamRankMap {
 
 	private Rankable getRank(SITeam team) {
 		if (!teamRankMap.containsKey(team)) {
-			teamRankMap.put(team, new TeamRank(team, START_RANK));
+			teamRankMap.put(team, new SITeamRank(team, START_RANK));
 		}
 		return teamRankMap.get(team);
 	}
@@ -53,11 +53,11 @@ public class TeamRankMap {
 		return teamRankMap.keySet();
 	}
 
-	public TeamRank get(SITeam team) {
+	public SITeamRank get(SITeam team) {
 		return teamRankMap.get(team);
 	}
 
-	public Collection<TeamRank> getTeamRanks() {
+	public Collection<SITeamRank> getTeamRanks() {
 		return teamRankMap.values();
 	}
 

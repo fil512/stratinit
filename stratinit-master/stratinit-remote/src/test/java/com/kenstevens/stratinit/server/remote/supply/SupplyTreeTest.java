@@ -8,11 +8,11 @@ import java.util.List;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
 import com.kenstevens.stratinit.supply.SupplyTree;
 import com.kenstevens.stratinit.type.SectorCoordVector;
 import com.kenstevens.stratinit.type.SectorCoords;

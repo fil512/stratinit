@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import com.kenstevens.stratinit.wicket.rank.TeamRankPage;
 
 public class PlayerTeamsPanel extends Panel {
 

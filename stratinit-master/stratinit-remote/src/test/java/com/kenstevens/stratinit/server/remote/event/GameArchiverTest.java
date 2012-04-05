@@ -12,6 +12,7 @@ import com.kenstevens.stratinit.dal.GameHistoryDal;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.GameHistoryNation;
 import com.kenstevens.stratinit.model.GameHistoryTeam;
+import com.kenstevens.stratinit.server.event.GameArchiver;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 
 public class GameArchiverTest extends TwoPlayerBase {

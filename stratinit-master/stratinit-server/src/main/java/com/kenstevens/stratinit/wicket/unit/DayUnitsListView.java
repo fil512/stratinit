@@ -4,6 +4,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
+import com.kenstevens.stratinit.wicket.model.DayUnitsModel;
+import com.kenstevens.stratinit.wicket.provider.DayUnitsListRow;
+
 @SuppressWarnings("serial")
 public class DayUnitsListView extends ListView<DayUnitsListRow> {
 

@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.wicket.message.MessageBoardPage;
+import com.kenstevens.stratinit.wicket.provider.GameTable;
 
 final class GameListView extends ListView<GameTable> {
 

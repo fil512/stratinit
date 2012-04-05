@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.docs;
 
-import com.kenstevens.stratinit.wicket.BasePage;
+import com.kenstevens.stratinit.wicket.base.BasePage;
 
 
 

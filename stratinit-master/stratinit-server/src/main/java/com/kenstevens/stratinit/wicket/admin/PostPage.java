@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.admin;
 
-import com.kenstevens.stratinit.wicket.BasePage;
+import com.kenstevens.stratinit.wicket.base.BasePage;
 
 public class PostPage extends BasePage {
 	private static final long serialVersionUID = 1L;

@@ -5,10 +5,10 @@ import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.ThreePlayerBase;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 

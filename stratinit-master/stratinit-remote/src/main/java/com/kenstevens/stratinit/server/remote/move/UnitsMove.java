@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.AttackType;
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.model.Unit;
@@ -25,8 +26,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveType;
+import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 @Scope("prototype")

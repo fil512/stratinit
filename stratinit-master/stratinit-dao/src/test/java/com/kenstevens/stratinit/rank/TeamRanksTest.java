@@ -8,8 +8,8 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.PlayerRank;
-import com.kenstevens.stratinit.model.TeamRank;
 import com.kenstevens.stratinit.server.remote.rank.ELOCalculator;
 
 public class TeamRanksTest {
@@ -22,7 +22,7 @@ public class TeamRanksTest {
 		teams.add(new SITeam("e", "f", 10));
 		TeamRanks teamRanks = new TeamRanks();
 		teamRanks.rankTeams(teams);
-		List<TeamRank> ranks = teamRanks.getTeamRanks();
+		List<SITeamRank> ranks = teamRanks.getTeamRanks();
 		assertEquals(3, ranks.size());
 		assertEquals("a b", ranks.get(0).getName());
 		assertEquals("c d", ranks.get(1).getName());
@@ -65,7 +65,7 @@ public class TeamRanksTest {
 		teams.add(new SITeam("e", "f", 10));
 		TeamRanks teamRanks = new TeamRanks();
 		teamRanks.rankTeams(teams);
-		List<TeamRank> ranks = teamRanks.getTeamRanks();
+		List<SITeamRank> ranks = teamRanks.getTeamRanks();
 		assertEquals(3, ranks.size());
 		assertEquals("a b", ranks.get(0).getName());
 		assertEquals("c d", ranks.get(1).getName());

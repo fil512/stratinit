@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.wicket.unit.PlayerUnitsPage;
 
 public class PlayerGameLinkPanel extends Panel {
 	private static final long serialVersionUID = 4303067574741765294L;

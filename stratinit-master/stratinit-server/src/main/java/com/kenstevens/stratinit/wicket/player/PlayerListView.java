@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 
 import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.wicket.game.PlayerListModel;
+import com.kenstevens.stratinit.wicket.model.PlayerListModel;
 
 public class PlayerListView extends PageableListView<Player> {
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat(

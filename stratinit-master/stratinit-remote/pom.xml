@@ -64,5 +64,9 @@
 			<groupId>org.simpleframework</groupId>
 			<artifactId>simple-xml</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>jdepend</groupId>
+			<artifactId>jdepend</artifactId>
+		</dependency>
 	</dependencies>
 </project>

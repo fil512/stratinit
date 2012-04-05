@@ -9,6 +9,7 @@ import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
 import com.google.common.collect.Maps;
+import com.kenstevens.stratinit.wicket.provider.UnitsBuiltProvider;
 
 @SuppressWarnings("serial")
 public class GameUnitsChartPanel extends Panel {

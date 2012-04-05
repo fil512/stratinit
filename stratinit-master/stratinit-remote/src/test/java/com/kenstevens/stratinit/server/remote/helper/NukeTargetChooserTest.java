@@ -8,11 +8,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;

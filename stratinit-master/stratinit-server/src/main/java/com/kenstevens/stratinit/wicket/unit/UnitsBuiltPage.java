@@ -3,7 +3,9 @@ package com.kenstevens.stratinit.wicket.unit;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import com.kenstevens.stratinit.wicket.BasePage;
+import com.kenstevens.stratinit.wicket.base.BasePage;
+import com.kenstevens.stratinit.wicket.model.GameUnitsBuiltListModel;
+import com.kenstevens.stratinit.wicket.provider.UnitsBuiltProvider;
 
 public class UnitsBuiltPage extends BasePage {
 	@SpringBean

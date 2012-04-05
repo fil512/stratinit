@@ -10,9 +10,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.PlayerRank;
 import com.kenstevens.stratinit.model.Rankable;
-import com.kenstevens.stratinit.model.TeamRank;
 
 public class TeamRanks {
 
@@ -50,8 +50,8 @@ public class TeamRanks {
 
 
 
-	public List<TeamRank> getTeamRanks() {
-		List<TeamRank> teamRankList = Lists.newArrayList(teamRankMap.getTeamRanks());
+	public List<SITeamRank> getTeamRanks() {
+		List<SITeamRank> teamRankList = Lists.newArrayList(teamRankMap.getTeamRanks());
 		Collections.sort(teamRankList, BY_RANK);
 		return teamRankList;
 	}
@@ -72,16 +72,16 @@ public class TeamRanks {
 		}
 	}
 
-	public List<TeamRank> getTeamRanks(final String playerName) {
-		List<TeamRank> teamRanks = getTeamRanks();
+	public List<SITeamRank> getTeamRanks(final String playerName) {
+		List<SITeamRank> sITeamRanks = getTeamRanks();
 		if (playerName == null) {
-			return teamRanks;
+			return sITeamRanks;
 		}
-		return Lists.newArrayList(Collections2.filter(teamRanks, new Predicate<TeamRank>() {
+		return Lists.newArrayList(Collections2.filter(sITeamRanks, new Predicate<SITeamRank>() {
 
 			@Override
-			public boolean apply(TeamRank teamRank) {
-				return teamRank.contains(playerName);
+			public boolean apply(SITeamRank sITeamRank) {
+				return sITeamRank.contains(playerName);
 			}
 			
 		}));

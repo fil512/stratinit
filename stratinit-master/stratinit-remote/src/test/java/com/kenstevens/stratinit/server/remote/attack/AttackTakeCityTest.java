@@ -11,14 +11,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenstevens.stratinit.model.City;
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
-import com.kenstevens.stratinit.server.remote.event.EventQueue;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveType;
 import com.kenstevens.stratinit.type.CityType;
+import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 

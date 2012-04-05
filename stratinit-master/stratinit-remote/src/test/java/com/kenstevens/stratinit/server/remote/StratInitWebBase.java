@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.City;
+import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Unit;
@@ -24,7 +25,6 @@ import com.kenstevens.stratinit.server.daoservice.MoveService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
-import com.kenstevens.stratinit.server.remote.move.cost.MoveCost;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
