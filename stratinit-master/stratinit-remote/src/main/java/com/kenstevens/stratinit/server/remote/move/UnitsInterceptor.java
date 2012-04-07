@@ -94,6 +94,15 @@ public class UnitsInterceptor {
 		if (!attack.canAttack(worldView, AttackType.INTERDICTION, unit)) {
 			return false;
 		}
+		
+		if (!canAttack(unit)) {
+			return false;
+		}
+		
+		return canIntercept(unit, targetSector);
+	}
+	
+	private boolean canAttack(Unit unit) {
 		if (unit.isHurt()) {
 			return false;
 		}
@@ -107,6 +116,10 @@ public class UnitsInterceptor {
 				return false;
 			}
 		}
+		return true;
+	}
+
+	private boolean canIntercept(Unit unit, WorldSector targetSector) {
 		// TODO REF excludeCoords is overloaded to mean a different
 		// attack type
 		if (unit.isNavy() && excludeCoords == null) {
