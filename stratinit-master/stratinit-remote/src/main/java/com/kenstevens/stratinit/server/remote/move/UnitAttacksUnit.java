@@ -22,7 +22,6 @@ import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.AttackHelper;
 
 @Scope("prototype")
@@ -199,7 +198,7 @@ public class UnitAttacksUnit {
 	}
 
 	private int damage(Unit attacker, Unit defender) {
-		int attack = initialAttack(attacker, defender);
+		int attack = AttackValueHelper.getInitialAttackValue(attackType, attacker, defender);
 		int damage = AttackHelper.randomDamage(attack);
 		damage = multiplyDamage(attacker, defender, damage);
 		damage = reduceDamageForFortifiedUnits(defender, damage);
@@ -230,25 +229,5 @@ public class UnitAttacksUnit {
 		return damage;
 	}
 
-	private int initialAttack(Unit attacker, Unit defender) {
-		int attack = attacker.getAttack();
-		if (attackType == AttackType.COUNTER_ATTACK) {
-			if (attacker.isBomber()) {
-				attack = Constants.MIN_ATTACK;
-			} else if (attacker.isNavy() && defender.isAir()) {
-				attack = Constants.MIN_ATTACK;
-			} else if (attacker.isNavy() && !attacker.isCanSeeSubs()
-					&& defender.isSubmarine()) {
-				attack = Constants.MIN_ATTACK;
-			}
-		}
-		if (attacker.getType() == UnitType.SUBMARINE && defender.isAir()) {
-			attack = Constants.MIN_ATTACK;
-		} else if (attacker.getType() == UnitType.NAVAL_BOMBER
-				&& !defender.isNavy()) {
-			attack = Constants.MIN_ATTACK;
-		}
-		return attack;
-	}
-
+	
 }
