@@ -26,7 +26,7 @@ public class UnitButtons extends Composite {
 		createContents();
 	}
 
-	private void createContents() {
+	private final void createContents() {
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 8;
 		setLayout(gridLayout);

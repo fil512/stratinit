@@ -116,7 +116,7 @@ public class GameView extends Game {
 		return myNoAlliances;
 	}
 
-	public void setMyNoAlliances(boolean myNoAlliances) {
+	public final void setMyNoAlliances(boolean myNoAlliances) {
 		this.myNoAlliances = myNoAlliances;
 	}
 }

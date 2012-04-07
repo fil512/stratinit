@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.control.MapController;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
+import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.TabControl;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 
@@ -23,10 +24,12 @@ public class TabManager implements TabControl {
 	ActionFactory actionFactory;
 	@Autowired
 	ArrivedDataEventAccumulator arrivedDataEventAccumulator;
+	@Autowired
+	Data db;
 
 	int tabIndex = 0;
 	int tabSelected;
-	
+
 	private final Map<String, TabItem> tabMap = Maps.newHashMap();
 	private final Map<String, Integer> tabIndexMap = Maps.newHashMap();
 	private TabFolder tabFolder;
@@ -47,9 +50,9 @@ public class TabManager implements TabControl {
 	}
 
 	public void setTabFolder(TabFolder tabFolder) {
-		this.tabFolder = tabFolder;		
+		this.tabFolder = tabFolder;
 	}
-	
+
 	public void setControllers(FutureTabItemControl futureTabItemControl,
 			MapController mapController) {
 		this.futureTabItemControl = futureTabItemControl;
@@ -62,6 +65,9 @@ public class TabManager implements TabControl {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+				if (!db.isLoaded()) {
+					return;
+				}
 				switchTabMightChangeMap();
 				if (futureTabSelected()) {
 					futureTabItemControl.setContents();
@@ -70,13 +76,13 @@ public class TabManager implements TabControl {
 				} else if (playerTabSelected()) {
 					actionFactory.getNations();
 				} else if (unitTabSelected()) {
-					arrivedDataEventAccumulator.addEvent(new UnitListReplacementArrivedEvent());
+					arrivedDataEventAccumulator
+							.addEvent(new UnitListReplacementArrivedEvent());
 					arrivedDataEventAccumulator.fireEvents();
 				}
 			}
 		});
 	}
-	
 
 	private void switchTabMightChangeMap() {
 		int lastTabSelected = tabSelected;
@@ -88,7 +94,7 @@ public class TabManager implements TabControl {
 			mapController.buildImage();
 		}
 	}
-	
+
 	private boolean toOrFrom(int lastTabSelected, int tabIndex) {
 		return lastTabSelected == tabIndex
 				|| tabFolder.getSelectionIndex() == tabIndex;
@@ -97,7 +103,6 @@ public class TabManager implements TabControl {
 	public TabFolder getTabFolder() {
 		return tabFolder;
 	}
-
 
 	public void switchToSectorTab() {
 		final Display display = Display.getDefault();
@@ -116,6 +121,7 @@ public class TabManager implements TabControl {
 	private boolean futureTabSelected() {
 		return tabSelected == futureTabIndex;
 	}
+
 	@Override
 	public boolean battleTabSelected() {
 		return tabSelected == battleTabIndex;
@@ -168,5 +174,5 @@ public class TabManager implements TabControl {
 	public void setUnitTabIndex(int unitTabIndex) {
 		this.unitTabIndex = unitTabIndex;
 	}
-	
+
 }
