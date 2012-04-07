@@ -279,132 +279,41 @@ public class MainWindow implements MapControl, GameManager {
 	 * @wbp.parser.entryPoint
 	 */
 	protected void createContents() {
-		shell = new Shell();
-		setShellLocation();
-		topShell.setShell(shell);
-		shell.setLayout(new FormLayout());
-		shell.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(final MouseEvent e) {
-			}
-		});
-		shell.setSize(1072, 735);
-		controllerManager.setTitle(shell);
+		initContents();
 
-		Canvas canvas = new Canvas(shell, SWT.NO_BACKGROUND
-				| SWT.NO_REDRAW_RESIZE | SWT.V_SCROLL | SWT.H_SCROLL);
 
-		final FormData fdCanvas = new FormData();
-		fdCanvas.bottom = new FormAttachment(100, -5);
-		fdCanvas.top = new FormAttachment(0, 5);
-		fdCanvas.left = new FormAttachment(0, 5);
-		canvas.setLayoutData(fdCanvas);
+		createMainMenu();
 
-		MainMenu mainMenu = new MainMenu(shell, SWT.NONE);
-		mainMenu.setLayoutData(new FormData());
-		spring.autowire(new MainMenuControl(mainMenu));
+		TabFolder tabFolder = createTabFolder();
 
-		TabFolder tabFolder = new TabFolder(shell, SWT.NONE);
-		fdCanvas.right = new FormAttachment(tabFolder, -5, SWT.LEFT);
-		final FormData fdTabFolder = new FormData();
-		fdTabFolder.top = new FormAttachment(0, 5);
-		fdTabFolder.left = new FormAttachment(100, -421);
-		fdTabFolder.right = new FormAttachment(100, -5);
-		tabFolder.setLayoutData(fdTabFolder);
+		Canvas canvas = createCanvas(tabFolder);
 
-		mapCanvasControl = spring.autowire(new MapCanvasControl(canvas));
-		controllerManager.add(mapCanvasControl);
 
-		final TabItem sTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.register(ClientConstants.SECTOR_TAB_ITEM_TITLE, sTabItem);
-		sectorTabItem = new SectorTabItem(tabFolder, SWT.NONE);
-		sTabItem.setControl(sectorTabItem);
-		sectorTabItemControl = spring.autowire(new SectorTabItemControl(
-				sectorTabItem));
-		controllerManager.add(sectorTabItemControl);
+		createSectorTab(tabFolder);
 
-		final TabItem uTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setUnitTabIndex(tabManager.register(ClientConstants.UNIT_TAB_TITLE, uTabItem));
-		UnitTabItem unitTabItem = new UnitTabItem(tabFolder, SWT.NONE);
-		uTabItem.setControl(unitTabItem);
-		unitTabItemControl = spring
-				.autowire(new UnitTabItemControl(unitTabItem));
-		controllerManager.add(unitTabItemControl);
+		createUnitTab(tabFolder);
 
-		final TabItem cTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setCityTabIndex(tabManager.register(
-				ClientConstants.CITY_TITLE, cTabItem));
+		createCityTab(tabFolder);
 
-		CityTabItem cityTabItem = new CityTabItem(tabFolder, SWT.NONE);
-		cTabItem.setControl(cityTabItem);
-		CityTabItemControl cityTabItemControl = spring
-				.autowire(new CityTabItemControl(cityTabItem));
-		new Label(cityTabItem.getBuildingCombos(), SWT.NONE);
-		new Label(cityTabItem.getBuildingCombos(), SWT.NONE);
-		new Label(cityTabItem.getBuildingCombos(), SWT.NONE);
-		controllerManager.add(cityTabItemControl);
+		createBattleTab(tabFolder);
 
-		battleTab = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setBattleTabIndex(tabManager.register(
-				ClientConstants.BATTLE_TAB_ITEM_TITLE, battleTab));
+		createPlayerTab(tabFolder);
 
-		BattleTabItem battleTabItem = new BattleTabItem(tabFolder, SWT.NONE);
-		battleTab.setControl(battleTabItem);
-		BattleTabItemControl battleTabItemControl = spring
-				.autowire(new BattleTabItemControl(battleTabItem));
-		controllerManager.add(battleTabItemControl);
+		createHistoryTab(tabFolder);
 
-		final TabItem pTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setPlayerTabIndex(tabManager.register(
-				ClientConstants.PLAYER_TAB_ITEM_TITLE, pTabItem));
+		createFutureTab(tabFolder);
 
-		PlayerTabItem playerTabItem = new PlayerTabItem(tabFolder, SWT.NONE);
-		playerTabItem.getRefreshButton().setImage(imageLibrary.getUpdate());
-		pTabItem.setControl(playerTabItem);
-		PlayerTabItemControl playerTabItemControl = spring
-				.autowire(new PlayerTabItemControl(playerTabItem));
-		controllerManager.add(playerTabItemControl);
+		createSupplyTab(tabFolder);
 
-		final TabItem hTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.register(ClientConstants.HISTORY_TITLE, hTabItem);
+		createBottomControls(tabFolder, canvas);
 
-		HistoryTabItem historyTabItem = new HistoryTabItem(tabFolder, SWT.NONE);
-		hTabItem.setControl(historyTabItem);
-		HistoryTabItemControl historyTabItemControl = spring
-				.autowire(new HistoryTabItemControl(historyTabItem));
-		controllerManager.add(historyTabItemControl);
+		setButtonListeners();
+		setResizeListener();
+	}
 
-		final TabItem fTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setFutureTabIndex(tabManager.register(
-				ClientConstants.FUTURE_TITLE, fTabItem));
-
-		FutureTabItem futureTabItem = new FutureTabItem(tabFolder, SWT.NONE);
-		fTabItem.setControl(futureTabItem);
-		futureTabItemControl = spring.autowire(new FutureTabItemControl(
-				futureTabItem));
-		controllerManager.add(futureTabItemControl);
-
-		final TabItem mTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setSupplyTabIndex(tabManager.register(
-				ClientConstants.SUPPLY_TAB_ITEM_TITLE, mTabItem));
-
-		SupplyTabItem supplyTabItem = new SupplyTabItem(tabFolder, SWT.NONE);
-		mTabItem.setControl(supplyTabItem);
-		supplyTabItemControl = spring.autowire(new SupplyTabItemControl(
-				supplyTabItem));
-		controllerManager.add(supplyTabItemControl);
-
-		org.eclipse.swt.widgets.List commandList;
-		commandList = new org.eclipse.swt.widgets.List(shell, SWT.READ_ONLY
-				| SWT.SIMPLE | SWT.V_SCROLL);
-		fdTabFolder.bottom = new FormAttachment(100, -205);
-		commandList.removeAll();
-		final FormData fdCommandList = new FormData();
-		fdCommandList.top = new FormAttachment(tabFolder, 5);
-		fdCommandList.left = new FormAttachment(canvas, 5);
-		fdCommandList.right = new FormAttachment(100, -49);
-		fdCommandList.bottom = new FormAttachment(100, -145);
-		commandList.setLayoutData(fdCommandList);
+	private void createBottomControls(TabFolder tabFolder, Canvas canvas) {
+		org.eclipse.swt.widgets.List commandList = createCommandList(tabFolder,
+				canvas);
 
 		final ProgressBar progressBar = new ProgressBar(shell, SWT.SMOOTH);
 		final FormData fdProgressBar = new FormData();
@@ -416,18 +325,7 @@ public class MainWindow implements MapControl, GameManager {
 				progressBar);
 		widgetContainer.setProgressBarControl(progressBarControl);
 
-		Text statusLabel;
-		statusLabel = new Text(shell, SWT.V_SCROLL | SWT.H_SCROLL);
-		fdProgressBar.bottom = new FormAttachment(statusLabel, -6);
-		final FormData fdStatusLabel = new FormData();
-		fdStatusLabel.right = new FormAttachment(tabFolder, 0, SWT.RIGHT);
-		fdStatusLabel.left = new FormAttachment(canvas, 6);
-		statusLabel.setLayoutData(fdStatusLabel);
-		statusControl = new TextControl(statusLabel);
-
 		updateButton = new Button(shell, SWT.NONE);
-		fdStatusLabel.top = new FormAttachment(updateButton, -80, SWT.TOP);
-		fdStatusLabel.bottom = new FormAttachment(updateButton, -6);
 		updateButton.setToolTipText("Update all data");
 		final FormData fdUpdateButton = new FormData();
 		fdUpdateButton.right = new FormAttachment(tabFolder, -1, SWT.RIGHT);
@@ -438,6 +336,17 @@ public class MainWindow implements MapControl, GameManager {
 		updateButton.setEnabled(false);
 		updateButton.setImage(imageLibrary.getUpdate());
 
+		Text statusLabel;
+		statusLabel = new Text(shell, SWT.V_SCROLL | SWT.H_SCROLL);
+		fdProgressBar.bottom = new FormAttachment(statusLabel, -6);
+		final FormData fdStatusLabel = new FormData();
+		fdStatusLabel.right = new FormAttachment(tabFolder, 0, SWT.RIGHT);
+		fdStatusLabel.left = new FormAttachment(canvas, 6);
+		fdStatusLabel.top = new FormAttachment(updateButton, -80, SWT.TOP);
+		fdStatusLabel.bottom = new FormAttachment(updateButton, -6);
+		statusLabel.setLayoutData(fdStatusLabel);
+		statusControl = new TextControl(statusLabel);
+		
 		coordsLabel = new Label(shell, SWT.NONE);
 		final FormData fdCoords = new FormData();
 		fdCoords.top = new FormAttachment(updateButton, 0, SWT.TOP);
@@ -489,9 +398,162 @@ public class MainWindow implements MapControl, GameManager {
 		commandPointsLabel.setLayoutData(fdCommandPoints);
 		tabManager.setTabFolder(tabFolder);
 		tabManager.setControllers(futureTabItemControl, mapCanvasControl);
+	}
 
-		setButtonListeners();
-		setResizeListener();
+	private org.eclipse.swt.widgets.List createCommandList(TabFolder tabFolder,
+			Canvas canvas) {
+		org.eclipse.swt.widgets.List commandList;
+		commandList = new org.eclipse.swt.widgets.List(shell, SWT.READ_ONLY
+				| SWT.SIMPLE | SWT.V_SCROLL);
+
+		commandList.removeAll();
+		final FormData fdCommandList = new FormData();
+		fdCommandList.top = new FormAttachment(tabFolder, 5);
+		fdCommandList.left = new FormAttachment(canvas, 5);
+		fdCommandList.right = new FormAttachment(100, -49);
+		fdCommandList.bottom = new FormAttachment(100, -145);
+		commandList.setLayoutData(fdCommandList);
+		return commandList;
+	}
+
+	private void createSupplyTab(TabFolder tabFolder) {
+		final TabItem mTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.setSupplyTabIndex(tabManager.register(
+				ClientConstants.SUPPLY_TAB_ITEM_TITLE, mTabItem));
+
+		SupplyTabItem supplyTabItem = new SupplyTabItem(tabFolder, SWT.NONE);
+		mTabItem.setControl(supplyTabItem);
+		supplyTabItemControl = spring.autowire(new SupplyTabItemControl(
+				supplyTabItem));
+		controllerManager.add(supplyTabItemControl);
+	}
+
+	private void createFutureTab(TabFolder tabFolder) {
+		final TabItem fTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.setFutureTabIndex(tabManager.register(
+				ClientConstants.FUTURE_TITLE, fTabItem));
+
+		FutureTabItem futureTabItem = new FutureTabItem(tabFolder, SWT.NONE);
+		fTabItem.setControl(futureTabItem);
+		futureTabItemControl = spring.autowire(new FutureTabItemControl(
+				futureTabItem));
+		controllerManager.add(futureTabItemControl);
+	}
+
+	private void createHistoryTab(TabFolder tabFolder) {
+		final TabItem hTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.register(ClientConstants.HISTORY_TITLE, hTabItem);
+
+		HistoryTabItem historyTabItem = new HistoryTabItem(tabFolder, SWT.NONE);
+		hTabItem.setControl(historyTabItem);
+		HistoryTabItemControl historyTabItemControl = spring
+				.autowire(new HistoryTabItemControl(historyTabItem));
+		controllerManager.add(historyTabItemControl);
+	}
+
+	private void createPlayerTab(TabFolder tabFolder) {
+		final TabItem pTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.setPlayerTabIndex(tabManager.register(
+				ClientConstants.PLAYER_TAB_ITEM_TITLE, pTabItem));
+
+		PlayerTabItem playerTabItem = new PlayerTabItem(tabFolder, SWT.NONE);
+		playerTabItem.getRefreshButton().setImage(imageLibrary.getUpdate());
+		pTabItem.setControl(playerTabItem);
+		PlayerTabItemControl playerTabItemControl = spring
+				.autowire(new PlayerTabItemControl(playerTabItem));
+		controllerManager.add(playerTabItemControl);
+	}
+
+	private void createBattleTab(TabFolder tabFolder) {
+		battleTab = new TabItem(tabFolder, SWT.NONE);
+		tabManager.setBattleTabIndex(tabManager.register(
+				ClientConstants.BATTLE_TAB_ITEM_TITLE, battleTab));
+
+		BattleTabItem battleTabItem = new BattleTabItem(tabFolder, SWT.NONE);
+		battleTab.setControl(battleTabItem);
+		BattleTabItemControl battleTabItemControl = spring
+				.autowire(new BattleTabItemControl(battleTabItem));
+		controllerManager.add(battleTabItemControl);
+	}
+
+	private void createCityTab(TabFolder tabFolder) {
+		final TabItem cTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.setCityTabIndex(tabManager.register(
+				ClientConstants.CITY_TITLE, cTabItem));
+
+		CityTabItem cityTabItem = new CityTabItem(tabFolder, SWT.NONE);
+		cTabItem.setControl(cityTabItem);
+		CityTabItemControl cityTabItemControl = spring
+				.autowire(new CityTabItemControl(cityTabItem));
+		controllerManager.add(cityTabItemControl);
+	}
+
+	private void createUnitTab(TabFolder tabFolder) {
+		final TabItem uTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.setUnitTabIndex(tabManager.register(ClientConstants.UNIT_TAB_TITLE, uTabItem));
+		UnitTabItem unitTabItem = new UnitTabItem(tabFolder, SWT.NONE);
+		uTabItem.setControl(unitTabItem);
+		unitTabItemControl = spring
+				.autowire(new UnitTabItemControl(unitTabItem));
+		controllerManager.add(unitTabItemControl);
+	}
+
+	private void createSectorTab(TabFolder tabFolder) {
+		final TabItem sTabItem = new TabItem(tabFolder, SWT.NONE);
+		tabManager.register(ClientConstants.SECTOR_TAB_ITEM_TITLE, sTabItem);
+		sectorTabItem = new SectorTabItem(tabFolder, SWT.NONE);
+		sTabItem.setControl(sectorTabItem);
+		sectorTabItemControl = spring.autowire(new SectorTabItemControl(
+				sectorTabItem));
+		controllerManager.add(sectorTabItemControl);
+	}
+
+	private Canvas createCanvas(TabFolder tabFolder) {
+		Canvas canvas = new Canvas(shell, SWT.NO_BACKGROUND
+				| SWT.NO_REDRAW_RESIZE | SWT.V_SCROLL | SWT.H_SCROLL);
+
+		final FormData fdCanvas = new FormData();
+		fdCanvas.right = new FormAttachment(tabFolder, -5, SWT.LEFT);
+		fdCanvas.bottom = new FormAttachment(100, -5);
+		fdCanvas.top = new FormAttachment(0, 5);
+		fdCanvas.left = new FormAttachment(0, 5);
+		canvas.setLayoutData(fdCanvas);
+
+		mapCanvasControl = spring.autowire(new MapCanvasControl(canvas));
+		controllerManager.add(mapCanvasControl);
+		
+		return canvas;
+	}
+
+	private TabFolder createTabFolder() {
+		TabFolder tabFolder = new TabFolder(shell, SWT.NONE);
+		final FormData fdTabFolder = new FormData();
+		fdTabFolder.top = new FormAttachment(0, 5);
+		fdTabFolder.left = new FormAttachment(100, -421);
+		fdTabFolder.right = new FormAttachment(100, -5);
+		fdTabFolder.bottom = new FormAttachment(100, -205);
+		tabFolder.setLayoutData(fdTabFolder);
+		return tabFolder;
+	}
+
+	private void createMainMenu() {
+		MainMenu mainMenu = new MainMenu(shell, SWT.NONE);
+		mainMenu.setLayoutData(new FormData());
+		spring.autowire(new MainMenuControl(mainMenu));
+	}
+
+	private void initContents() {
+		shell = new Shell();
+		setShellLocation();
+		topShell.setShell(shell);
+		shell.setLayout(new FormLayout());
+		shell.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(final MouseEvent e) {
+			}
+		});
+		shell.setSize(1072, 735);
+		controllerManager.setTitle(shell);
 	}
 
 	private void setResizeListener() {

@@ -5,7 +5,9 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import com.kenstevens.stratinit.shell.TopShell;
 
-public class PlayerCommandPointWarner {
+public final class PlayerCommandPointWarner {
+	
+	public PlayerCommandPointWarner() {}
 
 	public static boolean beenWarned = false;
 
