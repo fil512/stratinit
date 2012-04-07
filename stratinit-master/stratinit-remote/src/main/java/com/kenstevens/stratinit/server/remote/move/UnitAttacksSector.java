@@ -1,8 +1,6 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -17,7 +15,6 @@ import com.kenstevens.stratinit.model.CityCapturedBattleLog;
 import com.kenstevens.stratinit.model.FlakBattleLog;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
@@ -27,7 +24,6 @@ import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.AttackHelper;
 
 @Scope("prototype")
@@ -77,11 +73,11 @@ public class UnitAttacksSector {
 				return new Result<None>(new SIBattleLog(actor, flakBattleLog), false);
 			}
 		}
-		Collection<Unit> units = Lists.newArrayList(unitDao.getUnits(targetSector));
+		Collection<Unit> defUnits = Lists.newArrayList(unitDao.getUnits(targetSector));
 		if (!targetSector.isWater() && attackingUnit.isBomber()) {
-			return bombTarget(units, attackReadiness, flakDamage);
+			return bombTarget(defUnits, attackReadiness, flakDamage);
 		}
-		Unit enemyUnit = getUnitToAttack(units);
+		Unit enemyUnit = AttackingUnitFinderHelper.findUnitToAttack(attackType, attackingUnit, defUnits, targetSector, worldView);
 		if (enemyUnit != null) {
 			return attack(enemyUnit, attackReadiness, flakDamage);
 		} else if (targetSector.isEmptyCity()) {
@@ -101,66 +97,7 @@ public class UnitAttacksSector {
 		return unitsAttackUnit.attack(attackReadiness, null, flakDamage);
 	}
 
-	private Unit getUnitToAttack(Collection<Unit> units) {
-		if (attackType == AttackType.INTERCEPTION) {
-			removeIntercepted(units);
-		}
-		if (units.isEmpty()) {
-			return null;
-		}
 
-		if (targetSector.isWater()) {
-			// we're at sea, pick the ship if there is one
-			for (Unit unit : units) {
-				if (unit.isNavy()) {
-					return unit;
-				}
-			}
-		}
-		if (attackType == AttackType.INTERCEPTION) {
-			// when intercepting, prefer fighters then air units.  e.g. heli carrying inf
-			for (Unit unit : units) {
-				if (unit.getType() == UnitType.FIGHTER) {
-					return unit;
-				}
-			}
-			for (Unit unit : units) {
-				if (unit.isAir()) {
-					return unit;
-				}
-			}
-		}
-
-		return getUnitWithHighestMultiplier(units);
-	}
-
-	private void removeIntercepted(Collection<Unit> units) {
-		List<Unit> unitsToRemove = new ArrayList<Unit>();
-		for (Unit unit : units) {
-			if (unit.isIntercepted()) {
-				unitsToRemove.add(unit);
-			}
-		}
-		units.removeAll(unitsToRemove);
-	}
-
-	private Unit getUnitWithHighestMultiplier(Collection<Unit> units) {
-		UnitBase attackerBase = attackingUnit.getUnitBase();
-		int maxMultiplier = -1;
-		Unit maxUnit = null;
-
-		for (Unit defender : units) {
-			if (!AttackHelper.canAttack(attackType, worldView.getMyRelation(defender.getNation()))) {
-				continue;
-			}
-			int multiplier = UnitBase.getMultiplier(attackerBase, defender.getUnitBase());
-			if (multiplier >= maxMultiplier) {
-				maxMultiplier = multiplier;
-				maxUnit = defender;
-			}
-		}
-		return maxUnit;
-	}
 
 	private Result<None> takeCity(AttackReadiness attackReadiness) {
 		Nation oldOwner = sectorDaoService.captureCity(attackingUnit.getNation(),
