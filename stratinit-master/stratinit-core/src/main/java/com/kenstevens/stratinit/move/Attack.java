@@ -26,6 +26,26 @@ public class Attack {
 			return canCounterAttack(unit, type);
 		}
 
+		if (!canAttack(unit, attackType)) {
+			return false;
+		}
+
+		if (type == SectorType.LAND) {
+			if (unit.isNavy()) {
+				return unit.isNavyCanAttackLand();
+			}
+		} else if (type == SectorType.WATER) {
+			if (unit.isLand()) {
+				return unit.isLandCanAttackShips();
+			} else if (unit.isBomber() && unit.getAttack() == 0) {
+				return false;
+			}
+		}
+
+		return canReachToAttack(coordMeasure, unit);
+	}
+
+	private boolean canAttack(Unit unit, AttackType attackType) {
 		if (worldSector.isNeutralCity()) {
 			return unit.isLand();
 		}
@@ -43,20 +63,7 @@ public class Attack {
 		if (worldSector.isEmptyCity()) {
 			return unit.isLand();
 		}
-
-		if (type == SectorType.LAND) {
-			if (unit.isNavy()) {
-				return unit.isNavyCanAttackLand();
-			}
-		} else if (type == SectorType.WATER) {
-			if (unit.isLand()) {
-				return unit.isLandCanAttackShips();
-			} else if (unit.isBomber() && unit.getAttack() == 0) {
-				return false;
-			}
-		}
-
-		return canReachToAttack(coordMeasure, unit);
+		return true;
 	}
 
 	private boolean canReachToAttack(CoordMeasure coordMeasure, Unit unit) {

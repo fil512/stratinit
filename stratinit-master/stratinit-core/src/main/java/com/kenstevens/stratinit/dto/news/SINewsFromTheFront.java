@@ -49,7 +49,10 @@ public class SINewsFromTheFront extends SINewsOpponents {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SINewsFromTheFront other = (SINewsFromTheFront) obj;
+		return typedEquals((SINewsFromTheFront) obj);
+	}
+	
+	private boolean typedEquals(SINewsFromTheFront other) {
 		if (killed != other.killed)
 			return false;
 		if (nationUnitType == null) {
