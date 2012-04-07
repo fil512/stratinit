@@ -64,8 +64,8 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
 	@Test
 	public void infOnXportInPortNotSunk() {
 		declareWar();
-		Unit inf = unitDaoService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
 		Unit transport = unitDaoService.buildUnit(nationThem, PORT, UnitType.TRANSPORT);
+		Unit inf = unitDaoService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
 		Unit dest = unitDaoService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
 		sectorDaoServiceImpl.captureCity(nationThem, PORT);
 		
