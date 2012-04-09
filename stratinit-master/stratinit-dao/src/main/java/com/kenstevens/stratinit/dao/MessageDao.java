@@ -9,22 +9,22 @@ import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 
 public interface MessageDao {
 
-	public abstract void persist(Mail mail);
+	void persist(Mail mail);
 
-	public abstract void remove(Mail mail);
+	void remove(Mail mail);
 
-	public abstract List<Mail> getMessages(Nation nation);
+	List<Mail> getMessages(Nation nation);
 
-	public abstract List<Mail> getMail(Nation nation);
+	List<Mail> getMail(Nation nation);
 
-	public abstract List<Mail> getSentMail(Nation nation);
+	List<Mail> getSentMail(Nation nation);
 
-	public abstract List<Mail> getAnnouncements(Game game);
+	List<Mail> getAnnouncements(Game game);
 
-	public abstract List<Mail> getBulletins(Game game);
+	List<Mail> getBulletins(Game game);
 
-	public abstract List<Mail> getNotifications(Nation nation);
+	List<Mail> getNotifications(Nation nation);
 
-	public abstract List<RelationChangeAudit> getRelationChanges(Game game);
+	List<RelationChangeAudit> getRelationChanges(Game game);
 
 }

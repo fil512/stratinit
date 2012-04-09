@@ -22,78 +22,78 @@ import com.kenstevens.stratinit.type.UnitType;
 
 public interface SectorDaoService {
 
-	public abstract void survey(Nation nation);
+	void survey(Nation nation);
 
 	// Returns true if build type changed
-	public abstract void buildUnit(CityPK cityPK, Date buildTime);
+	void buildUnit(CityPK cityPK, Date buildTime);
 
 	// TODO DEPL persistence.xml read-only on getters
-	public abstract WorldView getAllWorldView(Nation nation);
+	WorldView getAllWorldView(Nation nation);
 
-	public abstract WorldView getSupplyWorldView(Unit unit);
+	WorldView getSupplyWorldView(Unit unit);
 
-	public abstract WorldView getInterdictionWorldView(Unit unit, Nation nation);
+	WorldView getInterdictionWorldView(Unit unit, Nation nation);
 
-	public abstract WorldView getInterceptionWorldView(SectorCoords coords,
+	WorldView getInterceptionWorldView(SectorCoords coords,
 			Nation nation);
 
-	public abstract WorldView getSeenWorldView(Nation nation);
+	WorldView getSeenWorldView(Nation nation);
 
-	public abstract int getLandUnitWeight(WorldSector worldSector);
+	int getLandUnitWeight(WorldSector worldSector);
 
-	public abstract List<Sector> getSectorsSeen(Unit unit);
+	List<Sector> getSectorsSeen(Unit unit);
 
-	public abstract void merge(City city);
+	void merge(City city);
 
 	// Returns old owner
-	public abstract Nation captureCity(Nation nation, Sector sector);
+	Nation captureCity(Nation nation, Sector sector);
 
-	public abstract void explodeSupply(Nation nation, SectorCoords coords);
+	void explodeSupply(Nation nation, SectorCoords coords);
 
-	public abstract void updateSeen(CoordMeasure coordMeasure,
+	void updateSeen(CoordMeasure coordMeasure,
 			List<Unit> units, MoveSeen moveSeen);
 
-	public abstract void unitsSeen(CoordMeasure coordMeasure, List<Unit> units,
+	void unitsSeen(CoordMeasure coordMeasure, List<Unit> units,
 			MoveSeen moveSeen, boolean attacking);
 
-	public abstract void satelliteSees(LaunchedSatellite satellite,
+	void satelliteSees(LaunchedSatellite satellite,
 			MoveSeen moveSeen);
 
-	public abstract WorldSector refreshWorldSector(Nation nation,
+	WorldSector refreshWorldSector(Nation nation,
 			WorldView worldView, WorldSector targetSector);
 
-	public abstract Nation captureCity(Nation nation, SectorCoords city);
+	Nation captureCity(Nation nation, SectorCoords city);
 
-	public abstract Set<Nation> devastate(Unit attackerUnit, Sector sector, boolean isCounter);
+	Set<Nation> devastate(Unit attackerUnit, Sector sector, boolean isCounter);
 
-	public abstract Result<City> updateCity(Nation nation, SectorCoords coords, UpdateCityField field, UnitType build,
+	Result<City> updateCity(Nation nation, SectorCoords coords, UpdateCityField field, UnitType build,
 			UnitType nextBuild, boolean switchOnTechChange, SectorCoords nextCoords);
 
-	public abstract void saveIfNew(Nation nation, Sector sector);
+	void saveIfNew(Nation nation, Sector sector);
 
-	public abstract void unitSeen(CoordMeasure coordMeasure, Unit unit,
+	void unitSeen(CoordMeasure coordMeasure, Unit unit,
 			MoveSeen moveSeen, boolean attacking);
 
-	public abstract void updateSeen(CoordMeasure coordMeasure, Unit unit,
+	void updateSeen(CoordMeasure coordMeasure, Unit unit,
 			MoveSeen moveSeen);
 
-	public abstract Result<None> cedeCity(City city, Nation nation);
+	Result<None> cedeCity(City city, Nation nation);
 
-	public abstract void switchCityBuildsFromTechChange(Nation nation, Date buildTime);
+	void switchCityBuildsFromTechChange(Nation nation, Date buildTime);
 
-	public abstract Result<None> establishCity(Unit unit);
+	Result<None> establishCity(Unit unit);
 
-	public abstract Result<None> destroyCity(City city);
+	Result<None> destroyCity(City city);
 
-	public abstract void cityChanged(City city);
+	void cityChanged(City city);
 
-	public abstract void merge(Sector sector);
+	void merge(Sector sector);
 
 	void removeCityMoves(Game game);
 
 	void setCityMove(City city, SectorCoords targetCoords);
 	
-	public abstract void remove(City city);
+	void remove(City city);
 
 	WorldSector getSectorView(Unit unit);
 }

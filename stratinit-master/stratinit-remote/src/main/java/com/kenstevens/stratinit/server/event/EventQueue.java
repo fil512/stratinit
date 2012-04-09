@@ -9,19 +9,19 @@ import com.kenstevens.stratinit.model.UnitSeen;
 
 public interface EventQueue {
 
-	public abstract void shutdown();
+	void shutdown();
 
-	public abstract void schedule(City city);
+	void schedule(City city);
 
-	public abstract void schedule(UnitSeen unitSeen);
+	void schedule(UnitSeen unitSeen);
 
-	public abstract void schedule(Game game, boolean gameStarted);
+	void schedule(Game game, boolean gameStarted);
 
-	public abstract void schedule(Unit unit);
+	void schedule(Unit unit);
 
-	public abstract void schedule(Relation relation);
+	void schedule(Relation relation);
 
-	public abstract boolean cancel(EventKeyed eventKeyed);
+	boolean cancel(EventKeyed eventKeyed);
 
-	public abstract void scheduleFlushCache();
+	void scheduleFlushCache();
 }

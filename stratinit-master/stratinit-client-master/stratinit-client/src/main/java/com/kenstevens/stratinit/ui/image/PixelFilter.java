@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.ui.image;
 
 
-public interface PixelFilter {
+interface PixelFilter {
 
-	public boolean match(int pixelValue);
+	boolean match(int pixelValue);
 
 }

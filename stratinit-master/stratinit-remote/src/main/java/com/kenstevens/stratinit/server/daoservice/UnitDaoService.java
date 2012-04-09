@@ -21,75 +21,75 @@ import com.kenstevens.stratinit.type.UnitType;
 
 public interface UnitDaoService {
 
-	public abstract void updateUnit(Unit unit, Date buildTime);
+	void updateUnit(Unit unit, Date buildTime);
 
-	public abstract Unit buildUnit(Nation nation, SectorCoords coords,
+	Unit buildUnit(Nation nation, SectorCoords coords,
 			UnitType unitType, Date buildTime);
 
-	public abstract Unit buildUnit(Nation nation, SectorCoords coords,
+	Unit buildUnit(Nation nation, SectorCoords coords,
 			UnitType unitType);
 
-	public abstract void merge(Unit unit);
+	void merge(Unit unit);
 
-	public abstract void resupplyAir(Unit carrier);
+	void resupplyAir(Unit carrier);
 
-	public abstract void disable(UnitSeen unitSeen);
+	void disable(UnitSeen unitSeen);
 
-	public abstract void remove(Unit unit);
+	void remove(Unit unit);
 
-	public abstract void remove(UnitSeen unitSeen);
+	void remove(UnitSeen unitSeen);
 
-	public abstract void saveOrUpdate(Nation nation, Unit unit);
+	void saveOrUpdate(Nation nation, Unit unit);
 
-	public abstract void killUnit(Unit unit);
+	void killUnit(Unit unit);
 
-	public abstract void damage(Unit unit, int damage);
+	void damage(Unit unit, int damage);
 
-	public abstract void disable(Nation nation, Unit unit);
+	void disable(Nation nation, Unit unit);
 
-	public abstract void persist(LaunchedSatellite launchedSatellite);
+	void persist(LaunchedSatellite launchedSatellite);
 
-	public abstract void disable(UnitSeenPK unitSeenPK);
+	void disable(UnitSeenPK unitSeenPK);
 
-	public abstract void saveOrUpdate(UnitSeen unitSeen);
+	void saveOrUpdate(UnitSeen unitSeen);
 
-	public abstract void disable(Nation nation, List<Unit> units);
+	void disable(Nation nation, List<Unit> units);
 
-	public abstract Set<Unit> getTeamSeenUnits(Nation nation,
+	Set<Unit> getTeamSeenUnits(Nation nation,
 			Collection<Nation> allies);
 
-	public abstract Set<Unit> getTeamUnits(Nation nation,
+	Set<Unit> getTeamUnits(Nation nation,
 			Collection<Nation> allies);
 
-	public abstract Set<Unit> getAllyUnits(Collection<Nation> allies);
+	Set<Unit> getAllyUnits(Collection<Nation> allies);
 
-	public abstract Map<SectorCoords, List<Unit>> getUnitMap(Game game);
+	Map<SectorCoords, List<Unit>> getUnitMap(Game game);
 
-	public abstract int getPower(Nation nation);
+	int getPower(Nation nation);
 
-	public abstract Result<None> cedeUnit(Unit unit, Nation nation);
+	Result<None> cedeUnit(Unit unit, Nation nation);
 
-	public abstract List<Unit> getPassengers(Unit holder,
+	List<Unit> getPassengers(Unit holder,
 			WorldSector holderSector);
 
-	public abstract Result<None> disbandUnit(Unit unit);
+	Result<None> disbandUnit(Unit unit);
 
-	public abstract void updateCarrierRadar(Nation nation);
+	void updateCarrierRadar(Nation nation);
 
-	public abstract void removeUnitsSeen(Game game);
+	void removeUnitsSeen(Game game);
 
-	public abstract void removeUnitMoves(Game game);
+	void removeUnitMoves(Game game);
 
-	public abstract void setUnitMove(Unit unit, SectorCoords targetCoords);
+	void setUnitMove(Unit unit, SectorCoords targetCoords);
 
 	void clearUnitMove(Unit unit);
 
 	Result<None> buildCity(Unit unit);
 
-	public abstract Result<None> cancelMoveOrder(Unit unit);
+	Result<None> cancelMoveOrder(Unit unit);
 
 	void executeCityMove(Unit unit, City city);
 
-	public abstract List<Unit> getPassengers(Unit unit,
+	List<Unit> getPassengers(Unit unit,
 			WorldSector worldSector, Collection<Unit> values);
 }

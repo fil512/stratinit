@@ -5,12 +5,12 @@ import java.util.TimerTask;
 
 public interface JavaTimer {
 
-	public abstract void cancel();
+	void cancel();
 
-	public abstract void schedule(TimerTask task, Date time, long periodMillis);
+	void schedule(TimerTask task, Date time, long periodMillis);
 
-	public abstract void schedule(TimerTask task, Date time);
+	void schedule(TimerTask task, Date time);
 
-	public abstract void cancel(Event event);
+	void cancel(Event event);
 
 }

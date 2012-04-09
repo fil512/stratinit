@@ -13,38 +13,38 @@ import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
 
 public interface LogDao {
 
-	public abstract void persist(BattleLog battleLog);
+	void persist(BattleLog battleLog);
 
-	public abstract List<CityCapturedBattleLog> getCityCapturedBattleLogs(
+	List<CityCapturedBattleLog> getCityCapturedBattleLogs(
 			Nation nation);
 
-	public abstract List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
+	List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
 			Nation nation);
 
-	public abstract List<FlakBattleLog> getFlakBattleLogs(Nation nation);
+	List<FlakBattleLog> getFlakBattleLogs(Nation nation);
 
-	public abstract void remove(CityCapturedBattleLog log);
+	void remove(CityCapturedBattleLog log);
 
-	public abstract void remove(UnitAttackedBattleLog log);
+	void remove(UnitAttackedBattleLog log);
 
-	public abstract void remove(FlakBattleLog log);
+	void remove(FlakBattleLog log);
 
-	public abstract void remove(CityNukedBattleLog log);
+	void remove(CityNukedBattleLog log);
 
-	public abstract void removeLogs(Game game);
+	void removeLogs(Game game);
 
-	public abstract List<BattleLog> getBattleLogs(Game game);
+	List<BattleLog> getBattleLogs(Game game);
 
-	public abstract List<CityCapturedBattleLog> getCityCapturedBattleLogs(
+	List<CityCapturedBattleLog> getCityCapturedBattleLogs(
 			Game game);
 
-	public abstract List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
+	List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
 			Game game);
 
-	public abstract List<FlakBattleLog> getFlakBattleLogs(Game game);
+	List<FlakBattleLog> getFlakBattleLogs(Game game);
 
-	public abstract List<CityNukedBattleLog> getCityNukedBattleLogs(Game game);
+	List<CityNukedBattleLog> getCityNukedBattleLogs(Game game);
 
-	public abstract void persist(ErrorLog errorLog);
+	void persist(ErrorLog errorLog);
 
 }

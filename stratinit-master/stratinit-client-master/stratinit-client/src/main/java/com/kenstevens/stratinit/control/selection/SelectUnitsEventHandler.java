@@ -4,5 +4,5 @@ import com.google.gwt.event.shared.EventHandler;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 
 public abstract class SelectUnitsEventHandler implements EventHandler {
-	abstract public void selectUnits(Source selectionSource);
+	public abstract void selectUnits(Source selectionSource);
 }
