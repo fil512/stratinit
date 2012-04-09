@@ -18,10 +18,15 @@ public class ResultBattleLogProcessor {
 	enum Event {
 		CONQUEST, I_DIED, THEY_DIED, I_HIT
 	}
-	
+
 	public void process(List<SIBattleLog> silogs) {
+		Event event = getPrimaryEvent(silogs);
+		playSound(event);
+	}
+
+	private Event getPrimaryEvent(List<SIBattleLog> silogs) {
 		Event event = null;
-		
+
 		for (SIBattleLog silog : silogs) {
 			BattleLogEntry battleLog = new BattleLogEntry(silog);
 			if (battleLog.getType() == NewsCategory.CONQUEST) {
@@ -35,16 +40,21 @@ public class ResultBattleLogProcessor {
 				event = Event.I_HIT;
 			}
 		}
-		if (event != null) {
-			if (event == Event.CONQUEST) {
-				wavPlayer.playFanfare();
-			} else if (event == Event.I_DIED) {
-				wavPlayer.playIDied();
-			} else if (event == Event.THEY_DIED) {
-				wavPlayer.playExplosion();
-			} else if (event == Event.I_HIT) {
-				wavPlayer.playHit();
-			}
+		return event;
+	}
+
+	private void playSound(Event event) {
+		if (event == null) {
+			return;
+		}
+		if (event == Event.CONQUEST) {
+			wavPlayer.playFanfare();
+		} else if (event == Event.I_DIED) {
+			wavPlayer.playIDied();
+		} else if (event == Event.THEY_DIED) {
+			wavPlayer.playExplosion();
+		} else if (event == Event.I_HIT) {
+			wavPlayer.playHit();
 		}
 	}
 }
