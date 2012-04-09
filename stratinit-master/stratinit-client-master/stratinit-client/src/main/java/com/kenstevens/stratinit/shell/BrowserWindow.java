@@ -29,6 +29,8 @@ public class BrowserWindow {
 
 	private Browser browser;
 
+	private Text location;
+
 	public void open(Shell shell, String targetUrl) {
 		Shell window = new Shell(shell);
 		createContents(window, targetUrl);
@@ -54,32 +56,13 @@ public class BrowserWindow {
 		ToolItem itemGo = new ToolItem(toolbar, SWT.PUSH);
 		itemGo.setText("Go");
 
-		GridData data = new GridData();
-		data.horizontalSpan = 3;
-		toolbar.setLayoutData(data);
-
-		Label labelAddress = new Label(shell, SWT.NONE);
-		labelAddress.setText("Address");
-
-		final Text location = new Text(shell, SWT.BORDER);
-		data = new GridData();
-		data.horizontalAlignment = GridData.FILL;
-		data.horizontalSpan = 2;
-		data.grabExcessHorizontalSpace = true;
-		location.setLayoutData(data);
-
+		GridData data = createData(shell, toolbar);
 		try {
 			browser = new Browser(shell, SWT.NONE);
 		} catch (SWTError e) {
 			logger.error("Could not instantiate Browser: "+e.getMessage(), e);
 			return;
 		}
-		data = new GridData();
-		data.horizontalAlignment = GridData.FILL;
-		data.verticalAlignment = GridData.FILL;
-		data.horizontalSpan = 3;
-		data.grabExcessHorizontalSpace = true;
-		data.grabExcessVerticalSpace = true;
 		browser.setLayoutData(data);
 
 		final Label status = new Label(shell, SWT.NONE);
@@ -104,6 +87,30 @@ public class BrowserWindow {
 			}
 		});
 
+	}
+
+	private GridData createData(Shell shell, ToolBar toolbar) {
+		GridData data = new GridData();
+		data.horizontalSpan = 3;
+		toolbar.setLayoutData(data);
+
+		Label labelAddress = new Label(shell, SWT.NONE);
+		labelAddress.setText("Address");
+
+		location = new Text(shell, SWT.BORDER);
+		data = new GridData();
+		data.horizontalAlignment = GridData.FILL;
+		data.horizontalSpan = 2;
+		data.grabExcessHorizontalSpace = true;
+		location.setLayoutData(data);
+
+		data = new GridData();
+		data.horizontalAlignment = GridData.FILL;
+		data.verticalAlignment = GridData.FILL;
+		data.horizontalSpan = 3;
+		data.grabExcessHorizontalSpace = true;
+		data.grabExcessVerticalSpace = true;
+		return data;
 	}
 
 	private Listener addListeners(final Text location, final Label status,
