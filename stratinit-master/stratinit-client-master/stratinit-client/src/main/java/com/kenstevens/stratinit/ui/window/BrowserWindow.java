@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.shell;
+package com.kenstevens.stratinit.ui.window;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

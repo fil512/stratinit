@@ -5,6 +5,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.ui.window.BrowserWindow;
+
 
 
 @Component

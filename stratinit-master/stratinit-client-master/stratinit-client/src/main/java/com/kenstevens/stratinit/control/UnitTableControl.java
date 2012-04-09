@@ -41,6 +41,7 @@ import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.UnitListArrivedEvent;
 import com.kenstevens.stratinit.event.UnitListArrivedEventHandler;
 import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.model.Unit;
@@ -106,31 +107,36 @@ public class UnitTableControl implements Controller {
 			case SWT.MouseHover: {
 				TableItem item = table.getItem(new Point(event.x, event.y));
 				if (item != null && item.getData() instanceof Unit) {
-					if (tip != null && !tip.isDisposed())
-						tip.dispose();
 					Unit unit = (Unit) item.getData();
-					if (unit.getNation().equals(db.getNation())) {
+					Nation unitNation = unit.getNation();
+					if (unitNation.equals(db.getNation())) {
 						return;
 					}
-					tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
-					tip.setLayout(new FillLayout());
-					label = new Label(tip, SWT.NONE);
-					label.setForeground(display
-							.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-					label.setBackground(display
-							.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-					label.setData("_TABLEITEM", item);
-					label.setText(unit.getNation().toString());
-					label.addListener(SWT.MouseExit, labelListener);
-					label.addListener(SWT.MouseDown, labelListener);
-					Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-					Rectangle rect = item.getBounds(0);
-					Point pt = table.toDisplay(rect.x, rect.y);
-					tip.setBounds(pt.x, pt.y, size.x, size.y);
-					tip.setVisible(true);
+					popUpUnitNation(item, unitNation);
 				}
 			}
 			}
+		}
+
+		private void popUpUnitNation(TableItem item, Nation unitNation) {
+			if (tip != null && !tip.isDisposed())
+				tip.dispose();
+			tip = new Shell(table.getShell(), SWT.ON_TOP | SWT.TOOL);
+			tip.setLayout(new FillLayout());
+			label = new Label(tip, SWT.NONE);
+			label.setForeground(display
+					.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
+			label.setBackground(display
+					.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+			label.setData("_TABLEITEM", item);
+			label.setText(unitNation.toString());
+			label.addListener(SWT.MouseExit, labelListener);
+			label.addListener(SWT.MouseDown, labelListener);
+			Point size = tip.computeSize(SWT.DEFAULT, SWT.DEFAULT);
+			Rectangle rect = item.getBounds(0);
+			Point pt = table.toDisplay(rect.x, rect.y);
+			tip.setBounds(pt.x, pt.y, size.x, size.y);
+			tip.setVisible(true);
 		}
 	}
 
