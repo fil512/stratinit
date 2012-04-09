@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.ui.window;
+package com.kenstevens.stratinit.shell;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -92,6 +92,22 @@ public class BrowserWindow {
 		data.horizontalAlignment = GridData.END;
 		progressBar.setLayoutData(data);
 
+		Listener listener = addListeners(location, status, progressBar);
+		itemBack.addListener(SWT.Selection, listener);
+		itemForward.addListener(SWT.Selection, listener);
+		itemStop.addListener(SWT.Selection, listener);
+		itemRefresh.addListener(SWT.Selection, listener);
+		itemGo.addListener(SWT.Selection, listener);
+		location.addListener(SWT.DefaultSelection, new Listener() {
+			public void handleEvent(Event e) {
+				browser.setUrl(location.getText());
+			}
+		});
+
+	}
+
+	private Listener addListeners(final Text location, final Label status,
+			final ProgressBar progressBar) {
 		/* event handling */
 		Listener listener = new Listener() {
 			public void handleEvent(Event event) {
@@ -137,16 +153,6 @@ public class BrowserWindow {
 			public void changing(LocationEvent event) {
 			}
 		});
-		itemBack.addListener(SWT.Selection, listener);
-		itemForward.addListener(SWT.Selection, listener);
-		itemStop.addListener(SWT.Selection, listener);
-		itemRefresh.addListener(SWT.Selection, listener);
-		itemGo.addListener(SWT.Selection, listener);
-		location.addListener(SWT.DefaultSelection, new Listener() {
-			public void handleEvent(Event e) {
-				browser.setUrl(location.getText());
-			}
-		});
-
+		return listener;
 	}
 }
