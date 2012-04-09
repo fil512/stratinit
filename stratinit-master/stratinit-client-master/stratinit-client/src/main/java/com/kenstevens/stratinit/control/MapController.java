@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.control;
 
 public interface MapController extends TopLevelController {
 
-	public void redraw();
+	void redraw();
 
-	public void buildImage();
+	void buildImage();
 }
