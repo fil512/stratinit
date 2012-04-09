@@ -5,13 +5,13 @@ import com.kenstevens.stratinit.model.Updatable;
 
 public interface EventTimer {
 
-	public abstract void shutdown();
+	void shutdown();
 
-	public abstract void schedule(Event event);
+	void schedule(Event event);
 
-	public abstract boolean cancel(EventKey eventKey);
+	boolean cancel(EventKey eventKey);
 
-	public abstract boolean isShuttingDown();
+	boolean isShuttingDown();
 
-	public abstract Event getScheduledEvent(Updatable updatable);
+	Event getScheduledEvent(Updatable updatable);
 }

@@ -2,15 +2,15 @@ package com.kenstevens.stratinit.shell;
 
 public interface TabControl {
 
-	public boolean battleTabSelected();
+	boolean battleTabSelected();
 
-	public void switchToSectorTab();
+	void switchToSectorTab();
 
-	public boolean playerTabSelected();
+	boolean playerTabSelected();
 
-	public boolean cityTabSelected();
+	boolean cityTabSelected();
 
-	public boolean supplyTabSelected();
+	boolean supplyTabSelected();
 
-	public boolean unitTabSelected();
+	boolean unitTabSelected();
 }

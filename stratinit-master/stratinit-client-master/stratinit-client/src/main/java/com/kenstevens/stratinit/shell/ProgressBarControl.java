@@ -2,10 +2,10 @@ package com.kenstevens.stratinit.shell;
 
 public interface ProgressBarControl {
 
-	public abstract void setMaximum(final int value);
+	void setMaximum(final int value);
 
-	public abstract void incrementSelection();
+	void incrementSelection();
 
-	public abstract void reset();
+	void reset();
 
 }

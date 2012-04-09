@@ -6,8 +6,8 @@ import com.kenstevens.stratinit.model.World;
 
 public interface WorldManager {
 
-	public abstract World build(Game game);
+	World build(Game game);
 
-	public abstract void addPlayerToMap(int island, Nation nation);
+	void addPlayerToMap(int island, Nation nation);
 
 }

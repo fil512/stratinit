@@ -3,11 +3,11 @@ package com.kenstevens.stratinit.ui.window;
 
 public interface WindowDirector {
 
-	public abstract void accountSettingsWindow();
+	void accountSettingsWindow();
 
-	public abstract void openNewsWindow();
+	void openNewsWindow();
 
-	public abstract void openStatsWindow(final int gameId);
+	void openStatsWindow(final int gameId);
 
-	public abstract void chooseGameWindow();
+	void chooseGameWindow();
 }

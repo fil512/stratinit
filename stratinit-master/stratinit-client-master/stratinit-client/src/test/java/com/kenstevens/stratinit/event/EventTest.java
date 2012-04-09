@@ -43,7 +43,7 @@ public class EventTest extends StratInitClientTest {
 	static abstract class FooEventHandler implements EventHandler {
 		public static final Type<FooEventHandler> TYPE = new Type<FooEventHandler>();
 
-		abstract public void doFooStuff(String instring);
+		public abstract void doFooStuff(String instring);
 	}
 
 	@Test

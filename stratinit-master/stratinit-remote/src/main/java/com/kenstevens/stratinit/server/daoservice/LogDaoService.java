@@ -6,10 +6,10 @@ import com.kenstevens.stratinit.model.Player;
 
 public interface LogDaoService {
 
-	public abstract void persist(BattleLog battleLog);
+	void persist(BattleLog battleLog);
 
-	public abstract void removeLogs(Game game);
+	void removeLogs(Game game);
 
-	public abstract int logError(Game game, Player player, String stackTrace);
+	int logError(Game game, Player player, String stackTrace);
 
 }

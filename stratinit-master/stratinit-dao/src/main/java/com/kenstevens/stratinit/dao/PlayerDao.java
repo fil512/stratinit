@@ -7,26 +7,26 @@ import com.kenstevens.stratinit.model.PlayerRole;
 
 public interface PlayerDao {
 
-	public abstract void persist(Player player);
+	void persist(Player player);
 
-	public abstract void persist(PlayerRole playerRole);
+	void persist(PlayerRole playerRole);
 
-	public abstract List<Player> getAllPlayers();
+	List<Player> getAllPlayers();
 
-	public abstract Player find(String username);
+	Player find(String username);
 
-	public abstract void remove(String username);
+	void remove(String username);
 
-	public abstract void remove(Player player);
+	void remove(Player player);
 
-	public abstract PlayerRole getPlayerRole(Player player, String roleName);
+	PlayerRole getPlayerRole(Player player, String roleName);
 
-	public abstract void merge(Player player);
+	void merge(Player player);
 
-	public abstract List<PlayerRole> getRoles(Player player);
+	List<PlayerRole> getRoles(Player player);
 
-	public abstract Player findByEmail(String email);
+	Player findByEmail(String email);
 
-	public abstract Player find(Integer id);
+	Player find(Integer id);
 
 }

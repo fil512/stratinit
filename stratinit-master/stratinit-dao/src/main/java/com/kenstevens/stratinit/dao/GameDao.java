@@ -16,76 +16,76 @@ import com.kenstevens.stratinit.type.RelationType;
 
 public interface GameDao {
 
-	public abstract void persist(Game game);
+	void persist(Game game);
 
-	public abstract void persist(Nation nation);
+	void persist(Nation nation);
 
-	public abstract void persist(Relation relation);
+	void persist(Relation relation);
 
-	public abstract List<Game> getAllGames();
+	List<Game> getAllGames();
 
-	public abstract List<Nation> getNations(Game game);
+	List<Nation> getNations(Game game);
 
-	public abstract List<Nation> getNations(Player player);
+	List<Nation> getNations(Player player);
 
-	public abstract Game findGame(int gameId);
+	Game findGame(int gameId);
 
-	public abstract Relation findRelation(Nation from, Nation to);
+	Relation findRelation(Nation from, Nation to);
 
-	public abstract Relation findRelation(RelationPK relationPK);
+	Relation findRelation(RelationPK relationPK);
 
-	public abstract Nation findNation(Game game, Player player);
+	Nation findNation(Game game, Player player);
 
-	public abstract Nation findNation(int gameId, Player player);
+	Nation findNation(int gameId, Player player);
 
-	public abstract void removeGame(int id);
+	void removeGame(int id);
 
-	public abstract void remove(Game game);
+	void remove(Game game);
 
-	public abstract List<Nation> getAllNations(int gameId);
+	List<Nation> getAllNations(int gameId);
 
-	public abstract List<Nation> getAllNations();
+	List<Nation> getAllNations();
 
-	public abstract Map<Nation, RelationType> getMyRelationsAsMap(Nation nation);
+	Map<Nation, RelationType> getMyRelationsAsMap(Nation nation);
 
-	public abstract Map<Nation, RelationType> getTheirRelationTypesAsMap(
+	Map<Nation, RelationType> getTheirRelationTypesAsMap(
 			Nation nation);
 
-	public abstract Map<Nation, Relation> getTheirRelationsAsMap(Nation nation);
+	Map<Nation, Relation> getTheirRelationsAsMap(Nation nation);
 
-	public abstract Collection<Relation> getMyRelations(Nation nation);
+	Collection<Relation> getMyRelations(Nation nation);
 
-	public abstract Collection<Relation> getTheirRelations(Nation nation);
+	Collection<Relation> getTheirRelations(Nation nation);
 
-	public abstract void merge(Game game);
+	void merge(Game game);
 
-	public abstract void merge(Nation nation);
+	void merge(Nation nation);
 
-	public abstract Nation getNation(int gameId, int nationId);
+	Nation getNation(int gameId, int nationId);
 
-	public abstract void merge(Relation relation);
+	void merge(Relation relation);
 
-	public abstract Collection<Relation> getAllChangingRelations(Game game);
+	Collection<Relation> getAllChangingRelations(Game game);
 
-	public abstract Collection<Nation> getAllies(Nation nation);
+	Collection<Nation> getAllies(Nation nation);
 
-	public abstract List<Relation> getRelations(Game game);
+	List<Relation> getRelations(Game game);
 
-	public abstract void flush();
+	void flush();
 
-	public abstract void persist(RelationChangeAudit relationChangeAudit);
+	void persist(RelationChangeAudit relationChangeAudit);
 
-	public abstract Relation getReverse(Relation relation);
+	Relation getReverse(Relation relation);
 
-	public abstract List<Game> getUnjoinedGames(Player player);
+	List<Game> getUnjoinedGames(Player player);
 
-	public abstract List<GameBuildAudit> getGameBuildAudit();
+	List<GameBuildAudit> getGameBuildAudit();
 
-	public abstract void remove(Relation relation);
+	void remove(Relation relation);
 
-	public abstract void remove(City city);
+	void remove(City city);
 
-	public abstract Collection<Nation> getFriendsAndAllies(Nation nation);
+	Collection<Nation> getFriendsAndAllies(Nation nation);
 
-	public abstract List<Game> getAllStartedGames();
+	List<Game> getAllStartedGames();
 }

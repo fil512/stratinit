@@ -4,8 +4,8 @@ import com.kenstevens.stratinit.cache.GameCache;
 
 public interface GameLoaderService {
 
-	public abstract void flush(GameCache gameCache);
+	void flush(GameCache gameCache);
 
-	public abstract GameCache loadGame(int gameId);
+	GameCache loadGame(int gameId);
 
 }

@@ -15,49 +15,49 @@ import com.kenstevens.stratinit.type.RelationType;
 
 public interface GameDaoService {
 
-	public abstract Game createGame(String name);
+	Game createGame(String name);
 
-	public abstract Game createBlitzGame(String name, int islands);
+	Game createBlitzGame(String name, int islands);
 
-	public abstract void mapGame(Game game);
+	void mapGame(Game game);
 
-	public abstract void scheduleGame(Game game);
+	void scheduleGame(Game game);
 
-	public abstract Result<Nation> joinGame(Player player, int gameId, boolean noAlliances);
+	Result<Nation> joinGame(Player player, int gameId, boolean noAlliances);
 
-	public abstract List<Game> getUnjoinedGames(Player player);
+	List<Game> getUnjoinedGames(Player player);
 
-	public abstract List<Game> getJoinedGames(Player player);
+	List<Game> getJoinedGames(Player player);
 
-	public abstract Game findGame(int gameId);
+	Game findGame(int gameId);
 
-	public abstract void removeGame(int gameId);
+	void removeGame(int gameId);
 
-	public abstract Result<Relation> setRelation(Nation nation, Nation target,
+	Result<Relation> setRelation(Nation nation, Nation target,
 			RelationType newRelation, boolean override);
 
-	public abstract void switchRelation(RelationPK relationPK);
+	void switchRelation(RelationPK relationPK);
 
-	public abstract void switchRelation(Relation relation);
+	void switchRelation(Relation relation);
 
-	public abstract void disable(Game game);
+	void disable(Game game);
 
 	// TODO record more about the game
-	public abstract void score(Game game);
+	void score(Game game);
 
-	public abstract void merge(Nation nation);
+	void merge(Nation nation);
 
-	public abstract List<GameBuildAudit> getGameBuildAudit();
+	List<GameBuildAudit> getGameBuildAudit();
 
-	public abstract void remove(Relation relation);
+	void remove(Relation relation);
 
-	public abstract void updateGame(Game game, Date lastUpdated);
+	void updateGame(Game game, Date lastUpdated);
 
-	public abstract List<SITeam> getTeams(Game game);
+	List<SITeam> getTeams(Game game);
 
-	public abstract void setNoAlliances(Game game);
+	void setNoAlliances(Game game);
 
-	public abstract void merge(Game game);
+	void merge(Game game);
 
 	void calculateAllianceVote(Game game);
 }

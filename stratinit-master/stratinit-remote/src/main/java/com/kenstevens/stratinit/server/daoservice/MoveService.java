@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 public interface MoveService {
 
-	public abstract Result<MoveCost> move(Nation nation, List<SIUnit> units,
+	Result<MoveCost> move(Nation nation, List<SIUnit> units,
 			SectorCoords target);
 
 }

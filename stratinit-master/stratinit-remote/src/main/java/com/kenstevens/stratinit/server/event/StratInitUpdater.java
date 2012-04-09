@@ -9,19 +9,19 @@ import com.kenstevens.stratinit.model.UnitSeenPK;
 
 public interface StratInitUpdater {
 
-	public abstract void updateTech(Integer gameId, Date date);
+	void updateTech(Integer gameId, Date date);
 
-	public abstract void switchRelation(RelationPK relationPK);
+	void switchRelation(RelationPK relationPK);
 
-	public abstract void updateUnit(Unit unit, Date date);
+	void updateUnit(Unit unit, Date date);
 
-	public abstract void buildUnit(CityPK cityPK, Date date);
+	void buildUnit(CityPK cityPK, Date date);
 
-	public abstract void disable(UnitSeenPK unitSeenPK);
+	void disable(UnitSeenPK unitSeenPK);
 
-	public abstract void endGame(Integer gameId);
+	void endGame(Integer gameId);
 
-	public abstract void startGame(Integer gameId);
+	void startGame(Integer gameId);
 
-	public abstract void mapGame(Integer gameId);
+	void mapGame(Integer gameId);
 }
