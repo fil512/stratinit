@@ -17,21 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.MapController;
 import com.kenstevens.stratinit.control.selection.MapCentre;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.SelectNationEvent;
-import com.kenstevens.stratinit.control.selection.SelectNationEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.GameChangedEvent;
-import com.kenstevens.stratinit.event.GameChangedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.WorldArrivedEvent;
-import com.kenstevens.stratinit.event.WorldArrivedEventHandler;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.model.City;
@@ -86,9 +82,9 @@ public class MapCanvasControl implements MapController {
 	@Autowired
 	private UnitDrawerService unitDrawer;
 	@Autowired
-	private HandlerManager handlerManager;
-	@Autowired
 	SelectedNation selectedNation;
+	@Autowired
+	private StratinitEventBus eventBus;
 
 	// TODO REF this class too big
 
@@ -134,60 +130,48 @@ public class MapCanvasControl implements MapController {
 
 		redraw();
 	}
+	
+	@Subscribe
+	public void handleGameChangedEvent(GameChangedEvent event) {
+		if (db.getWorld() != null) {
+			origin = new Point(0, 0);
+			mapImageManager.buildImage();
+			gameSwitched = true;
+		}
+	}
+	
+	@Subscribe
+	public void handleWorldArrivedEvent(WorldArrivedEvent event) {
+		buildImage();
+	}
+	
+	@Subscribe
+	public void handleSelectSectorEvent(SelectSectorEvent event) {
+		setCoords(event.getSelectionSource(), selectedCoords.getCoords());
+	}
+	
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		boolean scrollToSeeUnit = false;
+		Source source = event.getSelectionSource();
+		if (source  == Source.UNIT_TAB) {
+			scrollToSeeUnit = true;
+		}
+		if (widgetContainer.getTabControl().supplyTabSelected()) {
+			setCoords(source, selectedCoords.getCoords());
+		} else {
+			displayActiveUnitsAndScroll(scrollToSeeUnit);
+		}
+	}
+	
+	@Subscribe
+	public void handleSelectNationEvent(SelectNationEvent event) {
+		mapImageManager.buildImage();
+		redraw();
+	}
 
 	public void setControllers() {
-		handlerManager.addHandler(WorldArrivedEvent.TYPE, new WorldArrivedEventHandler() {
-			@Override
-			public void dataArrived() {
-				buildImage();
-			}
-		});
-		handlerManager.addHandler(GameChangedEvent.TYPE,
-				new GameChangedEventHandler() {
-
-					@Override
-					public void gameChanged() {
-						if (db.getWorld() != null) {
-							origin = new Point(0, 0);
-							mapImageManager.buildImage();
-							gameSwitched = true;
-						}
-					}
-				});
-		handlerManager.addHandler(SelectSectorEvent.TYPE,
-				new SelectSectorEventHandler() {
-
-					@Override
-					public void selectSector(Source source) {
-						setCoords(source, selectedCoords.getCoords());
-					}
-				});
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-
-					@Override
-					public void selectUnits(Source source) {
-						boolean scrollToSeeUnit = false;
-						if (source == Source.UNIT_TAB) {
-							scrollToSeeUnit = true;
-						}
-						if (widgetContainer.getTabControl().supplyTabSelected()) {
-							setCoords(source, selectedCoords.getCoords());
-						} else {
-							displayActiveUnitsAndScroll(scrollToSeeUnit);
-						}
-					}
-				});
-		handlerManager.addHandler(SelectNationEvent.TYPE,
-				new SelectNationEventHandler() {
-
-					@Override
-					public void selectNation(Source source) {
-						mapImageManager.buildImage();
-						redraw();
-					}
-				});
-		
+		eventBus.register(this);
 	}
 
 	@Override

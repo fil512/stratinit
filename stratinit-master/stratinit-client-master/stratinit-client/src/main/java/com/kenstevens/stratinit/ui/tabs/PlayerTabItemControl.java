@@ -20,16 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.PlayerTableControl;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.control.selection.SelectNationEvent;
-import com.kenstevens.stratinit.control.selection.SelectNationEventHandler;
-import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.GameChangedEvent;
-import com.kenstevens.stratinit.event.GameChangedEventHandler;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
-import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.model.NationView;
@@ -52,13 +49,13 @@ public class PlayerTabItemControl implements TopLevelController {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private HandlerManager handlerManager;
-	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
 	private SelectedNation selectedNation;
 	@Autowired
 	private Data db;
+	@Autowired
+	private StratinitEventBus eventBus;
 
 	private final PlayerTabItem playerTabItem;
 
@@ -69,46 +66,38 @@ public class PlayerTabItemControl implements TopLevelController {
 		setButtonListeners();
 	}
 
+	@Subscribe
+	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
+		setRelations();
+	}
+	
+	@Subscribe
+	public void handleSelectNationEvent(SelectNationEvent event) {
+		NationView player = selectedNation.getPlayer();
+		if (player != null) {
+			setRelations();
+		}
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(NationListArrivedEvent.TYPE,
-				new NationListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						setRelations();
-					}
-				});
-		handlerManager.addHandler(SelectNationEvent.TYPE,
-				new SelectNationEventHandler() {
+		eventBus.register(this);
+	}
 
-					@Override
-					public void selectNation(Source source) {
-						NationView player = selectedNation.getPlayer();
-						if (player != null) {
-							setRelations();
-						}
-					}
-				});
-		handlerManager.addHandler(GameChangedEvent.TYPE, new GameChangedEventHandler() {
-
-			@Override
-			public void gameChanged() {
-				GameView selectedGame = db.getSelectedGame();
-				boolean noAlliances = !selectedGame.hasStarted() || selectedGame.isNoAlliances();
-				Combo combo = playerTabItem.getMyRelationCombo();
-				combo.removeAll();
-				for (RelationType relationType : RelationType.values()) {
-					if (relationType == RelationType.ALLIED && noAlliances) {
-						continue;
-					}
-					combo.add(relationType.toString());
-				}
-
-
+	@Subscribe
+	public void handleGameChangedEvent(GameChangedEvent event) {
+		GameView selectedGame = db.getSelectedGame();
+		boolean noAlliances = !selectedGame.hasStarted()
+				|| selectedGame.isNoAlliances();
+		Combo combo = playerTabItem.getMyRelationCombo();
+		combo.removeAll();
+		for (RelationType relationType : RelationType.values()) {
+			if (relationType == RelationType.ALLIED && noAlliances) {
+				continue;
 			}
-			
-		});
+			combo.add(relationType.toString());
+		}
 	}
 
 	private void setRelations() {
@@ -129,7 +118,8 @@ public class PlayerTabItemControl implements TopLevelController {
 						try {
 							actionFactory.getNations();
 						} catch (Exception e1) {
-							logger.error(e1.getMessage(), e1);						}
+							logger.error(e1.getMessage(), e1);
+						}
 					}
 				});
 
@@ -140,16 +130,19 @@ public class PlayerTabItemControl implements TopLevelController {
 				NationView selectedPlayer = playerTableControl
 						.getSelectedPlayer();
 				if (selectedPlayer == null) {
-					statusReporter.reportError("You must first select a player to change relations with before setting your relation.");
+					statusReporter
+							.reportError("You must first select a player to change relations with before setting your relation.");
 					return;
 				}
-				actionFactory.setRelation(selectedPlayer, RelationType.valueOf(choice));
+				actionFactory.setRelation(selectedPlayer,
+						RelationType.valueOf(choice));
 			}
 		});
 	}
 
 	public void setControllers() {
-		playerTableControl = spring.autowire(new PlayerTableControl( playerTabItem.getPlayerTable(), playerTabItem.getTeamTable() ));
+		playerTableControl = spring.autowire(new PlayerTableControl(
+				playerTabItem.getPlayerTable(), playerTabItem.getTeamTable()));
 	}
 
 	public void setContents() {
@@ -160,12 +153,11 @@ public class PlayerTabItemControl implements TopLevelController {
 		if (selection.length == 0) {
 			return;
 		}
-		NationView player = (NationView)selection[0].getData();
+		NationView player = (NationView) selection[0].getData();
 		if (playerTabItem.isDisposed())
 			return;
 		Combo combo = playerTabItem.getMyRelationCombo();
-		combo.select(combo.indexOf(player.getMyRelation().getType()
-				.toString()));
+		combo.select(combo.indexOf(player.getMyRelation().getType().toString()));
 		Text theirRelationText = playerTabItem.getTheirRelationText();
 		theirRelationText.setText(player.getTheirRelation().getType()
 				.toString());
@@ -177,8 +169,7 @@ public class PlayerTabItemControl implements TopLevelController {
 			nextText.setText("");
 		} else {
 			switchesText.setText(FORMAT.format(switchTime));
-			nextText.setText(player.getMyRelation().getNextType()
-					.toString());
+			nextText.setText(player.getMyRelation().getNextType().toString());
 		}
 		Date theirSwitchTime = player.getTheirRelation().getSwitchTime();
 		switchesText = playerTabItem.getTheirSwitchesText();
@@ -188,8 +179,7 @@ public class PlayerTabItemControl implements TopLevelController {
 			nextText.setText("");
 		} else {
 			switchesText.setText(FORMAT.format(theirSwitchTime));
-			nextText.setText(player.getTheirRelation().getNextType()
-					.toString());
+			nextText.setText(player.getTheirRelation().getNextType().toString());
 		}
 	}
 }

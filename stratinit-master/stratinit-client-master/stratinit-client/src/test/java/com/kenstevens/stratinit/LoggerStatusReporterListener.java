@@ -7,29 +7,26 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gwt.event.shared.HandlerManager;
-import com.kenstevens.stratinit.shell.Message;
+import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.shell.StatusReportEvent;
-import com.kenstevens.stratinit.shell.StatusReportEventHandler;
 
 @Service
 public final class LoggerStatusReporterListener {
 	private final Log logger = LogFactory.getLog(getClass());
 	@Autowired
-	private HandlerManager handlerManager;
-
+	private StratinitEventBus eventBus;
+	
 	private LoggerStatusReporterListener() {}
 
+	@Subscribe
+	public void handleStatusReportEvent(StatusReportEvent event) {
+		logger.info(event.getMessage().toString());
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(StatusReportEvent.TYPE,
-				new StatusReportEventHandler() {
-
-					@Override
-					public void reportStatus(Message message) {
-						logger.info(message.toString());
-					}
-				});
+		eventBus.register(this);
 	}
 }

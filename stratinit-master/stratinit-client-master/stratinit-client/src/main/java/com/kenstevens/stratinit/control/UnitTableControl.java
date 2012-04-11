@@ -31,15 +31,13 @@ import org.springframework.stereotype.Component;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.UnitListArrivedEvent;
-import com.kenstevens.stratinit.event.UnitListArrivedEventHandler;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.SelectedCoords;
@@ -64,7 +62,7 @@ public class UnitTableControl implements Controller {
 	@Autowired
 	private SelectedUnits selectedUnits;
 	@Autowired
-	private HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 	private Predicate<Unit> unitFilter;
 	private final boolean listenToSectorSelects;
 	private final boolean isShowCoords;
@@ -140,35 +138,29 @@ public class UnitTableControl implements Controller {
 		}
 	}
 
+	@Subscribe
+	public void handleUnitListArrivedEvent(UnitListArrivedEvent event) {
+		unitsChanged();
+	}
+
+	@Subscribe
+	public void handleSelectSectorEvent(SelectSectorEvent event) {
+		if (!listenToSectorSelects) {
+			return;
+		}
+		coordsSelected();
+	}
+	
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		coordsSelected();
+		unitsSelected();
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(UnitListArrivedEvent.TYPE,
-				new UnitListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						unitsChanged();
-					}
-				});
-		if (listenToSectorSelects) {
-			handlerManager.addHandler(SelectSectorEvent.TYPE,
-					new SelectSectorEventHandler() {
-
-						@Override
-						public void selectSector(Source source) {
-							coordsSelected();
-						}
-					});
-		}
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-
-					@Override
-					public void selectUnits(Source source) {
-						coordsSelected();
-						unitsSelected();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	public final void setTableListeners() {

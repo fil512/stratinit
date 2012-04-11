@@ -12,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
-import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.TeamListArrivedEvent;
-import com.kenstevens.stratinit.event.TeamListArrivedEventHandler;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationList;
 import com.kenstevens.stratinit.model.NationView;
@@ -35,31 +34,28 @@ public class PlayerTableControl {
 	@Autowired
 	private SelectEvent selectEvent;
 	@Autowired
-	private HandlerManager handlerManager;
-
+	protected StratinitEventBus eventBus;
+	
 	public PlayerTableControl(Table playerTable, Table teamTable) {
 		this.playerTable = playerTable;
 		this.teamTable = teamTable;
 		setTableListeners();
 	}
 
+	@Subscribe
+	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
+		rebuildPlayerTable(db.getNationList());
+	}
+	
+	@Subscribe
+	public void handleTeamListArrivedEvent(TeamListArrivedEvent event) {
+		rebuildTeamTable(db.getTeamList());
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(NationListArrivedEvent.TYPE,
-				new NationListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						rebuildPlayerTable(db.getNationList());
-					}
-				});
-		handlerManager.addHandler(TeamListArrivedEvent.TYPE,
-				new TeamListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						rebuildTeamTable(db.getTeamList());
-					}
-				});
+		eventBus.register(this);
 	}
 
 	public final void setTableListeners() {

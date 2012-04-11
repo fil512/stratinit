@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
-import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCity;
@@ -40,7 +40,7 @@ public class CityButtonsControl {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 	
 	private final CityButtons cityButtons;
 
@@ -48,24 +48,22 @@ public class CityButtonsControl {
 		this.cityButtons = cityButtons;
 		setInitialImages();
 	}
+	
+	@Subscribe
+	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
+		NationView ally = db.getAlly();
+		if (ally == null) {
+			cityButtons.getCedeButton().setEnabled(false);
+		} else {
+			cityButtons.getCedeButton().setEnabled(true);
+		}
+	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
 		setButtonListeners();
-		handlerManager.addHandler(NationListArrivedEvent.TYPE,
-				new NationListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						NationView ally = db.getAlly();
-						if (ally == null) {
-							cityButtons.getCedeButton().setEnabled(false);
-						} else {
-							cityButtons.getCedeButton().setEnabled(true);
-						}
-
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void setButtonListeners() {

@@ -8,15 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
-import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCoords;
@@ -62,7 +59,7 @@ public class UnitButtonsControl {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 
 	private final UnitButtons unitButtons;
 	private WorldSector selectedSector;
@@ -73,40 +70,33 @@ public class UnitButtonsControl {
 		setCentreHomeEnabled(false);
 	}
 
+	@Subscribe
+	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
+		NationView ally = db.getAlly();
+		if (ally == null) {
+			unitButtons.getCedeButton().setEnabled(false);
+		} else {
+			unitButtons.getCedeButton().setEnabled(true);
+		}
+	}
+
+	@Subscribe
+	public void handleSelectSectorEvent(SelectSectorEvent event) {
+		setSelectedSector();
+		noUnitsSelected();
+	}
+
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		setSelectedSector();
+		unitsSelected();
+	}
+		
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
 		setButtonListeners();
-		handlerManager.addHandler(NationListArrivedEvent.TYPE,
-				new NationListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						NationView ally = db.getAlly();
-						if (ally == null) {
-							unitButtons.getCedeButton().setEnabled(false);
-						} else {
-							unitButtons.getCedeButton().setEnabled(true);
-						}
-					}
-				});
-		handlerManager.addHandler(SelectSectorEvent.TYPE,
-				new SelectSectorEventHandler() {
-
-					@Override
-					public void selectSector(Source source) {
-						setSelectedSector();
-						noUnitsSelected();
-					}
-				});
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-
-					@Override
-					public void selectUnits(Source source) {
-						setSelectedSector();
-						unitsSelected();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void noUnitsSelected() {
@@ -124,7 +114,8 @@ public class UnitButtonsControl {
 		unitButtons.getDisbandButton().setEnabled(true);
 		unitButtons.getCentreUnitButton().setEnabled(true);
 		unitButtons.setIsEngineer(firstUnit.isEngineer());
-		unitButtons.getCancelMoveButton().setEnabled(firstUnit.getUnitMove() != null);
+		unitButtons.getCancelMoveButton().setEnabled(
+				firstUnit.getUnitMove() != null);
 		if (selectedSector != null) {
 			Button switchTerrainButton = unitButtons.getSwitchTerrainButton();
 			if (selectedSector.isLand()) {
@@ -143,8 +134,8 @@ public class UnitButtonsControl {
 
 	private void setButtonListeners() {
 		unitButtons.getCedeButton().addSelectionListener(
-				new CedeUnitsSelectionAdapter(selectEvent, spring, actionFactory,
-						topShell, cedeWindow));
+				new CedeUnitsSelectionAdapter(selectEvent, spring,
+						actionFactory, topShell, cedeWindow));
 		unitButtons.getDisbandButton().addSelectionListener(
 				new DisbandSelectionAdapter(selectEvent, spring, actionFactory,
 						topShell));
@@ -183,8 +174,8 @@ public class UnitButtonsControl {
 						imageLibrary.getBuildCity());
 				unitButtons.getCancelMoveButton().setImage(
 						imageLibrary.getCancelMove());
-				unitButtons.getUpdateButton().setImage(
-						imageLibrary.getUpdate());
+				unitButtons.getUpdateButton()
+						.setImage(imageLibrary.getUpdate());
 			}
 		});
 	}

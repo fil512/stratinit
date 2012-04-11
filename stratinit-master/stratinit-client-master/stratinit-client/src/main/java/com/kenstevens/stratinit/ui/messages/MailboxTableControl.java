@@ -9,47 +9,51 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.event.MessageListArrivedEvent;
-import com.kenstevens.stratinit.event.MessageListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Message;
 import com.kenstevens.stratinit.model.MessageList;
 import com.kenstevens.stratinit.ui.tabs.TableControl;
 
-public abstract class MailboxTableControl extends TableControl implements Controller {
+public abstract class MailboxTableControl extends TableControl implements
+		Controller {
 
 	protected final Table table;
-	@Autowired protected Data db;
+	@Autowired
+	protected Data db;
+	@Autowired
+	protected StratinitEventBus eventBus;
 	private Font boldTableFont;
 
 	protected MailboxTableControl(Table table) {
 		this.table = table;
 		boldTableFont = getBoldTableFont(table, Display.getDefault());
 	}
+	
+	@Subscribe
+	public void handleMessageListArrivedEvent(MessageListArrivedEvent event) {
+		updateTable(getMessageList());
+	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(MessageListArrivedEvent.TYPE,
-				new MessageListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						updateTable(getMessageList());
-					}
-				});
+		eventBus.register(this);
 	}
-	
+
 	protected abstract MessageList getMessageList();
+
 	protected abstract String getPlayerName(Message message);
 
-	protected void setBoldIfUnread(Message message,
-			TableItem item) {
+	protected void setBoldIfUnread(Message message, TableItem item) {
 		if (!message.isRead()) {
 			item.setFont(boldTableFont);
 		}
 	}
-	
+
 	protected void setRead(Message message, TableItem item) {
 		message.setRead(true);
 		item.setFont(table.getFont());
@@ -67,8 +71,7 @@ public abstract class MailboxTableControl extends TableControl implements Contro
 			Message message = messageList.get(i);
 			String player = getPlayerName(message);
 			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText(new String[] { player,
-					message.getDateString(),
+			item.setText(new String[] { player, message.getDateString(),
 					message.getSubject() });
 			if (message.getDate().after(db.getLastLoginTime())) {
 				message.setRead(false);

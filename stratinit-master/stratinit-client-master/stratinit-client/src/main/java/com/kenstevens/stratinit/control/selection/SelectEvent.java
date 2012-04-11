@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCity;
@@ -35,7 +35,7 @@ public class SelectEvent {
 	@Autowired
 	private Data db;
 	@Autowired
-	private HandlerManager handlerManager;
+	private StratinitEventBus eventBus;
 
 	public void selectSectorCoords(SectorCoords sectorCoords,
 			Selection.Source selectionSource) {
@@ -65,7 +65,7 @@ public class SelectEvent {
 		selectedUnits.clear();
 		selectCoords(sectorCoords);
 		if (fireEvent) {
-			handlerManager.fireEvent(new SelectSectorEvent(selectionSource));
+			eventBus.post(new SelectSectorEvent(selectionSource));
 		}
 	}
 
@@ -104,7 +104,7 @@ public class SelectEvent {
 		SectorCoords coords = units.get(0).getCoords();
 		selectCoords(coords);
 		if (fireEvent) {
-			handlerManager.fireEvent(new SelectUnitsEvent(selectionSource));
+			eventBus.post(new SelectUnitsEvent(selectionSource));
 		}
 	}
 
@@ -124,7 +124,7 @@ public class SelectEvent {
 
 	public void selectNation(NationView nation, Source selectionSource) {
 		selectedNation.setNation(nation);
-		handlerManager.fireEvent(new SelectNationEvent(selectionSource));
+		eventBus.post(new SelectNationEvent(selectionSource));
 	}
 
 	public List<UnitView> getSelectedUnits() {

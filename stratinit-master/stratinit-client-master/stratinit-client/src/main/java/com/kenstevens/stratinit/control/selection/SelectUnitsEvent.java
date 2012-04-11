@@ -5,18 +5,15 @@ import com.kenstevens.stratinit.event.StratInitEvent;
 
 //TODO REF this should probably be a type of selectSector event
 
-public class SelectUnitsEvent extends StratInitEvent<SelectUnitsEventHandler> {
-	public static final Type<SelectUnitsEventHandler> TYPE = new Type<SelectUnitsEventHandler>();
+public class SelectUnitsEvent implements StratInitEvent {
 	private final Source selectionSource;
 	
 	public SelectUnitsEvent(Selection.Source selectionSource) {
 		this.selectionSource = selectionSource;
 		
 	}
-	
-	@Override
-	protected void dispatch(SelectUnitsEventHandler handler) {
-		handler.selectUnits(selectionSource);
-	}
 
+	public Source getSelectionSource() {
+		return selectionSource;
+	}
 }

@@ -5,19 +5,19 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.GwtEvent.Type;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.StratInitClientTest;
 
 public class EventTest extends StratInitClientTest {
 	public static final String TEST_STRING = "test";
+	FooEvent fooEvent = new FooEvent(TEST_STRING);
+	final int[] callCount = {0};
+	final String[] gotString = {""};
 
 	@Autowired
-	HandlerManager handlerManager;
+	StratinitEventBus eventBus;
 
-	static class FooEvent extends GwtEvent<FooEventHandler> {
+	static class FooEvent implements StratInitEvent {
 
 		private final String name;
 
@@ -25,44 +25,24 @@ public class EventTest extends StratInitClientTest {
 			this.name = name;
 		}
 
-		@Override
-		public Type<FooEventHandler> getAssociatedType() {
-			return FooEventHandler.TYPE;
-		}
-
-		@Override
-		protected void dispatch(FooEventHandler handler) {
-			handler.doFooStuff(name);
-		}
-
 		public String getName() {
 			return name;
 		}
 	}
 
-	static abstract class FooEventHandler implements EventHandler {
-		public static final Type<FooEventHandler> TYPE = new Type<FooEventHandler>();
-
-		public abstract void doFooStuff(String instring);
+	@Subscribe
+	public void handleFooEvent(FooEvent event) {
+		++callCount[0];
+		gotString[0] = event.getName();
 	}
-
+	
 	@Test
 	public void testDispatch() {
-		FooEvent fooEvent = new FooEvent(TEST_STRING);
-		final int[] callCount = {0};
-		final String[] gotString = {""};
 
-		FooEventHandler testHandler = new FooEventHandler() {
-
-			public void doFooStuff(String instring) {
-				++callCount[0];
-				gotString[0] = instring;
-			}
-		};
 		assertEquals(0, callCount[0]);
 		assertEquals("", gotString[0]);
-		handlerManager.addHandler(FooEventHandler.TYPE, testHandler);
-		handlerManager.fireEvent(fooEvent);
+		eventBus.register(this);
+		eventBus.post(fooEvent);
 		assertEquals(1, callCount[0]);
 		assertEquals(TEST_STRING, gotString[0]);
 	}
