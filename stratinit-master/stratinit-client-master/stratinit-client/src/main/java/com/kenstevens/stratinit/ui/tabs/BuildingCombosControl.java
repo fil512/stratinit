@@ -14,15 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.ETAHelper;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.CityListArrivedEvent;
-import com.kenstevens.stratinit.event.CityListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.CityMove;
@@ -49,7 +46,7 @@ public class BuildingCombosControl {
 	@Autowired
 	private SelectedCoords selectedCoords;
 	@Autowired
-	private HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 
 	private final BuildingCombos buildingCombos;
 
@@ -59,33 +56,27 @@ public class BuildingCombosControl {
 		this.buildingCombos = buildingCombos;
 	}
 
+	@Subscribe
+	public void handleCityListArrivedEvent(CityListArrivedEvent event) {
+		setBuildCombos();
+	}
+
+	@Subscribe
+	public void handleSelectSectorEvent(SelectSectorEvent event) {
+		sectorSelected();
+	}
+
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		sectorSelected();
+	}
+
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
 		setComboListeners();
 		setButtonListeners();
-
-		handlerManager.addHandler(CityListArrivedEvent.TYPE,
-				new CityListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						setBuildCombos();
-					}
-				});
-		handlerManager.addHandler(SelectSectorEvent.TYPE,
-				new SelectSectorEventHandler() {
-					@Override
-					public void selectSector(Source selectionSource) {
-						sectorSelected();
-					}
-				});
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-					@Override
-					public void selectUnits(Source selectionSource) {
-						sectorSelected();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void setSelectedSector(WorldSector sector) {

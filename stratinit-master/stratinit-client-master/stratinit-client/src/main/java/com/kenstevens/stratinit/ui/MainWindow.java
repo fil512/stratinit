@@ -26,16 +26,15 @@ import org.eclipse.swt.widgets.Text;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.control.CommandListControlImpl;
 import com.kenstevens.stratinit.control.TextControl;
 import com.kenstevens.stratinit.control.selection.MapCentre;
 import com.kenstevens.stratinit.event.CommandPointsArrivedEvent;
-import com.kenstevens.stratinit.event.CommandPointsArrivedEventHandler;
 import com.kenstevens.stratinit.event.GameChangedEvent;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
-import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.model.Data;
@@ -49,7 +48,6 @@ import com.kenstevens.stratinit.shell.GameManager;
 import com.kenstevens.stratinit.shell.MapControl;
 import com.kenstevens.stratinit.shell.Message;
 import com.kenstevens.stratinit.shell.StatusReportEvent;
-import com.kenstevens.stratinit.shell.StatusReportEventHandler;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.shell.WidgetContainer;
@@ -130,7 +128,7 @@ public class MainWindow implements MapControl, GameManager {
 	@Autowired
 	private ControllerManager controllerManager;
 	@Autowired
-	private HandlerManager handlerManager;
+	private StratinitEventBus eventBus;
 
 	private SupplyTabItemControl supplyTabItemControl;
 	private Label distanceLabel;
@@ -208,37 +206,31 @@ public class MainWindow implements MapControl, GameManager {
 		widgetContainer.setGameManager(this);
 	}
 
+	@Subscribe
+	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
+		updateNation();
+	}
+	
+	@Subscribe
+	public void handleCommandPointsArrivedEvent(CommandPointsArrivedEvent event) {
+		updateNation();
+	}
+	
+	@Subscribe
+	public void handleStatusReportEvent(StatusReportEvent event) {
+		Message message = event.getMessage();
+		if (message == null) {
+			statusControl.setMessage("");
+			return;
+		} else if (message.isError()) {
+			statusControl.setError(message.getText());
+		} else {
+			statusControl.setMessage(message.getText());
+		}
+	}
+	
 	private void addHandlers() {
-		handlerManager.addHandler(NationListArrivedEvent.TYPE,
-				new NationListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						updateNation();
-					}
-				});
-		handlerManager.addHandler(StatusReportEvent.TYPE,
-				new StatusReportEventHandler() {
-
-					@Override
-					public void reportStatus(Message message) {
-						if (message == null) {
-							statusControl.setMessage("");
-							return;
-						} else if (message.isError()) {
-							statusControl.setError(message.getText());
-						} else {
-							statusControl.setMessage(message.getText());
-						}
-
-					}
-				});
-		handlerManager.addHandler(CommandPointsArrivedEvent.TYPE,
-				new CommandPointsArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						updateNation();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void submitError(Exception e) {
@@ -674,7 +666,7 @@ public class MainWindow implements MapControl, GameManager {
 		int gameId = game.getId();
 		selectedUnits.clear();
 		db.setSelectedGameId(gameId);
-		handlerManager.fireEvent(new GameChangedEvent());
+		eventBus.post(new GameChangedEvent());
 		enableUpdateButton();
 		controllerManager.setTitle(shell);
 		statusReporter.reportResult("Game " + gameId + " selected.");

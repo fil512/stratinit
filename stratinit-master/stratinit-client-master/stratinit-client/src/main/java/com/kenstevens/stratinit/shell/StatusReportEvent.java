@@ -2,17 +2,14 @@ package com.kenstevens.stratinit.shell;
 
 import com.kenstevens.stratinit.event.StratInitEvent;
 
-public class StatusReportEvent extends StratInitEvent<StatusReportEventHandler> {
-	public static final Type<StatusReportEventHandler> TYPE = new Type<StatusReportEventHandler>();
+public class StatusReportEvent implements StratInitEvent {
 	private final Message message;
 	
 	public StatusReportEvent(Message message) {
 		this.message = message;
 	}
 
-	@Override
-	protected void dispatch(StatusReportEventHandler handler) {
-		handler.reportStatus(message);
+	public Message getMessage() {
+		return message;
 	}
-
 }

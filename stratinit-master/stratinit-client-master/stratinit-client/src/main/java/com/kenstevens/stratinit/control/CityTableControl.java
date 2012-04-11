@@ -13,17 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.CityListArrivedEvent;
-import com.kenstevens.stratinit.event.CityListArrivedEventHandler;
 import com.kenstevens.stratinit.event.CityListReplacementArrivedEvent;
-import com.kenstevens.stratinit.event.CityListReplacementArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.CityView;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedCity;
@@ -40,7 +37,7 @@ public class CityTableControl implements Controller {
 	@Autowired
 	private SelectedCity selectedCity;
 	@Autowired
-	private HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 	
 	private CityTableItemControl cityTableItemControl;
 
@@ -49,50 +46,33 @@ public class CityTableControl implements Controller {
 		setTableListeners();
 	}
 
+	@Subscribe
+	public void handleCityListReplacementArrivedEvent(CityListReplacementArrivedEvent event) {
+		cityTableItemControl.clear();
+		cityTableItemControl.tablifyCities();
+		table.redraw();
+	}
+	
+	@Subscribe
+	public void handleCityListArrivedEvent(CityListArrivedEvent event) {
+		updateTable();
+	}
+	
+	@Subscribe
+	public void handleSelectSectorEvent(SelectSectorEvent event) {
+		selectCity();
+	}
+	
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		selectCity();
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
 		cityTableItemControl = new CityTableItemControl(table, db);
-		handlerManager.addHandler(CityListArrivedEvent.TYPE,
-				new CityListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						updateTable();
-					}
-				});
-		
-		handlerManager.addHandler(CityListReplacementArrivedEvent.TYPE,
-				new CityListReplacementArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						cityTableItemControl.clear();
-						cityTableItemControl.tablifyCities();
-						table.redraw();
-					}
-				});
-		handlerManager.addHandler(CityListReplacementArrivedEvent.TYPE,
-				new CityListReplacementArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						cityTableItemControl.clear();
-						cityTableItemControl.tablifyCities();
-						table.redraw();
-					}
-				});
-		handlerManager.addHandler(SelectSectorEvent.TYPE,
-				new SelectSectorEventHandler() {
-					@Override
-					public void selectSector(Source selectionSource) {
-						selectCity();
-					}
-				});
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-					@Override
-					public void selectUnits(Source selectionSource) {
-						selectCity();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	public final void setTableListeners() {

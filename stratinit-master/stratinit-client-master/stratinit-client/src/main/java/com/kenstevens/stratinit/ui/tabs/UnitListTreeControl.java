@@ -13,16 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.UnitListArrivedEvent;
-import com.kenstevens.stratinit.event.UnitListArrivedEventHandler;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
-import com.kenstevens.stratinit.event.UnitListReplacementArrivedEventHandler;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.LaunchedSatellite;
 import com.kenstevens.stratinit.model.Unit;
@@ -47,7 +45,8 @@ public class UnitListTreeControl implements Controller {
 				selectEvent.selectUnit(unit, Source.UNIT_TAB);
 			} else if (data instanceof LaunchedSatellite) {
 				LaunchedSatellite sat = (LaunchedSatellite) data;
-				selectEvent.selectSectorCoords(sat.getCoords(), Source.UNIT_TAB);
+				selectEvent
+						.selectSectorCoords(sat.getCoords(), Source.UNIT_TAB);
 			}
 		}
 	}
@@ -60,7 +59,7 @@ public class UnitListTreeControl implements Controller {
 	@Autowired
 	private SelectEvent selectEvent;
 	@Autowired
-	private HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 
 	public UnitListTreeControl(UnitTabItem unitTabItem) {
 		this.tree = unitTabItem.getUnitListTree();
@@ -68,40 +67,32 @@ public class UnitListTreeControl implements Controller {
 		setTreeListeners();
 	}
 
+	@Subscribe
+	public void handleUnitListReplacementArrivedEvent(
+			UnitListReplacementArrivedEvent event) {
+		rebuildTree();
+	}
+
+	@Subscribe
+	public void handleUnitListArrivedEvent(UnitListArrivedEvent event) {
+		updateTree();
+	}
+
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		List<UnitView> units = selectEvent.getSelectedUnits();
+		if (units.isEmpty()) {
+			return;
+		}
+		Unit unit = units.get(0);
+		select(unit);
+	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
 		treeItemListControl = new TreeItemListControl(treeItemList, db);
-		handlerManager.addHandler(UnitListArrivedEvent.TYPE,
-				new UnitListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						updateTree();
-					}
-				});
-		
-		handlerManager.addHandler(UnitListReplacementArrivedEvent.TYPE,
-				new UnitListReplacementArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						rebuildTree();
-					}
-				});
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-
-					@Override
-					public void selectUnits(Source source) {
-						List<UnitView> units = selectEvent.getSelectedUnits();
-						if (units.isEmpty()) {
-							return;
-						}
-						Unit unit = units.get(0);
-						select(unit);
-					}
-				});
-		
+		eventBus.register(this);
 	}
 
 	public final void setTreeListeners() {
@@ -153,7 +144,6 @@ public class UnitListTreeControl implements Controller {
 		}
 	}
 
-
 	private void updateTree() {
 		List<UnitView> dbUnits = db.getUnitList().getUnits();
 		WorldView worldView = db.getWorld();
@@ -177,17 +167,18 @@ public class UnitListTreeControl implements Controller {
 			}
 		} else {
 			if (dbUnits.contains(listUnit)) {
-				item.setText(treeItemListControl.toStringArray(worldView, listUnit));
+				item.setText(treeItemListControl.toStringArray(worldView,
+						listUnit));
 				treeItemListControl.setUnitTreeItemColour(listUnit, item);
 			} else {
 				// Unit has died
 				listUnit.setAlive(false);
-				item.setText(treeItemListControl.toStringArray(worldView, listUnit));
+				item.setText(treeItemListControl.toStringArray(worldView,
+						listUnit));
 				treeItemListControl.updateHeader(db, item, listUnit);
 			}
 		}
 	}
-
 
 	public void rebuildTree() {
 		treeItemListControl.clear();

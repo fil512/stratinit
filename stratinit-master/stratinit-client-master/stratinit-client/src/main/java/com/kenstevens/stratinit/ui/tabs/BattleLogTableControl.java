@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.Selection;
 import com.kenstevens.stratinit.event.BattleLogListArrivedEvent;
-import com.kenstevens.stratinit.event.BattleLogListArrivedEventHandler;
 import com.kenstevens.stratinit.model.BattleLogEntry;
 import com.kenstevens.stratinit.model.BattleLogList;
 import com.kenstevens.stratinit.model.Data;
@@ -38,18 +38,15 @@ public class BattleLogTableControl extends TableControl implements Controller {
 		setTableListeners();
 	}
 
+	@Subscribe
+	public void handleBattleLogListArrived(BattleLogListArrivedEvent event) {
+		updateTable();
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(BattleLogListArrivedEvent.TYPE,
-				new BattleLogListArrivedEventHandler() {
-
-					@Override
-					public void dataArrived() {
-						updateTable();
-					}
-
-				});
+		eventBus.register(this);
 	}
 
 	public final void setTableListeners() {

@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.GameListArrivedEvent;
-import com.kenstevens.stratinit.event.GameListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.GameList;
 import com.kenstevens.stratinit.model.GameView;
 
@@ -19,8 +19,8 @@ import com.kenstevens.stratinit.model.GameView;
 @Component
 public class GameTableControl {
 	@Autowired
-	private HandlerManager handlerManager;
-
+	private StratinitEventBus eventBus;
+	
 	private final GameTable gameTable;
 	private final GameList gameList;
 
@@ -28,17 +28,16 @@ public class GameTableControl {
 		this.gameTable = gameTable;
 		this.gameList = gameList;
 	}
+	
+	@Subscribe
+	public void handleGameListArrivedEvent(GameListArrivedEvent event) {
+		updateTable();
+	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(GameListArrivedEvent.TYPE,
-				new GameListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						updateTable();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void updateTable() {

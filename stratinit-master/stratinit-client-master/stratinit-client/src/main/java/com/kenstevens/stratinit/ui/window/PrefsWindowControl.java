@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
 import com.kenstevens.stratinit.audio.WavPlayer;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.WorldArrivedEvent;
 import com.kenstevens.stratinit.model.Account;
 
@@ -23,8 +23,8 @@ public class PrefsWindowControl {
 	@Autowired
 	private WavPlayer wavPlayer;
 	@Autowired
-	private HandlerManager handlerManager;
-
+	protected StratinitEventBus eventBus;
+	
 	private final PrefsWindow prefsWindow;
 
 	public PrefsWindowControl(PrefsWindow window) {
@@ -42,7 +42,7 @@ public class PrefsWindowControl {
 				try {
 					account.getPreferences().setShowBuilding(
 							showBuildingButton.getSelection());
-					handlerManager.fireEvent(new WorldArrivedEvent());
+					eventBus.post(new WorldArrivedEvent());
 				} catch (Exception e1) {
 					logger.error(e1.getMessage(), e1);
 				}
@@ -113,7 +113,7 @@ public class PrefsWindowControl {
 				try {
 					account.getPreferences().setShowFOW(
 							showFOWButton.getSelection());
-					handlerManager.fireEvent(new WorldArrivedEvent());
+					eventBus.post(new WorldArrivedEvent());
 				} catch (Exception e1) {
 					logger.error(e1.getMessage(), e1);
 				}

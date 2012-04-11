@@ -7,11 +7,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 
 public class TableControl {
 	@Autowired
-	protected HandlerManager handlerManager;
+	protected StratinitEventBus eventBus;
 
 	protected Font getBoldTableFont(Table table, Display display) {
 		FontData fd = table.getFont().getFontData()[0];

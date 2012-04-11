@@ -12,14 +12,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Predicate;
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.control.UnitTableControl;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEventHandler;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEventHandler;
-import com.kenstevens.stratinit.control.selection.Selection.Source;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.Unit;
@@ -41,9 +39,9 @@ public class SectorTabItemControl implements TopLevelController {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private HandlerManager handlerManager;
-	@Autowired
 	private SelectedCoords selectedCoords;
+	@Autowired
+	protected StratinitEventBus eventBus;
 
 	private final SectorTabItem sectorTabItem;
 
@@ -89,25 +87,20 @@ public class SectorTabItemControl implements TopLevelController {
 				sectorTabItem.getUnitButtons()));
 	}
 
+	@Subscribe
+	public void handleSelectSectorEvent(SelectSectorEvent event) {
+		sectorSelected();		
+	}
+
+	@Subscribe
+	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
+		sectorSelected();
+	}
+	
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(SelectSectorEvent.TYPE,
-				new SelectSectorEventHandler() {
-
-					@Override
-					public void selectSector(Source source) {
-						sectorSelected();
-					}
-				});
-		handlerManager.addHandler(SelectUnitsEvent.TYPE,
-				new SelectUnitsEventHandler() {
-
-					@Override
-					public void selectUnits(Source source) {
-						sectorSelected();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void setSelectedSector(WorldSector sector) {

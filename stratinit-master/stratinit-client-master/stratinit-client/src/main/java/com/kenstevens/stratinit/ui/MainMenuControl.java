@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.gwt.event.shared.HandlerManager;
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
-import com.kenstevens.stratinit.event.NationListArrivedEventHandler;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Nation;
@@ -53,8 +53,6 @@ public class MainMenuControl {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private HandlerManager handlerManager;
-	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
 	private ActionFactory actionFactory;
@@ -66,22 +64,22 @@ public class MainMenuControl {
 	private WindowDirector windowDirector;
 	@Autowired
 	private Data db;
+	@Autowired
+	protected StratinitEventBus eventBus;
 
 	public MainMenuControl(MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
 		setMenuListeners();
 	}
+	@Subscribe
+	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
+		setFlag();
+	}
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void addObservers() {
-		handlerManager.addHandler(NationListArrivedEvent.TYPE,
-				new NationListArrivedEventHandler() {
-					@Override
-					public void dataArrived() {
-						setFlag();
-					}
-				});
+		eventBus.register(this);
 	}
 
 	private void setFlag() {
