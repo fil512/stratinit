@@ -33,13 +33,7 @@ public class MoveUnitsTest extends WithUnitsBase {
 	@Test
 	public void unitInsufFuel() {
 		List<SIUnit> units = makeUnitList(testHelicopter);
-		testHelicopter.decreaseFuel();
-		testHelicopter.decreaseFuel();
-		testHelicopter.decreaseFuel();
-		testHelicopter.decreaseFuel();
-		testHelicopter.decreaseFuel();
-		testHelicopter.decreaseFuel();
-		testHelicopter.decreaseFuel();
+		testHelicopter.setFuel(5);
 		Result<MoveCost> result = moveUnits(units, new SectorCoords(5,5));
 		assertFalseResult(result);
 	}

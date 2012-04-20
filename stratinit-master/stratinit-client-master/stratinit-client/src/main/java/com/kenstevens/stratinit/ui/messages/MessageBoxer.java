@@ -21,7 +21,7 @@ public class MessageBoxer {
 	public Mail forward() {
 		Mail forwardedMessage = new Mail();
 		forwardedMessage.setBody(encapsulateBody("Forwarded"));
-		String subject = message.getSubject();
+		String subject = message == null ? "" : message.getSubject();
 		if (subject.startsWith("FW: ")) {
 			forwardedMessage.setSubject(subject);
 		} else {

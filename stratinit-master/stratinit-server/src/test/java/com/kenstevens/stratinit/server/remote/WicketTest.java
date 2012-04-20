@@ -21,6 +21,7 @@ public class WicketTest {
         provider.addIncludeFilter(new AssignableTypeFilter(Panel.class));
         provider.addIncludeFilter(new AssignableTypeFilter(WebPage.class));
         provider.addExcludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*Provider")));
+        provider.addExcludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*ProviderImpl")));
  
         Set<BeanDefinition> components = provider.findCandidateComponents("com/kenstevens/stratinit/wicket");
         for (BeanDefinition component : components) {

@@ -88,8 +88,8 @@ public abstract class UnitBase {
 				30, 1, 0, 2, 8);
 		AirUnitBase navalBomber = new AirUnitBase(UnitType.NAVAL_BOMBER, 8, 12,
 				20, 1, 8, 1, 7);
-		AirUnitBase helicopter = new AirUnitBase(UnitType.HELICOPTER, 9, 8, 12,
-				2, 3, 1, 5);
+		AirUnitBase helicopter = new AirUnitBase(UnitType.HELICOPTER, 9, 6, 16,
+				2, 5, 2, 5);
 		LandUnitBase engineer = new LandUnitBase(UnitType.ENGINEER, 0, 16, 3,
 				1, 0, 10, 4);
 		AirUnitBase zeppelin = new AirUnitBase(UnitType.ZEPPELIN, 0, 12, 5, 3,

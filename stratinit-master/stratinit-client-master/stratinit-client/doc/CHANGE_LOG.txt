@@ -1,3 +1,16 @@
+Release 1.2.4
+  * BALANCE CHANGE: Helicopter cost reduced from 8 to 6
+  * BALANCE CHANGE: Helicopter range increased from 12 to 16
+  * BALANCE CHANGE: Helicopter attack increased from 3 to 5
+  * BALANCE CHANGE: Helicopter ammo increased from 1 to 2
+  * Fixed a bug that crashes the client when you clicked "forward" and no message was selected.
+  * Fixed a bug that crashes the client at startup due to a race condition
+  * Fixed a bug that crashes the client if you try to update a city you no longer own
+  * Spent a couple of hours trying to reproduce the double-alliance bug, but so far no dice.  Does anyone out there know the trick to create
+    a double-alliance?
+  * Replaced GWT libraries with Guava libraries.  this will require a new jnlp download.
+  * Added Java installation instructions to the "Play" web page.
+
 Release 1.2.3
   * Modified Web Site "games" -> Past Games.  Now you can click on a player name and see charts of their unit build orders for that game.
   * Modified Web Site "units built" added pie charts to indicate preferred units in each game.

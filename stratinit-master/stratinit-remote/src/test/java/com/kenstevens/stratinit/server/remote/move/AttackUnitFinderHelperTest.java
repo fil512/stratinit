@@ -125,7 +125,4 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
 				AttackingUnitFinderHelper.findUnitToAttack(AttackType.INTERCEPTION, att, units, waterSector, worldView));
 
 	}
-	
-
-	// FIXME finish this test
 }
