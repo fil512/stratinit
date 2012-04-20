@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.MapController;
 import com.kenstevens.stratinit.control.selection.MapCentre;
@@ -36,6 +37,7 @@ import com.kenstevens.stratinit.model.SelectedCity;
 import com.kenstevens.stratinit.model.SelectedCoords;
 import com.kenstevens.stratinit.model.SelectedNation;
 import com.kenstevens.stratinit.model.SelectedUnits;
+import com.kenstevens.stratinit.model.UnitList;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
@@ -301,8 +303,12 @@ public class MapCanvasControl implements MapController {
 						Source.CANVAS_SELECT);
 				switchToSectorTab = false;
 			} else {
-				List<UnitView> unitsInSector = db.getUnitList().unitsAt(
-						sectorCoords);
+				List<UnitView> unitsInSector = Lists.newArrayList();
+				UnitList unitList = db.getUnitList();
+				if (unitList != null) {
+					unitsInSector.addAll(unitList.unitsAt(
+							sectorCoords));
+				}
 				if (unitsInSector.size() == 1) {
 					selectEvent
 							.selectUnits(unitsInSector, Source.CANVAS_SELECT);

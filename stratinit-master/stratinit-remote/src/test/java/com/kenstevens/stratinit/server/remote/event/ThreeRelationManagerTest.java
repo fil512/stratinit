@@ -84,4 +84,5 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
 		assertNotNull(relation.getSwitchTime());
 		assertTrue(eventQueue.cancel(relation));
 	}
+	
 }

@@ -450,6 +450,10 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 
 		City city = sectorDao.getCity(nation, coords);
 
+		if (city == null) {
+			return new Result<City>("You don't own city at "+coords, false);
+		}
+		
 		Result<City> retval;
 		if (field == UpdateCityField.BUILD) {
 			retval = cityBuilderService.updateBuild(nation, city, build);

@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.type.Constants;
 public final class ClientConstants {
 
 	public static final String CLIENT_NAME = "Strategic Initiative";
-	public static final String CLIENT_VERSION = "1.2.3";
+	public static final String CLIENT_VERSION = "1.2.4";
 	public static final int SCREEN_WIDTH = 40;
 	public static final String FAILED_PAGE = "failed_to_parse.html";
 	public static final String HELP_URL = "http://www.strategicinitiative.org/";

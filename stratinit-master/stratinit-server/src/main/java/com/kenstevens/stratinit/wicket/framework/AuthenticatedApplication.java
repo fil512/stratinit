@@ -24,10 +24,6 @@ public class AuthenticatedApplication extends AuthenticatedWebApplication {
 		super.init();
 		
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
-		// FIXME do we need this?  Do we need other mounts too?
-//		mountPackage("/admin", AdminPage.class);
-//		mountPackage("/docs", AboutPage.class);
-//		mountPackage("/games", LeaderBoardPage.class);
 		getApplicationSettings().setInternalErrorPage(ErrorPage.class);
 		getApplicationSettings().setPageExpiredErrorPage(PageExpired.class);
 		
