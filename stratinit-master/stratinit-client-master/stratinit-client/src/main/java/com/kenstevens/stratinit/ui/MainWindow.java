@@ -81,6 +81,8 @@ import com.kenstevens.stratinit.util.Spring;
 
 @Component("MainWindow")
 public class MainWindow implements MapControl, GameManager {
+	private static final int CREATE_STEPS = 17;
+
 	private final Log logger = LogFactory.getLog(getClass());
 
 	private Label distanceValueLabel;
@@ -129,6 +131,8 @@ public class MainWindow implements MapControl, GameManager {
 	private ControllerManager controllerManager;
 	@Autowired
 	private StratinitEventBus eventBus;
+	@Autowired
+	private SplashWindow splashWindow;
 
 	private SupplyTabItemControl supplyTabItemControl;
 	private Label distanceLabel;
@@ -154,6 +158,7 @@ public class MainWindow implements MapControl, GameManager {
 	 * Open the window
 	 */
 	public void open() {
+		splashWindow.open(CREATE_STEPS);
 		setWidgetContainerValues();
 		final Display display = Display.getDefault();
 
@@ -163,6 +168,7 @@ public class MainWindow implements MapControl, GameManager {
 			shell.layout();
 			shell.open();
 			newbHelper.openNextWindow();
+			splashWindow.close();
 			while (!shell.isDisposed()) {
 				if (!display.readAndDispatch())
 					display.sleep();
@@ -177,12 +183,17 @@ public class MainWindow implements MapControl, GameManager {
 
 	private void buildInterface() {
 		loadFiles();
+		splashWindow.pushProgressBar();
 		createContents();
 		controllerManager.setControllers();
+		splashWindow.pushProgressBar();
 		addHandlers();
+		splashWindow.pushProgressBar();
 		supplyTabItemControl.setContents();
+		splashWindow.pushProgressBar();
 		controllerManager.setTitle(shell);
 		mapImageManager.buildImage();
+		splashWindow.pushProgressBar();
 	}
 
 	private void loadFiles() {
@@ -272,32 +283,44 @@ public class MainWindow implements MapControl, GameManager {
 	 */
 	protected void createContents() {
 		initContents();
+		splashWindow.pushProgressBar();
 
 
 		createMainMenu();
+		splashWindow.pushProgressBar();
 
 		TabFolder tabFolder = createTabFolder();
 
 		Canvas canvas = createCanvas(tabFolder);
 
+		splashWindow.pushProgressBar();
 
 		createSectorTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createUnitTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createCityTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createBattleTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createPlayerTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createHistoryTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createFutureTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createSupplyTab(tabFolder);
+		splashWindow.pushProgressBar();
 
 		createBottomControls(tabFolder, canvas);
+		splashWindow.pushProgressBar();
 
 		setButtonListeners();
 		setResizeListener();

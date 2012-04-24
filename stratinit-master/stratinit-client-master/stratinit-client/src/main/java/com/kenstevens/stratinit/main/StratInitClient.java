@@ -21,11 +21,11 @@ public final class StratInitClient {
 		try {
 			ApplicationContext context = new ClassPathXmlApplicationContext("/spring.xml");
 			actionFactory = (ActionFactory) context.getBean("actionFactory");
-			MainWindow window = (MainWindow) context.getBean("MainWindow");
+			MainWindow mainWindow = (MainWindow) context.getBean("MainWindow");
 			actionQueue = (ActionQueue) context.getBean("ActionQueue");
-			actionQueue.start();
 			wavPlayer = (WavPlayer) context.getBean("WavPlayer");
-			window.open();
+			actionQueue.start();
+			mainWindow.open();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			if (actionFactory != null) {
