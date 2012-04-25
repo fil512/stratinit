@@ -88,4 +88,6 @@ public interface GameDao {
 	Collection<Nation> getFriendsAndAllies(Nation nation);
 
 	List<Game> getAllStartedGames();
+
+	Collection<Nation> getMyRelations(Nation nation, RelationType relationType);
 }

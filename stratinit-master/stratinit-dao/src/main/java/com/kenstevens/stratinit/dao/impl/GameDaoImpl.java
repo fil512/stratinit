@@ -105,7 +105,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	// FIXME find out where this is being used and either rip out the mutual part of it, or split it into two functions (or maybe already there are 2 functions)
-	private Collection<Nation> getRelations(Nation nation, final Set<RelationType> relations) {
+	private Collection<Nation> getMutualRelations(Nation nation, final Set<RelationType> relations) {
 		Collection<Relation> myAllies = Collections2.filter(getMyRelations(nation), new Predicate<Relation>() {
 			public boolean apply(Relation input) {
 				return relations.contains(input.getType());
@@ -129,7 +129,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	@Override
 	public Collection<Nation> getAllies(Nation nation) {
 		Set<RelationType> relations = Sets.immutableEnumSet(RelationType.ALLIED);
-		return getRelations(nation, relations);
+		return getMutualRelations(nation, relations);
 	}
 
 	@Override
@@ -142,6 +142,21 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 		});
 	}
 
+	@Override
+	public Collection<Nation> getMyRelations(final Nation nation, final RelationType relationType) {
+		List<Relation> relations = getGameCache(nation.getGameId()).getRelations();
+		Collection<Relation> myAllies = Collections2.filter(relations, new Predicate<Relation>() {
+			public boolean apply(Relation relation) {
+				return relation.getFrom().equals(nation) && relation.getType().equals(relationType);
+			}
+		});
+		return Collections2.transform(myAllies, new Function<Relation, Nation>() {
+			@Override
+			public Nation apply(Relation relation) {
+				return relation.getTo();
+			}
+		});
+	}
 	public Map<Nation, RelationType> getMyRelationsAsMap(Nation nation) {
 		Collection<Relation> relations = getMyRelations(nation);
 		Map<Nation, RelationType> retval = new HashMap<Nation, RelationType>();
@@ -310,7 +325,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	@Override
 	public Collection<Nation> getFriendsAndAllies(Nation nation) {
 		Set<RelationType> relations = Sets.immutableEnumSet(RelationType.ALLIED, RelationType.FRIENDLY);
-		return getRelations(nation, relations);
+		return getMutualRelations(nation, relations);
 	}
 
 	@Override
