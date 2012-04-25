@@ -12,8 +12,11 @@ import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.stereotype.Component;
 
+import com.kenstevens.stratinit.ui.image.ImageManager;
+
 @Component
 public class SplashWindow {
+	private final ImageManager imageManager = new ImageManager();
 
 	private ProgressBar progressBar;
 	private Shell splash;
@@ -21,7 +24,7 @@ public class SplashWindow {
 
 	public void open(final int barMaximum) {
 		final Display display = Display.getDefault();
-		image = new Image(display, 300, 300);
+		image = imageManager.loadImageFromFile("Splash.jpg");
 		splash = new Shell(SWT.ON_TOP);
 		progressBar = new ProgressBar(splash, SWT.NONE);
 		progressBar.setMaximum(barMaximum);
@@ -53,7 +56,7 @@ public class SplashWindow {
 		display.asyncExec(new Runnable() {
 			public void run() {
 				int selection = progressBar.getSelection();
-				progressBar.setSelection(++selection);
+				progressBar.setSelection(selection+1);
 			}
 		});
 	}

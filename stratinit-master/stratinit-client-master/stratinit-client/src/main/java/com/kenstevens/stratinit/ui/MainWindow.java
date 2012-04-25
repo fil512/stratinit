@@ -1,17 +1,11 @@
 package com.kenstevens.stratinit.ui;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
@@ -76,45 +70,31 @@ import com.kenstevens.stratinit.ui.tabs.UnitTabItemControl;
 import com.kenstevens.stratinit.ui.window.WindowDirector;
 import com.kenstevens.stratinit.ui.window.map.MapCanvasControl;
 import com.kenstevens.stratinit.ui.window.map.MapImageManager;
-import com.kenstevens.stratinit.util.AccountPersister;
 import com.kenstevens.stratinit.util.Spring;
 
-@Component("MainWindow")
+@Component
 public class MainWindow implements MapControl, GameManager {
-	private static final int CREATE_STEPS = 17;
-
-	private final Log logger = LogFactory.getLog(getClass());
 
 	private Label distanceValueLabel;
 	private Label coordsLabel;
 	private Button updateButton;
 
-	protected Shell shell;
 	private MapCanvasControl mapCanvasControl;
 	private FutureTabItemControl futureTabItemControl;
 	private TextControl statusControl;
 
 	@Autowired
 	private MapImageManager mapImageManager;
-	@Autowired
-	private AccountPersister accountPersister;
-	@Autowired
-	private ImageLibrary imageLibrary;
 
 	@Autowired
 	private Data db;
-	@Autowired
-	private ActionFactory actionFactory;
+
 	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private NewbHelper newbHelper;
-	@Autowired
 	private MapCentre mapCentre;
-	@Autowired
-	private TopShell topShell;
 	@Autowired
 	private WidgetContainer widgetContainer;
 	@Autowired
@@ -133,6 +113,12 @@ public class MainWindow implements MapControl, GameManager {
 	private StratinitEventBus eventBus;
 	@Autowired
 	private SplashWindow splashWindow;
+	@Autowired
+	private TopShell topShell;
+	@Autowired
+	private ImageLibrary imageLibrary;
+	@Autowired
+	private ActionFactory actionFactory;
 
 	private SupplyTabItemControl supplyTabItemControl;
 	private Label distanceLabel;
@@ -157,57 +143,24 @@ public class MainWindow implements MapControl, GameManager {
 	/**
 	 * Open the window
 	 */
-	public void open() {
-		splashWindow.open(CREATE_STEPS);
+	public void open(Shell shell) {
 		setWidgetContainerValues();
-		final Display display = Display.getDefault();
+		buildInterface(shell);
 
-		try {
-			buildInterface();
-			setShellSize();
-			shell.layout();
-			shell.open();
-			newbHelper.openNextWindow();
-			splashWindow.close();
-			while (!shell.isDisposed()) {
-				if (!display.readAndDispatch())
-					display.sleep();
-			}
-		} finally {
-			persistAccount();
-			if (display.isDisposed()) {
-				display.dispose();
-			}
-		}
 	}
 
-	private void buildInterface() {
-		loadFiles();
+	private void buildInterface(Shell shell) {
 		splashWindow.pushProgressBar();
-		createContents();
+		createContents(shell);
 		controllerManager.setControllers();
 		splashWindow.pushProgressBar();
 		addHandlers();
 		splashWindow.pushProgressBar();
 		supplyTabItemControl.setContents();
 		splashWindow.pushProgressBar();
-		controllerManager.setTitle(shell);
+		controllerManager.setTitle();
 		mapImageManager.buildImage();
 		splashWindow.pushProgressBar();
-	}
-
-	private void loadFiles() {
-		String loadResult;
-		try {
-			loadResult = accountPersister.load();
-			imageLibrary.loadImages();
-			statusReporter.reportResult(loadResult);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			loadResult = e.getMessage();
-			statusReporter.reportError(loadResult);
-			submitError(e);
-		}
 	}
 
 	private void setWidgetContainerValues() {
@@ -221,12 +174,12 @@ public class MainWindow implements MapControl, GameManager {
 	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
 		updateNation();
 	}
-	
+
 	@Subscribe
 	public void handleCommandPointsArrivedEvent(CommandPointsArrivedEvent event) {
 		updateNation();
 	}
-	
+
 	@Subscribe
 	public void handleStatusReportEvent(StatusReportEvent event) {
 		Message message = event.getMessage();
@@ -239,41 +192,9 @@ public class MainWindow implements MapControl, GameManager {
 			statusControl.setMessage(message.getText());
 		}
 	}
-	
+
 	private void addHandlers() {
 		eventBus.register(this);
-	}
-
-	private void submitError(Exception e) {
-		actionFactory.submitError(e);
-	}
-
-	private void setShellSize() {
-		Rectangle rect = Display.getCurrent().getClientArea();
-		if (account.getWidth() > 0) {
-			shell.setSize(account.getWidth(), account.getHeight());
-		} else {
-			shell.setSize(shell.computeSize(rect.width
-					- ClientConstants.HMARGIN, rect.height
-					- ClientConstants.VMARGIN));
-		}
-	}
-
-	private void setShellLocation() {
-		if (account.getX() > -1) {
-			shell.setLocation(account.getX(), account.getY());
-		} else {
-			shell.setLocation(0, 0);
-		}
-	}
-
-	private void persistAccount() {
-		try {
-			accountPersister.save();
-		} catch (Exception e) {
-			logger.error("Failed to save file: " + e.getMessage());
-			logger.error(e.getMessage(), e);
-		}
 	}
 
 	/**
@@ -281,17 +202,15 @@ public class MainWindow implements MapControl, GameManager {
 	 * 
 	 * @wbp.parser.entryPoint
 	 */
-	protected void createContents() {
-		initContents();
+	protected void createContents(Shell shell) {
 		splashWindow.pushProgressBar();
 
-
-		createMainMenu();
+		createMainMenu(shell);
 		splashWindow.pushProgressBar();
 
-		TabFolder tabFolder = createTabFolder();
+		TabFolder tabFolder = createTabFolder(shell);
 
-		Canvas canvas = createCanvas(tabFolder);
+		Canvas canvas = createCanvas(shell, tabFolder);
 
 		splashWindow.pushProgressBar();
 
@@ -319,16 +238,17 @@ public class MainWindow implements MapControl, GameManager {
 		createSupplyTab(tabFolder);
 		splashWindow.pushProgressBar();
 
-		createBottomControls(tabFolder, canvas);
+		createBottomControls(shell, tabFolder, canvas);
 		splashWindow.pushProgressBar();
 
 		setButtonListeners();
-		setResizeListener();
+		setResizeListener(shell);
 	}
 
-	private void createBottomControls(TabFolder tabFolder, Canvas canvas) {
-		org.eclipse.swt.widgets.List commandList = createCommandList(tabFolder,
-				canvas);
+	private void createBottomControls(Shell shell, TabFolder tabFolder,
+			Canvas canvas) {
+		org.eclipse.swt.widgets.List commandList = createCommandList(shell,
+				tabFolder, canvas);
 
 		final ProgressBar progressBar = new ProgressBar(shell, SWT.SMOOTH);
 		final FormData fdProgressBar = new FormData();
@@ -361,7 +281,7 @@ public class MainWindow implements MapControl, GameManager {
 		fdStatusLabel.bottom = new FormAttachment(updateButton, -6);
 		statusLabel.setLayoutData(fdStatusLabel);
 		statusControl = new TextControl(statusLabel);
-		
+
 		coordsLabel = new Label(shell, SWT.NONE);
 		final FormData fdCoords = new FormData();
 		fdCoords.top = new FormAttachment(updateButton, 0, SWT.TOP);
@@ -415,8 +335,8 @@ public class MainWindow implements MapControl, GameManager {
 		tabManager.setControllers(futureTabItemControl, mapCanvasControl);
 	}
 
-	private org.eclipse.swt.widgets.List createCommandList(TabFolder tabFolder,
-			Canvas canvas) {
+	private org.eclipse.swt.widgets.List createCommandList(Shell shell,
+			TabFolder tabFolder, Canvas canvas) {
 		org.eclipse.swt.widgets.List commandList;
 		commandList = new org.eclipse.swt.widgets.List(shell, SWT.READ_ONLY
 				| SWT.SIMPLE | SWT.V_SCROLL);
@@ -505,7 +425,8 @@ public class MainWindow implements MapControl, GameManager {
 
 	private void createUnitTab(TabFolder tabFolder) {
 		final TabItem uTabItem = new TabItem(tabFolder, SWT.NONE);
-		tabManager.setUnitTabIndex(tabManager.register(ClientConstants.UNIT_TAB_TITLE, uTabItem));
+		tabManager.setUnitTabIndex(tabManager.register(
+				ClientConstants.UNIT_TAB_TITLE, uTabItem));
 		UnitTabItem unitTabItem = new UnitTabItem(tabFolder, SWT.NONE);
 		uTabItem.setControl(unitTabItem);
 		unitTabItemControl = spring
@@ -523,7 +444,7 @@ public class MainWindow implements MapControl, GameManager {
 		controllerManager.add(sectorTabItemControl);
 	}
 
-	private Canvas createCanvas(TabFolder tabFolder) {
+	private Canvas createCanvas(Shell shell, TabFolder tabFolder) {
 		Canvas canvas = new Canvas(shell, SWT.NO_BACKGROUND
 				| SWT.NO_REDRAW_RESIZE | SWT.V_SCROLL | SWT.H_SCROLL);
 
@@ -536,11 +457,11 @@ public class MainWindow implements MapControl, GameManager {
 
 		mapCanvasControl = spring.autowire(new MapCanvasControl(canvas));
 		controllerManager.add(mapCanvasControl);
-		
+
 		return canvas;
 	}
 
-	private TabFolder createTabFolder() {
+	private TabFolder createTabFolder(Shell shell) {
 		TabFolder tabFolder = new TabFolder(shell, SWT.NONE);
 		final FormData fdTabFolder = new FormData();
 		fdTabFolder.top = new FormAttachment(0, 5);
@@ -551,27 +472,13 @@ public class MainWindow implements MapControl, GameManager {
 		return tabFolder;
 	}
 
-	private void createMainMenu() {
+	private void createMainMenu(Shell shell) {
 		MainMenu mainMenu = new MainMenu(shell, SWT.NONE);
 		mainMenu.setLayoutData(new FormData());
 		spring.autowire(new MainMenuControl(mainMenu));
 	}
 
-	private void initContents() {
-		shell = new Shell();
-		setShellLocation();
-		topShell.setShell(shell);
-		shell.setLayout(new FormLayout());
-		shell.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(final MouseEvent e) {
-			}
-		});
-		shell.setSize(1072, 735);
-		controllerManager.setTitle(shell);
-	}
-
-	private void setResizeListener() {
+	private void setResizeListener(final Shell shell) {
 		shell.addListener(SWT.Resize, new Listener() {
 			@Override
 			public void handleEvent(Event e) {
@@ -657,8 +564,9 @@ public class MainWindow implements MapControl, GameManager {
 		distanceValueLabel.setVisible(visibleToSet);
 	}
 
+	// FIXME need this?
 	public void layout() {
-		shell.layout();
+		topShell.getShell().layout();
 	}
 
 	public Label getLines() {
@@ -691,7 +599,7 @@ public class MainWindow implements MapControl, GameManager {
 		db.setSelectedGameId(gameId);
 		eventBus.post(new GameChangedEvent());
 		enableUpdateButton();
-		controllerManager.setTitle(shell);
+		controllerManager.setTitle();
 		statusReporter.reportResult("Game " + gameId + " selected.");
 		wavPlayer.playIntro();
 		actionFactory.getVersion();

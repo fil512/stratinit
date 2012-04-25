@@ -39,4 +39,8 @@ public final class TopShell {
 			}
 		});
 	}
+
+	public void setTitle(String title) {
+		shell.setText(title);
+	}
 }

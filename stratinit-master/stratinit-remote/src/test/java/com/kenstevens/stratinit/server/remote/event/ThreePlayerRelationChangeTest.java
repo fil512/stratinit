@@ -47,14 +47,13 @@ public class ThreePlayerRelationChangeTest extends ThreeRelationManagerTest {
 		assertEquals("You already have an ally", result.toString());
 	}
 
+
 	
 	@Test
-	public void noDoubleAllyAfterWar() {
+	public void noDoubleUnrequiredAlly() {
 		declareAlliance();
-		allianceDeclared();
 		Result<Relation> result = gameDaoService.setRelation(nationMe, nationThird, RelationType.ALLIED, false);
 		assertFalseResult(result);
 		assertEquals("You already have an ally", result.toString());
 	}
-
 }
