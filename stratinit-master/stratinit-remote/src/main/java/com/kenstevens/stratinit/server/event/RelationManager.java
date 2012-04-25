@@ -77,7 +77,7 @@ public class RelationManager {
 	}
 
 	private String roomForAlliesString(Relation relation) {
-		Collection<Nation> myAllies = gameDao.getAllies(relation.getFrom());
+		Collection<Nation> myAllies = gameDao.getMyRelations(relation.getFrom(), RelationType.ALLIED);
 		Collection<Nation> theirAllies = gameDao.getAllies(relation.getTo());
 		if (myAllies.size() >= Constants.MAX_ALLIES) {
 			return "You already have an ally";
