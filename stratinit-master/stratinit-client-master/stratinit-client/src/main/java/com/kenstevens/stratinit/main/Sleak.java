@@ -75,7 +75,7 @@ public static void main (String [] args) {
 	ApplicationContext context = new ClassPathXmlApplicationContext("/spring.xml");
 	MainWindow window = (MainWindow) context.getBean("MainWindow");
 
-	window.open();
+	window.open(new Shell());
 	// Launch your application here
 	// e.g.		
 //	Shell shell = new Shell(display);

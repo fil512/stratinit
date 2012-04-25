@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.ui.MainWindow;
+import com.kenstevens.stratinit.ui.MainShell;
 
 public final class StratInitClient {
 	private static Logger logger = Logger.getLogger(StratInitClient.class.getName());
@@ -21,11 +21,12 @@ public final class StratInitClient {
 		try {
 			ApplicationContext context = new ClassPathXmlApplicationContext("/spring.xml");
 			actionFactory = (ActionFactory) context.getBean("actionFactory");
-			MainWindow mainWindow = (MainWindow) context.getBean("MainWindow");
+			MainShell mainShell = (MainShell) context.getBean("MainShell");
 			actionQueue = (ActionQueue) context.getBean("ActionQueue");
 			wavPlayer = (WavPlayer) context.getBean("WavPlayer");
+
 			actionQueue.start();
-			mainWindow.open();
+			mainShell.start();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 			if (actionFactory != null) {
@@ -42,4 +43,5 @@ public final class StratInitClient {
 			System.exit(0);
 		}
 	}
+
 }
