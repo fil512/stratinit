@@ -48,10 +48,12 @@ public class MainShell {
 	@Autowired
 	private NewbHelper newbHelper;
 
-	private Shell shell = new Shell();
+	private Shell shell;
 
 	public void start() {
 		final Display display = Display.getDefault();
+		shell = new Shell();
+
 		try {
 			loadFiles();
 

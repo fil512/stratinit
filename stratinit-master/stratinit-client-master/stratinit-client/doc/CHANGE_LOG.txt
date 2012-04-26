@@ -1,3 +1,7 @@
+Release 1.2.5
+  * Fixed a bug that permitted multiple alliances
+  * Added a splash screen
+
 Release 1.2.4
   * BALANCE CHANGE: Helicopter cost reduced from 8 to 6
   * BALANCE CHANGE: Helicopter range increased from 12 to 16

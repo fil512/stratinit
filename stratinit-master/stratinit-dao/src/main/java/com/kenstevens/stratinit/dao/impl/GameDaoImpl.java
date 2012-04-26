@@ -104,7 +104,6 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 		return dataCache.getAllNations();
 	}
 
-	// FIXME find out where this is being used and either rip out the mutual part of it, or split it into two functions (or maybe already there are 2 functions)
 	private Collection<Nation> getMutualRelations(Nation nation, final Set<RelationType> relations) {
 		Collection<Relation> myAllies = Collections2.filter(getMyRelations(nation), new Predicate<Relation>() {
 			public boolean apply(Relation input) {

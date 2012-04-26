@@ -9,7 +9,7 @@ public final class Constants {
 	public static final String EMAIL_FROM_ADDRESS = "hq@strategicinitiative.org";
 	public static final String EMAIL_ADMIN_ADDRESS = "ken.stevens@sympatico.ca";
 
-	public static final String SERVER_VERSION = "1.2.4";
+	public static final String SERVER_VERSION = "1.2.5";
 	public static final int UNASSIGNED = -1;
 	public static final int HOURS_BETWEEN_UNIT_UPDATES = 4;
 	public static final int TECH_UPDATE_INTERVAL_SECONDS = 15 * 60;
