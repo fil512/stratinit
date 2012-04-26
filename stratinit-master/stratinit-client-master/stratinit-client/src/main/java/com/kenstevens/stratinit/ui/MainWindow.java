@@ -564,7 +564,7 @@ public class MainWindow implements MapControl, GameManager {
 		distanceValueLabel.setVisible(visibleToSet);
 	}
 
-	// FIXME need this?
+	// TODO REF need this?
 	public void layout() {
 		topShell.getShell().layout();
 	}
