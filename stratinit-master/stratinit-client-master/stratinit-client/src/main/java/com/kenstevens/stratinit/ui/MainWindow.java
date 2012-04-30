@@ -112,8 +112,6 @@ public class MainWindow implements MapControl, GameManager {
 	@Autowired
 	private StratinitEventBus eventBus;
 	@Autowired
-	private SplashWindow splashWindow;
-	@Autowired
 	private TopShell topShell;
 	@Autowired
 	private ImageLibrary imageLibrary;
@@ -150,17 +148,12 @@ public class MainWindow implements MapControl, GameManager {
 	}
 
 	private void buildInterface(Shell shell) {
-		splashWindow.pushProgressBar();
 		createContents(shell);
 		controllerManager.setControllers();
-		splashWindow.pushProgressBar();
 		addHandlers();
-		splashWindow.pushProgressBar();
 		supplyTabItemControl.setContents();
-		splashWindow.pushProgressBar();
 		controllerManager.setTitle();
 		mapImageManager.buildImage();
-		splashWindow.pushProgressBar();
 	}
 
 	private void setWidgetContainerValues() {
@@ -203,43 +196,30 @@ public class MainWindow implements MapControl, GameManager {
 	 * @wbp.parser.entryPoint
 	 */
 	protected void createContents(Shell shell) {
-		splashWindow.pushProgressBar();
 
 		createMainMenu(shell);
-		splashWindow.pushProgressBar();
 
 		TabFolder tabFolder = createTabFolder(shell);
 
 		Canvas canvas = createCanvas(shell, tabFolder);
 
-		splashWindow.pushProgressBar();
-
 		createSectorTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createUnitTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createCityTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createBattleTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createPlayerTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createHistoryTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createFutureTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createSupplyTab(tabFolder);
-		splashWindow.pushProgressBar();
 
 		createBottomControls(shell, tabFolder, canvas);
-		splashWindow.pushProgressBar();
 
 		setButtonListeners();
 		setResizeListener(shell);
