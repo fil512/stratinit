@@ -23,14 +23,10 @@ import com.kenstevens.stratinit.util.AccountPersister;
 @Component("MainShell")
 public class MainShell {
 
-	private static final int CREATE_STEPS = 17;
-
 	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	MainWindow mainWindow;
-	@Autowired
-	SplashWindow splashWindow;
 	@Autowired
 	Account account;
 	@Autowired
@@ -59,14 +55,12 @@ public class MainShell {
 
 			display.asyncExec(new Runnable() {
 				public void run() {
-					splashWindow.open(CREATE_STEPS);
 					initContents();
 					mainWindow.open(shell);
 					setShellSize();
 					shell.layout();
 					shell.open();
 					newbHelper.openNextWindow();
-					splashWindow.close();
 				}
 			});
 			while (!shell.isDisposed()) {
