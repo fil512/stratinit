@@ -188,40 +188,6 @@
             <actions />
             <formComponents />
           </screen>
-          <screen name="" id="117" customizedId="" beanClass="com.install4j.runtime.beans.screens.FormScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
-            <serializedBean>
-              <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.screens.FormScreen">
-                  <void property="subTitle">
-                    <string>Choose your update schedule</string>
-                  </void>
-                  <void property="title">
-                    <string>Schedule updates</string>
-                  </void>
-                </object>
-              </java>
-            </serializedBean>
-            <condition />
-            <validation />
-            <preActivation />
-            <postActivation />
-            <actions />
-            <formComponents>
-              <formComponent name="" id="118" customizedId="" beanClass="com.install4j.runtime.beans.formcomponents.UpdateScheduleSelectorComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
-                <serializedBean>
-                  <java class="java.beans.XMLDecoder">
-                    <object class="com.install4j.runtime.beans.formcomponents.UpdateScheduleSelectorComponent">
-                      <void property="initialUpdateSchedule">
-                        <object class="com.install4j.api.update.UpdateSchedule" field="ON_EVERY_START" />
-                      </void>
-                    </object>
-                  </java>
-                </serializedBean>
-                <initScript />
-                <visibilityScript />
-              </formComponent>
-            </formComponents>
-          </screen>
           <screen name="" id="8" customizedId="" beanClass="com.install4j.runtime.beans.screens.InstallationScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="true" backButton="2" finishScreen="false" wizardIndexChangeType="unchanged" wizardIndexKey="">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
@@ -380,7 +346,7 @@
           </screen>
         </screens>
       </application>
-      <application name="Updater with silent version check" id="80" customizedId="" beanClass="com.install4j.runtime.beans.applications.CustomApplication" enabled="true" commentSet="false" comment="" fileset="" customIcnsFile="${compiler:sys.install4jHome}/resource/macos/updater.icns" customIcoFile="${compiler:sys.install4jHome}/resource/updater.ico" automaticLauncherIntegration="true" launchMode="startupFirstWindow" launchInNewProcess="false" launchSchedule="updateSchedule" allLaunchers="true">
+      <application name="Updater with silent version check" id="80" customizedId="" beanClass="com.install4j.runtime.beans.applications.CustomApplication" enabled="true" commentSet="false" comment="" fileset="" customIcnsFile="${compiler:sys.install4jHome}/resource/macos/updater.icns" customIcoFile="${compiler:sys.install4jHome}/resource/updater.ico" automaticLauncherIntegration="true" launchMode="startupSync" launchInNewProcess="false" launchSchedule="always" allLaunchers="true">
         <serializedBean>
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.CustomApplication">
