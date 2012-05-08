@@ -36,6 +36,7 @@ syntax: regexp
 syntax: glob
 */.classpath
 kenstevens.jks
+stratinit-master/stratinit-client-master/stratinit-swt/target/*
 syntax: glob
 */.project
 syntax: glob
