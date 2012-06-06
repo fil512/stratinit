@@ -1,3 +1,7 @@
+Get rid of m2e and m2e errors
+Ensure target/dependency folders are being properly populated by running maven
+Rehearse install / upgrade process
+
 Installer works for windows6y4
 repeat for 3 other platforms
 document upgrade process:
