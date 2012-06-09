@@ -6,11 +6,14 @@ swt for platform isn't being added to jnlp
 3. Edit CHANGE_LOG.txt
 4. Change ClientConstants.CLIENT_VERSION
 5. Change Constants.SERVER_VERSION
+
 6. mvn clean install in stratinit-master
 7. mvn -Pwin32 clean install in stratinit-client-master
 8. eclipse refresh
+
 9. project clean in stratinit-server and stratinit-client
 10. Commit, push (and if necessary, in head hg merge released, hg commit, hg push)
+
 11. in stratinit-server type "mvn package"
 12. Check that stratinit.war contains WEB-INF/classes/db
 13. upload to /usr/local/tomcat/incoming
@@ -23,20 +26,10 @@ swt for platform isn't being added to jnlp
 20. Edit updates.xml per HOWTO.txt
 21. Upload updates.xml and all *_core.exe files to /home/stratinit/htdocs/install
 
+22. Shutdown server through web interface
+23. ./baclient.sh
+24. ./install.sh
+25. ./backup.sh
 
-15. Shutdown server through web interface
-15. ./baclient.sh
-16. ./install.sh
-17. ./backup.sh
-
-
-20. Modify release notes on google code
-21. Announce through web interface
-
-Mac release
-
-For linux:
-mvn -P linux32 clean package
-upload
-mvn -P linux64 clean package
-upload
+26. Modify release notes on google code
+27. Announce through web interface
