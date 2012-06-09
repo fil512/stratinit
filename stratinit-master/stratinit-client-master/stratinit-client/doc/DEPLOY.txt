@@ -14,11 +14,15 @@ swt for platform isn't being added to jnlp
 11. in stratinit-server type "mvn package"
 12. Check that stratinit.war contains WEB-INF/classes/db
 13. upload to /usr/local/tomcat/incoming
-14. in stratinit-swt type "mvn clean package"
-15. in stratinit-client type "mvn -Pwin64 clean package"
+14. in stratinit-swt type "mvn clean package" -> verify target/dependencies has latest libs
+15. in stratinit-client type "mvn -Pwin64 clean package" -> verify target/dependencies has latest libs
 16. open stratinit-client/stratinit.install4j
 17. Change General Settings -> version
-18. Check Installer -> Auto Update Options -> Minimum updatable version 
+18. (Possibly check Installer -> Auto Update Options -> Minimum updatable version )
+19. Run builders
+20. Edit updates.xml per HOWTO.txt
+21. Upload updates.xml and all *_core.exe files to /home/stratinit/htdocs/install
+
 
 15. Shutdown server through web interface
 15. ./baclient.sh
