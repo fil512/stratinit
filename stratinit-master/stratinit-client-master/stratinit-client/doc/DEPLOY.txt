@@ -18,7 +18,7 @@ swt for platform isn't being added to jnlp
 12. Check that stratinit.war contains WEB-INF/classes/db
 13. upload to /usr/local/tomcat/incoming
 14. in stratinit-swt type "mvn clean package" -> verify target/dependencies has latest libs
-15. in stratinit-client type "mvn -Pwin64 clean package" -> verify target/dependencies has latest libs
+15. in stratinit-client type "mvn -Pwin32 clean package" -> verify target/dependencies has latest libs and no swt
 16. open stratinit-client/stratinit.install4j
 17. Change General Settings -> version
 18. (Possibly check Installer -> Auto Update Options -> Minimum updatable version )
@@ -30,6 +30,7 @@ swt for platform isn't being added to jnlp
 23. ./baclient.sh
 24. ./install.sh
 25. ./backup.sh
+26. ./start.sh
 
 26. Modify release notes on google code
 27. Announce through web interface
