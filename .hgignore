@@ -37,6 +37,8 @@ syntax: glob
 */.classpath
 kenstevens.jks
 stratinit-master/stratinit-client-master/stratinit-swt/target/*
+stratinit-master/stratinit-client-master/stratinit-install/classes/*
+stratinit-master/stratinit-client-master/stratinit-install/lib/*
 syntax: glob
 */.project
 syntax: glob
