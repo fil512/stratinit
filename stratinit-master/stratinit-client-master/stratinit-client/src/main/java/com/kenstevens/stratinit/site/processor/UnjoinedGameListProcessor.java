@@ -16,6 +16,6 @@ public class UnjoinedGameListProcessor extends Processor {
 	
 	public void process(List<SIGame> entries) {
 		db.getUnjoinedGameList().addAll(translator.translate(entries));
-		arrivedDataEventAccumulator.addEvent(new GameListArrivedEvent());
+		arrivedDataEventAccumulator.addEvent(new GameListArrivedEvent(false));
 	}
 }
