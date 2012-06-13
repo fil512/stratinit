@@ -1,3 +1,5 @@
+ -=- DEPRECATED USE DEPLOY.txt -=-
+
 Follow these instructions to make a dmg file
 
 (Instructions below were derived from here: http://www.eclipse.org/swt/macosx/)

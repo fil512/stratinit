@@ -16,6 +16,6 @@ public class GameListProcessor extends Processor {
 	
 	public void process(List<SIGame> entries) {
 		db.getGameList().addAll(translator.translate(entries));
-		arrivedDataEventAccumulator.addEvent(new GameListArrivedEvent());
+		arrivedDataEventAccumulator.addEvent(new GameListArrivedEvent(true));
 	}
 }

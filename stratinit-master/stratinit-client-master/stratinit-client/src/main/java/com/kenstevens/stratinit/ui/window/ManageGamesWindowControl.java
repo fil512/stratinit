@@ -1,5 +1,7 @@
 package com.kenstevens.stratinit.ui.window;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -17,7 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.event.EmptyGameListEvent;
+import com.kenstevens.stratinit.event.GameListArrivedEvent;
+import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameView;
@@ -31,6 +37,9 @@ import com.kenstevens.stratinit.util.Spring;
 @Component
 public class ManageGamesWindowControl implements TopLevelController {
 	private final Log logger = LogFactory.getLog(getClass());
+
+	@Autowired
+	private StratinitEventBus eventBus;
 
 	@Autowired
 	private ActionFactory actionFactory;
@@ -51,7 +60,26 @@ public class ManageGamesWindowControl implements TopLevelController {
 		setTabFolderListeners();
 		setTableListeners();
 	}
+	
+	@SuppressWarnings("unused")
+	@PostConstruct
+	private void addObservers() {
+		eventBus.register(this);
+	}
 
+	@Subscribe
+	public void handleEmptyGameListEvent(EmptyGameListEvent event) {
+		window.selectJoinGameTab();
+	}
+	
+	@Subscribe
+	public void handleGameListArrivedEvent(GameListArrivedEvent event) {
+		if (event.isJoinedGames() && db.getGameList().isEmpty()) {
+			actionFactory.getUnjoinedGames();
+			window.selectJoinGameTab();
+		}
+	}
+	
 	private final void setTableListeners() {
 		final Table myGamesTable = window.getMyGamesTable().getTable();
 		myGamesTable.addMouseListener(new MouseAdapter() {
@@ -117,6 +145,8 @@ public class ManageGamesWindowControl implements TopLevelController {
 		});
 	}
 
+	
+	
 	protected final void selectGame() {
 		GameTable table = window.getMyGamesTable();
 		TableItem[] items = table.getSelection();

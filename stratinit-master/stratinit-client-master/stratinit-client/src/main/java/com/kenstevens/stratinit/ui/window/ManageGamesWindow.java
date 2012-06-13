@@ -26,6 +26,7 @@ public class ManageGamesWindow implements StratInitWindow {
 	private GameTable myGamesTable;
 	private TabFolder tabFolder;
 	private TabItem myGamesTab;
+	private TabItem joinGameTab;
 	private Button noAlliancesButton;
 	private Button alliancesAllowedButton;
 
@@ -55,11 +56,11 @@ public class ManageGamesWindow implements StratInitWindow {
 		selectGameButton.setBounds(0, 277, 84, 27);
 		selectGameButton.setText("Enter");
 
-		TabItem tbtmJoinGame = new TabItem(tabFolder, SWT.NONE);
-		tbtmJoinGame.setText("Join Game");
+		joinGameTab = new TabItem(tabFolder, SWT.NONE);
+		joinGameTab.setText("Join Game");
 
 		Group joinGroup = new Group(tabFolder, SWT.NONE);
-		tbtmJoinGame.setControl(joinGroup);
+		joinGameTab.setControl(joinGroup);
 		joinGroup.setLayout(new FormLayout());
 
 		joinGameTable = new GameTable(joinGroup, SWT.NONE);
@@ -122,6 +123,10 @@ public class ManageGamesWindow implements StratInitWindow {
 
 	public void selectGamesTab() {
 		tabFolder.setSelection(myGamesTab);
+	}
+	
+	public void selectJoinGameTab() {
+		tabFolder.setSelection(joinGameTab);
 	}
 	
 	public boolean isNoAlliancesAllowedSelected() {
