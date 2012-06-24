@@ -512,6 +512,10 @@ public class Unit extends GameUpdatable {
 		return type == UnitType.CARRIER;
 	}
 
+	public boolean isExplorer() {
+		return type == UnitType.ZEPPELIN || type == UnitType.PATROL;
+	}
+
 	public void setUnitMove(UnitMove unitMove) {
 		this.unitMove = unitMove;
 	}

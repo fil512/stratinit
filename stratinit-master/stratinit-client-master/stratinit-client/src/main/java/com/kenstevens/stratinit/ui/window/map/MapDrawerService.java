@@ -44,4 +44,8 @@ public class MapDrawerService {
 	public void buildMap() {
 		new MapBuilder(mapImageManager).draw();
 	}
+
+	public void drawUnknownReach(Set<SectorCoords> coords) {
+		new UnknownReachDrawer(mapImageManager, coords).draw();
+	}
 }

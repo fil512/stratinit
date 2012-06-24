@@ -7,6 +7,7 @@ import java.util.Set;
 import org.rollerjm.graph.Dijkstra;
 import org.rollerjm.graph.Path;
 
+import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.Unit;
@@ -282,6 +283,20 @@ public class Movement {
 			return false;
 		}
 		return targetSector.canEnter(unit);
+	}
+
+	public Set<SectorCoords> canReachUnknown(Unit unit) {
+		Set<SectorCoords> retval = Sets.newHashSet();
+		int range = UnitHelper.range(unit);
+		for (int x = unit.getX() - range; x <= unit.getX() + range; ++x) {
+			for (int y = unit.getY() - range; y <= unit.getY() + range; ++y) {
+				SectorCoords coords = new SectorCoords(worldView.size(), x, y);
+				if (worldView.getWorldSector(coords) == null) {
+					retval.add(coords);
+				}
+			}
+		}
+		return retval;
 	}
 
 }

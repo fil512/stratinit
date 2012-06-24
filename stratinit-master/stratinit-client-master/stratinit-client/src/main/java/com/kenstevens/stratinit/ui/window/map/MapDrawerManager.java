@@ -12,6 +12,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.supply.Supply;
+import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 
 @Service
@@ -71,5 +72,15 @@ public class MapDrawerManager {
 			unitDrawerService.drawUnitDamage(gc, unit);
 		}
 		return supply;
+	}
+
+	public void drawUnknownReach(GC gc, Set<SectorCoords> coords) {
+		for (SectorCoords coord : coords) {
+			mapDrawer.drawSquare(
+					gc, 
+					coord,
+					imageLibrary.getShadedImage(false,
+							true, true));
+		}
 	}
 }
