@@ -22,6 +22,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.window.LineStyle;
+import com.kenstevens.stratinit.util.UnitHelper;
 
 @Service
 public class UnitDrawerService {
@@ -87,6 +88,38 @@ public class UnitDrawerService {
 		drawReach(sectors);
 		supplyDrawer.drawSupplyTree(supply, longest);
 		drawUnitMove();
+		if (longest.isExplorer()) {
+			drawUnitRange(longest);
+		}
+		if (longest.isExplorer() || longest.isAir()) {
+			drawUnknownReach(movement.canReachUnknown(longest));
+		}
+	}
+
+	private void drawUnknownReach(Set<SectorCoords> coords) {
+		mapDrawer.drawUnknownReach(coords);
+	}
+
+	private void drawUnitRange(UnitView longest) {
+		SectorCoords coords = longest.getCoords();
+		int range = getUnitRange(longest);
+		int size = db.getBoardSize();
+		mapDrawer.drawLine(coords, new SectorCoords(size, coords.x + range, coords.y + range),
+				LineStyle.UNIT_RANGE);
+		mapDrawer.drawLine(coords, new SectorCoords(size, coords.x + range, coords.y - range),
+				LineStyle.UNIT_RANGE);
+		mapDrawer.drawLine(coords, new SectorCoords(size, coords.x - range, coords.y + range),
+				LineStyle.UNIT_RANGE);
+		mapDrawer.drawLine(coords, new SectorCoords(size, coords.x - range, coords.y - range),
+				LineStyle.UNIT_RANGE);
+	}
+
+	private int getUnitRange(UnitView longest) {
+		int range = 5;
+		if (UnitHelper.range(longest) < range) {
+			range = UnitHelper.range(longest);
+		}
+		return range;
 	}
 
 	private void drawReach(Set<WorldSector> sectors) {

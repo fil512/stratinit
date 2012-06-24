@@ -1,3 +1,11 @@
+Release 1.2.7
+  * Patrol boats and air units now highlight unit range into unknown.
+  * Added diagonal white lines to help guide exploring zeppelins and patrol boats (let me know if you don't like
+  this and I'll make it configurable)
+  * Changed version warning so it only warns if client is older than server.  There should not be a warning if client
+  is newer than server.  (Note this change prompted a new full download of the client.)
+  * Changed Splash Image
+
 Release 1.2.6
   * Moved to install4j installation platform.
   * If a user is in no games, start with the "Join Game" tab.

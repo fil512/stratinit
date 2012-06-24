@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.site.command;
 
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,8 +32,9 @@ public class GetVersionCommand extends Command<String> {
 	@Override
 	public void handleSuccess(String version) {
 		db.setServerVersion(version);
-		if (!db.getServerVersion().equals(
-				Constants.SERVER_VERSION)) {
+		DefaultArtifactVersion clientVersion = new DefaultArtifactVersion(version);
+		DefaultArtifactVersion serverVersion = new DefaultArtifactVersion(Constants.SERVER_VERSION);
+		if (clientVersion.compareTo(serverVersion) > 0) {
 			statusReporter
 					.reportError("WARNING: Expected server version "
 							+ Constants.SERVER_VERSION + " got "

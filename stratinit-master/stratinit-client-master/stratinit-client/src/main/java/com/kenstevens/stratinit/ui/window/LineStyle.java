@@ -5,7 +5,7 @@ import org.eclipse.swt.graphics.GC;
 import com.kenstevens.stratinit.shell.ColourMap;
 
 public enum LineStyle {
-	UNIT_MOVE, SUPPLY_LINKED, SUPPLY_ISOLATED, CITY_MOVE;
+	UNIT_MOVE, UNIT_RANGE, SUPPLY_LINKED, SUPPLY_ISOLATED, CITY_MOVE;
 
 	public void apply(GC gc) {
 		switch (this) {
@@ -18,6 +18,10 @@ public enum LineStyle {
 			gc.setForeground(ColourMap.WHITE);
 			gc.setAlpha(25);
 			gc.setLineWidth(2);
+			break;
+		case UNIT_RANGE:
+			gc.setForeground(ColourMap.GRAY);
+			gc.setLineWidth(1);
 			break;
 		case UNIT_MOVE:
 			gc.setForeground(ColourMap.BLACK);
