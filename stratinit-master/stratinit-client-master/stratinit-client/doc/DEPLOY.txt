@@ -28,10 +28,9 @@ swt for platform isn't being added to jnlp
 21. Upload updates.xml and all *_core.exe files to /home/stratinit/htdocs/install
 
 22. Shutdown server through web interface
-23. ./baclient.sh
-24. ./install.sh
-25. ./backup.sh
-26. ./start.sh
+23. ./install.sh
+24. ./backup.sh
+25. ./start.sh
 
 26. Modify release notes on google code
 27. Announce through web interface
