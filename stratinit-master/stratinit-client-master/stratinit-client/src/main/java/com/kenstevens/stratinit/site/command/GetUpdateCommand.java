@@ -22,6 +22,7 @@ public class GetUpdateCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
+		// FIXME in Java 7 we hang here
 		return stratInit.getUpdate();
 	}
 

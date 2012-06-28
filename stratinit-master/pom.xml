@@ -38,7 +38,7 @@
 		<stratinit.version>1.2.0-SNAPSHOT</stratinit.version>
 		<stratinit.client.version>1.2</stratinit.client.version>
 		<jetty.version>6.1.26</jetty.version>
-		<spring.version>3.1.0.RELEASE</spring.version>
+		<spring.version>3.1.1.RELEASE</spring.version>
 		<wicket.version>1.5.4</wicket.version>
 		<hibernate.version>4.0.1.Final</hibernate.version>
 		<swt.version>3.5.2</swt.version>

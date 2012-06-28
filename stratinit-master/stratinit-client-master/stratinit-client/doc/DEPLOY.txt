@@ -6,6 +6,7 @@ swt for platform isn't being added to jnlp
 3. Edit CHANGE_LOG.txt
 4. Change ClientConstants.CLIENT_VERSION
 5. Change Constants.SERVER_VERSION
+5a. Change links on download page (maybe remove version number entirely and copy on server?)
 
 6. mvn clean install in stratinit-master
 7. mvn -Pwin32 clean install in stratinit-client-master
