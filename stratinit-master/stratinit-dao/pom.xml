@@ -87,7 +87,7 @@
 				<artifactId>db-migration-maven-plugin</artifactId>
 				<version>0.9.9-m5</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost/stratinit</url>
+					<url>jdbc:postgresql://sipg/stratinit</url>
 					<username>postgres</username>
 					<password>postgr3S</password>
 				</configuration>
