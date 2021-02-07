@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.remote;
 
+import com.kenstevens.stratinit.dto.SIBattleLog;
+import com.kenstevens.stratinit.type.Constants;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.type.Constants;
 
 public class Result<T> implements Serializable {
 	private static final long serialVersionUID = 2L;

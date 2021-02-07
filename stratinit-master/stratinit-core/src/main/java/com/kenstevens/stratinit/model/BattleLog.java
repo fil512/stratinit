@@ -1,20 +1,12 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Embedded;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.SequenceGenerator;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @MappedSuperclass
 public abstract class BattleLog implements NewsWorthy {

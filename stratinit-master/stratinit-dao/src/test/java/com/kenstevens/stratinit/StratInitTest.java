@@ -1,12 +1,15 @@
 package com.kenstevens.stratinit;
 
-import java.sql.BatchUpdateException;
-import java.sql.SQLException;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.apache.commons.lang.exception.ExceptionUtils;
+import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.PlayerDao;
+import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.SectorType;
+import com.kenstevens.stratinit.type.UnitType;
+import com.kenstevens.stratinit.util.GameScheduleHelper;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.internal.SessionImpl;
@@ -17,20 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.type.SectorType;
-import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.util.GameScheduleHelper;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.sql.BatchUpdateException;
+import java.sql.SQLException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/spring.xml")

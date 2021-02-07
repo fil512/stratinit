@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIUnit;
@@ -17,6 +12,10 @@ import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.helper.PlayerUnitList;
 import com.kenstevens.stratinit.server.remote.helper.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.type.UnitType;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
 	@Autowired

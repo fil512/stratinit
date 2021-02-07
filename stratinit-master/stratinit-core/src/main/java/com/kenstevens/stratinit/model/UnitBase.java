@@ -1,17 +1,16 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class UnitBase {
 	private static int LARGEST_INTERDICTS_SIGHT = -1;

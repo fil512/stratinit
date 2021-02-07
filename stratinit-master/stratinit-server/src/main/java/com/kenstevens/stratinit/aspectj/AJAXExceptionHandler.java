@@ -1,9 +1,6 @@
 package com.kenstevens.stratinit.aspectj;
 
-import java.sql.BatchUpdateException;
-import java.sql.SQLException;
-
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,6 +9,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.sql.BatchUpdateException;
+import java.sql.SQLException;
 
 @Component
 @Aspect

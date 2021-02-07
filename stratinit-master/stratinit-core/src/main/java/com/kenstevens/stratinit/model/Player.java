@@ -1,16 +1,10 @@
 package com.kenstevens.stratinit.model;
 
+import org.apache.commons.lang3.StringUtils;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
-import org.apache.commons.lang.StringUtils;
 
 
 @Entity
@@ -68,11 +62,8 @@ public class Player implements Serializable {
 			return false;
 		Player other = (Player) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 
 	public void setPassword(String password) {
