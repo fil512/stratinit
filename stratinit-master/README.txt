@@ -8,3 +8,7 @@ mvn clean install -DskipTests
 in stratinit-server
 mvn flyway:info
 mvn compile flyway:migrate
+
+mvn clean install
+cd stratinit-client-master
+mvn -Pwin64 clean install
