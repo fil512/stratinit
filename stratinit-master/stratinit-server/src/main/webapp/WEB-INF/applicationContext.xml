@@ -17,13 +17,8 @@ http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 	</bean>
 
 	<!-- Spring JPA Entity Manager Factory -->
-	<bean id="migrationManager" class="com.carbonfive.db.migration.DataSourceMigrationManager"
-		init-method="migrate">
-		<constructor-arg ref="dataSource" />
-	</bean>
-
 	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" depends-on="migrationManager">
+		class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
 		<property name="persistenceUnitName" value="stratinitdb" />
 	</bean>
 

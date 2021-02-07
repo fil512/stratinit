@@ -83,50 +83,13 @@
                 <version>6.1.6</version>
             </plugin>
             <plugin>
-                <groupId>com.carbonfive.db-support</groupId>
-                <artifactId>db-migration-maven-plugin</artifactId>
-                <version>0.9.9-m5</version>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.5.2</version>
                 <configuration>
                     <url>jdbc:postgresql://localhost/stratinit</url>
-                    <username>postgres</username>
+                    <user>postgres</user>
                     <password>postgr3S</password>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>42.2.18</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>hibernate3-maven-plugin</artifactId>
-                <version>2.2</version>
-                <executions>
-                    <execution>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>hbm2ddl</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <configuration>
-                    <components>
-                        <component>
-                            <name>hbm2ddl</name>
-                            <implementation>jpaconfiguration</implementation>
-                        </component>
-                    </components>
-                    <componentProperties>
-                        <persistenceunit>stratinitdb</persistenceunit>
-                        <outputfilename>stratinit.ddl</outputfilename>
-                        <drop>false</drop>
-                        <create>true</create>
-                        <export>false</export>
-                        <format>true</format>
-                    </componentProperties>
                 </configuration>
             </plugin>
         </plugins>
