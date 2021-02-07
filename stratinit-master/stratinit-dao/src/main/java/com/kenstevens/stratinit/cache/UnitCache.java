@@ -6,9 +6,12 @@ import java.util.List;
 
 import com.kenstevens.stratinit.model.Unit;
 
+import javax.annotation.Nonnull;
+
 public class UnitCache extends Cacheable {
 	private final List<Unit> units = new ArrayList<Unit>();
 
+	@Nonnull
 	public List<Unit> getUnits() {
 		return Collections.unmodifiableList(units);
 	}

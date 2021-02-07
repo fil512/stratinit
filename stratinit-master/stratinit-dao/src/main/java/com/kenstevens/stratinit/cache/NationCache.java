@@ -23,6 +23,8 @@ import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 
+import javax.annotation.Nonnull;
+
 public class NationCache extends Cacheable {
 	private final Log logger = LogFactory.getLog(getClass());
 
@@ -87,6 +89,7 @@ public class NationCache extends Cacheable {
 		unitCache.setModified(modified);
 	}
 
+	@Nonnull
 	public List<Unit> getUnits() {
 		return unitCache.getUnits();
 	}

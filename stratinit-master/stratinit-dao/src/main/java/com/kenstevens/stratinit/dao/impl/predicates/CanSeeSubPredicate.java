@@ -1,9 +1,6 @@
 package com.kenstevens.stratinit.dao.impl.predicates;
 
-import static com.google.common.base.Predicates.and;
-
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.type.CoordMeasure;
@@ -21,7 +18,9 @@ public class CanSeeSubPredicate implements Predicate<NationCache> {
 
 	@Override
 	public boolean apply(NationCache nationCache) {
-		Predicate<Unit> canSeeThisSub = and(new UnitSeesSubsPredicate(), new UnitCanSeeUnitPredicate(coordMeasure, sub));
-		return Iterables.any(nationCache.getUnits(), canSeeThisSub);
+		UnitSeesSubsPredicate unitSeesSubsPredicate = new UnitSeesSubsPredicate();
+		UnitCanSeeUnitPredicate unitCanSeeUnitPredicate = new UnitCanSeeUnitPredicate(coordMeasure, sub);
+		java.util.function.Predicate<Unit> canSeeThisSub = unitSeesSubsPredicate.and(unitCanSeeUnitPredicate);
+		return nationCache.getUnits().stream().anyMatch(canSeeThisSub);
 	}
 }
