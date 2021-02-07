@@ -1,19 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -25,9 +11,18 @@ import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplate;
 import com.kenstevens.stratinit.type.Constants;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.Assert.*;
 
 public class GameDaoStateChangeTest extends StratInitDaoBase {
-	private Mockery context = new Mockery();
+	private final Mockery context = new Mockery();
 	private EventQueue eventQueue;
 	private MailService mailService;
 	private WorldManager worldManager;
@@ -98,7 +93,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		context.checking(new Expectations() {
 			{
 				oneOf(worldManager).build(with(any(Game.class)));
-				oneOf(sectorDao).persist(with(any(World.class)));
+				oneOf(sectorDao).persist(with(aNull(World.class)));
 			}
 		});
 
@@ -216,6 +211,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		gameDaoService.mapGame(game);
 	}
 
+	// FIXME this test started failing when we upgraded mock
 	@Test
 	public void joinBeforeMapped() {
 		final Game game = makeGame();
@@ -228,7 +224,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 				oneOf(eventQueue).schedule(game, false);
 				oneOf(worldManager).build(game);
 				oneOf(worldManager).addPlayerToMap(0, result.getValue());
-				oneOf(sectorDao).persist(with(any(World.class)));
+				oneOf(sectorDao).persist(with(aNull(World.class)));
 				oneOf(mailService).sendEmail(with(same(player)),
 						with(any(MailTemplate.class)));
 			}
@@ -253,7 +249,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 				oneOf(worldManager).build(game);
 				exactly(3).of(worldManager).addPlayerToMap(with(any(Integer.class)),
 						with(any(Nation.class)));
-				oneOf(sectorDao).persist(with(any(World.class)));
+				oneOf(sectorDao).persist(with(aNull(World.class)));
 			}
 		});
 		gameDaoService.scheduleGame(game);
@@ -277,9 +273,9 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 			{
 				oneOf(eventQueue).schedule(game, false);
 				oneOf(worldManager).build(game);
-				exactly(Constants.MAP_EXTRA_SLOTS+2).of(worldManager).addPlayerToMap(with(any(Integer.class)),
+				exactly(Constants.MAP_EXTRA_SLOTS + 2).of(worldManager).addPlayerToMap(with(any(Integer.class)),
 						with(any(Nation.class)));
-				oneOf(sectorDao).persist(with(any(World.class)));
+				oneOf(sectorDao).persist(with(aNull(World.class)));
 			}
 		});
 		gameDaoService.scheduleGame(game);

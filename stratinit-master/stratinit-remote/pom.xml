@@ -46,7 +46,10 @@
 			<groupId>oro</groupId>
 			<artifactId>oro</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+		</dependency>
 		<!-- test -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -57,7 +57,7 @@ public abstract class StratInitTest {
 	public void stratInit() {
 		if (!initialized) {
 			SessionImpl session = (SessionImpl) entityManager.getDelegate();
-			Assert.assertTrue("RUNNING IN HSQL", session.getFactory().getDialect() instanceof org.hibernate.dialect.HSQLDialect);
+			Assert.assertTrue("RUNNING IN H2", session.getFactory().getDialect() instanceof org.hibernate.dialect.H2Dialect);
 			initialized = true;
 			testPlayer1 = new Player("a");
 			testPlayer1.setEmail("foo@foo.com");

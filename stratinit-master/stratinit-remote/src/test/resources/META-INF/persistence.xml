@@ -10,13 +10,13 @@
 		<jar-file>file:../stratinit-core/target/classes</jar-file>
 		 
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="create" />
-			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
-			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
-			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:stratinit" />
-			<property name="hibernate.connection.username" value="sa" />
-			<property name="hibernate.connection.password" value="" />
+			<property name="hibernate.hbm2ddl.auto" value="create"/>
+			<property name="hibernate.show_sql" value="false"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+			<property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
+			<property name="hibernate.connection.url" value="jdbc:h2:mem:stratinit"/>
+			<property name="hibernate.connection.username" value="sa"/>
+			<property name="hibernate.connection.password" value=""/>
 			<!-- 
 			<property name="hibernate.cache.use_second_level_cache" value="true" /> 
 			<property name="hibernate.cache.use_query_cache" value="true" /> 

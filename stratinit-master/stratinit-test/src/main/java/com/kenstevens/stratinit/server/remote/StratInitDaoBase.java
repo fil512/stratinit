@@ -1,15 +1,12 @@
 package com.kenstevens.stratinit.server.remote;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.dao.*;
+import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.type.*;
+import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.hibernate.internal.SessionImpl;
 import org.junit.After;
 import org.junit.Before;
@@ -20,27 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.LogDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.RunMode;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.type.SectorType;
-import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.util.GameScheduleHelper;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 // Move ddl generation up to web project so there is only one real
 // persistence.xml
@@ -173,8 +157,8 @@ public abstract class StratInitDaoBase {
 		Constants.setRunMode(RunMode.PRODUCTION);
 		if (!initialized) {
 			SessionImpl session = getSession();
-			assertTrue("Running in HSQL", session.getFactory()
-					.getDialect() instanceof org.hibernate.dialect.HSQLDialect);
+			assertTrue("Running in H2", session.getFactory()
+					.getDialect() instanceof org.hibernate.dialect.H2Dialect);
 			initialized = true;
 		}
 
