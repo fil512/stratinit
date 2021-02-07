@@ -45,8 +45,6 @@ public class UnitTest {
 		assertUnitConstructor(fighter, UnitType.FIGHTER);
 	}
 
-
-
 	@Test
 	public void canSupply() {
 		assertTrue(supply.supplies(inf));

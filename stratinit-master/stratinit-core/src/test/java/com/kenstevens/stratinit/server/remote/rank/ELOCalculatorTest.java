@@ -71,5 +71,4 @@ public class ELOCalculatorTest {
 		assertEquals(30.3, winNewELO - winStartELO, 0.1);
 		assertEquals(1.7, loseStartELO - loseNewELO, 0.1);
 	}
-
 }
