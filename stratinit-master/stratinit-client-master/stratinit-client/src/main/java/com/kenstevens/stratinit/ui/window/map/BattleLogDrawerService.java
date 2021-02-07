@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.model.BattleLogEntry;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class BattleLogDrawerService {

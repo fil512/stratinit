@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.swt.SWT;
-
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.swt.SWT;
+
+import java.util.List;
 
 public class BattleLogEntry extends DatedItem {
 	public static final String CITY = "city";

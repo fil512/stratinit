@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.ui.messages;
 
+import com.kenstevens.stratinit.model.Mail;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.kenstevens.stratinit.model.Mail;
 
 public class MessageBoxer {
 	private final Mail message;
@@ -33,12 +32,12 @@ public class MessageBoxer {
 	private static final Pattern WRAP_REGEXP = Pattern.compile(".{0,79}([ $|\\s$]|$)");
 
 	private static String[] wordWrap(String str) {
-	    List<String> list = new LinkedList<String>();
-	    Matcher m = WRAP_REGEXP.matcher(str);
-	    while (m.find()) {
-	    	list.add(m.group());
-	    }
-	    return (String[]) list.toArray(new String[list.size()]);
+		List<String> list = new LinkedList<String>();
+		Matcher m = WRAP_REGEXP.matcher(str);
+		while (m.find()) {
+			list.add(m.group());
+		}
+		return list.toArray(new String[list.size()]);
 	}
 
 	private String encapsulateBody(String prefix) {

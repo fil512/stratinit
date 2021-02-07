@@ -1,33 +1,5 @@
 package com.kenstevens.stratinit.control;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -38,16 +10,24 @@ import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.UnitListArrivedEvent;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.SelectedCoords;
-import com.kenstevens.stratinit.model.SelectedUnits;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitList;
-import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.shell.ColourMap;
+import org.apache.commons.lang3.ArrayUtils;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.*;
 
 @Scope("prototype")
 @Component
@@ -63,13 +43,13 @@ public class UnitTableControl implements Controller {
 	private SelectedUnits selectedUnits;
 	@Autowired
 	protected StratinitEventBus eventBus;
-	private Predicate<Unit> unitFilter;
+	private final Predicate<Unit> unitFilter;
 	private final boolean listenToSectorSelects;
 	private final boolean isShowCoords;
-	private Comparator<UnitView> unitComparator;
+	private final Comparator<UnitView> unitComparator;
 
 	public UnitTableControl(Table unitTable, Predicate<Unit> unitFilter, Comparator<UnitView> unitComparator,
-			boolean listenToSectorSelects, boolean isShowCoords) {
+							boolean listenToSectorSelects, boolean isShowCoords) {
 		this.unitFilter = unitFilter;
 		this.unitComparator = unitComparator;
 		this.listenToSectorSelects = listenToSectorSelects;
