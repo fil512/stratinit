@@ -1,19 +1,21 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.Date;
+import com.kenstevens.stratinit.type.NewsCategory;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
-
-import com.kenstevens.stratinit.type.NewsCategory;
+import java.util.Date;
 
 @Entity
 public class Mail extends Message {
+	@Column(columnDefinition = "clob")
 	private String body = "";
 	@Transient
 	private boolean post = false;
 
-	public Mail() {}
+	public Mail() {
+	}
 
 	public Mail(Game game, Nation from, Nation to, String subject, String body) {
 		super(game, from, to, subject);

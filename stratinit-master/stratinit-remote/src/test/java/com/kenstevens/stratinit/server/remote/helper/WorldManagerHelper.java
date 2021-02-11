@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.server.remote.helper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class WorldManagerHelper {
@@ -30,7 +29,7 @@ public class WorldManagerHelper {
 
 	public Player createPlayer() {
 		Player player = new Player("addMe");
-		playerDao.persist(player);
+		playerDao.save(player);
 		return player;
 	}
 

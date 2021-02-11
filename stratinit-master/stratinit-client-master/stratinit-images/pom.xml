@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>stratinit-client-master</artifactId>
 		<groupId>com.kenstevens.stratinit</groupId>
-		<version>1.2</version>
+		<version>1.3</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>stratinit-images</artifactId>
@@ -26,6 +26,12 @@
 		<dependency>
 			<groupId>jdepend</groupId>
 			<artifactId>jdepend</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

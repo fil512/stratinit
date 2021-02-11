@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -31,7 +30,8 @@ import static org.junit.Assert.assertTrue;
 // move proper persistence.xml up here
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "/WEB-INF/applicationContext.xml")
-@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
+// FIXME need something like this?
+//@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
 @Transactional
 public abstract class StratInitDaoBase {
 	
@@ -140,7 +140,7 @@ public abstract class StratInitDaoBase {
 		}
 		player = new Player(username);
 		player.setEmail("foo@foo.com");
-		playerDao.persist(player);
+		playerDao.save(player);
 		return player;
 	}
 	
@@ -223,7 +223,7 @@ public abstract class StratInitDaoBase {
 	protected Player createPlayer() {
 		Player player = new Player(PLAYER_NAME);
 		player.setEmail("foo@foo.com");
-		playerDao.persist(player);
+		playerDao.save(player);
 		return player;
 	}
 

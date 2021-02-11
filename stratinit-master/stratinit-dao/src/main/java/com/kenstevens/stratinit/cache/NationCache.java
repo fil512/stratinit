@@ -1,29 +1,18 @@
 package com.kenstevens.stratinit.cache;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.google.common.collect.Collections2;
+import com.kenstevens.stratinit.dal.NationDal;
+import com.kenstevens.stratinit.dal.SectorDal;
+import com.kenstevens.stratinit.dal.UnitDal;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.common.collect.Collections2;
-import com.kenstevens.stratinit.dal.GameDal;
-import com.kenstevens.stratinit.dal.SectorDal;
-import com.kenstevens.stratinit.dal.UnitDal;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitMove;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
-
 import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.List;
 
 public class NationCache extends Cacheable {
 	private final Log logger = LogFactory.getLog(getClass());
@@ -180,11 +169,11 @@ public class NationCache extends Cacheable {
 		cityMoveCache.remove(cityMove.getCity().getCoords());
 	}
 
-	public void flush(int gameId, GameDal gameDal, SectorDal sectorDal, UnitDal unitDal) {
+	public void flush(int gameId, NationDal nationDal, SectorDal sectorDal, UnitDal unitDal) {
 		if (isModified()) {
 			logger.debug("Flushing " + nation + " nation for game #"
 					+ gameId);
-			gameDal.flush(nation);
+			nationDal.save(nation);
 			setModified(false);
 		}
 		if (sectorSeenCache.isModified()) {

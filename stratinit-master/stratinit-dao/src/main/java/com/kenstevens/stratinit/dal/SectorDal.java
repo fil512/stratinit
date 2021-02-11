@@ -1,14 +1,9 @@
 package com.kenstevens.stratinit.dal;
 
+import com.kenstevens.stratinit.model.*;
+
 import java.util.Collection;
 import java.util.List;
-
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.World;
 
 public interface SectorDal {
 
@@ -29,8 +24,6 @@ public interface SectorDal {
 	void persist(SectorSeen sectorSeen);
 
 	void persist(World world);
-
-	void remove(Game game);
 
 	void flushSectors(List<Sector> sectors);
 

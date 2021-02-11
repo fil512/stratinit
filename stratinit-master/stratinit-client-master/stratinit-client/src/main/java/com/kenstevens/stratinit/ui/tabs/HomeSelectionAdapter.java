@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import org.apache.log4j.Logger;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 final class HomeSelectionAdapter extends SelectionAdapter {
-	final Logger logger = Logger.getLogger(getClass());
+	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final WidgetContainer widgetContainer;
 	private final Data db;

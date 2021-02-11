@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.model;
 
-import java.io.Serializable;
+import com.kenstevens.stratinit.type.UnitType;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import com.kenstevens.stratinit.type.UnitType;
+import java.io.Serializable;
 
 @Entity
 public class GameBuildAudit implements Serializable {
@@ -13,10 +12,11 @@ public class GameBuildAudit implements Serializable {
 	@Id
 	private String id;
 	private Integer gameId;
-    private UnitType type;
-	private int count;
-    
-    public GameBuildAudit() {}
+	private UnitType type;
+	private long count;
+
+	public GameBuildAudit() {
+	}
 
 	public Integer getGameId() {
 		return gameId;
@@ -34,11 +34,11 @@ public class GameBuildAudit implements Serializable {
 		this.type = type;
 	}
 
-	public int getCount() {
+	public long getCount() {
 		return count;
 	}
 
-	public void setCount(int count) {
+	public void setCount(long count) {
 		this.count = count;
 	}
 

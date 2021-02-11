@@ -1,19 +1,11 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.Date;
-
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
-
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Unit extends GameUpdatable {
@@ -91,11 +83,8 @@ public class Unit extends GameUpdatable {
 			return false;
 		Unit other = (Unit) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 
 	public void setId(Integer unitId) {
@@ -114,7 +103,7 @@ public class Unit extends GameUpdatable {
 		return nation;
 	}
 
-	public final void setType(UnitType type) {
+	public void setType(UnitType type) {
 		this.type = type;
 		this.unitBase = UnitBase.getUnitBase(type);
 		this.canSeeSubs = this.unitBase.isCanSeeSubs();

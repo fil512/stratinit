@@ -1,22 +1,24 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.dal.impl.PlayerDal;
+import com.kenstevens.stratinit.dal.PlayerDal;
+import com.kenstevens.stratinit.dal.PlayerRoleDal;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.PlayerRole;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlayerDaoImpl implements PlayerDao {
 	@Autowired
 	private PlayerDal playerDal;
+	@Autowired
+	private PlayerRoleDal playerRoleDal;
 	@Autowired
 	private GameDao gameDao;
 	@Autowired
@@ -28,48 +30,40 @@ public class PlayerDaoImpl implements PlayerDao {
 	}
 
 	@Override
-	public void persist(Player player) {
-		playerDal.persist(player);
+	public void save(Player player) {
+		playerDal.save(player);
 		dataCache.add(player);
 	}
 
 	@Override
-	public void persist(PlayerRole playerRole) {
-		playerDal.persist(playerRole);
+	public void save(PlayerRole playerRole) {
+		playerRoleDal.save(playerRole);
 	}
 
 	@Override
 	public Player find(String username) {
-		if (username == null) {
-			return null;
-		}
-		for (Player player : dataCache.getAllPlayers()) {
-			if (username.equals(player.getUsername())) {
-				return player;
-			}
-		}
-		return null;
+		return playerDal.findByUsername(username);
 	}
 
 	@Override
 	public void remove(String username) {
-		playerDal.remove(username);
+		playerDal.deleteByUsername(username);
 	}
 
 	@Override
 	public void remove(Player player) {
-		playerDal.remove(player);
+		playerDal.delete(player);
 		dataCache.remove(player);
 	}
 
 	@Override
 	public PlayerRole getPlayerRole(Player player, String roleName) {
-		return playerDal.getPlayerRole(player, roleName);
+		return playerRoleDal.findByPlayerAndRoleName(player, roleName);
 	}
 
 	@Override
 	public void merge(Player player) {
-		playerDal.merge(player);
+		playerDal.save(player);
 		// Note this behavior is different from other daos.  We don't mind doing a db merge every time
 		// since player updates are rare.
 		List<Nation> nations = gameDao.getNations(player);
@@ -80,7 +74,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
 	@Override
 	public List<PlayerRole> getRoles(Player player) {
-		return playerDal.getRoles(player);
+		return playerRoleDal.findByPlayer(player);
 	}
 
 	@Override

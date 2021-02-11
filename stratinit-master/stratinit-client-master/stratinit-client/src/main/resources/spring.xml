@@ -9,15 +9,13 @@
 	<bean id="httpInvoker" class="com.kenstevens.stratinit.site.server.BasicAuthenticationCommonsHttpInvokerRequestExecutor"/>
 
 	<bean id="stratInit"
-		class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+          class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:8080/stratinit/remoting/StratInit"/>
+        <property name="serviceInterface" value="com.kenstevens.stratinit.remote.StratInit"/>
+        <property name="httpInvokerRequestExecutor" ref="httpInvoker"/>
+    </bean>
+<!--
     	<property name="serviceUrl" value="http://www.strategicinitiative.org:8080/stratinit/remoting/StratInit" />
-<!--
-		<property name="serviceUrl" value="http://localhost:8080/remoting/StratInit" />
--->
-		<property name="serviceInterface" value="com.kenstevens.stratinit.remote.StratInit" />
-		<property name="httpInvokerRequestExecutor" ref="httpInvoker"/>
-<!--
     	<property name="serviceUrl" value="http://localhost:8080/stratinit/remoting/StratInit" />
 -->
-	</bean>
 </beans>

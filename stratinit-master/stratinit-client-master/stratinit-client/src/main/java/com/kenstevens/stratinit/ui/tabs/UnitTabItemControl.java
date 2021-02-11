@@ -1,25 +1,26 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.util.Spring;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
 public class UnitTabItemControl implements TopLevelController {
 
 
-	final Logger logger = Logger.getLogger(getClass());
+	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private Spring spring;
-	@Autowired Data db;
+	@Autowired
+	Data db;
 
 	private final UnitTabItem unitTabItem;
 

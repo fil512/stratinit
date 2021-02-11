@@ -10,30 +10,31 @@ import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.internal.SessionImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/spring.xml")
-public abstract class StratInitTest {
-	private final Log logger = LogFactory.getLog(getClass());
+import static org.junit.Assert.assertTrue;
 
-	@Autowired
-	protected GameDao gameDao;
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {TestConfig.class})
+public abstract class StratInitTest {
+	final Logger logger = LoggerFactory.getLogger(getClass());
+
 	@PersistenceContext
 	protected EntityManager entityManager;
+	@Autowired
+	protected GameDao gameDao;
 	@Autowired
 	private PlayerDao playerDao;
 	@Autowired
@@ -57,14 +58,14 @@ public abstract class StratInitTest {
 	public void stratInit() {
 		if (!initialized) {
 			SessionImpl session = (SessionImpl) entityManager.getDelegate();
-			Assert.assertTrue("RUNNING IN H2", session.getFactory().getDialect() instanceof org.hibernate.dialect.H2Dialect);
+			assertTrue("RUNNING IN H2", session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect);
 			initialized = true;
 			testPlayer1 = new Player("a");
 			testPlayer1.setEmail("foo@foo.com");
-			playerDao.persist(testPlayer1);
+			playerDao.save(testPlayer1);
 			testPlayer2 = new Player("b");
 			testPlayer2.setEmail("foo@foo.com");
-			playerDao.persist(testPlayer2);
+			playerDao.save(testPlayer2);
 		}
 	}
 

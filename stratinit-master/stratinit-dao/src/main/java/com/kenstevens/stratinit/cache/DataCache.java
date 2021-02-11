@@ -1,32 +1,23 @@
 package com.kenstevens.stratinit.cache;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dal.GameDal;
-import com.kenstevens.stratinit.dal.impl.PlayerDal;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.Updatable;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.dal.PlayerDal;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.Constants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Repository
 public class DataCache extends Updatable {
@@ -47,14 +38,15 @@ public class DataCache extends Updatable {
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void load() {
-		loadPlayers();
-		loadGames();
+		// FIXME
+//		loadPlayers();
+//		loadGames();
 	}
 
 	private void loadGames() {
 		logger.info("Loading games into cache...");
 
-		for (Game game : gameDal.getAllGames()) {
+		for (Game game : gameDal.findAll()) {
 			Integer gameId = game.getId();
 			getGameCache(gameId);
 		}
@@ -64,7 +56,7 @@ public class DataCache extends Updatable {
 	private void loadPlayers() {
 		logger.info("Loading players into cache...");
 
-		for (Player player : playerDal.getAllPlayers()) {
+		for (Player player : playerDal.findAll()) {
 			add(player);
 		}
 		logger.info("...done.");

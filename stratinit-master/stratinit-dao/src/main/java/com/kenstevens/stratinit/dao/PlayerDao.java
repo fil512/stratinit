@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.dao;
 
-import java.util.List;
-
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.PlayerRole;
 
+import java.util.List;
+
 public interface PlayerDao {
 
-	void persist(Player player);
+	void save(Player player);
 
-	void persist(PlayerRole playerRole);
+	void save(PlayerRole playerRole);
 
 	List<Player> getAllPlayers();
 

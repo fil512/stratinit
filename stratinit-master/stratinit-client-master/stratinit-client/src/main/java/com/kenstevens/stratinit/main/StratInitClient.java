@@ -1,18 +1,19 @@
 package com.kenstevens.stratinit.main;
 
-import org.apache.log4j.Logger;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.MainShell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public final class StratInitClient {
-	private static Logger logger = Logger.getLogger(StratInitClient.class.getName());
+	static final Logger logger = LoggerFactory.getLogger(StratInitClient.class);
 
-	private StratInitClient() {}
+	private StratInitClient() {
+	}
 
 	public static void main(String[] args) {
 		ActionQueue actionQueue = null;

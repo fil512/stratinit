@@ -1,26 +1,26 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 final public class CentreHomeSelectionAdapter extends SelectionAdapter {
-	final Logger logger = Logger.getLogger(getClass());
+	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final WidgetContainer widgetContainer;
 	private final SelectEvent selectEvent;
 
 	public CentreHomeSelectionAdapter(WidgetContainer widgetContainer,
-			SelectEvent selectEvent) {
-				this.widgetContainer = widgetContainer;
-				this.selectEvent = selectEvent;
+									  SelectEvent selectEvent) {
+		this.widgetContainer = widgetContainer;
+		this.selectEvent = selectEvent;
 	}
 
 	@Override

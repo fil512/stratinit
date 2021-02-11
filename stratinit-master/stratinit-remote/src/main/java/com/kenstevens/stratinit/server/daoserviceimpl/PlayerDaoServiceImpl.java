@@ -1,16 +1,5 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.validator.EmailValidator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.PlayerRole;
@@ -19,6 +8,17 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplateLibrary;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.EmailValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 @Service
 public class PlayerDaoServiceImpl implements PlayerDaoService {
@@ -56,8 +56,8 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		playerRole.setPlayer(player);
 		playerRole.setRoleName("ROLE_USER");
 
-		playerDao.persist(player);
-		playerDao.persist(playerRole);
+		playerDao.save(player);
+		playerDao.save(playerRole);
 
 		logger.info("REGISTERING USER [" + player.getUsername() + "].");
 		mailService.sendEmail(player,
@@ -130,8 +130,8 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		mailService.sendEmail(player,
 				MailTemplateLibrary.getForgottenPassword(username, password));
 
-		ShaPasswordEncoder encoder = new ShaPasswordEncoder();
-		player.setPassword(encoder.encodePassword(password, null));
+		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		player.setPassword(encoder.encode(password));
 		playerDao.merge(player);
 
 		return new Result<None>("Password reset for user [" + username + "].",
@@ -155,16 +155,13 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		if (player == null) {
 			return false;
 		}
-		ShaPasswordEncoder encoder = new ShaPasswordEncoder();
-		String encodedPassword = encoder.encodePassword(password, null);
+		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		String encodedPassword = encoder.encode(password);
 
 		if (!player.getPassword().equals(encodedPassword)) {
 			return false;
 		}
-		if (!player.isEnabled()) {
-			return false;
-		}
-		return true;
+		return player.isEnabled();
 	}
 
 	@Override

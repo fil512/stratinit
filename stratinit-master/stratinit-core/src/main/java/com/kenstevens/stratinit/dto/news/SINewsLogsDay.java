@@ -1,14 +1,14 @@
 package com.kenstevens.stratinit.dto.news;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multiset.Entry;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SINewsLogsDay implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -47,7 +47,7 @@ public class SINewsLogsDay implements Serializable {
 	}
 
 	public List<SINewsNeutralConquest> getNeutralConquests() {
-		return Lists.transform(Lists.newArrayList(neutralConquests.entrySet()), new Function<Multiset.Entry<SINewsNeutralConquest>, SINewsNeutralConquest>() {
+		return Lists.transform(Lists.newArrayList(neutralConquests.entrySet()), new Function<Entry<SINewsNeutralConquest>, SINewsNeutralConquest>() {
 			public SINewsNeutralConquest apply(Entry<SINewsNeutralConquest> entry) {
 				return new SINewsNeutralConquest(entry.getElement().nationName, entry.getCount());
 			}

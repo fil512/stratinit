@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.main;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
+import com.kenstevens.stratinit.remote.StratInit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.remote.StratInit;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 @Service
 public class FlushCache implements ServletContextListener {
@@ -18,7 +17,7 @@ public class FlushCache implements ServletContextListener {
 	private StratInit stratInit;
 
 	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
+	public void contextDestroyed(ServletContextEvent sce) {
 		logger.info("Shutdown event received");
 		stratInit.shutdown();
 		logger.info("Shutdown event processed");

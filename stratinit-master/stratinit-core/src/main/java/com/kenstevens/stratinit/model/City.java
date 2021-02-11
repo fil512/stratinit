@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.Date;
+import com.kenstevens.stratinit.type.CityType;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.UnitType;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
-
-import com.kenstevens.stratinit.type.CityType;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.type.UnitType;
+import java.util.Date;
 
 
 @Entity
@@ -60,11 +59,8 @@ public class City extends GameUpdatable {
 			return false;
 		City other = (City) obj;
 		if (cityPK == null) {
-			if (other.cityPK != null)
-				return false;
-		} else if (!cityPK.equals(other.cityPK))
-			return false;
-		return true;
+			return other.cityPK == null;
+		} else return cityPK.equals(other.cityPK);
 	}
 
 	private void setType(CityType type) {
@@ -75,7 +71,7 @@ public class City extends GameUpdatable {
 		return type;
 	}
 
-	private final void setBuild(UnitType build) {
+	private void setBuild(UnitType build) {
 		Date lastUpdated;
 		if (getGame().hasStarted()) {
 			lastUpdated = new Date();
@@ -85,7 +81,7 @@ public class City extends GameUpdatable {
 		setBuild(build, lastUpdated);
 	}
 
-	public final void setBuild(UnitType build, Date lastUpdated) {
+	public void setBuild(UnitType build, Date lastUpdated) {
 		this.build = build;
 		this.setLastUpdated(lastUpdated);
 		this.setType(UnitBase.getUnitBase(build).getBuiltIn());

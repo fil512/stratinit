@@ -1,5 +1,10 @@
 package com.kenstevens.stratinit.wicket.framework;
 
+import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -9,13 +14,8 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
-
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.StratInit;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
-import com.kenstevens.stratinit.wicket.util.InfoResult;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegistrationForm extends Form<Player> {
 	private static final long serialVersionUID = 1L;
@@ -52,9 +52,9 @@ public class RegistrationForm extends Form<Player> {
 	@Override
 	public final void onSubmit() {
 		Player player = getModelObject();
-		ShaPasswordEncoder encoder = new ShaPasswordEncoder();
 		if (player.getPassword() != null) {
-			player.setPassword(encoder.encodePassword(player.getPassword(), null));
+			PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+			player.setPassword(encoder.encode(player.getPassword()));
 		}
 		player.setUserAgent(this.getWebRequest().getHeader("User-Agent"));
 		Result<Player> result;

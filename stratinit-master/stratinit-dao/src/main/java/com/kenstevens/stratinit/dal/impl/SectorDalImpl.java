@@ -1,21 +1,13 @@
 package com.kenstevens.stratinit.dal.impl;
 
-import java.util.Collection;
-import java.util.List;
+import com.kenstevens.stratinit.dal.SectorDal;
+import com.kenstevens.stratinit.model.*;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.springframework.stereotype.Service;
-
-import com.kenstevens.stratinit.dal.SectorDal;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.Updatable;
-import com.kenstevens.stratinit.model.World;
+import java.util.Collection;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 @Service
@@ -73,26 +65,6 @@ public class SectorDalImpl implements SectorDal {
 		return entityManager.createQuery(
 				"from City c WHERE c.cityPK.game = :game")
 				.setParameter("game", game).getResultList();
-	}
-
-	@Override
-	public void remove(Game game) {
-		if (game.getId() == null) {
-			return;
-		}
-
-		List<Sector> sectors = getSectors(game);
-		List<City> cities = getCities(game);
-		List<SectorSeen> sectorsSeen = getSectorsSeen(game);
-		for (Updatable city : cities) {
-			entityManager.remove(city);
-		}
-		for (SectorSeen sectorSeen : sectorsSeen) {
-			entityManager.remove(sectorSeen);
-		}
-		for (Sector sector : sectors) {
-			entityManager.remove(sector);
-		}
 	}
 
 	@Override

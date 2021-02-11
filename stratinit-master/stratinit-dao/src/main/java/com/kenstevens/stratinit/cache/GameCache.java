@@ -1,34 +1,15 @@
 package com.kenstevens.stratinit.cache;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
+import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.dal.GameDal;
+import com.kenstevens.stratinit.dal.RelationDal;
+import com.kenstevens.stratinit.dal.SectorDal;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.type.SectorCoords;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dal.GameDal;
-import com.kenstevens.stratinit.dal.SectorDal;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.model.RelationPK;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitMove;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.type.SectorCoords;
+import java.util.*;
 
 public class GameCache extends Cacheable {
 	private final Log log = LogFactory.getLog(getClass());
@@ -255,11 +236,11 @@ public class GameCache extends Cacheable {
 		getNationCache(unit.getNation()).remove(unit);
 	}
 
-	public void flush(GameDal gameDal, SectorDal sectorDal) {
+	public void flush(GameDal gameDal, RelationDal relationDal, SectorDal sectorDal) {
 		if (isModified()) {
 			log.debug("Flushing game #" + getGameId());
-			gameDal.flush(getGame());
-			gameDal.flushRelations(getRelations());
+			gameDal.save(game);
+			getRelations().forEach(relationDal::save);
 			setModified(false);
 		}
 		if (worldCache != null && worldCache.isModified()) {

@@ -1,15 +1,12 @@
 package com.kenstevens.stratinit.wicket.player;
 
-import java.text.SimpleDateFormat;
-
-import nl.bitwalker.useragentutils.UserAgent;
-
+import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.wicket.model.PlayerListModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.wicket.model.PlayerListModel;
+import java.text.SimpleDateFormat;
 
 public class PlayerListView extends PageableListView<Player> {
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat(
@@ -35,14 +32,15 @@ public class PlayerListView extends PageableListView<Player> {
 			listItem.add(new Label("lastLogin", ""
 					+ FORMAT.format(player.getLastLogin())));
 			String userAgentString = player.getUserAgent();
-			if (userAgentString != null) {
-				UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-				listItem.add(new Label("os", userAgent.getOperatingSystem().getName()));
-				listItem.add(new Label("browser", userAgent.getBrowser().getName()));
-			} else {
-				listItem.add(new Label("os", ""));
-				listItem.add(new Label("browser", ""));
-			}
+			// FIXME
+//			if (userAgentString != null) {
+//				UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
+//				listItem.add(new Label("os", userAgent.getOperatingSystem().getName()));
+//				listItem.add(new Label("browser", userAgent.getBrowser().getName()));
+//			} else {
+			listItem.add(new Label("os", ""));
+			listItem.add(new Label("browser", ""));
+//			}
 		} else {
 			listItem.add(new Label("won", "" + player.getWins()));
 			listItem.add(new Label("played", "" + player.getPlayed()));
