@@ -1,15 +1,5 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import static com.google.common.base.Predicates.and;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -20,18 +10,20 @@ import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.impl.predicates.BaseCityPredicate;
 import com.kenstevens.stratinit.dao.impl.predicates.OtherNationPredicate;
 import com.kenstevens.stratinit.dao.impl.predicates.SeesSectorPredicate;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.CityPK;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Predicates.and;
 
 @Service
 public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
@@ -51,11 +43,6 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	@Override
 	public SectorSeen findSectorSeen(Nation nation, Sector sector) {
 		return findSectorSeen(nation, sector.getCoords());
-	}
-
-	@Override
-	public List<City> getAllCities() {
-		return dataCache.getAllCities();
 	}
 
 	@Override
@@ -152,8 +139,8 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	}
 
 	@Override
-	public World getWorld(int gameId) {
-		return getGameCache(gameId).getWorld();
+	public World getWorld(Game game) {
+		return getGameCache(game.getId()).getWorld();
 	}
 
 	@Override
@@ -177,19 +164,19 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	}
 
 	@Override
-	public void persist(City city) {
+	public void save(City city) {
 		sectorDal.persist(city);
 		getGameCache(city.getGame()).add(city);
 	}
 
 	@Override
-	public void persist(SectorSeen sectorSeen) {
+	public void save(SectorSeen sectorSeen) {
 		sectorDal.persist(sectorSeen);
 		getNationCache(sectorSeen.getNation()).add(sectorSeen);
 	}
 
 	@Override
-	public void persist(World world) {
+	public void save(World world) {
 		sectorDal.persist(world);
 		getGameCache(world.getGame()).setWorld(world);
 	}
@@ -205,7 +192,7 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		SectorSeen foundSectorSeen = findSectorSeen(nation, sector);
 		if (foundSectorSeen == null) {
 			SectorSeen sectorSeen = new SectorSeen(nation, sector);
-			persist(sectorSeen);
+			save(sectorSeen);
 		}
 	}
 
@@ -223,14 +210,11 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		if (!sector.isLand() && !sector.isWater()) {
 			return false;
 		}
-		World world = getWorld(nation.getGameId());
+		World world = getWorld(nation.getGame());
 		if (isBesideCity(world, nation, sector)) {
 			return false;
 		}
-		if (world.isAtSea(sector)) {
-			return false;
-		}
-		return true;
+		return !world.isAtSea(sector);
 	}
 
 	private boolean isBesideCity(World world, Nation nation, Sector sector) {
@@ -272,7 +256,7 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	}
 
 	@Override
-	public void persist(CityMove cityMove) {
+	public void save(CityMove cityMove) {
 		City city = findCity(cityMove.getCity().getCityPK());
 		if (city == null) {
 			return;

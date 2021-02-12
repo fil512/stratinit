@@ -18,13 +18,15 @@ public class MockGameLoaderService implements GameLoader {
 	private UnitDal unitDal;
 	@Autowired
 	private CityDal cityDal;
+	@Autowired
+	private SectorSeenDal sectorSeenDal;
 
 	private GameLoader gameLoader;
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void init() {
-		gameLoader = new GameLoaderImpl(gameDal, nationDal, relationDal, sectorDal, unitDal, cityDal);
+		gameLoader = new GameLoaderImpl(gameDal, nationDal, relationDal, sectorDal, unitDal, cityDal, sectorSeenDal);
 	}
 
 	@Override

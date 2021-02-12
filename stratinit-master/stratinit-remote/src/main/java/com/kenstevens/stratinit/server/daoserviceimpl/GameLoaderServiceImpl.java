@@ -25,13 +25,15 @@ public class GameLoaderServiceImpl implements GameLoader, GameLoaderService {
 	private UnitDal unitDal;
 	@Autowired
 	private CityDal cityDal;
+	@Autowired
+	private SectorSeenDal secorSeenDal;
 
 	private GameLoader gameLoader;
 
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void init() {
-		gameLoader = new GameLoaderImpl(gameDal, nationDal, relationDal, sectorDal, unitDal, cityDal);
+		gameLoader = new GameLoaderImpl(gameDal, nationDal, relationDal, sectorDal, unitDal, cityDal, secorSeenDal);
 	}
 
 	@Override

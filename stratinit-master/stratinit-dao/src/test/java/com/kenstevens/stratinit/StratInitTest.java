@@ -94,7 +94,7 @@ public abstract class StratInitTest {
 		testSector = new Sector(testGame, testCoords, SectorType.LAND);
 		World world = new World(testGame, true);
 		world.setSector(testSector);
-		sectorDao.persist(world);
+		sectorDao.save(world);
 	}
 
 	protected void createGame2() {
@@ -106,7 +106,7 @@ public abstract class StratInitTest {
 		testSector2 = new Sector(testGame2, testCoords, SectorType.LAND);
 		World world = new World(testGame2, true);
 		world.setSector(testSector2);
-		sectorDao.persist(world);
+		sectorDao.save(world);
 	}
 
 	protected void createNation1() {

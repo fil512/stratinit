@@ -1,36 +1,14 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameBuildAudit;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.model.RelationPK;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.GameCreator;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.TeamCalculator;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.daoservice.WorldManager;
+import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.event.RelationManager;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
@@ -39,6 +17,10 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import com.kenstevens.stratinit.world.GameSizer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class GameDaoServiceImpl implements GameDaoService {
@@ -130,7 +112,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		GameSizer.setIslands(game);
 		GameSizer.setSize(game);
 		World world = createWorld(game);
-		sectorDao.persist(world);
+		sectorDao.save(world);
 		game.setMapped();
 		List<Nation> nations = gameDao.getNations(game);
 		int island = 0;

@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.model.Sector;
@@ -18,6 +13,10 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class TerrainSwitcher {
@@ -31,7 +30,7 @@ public class TerrainSwitcher {
 	private UnitDao unitDao;
 
 	public Result<None> switchTerrain(Unit unit) {
-		World world = sectorDao.getWorld(unit.getGameId());
+		World world = sectorDao.getWorld(unit.getGame());
 		Sector sector = world.getSector(unit);
 		if (nonEngineerUnitsInSector(sector)) {
 			return new Result<None>("Only Engineer units may be in a sector to change its terrain", false);
@@ -40,7 +39,7 @@ public class TerrainSwitcher {
 		SectorType toType;
 		if (fromType == SectorType.LAND) {
 			toType = SectorType.WATER;
-			if (!hasNeighbourOfType(world, unit.getCoords(), toType)) { 
+			if (!hasNeighbourOfType(world, unit.getCoords(), toType)) {
 				return new Result<None>("Can only switch LAND to WATER if there is already WATER adjacent.", false);
 			}
 		} else if (fromType == SectorType.WATER) {

@@ -18,15 +18,17 @@ public class GameLoaderImpl implements GameLoader {
     private final SectorDal sectorDal;
     private final UnitDal unitDal;
     private final CityDal cityDal;
+    private final SectorSeenDal sectorSeenDal;
     // FIXME autowire
 
-    public GameLoaderImpl(GameDal gameDal, NationDal nationDal, RelationDal relationDal, SectorDal sectorDal, UnitDal unitDal, CityDal citydal) {
+    public GameLoaderImpl(GameDal gameDal, NationDal nationDal, RelationDal relationDal, SectorDal sectorDal, UnitDal unitDal, CityDal citydal, SectorSeenDal sectorSeenDal) {
         this.gameDal = gameDal;
         this.nationDal = nationDal;
         this.relationDal = relationDal;
         this.sectorDal = sectorDal;
         this.unitDal = unitDal;
         this.cityDal = citydal;
+        this.sectorSeenDal = sectorSeenDal;
     }
 
     public GameCache loadGame(int gameId) {
@@ -48,13 +50,13 @@ public class GameLoaderImpl implements GameLoader {
                 return null;
             }
             logger.info("Getting World");
-            gameCache.setWorld(sectorDal.getWorld(game));
+            gameCache.setWorld(getWorld(game));
             logger.info("Getting Cities");
             setCities(gameCache);
             logger.info("Getting Units");
             setUnits(gameCache);
             logger.info("Getting Sectors Seen");
-            gameCache.setSectorsSeen(sectorDal.getSectorsSeen(gameCache
+            gameCache.setSectorsSeen(sectorSeenDal.findByGame(gameCache
                     .getGame()));
             logger.info("Getting Units Seen");
             gameCache.setUnitsSeen(unitDal.getUnitsSeen(gameCache.getGame()));
@@ -71,6 +73,15 @@ public class GameLoaderImpl implements GameLoader {
         }
         logger.info("Game #" + gameId + " loaded.");
         return gameCache;
+    }
+
+    private World getWorld(Game game) {
+        World world = new World(game, false);
+        List<Sector> sectors = sectorDal.findByGame(game);
+        for (Sector sector : sectors) {
+            world.setSector(sector);
+        }
+        return world;
     }
 
     private void clearBadUnitMoves(List<UnitMove> badUnitMoves) {

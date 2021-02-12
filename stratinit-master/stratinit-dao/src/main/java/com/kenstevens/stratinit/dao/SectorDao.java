@@ -1,26 +1,17 @@
 package com.kenstevens.stratinit.dao;
 
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.type.SectorCoords;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.CityPK;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.type.SectorCoords;
-
 public interface SectorDao {
 
-	void persist(SectorSeen sectorSeen);
+	void save(SectorSeen sectorSeen);
 
 	List<City> getCities(Nation nation);
-
-	List<City> getAllCities();
 
 	Collection<SectorSeen> getSectorsSeen(Nation nation);
 
@@ -32,7 +23,7 @@ public interface SectorDao {
 
 	City getCity(Nation nation, SectorCoords coords);
 
-	void persist(World world);
+	void save(World world);
 
 	City findCity(CityPK cityPK);
 
@@ -62,11 +53,11 @@ public interface SectorDao {
 
 	void remove(City city);
 
-	World getWorld(int gameId);
+	World getWorld(Game game);
 
 	Map<SectorCoords, City> getCityMap(Game game);
 
-	void persist(City city);
+	void save(City city);
 
 	void transferCity(City city, Nation nation);
 
@@ -80,7 +71,7 @@ public interface SectorDao {
 
 	void merge(CityMove cityMove);
 
-	void persist(CityMove cityMove);
+	void save(CityMove cityMove);
 
 	void remove(CityMove cityMove);
 }

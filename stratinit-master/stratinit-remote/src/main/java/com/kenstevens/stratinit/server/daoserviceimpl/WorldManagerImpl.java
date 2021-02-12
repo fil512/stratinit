@@ -1,20 +1,9 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.daoservice.WorldManager;
@@ -25,6 +14,10 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.world.WorldCreator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class WorldManagerImpl implements WorldManager {
@@ -77,7 +70,7 @@ public class WorldManagerImpl implements WorldManager {
 					unit.addMobility();
 				}
 			}
-			sectorDao.persist(city);
+			sectorDao.save(city);
 			eventQueue.schedule(city);
 			firstCity = false;
 		}

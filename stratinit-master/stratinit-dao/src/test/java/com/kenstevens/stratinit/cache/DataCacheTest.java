@@ -106,9 +106,9 @@ public class DataCacheTest extends StratInitTest {
 		Sector newSector = world.getSector(coords);
 		newSector.setType(newType);
 		sectorDao.merge(newSector);
-		
+
 		Game game = gameDal.findGame(testGame.getId());
-		Sector sector = sectorDal.getWorld(game).getSector(coords);
+		Sector sector = sectorDao.getWorld(game).getSector(coords);
 		assertEquals(oldType, sector.getType());
 		assertFalse(dataCache.getGameCache(testGame).isModified());
 		assertTrue(dataCache.getGameCache(testGame).isWorldModified());
@@ -117,7 +117,7 @@ public class DataCacheTest extends StratInitTest {
 		assertFalse(dataCache.getGameCache(testGame).isWorldModified());
 		entityManager.flush();
 
-		sector = sectorDal.getWorld(testGame).getSector(coords);
+		sector = sectorDao.getWorld(testGame).getSector(coords);
 		assertEquals(newType, sector.getType());
 	}
 	

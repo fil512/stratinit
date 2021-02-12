@@ -1,57 +1,26 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.CityNukedBattleLog;
-import com.kenstevens.stratinit.model.CityPK;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.server.daoservice.CityBuilderService;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.MoveSeen;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.supply.Supply;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.CoordMeasure;
-import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.type.SectorType;
-import com.kenstevens.stratinit.type.UnitType;
+import com.kenstevens.stratinit.type.*;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 // TODO OPT pull stuff out of daoservices that only hit cache
 @Service
@@ -317,7 +286,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		city = sectorDao.getCity(sector);
 		if (city == null) {
 			city = new City(sector, nation, UnitType.BASE);
-			sectorDao.persist(city);
+			sectorDao.save(city);
 		} else {
 			opponent = city.getNation();
 			cityBuilderService.cityCapturedBuildChange(city);
@@ -543,12 +512,12 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	public Result<None> establishCity(Unit unit) {
 		Nation nation = unit.getNation();
 		SectorCoords coords = unit.getCoords();
-		Sector sector = sectorDao.getWorld(nation.getGameId()).getSector(coords);
+		Sector sector = sectorDao.getWorld(nation.getGame()).getSector(coords);
 		if (!canEstablishCity(nation, sector)) {
-			return new Result<None>("You may not establish a city at "+coords+".  Cities can only be established on land or next to land and may not be adjacent to other player cities.", false);
+			return new Result<None>("You may not establish a city at " + coords + ".  Cities can only be established on land or next to land and may not be adjacent to other player cities.", false);
 		}
 		City city = new City(sector, nation, UnitType.BASE);
-		sectorDao.persist(city);
+		sectorDao.save(city);
 		cityChanged(city);
 		sector.setType(SectorType.PLAYER_CITY);
 		sectorDao.merge(sector);
@@ -557,7 +526,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		logDaoService.persist(battleLog);
 		unit.decreaseMobility(Constants.MOB_COST_TO_CREATE_CITY);
 		unitDao.merge(unit);
-		return new Result<None>("City established at "+coords+".", true);
+		return new Result<None>("City established at " + coords + ".", true);
 	}
 
 	private boolean canEstablishCity(Nation nation, Sector sector) {
@@ -566,14 +535,14 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 
 	@Override
 	public Result<None> destroyCity(City city) {
-		
-		Sector sector = sectorDao.getWorld(city.getGameId()).getSector(city.getCoords());
+
+		Sector sector = sectorDao.getWorld(city.getGame()).getSector(city.getCoords());
 		sector.setType(SectorType.START_CITY);
 		sectorDao.merge(sector);
 
 		remove(city);
-		
-		return new Result<None>("City destroyed at "+sector.getCoords()+".", true);
+
+		return new Result<None>("City destroyed at " + sector.getCoords() + ".", true);
 	}
 
 	@Override
@@ -606,7 +575,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	public void setCityMove(City city, SectorCoords targetCoords) {
 		CityMove cityMove = new CityMove(city, targetCoords);
 		city.setCityMove(cityMove);
-		sectorDao.persist(cityMove);
+		sectorDao.save(cityMove);
 		merge(city);
 	}
 

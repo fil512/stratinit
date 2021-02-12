@@ -124,7 +124,7 @@ public abstract class StratInitDaoBase {
 		testGameId = testGame.getId();
 		World world = new World(testGame, true);
 		populate(world, getTypes(), getIslands());
-		sectorDao.persist(world);
+		sectorDao.save(world);
 		playerMe = createPlayer(PLAYER_ME_NAME);
 		testWorld = dataCache.getGameCache(testGameId).getWorld();
 	}

@@ -92,9 +92,9 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 	public void createBlitzGame() {
 		context.checking(new Expectations() {
 			{
-				oneOf(worldManager).build(with(any(Game.class)));
-				oneOf(sectorDao).persist(with(aNull(World.class)));
-			}
+                oneOf(worldManager).build(with(any(Game.class)));
+                oneOf(sectorDao).save(with(aNull(World.class)));
+            }
 		});
 
 		Game game = makeBlitzGame();
@@ -185,11 +185,11 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		final Game game = makeGame();
 
 		context.checking(new Expectations() {
-			{
-				oneOf(eventQueue).schedule(game, false);
-				oneOf(worldManager).build(game);
-				oneOf(sectorDao).persist(with(any(World.class)));
-			}
+            {
+                oneOf(eventQueue).schedule(game, false);
+                oneOf(worldManager).build(game);
+                oneOf(sectorDao).save(with(any(World.class)));
+            }
 		});
 		gameDaoService.scheduleGame(game);
 		gameDaoService.mapGame(game);
@@ -201,11 +201,11 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 	public void mapGameNoPlayers() {
 		final Game game = makeGame();
 		context.checking(new Expectations() {
-			{
-				oneOf(eventQueue).schedule(game, false);
-				oneOf(worldManager).build(game);
-				oneOf(sectorDao).persist(with(any(World.class)));
-			}
+            {
+                oneOf(eventQueue).schedule(game, false);
+                oneOf(worldManager).build(game);
+                oneOf(sectorDao).save(with(any(World.class)));
+            }
 		});
 		gameDaoService.scheduleGame(game);
 		gameDaoService.mapGame(game);
@@ -220,14 +220,14 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 				.getId(), false);
 
 		context.checking(new Expectations() {
-			{
-				oneOf(eventQueue).schedule(game, false);
-				oneOf(worldManager).build(game);
-				oneOf(worldManager).addPlayerToMap(0, result.getValue());
-				oneOf(sectorDao).persist(with(aNull(World.class)));
-				oneOf(mailService).sendEmail(with(same(player)),
-						with(any(MailTemplate.class)));
-			}
+            {
+                oneOf(eventQueue).schedule(game, false);
+                oneOf(worldManager).build(game);
+                oneOf(worldManager).addPlayerToMap(0, result.getValue());
+                oneOf(sectorDao).save(with(aNull(World.class)));
+                oneOf(mailService).sendEmail(with(same(player)),
+                        with(any(MailTemplate.class)));
+            }
 		});
 		gameDaoService.scheduleGame(game);
 		gameDaoService.mapGame(game);
@@ -244,13 +244,13 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		final Player player = createPlayer();
 
 		context.checking(new Expectations() {
-			{
-				oneOf(eventQueue).schedule(game, false);
-				oneOf(worldManager).build(game);
-				exactly(3).of(worldManager).addPlayerToMap(with(any(Integer.class)),
-						with(any(Nation.class)));
-				oneOf(sectorDao).persist(with(aNull(World.class)));
-			}
+            {
+                oneOf(eventQueue).schedule(game, false);
+                oneOf(worldManager).build(game);
+                exactly(3).of(worldManager).addPlayerToMap(with(any(Integer.class)),
+                        with(any(Nation.class)));
+                oneOf(sectorDao).save(with(aNull(World.class)));
+            }
 		});
 		gameDaoService.scheduleGame(game);
 		playersJoinGame(game, 2);
@@ -270,13 +270,13 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		final Game game = makeGame();
 
 		context.checking(new Expectations() {
-			{
-				oneOf(eventQueue).schedule(game, false);
-				oneOf(worldManager).build(game);
-				exactly(Constants.MAP_EXTRA_SLOTS + 2).of(worldManager).addPlayerToMap(with(any(Integer.class)),
-						with(any(Nation.class)));
-				oneOf(sectorDao).persist(with(aNull(World.class)));
-			}
+            {
+                oneOf(eventQueue).schedule(game, false);
+                oneOf(worldManager).build(game);
+                exactly(Constants.MAP_EXTRA_SLOTS + 2).of(worldManager).addPlayerToMap(with(any(Integer.class)),
+                        with(any(Nation.class)));
+                oneOf(sectorDao).save(with(aNull(World.class)));
+            }
 		});
 		gameDaoService.scheduleGame(game);
 		playersJoinGame(game, 2);
