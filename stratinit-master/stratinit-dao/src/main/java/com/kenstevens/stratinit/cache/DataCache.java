@@ -4,9 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dal.GameDal;
-import com.kenstevens.stratinit.dal.PlayerDal;
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.repo.GameRepo;
+import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,9 +28,9 @@ public class DataCache extends Updatable {
 	@Autowired
 	private GameLoader gameLoader;
 	@Autowired
-	private GameDal gameDal;
+	private GameRepo gameRepo;
 	@Autowired
-	private PlayerDal playerDal;
+	private PlayerRepo playerRepo;
 
 	private final Map<Integer, GameCache> gameMap = new TreeMap<Integer, GameCache>();
 	private final Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
@@ -46,7 +46,7 @@ public class DataCache extends Updatable {
 	private void loadGames() {
 		logger.info("Loading games into cache...");
 
-		for (Game game : gameDal.findAll()) {
+		for (Game game : gameRepo.findAll()) {
 			Integer gameId = game.getId();
 			getGameCache(gameId);
 		}
@@ -56,7 +56,7 @@ public class DataCache extends Updatable {
 	private void loadPlayers() {
 		logger.info("Loading players into cache...");
 
-		for (Player player : playerDal.findAll()) {
+		for (Player player : playerRepo.findAll()) {
 			add(player);
 		}
 		logger.info("...done.");

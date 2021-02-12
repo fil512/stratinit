@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.cache;
 
-import com.kenstevens.stratinit.dal.*;
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.repo.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -12,38 +12,38 @@ import java.util.Optional;
 @Service
 public class GameLoaderImpl implements GameLoader {
     private final Log logger = LogFactory.getLog(getClass());
-    private final GameDal gameDal;
-    private final NationDal nationDal;
-    private final RelationDal relationDal;
+    private final GameRepo gameRepo;
+    private final NationRepo nationRepo;
+    private final RelationRepo relationRepo;
     private final SectorDal sectorDal;
     private final UnitDal unitDal;
-    private final CityDal cityDal;
-    private final SectorSeenDal sectorSeenDal;
+    private final CityRepo cityRepo;
+    private final SectorSeenRepo sectorSeenRepo;
     // FIXME autowire
 
-    public GameLoaderImpl(GameDal gameDal, NationDal nationDal, RelationDal relationDal, SectorDal sectorDal, UnitDal unitDal, CityDal citydal, SectorSeenDal sectorSeenDal) {
-        this.gameDal = gameDal;
-        this.nationDal = nationDal;
-        this.relationDal = relationDal;
+    public GameLoaderImpl(GameRepo gameRepo, NationRepo nationRepo, RelationRepo relationRepo, SectorDal sectorDal, UnitDal unitDal, CityRepo citydal, SectorSeenRepo sectorSeenRepo) {
+        this.gameRepo = gameRepo;
+        this.nationRepo = nationRepo;
+        this.relationRepo = relationRepo;
         this.sectorDal = sectorDal;
         this.unitDal = unitDal;
-        this.cityDal = citydal;
-        this.sectorSeenDal = sectorSeenDal;
+        this.cityRepo = citydal;
+        this.sectorSeenRepo = sectorSeenRepo;
     }
 
     public GameCache loadGame(int gameId) {
         logger.info("Loading game #" + gameId + " into cache.");
 
-        Optional<Game> oGame = gameDal.findById(gameId);
+        Optional<Game> oGame = gameRepo.findById(gameId);
         if (!oGame.isPresent()) {
             return null;
         }
         Game game = oGame.get();
         logger.info("Getting Relations");
-        List<Relation> relations = relationDal.findByGame(game);
+        List<Relation> relations = relationRepo.findByGame(game);
         GameCache gameCache = new GameCache(game, relations);
         logger.info("Getting Nations");
-        gameCache.addNations(nationDal.findByNationPKGame(game));
+        gameCache.addNations(nationRepo.findByNationPKGame(game));
         if (game.isMapped()) {
             if (game.getSize() == 0) {
                 logger.error("Cannot load game " + game + " because it is mapped but has no size.");
@@ -56,7 +56,7 @@ public class GameLoaderImpl implements GameLoader {
             logger.info("Getting Units");
             setUnits(gameCache);
             logger.info("Getting Sectors Seen");
-            gameCache.setSectorsSeen(sectorSeenDal.findByGame(gameCache
+            gameCache.setSectorsSeen(sectorSeenRepo.findByGame(gameCache
                     .getGame()));
             logger.info("Getting Units Seen");
             gameCache.setUnitsSeen(unitDal.getUnitsSeen(gameCache.getGame()));
@@ -99,7 +99,7 @@ public class GameLoaderImpl implements GameLoader {
     }
 
     private void setCities(GameCache gameCache) {
-        List<City> cities = cityDal.findByCityPKGame(gameCache.getGame());
+        List<City> cities = cityRepo.findByCityPKGame(gameCache.getGame());
         for (City city : cities) {
             gameCache.add(city);
         }
@@ -113,9 +113,9 @@ public class GameLoaderImpl implements GameLoader {
     }
 
     public void flush(GameCache gameCache) {
-        gameCache.flush(gameDal, relationDal, sectorDal);
+        gameCache.flush(gameRepo, relationRepo, sectorDal);
         for (NationCache nationCache : gameCache.getNationCaches()) {
-            nationCache.flush(gameCache.getGameId(), nationDal, sectorDal, unitDal);
+            nationCache.flush(gameCache.getGameId(), nationRepo, sectorDal, unitDal);
         }
     }
 }

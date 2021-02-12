@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dal;
+package com.kenstevens.stratinit.repo;
 
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.SectorSeen;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SectorSeenDal extends JpaRepository<SectorSeen, SectorSeenPK> {
+public interface SectorSeenRepo extends JpaRepository<SectorSeen, SectorSeenPK> {
     @Query("Select ss from SectorSeen ss WHERE ss.sectorSeenPK.nation.nationPK.game = :game")
     List<SectorSeen> findByGame(@Param("game") Game game);
 }

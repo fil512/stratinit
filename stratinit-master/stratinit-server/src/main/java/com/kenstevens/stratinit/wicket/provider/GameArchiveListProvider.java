@@ -1,17 +1,16 @@
 package com.kenstevens.stratinit.wicket.provider;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dal.GameHistoryDal;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.rank.TeamProvider;
+import com.kenstevens.stratinit.repo.GameHistoryDal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GameArchiveListProvider implements GameListProvider {

@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dal;
+package com.kenstevens.stratinit.repo;
 
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.CityPK;
@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CityDal extends JpaRepository<City, CityPK> {
+public interface CityRepo extends JpaRepository<City, CityPK> {
     List<City> findByCityPKGame(Game game);
 }

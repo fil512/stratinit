@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.cache;
 
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dal.GameDal;
-import com.kenstevens.stratinit.dal.RelationDal;
-import com.kenstevens.stratinit.dal.SectorDal;
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.repo.GameRepo;
+import com.kenstevens.stratinit.repo.RelationRepo;
+import com.kenstevens.stratinit.repo.SectorDal;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -236,11 +236,11 @@ public class GameCache extends Cacheable {
 		getNationCache(unit.getNation()).remove(unit);
 	}
 
-	public void flush(GameDal gameDal, RelationDal relationDal, SectorDal sectorDal) {
+	public void flush(GameRepo gameRepo, RelationRepo relationRepo, SectorDal sectorDal) {
 		if (isModified()) {
 			log.debug("Flushing game #" + getGameId());
-			gameDal.save(game);
-			getRelations().forEach(relationDal::save);
+			gameRepo.save(game);
+			getRelations().forEach(relationRepo::save);
 			setModified(false);
 		}
 		if (worldCache != null && worldCache.isModified()) {

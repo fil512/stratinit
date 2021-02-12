@@ -1,46 +1,29 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import static com.google.common.base.Predicates.and;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.cache.NationCacheToNationFunction;
-import com.kenstevens.stratinit.dal.UnitDal;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.dao.impl.predicates.CanSeeSubPredicate;
-import com.kenstevens.stratinit.dao.impl.predicates.CanSeeUnitPredicate;
-import com.kenstevens.stratinit.dao.impl.predicates.OtherNationPredicate;
-import com.kenstevens.stratinit.dao.impl.predicates.SeesUnitPredicate;
-import com.kenstevens.stratinit.dao.impl.predicates.UnitIsCapitalShip;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitMove;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.model.UnitSeenPK;
+import com.kenstevens.stratinit.dao.impl.predicates.*;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.repo.UnitDal;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.world.predicate.InSectorPredicate;
-import com.kenstevens.stratinit.world.predicate.UnitCanCounterFireUnitPredicate;
-import com.kenstevens.stratinit.world.predicate.UnitCanInterdictUnitPredicate;
-import com.kenstevens.stratinit.world.predicate.UnitDevistatesPredicate;
-import com.kenstevens.stratinit.world.predicate.UnitTypePredicate;
-import com.kenstevens.stratinit.world.predicate.UnitWithinPredicate;
+import com.kenstevens.stratinit.world.predicate.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static com.google.common.base.Predicates.and;
 
 @Service
 public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {

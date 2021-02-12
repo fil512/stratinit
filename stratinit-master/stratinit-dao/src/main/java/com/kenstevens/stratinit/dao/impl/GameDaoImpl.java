@@ -7,10 +7,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.cache.GameLoader;
-import com.kenstevens.stratinit.dal.*;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
+import com.kenstevens.stratinit.repo.*;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.util.GameNameFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +21,17 @@ import java.util.*;
 @Service
 public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	@Autowired
-	private GameDal gameDal;
+	private GameRepo gameRepo;
 	@Autowired
-	private NationDal nationDal;
+	private NationRepo nationRepo;
 	@Autowired
-	private RelationDal relationDal;
+	private RelationRepo relationRepo;
 	@Autowired
-	private RelationChangeAuditDal relationChangeAuditDal;
+	private RelationChangeAuditRepo relationChangeAuditRepo;
 	@Autowired
-	private GameBuildAuditDal gameBuildAuditDal;
+	private GameBuildAuditRepo gameBuildAuditRepo;
 	@Autowired
-	private CityDal cityDal;
+	private CityRepo cityRepo;
 	@Autowired
 	private GameLoader gameLoader;
 
@@ -237,7 +237,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 		if (game.isEnabled()) {
 			getGameCache(game).setModified(true);
 		} else {
-			gameDal.save(game);
+			gameRepo.save(game);
 			dataCache.remove(game);
 		}
 	}
@@ -254,7 +254,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 
 	@Override
 	public void persist(Nation nation) {
-		nationDal.save(nation);
+		nationRepo.save(nation);
 		getGameCache(nation.getGameId()).add(nation);
 	}
 
@@ -264,7 +264,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 		if (game.getName() == null) {
 			game.setName("");
 		}
-		gameDal.save(game);
+		gameRepo.save(game);
 		getGameCache(game.getId());
 		if (game.getName().isEmpty()) {
 			game.setName(GameNameFile.getName(game.getId()));
@@ -273,18 +273,18 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 
 	@Override
 	public void persist(Relation relation) {
-		relationDal.save(relation);
+		relationRepo.save(relation);
 		getGameCache(relation.getGame()).add(relation);
 	}
 
 	@Override
 	public void persist(RelationChangeAudit relationChangeAudit) {
-		relationChangeAuditDal.save(relationChangeAudit);
+		relationChangeAuditRepo.save(relationChangeAudit);
 	}
 
 	@Override
 	public void remove(Game game) {
-		gameDal.delete(game);
+		gameRepo.delete(game);
 		dataCache.remove(game);
 	}
 
@@ -306,17 +306,17 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 
 	@Override
 	public List<GameBuildAudit> getGameBuildAudit() {
-		return gameBuildAuditDal.findAll();
+		return gameBuildAuditRepo.findAll();
 	}
 
 	@Override
 	public void remove(Relation relation) {
-		relationDal.delete(relation);
+		relationRepo.delete(relation);
 	}
 
 	@Override
 	public void remove(City city) {
-		cityDal.delete(city);
+		cityRepo.delete(city);
 	}
 
 	@Override

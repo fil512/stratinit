@@ -1,23 +1,18 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dal.GameHistoryDal;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.model.GameHistoryNation;
-import com.kenstevens.stratinit.model.GameHistoryTeam;
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.rank.TeamProvider;
+import com.kenstevens.stratinit.repo.GameHistoryDal;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class TeamProviderImpl implements TeamProvider {

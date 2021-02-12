@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dal;
+package com.kenstevens.stratinit.repo;
 
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface NationDal extends JpaRepository<Nation, Integer> {
+public interface NationRepo extends JpaRepository<Nation, Integer> {
     List<Nation> findByNationPKGame(Game game);
 }

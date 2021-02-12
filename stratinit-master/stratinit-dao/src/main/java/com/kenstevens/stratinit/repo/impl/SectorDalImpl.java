@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dal.impl;
+package com.kenstevens.stratinit.repo.impl;
 
 import com.kenstevens.stratinit.model.*;
 

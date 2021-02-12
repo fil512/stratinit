@@ -1,19 +1,18 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.kenstevens.stratinit.dal.GameHistoryDal;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.GameHistoryNation;
 import com.kenstevens.stratinit.model.GameHistoryTeam;
+import com.kenstevens.stratinit.repo.GameHistoryDal;
 import com.kenstevens.stratinit.server.event.GameArchiver;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class GameArchiverTest extends TwoPlayerBase {
 	@Autowired

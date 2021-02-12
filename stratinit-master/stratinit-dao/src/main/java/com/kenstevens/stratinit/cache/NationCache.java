@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.cache;
 
 import com.google.common.collect.Collections2;
-import com.kenstevens.stratinit.dal.NationDal;
-import com.kenstevens.stratinit.dal.SectorDal;
-import com.kenstevens.stratinit.dal.UnitDal;
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.repo.NationRepo;
+import com.kenstevens.stratinit.repo.SectorDal;
+import com.kenstevens.stratinit.repo.UnitDal;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 import org.apache.commons.logging.Log;
@@ -169,11 +169,11 @@ public class NationCache extends Cacheable {
 		cityMoveCache.remove(cityMove.getCity().getCoords());
 	}
 
-	public void flush(int gameId, NationDal nationDal, SectorDal sectorDal, UnitDal unitDal) {
+	public void flush(int gameId, NationRepo nationRepo, SectorDal sectorDal, UnitDal unitDal) {
 		if (isModified()) {
 			logger.debug("Flushing " + nation + " nation for game #"
 					+ gameId);
-			nationDal.save(nation);
+			nationRepo.save(nation);
 			setModified(false);
 		}
 		if (sectorSeenCache.isModified()) {

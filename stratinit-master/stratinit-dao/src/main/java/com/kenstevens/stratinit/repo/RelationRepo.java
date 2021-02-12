@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dal;
+package com.kenstevens.stratinit.repo;
 
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Relation;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RelationDal extends JpaRepository<Relation, RelationPK> {
+public interface RelationRepo extends JpaRepository<Relation, RelationPK> {
     @Query("select r from Relation r where r.relationPK.from.nationPK.game = :game")
     List<Relation> findByGame(@Param("game") Game game);
 }

@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.wicket.provider;
 
-import com.kenstevens.stratinit.dal.GameDal;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.repo.GameRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class MessageListProvider {
     @Autowired
-    GameDal gameDal;
+    GameRepo gameRepo;
     @Autowired
     MessageDao messageDao;
 
@@ -27,7 +27,7 @@ public class MessageListProvider {
     };
 
     public List<Mail> getMessages(int gameId) {
-        Optional<Game> game = gameDal.findById(Integer.valueOf(gameId));
+        Optional<Game> game = gameRepo.findById(Integer.valueOf(gameId));
         if (!game.isPresent()) {
             return Collections.emptyList();
         }

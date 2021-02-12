@@ -1,23 +1,17 @@
 package com.kenstevens.stratinit.wicket.provider;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.kenstevens.stratinit.dal.GameHistoryDal;
-import com.kenstevens.stratinit.dal.UnitDal;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.repo.GameHistoryDal;
+import com.kenstevens.stratinit.repo.UnitDal;
 import com.kenstevens.stratinit.type.UnitType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class UnitsBuiltProvider {
@@ -40,7 +34,7 @@ public class UnitsBuiltProvider {
 		return retval;
 	}
 
-	private static Comparator<UnitsBuilt> byLove = new Comparator<UnitsBuilt>() {
+	private static final Comparator<UnitsBuilt> byLove = new Comparator<UnitsBuilt>() {
 
 		@Override
 		public int compare(UnitsBuilt o1, UnitsBuilt o2) {

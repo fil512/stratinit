@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.wicket.provider;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.model.GameHistory;
+import com.kenstevens.stratinit.rank.TeamHelper;
+import com.kenstevens.stratinit.rank.TeamProvider;
+import com.kenstevens.stratinit.rank.TeamRanker;
+import com.kenstevens.stratinit.repo.GameHistoryDal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.dal.GameHistoryDal;
-import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.rank.TeamRanker;
-import com.kenstevens.stratinit.rank.TeamHelper;
-import com.kenstevens.stratinit.rank.TeamProvider;
+import java.util.List;
 
 @Service
 public class GameRankerProvider {

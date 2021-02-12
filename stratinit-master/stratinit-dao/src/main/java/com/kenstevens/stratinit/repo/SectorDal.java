@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dal;
+package com.kenstevens.stratinit.repo;
 
 import com.kenstevens.stratinit.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
