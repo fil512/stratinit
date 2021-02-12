@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,24 +13,21 @@ import java.util.Optional;
 @Service
 public class GameLoaderImpl implements GameLoader {
     private final Log logger = LogFactory.getLog(getClass());
-    private final GameRepo gameRepo;
-    private final NationRepo nationRepo;
-    private final RelationRepo relationRepo;
-    private final SectorDal sectorDal;
-    private final UnitDal unitDal;
-    private final CityRepo cityRepo;
-    private final SectorSeenRepo sectorSeenRepo;
-    // FIXME autowire
 
-    public GameLoaderImpl(GameRepo gameRepo, NationRepo nationRepo, RelationRepo relationRepo, SectorDal sectorDal, UnitDal unitDal, CityRepo citydal, SectorSeenRepo sectorSeenRepo) {
-        this.gameRepo = gameRepo;
-        this.nationRepo = nationRepo;
-        this.relationRepo = relationRepo;
-        this.sectorDal = sectorDal;
-        this.unitDal = unitDal;
-        this.cityRepo = citydal;
-        this.sectorSeenRepo = sectorSeenRepo;
-    }
+    @Autowired
+    private GameRepo gameRepo;
+    @Autowired
+    private NationRepo nationRepo;
+    @Autowired
+    private RelationRepo relationRepo;
+    @Autowired
+    private SectorDal sectorDal;
+    @Autowired
+    private UnitDal unitDal;
+    @Autowired
+    private CityRepo cityRepo;
+    @Autowired
+    private SectorSeenRepo sectorSeenRepo;
 
     public GameCache loadGame(int gameId) {
         logger.info("Loading game #" + gameId + " into cache.");

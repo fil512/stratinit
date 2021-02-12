@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.kenstevens.stratinit.dal")
+@EnableJpaRepositories(basePackages = "com.kenstevens.stratinit.repo")
 @PropertySource("persistence.properties")
 @EnableTransactionManagement
 @ComponentScan
