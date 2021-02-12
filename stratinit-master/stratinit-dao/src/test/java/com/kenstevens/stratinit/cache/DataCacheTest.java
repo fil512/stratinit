@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.repo.SectorDal;
+import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class DataCacheTest extends StratInitTest {
 	@Autowired
 	SectorDao sectorDao;
 	@Autowired
-	SectorDal sectorDal;
+	SectorRepo sectorRepo;
 
 	@Test
 	public void getGameCachesNoReturnDisabledGames() {

@@ -21,11 +21,13 @@ public class GameLoaderImpl implements GameLoader {
     @Autowired
     private RelationRepo relationRepo;
     @Autowired
-    private SectorDal sectorDal;
+    private SectorRepo sectorRepo;
     @Autowired
     private UnitDal unitDal;
     @Autowired
     private CityRepo cityRepo;
+    @Autowired
+    private CityMoveRepo cityMoveRepo;
     @Autowired
     private SectorSeenRepo sectorSeenRepo;
 
@@ -66,7 +68,7 @@ public class GameLoaderImpl implements GameLoader {
             clearBadUnitMoves(badUnitMoves);
             logger.info("Getting City Moves");
 
-            List<CityMove> badCityMoves = gameCache.setCityMoves(sectorDal.getCityMoves(gameCache.getGame()));
+            List<CityMove> badCityMoves = gameCache.setCityMoves(cityMoveRepo.findByGame(gameCache.getGame()));
             clearBadCityMoves(badCityMoves);
         }
         logger.info("Game #" + gameId + " loaded.");
@@ -75,7 +77,7 @@ public class GameLoaderImpl implements GameLoader {
 
     private World getWorld(Game game) {
         World world = new World(game, false);
-        List<Sector> sectors = sectorDal.findByGame(game);
+        List<Sector> sectors = sectorRepo.findByGame(game);
         for (Sector sector : sectors) {
             world.setSector(sector);
         }
@@ -92,7 +94,7 @@ public class GameLoaderImpl implements GameLoader {
     private void clearBadCityMoves(List<CityMove> badCityMoves) {
         for (CityMove cityMove : badCityMoves) {
             logger.warn("Removing bad city move id#" + cityMove.getId());
-            sectorDal.remove(cityMove);
+            cityMoveRepo.delete(cityMove);
         }
     }
 
@@ -111,9 +113,9 @@ public class GameLoaderImpl implements GameLoader {
     }
 
     public void flush(GameCache gameCache) {
-        gameCache.flush(gameRepo, relationRepo, sectorDal);
+        gameCache.flush(gameRepo, relationRepo, sectorRepo);
         for (NationCache nationCache : gameCache.getNationCaches()) {
-            nationCache.flush(gameCache.getGameId(), nationRepo, sectorDal, unitDal);
+            nationCache.flush(gameCache.getGameId(), nationRepo, sectorRepo, cityRepo, sectorSeenRepo, unitDal);
         }
     }
 }

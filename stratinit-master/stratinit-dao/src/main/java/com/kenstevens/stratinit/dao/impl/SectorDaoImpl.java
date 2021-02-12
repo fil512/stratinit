@@ -10,7 +10,10 @@ import com.kenstevens.stratinit.dao.impl.predicates.BaseCityPredicate;
 import com.kenstevens.stratinit.dao.impl.predicates.OtherNationPredicate;
 import com.kenstevens.stratinit.dao.impl.predicates.SeesSectorPredicate;
 import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.repo.SectorDal;
+import com.kenstevens.stratinit.repo.CityMoveRepo;
+import com.kenstevens.stratinit.repo.CityRepo;
+import com.kenstevens.stratinit.repo.SectorRepo;
+import com.kenstevens.stratinit.repo.SectorSeenRepo;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -28,7 +31,13 @@ import static com.google.common.base.Predicates.and;
 @Service
 public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	@Autowired
-	private SectorDal sectorDal;
+	private SectorRepo sectorRepo;
+	@Autowired
+	private SectorSeenRepo sectorSeenRepo;
+	@Autowired
+	private CityRepo cityRepo;
+	@Autowired
+	private CityMoveRepo cityMoveRepo;
 
 	@Override
 	public City findCity(CityPK cityPK) {
@@ -165,25 +174,27 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void save(City city) {
-		sectorDal.persist(city);
+		cityRepo.save(city);
 		getGameCache(city.getGame()).add(city);
 	}
 
 	@Override
 	public void save(SectorSeen sectorSeen) {
-		sectorDal.persist(sectorSeen);
+		sectorSeenRepo.save(sectorSeen);
 		getNationCache(sectorSeen.getNation()).add(sectorSeen);
 	}
 
 	@Override
 	public void save(World world) {
-		sectorDal.persist(world);
+		for (Sector sector : world.getSectors()) {
+			sectorRepo.save(sector);
+		}
 		getGameCache(world.getGame()).setWorld(world);
 	}
 
 	@Override
-	public void remove(City city) {
-		sectorDal.remove(city);
+	public void delete(City city) {
+		cityRepo.delete(city);
 		getGameCache(city.getGame()).remove(city);
 	}
 
@@ -234,10 +245,10 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void clearCityMove(City city) {
-		List<CityMove> cityMoves = sectorDal.findCityMoves(city);
+		List<CityMove> cityMoves = cityMoveRepo.findByCity(city);
 		city.setCityMove(null);
 		for (CityMove cityMove : cityMoves) {
-			remove(cityMove);
+			delete(cityMove);
 		}
 	}
 
@@ -252,7 +263,7 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void merge(CityMove cityMove) {
-		sectorDal.flush(cityMove);
+		cityMoveRepo.save(cityMove);
 	}
 
 	@Override
@@ -261,13 +272,13 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 		if (city == null) {
 			return;
 		}
-		sectorDal.persist(cityMove);
+		cityMoveRepo.save(cityMove);
 		getNationCache(city.getNation()).add(cityMove);
 	}
 
 	@Override
-	public void remove(CityMove cityMove) {
-		sectorDal.remove(cityMove);
+	public void delete(CityMove cityMove) {
+		cityMoveRepo.delete(cityMove);
 		getNationCache(cityMove.getCity().getNation()).remove(cityMove);
 	}
 

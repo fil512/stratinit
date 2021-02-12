@@ -57,13 +57,7 @@ public class SectorDalImpl {
 		}
 	}
 
-	public List<CityMove> findCityMoves(City city) {
-		return entityManager
-				.createQuery(
-						"from CityMove cm where cm.city = :city")
-				.setParameter("city", city).getResultList();
-	}
-	
+
 	public void flush(CityMove cityMove) {
 		entityManager.merge(cityMove);
 		

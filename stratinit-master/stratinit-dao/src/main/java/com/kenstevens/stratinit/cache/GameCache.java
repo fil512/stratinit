@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.RelationRepo;
-import com.kenstevens.stratinit.repo.SectorDal;
+import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -236,7 +236,7 @@ public class GameCache extends Cacheable {
 		getNationCache(unit.getNation()).remove(unit);
 	}
 
-	public void flush(GameRepo gameRepo, RelationRepo relationRepo, SectorDal sectorDal) {
+	public void flush(GameRepo gameRepo, RelationRepo relationRepo, SectorRepo sectorRepo) {
 		if (isModified()) {
 			log.debug("Flushing game #" + getGameId());
 			gameRepo.save(game);
@@ -245,7 +245,7 @@ public class GameCache extends Cacheable {
 		}
 		if (worldCache != null && worldCache.isModified()) {
 			log.debug("Flushing world for game #" + getGameId());
-			sectorDal.flushSectors(getSectors());
+			sectorRepo.saveAll(getSectors());
 			setWorldModified(false);
 		}
 	}

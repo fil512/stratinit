@@ -549,7 +549,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	public void remove(City city) {
 		eventQueue.cancel(city);
 		clearCityMove(city);
-		sectorDao.remove(city);
+		sectorDao.delete(city);
 	}
 	
 	@Override
@@ -567,7 +567,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	@Override
 	public void removeCityMoves(Game game) {
 		for (CityMove cityMove : Lists.newArrayList(sectorDao.getCityMoves(game))) {
-			sectorDao.remove(cityMove);
+			sectorDao.delete(cityMove);
 		}
 	}
 

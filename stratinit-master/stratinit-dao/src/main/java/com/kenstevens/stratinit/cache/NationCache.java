@@ -2,9 +2,7 @@ package com.kenstevens.stratinit.cache;
 
 import com.google.common.collect.Collections2;
 import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.repo.NationRepo;
-import com.kenstevens.stratinit.repo.SectorDal;
-import com.kenstevens.stratinit.repo.UnitDal;
+import com.kenstevens.stratinit.repo.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 import org.apache.commons.logging.Log;
@@ -169,7 +167,8 @@ public class NationCache extends Cacheable {
 		cityMoveCache.remove(cityMove.getCity().getCoords());
 	}
 
-	public void flush(int gameId, NationRepo nationRepo, SectorDal sectorDal, UnitDal unitDal) {
+	// FIXME move to service
+	public void flush(int gameId, NationRepo nationRepo, SectorRepo sectorRepo, CityRepo cityRepo, SectorSeenRepo sectorSeenRepo, UnitDal unitDal) {
 		if (isModified()) {
 			logger.debug("Flushing " + nation + " nation for game #"
 					+ gameId);
@@ -179,14 +178,14 @@ public class NationCache extends Cacheable {
 		if (sectorSeenCache.isModified()) {
 			logger.debug("Flushing sectors seen for " + nation
 					+ " nation for game #" + gameId);
-			sectorDal.flushSectorsSeen(getSectorsSeen());
+			sectorSeenRepo.saveAll(getSectorsSeen());
 			setSectorSeenModified(false);
 		}
 		if (cityCache.isModified()) {
 			logger.debug("Flushing cities for " + nation
 					+ " nation for game #" + gameId);
 			for (City city : getCities()) {
-				sectorDal.flush(city);
+				cityRepo.save(city);
 			}
 			setCityCacheModified(false);
 		}
