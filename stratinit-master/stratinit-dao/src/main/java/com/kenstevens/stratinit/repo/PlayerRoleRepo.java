@@ -12,4 +12,6 @@ public interface PlayerRoleRepo extends JpaRepository<PlayerRole, Integer> {
 	PlayerRole findByPlayerAndRoleName(Player player, String roleName);
 
 	List<PlayerRole> findByPlayer(Player player);
+
+	void deleteByPlayerUsername(String username);
 }

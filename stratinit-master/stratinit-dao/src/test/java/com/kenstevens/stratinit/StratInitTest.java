@@ -29,6 +29,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {TestConfig.class})
 public abstract class StratInitTest {
+	public static final String TEST_PLAYER1_USERNAME = "a";
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@PersistenceContext
@@ -60,7 +61,7 @@ public abstract class StratInitTest {
 			SessionImpl session = (SessionImpl) entityManager.getDelegate();
 			assertTrue("RUNNING IN H2", session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect);
 			initialized = true;
-			testPlayer1 = new Player("a");
+			testPlayer1 = new Player(TEST_PLAYER1_USERNAME);
 			testPlayer1.setEmail("foo@foo.com");
 			playerDao.save(testPlayer1);
 			testPlayer2 = new Player("b");

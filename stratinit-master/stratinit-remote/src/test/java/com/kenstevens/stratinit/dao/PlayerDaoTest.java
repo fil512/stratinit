@@ -23,9 +23,9 @@ public class PlayerDaoTest extends StratInitWebBase {
 			assertPlayer(PLAYER_ME_NAME);
 			assertPlayer(PLAYER2_NAME);
 		} finally {
-			playerDao.remove(PLAYER_ME_NAME);
-			playerDao.remove(PLAYER2_NAME);
-		}
+            playerDao.deleteByUsername(PLAYER_ME_NAME);
+            playerDao.deleteByUsername(PLAYER2_NAME);
+        }
 	}
 
 	private void assertPlayer(String username) {

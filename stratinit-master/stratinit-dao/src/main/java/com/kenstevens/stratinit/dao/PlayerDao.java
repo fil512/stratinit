@@ -15,7 +15,7 @@ public interface PlayerDao {
 
 	Player find(String username);
 
-	void remove(String username);
+	void deleteByUsername(String username);
 
 	void remove(Player player);
 

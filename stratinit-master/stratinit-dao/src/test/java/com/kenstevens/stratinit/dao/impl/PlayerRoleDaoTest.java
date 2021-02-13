@@ -2,13 +2,12 @@ package com.kenstevens.stratinit.dao.impl;
 
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.PlayerRole;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.NoResultException;
+import javax.transaction.Transactional;
 
 public class PlayerRoleDaoTest extends StratInitTest {
 	@Autowired
@@ -16,6 +15,7 @@ public class PlayerRoleDaoTest extends StratInitTest {
 	private String roleName;
 
 	@Test
+	@Transactional
 	public void testPlayerPersistenceAndRemove() {
 		PlayerRole playerRole = new PlayerRole();
 		playerRole.setPlayer(testPlayer1);
@@ -25,15 +25,7 @@ public class PlayerRoleDaoTest extends StratInitTest {
 		playerDao.save(playerRole);
 
 		Assert.assertNotNull(playerDao.getPlayerRole(testPlayer1, roleName));
-	}
-
-	@Test(expected=NoResultException.class)
-	public void removeRole() {
-		String username = "testRemove";
-		Player player = new Player(username);
-		playerDao.save(player);
-		Assert.assertNotNull(playerDao.getPlayerRole(player, roleName));
-		playerDao.remove(username);
-		Assert.assertNull(playerDao.getPlayerRole(player, roleName));
+		playerDao.deleteByUsername(TEST_PLAYER1_USERNAME);
+		Assert.assertNull(playerDao.getPlayerRole(testPlayer1, roleName));
 	}
 }

@@ -46,7 +46,8 @@ public class PlayerDaoImpl implements PlayerDao {
 	}
 
 	@Override
-	public void remove(String username) {
+	public void deleteByUsername(String username) {
+		playerRoleRepo.deleteByPlayerUsername(username);
 		playerRepo.deleteByUsername(username);
 	}
 
