@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.repo.GameHistoryDal;
-import com.kenstevens.stratinit.repo.UnitDal;
+import com.kenstevens.stratinit.repo.UnitBuildAuditRepo;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,8 @@ public class UnitsBuiltProvider {
 	@Autowired
 	GameHistoryDal gameHistoryDal;
 	@Autowired
-	UnitDal unitDal;
+	UnitBuildAuditRepo unitBuildAuditRepo;
+
 	Map<String, Integer> buildCount = Maps.newHashMap();
 
 	public List<GameUnitsBuilt> getUnitsBuilt() {
@@ -76,8 +77,7 @@ public class UnitsBuiltProvider {
 
 	private Map<UnitType, UnitsBuilt> getGameUnitsMap(GameHistory game) {
 		Map<UnitType, UnitsBuilt> unitsBuiltMap = newMap(game.getGameId());
-		List<UnitBuildAudit> buildAudits = unitDal.getBuildAudits(game
-				.getGameId());
+		List<UnitBuildAudit> buildAudits = unitBuildAuditRepo.findByGameId(game.getGameId());
 		for (UnitBuildAudit buildAudit : buildAudits) {
 			UnitsBuilt unitsBuilt = unitsBuiltMap.get(buildAudit.getType());
 			unitsBuilt.increment();

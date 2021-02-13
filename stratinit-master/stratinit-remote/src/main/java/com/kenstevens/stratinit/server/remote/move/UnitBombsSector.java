@@ -1,22 +1,16 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 @Scope("prototype")
 @Component
@@ -65,7 +59,7 @@ public class UnitBombsSector {
 		if (!target.isAlive()) {
 			unitAttackedBattleLog.setDefenderDied(true);
 		}
-		logDaoService.persist(unitAttackedBattleLog);
+		logDaoService.save(unitAttackedBattleLog);
 		return new Result<None>(new SIBattleLog(actor, unitAttackedBattleLog));
 	}
 }

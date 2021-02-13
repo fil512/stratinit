@@ -396,7 +396,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 						.getNation(), RelationType.WAR, true);
 				retval.add(city.getNation());
 			}
-			logDaoService.persist(cityNukedBattleLog);
+			logDaoService.save(cityNukedBattleLog);
 			remove(city);
 			sector.setType(SectorType.WASTELAND);
 			sectorDao.merge(sector);
@@ -407,7 +407,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 			UnitAttackedBattleLog unitAttackedBattleLog = new UnitAttackedBattleLog(
 					AttackType.NUKE, attackerUnit, unit, sector.getCoords());
 			unitAttackedBattleLog.setDefenderDied(true);
-			logDaoService.persist(unitAttackedBattleLog);
+			logDaoService.save(unitAttackedBattleLog);
 		}
 		return retval;
 	}
@@ -523,7 +523,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		sectorDao.merge(sector);
 		CityCapturedBattleLog battleLog = new CityCapturedBattleLog(AttackType.INITIAL_ATTACK, unit,
 				null, unit.getCoords());
-		logDaoService.persist(battleLog);
+		logDaoService.save(battleLog);
 		unit.decreaseMobility(Constants.MOB_COST_TO_CREATE_CITY);
 		unitDao.merge(unit);
 		return new Result<None>("City established at " + coords + ".", true);

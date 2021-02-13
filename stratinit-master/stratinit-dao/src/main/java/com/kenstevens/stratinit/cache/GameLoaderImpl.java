@@ -23,13 +23,19 @@ public class GameLoaderImpl implements GameLoader {
     @Autowired
     private SectorRepo sectorRepo;
     @Autowired
-    private UnitDal unitDal;
-    @Autowired
     private CityRepo cityRepo;
     @Autowired
     private CityMoveRepo cityMoveRepo;
     @Autowired
     private SectorSeenRepo sectorSeenRepo;
+    @Autowired
+    private UnitSeenRepo unitSeenRepo;
+    @Autowired
+    private LaunchedSatelliteRepo launchedSatelliteRepo;
+    @Autowired
+    private UnitMoveRepo unitMoveRepo;
+    @Autowired
+    private UnitRepo unitRepo;
 
     public GameCache loadGame(int gameId) {
         logger.info("Loading game #" + gameId + " into cache.");
@@ -59,12 +65,11 @@ public class GameLoaderImpl implements GameLoader {
             gameCache.setSectorsSeen(sectorSeenRepo.findByGame(gameCache
                     .getGame()));
             logger.info("Getting Units Seen");
-            gameCache.setUnitsSeen(unitDal.getUnitsSeen(gameCache.getGame()));
+            gameCache.setUnitsSeen(unitSeenRepo.findByGame(gameCache.getGame()));
             logger.info("Getting Launched Satellites");
-            gameCache.setLaunchedSatellites(unitDal.getSatellites(gameCache
-                    .getGame()));
+            gameCache.setLaunchedSatellites(launchedSatelliteRepo.findByGame(gameCache.getGame()));
             logger.info("Getting Units Move");
-            List<UnitMove> badUnitMoves = gameCache.setUnitsMove(unitDal.getUnitsMove(gameCache.getGame()));
+            List<UnitMove> badUnitMoves = gameCache.setUnitsMove(unitMoveRepo.findByGame(gameCache.getGame()));
             clearBadUnitMoves(badUnitMoves);
             logger.info("Getting City Moves");
 
@@ -87,7 +92,7 @@ public class GameLoaderImpl implements GameLoader {
     private void clearBadUnitMoves(List<UnitMove> badUnitMoves) {
         for (UnitMove unitMove : badUnitMoves) {
             logger.warn("Removing bad unit move id#" + unitMove.getId());
-            unitDal.remove(unitMove);
+            unitMoveRepo.delete(unitMove);
         }
     }
 
@@ -106,7 +111,7 @@ public class GameLoaderImpl implements GameLoader {
     }
 
     private void setUnits(GameCache gameCache) {
-        List<Unit> units = unitDal.getUnits(gameCache.getGame());
+        List<Unit> units = unitRepo.findByGame(gameCache.getGame());
         for (Unit unit : units) {
             gameCache.add(unit);
         }
@@ -115,7 +120,7 @@ public class GameLoaderImpl implements GameLoader {
     public void flush(GameCache gameCache) {
         gameCache.flush(gameRepo, relationRepo, sectorRepo);
         for (NationCache nationCache : gameCache.getNationCaches()) {
-            nationCache.flush(gameCache.getGameId(), nationRepo, sectorRepo, cityRepo, sectorSeenRepo, unitDal);
+            nationCache.flush(gameCache.getGameId(), nationRepo, sectorRepo, cityRepo, sectorSeenRepo, unitRepo, unitSeenRepo, unitMoveRepo, launchedSatelliteRepo);
         }
     }
 }

@@ -10,9 +10,7 @@ import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dao.impl.predicates.*;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
-import com.kenstevens.stratinit.repo.UnitDal;
-import com.kenstevens.stratinit.repo.UnitRepo;
-import com.kenstevens.stratinit.repo.UnitSeenRepo;
+import com.kenstevens.stratinit.repo.*;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -21,6 +19,7 @@ import com.kenstevens.stratinit.world.predicate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,13 +31,16 @@ import static com.google.common.base.Predicates.and;
 public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	@Autowired
 	private DataCache dataCache;
-	// FIXME remove
-	@Autowired
-	private UnitDal unitDal;
 	@Autowired
 	private UnitRepo unitRepo;
 	@Autowired
 	private UnitSeenRepo unitSeenRepo;
+	@Autowired
+	private UnitMoveRepo unitMoveRepo;
+	@Autowired
+	private UnitBuildAuditRepo unitBuildAuditRepo;
+	@Autowired
+	private LaunchedSatelliteRepo launchedSatelliteRepo;
 
 	@Override
 	public Unit findUnit(Integer unitId) {
@@ -62,12 +64,13 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 
 	@Override
 	public List<UnitBuildAudit> getBuildAudits(int gameId, String username) {
-		return unitDal.getBuildAudits(gameId, username);
+		// FIXME is And right?
+		return unitBuildAuditRepo.findByGameIdAndUsername(gameId, username);
 	}
 
 	@Override
 	public List<UnitBuildAudit> getBuildAudits(Game game) {
-		return unitDal.getBuildAudits(game);
+		return unitBuildAuditRepo.findByGameId(game.getId());
 	}
 
 	@Override
@@ -190,14 +193,14 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 		if (unitSeen.isEnabled()) {
 			getNationCache(unitSeen.getNation()).setUnitSeenModified(true);
 		} else {
-			unitDal.flush(unitSeen);
+			unitSeenRepo.save(unitSeen);
 			getNationCache(unitSeen.getNation()).remove(unitSeen);
 		}
 	}
 
 	@Override
 	public void merge(UnitMove unitMove) {
-		unitDal.flush(unitMove);
+		unitMoveRepo.save(unitMove);
 	}
 
 	@Override
@@ -207,8 +210,8 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
-	public void persist(LaunchedSatellite satellite) {
-		unitDal.persist(satellite);
+	public void save(LaunchedSatellite satellite) {
+		launchedSatelliteRepo.save(satellite);
 		getNationCache(satellite.getNation()).add(satellite);
 	}
 
@@ -219,18 +222,14 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
-	public void persist(UnitMove unitMove) {
-		Unit unit = findUnit(unitMove.getUnit().getId());
-		if (unit == null) {
-			return;
-		}
-		unitDal.persist(unitMove);
-		getNationCache(unit.getNation()).add(unitMove);
+	public void save(@Nonnull UnitMove unitMove) {
+		unitMoveRepo.save(unitMove);
+		getNationCache(unitMove.getUnit().getNation()).add(unitMove);
 	}
 
 	@Override
-	public void persist(UnitBuildAudit unitBuildAudit) {
-		unitDal.persist(unitBuildAudit);
+	public void save(UnitBuildAudit unitBuildAudit) {
+		unitBuildAuditRepo.save(unitBuildAudit);
 	}
 
 	@Override
@@ -249,14 +248,14 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
-	public void remove(UnitSeen unitSeen) {
-		unitDal.remove(unitSeen);
+	public void delete(UnitSeen unitSeen) {
+		unitSeenRepo.delete(unitSeen);
 		getNationCache(unitSeen.getNation()).remove(unitSeen);
 	}
 
 	@Override
-	public void remove(UnitMove unitMove) {
-		unitDal.remove(unitMove);
+	public void delete(UnitMove unitMove) {
+		unitMoveRepo.delete(unitMove);
 		getNationCache(unitMove.getUnit().getNation()).remove(unitMove);
 	}
 
@@ -302,16 +301,13 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 
 	@Override
 	public void clearUnitMove(Unit unit) {
-		List<UnitMove> unitMoves = unitDal.findUnitMoves(unit);
+		unitMoveRepo.deleteByUnit(unit);
 		unit.setUnitMove(null);
-		for (UnitMove unitMove : unitMoves) {
-			remove(unitMove);
-		}
 	}
 
 	@Override
 	public void transferUnitSeen(UnitSeen unitSeen, Nation oldOwner) {
-		remove(unitSeen);
+		delete(unitSeen);
 		UnitSeen newUnitSeen = new UnitSeen(oldOwner, unitSeen.getUnit());
 		save(newUnitSeen);
 	}

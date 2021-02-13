@@ -1,19 +1,7 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -23,6 +11,11 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.AttackHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -76,7 +69,7 @@ public class UnitAttacksUnit {
 		if (attackType == AttackType.INTERCEPTION) {
 			defender.setIntercepted(true);
 		}
-		logDaoService.persist(unitAttackedBattleLog);
+		logDaoService.save(unitAttackedBattleLog);
 		// TODO REF need this?
 		// unitDaoService.merge(enemyUnit);
 		return new Result<None>(new SIBattleLog(actor, unitAttackedBattleLog));
@@ -194,7 +187,7 @@ public class UnitAttacksUnit {
 				parentLog.getAttackType(), parentLog.getAttackerUnit(),
 				passenger, passenger.getCoords());
 		childLog.setDefenderDied(true);
-		logDaoService.persist(childLog);
+		logDaoService.save(childLog);
 	}
 
 	private int damage(Unit attacker, Unit defender) {

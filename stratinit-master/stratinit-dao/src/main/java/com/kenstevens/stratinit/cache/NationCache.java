@@ -168,7 +168,7 @@ public class NationCache extends Cacheable {
 	}
 
 	// FIXME move to service
-	public void flush(int gameId, NationRepo nationRepo, SectorRepo sectorRepo, CityRepo cityRepo, SectorSeenRepo sectorSeenRepo, UnitDal unitDal) {
+	public void flush(int gameId, NationRepo nationRepo, SectorRepo sectorRepo, CityRepo cityRepo, SectorSeenRepo sectorSeenRepo, UnitRepo unitRepo, UnitSeenRepo unitSeenRepo, UnitMoveRepo unitMoveRepo, LaunchedSatelliteRepo launchedSatelliteRepo) {
 		if (isModified()) {
 			logger.debug("Flushing " + nation + " nation for game #"
 					+ gameId);
@@ -193,26 +193,26 @@ public class NationCache extends Cacheable {
 			logger.debug("Flushing units for " + nation
 					+ " nation for game #" + gameId);
 			for (Unit unit : getUnits()) {
-				unitDal.flush(unit);
+				unitRepo.save(unit);
 			}
 			setUnitCacheModified(false);
 		}
 		if (unitSeenCache.isModified()) {
 			logger.debug("Flushing units seen for " + nation
 					+ " nation for game #" + gameId);
-			unitDal.flushUnitsSeen(getUnitsSeen());
+			unitSeenRepo.saveAll(getUnitsSeen());
 			setUnitSeenModified(false);
 		}
 		if (unitMoveCache.isModified()) {
 			logger.debug("Flushing units move for " + nation
 					+ " nation for game #" + gameId);
-			unitDal.flushUnitsMove(getUnitsMove());
+			unitMoveRepo.saveAll(getUnitsMove());
 			setUnitMoveModified(false);
 		}
 		if (launchedSatelliteCache.isModified()) {
 			logger.debug("Flushing launched satellites for " + nation
 					+ " nation for game #" + gameId);
-			unitDal.flushLaunchedSatellites(getLaunchedSatellites());
+			launchedSatelliteRepo.saveAll(getLaunchedSatellites());
 			setLaunchedSatelliteModified(false);
 		}
 	}

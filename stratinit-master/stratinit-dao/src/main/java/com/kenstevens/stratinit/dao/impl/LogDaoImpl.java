@@ -30,8 +30,16 @@ public class LogDaoImpl implements LogDao {
     FlakBattleLogRepo flakBattleLogRepo;
 
     @Override
-    public void save(UnitAttackedBattleLog unitAttackedBattleLog) {
-        unitAttackedBattleLogRepo.save(unitAttackedBattleLog);
+    public void save(BattleLog battleLog) {
+        if (battleLog instanceof UnitAttackedBattleLog) {
+            unitAttackedBattleLogRepo.save((UnitAttackedBattleLog) battleLog);
+        } else if (battleLog instanceof CityCapturedBattleLog) {
+            cityCapturedBattleLogRepo.save((CityCapturedBattleLog) battleLog);
+        } else if (battleLog instanceof CityNukedBattleLog) {
+            cityNukedBattleLogRepo.save((CityNukedBattleLog) battleLog);
+        } else if (battleLog instanceof FlakBattleLog) {
+            flakBattleLogRepo.save((FlakBattleLog) battleLog);
+        }
     }
 
     public void save(CityCapturedBattleLog cityCapturedBattleLog) {

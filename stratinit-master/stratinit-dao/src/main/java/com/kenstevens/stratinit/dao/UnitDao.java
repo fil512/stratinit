@@ -13,7 +13,7 @@ public interface UnitDao {
 
     void save(Unit unit);
 
-    void persist(LaunchedSatellite satellite);
+    void save(LaunchedSatellite satellite);
 
     void save(UnitSeen unitSeen);
 
@@ -59,7 +59,7 @@ public interface UnitDao {
 			Nation nation, Unit unit);
 
 	Collection<Unit> getUnitsThatCanCounterFireThisUnit(CoordMeasure coordMeasure,
-			Nation nation, Unit unit, SectorCoords excludeCoords);
+														Nation nation, Unit unit, SectorCoords excludeCoords);
 
 	Collection<Nation> getOtherNationsThatSeeThisUnit(Unit unit);
 
@@ -69,11 +69,11 @@ public interface UnitDao {
 
 	List<UnitMove> getUnitMoves(Game game);
 
-	void remove(UnitSeen unitSeen);
+	void delete(UnitSeen unitSeen);
 
 	List<UnitBuildAudit> getBuildAudits(Game game);
 
-	void persist(UnitBuildAudit unitBuildAudit);
+	void save(UnitBuildAudit unitBuildAudit);
 
 	List<UnitSeen> getUnitsSeen(Unit unit);
 
@@ -84,15 +84,15 @@ public interface UnitDao {
 	void transferUnitSeen(UnitSeen unitSeen, Nation oldOwner);
 
 	Collection<Unit> getUnitsOfType(Nation nation,
-			UnitType unitType);
+									UnitType unitType);
 
 	Collection<Unit> getMissiles(Nation nation);
 
 	void merge(UnitMove unitMove);
 
-	void persist(UnitMove unitMove);
+	void save(UnitMove unitMove);
 
-	void remove(UnitMove unitMove);
+	void delete(UnitMove unitMove);
 
 	void clearUnitMove(Unit unit);
 

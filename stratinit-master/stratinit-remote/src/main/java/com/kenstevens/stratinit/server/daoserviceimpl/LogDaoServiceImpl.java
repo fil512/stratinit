@@ -14,8 +14,8 @@ public class LogDaoServiceImpl implements LogDaoService {
 	private LogDao logDao;
 	@Autowired
 	private GameDao gameDao;
-	
-	public void persist(BattleLog battleLog) {
+
+	public void save(BattleLog battleLog) {
 		logDao.save(battleLog);
 		Nation defender = battleLog.getDefender();
 		if (defender != null && battleLog.getAttackType() == AttackType.INITIAL_ATTACK) {

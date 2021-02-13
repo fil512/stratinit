@@ -1,21 +1,9 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.Collection;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.FlakBattleLog;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -25,6 +13,11 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.AttackHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
 
 @Scope("prototype")
 @Component
@@ -69,7 +62,7 @@ public class UnitAttacksSector {
 			if (!attackingUnit.isAlive()) {
 				FlakBattleLog flakBattleLog = new FlakBattleLog(AttackType.FLAK,
 						attackingUnit, targetSector.getNation(), targetSector.getCoords(), flakDamage);
-				logDaoService.persist(flakBattleLog);
+				logDaoService.save(flakBattleLog);
 				return new Result<None>(new SIBattleLog(actor, flakBattleLog), false);
 			}
 		}
@@ -105,7 +98,7 @@ public class UnitAttacksSector {
 		unitDaoService.damage(attackingUnit, Constants.CITY_CAPTURE_DAMAGE);
 		CityCapturedBattleLog battleLog = new CityCapturedBattleLog(attackType, attackingUnit,
 				oldOwner, targetSector.getCoords());
-		
+
 		if (attackingUnit.isAlive()) {
 			attackingUnit.setCoords(targetSector.getCoords());
 			attackingUnit.decreaseMobility(attackReadiness.costToAttack());
@@ -113,7 +106,7 @@ public class UnitAttacksSector {
 		} else {
 			battleLog.setAttackerDied(true);
 		}
-		logDaoService.persist(battleLog);
+		logDaoService.save(battleLog);
 		return new Result<None>(new SIBattleLog(actor, battleLog));
 	}
 }

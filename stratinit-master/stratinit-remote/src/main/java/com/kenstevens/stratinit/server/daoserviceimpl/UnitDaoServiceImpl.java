@@ -111,7 +111,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 		Unit unit = new Unit(nation, unitType, coords, buildTime);
 		unitDao.save(unit);
 		UnitBuildAudit unitBuildAudit = new UnitBuildAudit(unit);
-		unitDao.persist(unitBuildAudit);
+		unitDao.save(unitBuildAudit);
 
 		eventQueue.schedule(unit);
 		MoveSeen moveSeen = new MoveSeen(nation, sectorDaoService, this);
@@ -152,7 +152,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 
 	public void remove(UnitSeen unitSeen) {
 		eventQueue.cancel(unitSeen);
-		unitDao.remove(unitSeen);
+		unitDao.delete(unitSeen);
 	}
 
 	public void saveOrUpdate(Nation nation, Unit unit) {
@@ -204,7 +204,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 	}
 
 	public void persist(LaunchedSatellite launchedSatellite) {
-		unitDao.persist(launchedSatellite);
+		unitDao.save(launchedSatellite);
 	}
 
 	public void disable(UnitSeenPK unitSeenPK) {
@@ -360,7 +360,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 	@Override
 	public void removeUnitMoves(Game game) {
 		for (UnitMove unitMove : Lists.newArrayList(unitDao.getUnitMoves(game))) {
-			unitDao.remove(unitMove);
+			unitDao.delete(unitMove);
 		}
 	}
 
@@ -368,7 +368,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 	public void setUnitMove(Unit unit, SectorCoords targetCoords) {
 		UnitMove unitMove = new UnitMove(unit, targetCoords);
 		unit.setUnitMove(unitMove);
-		unitDao.persist(unitMove);
+		unitDao.save(unitMove);
 		merge(unit);
 	}
 
