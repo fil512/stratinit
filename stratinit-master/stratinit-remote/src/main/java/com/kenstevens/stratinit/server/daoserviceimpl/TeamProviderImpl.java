@@ -7,7 +7,8 @@ import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.rank.TeamProvider;
-import com.kenstevens.stratinit.repo.GameHistoryDal;
+import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
+import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,14 @@ import java.util.List;
 @Service
 public class TeamProviderImpl implements TeamProvider {
 	@Autowired
-	GameHistoryDal gameHistoryDal;
+	GameHistoryTeamRepo gameHistoryTeamRepo;
+	@Autowired
+	GameHistoryNationRepo gameHistoryNationRepo;
 	@Autowired
 	GameDao gameDao;
 	@Autowired
 	SectorDao sectorDao;
-	
+
 	@Override
 	public Collection<Nation> getAllies(Nation nation) {
 		return gameDao.getAllies(nation);
@@ -40,9 +43,9 @@ public class TeamProviderImpl implements TeamProvider {
 
 	@Override
 	public void getTeamsAndNations(GameHistory gameHistory, List<SITeam> teams, List<SINation> nations) {
-		List<GameHistoryTeam> gameHistoryTeams = gameHistoryDal.getGameHistoryTeams(gameHistory);
+		List<GameHistoryTeam> gameHistoryTeams = gameHistoryTeamRepo.findByGameHistory(gameHistory);
 		for (GameHistoryTeam gameHistoryTeam : gameHistoryTeams) {
-			List<GameHistoryNation> gameHistoryNations = gameHistoryDal.getGameHistoryNations(gameHistoryTeam);
+			List<GameHistoryNation> gameHistoryNations = gameHistoryNationRepo.findByGameHistoryTeam(gameHistoryTeam);
 			addTeam(teams, gameHistoryNations);
 			addNations(nations, gameHistoryNations);
 		}

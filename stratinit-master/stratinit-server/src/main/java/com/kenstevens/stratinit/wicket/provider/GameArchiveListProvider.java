@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.rank.TeamProvider;
-import com.kenstevens.stratinit.repo.GameHistoryDal;
+import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +15,14 @@ import java.util.List;
 @Service
 public class GameArchiveListProvider implements GameListProvider {
 	@Autowired
-	GameHistoryDal gameHistoryDal;
+	GameHistoryRepo gameHistoryRepo;
 	@Autowired
 	TeamProvider teamProvider;
 
 	@Override
 	public List<GameTable> getGameTableList() {
 		List<GameTable> retval = new ArrayList<GameTable>();
-		List<GameHistory> games = gameHistoryDal.getAllGameHistories();
+		List<GameHistory> games = gameHistoryRepo.findAll();
 		for (GameHistory gameHistory : games) {
 			GameTable gameTable = new GameTable(gameHistory);
 			setTeams(gameHistory, gameTable);
@@ -35,7 +35,7 @@ public class GameArchiveListProvider implements GameListProvider {
 	public List<SINation> getNations(int gameId) {
 		List<SINation> nations = Lists.newArrayList();
 		List<SITeam> teams = Lists.newArrayList();
-		GameHistory gameHistory = gameHistoryDal.getGameHistoryByGameId(gameId);
+		GameHistory gameHistory = gameHistoryRepo.findByGameId(gameId);
 		teamProvider.getTeamsAndNations(gameHistory, teams, nations);
 		return nations;
 	}

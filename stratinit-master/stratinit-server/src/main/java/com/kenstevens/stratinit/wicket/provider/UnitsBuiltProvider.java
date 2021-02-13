@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
-import com.kenstevens.stratinit.repo.GameHistoryDal;
+import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import com.kenstevens.stratinit.repo.UnitBuildAuditRepo;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.*;
 @Service
 public class UnitsBuiltProvider {
 	@Autowired
-	GameHistoryDal gameHistoryDal;
+	GameHistoryRepo gameHistoryRepo;
 	@Autowired
 	UnitBuildAuditRepo unitBuildAuditRepo;
 
@@ -24,7 +24,7 @@ public class UnitsBuiltProvider {
 
 	public List<GameUnitsBuilt> getUnitsBuilt() {
 		List<GameUnitsBuilt> retval = Lists.newArrayList();
-		List<GameHistory> games = gameHistoryDal.getAllGameHistories();
+		List<GameHistory> games = gameHistoryRepo.findAll();
 		Collections.reverse(games);
 		for (GameHistory game : games) {
 			GameUnitsBuilt gameUnitsBuilt = new GameUnitsBuilt(game);
@@ -64,9 +64,9 @@ public class UnitsBuiltProvider {
 
 	public List<List<Object>> getUnitLove(int gameId) {
 		List<List<Object>> retval = Lists.newArrayList();
-		GameHistory game = gameHistoryDal.getGameHistoryByGameId(gameId);
+		GameHistory game = gameHistoryRepo.findByGameId(gameId);
 		Map<UnitType, UnitsBuilt> unitsBuiltMap = getGameUnitsMap(game);
-		for (UnitType unitType: UnitBase.orderedUnitTypes()) {
+		for (UnitType unitType : UnitBase.orderedUnitTypes()) {
 			List<Object> row = Lists.newArrayList();
 			row.add(JavaScriptHelper.unitTypeAsJSString(unitType));
 			row.add(unitsBuiltMap.get(unitType).getLove());

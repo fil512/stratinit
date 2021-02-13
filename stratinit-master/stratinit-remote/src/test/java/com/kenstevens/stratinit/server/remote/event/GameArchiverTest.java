@@ -3,7 +3,9 @@ package com.kenstevens.stratinit.server.remote.event;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.GameHistoryNation;
 import com.kenstevens.stratinit.model.GameHistoryTeam;
-import com.kenstevens.stratinit.repo.GameHistoryDal;
+import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
+import com.kenstevens.stratinit.repo.GameHistoryRepo;
+import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
 import com.kenstevens.stratinit.server.event.GameArchiver;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import org.junit.Test;
@@ -18,13 +20,16 @@ public class GameArchiverTest extends TwoPlayerBase {
 	@Autowired
 	GameArchiver gameArchiver;
 	@Autowired
-	GameHistoryDal gameHistoryDal;
+	GameHistoryRepo gameHistoryRepo;
+	@Autowired
+	GameHistoryTeamRepo gameHistoryTeamRepo;
+	@Autowired
+	GameHistoryNationRepo gameHistoryNationRepo;
 
 	@Test
 	public void gameHistoryUpdated() {
 		gameArchiver.archive(testGame);
-		GameHistory gameHistory = gameHistoryDal
-				.getGameHistoryByGameId(testGame.getId());
+		GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId());
 		assertNotNull(gameHistory);
 		assertEquals(testGame.getStartTime(), gameHistory.getStartTime());
 		assertEquals(testGame.getDuration(), gameHistory.getDuration());
@@ -37,24 +42,19 @@ public class GameArchiverTest extends TwoPlayerBase {
 	@Test
 	public void gameHistoryTeamUpdated() {
 		gameArchiver.archive(testGame);
-		GameHistory gameHistory = gameHistoryDal
-				.getGameHistoryByGameId(testGame.getId());
-		List<GameHistoryTeam> gameHistoryTeams = gameHistoryDal
-				.getGameHistoryTeams(gameHistory);
+		GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId());
+		List<GameHistoryTeam> gameHistoryTeams = gameHistoryTeamRepo.findByGameHistory(gameHistory);
 		assertEquals(2, gameHistoryTeams.size());
 	}
 
 	@Test
 	public void gameHistoryNationUpdated() {
 		gameArchiver.archive(testGame);
-		GameHistory gameHistory = gameHistoryDal
-				.getGameHistoryByGameId(testGame.getId());
-		List<GameHistoryTeam> gameHistoryTeams = gameHistoryDal
-				.getGameHistoryTeams(gameHistory);
+		GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId());
+		List<GameHistoryTeam> gameHistoryTeams = gameHistoryTeamRepo.findByGameHistory(gameHistory);
 		int i = 0;
 		for (GameHistoryTeam gameHistoryTeam : gameHistoryTeams) {
-			List<GameHistoryNation> nations = gameHistoryDal
-					.getGameHistoryNations(gameHistoryTeam);
+			List<GameHistoryNation> nations = gameHistoryNationRepo.findByGameHistoryTeam(gameHistoryTeam);
 			assertEquals(1, nations.size());
 			GameHistoryNation nation = nations.get(0);
 			if (i++ == 0) {

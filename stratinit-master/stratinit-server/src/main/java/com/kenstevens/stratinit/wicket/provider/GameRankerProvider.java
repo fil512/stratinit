@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.rank.TeamHelper;
 import com.kenstevens.stratinit.rank.TeamProvider;
 import com.kenstevens.stratinit.rank.TeamRanker;
-import com.kenstevens.stratinit.repo.GameHistoryDal;
+import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,12 @@ public class GameRankerProvider {
 	@Autowired
 	TeamProvider teamProvider;
 	@Autowired
-	GameHistoryDal gameHistoryDal;
+	GameHistoryRepo gameHistoryRepo;
 	
 	public TeamRanker getGameRanker() {
 		TeamHelper teamHelper = new TeamHelper(teamProvider);
 		TeamRanker teamRanker = new TeamRanker(teamHelper);
-		List<GameHistory> games = gameHistoryDal.getAllGameHistories();
+		List<GameHistory> games = gameHistoryRepo.findAll();
 		for (GameHistory game : games) {
 			teamRanker.rank(game);
 		}

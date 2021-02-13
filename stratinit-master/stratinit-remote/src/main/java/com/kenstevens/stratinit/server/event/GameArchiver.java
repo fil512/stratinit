@@ -1,25 +1,19 @@
 package com.kenstevens.stratinit.server.event;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.PlayerDao;
+import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.server.daoservice.GameHistoryDaoService;
+import com.kenstevens.stratinit.server.daoservice.TeamCalculator;
+import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.model.GameHistoryNation;
-import com.kenstevens.stratinit.model.GameHistoryTeam;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.server.daoservice.GameHistoryDaoService;
-import com.kenstevens.stratinit.server.daoservice.TeamCalculator;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import java.util.List;
 
 @Service
 public class GameArchiver {
@@ -40,11 +34,11 @@ public class GameArchiver {
 
 	public void archive(Game game) {
 		GameHistory gameHistory = new GameHistory(game);
-		gameHistoryDaoService.persist(gameHistory);
+		gameHistoryDaoService.save(gameHistory);
 		List<SITeam> teams = teamCalculator.getTeams(game);
 		for (SITeam team : teams) {
 			GameHistoryTeam gameHistoryTeam = new GameHistoryTeam(gameHistory);
-			gameHistoryDaoService.persist(gameHistoryTeam);
+			gameHistoryDaoService.save(gameHistoryTeam);
 			archiveTeam(gameHistoryTeam, game, team);
 		}
 	}
@@ -66,12 +60,12 @@ public class GameArchiver {
 		}
 		Nation nation = gameDao.findNation(game, player);
 		if (nation == null) {
-			logger.error("Unable to find player "+player+" in game "+game+".  Not archiving team.");
+			logger.error("Unable to find player " + player + " in game " + game + ".  Not archiving team.");
 			return;
 		}
 		int cities = sectorDao.getNumberOfCities(nation);
 		int power = unitDaoService.getPower(nation);
 		GameHistoryNation gameHistoryNation = new GameHistoryNation(gameHistoryTeam, nationName, cities, power);
-		gameHistoryDaoService.persist(gameHistoryNation);
+		gameHistoryDaoService.save(gameHistoryNation);
 	}
 }

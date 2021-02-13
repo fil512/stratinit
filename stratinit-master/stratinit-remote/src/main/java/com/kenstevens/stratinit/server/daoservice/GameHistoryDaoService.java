@@ -6,7 +6,9 @@ import com.kenstevens.stratinit.model.GameHistoryTeam;
 
 
 public interface GameHistoryDaoService {
-	void persist(GameHistory gameHistory);
-	void persist(GameHistoryTeam gameHistoryTeam);
-	void persist(GameHistoryNation gameHistoryNation);
+	void save(GameHistory gameHistory);
+
+	void save(GameHistoryTeam gameHistoryTeam);
+
+	void save(GameHistoryNation gameHistoryNation);
 }
