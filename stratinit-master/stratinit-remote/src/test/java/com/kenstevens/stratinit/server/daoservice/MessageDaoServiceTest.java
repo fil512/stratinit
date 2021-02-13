@@ -1,8 +1,10 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
+import com.kenstevens.stratinit.dao.MessageDao;
+import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
+import com.kenstevens.stratinit.server.remote.mail.MailService;
+import com.kenstevens.stratinit.server.remote.mail.MailTemplate;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -11,14 +13,11 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.kenstevens.stratinit.dao.MessageDao;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
-import com.kenstevens.stratinit.server.remote.mail.MailService;
-import com.kenstevens.stratinit.server.remote.mail.MailTemplate;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class MessageDaoServiceTest extends TwoPlayerBase {
-	private Mockery context = new Mockery();
+	private final Mockery context = new Mockery();
 	private MailService mailService;
 	private MessageDao messageDao;
 
@@ -54,7 +53,7 @@ public class MessageDaoServiceTest extends TwoPlayerBase {
 		context.checking(new Expectations() {
 			{
 				oneOf(mailService).sendEmail(with(same(playerThem)), with(any(MailTemplate.class)));
-				oneOf(messageDao).persist(with(any(Mail.class)));
+				oneOf(messageDao).save(with(any(Mail.class)));
 			}
 		});
 		Mail result = messageDaoService.sendMail(nationMe, nationThem, "test subject", "test body");
@@ -69,7 +68,7 @@ public class MessageDaoServiceTest extends TwoPlayerBase {
 	public void sendMessageBoard() {
 		context.checking(new Expectations() {
 			{
-				oneOf(messageDao).persist(with(any(Mail.class)));
+				oneOf(messageDao).save(with(any(Mail.class)));
 			}
 		});
 		Mail result = messageDaoService.sendMail(nationMe, null, "test subject", "test body");

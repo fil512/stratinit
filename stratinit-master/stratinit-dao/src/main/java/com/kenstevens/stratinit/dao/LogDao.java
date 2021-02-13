@@ -1,19 +1,12 @@
 package com.kenstevens.stratinit.dao;
 
-import java.util.List;
+import com.kenstevens.stratinit.model.*;
 
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.CityNukedBattleLog;
-import com.kenstevens.stratinit.model.ErrorLog;
-import com.kenstevens.stratinit.model.FlakBattleLog;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
+import java.util.List;
 
 public interface LogDao {
 
-	void persist(BattleLog battleLog);
+	void save(BattleLog battleLog);
 
 	List<CityCapturedBattleLog> getCityCapturedBattleLogs(
 			Nation nation);
@@ -23,7 +16,7 @@ public interface LogDao {
 
 	List<FlakBattleLog> getFlakBattleLogs(Nation nation);
 
-	void remove(CityCapturedBattleLog log);
+	void delete(CityCapturedBattleLog log);
 
 	void remove(UnitAttackedBattleLog log);
 

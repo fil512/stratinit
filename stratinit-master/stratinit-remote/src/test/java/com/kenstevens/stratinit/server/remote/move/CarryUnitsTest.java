@@ -1,12 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -14,6 +7,12 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class CarryUnitsTest extends StratInitWebBase {
 	@Autowired
@@ -177,7 +176,7 @@ public class CarryUnitsTest extends StratInitWebBase {
 	public void helicopterNoDragsHurtInfFromCity() {
 		Unit inf = unitDaoService.buildUnit(nationMe, PORT, UnitType.INFANTRY);
 		inf.damage(4);
-		unitDao.persist(inf);
+		unitDao.save(inf);
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);
 		Unit heli = unitDaoService.buildUnit(nationMe, PORT,
 				UnitType.HELICOPTER);
@@ -192,7 +191,7 @@ public class CarryUnitsTest extends StratInitWebBase {
 	public void helicopterNoDragsNoMobInfFromCity() {
 		Unit inf = unitDaoService.buildUnit(nationMe, PORT, UnitType.INFANTRY);
 		inf.decreaseMobility(inf.getMobility());
-		unitDao.persist(inf);
+		unitDao.save(inf);
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);
 		Unit heli = unitDaoService.buildUnit(nationMe, PORT,
 				UnitType.HELICOPTER);

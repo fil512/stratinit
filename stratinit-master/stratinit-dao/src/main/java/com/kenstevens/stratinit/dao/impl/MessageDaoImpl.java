@@ -1,28 +1,30 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
+import com.kenstevens.stratinit.repo.MailRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("unchecked")
 @Service
 public class MessageDaoImpl implements MessageDao {
 	@PersistenceContext
 	protected EntityManager entityManager;
+	@Autowired
+	MailRepo mailRepo;
 
 	@Override
-	public void persist(Mail mail) {
-		entityManager.persist(mail);
+	public void save(Mail mail) {
+		mailRepo.save(mail);
 	}
 
 	@Override

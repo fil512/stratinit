@@ -1,35 +1,10 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityPK;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.MoveCost;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.UnitMove;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.model.UnitSeenPK;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
@@ -47,6 +22,10 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.ContainerUnit;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class UnitDaoServiceImpl implements UnitDaoService {
@@ -130,7 +109,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 			return null;
 		}
 		Unit unit = new Unit(nation, unitType, coords, buildTime);
-		unitDao.persist(unit);
+		unitDao.save(unit);
 		UnitBuildAudit unitBuildAudit = new UnitBuildAudit(unit);
 		unitDao.persist(unitBuildAudit);
 

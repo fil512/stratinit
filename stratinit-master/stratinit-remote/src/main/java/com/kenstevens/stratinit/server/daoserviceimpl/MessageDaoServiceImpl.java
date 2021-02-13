@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
@@ -15,6 +10,10 @@ import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
 import com.kenstevens.stratinit.server.remote.helper.NewsLogBuilder;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplateLibrary;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MessageDaoServiceImpl implements MessageDaoService {
@@ -29,7 +28,7 @@ public class MessageDaoServiceImpl implements MessageDaoService {
 
 	public Mail sendMail(Nation from, Nation to, String subject, String body) {
 		Mail mail = new Mail(from.getGame(), from, to, subject, body);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 		newMail(to);
 		if (to != null && to.getPlayer().isEmailGameMail()) {
 			mailService.sendEmail(to.getPlayer(), MailTemplateLibrary.getGameEmail(from, subject, body));
@@ -47,13 +46,13 @@ public class MessageDaoServiceImpl implements MessageDaoService {
 
 	public void notify(Nation to, String subject, String body) {
 		Mail mail = new Mail(to.getGame(), null, to, subject, body);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 		newMail(to);
 	}
 
 	public void postBulletin(Game game, String subject, String body) {
 		Mail mail = new Mail(game, null, null, subject, body);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 	}
 
 	@Override

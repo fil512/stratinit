@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Mail;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class MessageDaoTest extends StratInitTest {
 	private static final String SUB = "subject";
@@ -21,7 +20,7 @@ public class MessageDaoTest extends StratInitTest {
 	public void testMail() {
 		createNation2();
 		Mail mail = new Mail(testGame, testNation1, testNation2, SUB, BOD);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 		List<Mail> messages = messageDao.getSentMail(testNation1);
 		assertMessage(mail, messages);
 		messages = messageDao.getMail(testNation2);
@@ -32,7 +31,7 @@ public class MessageDaoTest extends StratInitTest {
 	public void testAnno() {
 		createNation1();
 		Mail mail = new Mail(testGame, testNation1, null, SUB, BOD);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 		List<Mail> messages = messageDao.getSentMail(testNation1);
 		assertMessage(mail, messages);
 		messages = messageDao.getAnnouncements(testGame);
@@ -43,7 +42,7 @@ public class MessageDaoTest extends StratInitTest {
 	public void testNews() {
 		createGame();
 		Mail mail = new Mail(testGame, null, null, SUB, BOD);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 		List<Mail> messages = messageDao.getBulletins(testGame);
 		assertMessage(mail, messages);
 	}
@@ -52,7 +51,7 @@ public class MessageDaoTest extends StratInitTest {
 	public void testNotification() {
 		createNation1();
 		Mail mail = new Mail(testGame, null, testNation1, SUB, BOD);
-		messageDao.persist(mail);
+		messageDao.save(mail);
 		List<Mail> messages = messageDao.getNotifications(testNation1);
 		assertMessage(mail, messages);
 	}

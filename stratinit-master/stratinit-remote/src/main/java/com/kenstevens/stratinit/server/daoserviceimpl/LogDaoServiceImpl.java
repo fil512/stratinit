@@ -1,17 +1,11 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.LogDao;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.ErrorLog;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class LogDaoServiceImpl implements LogDaoService {
@@ -22,7 +16,7 @@ public class LogDaoServiceImpl implements LogDaoService {
 	private GameDao gameDao;
 	
 	public void persist(BattleLog battleLog) {
-		logDao.persist(battleLog);
+		logDao.save(battleLog);
 		Nation defender = battleLog.getDefender();
 		if (defender != null && battleLog.getAttackType() == AttackType.INITIAL_ATTACK) {
 			defender.setNewBattle(true);

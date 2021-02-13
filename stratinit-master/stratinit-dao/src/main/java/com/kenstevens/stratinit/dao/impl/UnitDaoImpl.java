@@ -11,6 +11,7 @@ import com.kenstevens.stratinit.dao.impl.predicates.*;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.repo.UnitDal;
+import com.kenstevens.stratinit.repo.UnitRepo;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -29,8 +30,11 @@ import static com.google.common.base.Predicates.and;
 public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	@Autowired
 	private DataCache dataCache;
+	// FIXME remove
 	@Autowired
 	private UnitDal unitDal;
+	@Autowired
+	private UnitRepo unitRepo;
 
 	@Override
 	public Unit findUnit(Integer unitId) {
@@ -172,7 +176,7 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 		if (unit.isAlive()) {
 			getNationCache(unit.getNation()).setUnitCacheModified(true);
 		} else {
-			unitDal.flush(unit);
+			unitRepo.save(unit);
 			getGameCache(unit.getGame()).remove(unit);
 		}
 	}
@@ -193,8 +197,8 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
-	public void persist(Unit unit) {
-		unitDal.persist(unit);
+	public void save(Unit unit) {
+		unitRepo.save(unit);
 		getGameCache(unit.getGame()).add(unit);
 	}
 

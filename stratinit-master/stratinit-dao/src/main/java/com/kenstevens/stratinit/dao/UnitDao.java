@@ -1,24 +1,17 @@
 package com.kenstevens.stratinit.dao;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitMove;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.model.UnitSeenPK;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
+import java.util.Collection;
+import java.util.List;
+
 public interface UnitDao {
 
-	void persist(Unit unit);
+	void save(Unit unit);
 
 	void persist(LaunchedSatellite satellite);
 

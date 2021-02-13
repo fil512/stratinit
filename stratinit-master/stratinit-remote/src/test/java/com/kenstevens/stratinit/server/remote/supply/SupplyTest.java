@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.remote.supply;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
@@ -17,6 +9,11 @@ import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.Assert.*;
 
 public class SupplyTest extends StratInitWebBase {
 	@Autowired protected SectorDaoService sectorDaoService;
@@ -86,7 +83,7 @@ public class SupplyTest extends StratInitWebBase {
 
 		Unit inf = unitDaoService.buildUnit(nationMe, OUT_TSUPPLY,
 				UnitType.INFANTRY);
-		unitDao.persist(inf);
+		unitDao.save(inf);
 		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
 		Supply supply = new Supply(worldView);
 		assertFalse(supply.inSupply(inf));

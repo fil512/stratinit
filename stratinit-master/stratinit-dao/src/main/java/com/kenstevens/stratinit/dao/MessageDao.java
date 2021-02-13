@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.dao;
 
-import java.util.List;
-
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 
+import java.util.List;
+
 public interface MessageDao {
 
-	void persist(Mail mail);
+	void save(Mail mail);
 
 	void remove(Mail mail);
 

@@ -132,6 +132,6 @@ public abstract class StratInitTest {
 	protected void createUnit1() {
 		createNation1();
 		testUnit1 = new Unit(testNation1, UnitType.INFANTRY, testCoords);
-		unitDao.persist(testUnit1);
+		unitDao.save(testUnit1);
 	}
 }
