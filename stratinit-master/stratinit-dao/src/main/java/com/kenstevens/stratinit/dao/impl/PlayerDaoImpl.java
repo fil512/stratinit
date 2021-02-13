@@ -54,7 +54,8 @@ public class PlayerDaoImpl implements PlayerDao {
 	}
 
 	@Override
-	public void remove(Player player) {
+	public void delete(Player player) {
+		playerRoleRepo.deleteByPlayer(player);
 		playerRepo.delete(player);
 		dataCache.remove(player);
 	}

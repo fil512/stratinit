@@ -258,7 +258,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	@Override
-	public void persist(Nation nation) {
+	public void save(Nation nation) {
 		nationRepo.save(nation);
 		getGameCache(nation.getGameId()).add(nation);
 	}

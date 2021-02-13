@@ -2,7 +2,10 @@ package com.kenstevens.stratinit.dao.impl;
 
 import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.repo.BattleLogRepo;
+import com.kenstevens.stratinit.repo.CityCapturedBattleLogRepo;
+import com.kenstevens.stratinit.repo.CityNukedBattleLogRepo;
+import com.kenstevens.stratinit.repo.FlakBattleLogRepo;
+import com.kenstevens.stratinit.repo.UnitAttackedBattleLogRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +21,29 @@ public class LogDaoImpl implements LogDao {
     @PersistenceContext
     protected EntityManager entityManager;
     @Autowired
-    BattleLogRepo battleLogRepo;
+    UnitAttackedBattleLogRepo unitAttackedBattleLogRepo;
+    @Autowired
+    CityCapturedBattleLogRepo cityCapturedBattleLogRepo;
+    @Autowired
+    CityNukedBattleLogRepo cityNukedBattleLogRepo;
+    @Autowired
+    FlakBattleLogRepo flakBattleLogRepo;
 
     @Override
-    public void save(BattleLog battleLog) {
-        battleLogRepo.save(battleLog);
+    public void save(UnitAttackedBattleLog unitAttackedBattleLog) {
+        unitAttackedBattleLogRepo.save(unitAttackedBattleLog);
+    }
+
+    public void save(CityCapturedBattleLog cityCapturedBattleLog) {
+        cityCapturedBattleLogRepo.save(cityCapturedBattleLog);
+    }
+
+    public void save(CityNukedBattleLog cityNukedBattleLog) {
+        cityNukedBattleLogRepo.save(cityNukedBattleLog);
+    }
+
+    public void save(FlakBattleLog flakBattleLog) {
+        flakBattleLogRepo.save(flakBattleLog);
     }
 
     @Override
@@ -50,8 +71,8 @@ public class LogDaoImpl implements LogDao {
     }
 
     @Override
-    public void delete(CityCapturedBattleLog log) {
-        battleLogRepo.delete(log);
+    public void delete(CityCapturedBattleLog cityCapturedBattleLog) {
+        cityCapturedBattleLogRepo.delete(cityCapturedBattleLog);
     }
 
     @Override

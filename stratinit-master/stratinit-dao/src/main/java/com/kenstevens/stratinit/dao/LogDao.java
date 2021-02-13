@@ -6,7 +6,13 @@ import java.util.List;
 
 public interface LogDao {
 
-	void save(BattleLog battleLog);
+	void save(UnitAttackedBattleLog unitAttackedBattleLog);
+
+	void save(CityCapturedBattleLog cityCapturedBattleLog);
+
+	void save(CityNukedBattleLog cityNukedBattleLog);
+
+	void save(FlakBattleLog flakBattleLog);
 
 	List<CityCapturedBattleLog> getCityCapturedBattleLogs(
 			Nation nation);

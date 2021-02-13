@@ -22,7 +22,7 @@ public class WorldManagerHelper {
 		Player player = createPlayer();
 		Game game = gameDao.findGame(gameId);
 		Nation nation = new Nation(game, player);
-		gameDao.persist(nation);
+		gameDao.save(nation);
 		smtpService.disable();
 		return nation;
 	}

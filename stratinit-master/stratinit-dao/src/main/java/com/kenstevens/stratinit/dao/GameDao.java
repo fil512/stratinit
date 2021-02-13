@@ -12,7 +12,7 @@ public interface GameDao {
 
 	void save(Game game);
 
-	void persist(Nation nation);
+	void save(Nation nation);
 
 	void persist(Relation relation);
 

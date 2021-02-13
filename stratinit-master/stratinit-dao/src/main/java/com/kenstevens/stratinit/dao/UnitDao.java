@@ -11,37 +11,37 @@ import java.util.List;
 
 public interface UnitDao {
 
-	void save(Unit unit);
+    void save(Unit unit);
 
-	void persist(LaunchedSatellite satellite);
+    void persist(LaunchedSatellite satellite);
 
-	void persist(UnitSeen unitSeen);
+    void save(UnitSeen unitSeen);
 
-	List<Unit> getUnits(Nation nation);
+    List<Unit> getUnits(Nation nation);
 
-	Collection<LaunchedSatellite> getSatellites(Nation nation);
+    Collection<LaunchedSatellite> getSatellites(Nation nation);
 
-	List<Unit> getAllUnits();
+    List<Unit> getAllUnits();
 
-	Collection<Unit> getSeenUnits(Nation nation);
+    Collection<Unit> getSeenUnits(Nation nation);
 
-	Collection<Unit> getUnits(Game game, SectorCoords coords);
+    Collection<Unit> getUnits(Game game, SectorCoords coords);
 
-	Collection<Unit> getUnits(Game game);
+    Collection<Unit> getUnits(Game game);
 
-	Unit findUnit(Integer unitId);
+    Unit findUnit(Integer unitId);
 
-	void remove(Unit unit);
+    void delete(Unit unit);
 
-	void merge(Unit unit);
+    void merge(Unit unit);
 
-	Collection<Unit> getUnits(Sector sector);
+    Collection<Unit> getUnits(Sector sector);
 
-	void merge(UnitSeen unitSeen);
+    void merge(UnitSeen unitSeen);
 
-	UnitSeen findUnitSeen(Nation nation, Unit unit);
+    UnitSeen findUnitSeen(Nation nation, Unit unit);
 
-	UnitSeen findUnitSeen(UnitSeenPK unitSeenPK);
+    UnitSeen findUnitSeen(UnitSeenPK unitSeenPK);
 
 	UnitSeen saveOrUpdate(UnitSeen unitSeen);
 

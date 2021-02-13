@@ -15,11 +15,11 @@ public class PlayerDaoTest extends StratInitTest {
 
 	@Test
 	public void testPlayerRemove() {
-		String username = "TEST";
-		Player player = new Player(username);
-		playerDao.save(player);
-		assertNotNull(playerDao.find(username));
-		playerDao.remove(player);
-		assertNull(playerDao.find(username));
-	}
+        String username = "TEST";
+        Player player = new Player(username);
+        playerDao.save(player);
+        assertNotNull(playerDao.find(username));
+        playerDao.delete(player);
+        assertNull(playerDao.find(username));
+    }
 }

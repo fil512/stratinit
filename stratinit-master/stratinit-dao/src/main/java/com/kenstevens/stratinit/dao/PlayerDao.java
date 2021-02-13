@@ -17,7 +17,7 @@ public interface PlayerDao {
 
 	void deleteByUsername(String username);
 
-	void remove(Player player);
+	void delete(Player player);
 
 	PlayerRole getPlayerRole(Player player, String roleName);
 

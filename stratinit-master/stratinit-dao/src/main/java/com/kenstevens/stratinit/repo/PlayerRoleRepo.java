@@ -9,9 +9,11 @@ import java.util.List;
 
 @Repository
 public interface PlayerRoleRepo extends JpaRepository<PlayerRole, Integer> {
-	PlayerRole findByPlayerAndRoleName(Player player, String roleName);
+    PlayerRole findByPlayerAndRoleName(Player player, String roleName);
 
-	List<PlayerRole> findByPlayer(Player player);
+    List<PlayerRole> findByPlayer(Player player);
 
-	void deleteByPlayerUsername(String username);
+    void deleteByPlayerUsername(String username);
+
+    void deleteByPlayer(Player player);
 }

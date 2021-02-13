@@ -6,15 +6,22 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitSeen;
-import org.junit.Assert;
+import com.kenstevens.stratinit.repo.UnitRepo;
+import com.kenstevens.stratinit.repo.UnitSeenRepo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 public class UnitDaoTest extends StratInitTest {
 	@Autowired
 	private UnitDao unitDao;
+	@Autowired
+	private UnitRepo unitRepo;
+	@Autowired
+	private UnitSeenRepo unitSeenRepo;
 	@Autowired
 	protected DataCache dataCache;
 
@@ -23,28 +30,30 @@ public class UnitDaoTest extends StratInitTest {
 		createUnit1();
 		List<Unit> result = Lists.newArrayList(unitDao.getUnits(testGame,
 				testCoords));
-		Assert.assertEquals(1, result.size());
-		Assert.assertEquals(testCoords, result.get(0).getCoords());
+		assertEquals(1, result.size());
+		assertEquals(testCoords, result.get(0).getCoords());
 		result = unitDao.getUnits(testNation1);
-		Assert.assertEquals(1, result.size());
-		Assert.assertEquals(testCoords, result.get(0).getCoords());
+		assertEquals(1, result.size());
+		assertEquals(testCoords, result.get(0).getCoords());
 	}
 
 	@Test
 	public void testUnitSeenDoublePersist() {
 		createUnit1();
 		UnitSeen unitSeen = new UnitSeen(testNation1, testUnit1);
-		unitDao.persist(unitSeen);
-		unitDao.persist(unitSeen);
+		unitDao.save(unitSeen);
+		unitDao.save(unitSeen);
 	}
 
 	@Test
 	public void testUnitSeenRemoveUnit() {
 		createUnit1();
 		UnitSeen unitSeen = new UnitSeen(testNation1, testUnit1);
-		unitDao.persist(unitSeen);
-		entityManager.flush();
-		unitDao.remove(testUnit1);
-		unitDao.persist(unitSeen);
+		unitDao.save(unitSeen);
+		assertEquals(1, unitRepo.count());
+		assertEquals(1, unitSeenRepo.count());
+		unitDao.delete(testUnit1);
+		assertEquals(0, unitRepo.count());
+		assertEquals(0, unitSeenRepo.count());
 	}
 }

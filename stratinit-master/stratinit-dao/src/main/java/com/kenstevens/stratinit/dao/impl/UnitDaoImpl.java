@@ -12,6 +12,7 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.repo.UnitDal;
 import com.kenstevens.stratinit.repo.UnitRepo;
+import com.kenstevens.stratinit.repo.UnitSeenRepo;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -20,6 +21,7 @@ import com.kenstevens.stratinit.world.predicate.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,6 +37,8 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	private UnitDal unitDal;
 	@Autowired
 	private UnitRepo unitRepo;
+	@Autowired
+	private UnitSeenRepo unitSeenRepo;
 
 	@Override
 	public Unit findUnit(Integer unitId) {
@@ -209,11 +213,8 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
-	public void persist(UnitSeen unitSeen) {
-		if (findUnit(unitSeen.getUnit().getId()) == null) {
-			return;
-		}
-		unitDal.saveOrUpdate(unitSeen);
+	public void save(UnitSeen unitSeen) {
+		unitSeenRepo.save(unitSeen);
 		getNationCache(unitSeen.getNation()).add(unitSeen);
 	}
 
@@ -233,15 +234,17 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
-	public void remove(Unit unit) {
-		unitDal.remove(unit);
+	@Transactional
+	public void delete(Unit unit) {
+		unitSeenRepo.deleteByUnit(unit);
+		unitRepo.delete(unit);
 		getGameCache(unit.getGame()).remove(unit);
 	}
 
 	@Override
 	public void removeUnits(Game game) {
 		for (Unit unit : getUnits(game)) {
-			remove(unit);
+			delete(unit);
 		}
 	}
 
@@ -261,7 +264,7 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	public UnitSeen saveOrUpdate(UnitSeen unitSeen) {
 		UnitSeen found = findUnitSeen(unitSeen.getUnitSeenPK());
 		if (found == null) {
-			persist(unitSeen);
+			save(unitSeen);
 			return unitSeen;
 		} else {
 			found.resetExpiry();
@@ -310,7 +313,7 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	public void transferUnitSeen(UnitSeen unitSeen, Nation oldOwner) {
 		remove(unitSeen);
 		UnitSeen newUnitSeen = new UnitSeen(oldOwner, unitSeen.getUnit());
-		persist(newUnitSeen);
+		save(newUnitSeen);
 	}
 
 	@Override

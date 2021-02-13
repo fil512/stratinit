@@ -143,7 +143,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		nation = new Nation(game, player);
 		nation.setNoAlliances(noAlliances);
 		nation.setNationId(nationId);
-		gameDao.persist(nation);
+		gameDao.save(nation);
 		calculateAllianceVote(game);
 		gameDao.merge(game);
 		setRelations(nation);

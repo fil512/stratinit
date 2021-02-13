@@ -147,7 +147,7 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 
 	public void remove(Unit unit) {
 		eventQueue.cancel(unit);
-		unitDao.remove(unit);
+		unitDao.delete(unit);
 	}
 
 	public void remove(UnitSeen unitSeen) {
