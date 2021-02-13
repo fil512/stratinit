@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface UnitRepo extends JpaRepository<Unit, Integer> {
     @Query("select u from Unit u WHERE u.nation.nationPK.game = :game")
-    List<Unit> findByGame(Game game);
+    List<Unit> findByGame(@Param("game") Game game);
 
     @Modifying
     @Query("delete from Unit u WHERE u.nation.nationPK.game = :game")

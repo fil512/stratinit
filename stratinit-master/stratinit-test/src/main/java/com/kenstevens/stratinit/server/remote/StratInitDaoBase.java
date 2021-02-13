@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.remote;
 
+import com.kenstevens.stratinit.DaoConfig;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
@@ -13,8 +14,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,14 +25,8 @@ import java.util.List;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-// Move ddl generation up to web project so there is only one real
-// persistence.xml
-// move proper persistence.xml up here
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "/WEB-INF/applicationContext.xml")
-// FIXME need something like this?
-//@TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
-@Transactional
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {DaoConfig.class})
 public abstract class StratInitDaoBase {
 	
 	@Autowired

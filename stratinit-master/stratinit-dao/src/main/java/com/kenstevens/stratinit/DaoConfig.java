@@ -24,19 +24,9 @@ import java.util.Properties;
 @PropertySource("persistence.properties")
 @EnableTransactionManagement
 @ComponentScan
-public class TestConfig {
+public class DaoConfig {
     @Autowired
     private Environment env;
-
-//    @Bean
-//    public LocalSessionFactoryBean sessionFactory() {
-//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-//        sessionFactory.setDataSource(dataSource());
-//        sessionFactory.setPackagesToScan("com.kenstevens.stratinit.model");
-//        sessionFactory.setHibernateProperties(hibernateProperties());
-//
-//        return sessionFactory;
-//    }
 
     @Bean
     public DataSource dataSource() {
@@ -70,14 +60,6 @@ public class TestConfig {
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return transactionManager;
     }
-
-    // FIXME
-//    @Bean
-//    public PlatformTransactionManager hibernateTransactionManager() {
-//        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-//        transactionManager.setSessionFactory(sessionFactory().getObject());
-//        return transactionManager;
-//    }
 
     private Properties additionalProperties() {
         Properties hibernateProperties = new Properties();

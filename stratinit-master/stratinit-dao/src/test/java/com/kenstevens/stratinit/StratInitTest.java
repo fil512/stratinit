@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {TestConfig.class})
+@ContextConfiguration(classes = {DaoConfig.class})
 public abstract class StratInitTest {
     public static final String TEST_PLAYER1_USERNAME = "a";
     protected static Player testPlayer1;
