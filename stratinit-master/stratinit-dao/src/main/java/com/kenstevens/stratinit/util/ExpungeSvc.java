@@ -21,8 +21,6 @@ public class ExpungeSvc {
     @Autowired
     CityRepo cityRepo;
     @Autowired
-    GameBuildAuditRepo gameBuildAuditRepo;
-    @Autowired
     GameRepo gameRepo;
     @Autowired
     MailRepo mailRepo;
@@ -50,7 +48,6 @@ public class ExpungeSvc {
         flakBattleLogRepo.deleteAll();
         cityMoveRepo.deleteAll();
         cityRepo.deleteAll();
-        gameBuildAuditRepo.deleteAll();
         mailRepo.deleteAll();
         relationChangeAuditRepo.deleteAll();
         relationRepo.deleteAll();

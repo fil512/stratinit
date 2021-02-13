@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.*;
+import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.hibernate.internal.SessionImpl;
 import org.junit.After;
@@ -41,6 +42,8 @@ public abstract class StratInitDaoBase {
 	protected PlayerDao playerDao;
 	@Autowired
 	protected DataCache dataCache;
+	@Autowired
+	private ExpungeSvc expungeSvc;
 
 	@PersistenceContext
 	protected EntityManager entityManager;
@@ -167,6 +170,7 @@ public abstract class StratInitDaoBase {
 		for (Player player : players) {
 			dataCache.remove(player);
 		}
+		expungeSvc.expungeAll();
 	}
 
 	private SessionImpl getSession() {
