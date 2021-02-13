@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -20,7 +21,7 @@ public class DataCacheTest extends StratInitTest {
 	@Autowired
 	GameDao gameDao;
 	@Autowired
-	GameDao gameDal;
+	GameRepo gameRepo;
 	@Autowired
 	PlayerDao playerDao;
 	@Autowired
@@ -107,9 +108,9 @@ public class DataCacheTest extends StratInitTest {
 		newSector.setType(newType);
 		sectorDao.merge(newSector);
 
-		Game game = gameDal.findGame(testGame.getId());
-		Sector sector = sectorDao.getWorld(game).getSector(coords);
-		assertEquals(oldType, sector.getType());
+		Game dbGame = gameRepo.findById(testGame.getId()).get();
+		Sector dbSector = sectorRepo.findByGameAndCoords(dbGame, coords);
+		assertEquals(oldType, dbSector.getType());
 		assertFalse(dataCache.getGameCache(testGame).isModified());
 		assertTrue(dataCache.getGameCache(testGame).isWorldModified());
 		dataCache.flush();
@@ -117,8 +118,8 @@ public class DataCacheTest extends StratInitTest {
 		assertFalse(dataCache.getGameCache(testGame).isWorldModified());
 		entityManager.flush();
 
-		sector = sectorDao.getWorld(testGame).getSector(coords);
-		assertEquals(newType, sector.getType());
+		dbSector = sectorDao.getWorld(testGame).getSector(coords);
+		assertEquals(newType, dbSector.getType());
 	}
 	
 	@Test
