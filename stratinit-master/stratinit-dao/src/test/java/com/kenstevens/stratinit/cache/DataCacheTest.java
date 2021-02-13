@@ -11,7 +11,6 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,16 +33,15 @@ public class DataCacheTest extends StratInitTest {
 	@Test
 	public void getGameCachesNoReturnDisabledGames() {
 		Game game1 = new Game();
-		gameDao.persist(game1);
+		gameDao.save(game1);
 		Game game2 = new Game();
-		gameDao.persist(game2);
+		gameDao.save(game2);
 		int origSize = dataCache.getGameCaches().size();
 		game1.setEnabled(false);
 		gameDao.merge(game1);
 		assertEquals(1, origSize - dataCache.getGameCaches().size());
 	}
 	
-	@Transactional
 	@Test
 	public void onlyOnePlayerEntity() {
 		// create game 1 nation 1
@@ -78,25 +76,20 @@ public class DataCacheTest extends StratInitTest {
 		entityManager.clear();
 	}
 	
-	@Transactional
 	@Test
 	public void sectorMerge() {
 		createGame();
-		Sector newSector = entityManager.find(Sector.class, new SectorPK(testGame, testSector.getCoords()));
+		Sector newSector = sectorRepo.findByGameAndCoords(testGame, testSector.getCoords());
 		newSector.setType(SectorType.PLAYER_CITY);
-		entityManager.merge(newSector);
-		entityManager.flush();
-		Sector newSector2 = entityManager.find(Sector.class, new SectorPK(testGame, testSector.getCoords()));
+		sectorRepo.save(newSector);
+		Sector newSector2 = sectorRepo.findByGameAndCoords(testGame, testSector.getCoords());
 		assertEquals(SectorType.PLAYER_CITY, newSector2.getType());
 	}
 
-	@Transactional
 	@Test
 	public void sectorPersist() {
 		createGame();
-		entityManager.flush();
-		entityManager.clear();
-		
+
 		SectorType oldType = testSector.getType();
 		SectorType newType = SectorType.PLAYER_CITY;
 		assertFalse(oldType == newType);
@@ -116,7 +109,6 @@ public class DataCacheTest extends StratInitTest {
 		dataCache.flush();
 		assertFalse(dataCache.getGameCache(testGame).isModified());
 		assertFalse(dataCache.getGameCache(testGame).isWorldModified());
-		entityManager.flush();
 
 		dbSector = sectorDao.getWorld(testGame).getSector(coords);
 		assertEquals(newType, dbSector.getType());

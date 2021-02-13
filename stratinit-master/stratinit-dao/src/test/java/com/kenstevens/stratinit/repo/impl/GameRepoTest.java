@@ -5,11 +5,9 @@ import com.kenstevens.stratinit.model.UnitSeen;
 import com.kenstevens.stratinit.repo.UnitDal;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.FlushModeType;
 
-@Transactional
 public class GameRepoTest extends StratInitTest {
 	@Autowired
 	private UnitDal unitDal;

@@ -11,6 +11,7 @@ import com.kenstevens.stratinit.repo.PlayerRoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -46,6 +47,7 @@ public class PlayerDaoImpl implements PlayerDao {
 	}
 
 	@Override
+	@Transactional
 	public void deleteByUsername(String username) {
 		playerRoleRepo.deleteByPlayerUsername(username);
 		playerRepo.deleteByUsername(username);

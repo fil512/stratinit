@@ -54,7 +54,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 	@Override
 	public Game createGame(String name) {
 		Game game = new Game(name);
-		gameDao.persist(game);
+		gameDao.save(game);
 		return game;
 	}
 
@@ -63,7 +63,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		Game game = new Game(name);
 		game.setBlitz(true);
 		game.setIslands(islands);
-		gameDao.persist(game);
+		gameDao.save(game);
 		GameScheduleHelper.setStartTimeBasedOnNow(game);
 		mapGame(game);
 		return game;

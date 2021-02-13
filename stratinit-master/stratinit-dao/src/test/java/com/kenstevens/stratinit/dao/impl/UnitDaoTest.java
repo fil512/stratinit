@@ -1,18 +1,16 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitSeen;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 public class UnitDaoTest extends StratInitTest {
 	@Autowired
@@ -41,7 +39,6 @@ public class UnitDaoTest extends StratInitTest {
 	}
 
 	@Test
-	@Transactional
 	public void testUnitSeenRemoveUnit() {
 		createUnit1();
 		UnitSeen unitSeen = new UnitSeen(testNation1, testUnit1);

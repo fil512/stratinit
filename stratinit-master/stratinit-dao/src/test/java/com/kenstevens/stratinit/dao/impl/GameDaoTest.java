@@ -1,18 +1,17 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Collection;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.type.RelationType;
+import org.junit.Assert;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
+
+import static org.junit.Assert.assertEquals;
 
 public class GameDaoTest extends StratInitTest {
 	@Autowired

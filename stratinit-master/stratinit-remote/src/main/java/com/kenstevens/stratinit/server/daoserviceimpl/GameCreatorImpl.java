@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.server.daoservice.GameCreator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.server.daoservice.GameCreator;
+import java.util.List;
 
 @Service
 public class GameCreatorImpl implements GameCreator {
@@ -27,8 +26,8 @@ public class GameCreatorImpl implements GameCreator {
 			}
 		}
 		Game game = new Game();
-		gameDao.persist(game);
-		logger.info("Created game "+game.getName());
+		gameDao.save(game);
+		logger.info("Created game " + game.getName());
 	}
 
 }

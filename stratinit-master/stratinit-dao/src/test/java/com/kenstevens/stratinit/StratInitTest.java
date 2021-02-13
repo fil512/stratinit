@@ -91,7 +91,7 @@ public abstract class StratInitTest {
 		testGame.setBlitz(true);
 		GameScheduleHelper.setStartTimeBasedOnNow(testGame);
 		testGame.setBlitz(false);
-		gameDao.persist(testGame);
+		gameDao.save(testGame);
 		testSector = new Sector(testGame, testCoords, SectorType.LAND);
 		World world = new World(testGame, true);
 		world.setSector(testSector);
@@ -103,7 +103,7 @@ public abstract class StratInitTest {
 		testGame2.setBlitz(true);
 		GameScheduleHelper.setStartTimeBasedOnNow(testGame2);
 		testGame2.setBlitz(false);
-		gameDao.persist(testGame2);
+		gameDao.save(testGame2);
 		testSector2 = new Sector(testGame2, testCoords, SectorType.LAND);
 		World world = new World(testGame2, true);
 		world.setSector(testSector2);

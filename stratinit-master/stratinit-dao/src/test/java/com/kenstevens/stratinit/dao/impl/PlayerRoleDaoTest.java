@@ -7,15 +7,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.transaction.Transactional;
-
 public class PlayerRoleDaoTest extends StratInitTest {
 	@Autowired
 	private PlayerDao playerDao;
 	private String roleName;
 
 	@Test
-	@Transactional
 	public void testPlayerPersistenceAndRemove() {
 		PlayerRole playerRole = new PlayerRole();
 		playerRole.setPlayer(testPlayer1);

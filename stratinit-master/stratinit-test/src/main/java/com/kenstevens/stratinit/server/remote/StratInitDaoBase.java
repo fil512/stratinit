@@ -120,7 +120,7 @@ public abstract class StratInitDaoBase {
 		testGame.setBlitz(false);
 		setIslands(NUM_ISLANDS);
 		testGame.setMapped();
-		gameDao.persist(testGame);
+		gameDao.save(testGame);
 		testGameId = testGame.getId();
 		World world = new World(testGame, true);
 		populate(world, getTypes(), getIslands());

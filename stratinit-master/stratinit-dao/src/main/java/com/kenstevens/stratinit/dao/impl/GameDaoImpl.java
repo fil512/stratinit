@@ -16,6 +16,7 @@ import com.kenstevens.stratinit.util.GameNameFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -34,6 +35,10 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	private CityRepo cityRepo;
 	@Autowired
 	private GameLoader gameLoader;
+	@Autowired
+	private SectorRepo sectorRepo;
+	@Autowired
+	private UnitRepo unitRepo;
 
 	@Override
 	public Game findGame(int gameId) {
@@ -259,7 +264,8 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	@Override
-	public void persist(Game game) {
+	@Transactional
+	public void save(Game game) {
 		game.setCreated();
 		if (game.getName() == null) {
 			game.setName("");
@@ -283,7 +289,11 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	@Override
+	@Transactional
 	public void remove(Game game) {
+		nationRepo.deleteByGame(game);
+		unitRepo.deleteByGame(game);
+		sectorRepo.deleteByGame(game);
 		gameRepo.delete(game);
 		dataCache.remove(game);
 	}

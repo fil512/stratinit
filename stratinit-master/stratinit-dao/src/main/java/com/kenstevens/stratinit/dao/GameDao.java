@@ -1,22 +1,16 @@
 package com.kenstevens.stratinit.dao;
 
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
+import com.kenstevens.stratinit.type.RelationType;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameBuildAudit;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.model.RelationPK;
-import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
-import com.kenstevens.stratinit.type.RelationType;
-
 public interface GameDao {
 
-	void persist(Game game);
+	void save(Game game);
 
 	void persist(Nation nation);
 

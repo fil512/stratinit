@@ -21,6 +21,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -185,6 +186,7 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	}
 
 	@Override
+	@Transactional
 	public void save(World world) {
 		for (Sector sector : world.getSectors()) {
 			sectorRepo.save(sector);
