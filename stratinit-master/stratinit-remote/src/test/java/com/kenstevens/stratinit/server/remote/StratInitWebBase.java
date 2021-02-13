@@ -1,22 +1,8 @@
 package com.kenstevens.stratinit.server.remote;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.main.Spring;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.MoveCost;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
@@ -27,13 +13,23 @@ import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Ignore
-public class StratInitWebBase extends StratInitDaoBase {
-	@Autowired protected GameDaoService gameDaoService;
-	@Autowired protected SectorDaoService sectorDaoService;
-	@Autowired protected UnitDaoService unitDaoService;
-	@Autowired protected Spring spring;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public abstract class StratInitWebBase extends StratInitDaoBase {
+	@Autowired
+	protected GameDaoService gameDaoService;
+	@Autowired
+	protected SectorDaoService sectorDaoService;
+	@Autowired
+	protected UnitDaoService unitDaoService;
+	@Autowired
+	protected Spring spring;
 	@Autowired
 	private SMTPService smtpService;
 	@Autowired

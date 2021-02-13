@@ -300,6 +300,7 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	}
 
 	@Override
+	@Transactional
 	public void clearUnitMove(Unit unit) {
 		unitMoveRepo.deleteByUnit(unit);
 		unit.setUnitMove(null);

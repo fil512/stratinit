@@ -299,6 +299,7 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	@Override
+	@Transactional
 	public void removeGame(int id) {
 		remove(getGameCache(id).getGame());
 	}
