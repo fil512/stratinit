@@ -278,13 +278,13 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	@Override
-	public void persist(Relation relation) {
+	public void save(Relation relation) {
 		relationRepo.save(relation);
 		getGameCache(relation.getGame()).add(relation);
 	}
 
 	@Override
-	public void persist(RelationChangeAudit relationChangeAudit) {
+	public void save(RelationChangeAudit relationChangeAudit) {
 		relationChangeAuditRepo.save(relationChangeAudit);
 	}
 

@@ -152,7 +152,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		} else if (game.getPlayers() >= Constants.getMinPlayersToSchedule()) {
 			scheduleGame(game);
 		}
-		return new Result<Nation>(nation);
+		return new Result<>(nation);
 	}
 
 	@Override
@@ -173,10 +173,10 @@ public class GameDaoServiceImpl implements GameDaoService {
 			if (nation.equals(me)) {
 				relation.setType(RelationType.ME);
 			}
-			gameDao.persist(relation);
+			gameDao.save(relation);
 			if (!nation.equals(me)) {
 				relation = new Relation(nation, me);
-				gameDao.persist(relation);
+				gameDao.save(relation);
 			}
 		}
 	}
@@ -306,7 +306,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 	private void moveRelationForward(Relation relation) {
 		RelationChangeAudit relationChangeAudit = new RelationChangeAudit(
 				relation);
-		gameDao.persist(relationChangeAudit);
+		gameDao.save(relationChangeAudit);
 		relation.setType(relation.getNextType());
 		relation.setNextType(null);
 		relation.setSwitchTime(null);

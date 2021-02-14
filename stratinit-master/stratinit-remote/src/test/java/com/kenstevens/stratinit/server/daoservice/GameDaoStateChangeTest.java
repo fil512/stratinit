@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -11,6 +12,7 @@ import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplate;
 import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.util.ExpungeSvc;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.After;
@@ -36,6 +38,10 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 	private WorldManager origWorldManager;
 	@Autowired
 	private SectorDao origSectorDao;
+	@Autowired
+	private ExpungeSvc expungeSvc;
+	@Autowired
+	private DataCache dataCache;
 
 	@Autowired
 	private GameDaoService gameDaoService;
@@ -58,6 +64,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 
 	@After
 	public void undoMocks() {
+		// FIXME remove these
 		ReflectionTestUtils.setField(gameDaoService, "eventQueue",
 				origEventQueue);
 		ReflectionTestUtils.setField(gameDaoService, "mailService",
@@ -66,6 +73,9 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 				origWorldManager);
 		ReflectionTestUtils.setField(gameDaoService, "sectorDao",
 				origSectorDao);
+
+		expungeSvc.expungeAll();
+		dataCache.clear();
 	}
 
 	@Test
@@ -241,20 +251,20 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 	@Test
 	public void joinAfterMapped() {
 		final Game game = makeGame();
-		final Player player = createPlayer();
 
 		context.checking(new Expectations() {
             {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                exactly(3).of(worldManager).addPlayerToMap(with(any(Integer.class)),
-                        with(any(Nation.class)));
-                oneOf(sectorDao).save(with(aNull(World.class)));
-            }
+				oneOf(eventQueue).schedule(game, false);
+				oneOf(worldManager).build(game);
+				exactly(3).of(worldManager).addPlayerToMap(with(any(Integer.class)),
+						with(any(Nation.class)));
+				oneOf(sectorDao).save(with(aNull(World.class)));
+			}
 		});
 		gameDaoService.scheduleGame(game);
 		playersJoinGame(game, 2);
 		gameDaoService.mapGame(game);
+		Player player = createPlayer();
 		final Result<Nation> result = gameDaoService.joinGame(player, game
 				.getId(), false);
 		assertResult(result);
@@ -276,32 +286,30 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
                 exactly(Constants.MAP_EXTRA_SLOTS + 2).of(worldManager).addPlayerToMap(with(any(Integer.class)),
                         with(any(Nation.class)));
                 oneOf(sectorDao).save(with(aNull(World.class)));
-            }
+			}
 		});
 		gameDaoService.scheduleGame(game);
 		playersJoinGame(game, 2);
 		gameDaoService.mapGame(game);
-		assertEquals(Constants.MAP_EXTRA_SLOTS+2, game.getIslands());
+		assertEquals(Constants.MAP_EXTRA_SLOTS + 2, game.getIslands());
 
 		playersJoinGame(game, Constants.MAP_EXTRA_SLOTS);
 
 		final Player player = createPlayer();
-		final Result<Nation> result = gameDaoService.joinGame(player, game
-				.getId(), false);
+		final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
 		assertFalseResult(result);
 
 		assertNotNull(game.getCreated());
 		assertNotNull(game.getStartTime());
 		assertIsMapped(game);
-		assertEquals(Constants.MAP_EXTRA_SLOTS+2, game.getPlayers());
+		assertEquals(Constants.MAP_EXTRA_SLOTS + 2, game.getPlayers());
 		context.assertIsSatisfied();
 	}
 
 	private void playersJoinGame(final Game game, int numPlayers) {
 		for (int i = 0; i < numPlayers; ++i) {
 			final Player player = createPlayer();
-			final Result<Nation> result = gameDaoService.joinGame(player, game
-					.getId(), false);
+			final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
 			assertResult(result);
 		}
 	}

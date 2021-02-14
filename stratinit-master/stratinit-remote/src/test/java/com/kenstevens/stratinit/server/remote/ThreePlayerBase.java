@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.server.remote;
 
 
-import org.junit.Before;
-
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
+import org.junit.Before;
 
 public abstract class ThreePlayerBase extends TwoPlayerBase {
 	protected static final String PLAYER_THREE_NAME = "three";
@@ -38,7 +37,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
 	private void setThirdRelationToMe(RelationType relationType) {
 		Relation relation = gameDao.findRelation(nationThird, nationMe);
 		relation.setType(relationType);
-		gameDao.persist(relation);
+		gameDao.save(relation);
 	}
 
 	private void setThemRelationToThird(RelationType relationType) {
@@ -50,7 +49,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
 	private void setThirdRelationToThem(RelationType relationType) {
 		Relation relation = gameDao.findRelation(nationThird, nationThem);
 		relation.setType(relationType);
-		gameDao.persist(relation);
+		gameDao.save(relation);
 	}
 
 	protected void declareWarOnThird() {

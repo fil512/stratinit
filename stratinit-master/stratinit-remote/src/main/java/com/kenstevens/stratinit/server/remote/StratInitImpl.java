@@ -1,28 +1,9 @@
 package com.kenstevens.stratinit.server.remote;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Properties;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.dto.SICity;
-import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.dto.SIMessage;
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.dto.SIRelation;
-import com.kenstevens.stratinit.dto.SISatellite;
-import com.kenstevens.stratinit.dto.SISector;
-import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.dto.SIUnitBase;
-import com.kenstevens.stratinit.dto.SIUnitBuilt;
-import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Nation;
@@ -33,45 +14,19 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
-import com.kenstevens.stratinit.server.remote.request.GetAnnouncementsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetCitiesRequest;
-import com.kenstevens.stratinit.server.remote.request.GetJoinedGamesRequest;
-import com.kenstevens.stratinit.server.remote.request.GetLogsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetMessagesRequest;
-import com.kenstevens.stratinit.server.remote.request.GetMyNationRequest;
-import com.kenstevens.stratinit.server.remote.request.GetNationsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetRelationsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetSattelitesRequest;
-import com.kenstevens.stratinit.server.remote.request.GetSectorsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetSeenCitiesRequest;
-import com.kenstevens.stratinit.server.remote.request.GetSeenUnitsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetSentMailRequest;
-import com.kenstevens.stratinit.server.remote.request.GetTeamsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetUnitsBuiltRequest;
-import com.kenstevens.stratinit.server.remote.request.GetUnitsRequest;
-import com.kenstevens.stratinit.server.remote.request.GetUnjoinedGamesRequest;
-import com.kenstevens.stratinit.server.remote.request.GetUpdateRequest;
-import com.kenstevens.stratinit.server.remote.request.write.BuildCityRequest;
-import com.kenstevens.stratinit.server.remote.request.write.CancelMoveOrderRequest;
-import com.kenstevens.stratinit.server.remote.request.write.CedeCityRequest;
-import com.kenstevens.stratinit.server.remote.request.write.CedeUnitsRequest;
-import com.kenstevens.stratinit.server.remote.request.write.ConcedeRequest;
-import com.kenstevens.stratinit.server.remote.request.write.DisbandUnitRequest;
-import com.kenstevens.stratinit.server.remote.request.write.GetBattleLogRequest;
-import com.kenstevens.stratinit.server.remote.request.write.GetMailRequest;
-import com.kenstevens.stratinit.server.remote.request.write.JoinGameRequest;
-import com.kenstevens.stratinit.server.remote.request.write.MoveUnitsRequest;
-import com.kenstevens.stratinit.server.remote.request.write.PostAnnouncementRequest;
-import com.kenstevens.stratinit.server.remote.request.write.SendMessageRequest;
-import com.kenstevens.stratinit.server.remote.request.write.SetGameRequest;
-import com.kenstevens.stratinit.server.remote.request.write.SetRelationRequest;
-import com.kenstevens.stratinit.server.remote.request.write.SwitchTerrainRequest;
-import com.kenstevens.stratinit.server.remote.request.write.UpdateCityRequest;
+import com.kenstevens.stratinit.server.remote.request.*;
+import com.kenstevens.stratinit.server.remote.request.write.*;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Properties;
 
 @Component("stratInit")
 public class StratInitImpl implements StratInit {
@@ -242,11 +197,12 @@ public class StratInitImpl implements StratInit {
 
 	@Override
 	public Result<SIRelation> setRelation(int nationId,
-			RelationType relationType) {
+										  RelationType relationType) {
 		return spring.autowire(new SetRelationRequest(nationId, relationType))
 				.process();
 	}
 
+	// FIXME factory
 	@Override
 	public Result<Integer> sendMessage(SIMessage simessage) {
 		return spring.autowire(new SendMessageRequest(simessage)).process();

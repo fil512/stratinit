@@ -13,6 +13,8 @@ import org.hibernate.internal.SessionImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -29,7 +32,9 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {DaoConfig.class})
 public abstract class StratInitDaoBase {
-	
+	final Logger logger = LoggerFactory.getLogger(getClass());
+	private final AtomicInteger playerIndex = new AtomicInteger();
+
 	@Autowired
 	protected GameDao gameDao;
 	@Autowired
@@ -44,9 +49,8 @@ public abstract class StratInitDaoBase {
 	protected DataCache dataCache;
 	@Autowired
 	private ExpungeSvc expungeSvc;
-
 	@PersistenceContext
-	protected EntityManager entityManager;
+	private EntityManager entityManager;
 	private static boolean initialized = false;
 	protected Game testGame;
 	protected World testWorld;
@@ -163,18 +167,14 @@ public abstract class StratInitDaoBase {
 		setupGame();
 	}
 
-	@After
-	public void removeGame() {
-		dataCache.remove(testGame);
-		List<Player> players = dataCache.getAllPlayers();
-		for (Player player : players) {
-			dataCache.remove(player);
-		}
-		expungeSvc.expungeAll();
+	private SessionImpl getSession() {
+		return (SessionImpl) entityManager.getDelegate();
 	}
 
-	private SessionImpl getSession() {
-		return  (SessionImpl) entityManager.getDelegate();
+	@After
+	public void removeGame() {
+		expungeSvc.expungeAll();
+		dataCache.clear();
 	}
 
 	private void populate(World world, String[] types, String[] islands) {
@@ -219,7 +219,9 @@ public abstract class StratInitDaoBase {
 	}
 
 	protected Player createPlayer() {
-		Player player = new Player(PLAYER_NAME);
+		String name = PLAYER_NAME + playerIndex.incrementAndGet();
+		Player player = new Player(name);
+		logger.info("Creating player with name {}", name);
 		player.setEmail("foo@foo.com");
 		playerDao.save(player);
 		return player;

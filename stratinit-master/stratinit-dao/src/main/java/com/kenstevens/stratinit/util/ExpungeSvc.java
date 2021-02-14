@@ -40,6 +40,10 @@ public class ExpungeSvc {
     UnitRepo unitRepo;
     @Autowired
     UnitSeenRepo unitSeenRepo;
+    @Autowired
+    UnitMoveRepo unitMoveRepo;
+    @Autowired
+    LaunchedSatelliteRepo launchedSatelliteRepo;
 
     public void expungeAll() {
         unitAttackedBattleLog.deleteAll();
@@ -54,7 +58,9 @@ public class ExpungeSvc {
         sectorRepo.deleteAll();
         sectorSeenRepo.deleteAll();
         unitSeenRepo.deleteAll();
+        unitMoveRepo.deleteAll();
         unitRepo.deleteAll();
+        launchedSatelliteRepo.deleteAll();
         nationRepo.deleteAll();
         playerRoleRepo.deleteAll();
         playerRepo.deleteAll();

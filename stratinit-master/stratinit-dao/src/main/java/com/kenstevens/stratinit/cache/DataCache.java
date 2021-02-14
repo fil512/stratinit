@@ -188,4 +188,9 @@ public class DataCache extends Updatable {
 	public Player getPlayer(Integer id) {
 		return playerMap.get(id);
 	}
+
+	public void clear() {
+		gameMap.clear();
+		playerMap.clear();
+	}
 }

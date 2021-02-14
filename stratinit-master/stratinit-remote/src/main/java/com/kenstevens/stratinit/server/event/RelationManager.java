@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.server.event;
 
-import java.util.Collection;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
@@ -14,6 +8,11 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Date;
 
 @Service
 public class RelationManager {
@@ -122,7 +121,7 @@ public class RelationManager {
 		eventQueue.schedule(relation);
 		RelationChangeAudit relationChangeAudit = new RelationChangeAudit(
 				relation);
-		gameDao.persist(relationChangeAudit);
+		gameDao.save(relationChangeAudit);
 		gameDao.merge(relation);
 		return "scheduled relation change with " + relation.getTo() + " to "
 				+ nextType + " " + hours + " hours from now.";

@@ -10,21 +10,21 @@ import java.util.Map;
 
 public interface GameDao {
 
-	void save(Game game);
+    void save(Game game);
 
-	void save(Nation nation);
+    void save(Nation nation);
 
-	void persist(Relation relation);
+    void save(Relation relation);
 
-	List<Game> getAllGames();
+    List<Game> getAllGames();
 
-	List<Nation> getNations(Game game);
+    List<Nation> getNations(Game game);
 
-	List<Nation> getNations(Player player);
+    List<Nation> getNations(Player player);
 
-	Game findGame(int gameId);
+    Game findGame(int gameId);
 
-	Relation findRelation(Nation from, Nation to);
+    Relation findRelation(Nation from, Nation to);
 
 	Relation findRelation(RelationPK relationPK);
 
@@ -57,27 +57,27 @@ public interface GameDao {
 
 	Nation getNation(int gameId, int nationId);
 
-	void merge(Relation relation);
+    void merge(Relation relation);
 
-	Collection<Relation> getAllChangingRelations(Game game);
+    Collection<Relation> getAllChangingRelations(Game game);
 
-	Collection<Nation> getAllies(Nation nation);
+    Collection<Nation> getAllies(Nation nation);
 
-	List<Relation> getRelations(Game game);
+    List<Relation> getRelations(Game game);
 
-	void flush();
+    void flush();
 
-	void persist(RelationChangeAudit relationChangeAudit);
+    void save(RelationChangeAudit relationChangeAudit);
 
-	Relation getReverse(Relation relation);
+    Relation getReverse(Relation relation);
 
-	List<Game> getUnjoinedGames(Player player);
+    List<Game> getUnjoinedGames(Player player);
 
-	List<GameBuildAudit> getGameBuildAudit();
+    List<GameBuildAudit> getGameBuildAudit();
 
-	void remove(Relation relation);
+    void remove(Relation relation);
 
-	void remove(City city);
+    void remove(City city);
 
 	Collection<Nation> getFriendsAndAllies(Nation nation);
 

@@ -48,7 +48,7 @@ public class GameDaoTest extends StratInitTest {
 		createNation2();
 		Relation relation1 = new Relation(testNation1, testNation2);
 		relation1.setType(RelationType.ALLIED);
-		gameDao.persist(relation1);
+		gameDao.save(relation1);
 		Collection<Nation> allies = gameDao.getAllies(testNation2);
 		assertEquals(0, allies.size());
 	}
@@ -58,7 +58,7 @@ public class GameDaoTest extends StratInitTest {
 		createNation2();
 		Relation relation1 = new Relation(testNation1, testNation2);
 		relation1.setType(RelationType.ALLIED);
-		gameDao.persist(relation1);
+		gameDao.save(relation1);
 		Collection<Nation> allies = gameDao.getAllies(testNation1);
 		assertEquals(0, allies.size());
 	}
@@ -68,10 +68,10 @@ public class GameDaoTest extends StratInitTest {
 		createNation2();
 		Relation relation1 = new Relation(testNation1, testNation2);
 		relation1.setType(RelationType.ALLIED);
-		gameDao.persist(relation1);
+		gameDao.save(relation1);
 		Relation relation2 = new Relation(testNation2, testNation1);
 		relation2.setType(RelationType.ALLIED);
-		gameDao.persist(relation2);
+		gameDao.save(relation2);
 		Collection<Nation> allies = gameDao.getAllies(testNation1);
 		assertEquals(1, allies.size());
 	}
