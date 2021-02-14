@@ -20,7 +20,7 @@ public abstract class AuthenticatedPage extends BasePage implements Authenticate
     // FIXME not id
     @Override
     public String getUsername() {
-        return getAuth().getId();
+        return (String) getAuth().getAttribute("username");
     }
 
 }

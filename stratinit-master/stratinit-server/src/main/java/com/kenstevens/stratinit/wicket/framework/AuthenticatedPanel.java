@@ -26,7 +26,7 @@ public abstract class AuthenticatedPanel extends Panel implements AuthenticatedC
 
 	@Override
 	public String getUsername() {
-		return getAuth().getId();
+		return (String) getAuth().getAttribute("username");
 	}
 
 	private AbstractAuthenticatedWebSession getAuth() {
