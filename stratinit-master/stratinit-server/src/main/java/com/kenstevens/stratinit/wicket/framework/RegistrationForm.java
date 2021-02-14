@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -14,8 +15,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class RegistrationForm extends Form<Player> {
 	private static final long serialVersionUID = 1L;
@@ -24,6 +24,8 @@ public class RegistrationForm extends Form<Player> {
 	StratInit stratInit;
 	@SpringBean
 	PlayerDaoService playerDaoService;
+	@SpringBean
+	BCryptPasswordEncoder passwordEncoder;
 
 	public RegistrationForm(String id, Player player) {
 		super(id, new CompoundPropertyModel<Player>(player));
@@ -31,7 +33,7 @@ public class RegistrationForm extends Form<Player> {
 
 		RequiredTextField<String> usernameField = new RequiredTextField<String>("username", String.class);
 		add(usernameField);
-		if (AuthenticatedSession.get().isSignedIn()) {
+		if (getAuth().isSignedIn()) {
 			usernameField.setEnabled(false);
 		}
 		add(new RequiredTextField<String>("email", String.class)
@@ -53,16 +55,19 @@ public class RegistrationForm extends Form<Player> {
 	public final void onSubmit() {
 		Player player = getModelObject();
 		if (player.getPassword() != null) {
-			PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-			player.setPassword(encoder.encode(player.getPassword()));
+			player.setPassword(passwordEncoder.encode(player.getPassword()));
 		}
 		player.setUserAgent(this.getWebRequest().getHeader("User-Agent"));
 		Result<Player> result;
-		if (AuthenticatedSession.get().isSignedIn()) {
+		if (getAuth().isSignedIn()) {
 			result = playerDaoService.updatePlayer(player);
 		} else {
 			result = playerDaoService.register(player);
 		}
 		new InfoResult<Player>(this).info(result);
+	}
+
+	protected AbstractAuthenticatedWebSession getAuth() {
+		return ((AbstractAuthenticatedWebSession) getSession());
 	}
 }

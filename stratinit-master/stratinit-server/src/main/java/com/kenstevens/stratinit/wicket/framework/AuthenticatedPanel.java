@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.wicket.framework;
 
 import com.kenstevens.stratinit.model.PlayerRole;
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.markup.html.panel.Panel;
 
 
@@ -15,16 +16,20 @@ public abstract class AuthenticatedPanel extends Panel implements AuthenticatedC
 
 	@Override
 	public boolean isSignedIn() {
-		return AuthenticatedSession.get().isSignedIn();
+		return getAuth().isSignedIn();
 	}
 
 	@Override
 	public boolean isAdmin() {
-		return AuthenticatedSession.getSession().getRoles().contains(PlayerRole.ROLE_ADMIN);
+		return getAuth().getRoles().contains(PlayerRole.ROLE_ADMIN);
 	}
 
 	@Override
 	public String getUsername() {
-		return AuthenticatedSession.getSession().getId();
+		return getAuth().getId();
+	}
+
+	private AbstractAuthenticatedWebSession getAuth() {
+		return ((AbstractAuthenticatedWebSession) getSession());
 	}
 }
