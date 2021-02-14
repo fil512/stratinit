@@ -1,25 +1,23 @@
 package com.kenstevens.stratinit.ui.image;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Ignore
+@Disabled
 public class ImageManagerTest {
 
 	private static final String GIF = "red.gif";
 	private static final String WRITE_FOLDER = "target/test/images";
 	ImageManager imageManager = new ImageManager(WRITE_FOLDER);
 
-	@Before
+	@BeforeEach
 	public void createDir() {
 		File imageDir = new File(WRITE_FOLDER);
 		if (!imageDir.canRead()) {

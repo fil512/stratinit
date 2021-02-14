@@ -1,20 +1,14 @@
 package com.kenstevens.stratinit.model.stats;
 
-import static org.junit.Assert.assertEquals;
+import com.kenstevens.stratinit.dto.SIBattleLog;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-
-import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.BattleLogEntry;
-import com.kenstevens.stratinit.model.BattleLogList;
-import com.kenstevens.stratinit.model.FlakBattleLog;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.type.UnitType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StatsHolderTest extends TwoPlayerTest {
 	@Test

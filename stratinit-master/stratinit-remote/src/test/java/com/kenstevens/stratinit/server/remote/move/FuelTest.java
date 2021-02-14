@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -13,6 +7,11 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class FuelTest extends TwoPlayerBase {
 	@Autowired protected SectorDaoService sectorDaoServiceImpl;
@@ -30,7 +29,7 @@ public class FuelTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(fighter), FIGHTER_SEA);
 		assertResult(result);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 	}
 
 	@Test
@@ -93,7 +92,7 @@ public class FuelTest extends TwoPlayerBase {
 	}
 
 	private void assertRefueled(Unit fighter, Result<MoveCost> result) {
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() == fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() == fighter.getFuel(), result.toString());
 	}
 	@Test
 	public void myPortNoRefuels() {
@@ -118,7 +117,7 @@ public class FuelTest extends TwoPlayerBase {
 	}
 
 	private void assertNotRefueled(Unit fighter, Result<MoveCost> result) {
-		assertFalse(result.toString(), fighter.getUnitBase().getMobility() == fighter.getFuel());
+		assertFalse(fighter.getUnitBase().getMobility() == fighter.getFuel(), result.toString());
 	}
 	@Test
 	public void attackFromCityRefuelsAndReAmmo() {
@@ -132,7 +131,7 @@ public class FuelTest extends TwoPlayerBase {
 				makeUnitList(fighter), NEXT_TO_CITY);
 		assertResult(result);
 		assertRefueled(fighter, result);
-		assertTrue(result.toString(), fighter.getUnitBase().getAmmo() == fighter.getAmmo());
+		assertTrue(fighter.getUnitBase().getAmmo() == fighter.getAmmo(), result.toString());
 	}
 	
 	@Test
@@ -168,11 +167,11 @@ public class FuelTest extends TwoPlayerBase {
 				UnitType.FIGHTER);
 		Unit carrier = unitDaoService.buildUnit(nationMe, CARRIER,
 				UnitType.CARRIER);
-		
+
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(fighter), FIGHTER_SEA);
 		assertResult(result);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 		result = moveUnits(
 				makeUnitList(carrier), FIGHTER_SEA);
 		assertRefueled(fighter, result);
@@ -187,10 +186,10 @@ public class FuelTest extends TwoPlayerBase {
 				UnitType.FIGHTER);
 		Unit carrier = unitDaoService.buildUnit(nationMe, CARRIER,
 				UnitType.CARRIER);
-		Result<MoveCost> result = moveUnits(nationThem, 
+		Result<MoveCost> result = moveUnits(nationThem,
 				makeUnitList(fighter), FIGHTER_SEA);
 		assertResult(result);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 		result = moveUnits(
 				makeUnitList(carrier), FIGHTER_SEA);
 		assertRefueled(fighter, result);
@@ -205,11 +204,11 @@ public class FuelTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(nationThem,
 				makeUnitList(fighter), FIGHTER_SEA);
 		assertResult(result);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 
 		result = moveUnits(
 				makeUnitList(carrier), FIGHTER_SEA);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 	}
 	@Test
 	public void warCarrierCannotEnter() {
@@ -222,10 +221,10 @@ public class FuelTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(nationThem,
 				makeUnitList(fighter), FIGHTER_SEA);
 		assertResult(result);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 
 		result = moveUnits(
 				makeUnitList(carrier), FIGHTER_SEA);
-		assertTrue(result.toString(), fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertTrue(fighter.getUnitBase().getMobility() > fighter.getFuel(), result.toString());
 	}
 }

@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.site.action;
 
-import org.jmock.Expectations;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.StratInitClientTest;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.util.Spring;
+import org.jmock.Expectations;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 
 
 

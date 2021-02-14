@@ -8,12 +8,12 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitSeen;
 import com.kenstevens.stratinit.repo.UnitRepo;
 import com.kenstevens.stratinit.repo.UnitSeenRepo;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UnitDaoTest extends StratInitTest {
 	@Autowired

@@ -2,11 +2,11 @@ package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PlayerDaoTest extends StratInitWebBase {
 	@Autowired
@@ -29,6 +29,6 @@ public class PlayerDaoTest extends StratInitWebBase {
 	}
 
 	private void assertPlayer(String username) {
-		Assert.assertNotNull(playerDao.find(username));
+		assertNotNull(playerDao.find(username));
 	}
 }

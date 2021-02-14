@@ -1,12 +1,5 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -14,6 +7,10 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class InterceptionTest extends TwoPlayerBase {
 	@Autowired
@@ -174,8 +171,8 @@ public class InterceptionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertFalseResult(result);
 		assertNotFired(result, fighter);
-		assertFalse(result.toString(),
-				fighter.getUnitBase().getMobility() > fighter.getFuel());
+		assertFalse(fighter.getUnitBase().getMobility() > fighter.getFuel(),
+				result.toString());
 	}
 
 	@Test
@@ -218,8 +215,8 @@ public class InterceptionTest extends TwoPlayerBase {
 		Unit heli2 = unitDaoService
 				.buildUnit(nationMe, ATT2, UnitType.HELICOPTER);
 		heli1.setHp(1);
-		Unit[] inf = new Unit[2*HELICOPTER_CAPACITY + 1];
-		for (int i = 0; i < 2*HELICOPTER_CAPACITY + 1; ++i) {
+		Unit[] inf = new Unit[2 * HELICOPTER_CAPACITY + 1];
+		for (int i = 0; i < 2 * HELICOPTER_CAPACITY + 1; ++i) {
 			inf[i] = unitDaoService
 					.buildUnit(nationMe, ATT2, UnitType.INFANTRY);
 		}
@@ -228,17 +225,17 @@ public class InterceptionTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(makeUnitList(heli1, heli2),
 				BETWEEN);
 		assertFalseResult(result);
-		assertFalse(result.toString(), heli1.isAlive());
+		assertFalse(heli1.isAlive(), result.toString());
 		assertTrue(heli2.isAlive());
 		int deadCount = 0;
-		for (int i = 0; i < 2*HELICOPTER_CAPACITY; ++i) {
+		for (int i = 0; i < 2 * HELICOPTER_CAPACITY; ++i) {
 			if (inf[i].isAlive()) {
 				assertEquals(heli2.getCoords(), inf[i].getCoords());
 			} else {
 				++deadCount;
 			}
 		}
-		assertEquals(ATT2, inf[2*HELICOPTER_CAPACITY].getCoords());
+		assertEquals(ATT2, inf[2 * HELICOPTER_CAPACITY].getCoords());
 		assertEquals(HELICOPTER_CAPACITY, deadCount);
 	}
 
@@ -277,8 +274,7 @@ public class InterceptionTest extends TwoPlayerBase {
 		Unit bomber2 = unitDaoService.buildUnit(nationMe, ATT,
 				UnitType.HEAVY_BOMBER);
 		unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
-		Result<MoveCost> result = moveUnits(makeUnitList(new Unit[] {
-				bomber1, bomber2 }), DEF);
+		Result<MoveCost> result = moveUnits(makeUnitList(bomber1, bomber2), DEF);
 		assertFalseResult(result);
 		Unit fighter1 = fighters[0];
 		Unit fighter2 = fighters[1];

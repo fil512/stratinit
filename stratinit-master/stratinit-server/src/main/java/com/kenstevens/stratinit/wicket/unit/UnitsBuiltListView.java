@@ -1,20 +1,17 @@
 package com.kenstevens.stratinit.wicket.unit;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.wicket.provider.UnitsBuilt;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 
-import com.kenstevens.stratinit.wicket.provider.UnitsBuilt;
+import java.util.List;
 
 public class UnitsBuiltListView extends ListView<UnitsBuilt> {
 
 	private static final long serialVersionUID = 1L;
 
-	public UnitsBuiltListView(String id,
-			IModel<? extends List<? extends UnitsBuilt>> unitsBuiltListModel) {
+	public UnitsBuiltListView(String id, List<UnitsBuilt> unitsBuiltListModel) {
 		super(id, unitsBuiltListModel);
 	}
 

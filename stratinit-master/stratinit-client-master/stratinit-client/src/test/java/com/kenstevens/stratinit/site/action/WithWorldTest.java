@@ -1,9 +1,5 @@
 package com.kenstevens.stratinit.site.action;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.StratInitClientTest;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
@@ -16,16 +12,19 @@ import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Ignore
+@Disabled
 public class WithWorldTest extends StratInitClientTest {
-	protected static final SectorCoords CITY = new SectorCoords(0,1);
+	protected static final SectorCoords CITY = new SectorCoords(0, 1);
 
 	@Autowired
 	Data db;
 	protected NationView nation;
 
-	@Before
+	@BeforeEach
 	public void init() {
 		SIGame sigame = new SIGame();
 		GameView game = new GameView(sigame);

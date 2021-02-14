@@ -6,24 +6,24 @@ import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class TwoPlayerBase extends StratInitWebBase {
-	protected static final String PLAYER_THEM_NAME = "them";
-	protected Player playerThem;
-	protected Nation nationThem;
-	protected int nationThemId;
+    protected static final String PLAYER_THEM_NAME = "them";
+    protected Player playerThem;
+    protected Nation nationThem;
+    protected int nationThemId;
 
-	@Before
-	public void joinTwoPlayers() {
-		setAuthentication(PLAYER_ME_NAME);
-		joinGamePlayerMe();
-		playerThem = createPlayer(PLAYER_THEM_NAME);
-		Result<Nation> retval = joinGame(playerThem);
-		nationThemId = retval.getValue().getNationId();
-		nationThem = gameDao.findNation(testGameId, playerThem);
-		setAuthentication(PLAYER_ME_NAME);
-	}
+    @BeforeEach
+    public void joinTwoPlayers() {
+        setAuthentication(PLAYER_ME_NAME);
+        joinGamePlayerMe();
+        playerThem = createPlayer(PLAYER_THEM_NAME);
+        Result<Nation> retval = joinGame(playerThem);
+        nationThemId = retval.getValue().getNationId();
+        nationThem = gameDao.findNation(testGameId, playerThem);
+        setAuthentication(PLAYER_ME_NAME);
+    }
 
 	private void setMyRelation(RelationType relationType) {
 		Relation relation = gameDao.findRelation(nationMe, nationThem);

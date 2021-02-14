@@ -1,15 +1,5 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-import java.util.Properties;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -18,6 +8,12 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.world.WorldHelper;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Properties;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GetGamesTest extends StratInitWebBase {
 

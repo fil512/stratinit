@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
@@ -16,6 +8,13 @@ import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class AttackUnitFinderHelperTest extends TwoPlayerBase {
 	private static final SectorCoords ATT_LAND = new SectorCoords(0, 0);
@@ -25,8 +24,8 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
 	private WorldView worldView;
 	private WorldSector landSector;
 	private WorldSector waterSector;
-	
-	@Before
+
+	@BeforeEach
 	public void getWorldView() {
 		declareWar();
 		worldView = sectorDaoService.getAllWorldView(nationMe);

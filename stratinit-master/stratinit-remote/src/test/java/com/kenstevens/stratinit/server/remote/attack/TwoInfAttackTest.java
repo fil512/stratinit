@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -12,6 +7,10 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TwoInfAttackTest extends TwoPlayerBase {
 	@Autowired protected SectorDaoService sectorDaoServiceImpl;
@@ -33,7 +32,7 @@ public class TwoInfAttackTest extends TwoPlayerBase {
 		inf2.addMobility();
 		unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] { inf1, inf2 }), DEF);
+				makeUnitList(inf1, inf2), DEF);
 		assertResult(result);
 		assertDamaged(result, inf1);
 		assertFired(result, inf1);
@@ -56,7 +55,7 @@ public class TwoInfAttackTest extends TwoPlayerBase {
 		def.setHp(1);
 		unitDao.merge(def);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] { inf1, inf2 }), DEF);
+				makeUnitList(inf1, inf2), DEF);
 		assertResult(result);
 		assertNotDamaged(result, inf1);
 		assertFired(result, inf1);
@@ -74,7 +73,7 @@ public class TwoInfAttackTest extends TwoPlayerBase {
 		inf1.addMobility();
 		unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] { inf1, inf2 }), DEF);
+				makeUnitList(inf1, inf2), DEF);
 		assertResult(result);
 		assertDamaged(result, inf1);
 		assertFired(result, inf1);
@@ -93,7 +92,7 @@ public class TwoInfAttackTest extends TwoPlayerBase {
 				UnitType.INFANTRY);
 		Unit def = unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] { inf1, inf2 }), DEF);
+				makeUnitList(inf1, inf2), DEF);
 		assertFalseResult(result);
 		assertNotDamaged(result, def);
 		assertNotMoved(result, inf1);

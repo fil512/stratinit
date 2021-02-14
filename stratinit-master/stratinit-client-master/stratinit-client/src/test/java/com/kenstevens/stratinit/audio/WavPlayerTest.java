@@ -1,16 +1,14 @@
 package com.kenstevens.stratinit.audio;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.InputStream;
-
-import javax.sound.sampled.DataLine.Info;
-
-import org.junit.Test;
+import com.kenstevens.stratinit.StratInitClientTest;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.kenstevens.stratinit.StratInitClientTest;
+import javax.sound.sampled.DataLine.Info;
+import java.io.InputStream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class WavPlayerTest  extends StratInitClientTest {
@@ -21,7 +19,7 @@ public class WavPlayerTest  extends StratInitClientTest {
 	public void getAudioStream() {
 		Info info = wavLibrary.getInfo("Hit.wav");
 		assertNotNull(info);
-		assertEquals(1, info.getFormats().length);;
+		assertEquals(1, info.getFormats().length);
 		InputStream stream = wavLibrary.getAudioStream("Hit.wav");
 		assertNotNull(stream);
 	}

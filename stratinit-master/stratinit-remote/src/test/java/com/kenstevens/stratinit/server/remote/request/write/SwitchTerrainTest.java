@@ -1,9 +1,5 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -11,6 +7,9 @@ import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SwitchTerrainTest extends TwoPlayerBase {
 	private static final SectorCoords INLAND = new SectorCoords(1,1);

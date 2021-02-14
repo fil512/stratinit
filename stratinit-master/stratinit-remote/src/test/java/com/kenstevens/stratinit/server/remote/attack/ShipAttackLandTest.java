@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -12,6 +7,10 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ShipAttackLandTest extends TwoPlayerBase {
 	@Autowired protected SectorDaoService sectorDaoServiceImpl;
@@ -50,7 +49,7 @@ public class ShipAttackLandTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(bb), LAND);
 		assertFalseResult(result);
-		assertEquals(result.toString(), bb.getUnitBase().getAmmo(), bb.getAmmo());
+		assertEquals(bb.getUnitBase().getAmmo(), bb.getAmmo(), result.toString());
 	}
 
 	@Test

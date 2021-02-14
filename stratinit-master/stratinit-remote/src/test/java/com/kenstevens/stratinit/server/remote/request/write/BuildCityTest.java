@@ -1,14 +1,5 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.SectorSeen;
@@ -18,6 +9,12 @@ import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BuildCityTest extends TwoPlayerBase {
 	private static final SectorCoords LAND = new SectorCoords(1,11);

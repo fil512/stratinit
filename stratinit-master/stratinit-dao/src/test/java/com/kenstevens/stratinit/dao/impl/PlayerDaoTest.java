@@ -3,11 +3,11 @@ package com.kenstevens.stratinit.dao.impl;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.model.Player;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class PlayerDaoTest extends StratInitTest {
 	@Autowired

@@ -1,15 +1,5 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Sector;
@@ -21,6 +11,12 @@ import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings("unused")
 public class AttackTakeCityTest extends TwoPlayerBase {
@@ -85,7 +81,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 		Unit trans = unitDaoService.buildUnit(nationMe, BESIDE,
 				UnitType.TRANSPORT);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] {inf, inf2}), CITY);
+				makeUnitList(inf, inf2), CITY);
 		assertResult(result);
 		assertDamaged(result, inf);
 		assertTookCity(result);
@@ -121,7 +117,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 		sectorDaoService.captureCity(nationThem, CITY);
 		declareWar();
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] {plane1, plane2, plane3}), CITY);
+				makeUnitList(plane1, plane2, plane3), CITY);
 		assertResult(result);
 		assertNoTookCity(result);
 	}
@@ -144,7 +140,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 		List<City> cities = sectorDao.getCities(nationMe);
 		Sector citySector = testWorld.getSector(CITY);
 		City city = sectorDao.getCity(citySector);
-		assertTrue(result.toString(), cities.contains(city));
+		assertTrue(cities.contains(city), result.toString());
 		assertEquals(MoveType.TAKE_CITY, result.getValue().getMoveType());
 	}
 
@@ -152,7 +148,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 		List<City> cities = sectorDao.getCities(nationMe);
 		Sector citySector = testWorld.getSector(CITY);
 		City city = sectorDao.getCity(citySector);
-		assertFalse(result.toString(), cities.contains(city));
+		assertFalse(cities.contains(city), result.toString());
 		assertFalse(MoveType.TAKE_CITY.equals(result.getValue().getMoveType()));
 	}
 
@@ -218,7 +214,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 		sectorDaoService.captureCity(nationThem, CITY);
 		declareWar();
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] {plane, inf}), CITY);
+				makeUnitList(plane, inf), CITY);
 		assertResult(result);
 		assertDamaged(result, inf);
 		assertTookCity(result);

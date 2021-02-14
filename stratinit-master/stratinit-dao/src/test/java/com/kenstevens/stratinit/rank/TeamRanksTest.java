@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.rank;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.PlayerRank;
 import com.kenstevens.stratinit.server.remote.rank.ELOCalculator;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TeamRanksTest {
 

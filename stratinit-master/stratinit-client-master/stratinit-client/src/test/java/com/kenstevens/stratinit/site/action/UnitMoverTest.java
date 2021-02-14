@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.site.action;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.UnitView;
@@ -14,6 +8,11 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.UnitHelper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnitMoverTest extends WithWorldTest {
 	@Autowired
@@ -40,8 +39,8 @@ public class UnitMoverTest extends WithWorldTest {
 		siunit.type = UnitType.FIGHTER;
 
 		UnitView unit = new UnitView(nation, siunit);
-		Result<None> result = unitMover.inRange(CITY, Lists.newArrayList(unit ));
-		assertTrue(result.toString(), result.isSuccess());
+		Result<None> result = unitMover.inRange(CITY, Lists.newArrayList(unit));
+		assertTrue(result.isSuccess(), result.toString());
 	}
 	@Test
 	public void oneFuelTwoMob() {
@@ -52,8 +51,8 @@ public class UnitMoverTest extends WithWorldTest {
 		siunit.type = UnitType.FIGHTER;
 
 		UnitView unit = new UnitView(nation, siunit);
-		Result<None> result = unitMover.inRange(CITY, Lists.newArrayList(unit ));
-		assertTrue(result.toString(), result.isSuccess());
+		Result<None> result = unitMover.inRange(CITY, Lists.newArrayList(unit));
+		assertTrue(result.isSuccess(), result.toString());
 	}
 	@Test
 	public void twoFuelOneMob() {
@@ -64,7 +63,7 @@ public class UnitMoverTest extends WithWorldTest {
 		siunit.type = UnitType.FIGHTER;
 
 		UnitView unit = new UnitView(nation, siunit);
-		Result<None> result = unitMover.inRange(CITY, Lists.newArrayList(unit ));
-		assertTrue(result.toString(), result.isSuccess());
+		Result<None> result = unitMover.inRange(CITY, Lists.newArrayList(unit));
+		assertTrue(result.isSuccess(), result.toString());
 	}
 }

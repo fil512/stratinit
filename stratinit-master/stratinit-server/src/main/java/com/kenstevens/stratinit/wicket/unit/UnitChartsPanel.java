@@ -1,15 +1,5 @@
 package com.kenstevens.stratinit.wicket.unit;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.template.JavaScriptTemplate;
-import org.apache.wicket.util.template.PackageTextTemplate;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
@@ -19,6 +9,16 @@ import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.wicket.model.DayUnitsModel;
 import com.kenstevens.stratinit.wicket.provider.JavaScriptHelper;
 import com.kenstevens.stratinit.wicket.provider.PlayerUnitsProvider;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.template.JavaScriptTemplate;
+import org.apache.wicket.util.template.PackageTextTemplate;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class UnitChartsPanel extends Panel {
@@ -47,13 +47,13 @@ public class UnitChartsPanel extends Panel {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		String js = "";
-		js += getChartJS(UnitBaseType.LAND);
-		js += getChartJS(UnitBaseType.NAVY);
-		js += getChartJS(UnitBaseType.AIR);
-		js += getChartJS(UnitBaseType.TECH);
-		response.renderString(js);
-	}
+        String js = "";
+        js += getChartJS(UnitBaseType.LAND);
+        js += getChartJS(UnitBaseType.NAVY);
+        js += getChartJS(UnitBaseType.AIR);
+        js += getChartJS(UnitBaseType.TECH);
+        response.render(OnDomReadyHeaderItem.forScript(js));
+    }
 
 	private String getChartJS(UnitBaseType unitBaseType) {
 		PackageTextTemplate ptTemplate = new PackageTextTemplate(

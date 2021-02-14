@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.Sector;
@@ -15,6 +7,11 @@ import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CedeCityTest extends TwoPlayerBase {
 	@Test

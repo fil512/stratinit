@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -17,18 +17,18 @@ public abstract class WithUnitsBase extends StratInitWebBase {
 	protected static final SectorCoords START_COORDS = new SectorCoords(0,0);
 	protected static final SectorCoords SEA1 = new SectorCoords(3,0);
 	protected static final SectorCoords SEA2 = new SectorCoords(3,1);
-	protected Unit testInfantry;
-	protected int testInfantryId;
-	protected Unit testHelicopter;
-	protected int testHelicopterId;
-	protected List<Unit>testInfantries = new ArrayList<Unit>();
+    protected Unit testInfantry;
+    protected int testInfantryId;
+    protected Unit testHelicopter;
+    protected int testHelicopterId;
+    protected List<Unit> testInfantries = new ArrayList<Unit>();
 
-	public WithUnitsBase() {
-		super();
-	}
+    public WithUnitsBase() {
+        super();
+    }
 
-	@Before
-	public void doJoinGame() {
+    @BeforeEach
+    public void doJoinGame() {
         joinGamePlayerMe();
         testInfantry = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
         testInfantry.addMobility();

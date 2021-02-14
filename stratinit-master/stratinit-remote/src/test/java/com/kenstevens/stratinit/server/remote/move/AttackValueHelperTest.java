@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
@@ -12,15 +7,19 @@ import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AttackValueHelperTest extends StratInitWebBase {
-	private static final SectorCoords SEA = new SectorCoords(4,0);
-	
-	@Before
+	private static final SectorCoords SEA = new SectorCoords(4, 0);
+
+	@BeforeEach
 	public void join() {
 		joinGamePlayerMe();
 	}
-	
+
 	@Test
 	public void testBBDestValues() {
 		Unit att = unitDaoService.buildUnit(nationMe, SEA, UnitType.BATTLESHIP);

@@ -1,30 +1,31 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.dto.SIGame;
+import com.kenstevens.stratinit.shell.ProgressBarControl;
+import com.kenstevens.stratinit.shell.WidgetContainer;
+import org.jmock.Mockery;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.shell.ProgressBarControl;
-import com.kenstevens.stratinit.shell.WidgetContainer;
-
-
-@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
+@Disabled
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/spring.xml")
 public class StratInitClientTest {
-	@Autowired protected Mockery context;
-	@Autowired protected WidgetContainer widgetContainer;
+	@Autowired
+	protected Mockery context;
+	@Autowired
+	protected WidgetContainer widgetContainer;
 
-	private ProgressBarControl progressBarControlMock = new ProgressBarControl() {
+	private final ProgressBarControl progressBarControlMock = new ProgressBarControl() {
 		@Override
 		public void incrementSelection() {
 		}
@@ -38,7 +39,7 @@ public class StratInitClientTest {
 		}
 	};
 
-	@Before
+	@BeforeEach
 	public void loadWidgets() {
 		widgetContainer.setProgressBarControl(progressBarControlMock);
 	}

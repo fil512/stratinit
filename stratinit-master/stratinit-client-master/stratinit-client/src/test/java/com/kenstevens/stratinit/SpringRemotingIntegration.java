@@ -1,26 +1,25 @@
 package com.kenstevens.stratinit;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.remoting.RemoteAccessException;
-
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.type.Constants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.RemoteAccessException;
 
-@Ignore
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+@Disabled
 public class SpringRemotingIntegration extends StratInitClientTest {
 	private final Log logger = LogFactory.getLog(getClass());
 
@@ -30,7 +29,7 @@ public class SpringRemotingIntegration extends StratInitClientTest {
 	private Account account;
 
 	@Test
-	public void testGoodLogin() throws HttpException, IOException {
+	public void testGoodLogin() throws IOException {
 		goodLogin();
 
 		String reply = stratInit.getVersion().getValue();
@@ -38,13 +37,13 @@ public class SpringRemotingIntegration extends StratInitClientTest {
 	}
 
 
-	private void goodLogin() throws HttpException, IOException {
+	private void goodLogin() throws IOException {
 		account.setUsername("hydro");
 		account.setPassword("hydro");
 	}
 
 	@Test
-	public void testGetMyGames() throws HttpException, IOException {
+	public void testGetMyGames() throws IOException {
 		goodLogin();
 		List<SIGame> games = stratInit.getJoinedGames().getValue();
 
@@ -54,25 +53,29 @@ public class SpringRemotingIntegration extends StratInitClientTest {
 	}
 
 	@Test
-	public void testGetSectors() throws HttpException, IOException {
+	public void testGetSectors() throws IOException {
 		goodLogin();
 		List<SISector> sectors = stratInit.getSectors().getValue();
 		logger.info("GOT " + sectors.size() + " sectors!");
 	}
 
 	@Test
-	public void testGetCities() throws HttpException, IOException {
+	public void testGetCities() throws IOException {
 		goodLogin();
 		List<SICity> cities = stratInit.getCities().getValue();
 		logger.info("cities: " + cities.size());
 	}
 
-	@Test(expected = RemoteAccessException.class)
+	@Test
 	public void testBadLogin() {
 		account.setUsername("hydro");
 		account.setPassword("hydrox");
-		String reply = stratInit.getVersion().getValue();
-		assertEquals(Constants.SERVER_VERSION, reply);
+		try {
+			String reply = stratInit.getVersion().getValue();
+			fail();
+		} catch (RemoteAccessException e) {
+			assertEquals("", e.getMessage());
+		}
 	}
 
 }

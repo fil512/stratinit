@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.wicket.unit;
 
-import java.util.Map;
-
-import org.apache.wicket.markup.html.IHeaderResponse;
+import com.google.common.collect.Maps;
+import com.kenstevens.stratinit.wicket.provider.UnitsBuiltProvider;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 
-import com.google.common.collect.Maps;
-import com.kenstevens.stratinit.wicket.provider.UnitsBuiltProvider;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class GameUnitsChartPanel extends Panel {
@@ -24,7 +24,7 @@ public class GameUnitsChartPanel extends Panel {
 	}
 
 	public void renderHead(IHeaderResponse response) {
-		response.renderString(getChartJS());
+		response.render(OnDomReadyHeaderItem.forScript(getChartJS()));
 	}
 
 	private String getChartJS() {

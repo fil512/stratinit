@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
-import java.util.List;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GetRelationsTest extends TwoPlayerBase {
 	private List<SIRelation> relations;

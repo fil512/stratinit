@@ -1,25 +1,25 @@
 package com.kenstevens.stratinit.util;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TestUpdateCalculator {
 	private UpdateCalculator updateCalculator;
 	private Date now;
 	private Date lastUpdated;
 
-	@Before
+	@BeforeEach
 	public void setLastUpdate() {
 		// 10:00
 		now = new Date();
 		// 7:30
 		lastUpdated = minutesBefore(now, 60 * 2 + 30);
-		int oneHourMillis = 60*60*1000;
+		int oneHourMillis = 60 * 60 * 1000;
 		updateCalculator = new UpdateCalculator(false, unshrinkTime(false, oneHourMillis));
 	}
 

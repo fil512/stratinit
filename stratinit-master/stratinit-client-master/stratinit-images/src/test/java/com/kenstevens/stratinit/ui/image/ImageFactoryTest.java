@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.ui.image;
 
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import java.io.FileNotFoundException;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
 // TODO CI find a way to get this to run on a headless box 
-@Ignore
+@Disabled
 public class ImageFactoryTest {
 	@Test
 	public void createImages() throws FileNotFoundException {

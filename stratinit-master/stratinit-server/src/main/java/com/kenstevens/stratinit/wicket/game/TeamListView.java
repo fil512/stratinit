@@ -1,20 +1,17 @@
 package com.kenstevens.stratinit.wicket.game;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SITeam;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 
-import com.kenstevens.stratinit.dto.SITeam;
+import java.util.List;
 
 public final class TeamListView extends ListView<SITeam> {
 
 	private static final long serialVersionUID = 1L;
 
-	public TeamListView(String id,
-			IModel<? extends List<? extends SITeam>> model) {
+	public TeamListView(String id, List<SITeam> model) {
 		super(id, model);
 	}
 

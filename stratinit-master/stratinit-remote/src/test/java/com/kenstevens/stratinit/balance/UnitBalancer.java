@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.balance;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
@@ -15,8 +9,13 @@ import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-@Ignore
+import java.io.IOException;
+import java.util.List;
+
+@Disabled
 public class UnitBalancer extends TwoPlayerBase {
 	public static final SectorCoords LAND_ATT_COORDS = new SectorCoords(2, 1);
 	public static final SectorCoords SEA_ATT_COORDS = new SectorCoords(3, 1);

@@ -1,12 +1,5 @@
 package com.kenstevens.stratinit.server.remote.supply;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Iterator;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
@@ -17,6 +10,12 @@ import com.kenstevens.stratinit.supply.SupplyTree;
 import com.kenstevens.stratinit.type.SectorCoordVector;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SupplyTreeTest  extends TwoPlayerBase {
 	private static final SectorCoords SUPPLY = new SectorCoords(3, 0);

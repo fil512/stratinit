@@ -1,17 +1,16 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.event.EventTimer;
 import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
+import org.jmock.Mockery;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 
-@Ignore
+@Disabled
 public class EventTimerMockedBase extends StratInitDaoBase {
 	protected Mockery context = new Mockery();
 
@@ -22,14 +21,14 @@ public class EventTimerMockedBase extends StratInitDaoBase {
 	@Autowired
 	protected EventQueue eventQueue;
 
-	@Before
+	@BeforeEach
 	public void setupMocks() {
 
 		eventTimer = context.mock(EventTimer.class);
 		ReflectionTestUtils.setField(eventQueue, "eventTimer", eventTimer);
 	}
 
-	@After
+	@AfterEach
 	public void undoMocks() {
 		ReflectionTestUtils.setField(eventQueue, "eventTimer", origEventTimer);
 	}

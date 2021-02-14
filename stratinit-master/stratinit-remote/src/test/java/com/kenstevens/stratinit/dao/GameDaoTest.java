@@ -1,20 +1,18 @@
 package com.kenstevens.stratinit.dao;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Map;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameDaoTest extends TwoPlayerBase {
 	@Autowired
 	private GameDao gameDao;
-	
 
 	@Test
 	public void getMyRelations() {

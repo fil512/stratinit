@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ThreePlayerRelationChangeTest extends ThreeRelationManagerTest {
 	@Test

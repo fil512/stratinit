@@ -1,19 +1,16 @@
 package com.kenstevens.stratinit.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Collection;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SectorDaoTest extends TwoPlayerBase {
 	private static final SectorCoords I_SEE = new SectorCoords(1,3);

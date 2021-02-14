@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.event;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.StratInitClientTest;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EventTest extends StratInitClientTest {
 	public static final String TEST_STRING = "test";

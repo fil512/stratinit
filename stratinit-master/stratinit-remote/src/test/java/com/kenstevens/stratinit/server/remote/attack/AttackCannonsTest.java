@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -13,6 +7,9 @@ import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AttackCannonsTest extends TwoPlayerBase {
 	private static final SectorCoords PORT = new SectorCoords(2, 2);
@@ -44,7 +41,7 @@ public class AttackCannonsTest extends TwoPlayerBase {
 		assertResult(result);
 		assertTrue(result.toString().contains("Cannons hit"));
 		assertDamaged(result, dest);
-		assertEquals(result.toString(), dest.getHp() + 1, dest.getUnitBase().getHp());
+		assertEquals(dest.getHp() + 1, dest.getUnitBase().getHp(), result.toString());
 		assertFired(result, dest);
 		assertDamaged(result, sat);
 		assertEquals(MoveType.ATTACK, result.getValue().getMoveType());

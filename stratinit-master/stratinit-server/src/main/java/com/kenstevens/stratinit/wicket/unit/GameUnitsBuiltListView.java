@@ -1,15 +1,10 @@
 package com.kenstevens.stratinit.wicket.unit;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.wicket.model.GameUnitsBuiltListModel;
+import com.kenstevens.stratinit.wicket.provider.GameUnitsBuilt;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.model.PropertyModel;
-
-import com.kenstevens.stratinit.wicket.model.GameUnitsBuiltListModel;
-import com.kenstevens.stratinit.wicket.provider.GameUnitsBuilt;
-import com.kenstevens.stratinit.wicket.provider.UnitsBuilt;
 
 public class GameUnitsBuiltListView extends PageableListView<GameUnitsBuilt> {
 
@@ -25,9 +20,7 @@ public class GameUnitsBuiltListView extends PageableListView<GameUnitsBuilt> {
 		final GameUnitsBuilt gub = listItem.getModelObject();
 		int gameId = gub.getGame().getGameId();
 		listItem.add(new Label("gamdId", "" + gameId));
-		UnitsBuiltListView unitsBuiltListView = new UnitsBuiltListView(
-				"unitsBuilt", new PropertyModel<List<UnitsBuilt>>(
-						listItem.getModel(), "unitsBuilt"));
+		UnitsBuiltListView unitsBuiltListView = new UnitsBuiltListView("unitsBuilt", gub.getUnitsBuilt());
 		listItem.add(unitsBuiltListView);
 		listItem.add(new GameUnitsChartPanel("gameUnitsChartPanel", gameId));
 	}

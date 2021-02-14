@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.remote;
 
 import com.kenstevens.stratinit.DaoConfig;
+import com.kenstevens.stratinit.TestConfig;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
@@ -10,14 +11,14 @@ import com.kenstevens.stratinit.type.*;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.hibernate.internal.SessionImpl;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,11 +27,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {DaoConfig.class})
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
 public abstract class StratInitDaoBase {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicInteger playerIndex = new AtomicInteger();
@@ -144,7 +145,7 @@ public abstract class StratInitDaoBase {
 		playerDao.save(player);
 		return player;
 	}
-	
+
 	protected String[] getIslands() {
 		return islands;
 	}
@@ -153,13 +154,12 @@ public abstract class StratInitDaoBase {
 		return types;
 	}
 
-	@Before
+	@BeforeEach
 	public void stratInit() {
 		Constants.setRunMode(RunMode.PRODUCTION);
 		if (!initialized) {
 			SessionImpl session = getSession();
-			assertTrue("Running in H2", session.getFactory()
-					.getDialect() instanceof org.hibernate.dialect.H2Dialect);
+			assertTrue(session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect, "Running in H2");
 			initialized = true;
 		}
 
@@ -171,7 +171,7 @@ public abstract class StratInitDaoBase {
 		return (SessionImpl) entityManager.getDelegate();
 	}
 
-	@After
+	@AfterEach
 	public void removeGame() {
 		expungeSvc.expungeAll();
 		dataCache.clear();
@@ -238,21 +238,21 @@ public abstract class StratInitDaoBase {
 	}
 
 	protected void assertResult(Result<? extends Object> result) {
-		assertTrue(result.toString(), result.isSuccess());
+		assertTrue(result.isSuccess(), result.toString());
 	}
 
 	protected void assertFalseResult(Result<? extends Object> result) {
-		assertFalse(result.toString(), result.isSuccess());
+		assertFalse(result.isSuccess(), result.toString());
 	}
 
 	protected void assertFalseResult(String string,
 			Result<? extends Object> result) {
-		assertFalse(string, result.isSuccess());
+		assertFalse(result.isSuccess(), string);
 	}
 	protected void assertTimeNear(long time1, long time2) {
-		assertTrue(new Date(time1) + " is not within " + TIME_TOLERANCE
-				+ " ms of " + new Date(time2) + ".  The difference is "
-				+ (time2 - time1) + " ms.",
-				Math.abs(time2 - time1) < TIME_TOLERANCE);
+		assertTrue(Math.abs(time2 - time1) < TIME_TOLERANCE,
+				new Date(time1) + " is not within " + TIME_TOLERANCE
+						+ " ms of " + new Date(time2) + ".  The difference is "
+						+ (time2 - time1) + " ms.");
 	}
 }

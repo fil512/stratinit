@@ -6,30 +6,30 @@ import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class ThreePlayerBase extends TwoPlayerBase {
-	protected static final String PLAYER_THREE_NAME = "three";
-	protected Player playerThree;
-	protected Nation nationThird;
-	protected int nationThreeId;
-	
-	@Override
-	protected void setIslands(int numIslands) {
-		testGame.setIslands(3);
-	}
-	
-	@Before
-	public void joinThreePlayers() {
-		playerThree = createPlayer(PLAYER_THREE_NAME);
-		Result<Nation> retval = joinGame(playerThree);
-		nationThreeId = retval.getValue().getNationId();
-		nationThird = gameDao.findNation(testGameId, playerThree);
-		setAuthentication(PLAYER_ME_NAME);
-	}
+    protected static final String PLAYER_THREE_NAME = "three";
+    protected Player playerThree;
+    protected Nation nationThird;
+    protected int nationThreeId;
 
-	private void setMyRelationToThird(RelationType relationType) {
-		Relation relation = gameDao.findRelation(nationMe, nationThird);
+    @Override
+    protected void setIslands(int numIslands) {
+        testGame.setIslands(3);
+    }
+
+    @BeforeEach
+    public void joinThreePlayers() {
+        playerThree = createPlayer(PLAYER_THREE_NAME);
+        Result<Nation> retval = joinGame(playerThree);
+        nationThreeId = retval.getValue().getNationId();
+        nationThird = gameDao.findNation(testGameId, playerThree);
+        setAuthentication(PLAYER_ME_NAME);
+    }
+
+    private void setMyRelationToThird(RelationType relationType) {
+        Relation relation = gameDao.findRelation(nationMe, nationThird);
 		relation.setNextType(relationType);
 		gameDaoService.switchRelation(relation);
 	}

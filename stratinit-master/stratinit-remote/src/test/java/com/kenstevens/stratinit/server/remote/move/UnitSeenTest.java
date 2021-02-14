@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitSeen;
@@ -13,6 +7,9 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitSeenTest extends TwoPlayerBase {
 	private static final SectorCoords SHIP1 = new SectorCoords(12,0);
@@ -89,7 +86,7 @@ public class UnitSeenTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(makeUnitList(sub), SHIP2);
 		assertResult(result);
 		unitSeen = unitDao.findUnitSeen(nationThem, sub);
-		assertNotNull(result.toString(), unitSeen);
+		assertNotNull(unitSeen, result.toString());
 	}
 
 	@Test

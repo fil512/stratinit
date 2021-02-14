@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
-import static org.junit.Assert.assertEquals;
+import com.kenstevens.stratinit.dto.SINation;
+import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GetNationsTest extends TwoPlayerBase {
 	@Test

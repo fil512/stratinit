@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.util;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.StratInitClientTest;
 import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.site.command.SendMessageCommand;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class SpringTest extends StratInitClientTest {
 	@Autowired protected Spring spring;

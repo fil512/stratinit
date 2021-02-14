@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.rank;
 
-import static org.junit.Assert.assertEquals;
+import com.kenstevens.stratinit.dto.SITeamRank;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.Test;
-
-import com.kenstevens.stratinit.dto.SITeamRank;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameRankerTest {
 	TeamHelper teamHelper = new TeamHelper(new TestTeamProvider());

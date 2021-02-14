@@ -1,46 +1,40 @@
 package com.kenstevens.stratinit.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UnitHelperTest {
 
-	private Unit inf;
-	private Unit fighter;
-	private Unit transport;
-	private Unit dest;
-	private Unit carrier;
-	private Unit heli;
-	private WorldSector landSector;
-	private WorldSector citySector;
-	private WorldSector waterSector;
-	private Nation nation;
-	private SectorCoords coords = new SectorCoords(0,0);
+    private Unit inf;
+    private Unit fighter;
+    private Unit transport;
+    private Unit dest;
+    private Unit carrier;
+    private Unit heli;
+    private WorldSector landSector;
+    private WorldSector citySector;
+    private WorldSector waterSector;
+    private Nation nation;
+    private final SectorCoords coords = new SectorCoords(0, 0);
 
-	@Before
-	public void init() {
-		Game game = new Game();
-		nation = new Nation(game, new Player());
-		inf = new Unit(nation, UnitType.INFANTRY, coords);
-		fighter = new Unit(nation, UnitType.FIGHTER, coords);
-		transport = new Unit(nation, UnitType.TRANSPORT, coords);
-		dest = new Unit(nation, UnitType.DESTROYER, coords);
-		carrier = new Unit(nation, UnitType.CARRIER, coords);
-		heli = new Unit(nation, UnitType.HELICOPTER, coords);
-		landSector = new WorldSector(game, coords, SectorType.LAND, 1);
+    @BeforeEach
+    public void init() {
+        Game game = new Game();
+        nation = new Nation(game, new Player());
+        inf = new Unit(nation, UnitType.INFANTRY, coords);
+        fighter = new Unit(nation, UnitType.FIGHTER, coords);
+        transport = new Unit(nation, UnitType.TRANSPORT, coords);
+        dest = new Unit(nation, UnitType.DESTROYER, coords);
+        carrier = new Unit(nation, UnitType.CARRIER, coords);
+        heli = new Unit(nation, UnitType.HELICOPTER, coords);
+        landSector = new WorldSector(game, coords, SectorType.LAND, 1);
 		waterSector = new WorldSector(game, coords, SectorType.WATER, 1);
 		citySector = new WorldSector(game, coords, SectorType.PLAYER_CITY, 1);
 	}

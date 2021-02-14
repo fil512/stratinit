@@ -5,13 +5,12 @@ import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.type.RelationType;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameDaoTest extends StratInitTest {
 	@Autowired
@@ -20,27 +19,27 @@ public class GameDaoTest extends StratInitTest {
 	@Test
 	public void testGamePersistence() {
 		createGame();
-		Assert.assertNotNull(gameDao.findGame(testGame.getId()));
+		assertNotNull(gameDao.findGame(testGame.getId()));
 	}
 
 	@Test
 	public void testGameRemove() {
 		createGame();
 		gameDao.remove(testGame);
-		Assert.assertNull(gameDao.findGame(testGame.getId()));
+		assertNull(gameDao.findGame(testGame.getId()));
 	}
 
 	@Test
 	public void testNationPersistence() {
 		createNation1();
-		Assert.assertNotNull(gameDao.findNation(testGame, testPlayer1));
+		assertNotNull(gameDao.findNation(testGame, testPlayer1));
 	}
 
 	@Test
 	public void testNationRemove() {
 		createNation1();
 		gameDao.remove(testGame);
-		Assert.assertNull(gameDao.findNation(testGame, testPlayer1));
+		assertNull(gameDao.findNation(testGame, testPlayer1));
 	}
 	
 	@Test

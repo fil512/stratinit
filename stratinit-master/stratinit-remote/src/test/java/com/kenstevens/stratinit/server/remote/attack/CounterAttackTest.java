@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.ThreePlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class CounterAttackTest extends ThreePlayerBase {
 	private static final SectorCoords SEA32 = new SectorCoords(3, 2);
@@ -77,7 +76,7 @@ public class CounterAttackTest extends ThreePlayerBase {
 		assertFiredOnce(result, dest4);
 		assertNotDamaged(result, dest31);
 		assertFiredOnce(result, dest31);
-		assertEquals(result.toString(), 3, result.getMessages().size());
+		assertEquals(3, result.getMessages().size(), result.toString());
 	}
 	
 	@Test

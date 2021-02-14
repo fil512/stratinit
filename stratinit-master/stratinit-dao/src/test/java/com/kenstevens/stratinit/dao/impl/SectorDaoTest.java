@@ -6,12 +6,10 @@ import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SectorDaoTest extends StratInitTest {
 	@Autowired
@@ -21,7 +19,7 @@ public class SectorDaoTest extends StratInitTest {
 	public void testSectorPersistance() {
 		createGame();
 		Sector result = sectorDao.getWorld(testGame).getSector(testCoords);
-		Assert.assertEquals(testGame.getId(), result.getGame().getId());
+		assertEquals(testGame.getId(), result.getGame().getId());
 	}
 	
 	@Test
@@ -77,7 +75,7 @@ public class SectorDaoTest extends StratInitTest {
 		sectorDao.save(city);
 
 		City result = sectorDao.getCity(testSector);
-		Assert.assertEquals(city, result);
-		Assert.assertEquals(city.getNation(), result.getNation());
+		assertEquals(city, result);
+		assertEquals(city.getNation(), result.getNation());
 	}
 }

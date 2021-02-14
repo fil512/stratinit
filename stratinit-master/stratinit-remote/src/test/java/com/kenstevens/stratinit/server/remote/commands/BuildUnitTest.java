@@ -1,24 +1,23 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BuildUnitTest extends StratInitWebBase {
 	private SICity sicity;
 
-	@Before
+	@BeforeEach
 	public void doJoinGame() throws InterruptedException {
 		joinGamePlayerMe();
 		List<SICity> cities = stratInit.getCities().getValue();

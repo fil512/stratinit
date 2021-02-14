@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.processor;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.StratInitClientTest;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.model.Data;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameListProcessorTest extends StratInitClientTest {
 	@Autowired

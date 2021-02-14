@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
@@ -16,19 +8,23 @@ import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitMoveTest extends StratInitWebBase {
-	public static final SectorCoords S00 = new SectorCoords(0,0);
-	public static final SectorCoords S01 = new SectorCoords(0,1);
-	public static final SectorCoords S02 = new SectorCoords(0,2);
-	public static final SectorCoords NO_SUPPLY = new SectorCoords(0,12);
-	public static final SectorCoords NO_SUPPLY_DEST = new SectorCoords(0,13);
+	public static final SectorCoords S00 = new SectorCoords(0, 0);
+	public static final SectorCoords S01 = new SectorCoords(0, 1);
+	public static final SectorCoords S02 = new SectorCoords(0, 2);
+	public static final SectorCoords NO_SUPPLY = new SectorCoords(0, 12);
+	public static final SectorCoords NO_SUPPLY_DEST = new SectorCoords(0, 13);
 
-	@Before
+	@BeforeEach
 	public void doJoinGame() {
 		joinGamePlayerMe();
 	}
-	
+
 	@Test
 	public void sufMob() {
 		Unit inf = unitDaoService.buildUnit(nationMe, S00,
@@ -61,7 +57,7 @@ public class UnitMoveTest extends StratInitWebBase {
 		Result<MoveCost> result = moveUnits(makeUnitList(inf), NO_SUPPLY_DEST);
 		assertFalseResult(result);
 		assertEquals(NO_SUPPLY, inf.getCoords());
-		assertNotNull(result.toString(), inf.getUnitMove());
+		assertNotNull(inf.getUnitMove(), result.toString());
 	}
 
 	@Test
@@ -75,7 +71,7 @@ public class UnitMoveTest extends StratInitWebBase {
 		Result<MoveCost> result = moveUnits(makeUnitList(inf), NO_SUPPLY_DEST);
 		assertFalseResult(result);
 		assertEquals(NO_SUPPLY, inf.getCoords());
-		assertNotNull(result.toString(), inf.getUnitMove());
+		assertNotNull(inf.getUnitMove(), result.toString());
 	}
 
 	@Test

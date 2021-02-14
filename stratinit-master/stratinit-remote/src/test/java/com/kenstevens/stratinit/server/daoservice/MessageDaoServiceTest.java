@@ -7,50 +7,50 @@ import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplate;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class MessageDaoServiceTest extends TwoPlayerBase {
 	private final Mockery context = new Mockery();
 	private MailService mailService;
-	private MessageDao messageDao;
+    private MessageDao messageDao;
 
-	@Autowired
-	private MailService origMailService;
-	@Autowired
-	private MessageDao origMessageDao;
+    @Autowired
+    private MailService origMailService;
+    @Autowired
+    private MessageDao origMessageDao;
 
-	@Autowired
-	private MessageDaoService messageDaoService;
+    @Autowired
+    private MessageDaoService messageDaoService;
 
-	@Before
-	public void setupMocks() {
+    @BeforeEach
+    public void setupMocks() {
 
-		mailService = context.mock(MailService.class);
-		messageDao = context.mock(MessageDao.class);
-		ReflectionTestUtils
-				.setField(messageDaoService, "mailService", mailService);
-		ReflectionTestUtils
-		.setField(messageDaoService, "messageDao", messageDao);
-	}
+        mailService = context.mock(MailService.class);
+        messageDao = context.mock(MessageDao.class);
+        ReflectionTestUtils
+                .setField(messageDaoService, "mailService", mailService);
+        ReflectionTestUtils
+                .setField(messageDaoService, "messageDao", messageDao);
+    }
 
-	@After
-	public void undoMocks() {
-		ReflectionTestUtils.setField(messageDaoService, "mailService",
-				origMailService);
-		ReflectionTestUtils.setField(messageDaoService, "messageDao",
-				origMessageDao);
-	}
+    @AfterEach
+    public void undoMocks() {
+        ReflectionTestUtils.setField(messageDaoService, "mailService",
+                origMailService);
+        ReflectionTestUtils.setField(messageDaoService, "messageDao",
+                origMessageDao);
+    }
 
-	@Test
-	public void sendMessage() {
-		context.checking(new Expectations() {
+    @Test
+    public void sendMessage() {
+        context.checking(new Expectations() {
 			{
 				oneOf(mailService).sendEmail(with(same(playerThem)), with(any(MailTemplate.class)));
 				oneOf(messageDao).save(with(any(Mail.class)));

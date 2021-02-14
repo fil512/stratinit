@@ -1,23 +1,15 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
-import com.kenstevens.stratinit.type.CityType;
-import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.type.SectorType;
-import com.kenstevens.stratinit.type.UnitType;
+import com.kenstevens.stratinit.type.*;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SectorDaoServiceTwoTest extends TwoPlayerBase {
 	private static final SectorCoords CITY = new SectorCoords(1, 4);

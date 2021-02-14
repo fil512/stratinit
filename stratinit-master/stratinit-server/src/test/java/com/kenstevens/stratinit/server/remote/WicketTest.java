@@ -1,18 +1,18 @@
 package com.kenstevens.stratinit.server.remote;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.util.Set;
-import java.util.regex.Pattern;
-
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
+
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class WicketTest {
 	@Test
@@ -25,13 +25,13 @@ public class WicketTest {
  
         Set<BeanDefinition> components = provider.findCandidateComponents("com/kenstevens/stratinit/wicket");
         for (BeanDefinition component : components) {
-        	if (component.isAbstract()) {
-        		continue;
-        	}
-        	@SuppressWarnings("unchecked")
-			Class<MarkupContainer> clazz = (Class<MarkupContainer>) Class.forName(component.getBeanClassName());
-        	String resource = clazz.getSimpleName()+".html";
-			assertNotNull("Resource ["+resource+"] not found with "+component.getBeanClassName(), clazz.getResourceAsStream(resource));
+            if (component.isAbstract()) {
+                continue;
+            }
+            @SuppressWarnings("unchecked")
+            Class<MarkupContainer> clazz = (Class<MarkupContainer>) Class.forName(component.getBeanClassName());
+            String resource = clazz.getSimpleName() + ".html";
+            assertNotNull(clazz.getResourceAsStream(resource), "Resource [" + resource + "] not found with " + component.getBeanClassName());
         }
     }
 }

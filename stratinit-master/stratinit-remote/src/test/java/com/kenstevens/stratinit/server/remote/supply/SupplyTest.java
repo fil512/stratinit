@@ -9,11 +9,11 @@ import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SupplyTest extends StratInitWebBase {
 	@Autowired protected SectorDaoService sectorDaoService;
@@ -22,27 +22,27 @@ public class SupplyTest extends StratInitWebBase {
 	private static final SectorCoords ENGINEER = new SectorCoords(0, 7);
 	private static final SectorCoords SEA_IN_REACH = new SectorCoords(6, 0);
 	private static final SectorCoords IN_TSUPPLY = new SectorCoords(9, 5);
-	private static final SectorCoords OUT_TSUPPLY = new SectorCoords(9, 6);
-	private static final SectorCoords SEA_OUT_OF_REACH = new SectorCoords(11, 0);
-	private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);
-	private static final SectorCoords CLOSE_ENOUGH_TO_PORT = new SectorCoords(6, 3);
-	private static final SectorCoords NEAR_PORT = new SectorCoords(6, 8);
-	private static final SectorCoords PORT = new SectorCoords(7, 8);
-	private static final SectorCoords FARXPORT = new SectorCoords(10, 13);
-	private static final SectorCoords FARXPORT1 = new SectorCoords(11, 13);
-	private static final SectorCoords FARLAND = new SectorCoords(9, 13);
+    private static final SectorCoords OUT_TSUPPLY = new SectorCoords(9, 6);
+    private static final SectorCoords SEA_OUT_OF_REACH = new SectorCoords(11, 0);
+    private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);
+    private static final SectorCoords CLOSE_ENOUGH_TO_PORT = new SectorCoords(6, 3);
+    private static final SectorCoords NEAR_PORT = new SectorCoords(6, 8);
+    private static final SectorCoords PORT = new SectorCoords(7, 8);
+    private static final SectorCoords FARXPORT = new SectorCoords(10, 13);
+    private static final SectorCoords FARXPORT1 = new SectorCoords(11, 13);
+    private static final SectorCoords FARLAND = new SectorCoords(9, 13);
 
-	@Before
-	public void doJoinGame() {
-		joinGamePlayerMe();
-	}
+    @BeforeEach
+    public void doJoinGame() {
+        joinGamePlayerMe();
+    }
 
-	@Test
-	public void unitInSupply() {
-		Unit inf = unitDaoService.buildUnit(nationMe, IN_SUPPLY,
-				UnitType.INFANTRY);
-		WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
-		Supply supply = new Supply(worldView);
+    @Test
+    public void unitInSupply() {
+        Unit inf = unitDaoService.buildUnit(nationMe, IN_SUPPLY,
+                UnitType.INFANTRY);
+        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        Supply supply = new Supply(worldView);
 		assertTrue(supply.inSupply(inf));
 	}
 

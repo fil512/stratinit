@@ -15,13 +15,13 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GameDaoStateChangeTest extends StratInitDaoBase {
 	private final Mockery context = new Mockery();
@@ -46,7 +46,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 	@Autowired
 	private GameDaoService gameDaoService;
 
-	@Before
+	@BeforeEach
 	public void setupMocks() {
 
 		eventQueue = context.mock(EventQueue.class);
@@ -62,7 +62,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		ReflectionTestUtils.setField(gameDaoService, "sectorDao", sectorDao);
 	}
 
-	@After
+	@AfterEach
 	public void undoMocks() {
 		// FIXME remove these
 		ReflectionTestUtils.setField(gameDaoService, "eventQueue",
@@ -184,41 +184,59 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		context.assertIsSatisfied();
 	}
 
-	@Test(expected = IllegalStateException.class)
 	public void mapGameNotStarted() {
 		Game game = makeGame();
-		gameDaoService.mapGame(game);
+		try {
+			gameDaoService.mapGame(game);
+			fail();
+		} catch (IllegalStateException e) {
+			assertEquals("", e.getMessage());
+		}
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void mapGameTwice() {
 		final Game game = makeGame();
-
+		final Player player = createPlayer();
+		final Result<Nation> result = gameDaoService.joinGame(player, game
+				.getId(), false);
 		context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                oneOf(sectorDao).save(with(any(World.class)));
-            }
+			{
+				oneOf(eventQueue).schedule(game, false);
+				oneOf(worldManager).build(game);
+				oneOf(sectorDao).save(with(aNull(World.class)));
+				oneOf(worldManager).addPlayerToMap(0, result.getValue());
+				oneOf(mailService).sendEmail(with(same(player)), with(any(MailTemplate.class)));
+			}
 		});
 		gameDaoService.scheduleGame(game);
 		gameDaoService.mapGame(game);
-		gameDaoService.mapGame(game);
+		try {
+			gameDaoService.mapGame(game);
+			fail();
+		} catch (IllegalStateException e) {
+			assertEquals("Game test is already mapped.  It cannot be mapped again.", e.getMessage());
+		}
 		context.assertIsSatisfied();
 	}
 
-	@Test(expected=IllegalStateException.class)
+	@Test
 	public void mapGameNoPlayers() {
 		final Game game = makeGame();
 		context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                oneOf(sectorDao).save(with(any(World.class)));
-            }
+			{
+				oneOf(eventQueue).schedule(game, false);
+				oneOf(worldManager).build(game);
+				oneOf(sectorDao).save(with(any(World.class)));
+			}
 		});
 		gameDaoService.scheduleGame(game);
-		gameDaoService.mapGame(game);
+		try {
+			gameDaoService.mapGame(game);
+			fail();
+		} catch (IllegalStateException e) {
+			assertEquals("Game test may not be mapped.  It has no players.", e.getMessage());
+		}
 	}
 
 	// FIXME this test started failing when we upgraded mock
@@ -234,9 +252,8 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
                 oneOf(eventQueue).schedule(game, false);
                 oneOf(worldManager).build(game);
                 oneOf(worldManager).addPlayerToMap(0, result.getValue());
-                oneOf(sectorDao).save(with(aNull(World.class)));
-                oneOf(mailService).sendEmail(with(same(player)),
-                        with(any(MailTemplate.class)));
+				oneOf(sectorDao).save(with(aNull(World.class)));
+				oneOf(mailService).sendEmail(with(same(player)), with(any(MailTemplate.class)));
             }
 		});
 		gameDaoService.scheduleGame(game);

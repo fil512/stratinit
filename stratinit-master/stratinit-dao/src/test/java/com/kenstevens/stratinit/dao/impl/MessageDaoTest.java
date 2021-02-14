@@ -3,12 +3,12 @@ package com.kenstevens.stratinit.dao.impl;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Mail;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MessageDaoTest extends StratInitTest {
 	private static final String SUB = "subject";

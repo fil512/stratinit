@@ -12,14 +12,14 @@ import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.internal.SessionImpl;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,10 +27,10 @@ import javax.transaction.Transactional;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {DaoConfig.class})
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
 public abstract class StratInitTest {
     public static final String TEST_PLAYER1_USERNAME = "a";
     protected static Player testPlayer1;
@@ -57,10 +57,10 @@ public abstract class StratInitTest {
     @Autowired
     private ExpungeSvc expungeSvc;
 
-    @Before
+    @BeforeEach
     public void stratInit() {
         SessionImpl session = (SessionImpl) entityManager.getDelegate();
-        assertTrue("RUNNING IN H2", session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect);
+        assertTrue(session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect, "RUNNING IN H2");
         testPlayer1 = new Player(TEST_PLAYER1_USERNAME);
         testPlayer1.setEmail("foo@foo.com");
         playerDao.save(testPlayer1);
@@ -70,7 +70,7 @@ public abstract class StratInitTest {
     }
 
     // TODO junit 5
-    @After
+    @AfterEach
     @Transactional
     public void clearDb() {
         expungeSvc.expungeAll();

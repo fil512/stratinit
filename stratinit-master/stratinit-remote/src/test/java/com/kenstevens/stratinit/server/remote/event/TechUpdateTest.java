@@ -4,30 +4,30 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.server.event.TechUpdateEvent;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TechUpdateTest extends TwoPlayerBase {
-	private final int secondsInDay = 60 * 60 * 24;
-	private final double FRACTION = (double) Constants.TECH_UPDATE_INTERVAL_SECONDS / secondsInDay;
-	private final double MY_TECH_GAIN = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES[1] * FRACTION;
-	private final double NATION2_TECH = 8.0;
-	private TechUpdateEvent techUpdateEvent;
+    private final int secondsInDay = 60 * 60 * 24;
+    private final double FRACTION = (double) Constants.TECH_UPDATE_INTERVAL_SECONDS / secondsInDay;
+    private final double MY_TECH_GAIN = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES[1] * FRACTION;
+    private final double NATION2_TECH = 8.0;
+    private TechUpdateEvent techUpdateEvent;
 
-	@Before
-	public void techEvent() {
-		techUpdateEvent = spring.autowire(new TechUpdateEvent(testGame));
-	}
+    @BeforeEach
+    public void techEvent() {
+        techUpdateEvent = spring.autowire(new TechUpdateEvent(testGame));
+    }
 
-	@Test
-	public void techUpdate() {
-		techUpdateEvent.execute();
-		Nation nation1 = gameDao.getNation(testGameId, nationMeId);
-		assertTrue(nation1.getTech() != 0.0);
-		assertEquals(MY_TECH_GAIN, nation1.getTech(), 0.00000001);
+    @Test
+    public void techUpdate() {
+        techUpdateEvent.execute();
+        Nation nation1 = gameDao.getNation(testGameId, nationMeId);
+        assertTrue(nation1.getTech() != 0.0);
+        assertEquals(MY_TECH_GAIN, nation1.getTech(), 0.00000001);
 	}
 
 	@Test

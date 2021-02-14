@@ -9,12 +9,12 @@ import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DataCacheTest extends StratInitTest {
 	@Autowired

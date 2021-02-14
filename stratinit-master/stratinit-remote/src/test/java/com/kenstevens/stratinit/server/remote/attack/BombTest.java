@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -13,6 +7,11 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class BombTest extends TwoPlayerBase {
 	@Autowired protected SectorDaoService sectorDaoServiceImpl;
@@ -79,7 +78,7 @@ public class BombTest extends TwoPlayerBase {
 		Unit inf = unitDaoService.buildUnit(nationThem, DEF,
 				UnitType.INFANTRY);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] {bomber1, bomber2}), DEF);
+				makeUnitList(bomber1, bomber2), DEF);
 		assertResult(result);
 		assertEquals(1, inf.getHp());
 	}
@@ -94,10 +93,10 @@ public class BombTest extends TwoPlayerBase {
 		Unit inf = unitDaoService.buildUnit(nationThem, DEF,
 				UnitType.INFANTRY);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] {bomber1, bomber2}), DEF);
+				makeUnitList(bomber1, bomber2), DEF);
 		assertResult(result);
 		result = moveUnits(
-				makeUnitList(new Unit[] {bomber1, bomber2}), DEF);
+				makeUnitList(bomber1, bomber2), DEF);
 		assertResult(result);
 		assertFalse(inf.isAlive());
 	}
@@ -138,7 +137,7 @@ public class BombTest extends TwoPlayerBase {
 		Unit dest = unitDaoService.buildUnit(nationThem, SEA,
 				UnitType.DESTROYER);
 		Result<MoveCost> result = moveUnits(
-				makeUnitList(new Unit[] {hbomber, nbomber}), SEA);
+				makeUnitList(hbomber, nbomber), SEA);
 		assertResult(result);
 		assertDamaged(result, dest);
 	}

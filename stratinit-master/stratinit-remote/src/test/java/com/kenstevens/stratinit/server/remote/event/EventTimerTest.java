@@ -1,14 +1,11 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.jmock.Expectations;
-import org.junit.Test;
-
 import com.kenstevens.stratinit.server.event.CityBuildEvent;
 import com.kenstevens.stratinit.server.event.Event;
+import org.jmock.Expectations;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EventTimerTest extends JavaTimerMockedBase {
 	@Test

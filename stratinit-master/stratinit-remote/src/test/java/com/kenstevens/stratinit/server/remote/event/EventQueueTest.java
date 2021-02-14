@@ -1,26 +1,21 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import java.util.Date;
-
-import org.jmock.Expectations;
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.server.event.CityBuildEvent;
-import com.kenstevens.stratinit.server.event.Event;
-import com.kenstevens.stratinit.server.event.GameMapEvent;
-import com.kenstevens.stratinit.server.event.GameStartEvent;
-import com.kenstevens.stratinit.server.event.UnitUpdateEvent;
+import com.kenstevens.stratinit.server.event.*;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
+import org.jmock.Expectations;
+import org.junit.jupiter.api.Test;
+
+import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class EventQueueTest extends EventTimerMockedBase {
 
-	private Date now = new Date();
-	private Date started = new Date(now.getTime() - 1);
+	private final Date now = new Date();
+	private final Date started = new Date(now.getTime() - 1);
 
 	@Test
 	public void shutdown() {

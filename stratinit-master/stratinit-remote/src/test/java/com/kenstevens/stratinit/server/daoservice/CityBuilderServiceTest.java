@@ -1,68 +1,67 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Date;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CityBuilderServiceTest extends StratInitWebBase {
-	private Mockery context = new Mockery();
+    private final Mockery context = new Mockery();
 
-	private EventQueue eventQueue;
-	private UnitDaoService unitDaoService;
-	
-	protected static final SectorCoords INF_CITY = new SectorCoords(1,4);
+    private EventQueue eventQueue;
+    private UnitDaoService unitDaoService;
 
-	@Autowired
-	private EventQueue origEventQueue;
-	@Autowired
-	private CityBuilderService cityBuilderService;
-	@Autowired
-	private UnitDaoService origUnitDaoService;
-	
-	private Date now = new Date();
-	private Date started = new Date(now.getTime() - 1);
-	private City city;
-	
-	@Before
-	public void setupMocks() {
-		eventQueue = context.mock(EventQueue.class);
-		unitDaoService = context.mock(UnitDaoService.class);
-		ReflectionTestUtils.setField(cityBuilderService, "eventQueue",
-				eventQueue);
-		ReflectionTestUtils.setField(cityBuilderService, "unitDaoService",
-				unitDaoService);
-		
-		joinGamePlayerMe();
-		city = sectorDao.getCity(nationMe, INF_CITY);
-		city.setLastUpdated(started);
-	}
+    protected static final SectorCoords INF_CITY = new SectorCoords(1, 4);
 
-	@After
-	public void undoMocks() {
-		ReflectionTestUtils.setField(cityBuilderService, "eventQueue",
-				origEventQueue);
-		ReflectionTestUtils.setField(cityBuilderService, "unitDaoService",
-				origUnitDaoService);
-	}
+    @Autowired
+    private EventQueue origEventQueue;
+    @Autowired
+    private CityBuilderService cityBuilderService;
+    @Autowired
+    private UnitDaoService origUnitDaoService;
 
-	@Test
-	public void citySameBuild() {
-		cityBuilderService.updateBuild(nationMe, city, UnitType.INFANTRY);
+    private final Date now = new Date();
+    private final Date started = new Date(now.getTime() - 1);
+    private City city;
+
+    @BeforeEach
+    public void setupMocks() {
+        eventQueue = context.mock(EventQueue.class);
+        unitDaoService = context.mock(UnitDaoService.class);
+        ReflectionTestUtils.setField(cityBuilderService, "eventQueue",
+                eventQueue);
+        ReflectionTestUtils.setField(cityBuilderService, "unitDaoService",
+                unitDaoService);
+
+        joinGamePlayerMe();
+        city = sectorDao.getCity(nationMe, INF_CITY);
+        city.setLastUpdated(started);
+    }
+
+    @AfterEach
+    public void undoMocks() {
+        ReflectionTestUtils.setField(cityBuilderService, "eventQueue",
+                origEventQueue);
+        ReflectionTestUtils.setField(cityBuilderService, "unitDaoService",
+                origUnitDaoService);
+    }
+
+    @Test
+    public void citySameBuild() {
+        cityBuilderService.updateBuild(nationMe, city, UnitType.INFANTRY);
 		context.assertIsSatisfied();
 	}
 

@@ -1,16 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-import java.util.List;
-
-import org.jmock.Expectations;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.EventKey;
@@ -24,9 +13,19 @@ import com.kenstevens.stratinit.server.event.UnitUpdateEvent;
 import com.kenstevens.stratinit.server.remote.event.EventTimerMockedBase;
 import com.kenstevens.stratinit.server.remote.helper.WorldManagerHelper;
 import com.kenstevens.stratinit.type.UnitType;
+import org.jmock.Expectations;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // FIXME TEST these tests fail sometimes in the group
-@Ignore
+@Disabled
 @SuppressWarnings("deprecation")
 public class WorldManagerTest extends EventTimerMockedBase {
 	@Autowired
@@ -41,11 +40,11 @@ public class WorldManagerTest extends EventTimerMockedBase {
 	EventQueue eventQueue;
 	@Autowired
 	CityBuilderService cityBuilderService;
-	
+
 	private Nation nation;
 	private Date now;
-	
-	@Before
+
+	@BeforeEach
 	public void createNation() {
 		nation = worldManagerHelper.createNation(testGameId);
 		now = new Date();

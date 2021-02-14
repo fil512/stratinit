@@ -1,14 +1,5 @@
 package com.kenstevens.stratinit.site.action;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.jmock.Expectations;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.StratInitClientTest;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
@@ -18,6 +9,14 @@ import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.CommandProcessor;
 import com.kenstevens.stratinit.util.Spring;
+import org.jmock.Expectations;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CommandProcessorTest extends StratInitClientTest {
 	@Autowired

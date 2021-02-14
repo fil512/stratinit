@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ShipStackTest extends StratInitWebBase {
 	private static final SectorCoords SHIP1 = new SectorCoords(3,0);
@@ -49,9 +48,9 @@ public class ShipStackTest extends StratInitWebBase {
 		Unit xport1 = unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
 		Unit xport2 = unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
 		sectorDaoService.captureCity(nationMe, PORT);
-		Result<MoveCost> result = moveUnits(makeUnitList(new Unit[] {xport1, xport2}), BETWEEN);
+		Result<MoveCost> result = moveUnits(makeUnitList(xport1, xport2), BETWEEN);
 		assertFalseResult(result);
-		assertTrue(result.toString(), xport1.getCoords().equals(PORT));
-		assertTrue(result.toString(), xport2.getCoords().equals(PORT));
+		assertTrue(xport1.getCoords().equals(PORT), result.toString());
+		assertTrue(xport2.getCoords().equals(PORT), result.toString());
 	}
 }

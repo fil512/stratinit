@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.world;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.World;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class WorldTest {

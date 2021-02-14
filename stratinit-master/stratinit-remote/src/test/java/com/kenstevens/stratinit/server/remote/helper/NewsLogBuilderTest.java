@@ -1,49 +1,32 @@
 package com.kenstevens.stratinit.server.remote.helper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.dto.news.SINewsAirDefense;
-import com.kenstevens.stratinit.dto.news.SINewsBulletin;
-import com.kenstevens.stratinit.dto.news.SINewsFirst;
-import com.kenstevens.stratinit.dto.news.SINewsForeignAffairs;
-import com.kenstevens.stratinit.dto.news.SINewsFromTheFront;
-import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.dto.news.SINewsNeutralConquest;
-import com.kenstevens.stratinit.dto.news.SINewsNuclearDetonations;
-import com.kenstevens.stratinit.dto.news.SINewsOpponentConquest;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.CityNukedBattleLog;
-import com.kenstevens.stratinit.model.FlakBattleLog;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
+import com.kenstevens.stratinit.dto.news.*;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class NewsLogBuilderTest extends TwoPlayerBase {
-	private Mockery context = new Mockery();
+	private final Mockery context = new Mockery();
 
 	private MessageDao messageDao;
 	private UnitDao unitDao;
@@ -62,23 +45,23 @@ public class NewsLogBuilderTest extends TwoPlayerBase {
 	private Unit unit;
 
 
-	@Before
+	@BeforeEach
 	public void setupMocks() {
 
 		messageDao = context.mock(MessageDao.class);
 		unitDao = context.mock(UnitDao.class);
 		logDao = context.mock(LogDao.class);
 		ReflectionTestUtils
-		.setField(newsLogBuilder, "messageDao", messageDao);
+				.setField(newsLogBuilder, "messageDao", messageDao);
 		ReflectionTestUtils
-		.setField(newsLogBuilder, "unitDao", unitDao);
+				.setField(newsLogBuilder, "unitDao", unitDao);
 		ReflectionTestUtils
-		.setField(newsLogBuilder, "logDao", logDao);
+				.setField(newsLogBuilder, "logDao", logDao);
 
 		unit = new Unit(nationMe, UnitType.INFANTRY, TEST_COORDS);
 	}
 
-	@After
+	@AfterEach
 	public void undoMocks() {
 		ReflectionTestUtils.setField(newsLogBuilder, "messageDao",
 				origMessageDao);

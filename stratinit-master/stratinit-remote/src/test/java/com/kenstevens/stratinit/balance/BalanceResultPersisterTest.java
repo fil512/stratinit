@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.balance;
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
-@Ignore
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+
+@Disabled
 public class BalanceResultPersisterTest {
 	@Test
 	public void load() throws IOException, ParserConfigurationException,

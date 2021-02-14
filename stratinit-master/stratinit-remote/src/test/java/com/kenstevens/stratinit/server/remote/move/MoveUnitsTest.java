@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
@@ -18,6 +10,13 @@ import com.kenstevens.stratinit.server.remote.WithUnitsBase;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class MoveUnitsTest extends WithUnitsBase {
 	public static final SectorCoords PORT = new SectorCoords(2,2);
@@ -181,9 +180,9 @@ public class MoveUnitsTest extends WithUnitsBase {
 		Result<MoveCost> result = moveUnits(makeUnitList(inf), PORT);
 		assertResult(result);
 		for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
-			assertEquals(result.toString(), inf[i].getCoords(), PORT);
+			assertEquals(inf[i].getCoords(), PORT, result.toString());
 		}
-		assertEquals(result.toString(), inf[TRANSPORT_CAPACITY].getCoords(), PORT);
+		assertEquals(inf[TRANSPORT_CAPACITY].getCoords(), PORT, result.toString());
 	}
 
 	@Test
@@ -193,7 +192,7 @@ public class MoveUnitsTest extends WithUnitsBase {
 		sectorDaoService.captureCity(nationMe, PORT);
 		Result<MoveCost> result = moveUnits(units, PORT);
 		assertResult(result);
-		assertEquals(result.toString(), dest.getCoords(), PORT);
+		assertEquals(dest.getCoords(), PORT, result.toString());
 		assertEquals(MoveType.MOVE, result.getValue().getMoveType());
 	}
 
@@ -204,7 +203,7 @@ public class MoveUnitsTest extends WithUnitsBase {
 		sectorDaoService.captureCity(nationMe, BY_PORT);
 		Result<MoveCost> result = moveUnits(makeUnitList(dest), BY_PORT);
 		assertFalseResult(result);
-		assertEquals(result.toString(), dest.getCoords(), PORT);
+		assertEquals(dest.getCoords(), PORT, result.toString());
 	}
 
 

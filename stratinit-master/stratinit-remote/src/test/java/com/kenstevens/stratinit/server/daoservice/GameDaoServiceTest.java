@@ -8,13 +8,13 @@ import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameDaoServiceTest extends StratInitWebBase {
 	@Autowired
@@ -55,27 +55,27 @@ public class GameDaoServiceTest extends StratInitWebBase {
 	}
 
 	// Don't rename this method!
-	@Test
-	public void testRemoveGame() {
-		Player player = createPlayer();
-		List<Game> games = gameDaoService.getUnjoinedGames(player);
-		int unjoined = games.size();
-		gameDaoService.removeGame(testGameId);
-		games = gameDaoService.getUnjoinedGames(player);
-		assertEquals(unjoined - 1, games.size());
-	}
+    @Test
+    public void testRemoveGame() {
+        Player player = createPlayer();
+        List<Game> games = gameDaoService.getUnjoinedGames(player);
+        int unjoined = games.size();
+        gameDaoService.removeGame(testGameId);
+        games = gameDaoService.getUnjoinedGames(player);
+        assertEquals(unjoined - 1, games.size());
+    }
 
-	@Ignore
-	@Test
-	public void sevenPlayersMapped() throws InterruptedException {
-		Game game = gameDaoService.createGame("test");
-		int gameId = game.getId();
-		List<Player> players = Lists.newArrayList();
-		List<Nation> nations = Lists.newArrayList();
-		int numPlayers = 5;
-		// TODO TEST why does this throw an exception with numPlayers >= 5?
-		for (int i = 0; i < numPlayers ; ++i) {
-			System.out.println("Player "+i);
+    @Disabled
+    @Test
+    public void sevenPlayersMapped() throws InterruptedException {
+        Game game = gameDaoService.createGame("test");
+        int gameId = game.getId();
+        List<Player> players = Lists.newArrayList();
+        List<Nation> nations = Lists.newArrayList();
+        int numPlayers = 5;
+        // TODO TEST why does this throw an exception with numPlayers >= 5?
+        for (int i = 0; i < numPlayers; ++i) {
+            System.out.println("Player " + i);
 			Result<Player> rresult = playerDaoService.register(new Player("testPlayer"+i));
 			assertResult(rresult);
 			Player player = rresult.getValue();

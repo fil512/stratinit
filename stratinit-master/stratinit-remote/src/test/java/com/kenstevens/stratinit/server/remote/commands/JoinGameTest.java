@@ -1,28 +1,23 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.kenstevens.stratinit.dto.SICity;
-import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.dto.SISector;
-import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JoinGameTest extends StratInitWebBase {
-	@Before
+	@BeforeEach
 	public void doJoinGame() {
 		joinGamePlayerMe();
 	}
-	
+
 	@Test
 	public void getJoinedGames() {
 		List<SIGame> games = stratInit.getJoinedGames().getValue();

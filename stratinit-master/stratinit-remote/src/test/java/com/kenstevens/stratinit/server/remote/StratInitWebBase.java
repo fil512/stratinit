@@ -13,13 +13,13 @@ import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class StratInitWebBase extends StratInitDaoBase {
 	@Autowired
@@ -37,7 +37,7 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 
 	protected StratInit stratInit;
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		stratInit = spring.getBean("stratInit", StratInit.class);
 		smtpService.disable();
@@ -76,48 +76,48 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	}
 	
 	protected void assertNotFired(Result<MoveCost> result, Unit itank) {
-		assertEquals(result.toString(), itank.getUnitBase().getAmmo(),
-				itank.getAmmo());
+		assertEquals(itank.getUnitBase().getAmmo(),
+				itank.getAmmo(), result.toString());
 	}
 
 	protected <T> void assertNotDamaged(Result<T> result, Unit itank) {
-		assertEquals(result.toString(), itank.getUnitBase().getHp(),
-				itank.getHp());
+		assertEquals(itank.getUnitBase().getHp(),
+				itank.getHp(), result.toString());
 	}
 
 	protected <T> void assertDamaged(Result<T> result, Unit itank) {
-		assertTrue(result.toString(),
-				itank.getUnitBase().getHp() > itank.getHp());
+		assertTrue(
+				itank.getUnitBase().getHp() > itank.getHp(), result.toString());
 	}
 
 	protected void assertNotMoved(Result<MoveCost> result, Unit itank) {
-		assertEquals(result.toString(), itank.getUnitBase().getMobility(),
-				itank.getMobility());
+		assertEquals(itank.getUnitBase().getMobility(),
+				itank.getMobility(), result.toString());
 	}
 
 	protected void assertMoved(Result<MoveCost> result, Unit itank) {
-		assertTrue(result.toString(),
-				itank.getUnitBase().getMobility() > itank.getMobility());
+		assertTrue(itank.getUnitBase().getMobility() > itank.getMobility(),
+				result.toString());
 	}
 
 	protected void assertFired(Result<MoveCost> result, Unit itank) {
-		assertTrue(result.toString(),
-				itank.getUnitBase().getAmmo() > itank.getAmmo());
+		assertTrue(itank.getUnitBase().getAmmo() > itank.getAmmo(),
+				result.toString());
 	}
 
 	protected void assertShortFuel(Result<MoveCost> result, Unit plane) {
-		assertTrue(result.toString(),
-				plane.getUnitBase().getMaxFuel() > plane.getFuel());
+		assertTrue(plane.getUnitBase().getMaxFuel() > plane.getFuel(),
+				result.toString());
 	}
 
 	protected void assertFullFuel(Result<MoveCost> result, Unit plane) {
-		assertEquals(result.toString(),
-				plane.getUnitBase().getMaxFuel(), plane.getFuel());
+		assertEquals(
+				plane.getUnitBase().getMaxFuel(), plane.getFuel(), result.toString());
 	}
 
 	protected void assertFiredOnce(Result<MoveCost> result, Unit itank) {
-		assertEquals(result.toString(),
-				itank.getUnitBase().getAmmo() - 1, itank.getAmmo());
+		assertEquals(
+				itank.getUnitBase().getAmmo() - 1, itank.getAmmo(), result.toString());
 	}
 
 	protected int getCapacity(UnitType unitType) {

@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GetTwoPlayerSectorsTest extends TwoPlayerBase {
 	private static final SectorCoords CITY = new SectorCoords(1, 4);
