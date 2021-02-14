@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -16,6 +8,13 @@ import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.UnitType;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class GameDaoServiceTest extends StratInitWebBase {
 	@Autowired
@@ -37,11 +36,11 @@ public class GameDaoServiceTest extends StratInitWebBase {
 	public void audit() {
 		Player player = createPlayer();
 		joinGame(player);
-		List<UnitBuildAudit>buildAuditList = unitDao.getBuildAudits(testGameId, PLAYER_NAME);
+		List<UnitBuildAudit> buildAuditList = unitDao.getBuildAudits(testGameId, player.getUsername());
 		assertEquals(5, buildAuditList.size());
 		UnitBuildAudit audit = buildAuditList.get(0);
 		assertEquals(UnitType.INFANTRY, audit.getType());
-		assertEquals(PLAYER_NAME, audit.getUsername());
+		assertEquals(player.getUsername(), audit.getUsername());
 	}
 
 
