@@ -6,25 +6,19 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import javax.annotation.PreDestroy;
 
 @Service
-public class FlushCache implements ServletContextListener {
+public class FlushCache {
 	private final Log logger = LogFactory.getLog(getClass());
 
 	@Autowired
 	private StratInit stratInit;
 
-	@Override
-	public void contextDestroyed(ServletContextEvent sce) {
+	@PreDestroy
+	public void shutdown() {
 		logger.info("Shutdown event received");
 		stratInit.shutdown();
 		logger.info("Shutdown event processed");
-	}
-
-	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		// Can't load cache here since dataCache won't be wired yet.
 	}
 }

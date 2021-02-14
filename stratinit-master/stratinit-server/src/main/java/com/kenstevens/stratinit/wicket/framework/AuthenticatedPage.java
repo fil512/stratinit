@@ -1,24 +1,25 @@
 package com.kenstevens.stratinit.wicket.framework;
 
+import com.kenstevens.stratinit.model.PlayerRole;
 import com.kenstevens.stratinit.wicket.base.BasePage;
 
 public abstract class AuthenticatedPage extends BasePage implements AuthenticatedComponent {
 
-	private static final long serialVersionUID = -8358571925296406622L;
-	
-	@Override
-	public boolean isSignedIn() {
-		return AuthenticatedSession.get().isSignedIn();
-	}
+    private static final long serialVersionUID = -8358571925296406622L;
 
-	@Override
-	public boolean isAdmin() {
-		return AuthenticatedSession.getSession().isAdmin();
-	}
+    @Override
+    public boolean isSignedIn() {
+        return AuthenticatedSession.get().isSignedIn();
+    }
 
-	@Override
-	public String getUsername() {
-		return AuthenticatedSession.getSession().getUsername();
-	}
+    @Override
+    public boolean isAdmin() {
+        return AuthenticatedSession.getSession().getRoles().contains(PlayerRole.ROLE_ADMIN);
+    }
+
+    @Override
+    public String getUsername() {
+        return AuthenticatedSession.getSession().getId();
+    }
 
 }

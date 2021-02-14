@@ -39,7 +39,7 @@
         <jetty.version>9.4.36.v20210114</jetty.version>
         <spring.boot.version>2.3.8.RELEASE</spring.boot.version>
         <spring.core.version>5.2.12.RELEASE</spring.core.version>
-        <spring.security.version>5.3.6.RELEASE</spring.security.version>
+        <spring.security.version>5.3.8.RELEASE</spring.security.version>
         <spring.data>2.3.6.RELEASE</spring.data>
         <wicket.version>9.2.0</wicket.version>
         <hibernate.version>5.4.27.Final</hibernate.version>
@@ -174,7 +174,17 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-autoconfigure</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
             <dependency>
@@ -197,6 +207,17 @@
                 <artifactId>spring-security-core</artifactId>
                 <version>${spring.security.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>javax.annotation</groupId>
                 <artifactId>javax.annotation-api</artifactId>
@@ -337,13 +358,6 @@
                 <version>4.0.1</version>
                 <scope>provided</scope>
             </dependency>
-            <dependency>
-                <groupId>jdepend</groupId>
-                <artifactId>jdepend</artifactId>
-                <version>2.9.1</version>
-                <scope>test</scope>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
     <repositories>

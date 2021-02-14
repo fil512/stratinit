@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.wicket.framework;
 
+import com.giffing.wicket.spring.boot.starter.configuration.extensions.external.spring.security.SecureWebSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -14,8 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.kenstevens.stratinit.model.PlayerRole;
-
+// FIXME delete this class?
 public class AuthenticatedSession extends AuthenticatedWebSession {
     
     private static final long serialVersionUID = 1L;
@@ -74,21 +74,10 @@ public class AuthenticatedSession extends AuthenticatedWebSession {
             roles.add(authority.getAuthority());
         }
     }
+    // FIXME remove other methods
 
-	public String getUsername() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication == null) {
-			return "";
-		}
-		return authentication.getName();
-	}
-	
-	public boolean isAdmin() {
-		return getRoles().contains(PlayerRole.ROLE_ADMIN);
-	}
-	
-	public static AuthenticatedSession getSession() {
-		return (AuthenticatedSession)get();
-	}
+    public static SecureWebSession getSession() {
+        return (SecureWebSession) get();
+    }
 
 }
