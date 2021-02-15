@@ -1,4 +1,4 @@
-INSERT INTO player VALUES (1,  now(), 'admin@admin.com', true, 'e48d046fa16ca3950a684bc79e30e134962a3f2e', 0, 'admin', 0);
+INSERT INTO player VALUES (1,  now(), 'admin@admin.com', true, '$2a$10$SyvzYKvhScIeLuATzk5t5esG9nQbwT1Kjg7Ug8zOZ65AiberQBjZe', 0, 'admin', 0);
 INSERT INTO playerrole VALUES (1, 'ROLE_ADMIN', 1);
 ALTER sequence role_id_sequence INCREMENT BY 1;
 ALTER sequence player_id_sequence INCREMENT BY 1;

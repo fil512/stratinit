@@ -38,10 +38,9 @@ public class DataCache extends Updatable {
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void load() {
-		// FIXME
-//		loadPlayers();
-//		loadGames();
-	}
+        loadPlayers();
+        loadGames();
+    }
 
 	private void loadGames() {
 		logger.info("Loading games into cache...");

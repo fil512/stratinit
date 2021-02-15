@@ -22,6 +22,7 @@ public final class StratInitClient {
 		try {
 			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 			context.register(SpringConfig.class);
+			context.refresh();
 			actionFactory = (ActionFactory) context.getBean("actionFactory");
 			MainShell mainShell = (MainShell) context.getBean("MainShell");
 			actionQueue = (ActionQueue) context.getBean("ActionQueue");

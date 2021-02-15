@@ -43,8 +43,8 @@ public class SpringRemotingIntegrationManualTest extends StratInitClientTest {
 	}
 
 	private void goodLogin() throws IOException {
-		account.setUsername("hydro");
-		account.setPassword("hydro");
+		account.setUsername("test1");
+		account.setPassword("testy");
 	}
 
 	@Test
