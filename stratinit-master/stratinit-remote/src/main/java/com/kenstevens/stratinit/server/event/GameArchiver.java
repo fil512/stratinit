@@ -8,8 +8,8 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.GameHistoryDaoService;
 import com.kenstevens.stratinit.server.daoservice.TeamCalculator;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +17,17 @@ import java.util.List;
 
 @Service
 public class GameArchiver {
-	private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-	private GameHistoryDaoService gameHistoryDaoService;
-	@Autowired
-	private TeamCalculator teamCalculator;
-	@Autowired
-	private PlayerDao playerDao;
-	@Autowired
-	private SectorDao sectorDao;
-	@Autowired
+    @Autowired
+    private GameHistoryDaoService gameHistoryDaoService;
+    @Autowired
+    private TeamCalculator teamCalculator;
+    @Autowired
+    private PlayerDao playerDao;
+    @Autowired
+    private SectorDao sectorDao;
+    @Autowired
 	private UnitDaoService unitDaoService;
 	@Autowired
 	private GameDao gameDao;

@@ -5,15 +5,15 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
 public class NationCache extends Cacheable {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final Nation nation;
 	private final SectorSeenCache sectorSeenCache = new SectorSeenCache();

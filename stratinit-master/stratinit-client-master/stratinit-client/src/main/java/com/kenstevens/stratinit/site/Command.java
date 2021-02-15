@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.site;
 
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.remoting.RemoteAccessException;
-import org.springframework.remoting.RemoteConnectFailureException;
-
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.CommandPointsArrivedEvent;
@@ -19,9 +11,16 @@ import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
 import com.kenstevens.stratinit.site.processor.ResultBattleLogProcessor;
 import com.kenstevens.stratinit.type.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.RemoteAccessException;
+import org.springframework.remoting.RemoteConnectFailureException;
+
+import java.util.List;
 
 public abstract class Command<T> {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	protected StratInit stratInit;
 	@Autowired

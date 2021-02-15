@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.audio;
 
 import com.google.common.collect.Maps;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.sound.sampled.*;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Service
 public class WavLibrary {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final Map<String, Info> infoMap = Maps.newHashMap();
 

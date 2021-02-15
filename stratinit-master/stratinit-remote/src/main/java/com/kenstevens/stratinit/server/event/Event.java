@@ -1,19 +1,18 @@
 package com.kenstevens.stratinit.server.event;
 
-import java.util.Date;
-import java.util.TimerTask;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.kenstevens.stratinit.model.EventKey;
 import com.kenstevens.stratinit.model.EventKeyed;
 import com.kenstevens.stratinit.model.Updatable;
 import com.kenstevens.stratinit.util.UpdateCalculator;
 import com.kenstevens.stratinit.util.UpdateManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.TimerTask;
 
 public abstract class Event {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	public static final int NO_PERIOD = -1;
 	private final TimerTask timerTask;
 	private final Date time;

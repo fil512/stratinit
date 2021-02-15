@@ -1,29 +1,23 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.kenstevens.stratinit.model.Account;
+import com.kenstevens.stratinit.shell.StratInitWindow;
+import com.kenstevens.stratinit.util.AccountPersister;
+import com.kenstevens.stratinit.util.XMLException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.model.Account;
-import com.kenstevens.stratinit.shell.StratInitWindow;
-import com.kenstevens.stratinit.util.AccountPersister;
-import com.kenstevens.stratinit.util.XMLException;
-
 @Component
 public class AccountSettingsWindow implements StratInitWindow {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private Text username;
 	private Text password;

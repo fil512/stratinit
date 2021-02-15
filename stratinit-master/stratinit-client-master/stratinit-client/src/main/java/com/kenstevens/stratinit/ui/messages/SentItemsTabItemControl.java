@@ -1,7 +1,9 @@
 package com.kenstevens.stratinit.ui.messages;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.model.Message;
+import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -9,19 +11,16 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.control.TopLevelController;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.model.Message;
-import com.kenstevens.stratinit.util.Spring;
-
 @Scope("prototype")
 @Component
 public class SentItemsTabItemControl extends MessageViewerControl implements TopLevelController {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private Spring spring;

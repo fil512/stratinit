@@ -1,20 +1,19 @@
 package com.kenstevens.stratinit.server.remote;
 
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.QuiesceService;
 import com.kenstevens.stratinit.cache.Cacheable;
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class ServerManager {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private Spring spring;
 	@Autowired

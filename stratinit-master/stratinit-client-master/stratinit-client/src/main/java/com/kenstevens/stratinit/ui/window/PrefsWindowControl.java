@@ -1,30 +1,29 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.WorldArrivedEvent;
 import com.kenstevens.stratinit.model.Account;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
 public class PrefsWindowControl {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private Account account;
 	@Autowired
 	private WavPlayer wavPlayer;
 	@Autowired
 	protected StratinitEventBus eventBus;
-	
+
 	private final PrefsWindow prefsWindow;
 
 	public PrefsWindowControl(PrefsWindow window) {

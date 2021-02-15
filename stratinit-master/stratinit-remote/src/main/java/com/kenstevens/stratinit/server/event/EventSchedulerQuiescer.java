@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.server.event;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.kenstevens.stratinit.QuiesceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.QuiesceService;
-
 @Service
 public class EventSchedulerQuiescer implements QuiesceService {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private EventScheduler eventScheduler;

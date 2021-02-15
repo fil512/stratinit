@@ -1,5 +1,8 @@
 package com.kenstevens.stratinit.server.event;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -7,12 +10,9 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class ServerLocker {
 	private static final String LOCK_FILENAME = "StratInit.lock";
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public FileLock getLock() {
 		RandomAccessFile file = null;
@@ -22,7 +22,7 @@ public class ServerLocker {
 			FileChannel fileChannel = file.getChannel();
 			retval = fileChannel.tryLock();
 		} catch (FileNotFoundException e) {
-			logger.error("Unable to create lockfile "+LOCK_FILENAME, e);
+			logger.error("Unable to create lockfile " + LOCK_FILENAME, e);
 		} catch (IOException e) {
 			logger.error("Unable to lock lockfile "+LOCK_FILENAME, e);
 		} catch (OverlappingFileLockException e) {

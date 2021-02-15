@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.main;
 
 import com.kenstevens.stratinit.remote.StratInit;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import javax.annotation.PreDestroy;
 
 @Service
 public class FlushCache {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private StratInit stratInit;

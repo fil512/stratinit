@@ -15,8 +15,8 @@ import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.event.EventQueue;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,8 @@ import java.util.*;
 // TODO OPT pull stuff out of daoservices that only hit cache
 @Service
 public class SectorDaoServiceImpl implements SectorDaoService {
-	@SuppressWarnings("unused")
-	private final Log logger = LogFactory.getLog(getClass());
+    @SuppressWarnings("unused")
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private GameDao gameDao;

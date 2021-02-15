@@ -1,5 +1,8 @@
 package com.kenstevens.stratinit.aspectj;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -8,25 +11,23 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-public final class Profiler
-{	private final static Log logger = LogFactory.getLog(Profiler.class);
+public final class Profiler {
+	private final static Logger logger = LoggerFactory.getLogger(Profiler.class);
 
 	private static final String PROFILE_FILENAME = "profile.txt";
 
 	private static final Map<ProfilerID, TimerClass> TIMERS = Collections.synchronizedMap(new HashMap<ProfilerID, TimerClass>());
 
-	private static File proFile = new File(PROFILE_FILENAME);
+	private static final File proFile = new File(PROFILE_FILENAME);
 	private static FileOutputStream outStream;
 	private static PrintStream out;
 
-	private Profiler() {}
+	private Profiler() {
+	}
 
 	static {
 		try {
-			logger.info("Opening "+PROFILE_FILENAME);
+			logger.info("Opening " + PROFILE_FILENAME);
 			outStream = new FileOutputStream(proFile);
 			out = new PrintStream(outStream);
 		} catch (IOException e) {

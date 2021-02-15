@@ -1,40 +1,28 @@
 package com.kenstevens.stratinit.server.event;
 
+import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.server.daoservice.*;
+import com.kenstevens.stratinit.server.remote.mail.SMTPService;
+import com.kenstevens.stratinit.server.remote.state.ServerStatus;
+import com.kenstevens.stratinit.util.UpdateManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 import java.nio.channels.FileLock;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.server.daoservice.CityBuilderService;
-import com.kenstevens.stratinit.server.daoservice.GameCreator;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.IntegrityCheckerService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.remote.mail.SMTPService;
-import com.kenstevens.stratinit.server.remote.state.ServerStatus;
-import com.kenstevens.stratinit.util.UpdateManager;
-
 @Service
 public class EventScheduler {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private EventQueue eventQueue;
@@ -194,10 +182,7 @@ public class EventScheduler {
 		if (!unit.isAlive()) {
 			return true;
 		}
-		if (unit.getNation().equals(unitSeen.getNation())) {
-			return true;
-		}
-		return false;
+		return unit.getNation().equals(unitSeen.getNation());
 	}
 
 	private void updateRelations(Game game) {

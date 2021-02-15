@@ -1,17 +1,16 @@
 package com.kenstevens.stratinit.cache;
 
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.kenstevens.stratinit.QuiesceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.QuiesceService;
+import java.util.List;
 
 @Service
 public class CacheQuiescer implements QuiesceService {
-	private final Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private DataCache dataCache;
@@ -24,11 +23,11 @@ public class CacheQuiescer implements QuiesceService {
 
 	private void recursivelyLockAndFlush(List<GameCache> gameCaches) {
 		if (gameCaches.isEmpty()) {
-			log.info("Flushing Data Cache.");
+			logger.info("Flushing Data Cache.");
 			dataCache.flush();
 		} else {
 			GameCache headGameCache = gameCaches.remove(0);
-			log.info("Locking game #" + headGameCache.getGameId());
+			logger.info("Locking game #" + headGameCache.getGameId());
 			synchronized (headGameCache) {
 				recursivelyLockAndFlush(gameCaches);
 			}

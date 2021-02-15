@@ -1,24 +1,22 @@
 package com.kenstevens.stratinit.util;
 
-import java.io.File;
-import java.io.IOException;
+import com.kenstevens.stratinit.main.ClientConstants;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
-import com.kenstevens.stratinit.main.ClientConstants;
+import java.io.File;
+import java.io.IOException;
 
 
 public abstract class XMLPersister {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public String load(String filename) {
 		String retval = "";
@@ -28,7 +26,7 @@ public abstract class XMLPersister {
 			File source = new File(filename);
 			if (source.exists()) {
 				DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory
-								.newInstance();
+						.newInstance();
 						DocumentBuilder docBuilder;
 						docBuilder = docBuilderFactory.newDocumentBuilder();
 						Document doc = docBuilder.parse(source);

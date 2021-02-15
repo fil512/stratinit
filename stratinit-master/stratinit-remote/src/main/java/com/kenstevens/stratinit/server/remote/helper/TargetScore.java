@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.remote.helper;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Sector;
@@ -15,10 +7,17 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TargetScore {
 	@SuppressWarnings("unused")
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public static final int CITY_VALUE = 24 * 2;
 	private final WorldSeenMap worldSeenMap;

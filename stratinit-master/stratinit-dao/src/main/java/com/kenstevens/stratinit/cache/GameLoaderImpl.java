@@ -2,8 +2,8 @@ package com.kenstevens.stratinit.cache;
 
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Service
 public class GameLoaderImpl implements GameLoader {
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private GameRepo gameRepo;

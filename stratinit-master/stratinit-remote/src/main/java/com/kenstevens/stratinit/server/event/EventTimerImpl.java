@@ -1,18 +1,17 @@
 package com.kenstevens.stratinit.server.event;
 
+import com.kenstevens.stratinit.model.EventKey;
+import com.kenstevens.stratinit.model.Updatable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Service;
-
-import com.kenstevens.stratinit.model.EventKey;
-import com.kenstevens.stratinit.model.Updatable;
-
 @Service
 public class EventTimerImpl implements EventTimer {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final JavaTimer javaTimer = new JavaTimerImpl();
 	private final Map<EventKey, Event> eventMap = new HashMap<EventKey, Event>();

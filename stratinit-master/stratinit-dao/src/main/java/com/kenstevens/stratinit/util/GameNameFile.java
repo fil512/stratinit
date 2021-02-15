@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public final class GameNameFile {
-	private static Log logger = LogFactory.getLog(GameNameFile.class);
+	static final Logger logger = LoggerFactory.getLogger(GameNameFile.class);
 
 	private static final String BATTLES_FILENAME = "battles.txt";
 	private static final int MAX_GAMES = 4096;

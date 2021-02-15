@@ -1,16 +1,5 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.Comparator;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.widgets.Label;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.base.Predicate;
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.TopLevelController;
@@ -18,14 +7,19 @@ import com.kenstevens.stratinit.control.UnitTableControl;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.SelectedCoords;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.shell.ColourMap;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.widgets.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Comparator;
 
 // TODO split off two controls: target sector and build dropdowns
 @Scope("prototype")
@@ -33,7 +27,7 @@ import com.kenstevens.stratinit.util.Spring;
 public class SectorTabItemControl implements TopLevelController {
 
 	@SuppressWarnings("unused")
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private Data db;
 	@Autowired

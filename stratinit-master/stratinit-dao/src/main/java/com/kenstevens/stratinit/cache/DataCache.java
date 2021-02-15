@@ -8,8 +8,8 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.type.Constants;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +23,7 @@ import java.util.TreeMap;
 public class DataCache extends Updatable {
 	private static final long serialVersionUID = 1L;
 
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private GameLoader gameLoader;

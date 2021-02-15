@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.server.daoserviceimpl;
 
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -24,13 +16,20 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.remote.ServerManager;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class IntegrityCheckerServiceImpl implements IntegrityCheckerService {
 	private static final int MAX_ALLOWABLE_DEPTH = 1024;
 
-	private final Log logger = LogFactory.getLog(getClass());
-	
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	UnitDao unitDao;
 	@Autowired
@@ -51,7 +50,7 @@ public class IntegrityCheckerServiceImpl implements IntegrityCheckerService {
 		while (checkUnits(game)) {
 			++depth;
 			if (depth > MAX_ALLOWABLE_DEPTH) {
-				logger.fatal("Too many stacked units.  Aborting.");
+				logger.error("Too many stacked units.  Aborting.");
 				serverManager.shutdown();
 				throw new StackOverflowError("Too many stacked units.  Aborting.");
 			}

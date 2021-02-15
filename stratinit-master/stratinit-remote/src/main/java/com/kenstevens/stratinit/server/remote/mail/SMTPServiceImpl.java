@@ -1,22 +1,20 @@
 package com.kenstevens.stratinit.server.remote.mail;
 
-import java.util.Properties;
+import com.kenstevens.stratinit.type.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.stereotype.Service;
-
-import com.kenstevens.stratinit.type.Constants;
+import java.util.Properties;
 
 @Service
 public class SMTPServiceImpl implements SMTPService {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String smptHostname = "localhost";
 

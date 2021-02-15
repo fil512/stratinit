@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.server.remote.request;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
@@ -15,11 +9,14 @@ import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.util.StackTraceHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
 
 public abstract class PlayerRequest<T> {
-	private final Log logger = LogFactory.getLog(getClass());
-
-
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private ServerStatus serverStatus;

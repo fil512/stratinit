@@ -1,23 +1,23 @@
 package com.kenstevens.stratinit;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.shell.StatusReportEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 @Service
 public final class LoggerStatusReporterListener {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private StratinitEventBus eventBus;
-	
-	private LoggerStatusReporterListener() {}
+
+	private LoggerStatusReporterListener() {
+	}
 
 	@Subscribe
 	public void handleStatusReportEvent(StatusReportEvent event) {

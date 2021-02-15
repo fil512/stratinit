@@ -1,23 +1,22 @@
 package com.kenstevens.stratinit.site;
 
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.WidgetContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 @Component("ActionQueue")
 public class ActionQueueImpl implements ActionQueue {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private CommandProcessor commandProcessor;
@@ -28,7 +27,7 @@ public class ActionQueueImpl implements ActionQueue {
 
 	private boolean shuttingDown = false;
 
-	private BlockingQueue<Action> queue = new ArrayBlockingQueue<Action>(
+	private final BlockingQueue<Action> queue = new ArrayBlockingQueue<Action>(
 			ClientConstants.ACTION_QUEUE_SIZE);
 	private Thread poll;
 

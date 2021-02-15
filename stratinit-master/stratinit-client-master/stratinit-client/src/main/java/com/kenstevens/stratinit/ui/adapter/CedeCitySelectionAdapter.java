@@ -1,17 +1,16 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.SelectedCity;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CedeCitySelectionAdapter extends SelectionAdapter {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final CedeWindow cedeWindow;
 	private final Spring spring;
 	private final SelectedCity selectedCity;

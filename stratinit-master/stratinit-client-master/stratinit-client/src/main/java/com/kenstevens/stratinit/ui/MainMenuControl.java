@@ -1,18 +1,5 @@
 package com.kenstevens.stratinit.ui;
 
-import javax.annotation.PostConstruct;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.MessageBox;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
@@ -26,19 +13,25 @@ import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.messages.MessageWindow;
 import com.kenstevens.stratinit.ui.messages.MessageWindowControl;
-import com.kenstevens.stratinit.ui.window.GameInfoWindow;
-import com.kenstevens.stratinit.ui.window.GameInfoWindowControl;
-import com.kenstevens.stratinit.ui.window.MapWindow;
-import com.kenstevens.stratinit.ui.window.MapWindowControl;
-import com.kenstevens.stratinit.ui.window.PrefsWindow;
-import com.kenstevens.stratinit.ui.window.PrefsWindowControl;
-import com.kenstevens.stratinit.ui.window.WindowDirector;
+import com.kenstevens.stratinit.ui.window.*;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component
 public class MainMenuControl {
-	private final Log logger = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final MainMenu mainMenu;
 	@Autowired

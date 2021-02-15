@@ -1,24 +1,22 @@
 package com.kenstevens.stratinit.balance;
 
+import com.kenstevens.stratinit.type.UnitType;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
-import org.xml.sax.SAXException;
-
-import com.kenstevens.stratinit.type.UnitType;
-
 public class BalanceResultPersister {
-	private final Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	static final String SAVE_NAME = "unitBalancer.xml";
-	static final String SAVE_FILE = "src/main/resources/com/kenstevens/stratinit/balance/"+SAVE_NAME;
+	static final String SAVE_FILE = "src/main/resources/com/kenstevens/stratinit/balance/" + SAVE_NAME;
 
 	public void save(BalanceResultList balanceResultList) throws IOException {
 		Serializer serializer = new Persister();
@@ -43,7 +41,7 @@ public class BalanceResultPersister {
 			try {
 				retval = deserialize(serializer, source);
 			} catch (IOException e) {
-				log.error(e.getMessage(), e);
+				logger.error(e.getMessage(), e);
 				throw e;
 			}
 			

@@ -6,13 +6,13 @@ import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.RelationRepo;
 import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class GameCache extends Cacheable {
-	private final Log log = LogFactory.getLog(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final Game game;
 	private WorldCache worldCache;
@@ -171,18 +171,18 @@ public class GameCache extends Cacheable {
 		for (UnitMove unitMove : unitsMove) {
 			Unit unitMoveUnit = unitMove.getUnit();
 			if (unitMoveUnit == null) {
-				log.error("unitMove.unit is null on unitMove with id "+unitMove.getId());
+				logger.error("unitMove.unit is null on unitMove with id " + unitMove.getId());
 				badUnitMoves.add(unitMove);
 				continue;
 			}
 			
 			Unit unit = getUnit(unitMoveUnit.getId());
 			if (unit == null) {
-				log.error("Unable to find unit for unitMove with unit id "+unitMoveUnit.getId());
+				logger.error("Unable to find unit for unitMove with unit id " + unitMoveUnit.getId());
 				badUnitMoves.add(unitMove);
 				continue;
 			} else if (unit.getUnitMove() != null) {
-				log.error("More than one unitMove with same unit id "+unitMoveUnit.getId());
+				logger.error("More than one unitMove with same unit id " + unitMoveUnit.getId());
 				badUnitMoves.add(unitMove);
 				continue;
 			}
@@ -198,18 +198,18 @@ public class GameCache extends Cacheable {
 		for (CityMove cityMove : cityMoves) {
 			City cityMoveCity = cityMove.getCity();
 			if (cityMoveCity == null) {
-				log.error("cityMove.city is null on cityMove with id "+cityMove.getId());
+				logger.error("cityMove.city is null on cityMove with id " + cityMove.getId());
 				badCityMoves.add(cityMove);
 				continue;
 			}
 			
 			City city = getCity(cityMoveCity.getCoords());
 			if (city == null) {
-				log.error("Unable to find city for cityMove with city "+cityMoveCity.getCoords());
+				logger.error("Unable to find city for cityMove with city " + cityMoveCity.getCoords());
 				badCityMoves.add(cityMove);
 				continue;
 			} else if (city.getCityMove() != null) {
-				log.error("More than one cityMove with same city "+cityMoveCity.getCoords());
+				logger.error("More than one cityMove with same city " + cityMoveCity.getCoords());
 				badCityMoves.add(cityMove);
 				continue;
 			}
@@ -238,13 +238,13 @@ public class GameCache extends Cacheable {
 
 	public void flush(GameRepo gameRepo, RelationRepo relationRepo, SectorRepo sectorRepo) {
 		if (isModified()) {
-			log.debug("Flushing game #" + getGameId());
+			logger.debug("Flushing game #" + getGameId());
 			gameRepo.save(game);
 			getRelations().forEach(relationRepo::save);
 			setModified(false);
 		}
 		if (worldCache != null && worldCache.isModified()) {
-			log.debug("Flushing world for game #" + getGameId());
+			logger.debug("Flushing world for game #" + getGameId());
 			sectorRepo.saveAll(getSectors());
 			setWorldModified(false);
 		}

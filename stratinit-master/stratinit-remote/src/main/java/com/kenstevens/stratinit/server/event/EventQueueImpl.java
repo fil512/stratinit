@@ -5,8 +5,8 @@ import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +14,17 @@ import java.util.Date;
 
 @Service
 public class EventQueueImpl implements EventQueue {
-	private final Log logger = LogFactory.getLog(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-	private Spring spring;
-	@Autowired
-	private EventTimer eventTimer;
-	@Autowired
-	private DataCache dataCache;
+    @Autowired
+    private Spring spring;
+    @Autowired
+    private EventTimer eventTimer;
+    @Autowired
+    private DataCache dataCache;
 
-	public EventQueueImpl() {
-	}
+    public EventQueueImpl() {
+    }
 
 	public void shutdown() {
 		eventTimer.shutdown();
