@@ -267,13 +267,13 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	@Transactional
 	public void save(Game game) {
 		game.setCreated();
-		if (game.getName() == null) {
-			game.setName("");
+		if (game.getGamename() == null) {
+			game.setGamename("");
 		}
 		gameRepo.save(game);
 		getGameCache(game.getId());
-		if (game.getName().isEmpty()) {
-			game.setName(GameNameFile.getName(game.getId()));
+		if (game.getGamename().isEmpty()) {
+			game.setGamename(GameNameFile.getName(game.getId()));
 		}
 	}
 

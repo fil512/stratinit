@@ -56,7 +56,7 @@ public class TeamProviderImpl implements TeamProvider {
 		for (GameHistoryNation gameHistoryNation : gameHistoryNations) {
 			SINation nation = new SINation();
 			nation.cities = gameHistoryNation.getCities();
-			nation.name = gameHistoryNation.getName();
+			nation.name = gameHistoryNation.getGamename();
 			nation.power = gameHistoryNation.getPower();
 			nation.gameId = gameHistoryNation.getGameHistoryTeam().getGameHistory().getGameId();
 			nations.add(nation);
@@ -67,10 +67,10 @@ public class TeamProviderImpl implements TeamProvider {
 	private void addTeam(List<SITeam> teams,
 			List<GameHistoryNation> gameHistoryNations) {
 		SITeam team = new SITeam();
-		team.nation1 = gameHistoryNations.get(0).getName();
+		team.nation1 = gameHistoryNations.get(0).getGamename();
 		team.score += gameHistoryNations.get(0).getCities();
 		if (gameHistoryNations.size() > 1) {
-			team.nation2 = gameHistoryNations.get(1).getName();
+			team.nation2 = gameHistoryNations.get(1).getGamename();
 			team.score += gameHistoryNations.get(1).getCities();
 		}
 		teams.add(team);

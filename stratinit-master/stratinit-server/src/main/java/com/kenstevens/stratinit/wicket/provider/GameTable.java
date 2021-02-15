@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.wicket.provider;
 
+import com.kenstevens.stratinit.dto.SINation;
+import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.GameHistory;
+
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameHistory;
 
 public class GameTable {
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("d MMM, yyyy");
@@ -33,7 +33,7 @@ public class GameTable {
 	private List<SINation> nations;
 
 	public String getName() {
-		return gameHistory.getName();
+		return gameHistory.getGamename();
 	}
 	
 	public String getStarts() {

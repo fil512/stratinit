@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.world;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.type.Constants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class GameSizer {
 
@@ -48,7 +48,7 @@ public final class GameSizer {
 					+ " cannot be sized because it has no islands");
 		}
 		int size = ISLANDS_TO_SIZE.get(game.getIslands());
-		game.setSize(size);
+		game.setGamesize(size);
 	}
 
 	public static void setIslands(Game game) {

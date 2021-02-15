@@ -36,7 +36,7 @@ public class GameArchiverTest extends TwoPlayerBase {
 		assertEquals(testGame.getEnds(), gameHistory.getEnds());
 		assertEquals(testGame.getId().intValue(), gameHistory.getGameId());
 		assertEquals(testGame.isBlitz(), gameHistory.isBlitz());
-		assertEquals(testGame.getName(), gameHistory.getName());
+		assertEquals(testGame.getGamename(), gameHistory.getGamename());
 	}
 
 	@Test
@@ -58,9 +58,9 @@ public class GameArchiverTest extends TwoPlayerBase {
 			assertEquals(1, nations.size());
 			GameHistoryNation nation = nations.get(0);
 			if (i++ == 0) {
-				assertEquals(PLAYER_ME_NAME, nation.getName());
+				assertEquals(PLAYER_ME_NAME, nation.getGamename());
 			} else {
-				assertEquals(PLAYER_THEM_NAME, nation.getName());
+				assertEquals(PLAYER_THEM_NAME, nation.getGamename());
 			}
 			assertEquals(2, nation.getCities());
 			assertEquals(3, nation.getPower());

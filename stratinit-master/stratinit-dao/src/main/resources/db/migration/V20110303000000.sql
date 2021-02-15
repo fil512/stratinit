@@ -4,8 +4,8 @@ CREATE TABLE GAMEHISTORY (
 	DURATION INTEGER NOT NULL,
 	ENDS TIMESTAMP,
 	GAMEID INTEGER NOT NULL,
-	"NAME" VARCHAR(255) NOT NULL,
-	"SIZE" INTEGER NOT NULL,
+	GAMENAME VARCHAR(255) NOT NULL,
+	GAMESIZE INTEGER NOT NULL,
 	STARTTIME TIMESTAMP,
 	CONSTRAINT GAMEHISTORY_PKEY PRIMARY KEY (ID)
 );
@@ -25,7 +25,7 @@ CREATE TABLE gamehistorynation
 (
   id integer NOT NULL,
   cities integer NOT NULL,
-  "NAME" character varying(255),
+  GAMENAME character varying(255),
   power integer NOT NULL,
   gamehistoryteam_id integer,
   CONSTRAINT gamehistorynation_pkey PRIMARY KEY (id),

@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.dto;
 
+import com.kenstevens.stratinit.model.Game;
+
 import java.io.Serializable;
 import java.util.Date;
-
-import com.kenstevens.stratinit.model.Game;
 
 
 public class SIGame implements Serializable {
@@ -26,8 +26,8 @@ public class SIGame implements Serializable {
 
 	public SIGame(Game game, boolean myNoAlliances) {
 		id = game.getId();
-		name = game.getName();
-		size = game.getSize();
+		name = game.getGamename();
+		size = game.getGamesize();
 		players = game.getPlayers();
 		noAlliancesVote = game.getNoAlliancesVote();
 		noAlliances = game.isNoAlliances();

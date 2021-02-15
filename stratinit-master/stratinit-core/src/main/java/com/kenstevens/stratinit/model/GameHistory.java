@@ -1,42 +1,37 @@
 package com.kenstevens.stratinit.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class GameHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
-	@SequenceGenerator(name="game_history_id_seq", sequenceName="game_history_id_sequence", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="game_history_id_seq")
+	@SequenceGenerator(name = "game_history_id_seq", sequenceName = "game_history_id_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_history_id_seq")
 	private Integer id;
-	@Column(nullable=false)
-    private String name;
+	@Column(nullable = false)
+	private String gamename;
 	private int gameId;
-	private int size;
-    private Date startTime;
-    private Date ends;
-    private int duration = 10; // days
-    private boolean blitz = false;
+	private int gamesize;
+	private Date startTime;
+	private Date ends;
+	private int duration = 10; // days
+	private boolean blitz = false;
 
-    public GameHistory() {}
+	public GameHistory() {
+	}
 
-    public GameHistory(Game game) {
-    	this.setGameId(game.getId());
-    	this.name = game.getName();
-		this.size = game.getSize();
+	public GameHistory(Game game) {
+		this.setGameId(game.getId());
+		this.gamename = game.getGamename();
+		this.gamesize = game.getGamesize();
 		this.startTime = game.getStartTime();
 		this.ends = game.getEnds();
 		this.duration = game.getDuration();
 		this.blitz = game.isBlitz();
-    }
+	}
     
 	@Override
 	public int hashCode() {
@@ -56,11 +51,8 @@ public class GameHistory implements Serializable {
 			return false;
 		GameHistory other = (GameHistory) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 
 	public Integer getId() {
@@ -71,20 +63,20 @@ public class GameHistory implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getGamename() {
+		return gamename;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setGamename(String gamename) {
+		this.gamename = gamename;
 	}
 
-	public int getSize() {
-		return size;
+	public int getGamesize() {
+		return gamesize;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public void setGamesize(int gamesize) {
+		this.gamesize = gamesize;
 	}
 
 	public Date getStartTime() {

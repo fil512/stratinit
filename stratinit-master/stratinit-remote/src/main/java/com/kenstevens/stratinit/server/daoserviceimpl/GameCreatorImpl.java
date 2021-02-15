@@ -27,7 +27,7 @@ public class GameCreatorImpl implements GameCreator {
 		}
 		Game game = new Game();
 		gameDao.save(game);
-		logger.info("Created game " + game.getName());
+		logger.info("Created game " + game.getGamename());
 	}
 
 }

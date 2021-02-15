@@ -120,13 +120,13 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		assertNull(game.getMapped());
 		assertFalse(game.isMapped());
 		assertEquals(0, game.getIslands());
-		assertEquals(0, game.getSize());
+		assertEquals(0, game.getGamesize());
 	}
 
 	private void assertIsMapped(Game game) {
 		assertNotNull(game.getMapped());
 		assertTrue(game.isMapped());
-		assertTrue(game.getSize() > 0);
+		assertTrue(game.getGamesize() > 0);
 		assertTrue(game.getIslands() > 0);
 	}
 

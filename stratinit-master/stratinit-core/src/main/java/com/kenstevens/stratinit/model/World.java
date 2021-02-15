@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class World implements CoordMeasure {
 	private final Sector[][] world;
@@ -15,7 +15,7 @@ public class World implements CoordMeasure {
 
 	public World(Game game, boolean create) {
 		this.game = game;
-		this.size = game.getSize();
+		this.size = game.getGamesize();
 		this.islands = game.getIslands();
 		world = new Sector[size][size];
 		if (create) {

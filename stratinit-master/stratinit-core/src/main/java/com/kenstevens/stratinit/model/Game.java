@@ -1,17 +1,11 @@
 package com.kenstevens.stratinit.model;
 
+import com.kenstevens.stratinit.type.Constants;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-
-import com.kenstevens.stratinit.type.Constants;
 
 /*
  * States:
@@ -24,38 +18,39 @@ import com.kenstevens.stratinit.type.Constants;
 @Entity
 public class Game extends GameUpdatable implements Serializable {
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat(
-	"MM/dd/yyyy H:mm zzz");
+			"MM/dd/yyyy H:mm zzz");
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@SequenceGenerator(name="game_id_seq", sequenceName="game_id_sequence", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="game_id_seq")
+	@SequenceGenerator(name = "game_id_seq", sequenceName = "game_id_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_id_seq")
 	private Integer id;
-	@Column(nullable=false)
-    private String name;
-	private int size;
-    private Boolean enabled = true;
-    private Date mapped;
-    private Date created;
-    private Date startTime;
-    private Date ends;
-    private int duration = 10; // days
-    private int islands;
-    private int players = 0;
-    private int noAlliancesVote = 0;
-    private boolean noAlliances = false;
-    private boolean blitz = false;
+	@Column(nullable = false)
+	private String gamename;
+	private int gamesize;
+	private Boolean enabled = true;
+	private Date mapped;
+	private Date created;
+	private Date startTime;
+	private Date ends;
+	private int duration = 10; // days
+	private int islands;
+	private int players = 0;
+	private int noAlliancesVote = 0;
+	private boolean noAlliances = false;
+	private boolean blitz = false;
 
-    public Game() {}
+	public Game() {
+	}
 
-    public Game(String name) {
-    	this.name = name;
-    }
+	public Game(String gamename) {
+		this.gamename = gamename;
+	}
 
-    public Game(String name, int size) {
-    	this(name);
-    	this.size = size;
-    }
+	public Game(String gamename, int gamesize) {
+		this(gamename);
+		this.gamesize = gamesize;
+	}
 
 	@Override
 	public int hashCode() {
@@ -75,11 +70,8 @@ public class Game extends GameUpdatable implements Serializable {
 			return false;
 		Game other = (Game) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 
 	public Date getExpectedMapTime() {
@@ -109,29 +101,34 @@ public class Game extends GameUpdatable implements Serializable {
 
     public Integer getId() {
         return id;
-    }
-    public void setId(Integer gameId) {
-        this.id = gameId;
-    }
+	}
+
+	public void setId(Integer gameId) {
+		this.id = gameId;
+	}
+
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
+
 	public Boolean isEnabled() {
 		return enabled;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getName() {
-		return name;
+
+	public String getGamename() {
+		return gamename;
 	}
 
-	public int getSize() {
-		return size;
+	public void setGamename(String gamename) {
+		this.gamename = gamename;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public int getGamesize() {
+		return gamesize;
+	}
+
+	public void setGamesize(int gamesize) {
+		this.gamesize = gamesize;
 	}
 
 	public int getPlayers() {
@@ -178,7 +175,7 @@ public class Game extends GameUpdatable implements Serializable {
 
 	@Override
 	public String toString() {
-		return"#"+id+" "+name;
+		return "#" + id + " " + gamename;
 	}
 
 	@Override

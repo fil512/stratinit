@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.Date;
-
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.move.WorldView;
+
+import java.util.Date;
 
 // TODO REF make all these final
 public class GameView extends Game {
@@ -26,8 +26,8 @@ public class GameView extends Game {
 
 	public GameView(SIGame sigame) {
 		this.setId(sigame.id);
-		this.setName(sigame.name);
-		this.setSize(sigame.size);
+		this.setGamename(sigame.name);
+		this.setGamesize(sigame.size);
 		this.setPlayers(sigame.players);
 		this.setNoAlliancesVote(sigame.noAlliancesVote);
 		this.setNoAlliances(sigame.noAlliances);

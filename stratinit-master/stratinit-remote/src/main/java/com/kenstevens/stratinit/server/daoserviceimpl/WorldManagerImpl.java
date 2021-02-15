@@ -46,7 +46,7 @@ public class WorldManagerImpl implements WorldManager {
 		List<Sector> islandCities = Lists.newArrayList(sectorDao.getStartCitiesOnIsland(game,
 				island));
 		if (islandCities.isEmpty()) {
-			throw new IllegalStateException("Island "+island+" on game "+game.getName()+" has no start cities.  game.players = "+game.getPlayers()+".  nation = "+nation+"."+"  nation.nationId="+nation.getNationId());
+			throw new IllegalStateException("Island " + island + " on game " + game.getGamename() + " has no start cities.  game.players = " + game.getPlayers() + ".  nation = " + nation + "." + "  nation.nationId=" + nation.getNationId());
 		}
 		nation.setStartCoords(islandCities.get(0).getCoords());
 		gameDao.merge(nation);

@@ -28,7 +28,7 @@ public class WithWorldTest extends StratInitClientTest {
 	public void init() {
 		SIGame sigame = new SIGame();
 		GameView game = new GameView(sigame);
-		game.setSize(10);
+		game.setGamesize(10);
 		SINation sination = new SINation();
 		nation = new NationView(game, sination);
 		WorldView world = new WorldView(nation, null, null);

@@ -1,24 +1,16 @@
 package com.kenstevens.stratinit.server.event;
 
-import java.util.Date;
-
+import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.main.Spring;
+import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.main.Spring;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.EventKey;
-import com.kenstevens.stratinit.model.EventKeyed;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.util.GameScheduleHelper;
+import java.util.Date;
 
 @Service
 public class EventQueueImpl implements EventQueue {
@@ -70,7 +62,7 @@ public class EventQueueImpl implements EventQueue {
 		if (startTime == null) {
 			logger
 					.info("Skipping scheduling game "
-							+ game.getName()
+							+ game.getGamename()
 							+ " since it doesn't have a start time yet (probably not enough players).");
 			return;
 		}
@@ -91,7 +83,7 @@ public class EventQueueImpl implements EventQueue {
 
 		Date expectedMapTime = game.getExpectedMapTime();
 		if (expectedMapTime == null) {
-			logger.error("Trying to schedule game " + game.getName()
+			logger.error("Trying to schedule game " + game.getGamename()
 					+ " which has no expected map time.");
 			return;
 		}

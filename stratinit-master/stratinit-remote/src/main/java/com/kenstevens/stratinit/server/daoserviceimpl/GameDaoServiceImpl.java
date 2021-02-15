@@ -91,21 +91,21 @@ public class GameDaoServiceImpl implements GameDaoService {
 	@Override
 	public void mapGame(Game game) {
 		if (game.getStartTime() == null) {
-			throw new IllegalStateException("Game " + game.getName()
+			throw new IllegalStateException("Game " + game.getGamename()
 					+ " can not be mapped.  It has not been started yet.");
 		}
 		if (game.isMapped() || game.getMapped() != null) {
-			throw new IllegalStateException("Game " + game.getName()
+			throw new IllegalStateException("Game " + game.getGamename()
 					+ " is already mapped.  It cannot be mapped again.");
 		}
 		if (game.isBlitz()) {
 			if (game.getIslands() <= 0) {
-				throw new IllegalStateException("Blitz game " + game.getName()
+				throw new IllegalStateException("Blitz game " + game.getGamename()
 						+ " may not be mapped.  It has no islands.");
 			}
 		} else {
 			if (game.getPlayers() <= 0) {
-				throw new IllegalStateException("Game " + game.getName()
+				throw new IllegalStateException("Game " + game.getGamename()
 						+ " may not be mapped.  It has no players.");
 			}
 		}

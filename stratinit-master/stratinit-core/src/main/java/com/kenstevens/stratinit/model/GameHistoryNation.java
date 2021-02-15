@@ -1,35 +1,30 @@
 package com.kenstevens.stratinit.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 
 @Entity
 public class GameHistoryNation implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
-	@SequenceGenerator(name="game_history_nation_id_seq", sequenceName="game_history_nation_id_sequence", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="game_history_nation_id_seq")
+	@SequenceGenerator(name = "game_history_nation_id_seq", sequenceName = "game_history_nation_id_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_history_nation_id_seq")
 	private Integer id;
 	@ManyToOne
 	private GameHistoryTeam gameHistoryTeam;
-	private String name;
+	private String gamename;
 	private int cities;
 	private int power;
 
-    public GameHistoryNation() {}
+	public GameHistoryNation() {
+	}
 
-    public GameHistoryNation(GameHistoryTeam gameHistoryTeam, String name, int cities, int power) {
-    	this.setGameHistoryTeam(gameHistoryTeam);
-    	this.setName(name);
-    	this.setCities(cities);
-    	this.setPower(power);
-    }
+	public GameHistoryNation(GameHistoryTeam gameHistoryTeam, String gamename, int cities, int power) {
+		this.setGameHistoryTeam(gameHistoryTeam);
+		this.setGamename(gamename);
+		this.setCities(cities);
+		this.setPower(power);
+	}
 
 	@Override
 	public int hashCode() {
@@ -49,11 +44,8 @@ public class GameHistoryNation implements Serializable {
 			return false;
 		GameHistoryNation other = (GameHistoryNation) obj;
 		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
+			return other.id == null;
+		} else return id.equals(other.id);
 	}
 
 	public void setGameHistoryTeam(GameHistoryTeam gameHistoryTeam) {
@@ -80,11 +72,11 @@ public class GameHistoryNation implements Serializable {
 		return power;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getGamename() {
+		return gamename;
 	}
 
-	public String getName() {
-		return name;
+	public void setGamename(String gamename) {
+		this.gamename = gamename;
 	}
 }

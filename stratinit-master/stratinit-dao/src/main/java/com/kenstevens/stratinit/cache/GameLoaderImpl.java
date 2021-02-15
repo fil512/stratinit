@@ -51,7 +51,7 @@ public class GameLoaderImpl implements GameLoader {
         logger.info("Getting Nations");
         gameCache.addNations(nationRepo.findByNationPKGame(game));
         if (game.isMapped()) {
-            if (game.getSize() == 0) {
+            if (game.getGamesize() == 0) {
                 logger.error("Cannot load game " + game + " because it is mapped but has no size.");
                 return null;
             }

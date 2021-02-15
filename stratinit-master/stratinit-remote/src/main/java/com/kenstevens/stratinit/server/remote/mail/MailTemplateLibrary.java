@@ -25,27 +25,27 @@ public final class MailTemplateLibrary {
 	}
 
 	public static MailTemplate getGameScheduled(Player player, Game game) {
-		return new MailTemplate(MailTemplateType.GAME_SCHEDULED, "StratInit Game "+game.getName()+" Starting Tomorrow", "Dear "+player.getUsername()+",\n"+
-		"\n"+
-		"Game #"+game.getName()+" will be mapped at "+game.getExpectedMapTimeString()+".  Log in any time after then to set up your country.\n\n"+
-		"The game clock in Game #"+game.getName()+" will start ticking at "+game.getStartTimeString()+".\n"+
-		"\nHydrogen\n");
+		return new MailTemplate(MailTemplateType.GAME_SCHEDULED, "StratInit Game " + game.getGamename() + " Starting Tomorrow", "Dear " + player.getUsername() + ",\n" +
+				"\n" +
+				"Game #" + game.getGamename() + " will be mapped at " + game.getExpectedMapTimeString() + ".  Log in any time after then to set up your country.\n\n" +
+				"The game clock in Game #" + game.getGamename() + " will start ticking at " + game.getStartTimeString() + ".\n" +
+				"\nHydrogen\n");
 	}
 
 	public static MailTemplate getGameMapped(Player player, Game game) {
-		return new MailTemplate(MailTemplateType.GAME_MAPPED, "StratInit Game "+game.getName()+" Started", "Dear "+player.getUsername()+",\n"+
-		"\n"+
-		"Game #"+game.getName()+" has been mapped.  You may now login to set up your country.\n\n"+
-		"The game clock in Game #"+game.getName()+" will start ticking at "+game.getStartTimeString()+".\n"+
-		"\nHydrogen\n");
+		return new MailTemplate(MailTemplateType.GAME_MAPPED, "StratInit Game " + game.getGamename() + " Started", "Dear " + player.getUsername() + ",\n" +
+				"\n" +
+				"Game #" + game.getGamename() + " has been mapped.  You may now login to set up your country.\n\n" +
+				"The game clock in Game #" + game.getGamename() + " will start ticking at " + game.getStartTimeString() + ".\n" +
+				"\nHydrogen\n");
 	}
 
 	public static MailTemplate getGameEmail(Nation from, String subject,
 			String body) {
 		Game game = from.getGame();
-		return new MailTemplate(MailTemplateType.GAME_EMAIL, "StratInit Game "+game.getName()+": "+subject,
-				"Strategic Inititiative Game "+game.getName()+"\nIn-game message from "+from.getName()+":\n\n"+
-				body);
+		return new MailTemplate(MailTemplateType.GAME_EMAIL, "StratInit Game " + game.getGamename() + ": " + subject,
+				"Strategic Inititiative Game " + game.getGamename() + "\nIn-game message from " + from.getName() + ":\n\n" +
+						body);
 	}
 
 	public static MailTemplate getForgottenPassword(String username,

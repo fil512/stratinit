@@ -1,7 +1,10 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import javax.annotation.PostConstruct;
-
+import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.event.GameListArrivedEvent;
+import com.kenstevens.stratinit.event.StratinitEventBus;
+import com.kenstevens.stratinit.model.GameList;
+import com.kenstevens.stratinit.model.GameView;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -9,11 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.event.GameListArrivedEvent;
-import com.kenstevens.stratinit.event.StratinitEventBus;
-import com.kenstevens.stratinit.model.GameList;
-import com.kenstevens.stratinit.model.GameView;
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component
@@ -48,11 +47,11 @@ public class GameTableControl {
 			table.removeAll();
 			for (GameView game : gameList) {
 				TableItem item = new TableItem(table, SWT.NONE);
-				item.setText(new String[] { "" + game.getId(), game.getName(),
-						"" + game.getSize(), game.getPlayersString(),
+				item.setText(new String[]{"" + game.getId(), game.getGamename(),
+						"" + game.getGamesize(), game.getPlayersString(),
 						game.getCreatedString(),
 						game.getExpectedMapTimeString(),
-						game.getStartTimeString(), game.getEndsString() });
+						game.getStartTimeString(), game.getEndsString()});
 				item.setData(game);
 			}
 			table.redraw();

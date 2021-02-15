@@ -62,9 +62,9 @@
         duration int4 not null,
         enabled bool,
         islands int4 not null,
-        name varchar(255) not null,
+        gamename varchar(255) not null,
         players int4 not null,
-        size int4 not null,
+        gamesize int4 not null,
         started timestamp,
         primary key (id)
     );

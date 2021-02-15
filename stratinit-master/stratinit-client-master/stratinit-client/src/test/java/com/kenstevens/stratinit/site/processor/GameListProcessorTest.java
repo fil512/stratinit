@@ -22,7 +22,7 @@ public class GameListProcessorTest extends StratInitClientTest {
 
 		gameListProcessor.process(sigames);
 		assertEquals(1, db.getGameList().size());
-		assertEquals("test", db.getGameList().get(1).getName());
+		assertEquals("test", db.getGameList().get(1).getGamename());
 		db.getGameList().remove("1");
 	}
 }
