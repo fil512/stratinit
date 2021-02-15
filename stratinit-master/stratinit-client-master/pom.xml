@@ -1,213 +1,251 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>stratinit-client-master</artifactId>
-	<packaging>pom</packaging>
-	<name>Strategic Initiative Client Master</name>
-	<parent>
-		<artifactId>stratinit-master</artifactId>
-		<groupId>com.kenstevens.stratinit</groupId>
-		<version>1.2.1-SNAPSHOT</version>
-	</parent>
-	<version>1.3</version>
-	<modules>
-		<module>stratinit-client</module>
-		<module>stratinit-images</module>
-		<module>stratinit-swt</module>
-	</modules>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>stratinit-client-master</artifactId>
+    <packaging>pom</packaging>
+    <name>Strategic Initiative Client Master</name>
+    <parent>
+        <artifactId>stratinit-master</artifactId>
+        <groupId>com.kenstevens.stratinit</groupId>
+        <version>1.2.1-SNAPSHOT</version>
+    </parent>
+    <version>1.3</version>
+    <modules>
+        <module>stratinit-client</module>
+        <module>stratinit-images</module>
+        <module>stratinit-swt</module>
+    </modules>
 
-	<profiles>
-		<profile>
-			<id>mac</id>
-			<activation>
-				<os>
-					<name>mac os x</name>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>swt-carbon-macosx</swt.artifactId>
-				<jnlp.url>http://www.strategicinitiative.org/mac</jnlp.url>
-			</properties>
-		</profile>
-		<profile>
-			<id>win32</id>
-			<properties>
-				<swt.artifactId>swt-win32-win32-x86</swt.artifactId>
-				<jnlp.url>http://www.strategicinitiative.org/client</jnlp.url>
-			</properties>
-		</profile>
-		<profile>
-			<id>win64</id>
-			<properties>
-				<swt.artifactId>swt-win32-win32-x86_64</swt.artifactId>
-				<jnlp.url>http://www.strategicinitiative.org/client</jnlp.url>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux32</id>
-			<properties>
-				<swt.artifactId>swt-gtk-linux-x86</swt.artifactId>
-				<jnlp.url>http://www.strategicinitiative.org/linux</jnlp.url>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux64</id>
-			<properties>
-				<swt.artifactId>swt-gtk-linux-x86_64</swt.artifactId>
-				<jnlp.url>http://www.strategicinitiative.org/linux</jnlp.url>
-			</properties>
-		</profile>
-	</profiles>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.mojo.webstart</groupId>
-					<artifactId>webstart-maven-plugin</artifactId>
-					<version>1.0-beta-1</version>
-					<executions>
-						<execution>
-							<id>make-jnlp</id> <!-- this is used for inheritance merges -->
-							<phase>package</phase> <!-- append to the packaging phase. -->
-							<!-- <goals> <goal>jnlp</goal> use jnlp, jnlp-inline or jnlp-single 
-								as appropriate -->
-							<!-- </goals> -->
-						</execution>
-					</executions>
-					<configuration>
-						<!--outputDirectory></outputDirectory --> <!-- not required?? -->
+    <profiles>
+        <profile>
+            <id>mac</id>
+            <activation>
+                <os>
+                    <name>mac os x</name>
+                </os>
+            </activation>
+            <properties>
+                <swt.artifactId>swt-carbon-macosx</swt.artifactId>
+                <jnlp.url>http://www.strategicinitiative.org/mac</jnlp.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>win32</id>
+            <properties>
+                <swt.artifactId>swt-win32-win32-x86</swt.artifactId>
+                <jnlp.url>http://www.strategicinitiative.org/client</jnlp.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>win64</id>
+            <properties>
+                <swt.artifactId>swt-win32-win32-x86_64</swt.artifactId>
+                <jnlp.url>http://www.strategicinitiative.org/client</jnlp.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux32</id>
+            <properties>
+                <swt.artifactId>swt-gtk-linux-x86</swt.artifactId>
+                <jnlp.url>http://www.strategicinitiative.org/linux</jnlp.url>
+            </properties>
+        </profile>
+        <profile>
+            <id>linux64</id>
+            <properties>
+                <swt.artifactId>swt-gtk-linux-x86_64</swt.artifactId>
+                <jnlp.url>http://www.strategicinitiative.org/linux</jnlp.url>
+            </properties>
+        </profile>
+    </profiles>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.8.1</version>
+                    <configuration>
+                        <generateBackupPoms>false</generateBackupPoms>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <release>11</release>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                    <configuration>
+                        <argLine>
+                            --illegal-access=permit
+                        </argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.0.0-M5</version>
+                    <configuration>
+                        <argLine>
+                            --illegal-access=permit
+                        </argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo.webstart</groupId>
+                    <artifactId>webstart-maven-plugin</artifactId>
+                    <version>1.0-beta-1</version>
+                    <executions>
+                        <execution>
+                            <id>make-jnlp</id> <!-- this is used for inheritance merges -->
+                            <phase>package</phase> <!-- append to the packaging phase. -->
+                            <!-- <goals> <goal>jnlp</goal> use jnlp, jnlp-inline or jnlp-single
+                                as appropriate -->
+                            <!-- </goals> -->
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!--outputDirectory></outputDirectory --> <!-- not required?? -->
 
-						<!-- Set to true to exclude all transitive dependencies. Default is 
-							false. -->
-						<excludeTransitive>false</excludeTransitive>
+                        <!-- Set to true to exclude all transitive dependencies. Default is
+                            false. -->
+                        <excludeTransitive>false</excludeTransitive>
 
-						<!-- The path where the libraries are stored within the jnlp structure. 
-							not required. by default the libraries are within the working directory -->
-						<!-- <libPath></libPath> -->
+                        <!-- The path where the libraries are stored within the jnlp structure.
+                            not required. by default the libraries are within the working directory -->
+                        <!-- <libPath></libPath> -->
 
-						<!-- [optional] transitive dependencies filter - if omitted, all transitive 
-							dependencies are included -->
-						<dependencies>
-							<!-- Note that only groupId and artifactId must be specified here. 
-								because of a limitation of the Include/ExcludesArtifactFilter -->
-							<!-- includes> <include>commons-logging:commons-logging</include> 
-								<include>commons-cli:commons-cli</include> </includes -->
-							<!-- excludes> <exclude></exclude> <excludes -->
-						</dependencies>
+                        <!-- [optional] transitive dependencies filter - if omitted, all transitive
+                            dependencies are included -->
+                        <dependencies>
+                            <!-- Note that only groupId and artifactId must be specified here.
+                                because of a limitation of the Include/ExcludesArtifactFilter -->
+                            <!-- includes> <include>commons-logging:commons-logging</include>
+                                <include>commons-cli:commons-cli</include> </includes -->
+                            <!-- excludes> <exclude></exclude> <excludes -->
+                        </dependencies>
 
-						<!-- resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory --> <!-- default value -->
+                        <!-- resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory --> <!-- default value -->
 
-						<!-- JNLP generation -->
-						<jnlp>
-							<!-- default values -->
-							<!-- inputTemplateResourcePath>${project.basedir}</inputTemplateResourcePath -->
-							<inputTemplate>src/main/jnlp/template.vm</inputTemplate> <!-- relative to inputTemplateResourcePath -->
-							<outputFile>stratinit-client-${project.version}.jnlp</outputFile> <!-- defaults to launch.jnlp -->
+                        <!-- JNLP generation -->
+                        <jnlp>
+                            <!-- default values -->
+                            <!-- inputTemplateResourcePath>${project.basedir}</inputTemplateResourcePath -->
+                            <inputTemplate>src/main/jnlp/template.vm
+                            </inputTemplate> <!-- relative to inputTemplateResourcePath -->
+                            <outputFile>stratinit-client-${project.version}.jnlp
+                            </outputFile> <!-- defaults to launch.jnlp -->
 
-							<!-- used to automatically identify the jar containing the main class. -->
-							<!-- this is perhaps going to change -->
-							<mainClass>com.kenstevens.stratinit.main.Launcher</mainClass>
-						</jnlp>
+                            <!-- used to automatically identify the jar containing the main class. -->
+                            <!-- this is perhaps going to change -->
+                            <mainClass>com.kenstevens.stratinit.main.Launcher</mainClass>
+                        </jnlp>
 
 
-						<!-- SIGNING -->
-						<!-- defining this will automatically sign the jar and its dependencies, 
-							if necessary -->
-						<sign>
-							<keystore>../../../../../kenstevens.jks</keystore>
-							<keypass>charisma</keypass>
-							<!-- we need to override passwords easily from the command line. ${keypass} -->
-							<storepass>dexterity</storepass> <!-- ${storepass} -->
-							<!--storetype>fillme</storetype -->
-							<alias>kenstevens</alias>
+                        <!-- SIGNING -->
+                        <!-- defining this will automatically sign the jar and its dependencies,
+                            if necessary -->
+                        <sign>
+                            <keystore>../../../../../kenstevens.jks</keystore>
+                            <keypass>charisma</keypass>
+                            <!-- we need to override passwords easily from the command line. ${keypass} -->
+                            <storepass>dexterity</storepass> <!-- ${storepass} -->
+                            <!--storetype>fillme</storetype -->
+                            <alias>kenstevens</alias>
 
-							<validity>365</validity>
+                            <validity>365</validity>
 
-							<!-- only required for generating the keystore -->
-							<dnameCn>kenstevens.com</dnameCn>
-							<dnameOu>none</dnameOu>
-							<dnameO>kenstevens.com</dnameO>
-							<dnameL>Toronto</dnameL>
-							<dnameSt>Ontario</dnameSt>
-							<dnameC>Canada</dnameC>
+                            <!-- only required for generating the keystore -->
+                            <dnameCn>kenstevens.com</dnameCn>
+                            <dnameOu>none</dnameOu>
+                            <dnameO>kenstevens.com</dnameO>
+                            <dnameL>Toronto</dnameL>
+                            <dnameSt>Ontario</dnameSt>
+                            <dnameC>Canada</dnameC>
 
-							<verify>true</verify> <!-- verify that the signing operation succeeded -->
-							<!-- KEYSTORE MANAGEMENT -->
-							<keystoreConfig>
-								<delete>false</delete> <!-- delete the keystore -->
-								<gen>false</gen>       <!-- optional shortcut to generate the store. -->
-							</keystoreConfig>
-						</sign>
+                            <verify>true</verify> <!-- verify that the signing operation succeeded -->
+                            <!-- KEYSTORE MANAGEMENT -->
+                            <keystoreConfig>
+                                <delete>false</delete> <!-- delete the keystore -->
+                                <gen>false</gen>       <!-- optional shortcut to generate the store. -->
+                            </keystoreConfig>
+                        </sign>
 
-						<!-- BUILDING PROCESS -->
+                        <!-- BUILDING PROCESS -->
 
-						<!-- pack200>true</pack200 -->
-						<!-- gzip>true</gzip --> <!-- default force when pack200 false, true when pack200 selected ?? -->
+                        <!-- pack200>true</pack200 -->
+                        <!-- gzip>true</gzip --> <!-- default force when pack200 false, true when pack200 selected ?? -->
 
-						<!-- causes a version attribute to be output in each jar resource element, 
-							optional, default is false -->
-						<!-- outputJarVersions>true</outputJarVersions -->
-						<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
-						<!--install>false</install --> <!-- not yet supported -->
-						<verbose>true</verbose>
+                        <!-- causes a version attribute to be output in each jar resource element,
+                            optional, default is false -->
+                        <!-- outputJarVersions>true</outputJarVersions -->
+                        <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+                        <!--install>false</install --> <!-- not yet supported -->
+                        <verbose>true</verbose>
 
-					</configuration>
-				</plugin>
-				<!-- run as mvn dependency:copy-dependencies -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.4</version>
-					<executions>
-						<execution>
-							<id>copy-dependencies</id>
-							<phase>package</phase>
-							<goals>
-								<goal>copy-dependencies</goal>
-							</goals>
-							<configuration>
-								<excludeScope>provided</excludeScope>
-								<overWriteReleases>false</overWriteReleases>
-								<overWriteSnapshots>false</overWriteSnapshots>
-								<overWriteIfNewer>true</overWriteIfNewer>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-	<repositories>
-		<repository>
-			<id>Mac SWT</id>
-			<name>Clojars Repository</name>
-			<layout>default</layout>
-			<url>http://clojars.org/repo/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Windows SWT</id>
-			<name>Maven Eclipse Repository</name>
-			<layout>default</layout>
-			<url>http://maven.clazzes.org/</url>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
+                    </configuration>
+                </plugin>
+                <!-- run as mvn dependency:copy-dependencies -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.4</version>
+                    <executions>
+                        <execution>
+                            <id>copy-dependencies</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <excludeScope>provided</excludeScope>
+                                <overWriteReleases>false</overWriteReleases>
+                                <overWriteSnapshots>false</overWriteSnapshots>
+                                <overWriteIfNewer>true</overWriteIfNewer>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    <repositories>
+        <repository>
+            <id>Mac SWT</id>
+            <name>Clojars Repository</name>
+            <layout>default</layout>
+            <url>http://clojars.org/repo/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>Windows SWT</id>
+            <name>Maven Eclipse Repository</name>
+            <layout>default</layout>
+            <url>http://maven.clazzes.org/</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
