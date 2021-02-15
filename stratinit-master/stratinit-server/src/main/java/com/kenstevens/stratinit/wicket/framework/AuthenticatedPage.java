@@ -9,18 +9,16 @@ public abstract class AuthenticatedPage extends BasePage implements Authenticate
 
     @Override
     public boolean isSignedIn() {
-        return getAuth().isSignedIn();
+        return AuthHelper.isSignedIn();
     }
 
     @Override
     public boolean isAdmin() {
-        return getAuth().getRoles().contains(PlayerRole.ROLE_ADMIN);
+        return AuthHelper.getRoles().contains(PlayerRole.ROLE_ADMIN);
     }
 
-    // FIXME not id
     @Override
     public String getUsername() {
-        return (String) getAuth().getAttribute("username");
+        return AuthHelper.getUsername();
     }
-
 }

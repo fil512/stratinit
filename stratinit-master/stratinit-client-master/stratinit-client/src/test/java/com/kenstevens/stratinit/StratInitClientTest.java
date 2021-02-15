@@ -5,7 +5,6 @@ import com.kenstevens.stratinit.shell.ProgressBarControl;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import org.jmock.Mockery;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,10 +15,9 @@ import java.util.Date;
 import java.util.List;
 
 
-@Disabled
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = "/spring.xml")
-public class StratInitClientTest {
+@ContextConfiguration(classes = SpringConfig.class)
+public abstract class StratInitClientTest {
 	@Autowired
 	protected Mockery context;
 	@Autowired

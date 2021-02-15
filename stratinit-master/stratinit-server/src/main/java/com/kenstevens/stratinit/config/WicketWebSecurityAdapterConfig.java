@@ -1,5 +1,7 @@
 package com.kenstevens.stratinit.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,11 +9,21 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
+    final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     @Bean(name = "authenticationManager")
@@ -47,12 +59,58 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests().antMatchers("/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/remote/**").hasAuthority("ROLE_USER")
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .logout()
-                .permitAll();
+                .httpBasic()
+                .and()
+//                .formLogin()
+//                .loginPage("/wicket/bookmarkable/com.kenstevens.stratinit.wicket.LoginPage")
+//                .loginProcessingUrl("/perform_login")
+//                .defaultSuccessUrl("/homepage.html", true)
+//                .failureUrl("/login.html?error=true")
+//                .failureHandler(authenticationFailureHandler())
+//                .and()
+//                .logout()
+//                .logoutUrl("/perform_logout")
+//                .deleteCookies("JSESSIONID")
+//                .logoutSuccessHandler(logoutSuccessHandler());
+//                .and()
+                .formLogin().permitAll()
+                .and()
+                .logout().permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/403");
         http.headers().frameOptions().disable();
     }
+
+    private LogoutSuccessHandler logoutSuccessHandler() {
+        return new LogoutSuccessHandler() {
+            @Override
+            public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                logger.info("LOGOUT SUCCESS for {}", authentication.getName());
+            }
+        };
+    }
+
+    private AuthenticationFailureHandler authenticationFailureHandler() {
+        return new AuthenticationFailureHandler() {
+            @Override
+            public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+                logger.error("Auth failure", e);
+            }
+        };
+    }
+
+//        <http create-session="never" auto-config="true">
+//        <intercept-url pattern="/remoting/**" access="ROLE_USER"/>
+//        <intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
+//        <form-login
+//    login-page="/wicket/bookmarkable/com.kenstevens.stratinit.wicket.LoginPage"/>
+//    </http>
 
     // FIXME
 //    @Autowired

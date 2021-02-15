@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.main;
 
+import com.kenstevens.stratinit.SpringConfig;
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.ui.MainShell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public final class StratInitClient {
 	static final Logger logger = LoggerFactory.getLogger(StratInitClient.class);
@@ -20,7 +20,8 @@ public final class StratInitClient {
 		WavPlayer wavPlayer = null;
 		ActionFactory actionFactory = null;
 		try {
-			ApplicationContext context = new ClassPathXmlApplicationContext("/spring.xml");
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+			context.register(SpringConfig.class);
 			actionFactory = (ActionFactory) context.getBean("actionFactory");
 			MainShell mainShell = (MainShell) context.getBean("MainShell");
 			actionQueue = (ActionQueue) context.getBean("ActionQueue");
