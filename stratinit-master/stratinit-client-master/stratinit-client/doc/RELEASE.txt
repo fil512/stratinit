@@ -5,9 +5,14 @@
 
 
 
+
+
+
+
+
+
  -=- DEPRECATED USE DEPLOY.txt -=-
 
-FIXME:
 swt for platform isn't being added to jnlp
 
 1. Check spring.xml points to 8080 server

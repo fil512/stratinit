@@ -20,8 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (player == null) {
             throw new UsernameNotFoundException("Player not found");
         }
-        // FIXME get username from spring principal instead
-//        Session.get().setAttribute("username", username);
         return new StratinitUserDetails(player, playerRoleRepo.findByPlayer(player));
     }
 }

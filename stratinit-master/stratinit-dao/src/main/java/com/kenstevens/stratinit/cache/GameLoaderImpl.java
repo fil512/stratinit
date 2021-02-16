@@ -15,6 +15,8 @@ public class GameLoaderImpl implements GameLoader {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
+    CacheFactory cacheFactory;
+    @Autowired
     private GameRepo gameRepo;
     @Autowired
     private NationRepo nationRepo;
@@ -47,7 +49,7 @@ public class GameLoaderImpl implements GameLoader {
         Game game = oGame.get();
         logger.info("Getting Relations");
         List<Relation> relations = relationRepo.findByGame(game);
-        GameCache gameCache = new GameCache(game, relations);
+        GameCache gameCache = cacheFactory.newGameCache(game, relations);
         logger.info("Getting Nations");
         gameCache.addNations(nationRepo.findByNationPKGame(game));
         if (game.isMapped()) {
@@ -120,7 +122,7 @@ public class GameLoaderImpl implements GameLoader {
     public void flush(GameCache gameCache) {
         gameCache.flush(gameRepo, relationRepo, sectorRepo);
         for (NationCache nationCache : gameCache.getNationCaches()) {
-            nationCache.flush(gameCache.getGameId(), nationRepo, sectorRepo, cityRepo, sectorSeenRepo, unitRepo, unitSeenRepo, unitMoveRepo, launchedSatelliteRepo);
+            nationCache.flush(gameCache.getGameId());
         }
     }
 }

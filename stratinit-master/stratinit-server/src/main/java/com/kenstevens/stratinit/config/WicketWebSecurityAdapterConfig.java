@@ -67,18 +67,6 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic()
                 .and()
-//                .formLogin()
-//                .loginPage("/wicket/bookmarkable/com.kenstevens.stratinit.wicket.LoginPage")
-//                .loginProcessingUrl("/perform_login")
-//                .defaultSuccessUrl("/homepage.html", true)
-//                .failureUrl("/login.html?error=true")
-//                .failureHandler(authenticationFailureHandler())
-//                .and()
-//                .logout()
-//                .logoutUrl("/perform_logout")
-//                .deleteCookies("JSESSIONID")
-//                .logoutSuccessHandler(logoutSuccessHandler());
-//                .and()
                 .formLogin().permitAll()
                 .and()
                 .logout().permitAll()
@@ -104,20 +92,4 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
             }
         };
     }
-
-//        <http create-session="never" auto-config="true">
-//        <intercept-url pattern="/remoting/**" access="ROLE_USER"/>
-//        <intercept-url pattern="/admin/**" access="ROLE_ADMIN"/>
-//        <form-login
-//    login-page="/wicket/bookmarkable/com.kenstevens.stratinit.wicket.LoginPage"/>
-//    </http>
-
-    // FIXME
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .inMemoryAuthentication()
-//                .withUser("admin").password("{noop}admin").authorities("USER", "ADMIN");
-//    }
-
 }

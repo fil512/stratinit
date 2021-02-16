@@ -7,13 +7,33 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
+@Component
+@Scope("prototype")
 public class NationCache extends Cacheable {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
+	private NationRepo nationRepo;
+	@Autowired
+	private CityRepo cityRepo;
+	@Autowired
+	private SectorSeenRepo sectorSeenRepo;
+	@Autowired
+	private UnitSeenRepo unitSeenRepo;
+	@Autowired
+	private LaunchedSatelliteRepo launchedSatelliteRepo;
+	@Autowired
+	private UnitMoveRepo unitMoveRepo;
+	@Autowired
+	private UnitRepo unitRepo;
 
 	private final Nation nation;
 	private final SectorSeenCache sectorSeenCache = new SectorSeenCache();
@@ -35,11 +55,11 @@ public class NationCache extends Cacheable {
 	public void add(City city) {
 		cityCache.add(city);
 	}
-	
+
 	public List<City> getCities() {
 		return cityCache.getCities();
 	}
-	
+
 	public void add(SectorSeen sectorSeen) {
 		sectorSeenCache.add(sectorSeen);
 	}
@@ -80,7 +100,7 @@ public class NationCache extends Cacheable {
 	public List<Unit> getUnits() {
 		return unitCache.getUnits();
 	}
-	
+
 	public void add(UnitSeen unitSeen) {
 		unitSeenCache.add(unitSeen);
 	}
@@ -112,7 +132,7 @@ public class NationCache extends Cacheable {
 	public Collection<Unit> getSeenUnits() {
 		return Collections2.transform(unitSeenCache.getUnitsSeen(), new UnitSeenToUnitFunction());
 	}
-	
+
 	public Collection<UnitSeen> getUnitsSeen() {
 		return unitSeenCache.getUnitsSeen();
 	}
@@ -129,11 +149,11 @@ public class NationCache extends Cacheable {
 	public void setUnitSeenModified(boolean modified) {
 		unitSeenCache.setModified(modified);
 	}
-	
+
 	public void setUnitMoveModified(boolean modified) {
 		unitMoveCache.setModified(modified);
 	}
-	
+
 	public void add(LaunchedSatellite launchedSatellite) {
 		launchedSatelliteCache.add(launchedSatellite);
 	}
@@ -141,7 +161,7 @@ public class NationCache extends Cacheable {
 	public void remove(LaunchedSatellite launchedSatellite) {
 		launchedSatelliteCache.remove(launchedSatellite);
 	}
-	
+
 	public Collection<LaunchedSatellite> getLaunchedSatellites() {
 		return launchedSatelliteCache.getLaunchedSatellites();
 	}
@@ -167,8 +187,7 @@ public class NationCache extends Cacheable {
 		cityMoveCache.remove(cityMove.getCity().getCoords());
 	}
 
-	// FIXME move to service
-	public void flush(int gameId, NationRepo nationRepo, SectorRepo sectorRepo, CityRepo cityRepo, SectorSeenRepo sectorSeenRepo, UnitRepo unitRepo, UnitSeenRepo unitSeenRepo, UnitMoveRepo unitMoveRepo, LaunchedSatelliteRepo launchedSatelliteRepo) {
+	public void flush(int gameId) {
 		if (isModified()) {
 			logger.debug("Flushing " + nation + " nation for game #"
 					+ gameId);

@@ -8,11 +8,19 @@ import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
+@Scope("prototype")
 public class GameCache extends Cacheable {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
+	CacheFactory cacheFactory;
 
 	private final Game game;
 	private WorldCache worldCache;
@@ -79,7 +87,7 @@ public class GameCache extends Cacheable {
 	}
 
 	public void add(Nation nation) {
-		this.nationCaches.add(new NationCache(nation));
+		this.nationCaches.add(cacheFactory.newNationCache(nation));
 	}
 
 	public List<Nation> getNations() {
@@ -175,7 +183,7 @@ public class GameCache extends Cacheable {
 				badUnitMoves.add(unitMove);
 				continue;
 			}
-			
+
 			Unit unit = getUnit(unitMoveUnit.getId());
 			if (unit == null) {
 				logger.error("Unable to find unit for unitMove with unit id " + unitMoveUnit.getId());
@@ -202,7 +210,7 @@ public class GameCache extends Cacheable {
 				badCityMoves.add(cityMove);
 				continue;
 			}
-			
+
 			City city = getCity(cityMoveCity.getCoords());
 			if (city == null) {
 				logger.error("Unable to find city for cityMove with city " + cityMoveCity.getCoords());
@@ -249,7 +257,7 @@ public class GameCache extends Cacheable {
 			setWorldModified(false);
 		}
 	}
-	
+
 	public boolean isWorldModified() {
 		return worldCache.isModified();
 	}

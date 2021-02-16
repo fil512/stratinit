@@ -52,7 +52,7 @@
             <groupId>org.eclipse</groupId>
             <artifactId>${swt.artifactId}</artifactId>
             <version>${swt.version}</version>
-            <!-- FIXME
+            <!-- FIXME restore
             <scope>provided</scope>
             -->
         </dependency>
@@ -104,19 +104,10 @@
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
         </dependency>
-        <!-- FIXME delete next two -->
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-artifact</artifactId>
             <version>3.0.3</version>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
