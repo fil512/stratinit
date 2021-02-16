@@ -70,27 +70,27 @@ public class GameCache extends Cacheable {
 
 	public List<NationCache> getNationCaches() {
 		return Collections.unmodifiableList(nationCaches);
-	}
+    }
 
-	public Nation getNation(Player player) {
-		NationCache nationCache = getNationCache(player);
-		if (nationCache == null) {
-			return null;
-		}
-		return nationCache.getNation();
-	}
+    public Nation getNation(Player player) {
+        NationCache nationCache = getNationCache(player);
+        if (nationCache == null) {
+            return null;
+        }
+        return nationCache.getNation();
+    }
 
-	public void addNations(List<Nation> nations) {
-		for (Nation nation : nations) {
-			add(nation);
-		}
-	}
+    public void addNations(Iterable<Nation> nations) {
+        for (Nation nation : nations) {
+            add(nation);
+        }
+    }
 
-	public void add(Nation nation) {
-		this.nationCaches.add(cacheFactory.newNationCache(nation));
-	}
+    public void add(Nation nation) {
+        this.nationCaches.add(cacheFactory.newNationCache(nation));
+    }
 
-	public List<Nation> getNations() {
+    public List<Nation> getNations() {
 		return Lists.transform(nationCaches, new NationCacheToNationFunction());
 	}
 
@@ -115,27 +115,27 @@ public class GameCache extends Cacheable {
 		return cityMap.get(coords);
 	}
 
-	public void add(City city) {
-		cityMap.put(city.getCoords(), city);
-		getNationCache(city.getNation()).add(city);
-	}
+    public void add(City city) {
+        cityMap.put(city.getCoords(), city);
+        getNationCache(city.getNation()).add(city);
+    }
 
-	public void remove(City city) {
-		cityMap.remove(city.getCoords());
-		getNationCache(city.getNation()).remove(city);
-	}
+    public void remove(City city) {
+        cityMap.remove(city.getCoords());
+        getNationCache(city.getNation()).remove(city);
+    }
 
-	public void setSectorsSeen(List<SectorSeen> sectorsSeen) {
-		for (SectorSeen sectorSeen : sectorsSeen) {
-			getNationCache(sectorSeen.getNation()).add(sectorSeen);
-		}
-	}
+    public void setSectorsSeen(Iterable<SectorSeen> sectorsSeen) {
+        for (SectorSeen sectorSeen : sectorsSeen) {
+            getNationCache(sectorSeen.getNation()).add(sectorSeen);
+        }
+    }
 
-	public Collection<City> getCities() {
-		return cityMap.values();
-	}
+    public Collection<City> getCities() {
+        return cityMap.values();
+    }
 
-	public Map<SectorCoords, City> getCityMap() {
+    public Map<SectorCoords, City> getCityMap() {
 		return Collections.unmodifiableMap(cityMap);
 	}
 
@@ -191,27 +191,27 @@ public class GameCache extends Cacheable {
 				continue;
 			} else if (unit.getUnitMove() != null) {
 				logger.error("More than one unitMove with same unit id " + unitMoveUnit.getId());
-				badUnitMoves.add(unitMove);
-				continue;
-			}
-			NationCache nationCache = getNationCache(unitMoveUnit.getNation());
-			nationCache.add(unitMove);
-			unit.setUnitMove(unitMove);
-		}
-		return badUnitMoves;
-	}
+                badUnitMoves.add(unitMove);
+                continue;
+            }
+            NationCache nationCache = getNationCache(unitMoveUnit.getNation());
+            nationCache.add(unitMove);
+            unit.setUnitMove(unitMove);
+        }
+        return badUnitMoves;
+    }
 
-	public List<CityMove> setCityMoves(List<CityMove> cityMoves) {
-		List<CityMove> badCityMoves = Lists.newArrayList();
-		for (CityMove cityMove : cityMoves) {
-			City cityMoveCity = cityMove.getCity();
-			if (cityMoveCity == null) {
-				logger.error("cityMove.city is null on cityMove with id " + cityMove.getId());
-				badCityMoves.add(cityMove);
-				continue;
-			}
+    public List<CityMove> setCityMoves(Iterable<CityMove> cityMoves) {
+        List<CityMove> badCityMoves = Lists.newArrayList();
+        for (CityMove cityMove : cityMoves) {
+            City cityMoveCity = cityMove.getCity();
+            if (cityMoveCity == null) {
+                logger.error("cityMove.city is null on cityMove with id " + cityMove.getId());
+                badCityMoves.add(cityMove);
+                continue;
+            }
 
-			City city = getCity(cityMoveCity.getCoords());
+            City city = getCity(cityMoveCity.getCoords());
 			if (city == null) {
 				logger.error("Unable to find city for cityMove with city " + cityMoveCity.getCoords());
 				badCityMoves.add(cityMove);
@@ -222,27 +222,27 @@ public class GameCache extends Cacheable {
 				continue;
 			}
 			NationCache nationCache = getNationCache(cityMoveCity.getNation());
-			nationCache.add(cityMove);
-			city.setCityMove(cityMove);
-		}
-		return badCityMoves;
-	}
+            nationCache.add(cityMove);
+            city.setCityMove(cityMove);
+        }
+        return badCityMoves;
+    }
 
-	public Collection<Unit> getUnits() {
-		return unitMap.values();
-	}
+    public Collection<Unit> getUnits() {
+        return unitMap.values();
+    }
 
-	public void setLaunchedSatellites(List<LaunchedSatellite> satellites) {
-		for (LaunchedSatellite launchedSatellite : satellites) {
-			getNationCache(launchedSatellite.getNation())
-					.add(launchedSatellite);
-		}
-	}
+    public void setLaunchedSatellites(Iterable<LaunchedSatellite> satellites) {
+        for (LaunchedSatellite launchedSatellite : satellites) {
+            getNationCache(launchedSatellite.getNation())
+                    .add(launchedSatellite);
+        }
+    }
 
-	public void remove(Unit unit) {
-		unitMap.remove(unit.getId());
-		getNationCache(unit.getNation()).remove(unit);
-	}
+    public void remove(Unit unit) {
+        unitMap.remove(unit.getId());
+        getNationCache(unit.getNation()).remove(unit);
+    }
 
 	public void flush(GameRepo gameRepo, RelationRepo relationRepo, SectorRepo sectorRepo) {
 		if (isModified()) {

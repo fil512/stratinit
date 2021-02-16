@@ -3,19 +3,20 @@ package com.kenstevens.stratinit.model;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import com.querydsl.core.annotations.QueryInit;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Unit extends GameUpdatable {
-
 	private static final long serialVersionUID = 1L;
 	@Id
 	@SequenceGenerator(name = "unit_id_seq", sequenceName = "unit_id_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_id_seq")
 	private Integer id;
 	@ManyToOne
+	@QueryInit("nationPK.game")
 	private Nation nation;
 	@Embedded
 	private SectorCoords coords;
@@ -53,10 +54,10 @@ public class Unit extends GameUpdatable {
 		this.hp = unitBase.getHp();
 		this.resupply();
 		this.alive = true;
-		if (getGame().hasStarted()) {
+		if (getParentGame().hasStarted()) {
 			this.setLastUpdated(new Date());
 		} else {
-			this.setLastUpdated(this.getGame().getStartTime());
+			this.setLastUpdated(this.getParentGame().getStartTime());
 		}
 		this.created = date;
 	}
@@ -264,12 +265,12 @@ public class Unit extends GameUpdatable {
 		return coords;
 	}
 
-	public Game getGame() {
+	public Game getParentGame() {
 		return nation.getNationPK().getGame();
 	}
 
 	public int getGameId() {
-		return getGame().getId();
+		return getParentGame().getId();
 	}
 
 	public void decreaseFuel() {

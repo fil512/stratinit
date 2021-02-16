@@ -22,7 +22,7 @@ public class CityView extends City {
 	}
 
 	public CityView copyFrom(CityView city) {
-		Sector sector = new Sector(city.getGame(), city.getCoords(), SectorType.PLAYER_CITY);
+		Sector sector = new Sector(city.getParentGame(), city.getCoords(), SectorType.PLAYER_CITY);
 		this.setCityPK(new CityPK(sector));
 		this.setNation(city.getNation());
 		this.setBuild(city.getBuild(), city.getLastUpdated());

@@ -79,10 +79,10 @@ public class DataCacheTest extends StratInitTest {
 	@Test
 	public void sectorMerge() {
 		createGame();
-		Sector newSector = sectorRepo.findByGameAndCoords(testGame, testSector.getCoords());
+		Sector newSector = findByGameAndCoords(testGame, testSector.getCoords());
 		newSector.setType(SectorType.PLAYER_CITY);
 		sectorRepo.save(newSector);
-		Sector newSector2 = sectorRepo.findByGameAndCoords(testGame, testSector.getCoords());
+		Sector newSector2 = findByGameAndCoords(testGame, testSector.getCoords());
 		assertEquals(SectorType.PLAYER_CITY, newSector2.getType());
 	}
 
@@ -102,7 +102,7 @@ public class DataCacheTest extends StratInitTest {
 		sectorDao.merge(newSector);
 
 		Game dbGame = gameRepo.findById(testGame.getId()).get();
-		Sector dbSector = sectorRepo.findByGameAndCoords(dbGame, coords);
+		Sector dbSector = findByGameAndCoords(dbGame, coords);
 		assertEquals(oldType, dbSector.getType());
 		assertFalse(dataCache.getGameCache(testGame).isModified());
 		assertTrue(dataCache.getGameCache(testGame).isWorldModified());
@@ -113,7 +113,11 @@ public class DataCacheTest extends StratInitTest {
 		dbSector = sectorDao.getWorld(testGame).getSector(coords);
 		assertEquals(newType, dbSector.getType());
 	}
-	
+
+	private Sector findByGameAndCoords(Game dbGame, SectorCoords coords) {
+		return sectorRepo.findOne(QSector.sector.sectorPK.game.eq(dbGame).and(QSector.sector.sectorPK.coords.eq(coords))).get();
+	}
+
 	@Test
 	public void dataCacheHasNextUpdate() {
 		assertNotNull(dataCache.getLastUpdated());

@@ -60,12 +60,12 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 		unit.setLastUpdated(buildTime);
 		UnitMove unitMove = unit.getUnitMove();
 		if (unitMove == null) {
-			// TODO REF add convenience method
-			City city = sectorDao.findCity(new CityPK(unit.getGame(), unit.getCoords()));
-			if (city != null && unit.getNation().equals(city.getNation()) && city.getCityMove() != null) {
-				executeCityMove(unit, city);
-			}
-		} else {
+            // TODO REF add convenience method
+            City city = sectorDao.findCity(new CityPK(unit.getParentGame(), unit.getCoords()));
+            if (city != null && unit.getNation().equals(city.getNation()) && city.getCityMove() != null) {
+                executeCityMove(unit, city);
+            }
+        } else {
 			executeMoveOrder(unit, unitMove.getCoords());
 		}
 		unitDao.merge(unit);
@@ -130,14 +130,14 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 	}
 
 	public void resupplyAir(Unit carrier) {
-		Collection<Unit> units = unitDao.getUnits(carrier.getGame(),
-				carrier.getCoords());
-		for (Unit unit : units) {
-			if (unit.requiresFuel()) {
-				unit.resupply();
-			}
-		}
-	}
+        Collection<Unit> units = unitDao.getUnits(carrier.getParentGame(),
+                carrier.getCoords());
+        for (Unit unit : units) {
+            if (unit.requiresFuel()) {
+                unit.resupply();
+            }
+        }
+    }
 
 	public void disable(UnitSeen unitSeen) {
 		eventQueue.cancel(unitSeen);
@@ -311,12 +311,12 @@ public class UnitDaoServiceImpl implements UnitDaoService {
 	}
 
 	public List<Unit> getPassengers(Unit holder, WorldSector fromSector, Collection<Unit> exclude) {
-		Collection<Unit> units = unitDao.getUnits(holder.getGame(),
-				fromSector.getCoords());
-		List<Unit> passengers = new ContainerUnit(holder, units)
-				.getPassengers(fromSector, exclude);
-		return passengers;
-	}
+        Collection<Unit> units = unitDao.getUnits(holder.getParentGame(),
+                fromSector.getCoords());
+        List<Unit> passengers = new ContainerUnit(holder, units)
+                .getPassengers(fromSector, exclude);
+        return passengers;
+    }
 
 	public List<Unit> getPassengers(Unit holder, WorldSector fromSector) {
 		return getPassengers(holder, fromSector, null);

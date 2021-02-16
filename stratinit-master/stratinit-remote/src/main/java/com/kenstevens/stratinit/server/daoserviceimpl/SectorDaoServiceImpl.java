@@ -536,14 +536,14 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	@Override
 	public Result<None> destroyCity(City city) {
 
-		Sector sector = sectorDao.getWorld(city.getGame()).getSector(city.getCoords());
-		sector.setType(SectorType.START_CITY);
-		sectorDao.merge(sector);
+        Sector sector = sectorDao.getWorld(city.getParentGame()).getSector(city.getCoords());
+        sector.setType(SectorType.START_CITY);
+        sectorDao.merge(sector);
 
-		remove(city);
+        remove(city);
 
-		return new Result<None>("City destroyed at " + sector.getCoords() + ".", true);
-	}
+        return new Result<None>("City destroyed at " + sector.getCoords() + ".", true);
+    }
 
 	@Override
 	public void remove(City city) {

@@ -1,9 +1,8 @@
 package com.kenstevens.stratinit.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
+import java.io.Serializable;
 
 
 @Embeddable
@@ -43,11 +42,8 @@ public class RelationPK implements Serializable {
 		} else if (!from.equals(other.from))
 			return false;
 		if (to == null) {
-			if (other.to != null)
-				return false;
-		} else if (!to.equals(other.to))
-			return false;
-		return true;
+			return other.to == null;
+		} else return to.equals(other.to);
 	}
 	public void setFrom(Nation from) {
 		this.from = from;

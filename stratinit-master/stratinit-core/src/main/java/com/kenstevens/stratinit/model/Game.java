@@ -192,7 +192,7 @@ public class Game extends GameUpdatable implements Serializable {
 	}
 
 	@Override
-	public Game getGame() {
+	public Game getParentGame() {
 		return this;
 	}
 

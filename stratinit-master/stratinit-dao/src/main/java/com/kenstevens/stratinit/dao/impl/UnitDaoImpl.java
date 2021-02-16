@@ -183,9 +183,9 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 		if (unit.isAlive()) {
 			getNationCache(unit.getNation()).setUnitCacheModified(true);
 		} else {
-			unitRepo.save(unit);
-			getGameCache(unit.getGame()).remove(unit);
-		}
+            unitRepo.save(unit);
+            getGameCache(unit.getParentGame()).remove(unit);
+        }
 	}
 
 	@Override
@@ -205,9 +205,9 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 
 	@Override
 	public void save(Unit unit) {
-		unitRepo.save(unit);
-		getGameCache(unit.getGame()).add(unit);
-	}
+        unitRepo.save(unit);
+        getGameCache(unit.getParentGame()).add(unit);
+    }
 
 	@Override
 	public void save(LaunchedSatellite satellite) {
@@ -235,10 +235,10 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	@Override
 	@Transactional
 	public void delete(Unit unit) {
-		unitSeenRepo.deleteByUnit(unit);
-		unitRepo.delete(unit);
-		getGameCache(unit.getGame()).remove(unit);
-	}
+        unitSeenRepo.deleteByUnit(unit);
+        unitRepo.delete(unit);
+        getGameCache(unit.getParentGame()).remove(unit);
+    }
 
 	@Override
 	public void removeUnits(Game game) {
@@ -275,16 +275,16 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 
 	@Override
 	public List<UnitSeen> getUnitsSeen(Unit unit) {
-		List<NationCache> nationCaches = getGameCache(unit.getGame()).getNationCaches();
-		List<UnitSeen> retval = new ArrayList<UnitSeen>();
-		for (NationCache nationCache : nationCaches) {
-			UnitSeen unitSeen = nationCache.getUnitSeen(unit.getId());
-			if (unitSeen != null) {
-				retval.add(unitSeen);
-			}
-		}
-		return retval;
-	}
+        List<NationCache> nationCaches = getGameCache(unit.getParentGame()).getNationCaches();
+        List<UnitSeen> retval = new ArrayList<UnitSeen>();
+        for (NationCache nationCache : nationCaches) {
+            UnitSeen unitSeen = nationCache.getUnitSeen(unit.getId());
+            if (unitSeen != null) {
+                retval.add(unitSeen);
+            }
+        }
+        return retval;
+    }
 
 	@Override
 	public int getNumberOfCapitalShips(Nation nation) {
@@ -293,11 +293,11 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 
 	@Override
 	public void transferUnit(Unit unit, Nation nation) {
-		merge(unit);
-		clearUnitMove(unit);
-		getGameCache(unit.getGame()).transferUnit(unit, nation);
-		merge(unit);
-	}
+        merge(unit);
+        clearUnitMove(unit);
+        getGameCache(unit.getParentGame()).transferUnit(unit, nation);
+        merge(unit);
+    }
 
 	@Override
 	@Transactional

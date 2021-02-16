@@ -175,9 +175,9 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void save(City city) {
-		cityRepo.save(city);
-		getGameCache(city.getGame()).add(city);
-	}
+        cityRepo.save(city);
+        getGameCache(city.getParentGame()).add(city);
+    }
 
 	@Override
 	public void save(SectorSeen sectorSeen) {
@@ -196,9 +196,9 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void delete(City city) {
-		cityRepo.delete(city);
-		getGameCache(city.getGame()).remove(city);
-	}
+        cityRepo.delete(city);
+        getGameCache(city.getParentGame()).remove(city);
+    }
 
 	@Override
 	public void saveIfNew(Nation nation, Sector sector) {
@@ -211,11 +211,11 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void transferCity(City city, Nation nation) {
-		clearCityMove(city);
-		merge(city);
-		getGameCache(city.getGame()).transferCity(city, nation);
-		merge(city);
-	}
+        clearCityMove(city);
+        merge(city);
+        getGameCache(city.getParentGame()).transferCity(city, nation);
+        merge(city);
+    }
 
 	// TODO REF Move this method into a helper, it doesn't belong here
 	@Override

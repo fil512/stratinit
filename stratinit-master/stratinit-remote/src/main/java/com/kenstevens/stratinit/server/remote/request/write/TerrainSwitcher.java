@@ -30,17 +30,17 @@ public class TerrainSwitcher {
 	private UnitDao unitDao;
 
 	public Result<None> switchTerrain(Unit unit) {
-		World world = sectorDao.getWorld(unit.getGame());
-		Sector sector = world.getSector(unit);
-		if (nonEngineerUnitsInSector(sector)) {
-			return new Result<None>("Only Engineer units may be in a sector to change its terrain", false);
-		}
-		SectorType fromType = sector.getType();
-		SectorType toType;
-		if (fromType == SectorType.LAND) {
-			toType = SectorType.WATER;
-			if (!hasNeighbourOfType(world, unit.getCoords(), toType)) {
-				return new Result<None>("Can only switch LAND to WATER if there is already WATER adjacent.", false);
+        World world = sectorDao.getWorld(unit.getParentGame());
+        Sector sector = world.getSector(unit);
+        if (nonEngineerUnitsInSector(sector)) {
+            return new Result<None>("Only Engineer units may be in a sector to change its terrain", false);
+        }
+        SectorType fromType = sector.getType();
+        SectorType toType;
+        if (fromType == SectorType.LAND) {
+            toType = SectorType.WATER;
+            if (!hasNeighbourOfType(world, unit.getCoords(), toType)) {
+                return new Result<None>("Can only switch LAND to WATER if there is already WATER adjacent.", false);
 			}
 		} else if (fromType == SectorType.WATER) {
 			toType = SectorType.LAND;

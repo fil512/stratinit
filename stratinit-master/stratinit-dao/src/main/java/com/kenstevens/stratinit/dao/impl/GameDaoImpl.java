@@ -291,12 +291,12 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	@Override
 	@Transactional
 	public void remove(Game game) {
-		nationRepo.deleteByGame(game);
-		unitRepo.deleteByGame(game);
-		sectorRepo.deleteByGame(game);
-		gameRepo.delete(game);
-		dataCache.remove(game);
-	}
+        nationRepo.deleteAll(nationRepo.findAll(QNation.nation.nationPK.game.eq(game)));
+        unitRepo.deleteByGame(game);
+        sectorRepo.deleteByGame(game);
+        gameRepo.delete(game);
+        dataCache.remove(game);
+    }
 
 	@Override
 	@Transactional

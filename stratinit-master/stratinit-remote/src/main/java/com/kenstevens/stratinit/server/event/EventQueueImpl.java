@@ -31,15 +31,15 @@ public class EventQueueImpl implements EventQueue {
 	}
 
 	public void schedule(City city) {
-		if (UnitBase.isNotUnit(city.getBuild())) {
-			return;
-		}
-		if (!city.getGame().hasStarted()) {
-			return;
-		}
-		CityBuildEvent cityBuildEvent = spring.autowire(new CityBuildEvent( city ));
-		eventTimer.schedule(cityBuildEvent);
-	}
+        if (UnitBase.isNotUnit(city.getBuild())) {
+            return;
+        }
+        if (!city.getParentGame().hasStarted()) {
+            return;
+        }
+        CityBuildEvent cityBuildEvent = spring.autowire(new CityBuildEvent(city));
+        eventTimer.schedule(cityBuildEvent);
+    }
 
 	public void schedule(UnitSeen unitSeen) {
 		if (!unitSeen.getGame().hasStarted()) {
@@ -112,13 +112,13 @@ public class EventQueueImpl implements EventQueue {
 	}
 
 	public void schedule(Unit unit) {
-		if (!unit.getGame().hasStarted()) {
-			return;
-		}
+        if (!unit.getParentGame().hasStarted()) {
+            return;
+        }
 
-		UnitUpdateEvent unitUpdateEvent = spring.autowire(new UnitUpdateEvent( unit ));
-		eventTimer.schedule(unitUpdateEvent);
-	}
+        UnitUpdateEvent unitUpdateEvent = spring.autowire(new UnitUpdateEvent(unit));
+        eventTimer.schedule(unitUpdateEvent);
+    }
 
 	public void schedule(Relation relation) {
 		if (!relation.getGame().hasStarted()) {

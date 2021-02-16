@@ -73,10 +73,10 @@ public class City extends GameUpdatable {
 
 	private void setBuild(UnitType build) {
 		Date lastUpdated;
-		if (getGame().hasStarted()) {
+		if (getParentGame().hasStarted()) {
 			lastUpdated = new Date();
 		} else {
-			lastUpdated = this.getGame().getStartTime();
+			lastUpdated = this.getParentGame().getStartTime();
 		}
 		setBuild(build, lastUpdated);
 	}
@@ -155,7 +155,7 @@ public class City extends GameUpdatable {
 	}
 
 	@Override
-	public Game getGame() {
+	public Game getParentGame() {
 		return nation.getGame();
 	}
 

@@ -1,18 +1,19 @@
 package com.kenstevens.stratinit.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.kenstevens.stratinit.type.RelationType;
+import com.querydsl.core.annotations.QueryInit;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
-import com.kenstevens.stratinit.type.RelationType;
+import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
 public class Relation implements EventKeyed, Serializable {
 	private static final long serialVersionUID = 1L;
 	@EmbeddedId
+	@QueryInit("from.nationPK.game")
 	private RelationPK relationPK;
 	private RelationType type = RelationType.NEUTRAL;
 	private Date switchTime;
@@ -43,11 +44,8 @@ public class Relation implements EventKeyed, Serializable {
 			return false;
 		Relation other = (Relation) obj;
 		if (getRelationPK() == null) {
-			if (other.getRelationPK() != null)
-				return false;
-		} else if (!getRelationPK().equals(other.getRelationPK()))
-			return false;
-		return true;
+			return other.getRelationPK() == null;
+		} else return getRelationPK().equals(other.getRelationPK());
 	}
 
 	public void setType(RelationType type) {

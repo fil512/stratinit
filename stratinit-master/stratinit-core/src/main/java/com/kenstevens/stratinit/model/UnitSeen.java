@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.kenstevens.stratinit.type.Constants;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
-import com.kenstevens.stratinit.type.Constants;
+import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
@@ -62,7 +61,7 @@ public class UnitSeen implements EventKeyed, Serializable {
 		return enabled;
 	}
 	public Game getGame() {
-		return getUnit().getGame();
+		return getUnit().getParentGame();
 	}
 	public String toString() {
 		return getNation()+" sees "+getUnit()+" #"+getUnit().getId();

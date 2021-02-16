@@ -1,12 +1,5 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.model.LaunchedSatellite;
@@ -24,6 +17,12 @@ import com.kenstevens.stratinit.server.remote.helper.NukeTargetScore;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
 
 @Scope("prototype")
 @Component
@@ -59,10 +58,10 @@ public class LaunchRocket {
 			return new Result<None>(unit+" can not reach "+targetCoords, false);
 		}
 		if (unit.getType() == UnitType.SATELLITE) {
-			messageDaoService.postBulletin(unit.getGame(), unit.getNation()+" launched a "+unit.toString(), null);
+			messageDaoService.postBulletin(unit.getParentGame(), unit.getNation() + " launched a " + unit.toString(), null);
 			launchSatellite();
 		} else if (unit.devastates()) {
-			messageDaoService.postBulletin(unit.getGame(), unit.getNation()+" launched an "+unit.toString(), null);
+			messageDaoService.postBulletin(unit.getParentGame(), unit.getNation() + " launched an " + unit.toString(), null);
 			Set<Nation> hitCities = launchICBM(initialAttack);
 			if (initialAttack) {
 				counterLaunch(hitCities);

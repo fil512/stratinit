@@ -1,18 +1,19 @@
 package com.kenstevens.stratinit.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.kenstevens.stratinit.type.SectorCoords;
+import com.querydsl.core.annotations.QueryInit;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
-import com.kenstevens.stratinit.type.SectorCoords;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 public class SectorSeen implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EmbeddedId
+	@QueryInit("nation.nationPK.game")
 	private SectorSeenPK sectorSeenPK;
 
 	private Date lastSeen;
@@ -62,11 +63,8 @@ public class SectorSeen implements Serializable {
 			return false;
 		SectorSeen other = (SectorSeen) obj;
 		if (sectorSeenPK == null) {
-			if (other.sectorSeenPK != null)
-				return false;
-		} else if (!sectorSeenPK.equals(other.sectorSeenPK))
-			return false;
-		return true;
+			return other.sectorSeenPK == null;
+		} else return sectorSeenPK.equals(other.sectorSeenPK);
 	}
 	
 }
