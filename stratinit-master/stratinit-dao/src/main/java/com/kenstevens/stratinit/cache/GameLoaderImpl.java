@@ -76,11 +76,11 @@ public class GameLoaderImpl implements GameLoader {
         Game game = gameCache.getGame();
         gameCache.setSectorsSeen(sectorSeenRepo.findAll(QSectorSeen.sectorSeen.sectorSeenPK.nation.nationPK.game.eq(game)));
         logger.info("Getting Units Seen");
-        gameCache.setUnitsSeen(unitSeenRepo.findByGame(game));
+        gameCache.setUnitsSeen(unitSeenRepo.findAll(QUnitSeen.unitSeen.unitSeenPK.nation.nationPK.game.eq(game)));
         logger.info("Getting Launched Satellites");
         gameCache.setLaunchedSatellites(launchedSatelliteRepo.findAll(QLaunchedSatellite.launchedSatellite.nation.nationPK.game.eq(game)));
         logger.info("Getting Units Move");
-        List<UnitMove> badUnitMoves = gameCache.setUnitsMove(unitMoveRepo.findByGame(game));
+        List<UnitMove> badUnitMoves = gameCache.setUnitsMove(unitMoveRepo.findAll(QUnitMove.unitMove.unit.nation.nationPK.game.eq(game)));
         clearBadUnitMoves(badUnitMoves);
         logger.info("Getting City Moves");
 

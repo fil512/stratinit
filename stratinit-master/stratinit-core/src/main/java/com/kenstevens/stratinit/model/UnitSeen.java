@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.model;
 
 import com.kenstevens.stratinit.type.Constants;
+import com.querydsl.core.annotations.QueryInit;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import java.util.Date;
 public class UnitSeen implements EventKeyed, Serializable {
 	private static final long serialVersionUID = 1L;
 	@EmbeddedId
+	@QueryInit({"nation.nationPK.game", "unit"})
 	private UnitSeenPK unitSeenPK;
 	private boolean enabled = true;
 

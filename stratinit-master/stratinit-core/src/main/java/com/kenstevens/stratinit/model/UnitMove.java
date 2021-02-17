@@ -1,14 +1,9 @@
 package com.kenstevens.stratinit.model;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.querydsl.core.annotations.QueryInit;
+
+import javax.persistence.*;
 
 @Entity
 public class UnitMove {
@@ -18,6 +13,7 @@ public class UnitMove {
 	private Integer id;
 
 	@ManyToOne
+	@QueryInit("nation.nationPK.game")
 	private Unit unit;
 	@Embedded
 	private SectorCoords coords;

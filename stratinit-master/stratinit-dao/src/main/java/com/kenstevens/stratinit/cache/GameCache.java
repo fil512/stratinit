@@ -168,13 +168,13 @@ public class GameCache extends Cacheable {
 		return unitMap.get(unitId);
 	}
 
-	public void setUnitsSeen(List<UnitSeen> unitsSeen) {
+	public void setUnitsSeen(Iterable<UnitSeen> unitsSeen) {
 		for (UnitSeen unitSeen : unitsSeen) {
 			getNationCache(unitSeen.getNation()).add(unitSeen);
 		}
 	}
 
-	public List<UnitMove> setUnitsMove(List<UnitMove> unitsMove) {
+	public List<UnitMove> setUnitsMove(Iterable<UnitMove> unitsMove) {
 		List<UnitMove> badUnitMoves = Lists.newArrayList();
 		for (UnitMove unitMove : unitsMove) {
 			Unit unitMoveUnit = unitMove.getUnit();

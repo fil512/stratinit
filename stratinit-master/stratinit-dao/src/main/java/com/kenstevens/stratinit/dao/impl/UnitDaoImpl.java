@@ -235,8 +235,8 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 	@Override
 	@Transactional
 	public void delete(Unit unit) {
-        unitSeenRepo.deleteByUnit(unit);
-        unitRepo.delete(unit);
+        unitSeenRepo.deleteAll(unitSeenRepo.findAll(QUnitSeen.unitSeen.unitSeenPK.unit.eq(unit)));
+		unitRepo.delete(unit);
         getGameCache(unit.getParentGame()).remove(unit);
     }
 
