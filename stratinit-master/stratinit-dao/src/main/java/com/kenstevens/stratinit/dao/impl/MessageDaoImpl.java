@@ -4,100 +4,85 @@ import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.model.QMail;
+import com.kenstevens.stratinit.model.audit.QRelationChangeAudit;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.repo.MailRepo;
+import com.kenstevens.stratinit.repo.RelationChangeAuditRepo;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nonnull;
 
 @SuppressWarnings("unchecked")
 @Service
 public class MessageDaoImpl implements MessageDao {
-	@PersistenceContext
-	protected EntityManager entityManager;
-	@Autowired
-	MailRepo mailRepo;
+    @Autowired
+    MailRepo mailRepo;
+    @Autowired
+    RelationChangeAuditRepo relationChangeAuditRepo;
 
-	@Override
-	public void save(Mail mail) {
-		mailRepo.save(mail);
-	}
+    @Override
+    public void save(Mail mail) {
+        mailRepo.save(mail);
+    }
 
-	@Override
-	public void remove(Mail mail) {
-		if (mail == null) {
-			return;
-		}
-		int id = mail.getMessageId();
-		Mail foundMail = entityManager.find(Mail.class, id);
-		if (foundMail != null) {
-			entityManager.remove(foundMail);
-		}
-	}
+    @Override
+    public void remove(@Nonnull Mail mail) {
+        mailRepo.delete(mail);
+    }
 
-	@Override
-	public List<Mail> getMessages(Nation nation) {
-		return entityManager
-				.createQuery(
-						"from Mail m WHERE (m.to = :nation or m.from = :nation) or (m.to is null and m.from is null)")
-				.setParameter("nation", nation).getResultList();
-	}
+    @Override
+    public Iterable<Mail> getMessages(Nation nation) {
+        QMail mail = QMail.mail;
+        return mailRepo.findAll((mail.to.eq(nation).or(mail.from.eq(nation))).or(isAnnouncement(mail)));
 
-	@Override
-	public List<Mail> getMail(Nation nation) {
-		return entityManager
-				.createQuery(
-						"from Mail m WHERE m.to = :nation")
-				.setParameter("nation", nation).getResultList();
-	}
+    }
 
-	@Override
-	public List<Mail> getSentMail(Nation nation) {
-		return entityManager
-				.createQuery(
-						"from Mail m WHERE m.from = :nation")
-				.setParameter("nation", nation).getResultList();
-	}
+    private Predicate isAnnouncement(QMail mail) {
+        return mail.to.isNull().and(mail.from.isNull());
+    }
 
-	@Override
-	public List<Mail> getAnnouncements(Game game) {
-		List<Mail>retval = new ArrayList<Mail>();
-		retval.addAll(entityManager
-				.createQuery(
-						"from Mail m WHERE m.to is null and m.from is not null and m.game = :game")
-				.setParameter("game", game).getResultList());
-		retval.addAll(entityManager
-				.createQuery(
-						"from Mail m WHERE m.to is null and m.from is null and m.body is not null and m.game = :game")
-				.setParameter("game", game).getResultList());
-		return retval;
-	}
+    @Override
+    public Iterable<Mail> getMail(Nation nation) {
+        return mailRepo.findAll(QMail.mail.to.eq(nation));
+    }
 
-	@Override
-	public List<Mail> getBulletins(Game game) {
-		return entityManager
-				.createQuery(
-						"from Mail m WHERE m.from.nationPK.player is null and m.to.nationPK.player is null and m.game = :game")
-				.setParameter("game", game).getResultList();
-	}
+    @Override
+    public Iterable<Mail> getSentMail(Nation nation) {
+        return mailRepo.findAll(QMail.mail.from.eq(nation));
+    }
 
-	@Override
-	public List<Mail> getNotifications(Nation nation) {
-		return entityManager
-				.createQuery(
-						"from Mail m WHERE m.from is null and m.to = :nation")
-				.setParameter("nation", nation).getResultList();
-	}
+    @Override
+    public Iterable<Mail> getAnnouncements(Game game) {
+        QMail mail = QMail.mail;
+        return mailRepo.findAll(adminAnnouncements(mail, game).or(gameAnnouncements(mail, game)));
+    }
 
-	@Override
-	public List<RelationChangeAudit> getRelationChanges(Game game) {
-		return entityManager
-		.createQuery(
-				"from RelationChangeAudit r WHERE r.gameId = :gameId")
-		.setParameter("gameId", game.getId()).getResultList();
-	}
+    private Predicate gameAnnouncements(QMail mail, Game game) {
+        return mail.to.isNull().and(mail.from.isNull()).and(mail.body.isNotNull()).and(mail.game.eq(game));
+    }
+
+    private BooleanExpression adminAnnouncements(QMail mail, Game game) {
+        return mail.to.isNull().and(mail.from.isNotNull()).and(mail.game.eq(game));
+    }
+
+    @Override
+    public Iterable<Mail> getBulletins(Game game) {
+        QMail mail = QMail.mail;
+        return mailRepo.findAll(mail.from.nationPK.player.isNull().and(mail.to.nationPK.player.isNull()).and(mail.game.eq(game)));
+    }
+
+    @Override
+    public Iterable<Mail> getNotifications(Nation nation) {
+        QMail mail = QMail.mail;
+        return mailRepo.findAll(mail.from.isNull().and(mail.to.eq(nation)));
+    }
+
+    @Override
+    public Iterable<RelationChangeAudit> getRelationChanges(Game game) {
+        return relationChangeAuditRepo.findAll(QRelationChangeAudit.relationChangeAudit.gameId.eq(game.getId()));
+    }
 }

@@ -1,12 +1,13 @@
 package com.kenstevens.stratinit.dao.impl;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Mail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +22,7 @@ public class MessageDaoTest extends StratInitTest {
 		createNation2();
 		Mail mail = new Mail(testGame, testNation1, testNation2, SUB, BOD);
 		messageDao.save(mail);
-		List<Mail> messages = messageDao.getSentMail(testNation1);
+		Iterable<Mail> messages = messageDao.getSentMail(testNation1);
 		assertMessage(mail, messages);
 		messages = messageDao.getMail(testNation2);
 		assertMessage(mail, messages);
@@ -32,7 +33,7 @@ public class MessageDaoTest extends StratInitTest {
 		createNation1();
 		Mail mail = new Mail(testGame, testNation1, null, SUB, BOD);
 		messageDao.save(mail);
-		List<Mail> messages = messageDao.getSentMail(testNation1);
+		Iterable<Mail> messages = messageDao.getSentMail(testNation1);
 		assertMessage(mail, messages);
 		messages = messageDao.getAnnouncements(testGame);
 		assertMessage(mail, messages);
@@ -43,7 +44,7 @@ public class MessageDaoTest extends StratInitTest {
 		createGame();
 		Mail mail = new Mail(testGame, null, null, SUB, BOD);
 		messageDao.save(mail);
-		List<Mail> messages = messageDao.getBulletins(testGame);
+		Iterable<Mail> messages = messageDao.getBulletins(testGame);
 		assertMessage(mail, messages);
 	}
 
@@ -52,13 +53,14 @@ public class MessageDaoTest extends StratInitTest {
 		createNation1();
 		Mail mail = new Mail(testGame, null, testNation1, SUB, BOD);
 		messageDao.save(mail);
-		List<Mail> messages = messageDao.getNotifications(testNation1);
+		Iterable<Mail> messages = messageDao.getNotifications(testNation1);
 		assertMessage(mail, messages);
 	}
 
-	private void assertMessage(Mail mail, List<Mail> messages) {
-		assertEquals(1, messages.size());
-		Mail message = messages.get(0);
+	private void assertMessage(Mail mail, Iterable<Mail> messages) {
+		ArrayList<Mail> msgs = Lists.newArrayList(messages);
+		assertEquals(1, msgs.size());
+		Mail message = msgs.get(0);
 		assertEquals(mail.getMessageId(), message.getMessageId());
 		assertEquals(SUB, message.getSubject());
 		assertEquals(BOD, message.getBody());

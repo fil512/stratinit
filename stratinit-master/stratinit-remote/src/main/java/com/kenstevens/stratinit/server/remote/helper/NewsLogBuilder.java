@@ -1,45 +1,19 @@
 package com.kenstevens.stratinit.server.remote.helper;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.LogDao;
-import com.kenstevens.stratinit.dao.MessageDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.dto.news.SINewsAirDefense;
-import com.kenstevens.stratinit.dto.news.SINewsBulletin;
-import com.kenstevens.stratinit.dto.news.SINewsFirst;
-import com.kenstevens.stratinit.dto.news.SINewsForeignAffairs;
-import com.kenstevens.stratinit.dto.news.SINewsFromTheFront;
-import com.kenstevens.stratinit.dto.news.SINewsLogs;
-import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.dto.news.SINewsNeutralConquest;
-import com.kenstevens.stratinit.dto.news.SINewsNuclearDetonations;
-import com.kenstevens.stratinit.dto.news.SINewsOpponentConquest;
+import com.kenstevens.stratinit.dao.*;
+import com.kenstevens.stratinit.dto.news.*;
 import com.kenstevens.stratinit.dto.news.translator.BulletinToSINewsBulletin;
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.CityNukedBattleLog;
-import com.kenstevens.stratinit.model.FlakBattleLog;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class NewsLogBuilder {
@@ -54,7 +28,7 @@ public class NewsLogBuilder {
 	@Autowired
 	private PlayerDao playerDao;
 
-	private Comparator<NewsWorthy> byDate = new Comparator<NewsWorthy>() {
+	private final Comparator<NewsWorthy> byDate = new Comparator<NewsWorthy>() {
 		public int compare(NewsWorthy e1, NewsWorthy e2) {
 			return e1.getDate().compareTo(e2.getDate());
 		}
@@ -71,7 +45,7 @@ public class NewsLogBuilder {
 	}
 
 	private void addBulletins(Game game, SINewsLogs newsLogs) {
-		List<Mail> bulletins = messageDao.getBulletins(game);
+		Iterable<Mail> bulletins = messageDao.getBulletins(game);
 		NewsWorthySplitter<Mail> splitter = new NewsWorthySplitter<Mail>();
 		Map<Integer, List<Mail>> map = splitter.split(game, bulletins);
 		for (int day : map.keySet()) {
@@ -99,7 +73,7 @@ public class NewsLogBuilder {
 	}
 
 	private void addForeignAffairs(Game game, SINewsLogs newsLogs) {
-		List<RelationChangeAudit> relationChanges = messageDao.getRelationChanges(game);
+		Iterable<RelationChangeAudit> relationChanges = messageDao.getRelationChanges(game);
 		NewsWorthySplitter<RelationChangeAudit> splitter = new NewsWorthySplitter<RelationChangeAudit>();
 		Map<Integer, List<RelationChangeAudit>> map = splitter.split(game, relationChanges);
 		for (int day : map.keySet()) {

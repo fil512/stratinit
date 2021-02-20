@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.wicket.provider;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
@@ -31,8 +32,8 @@ public class MessageListProvider {
         if (!game.isPresent()) {
             return Collections.emptyList();
         }
-        List<Mail> messages = messageDao.getAnnouncements(game.get());
-        Collections.sort(messages, messagesByDateComparator);
+        List<Mail> messages = Lists.newArrayList(messageDao.getAnnouncements(game.get()));
+        messages.sort(messagesByDateComparator);
         return messages;
     }
 }

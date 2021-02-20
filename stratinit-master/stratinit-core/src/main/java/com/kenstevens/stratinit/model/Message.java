@@ -1,17 +1,12 @@
 package com.kenstevens.stratinit.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.SequenceGenerator;
-
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.Constants;
+import com.querydsl.core.annotations.QueryInit;
+
+import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @MappedSuperclass
 public abstract class Message implements NewsWorthy {
@@ -23,9 +18,11 @@ public abstract class Message implements NewsWorthy {
 	private Integer messageId;
 	@ManyToOne
 	private Game game;
-	@ManyToOne(optional=true)
+	@ManyToOne(optional = true)
+	@QueryInit("nationPK.player")
 	private Nation from;
-	@ManyToOne(optional=true)
+	@ManyToOne(optional = true)
+	@QueryInit("nationPK.player")
 	private Nation to;
 	private String subject = "";
 	private Date date = new Date();
