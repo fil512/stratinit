@@ -64,7 +64,7 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 
 	@AfterEach
 	public void undoMocks() {
-		// FIXME remove these
+		// FIXME convert to mockito and remove these
 		ReflectionTestUtils.setField(gameDaoService, "eventQueue",
 				origEventQueue);
 		ReflectionTestUtils.setField(gameDaoService, "mailService",
@@ -239,7 +239,6 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 		}
 	}
 
-	// FIXME this test started failing when we upgraded mock
 	@Test
 	public void joinBeforeMapped() {
 		final Game game = makeGame();

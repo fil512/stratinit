@@ -77,6 +77,7 @@ public class StratInitImpl implements StratInit {
 	}
 
 	// FIXME Log this
+	// FIXME What does "Log this" mean?
 	public Result<None> setGame(int gameId, boolean noAlliances) {
 		return spring.autowire(new SetGameRequest(gameId, noAlliances)).process(gameId);
 	}

@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class PasswordTest {
-    // FIXME make all loggers this
     final Logger logger = LoggerFactory.getLogger(getClass());
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 

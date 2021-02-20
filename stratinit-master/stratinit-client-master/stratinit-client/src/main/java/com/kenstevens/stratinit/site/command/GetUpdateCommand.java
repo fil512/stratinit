@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.site.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.UpdateProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
@@ -22,7 +21,6 @@ public class GetUpdateCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		// FIXME in Java 7 we hang here
 		return stratInit.getUpdate();
 	}
 

@@ -10,7 +10,6 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import java.util.List;
 import java.util.Properties;
 
-// FIXME find a way to remote to this without a webservice get rid of @WebService so we can bump to Java 11
 public interface StratInit {
 	// TODO Return incremental battle logs and nation with all commands
 	Result<String> getVersion();

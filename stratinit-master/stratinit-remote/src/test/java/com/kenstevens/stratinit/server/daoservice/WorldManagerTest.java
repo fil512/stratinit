@@ -24,7 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// FIXME TEST these tests fail sometimes in the group
+// FIXME Convert to mockito and re-enable
 @Disabled
 @SuppressWarnings("deprecation")
 public class WorldManagerTest extends EventTimerMockedBase {

@@ -64,17 +64,4 @@ public class DaoConfig {
 
         return hibernateProperties;
     }
-
-    // FIXME
-//    @Bean
-//    @Scope("prototype")
-//    public GameCache newGameCache(Game game, List<Relation> relations) {
-//        return new GameCache(game, relations);
-//    }
-//
-//    @Bean
-//    @Scope("prototype")
-//    public NationCache newNationCache(Nation nation) {
-//        return new NationCache(nation);
-//    }
 }

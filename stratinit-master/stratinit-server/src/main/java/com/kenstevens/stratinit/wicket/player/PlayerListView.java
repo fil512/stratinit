@@ -31,15 +31,9 @@ public class PlayerListView extends PageableListView<Player> {
 					+ FORMAT.format(player.getCreated())));
 			listItem.add(new Label("lastLogin", ""
 					+ FORMAT.format(player.getLastLogin())));
-			String userAgentString = player.getUserAgent();
-			// FIXME
-//			if (userAgentString != null) {
-//				UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
-//				listItem.add(new Label("os", userAgent.getOperatingSystem().getName()));
-//				listItem.add(new Label("browser", userAgent.getBrowser().getName()));
-//			} else {
+			// FIXME can remove os?
 			listItem.add(new Label("os", ""));
-			listItem.add(new Label("browser", ""));
+			listItem.add(new Label("browser", player.getUserAgent()));
 //			}
 		} else {
 			listItem.add(new Label("won", "" + player.getWins()));
