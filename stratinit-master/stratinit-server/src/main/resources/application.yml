@@ -2,4 +2,8 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
+        security: INFO
+stratinit:
+  email:
+    hostname: localhost
+    enabled: false

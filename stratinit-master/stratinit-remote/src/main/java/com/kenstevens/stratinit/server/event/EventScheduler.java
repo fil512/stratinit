@@ -18,7 +18,6 @@ import java.nio.channels.FileLock;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 @Service
 public class EventScheduler {
@@ -62,27 +61,12 @@ public class EventScheduler {
 		}
 		logger.info("Server Lock File locked.\n");
 		logger.info("Event Queue starting up.");
-		processSystemProperties();
 		updateGames();
 		eventQueue.scheduleFlushCache();
 		// TODO is this a race condition?
 		gameCreator.createGameIfAllMapped();
 		logger.info("All events scheduled.  Server started.");
 		serverStatus.setRunning();
-	}
-
-	private void processSystemProperties() {
-		Properties props = System.getProperties();
-		logger.debug("System properties:");
-		for (String key : props.stringPropertyNames()) {
-			logger.debug(key + ": " + props.getProperty(key));
-		}
-		if ("disable".equals(System
-				.getProperty("com.kenstevens.stratinit.mail"))) {
-			logger.warn("Disabling SMTP Service.");
-			smtpService.disable();
-			// shortenGameCreationTime();
-		}
 	}
 
 	// private void shortenGameCreationTime() {

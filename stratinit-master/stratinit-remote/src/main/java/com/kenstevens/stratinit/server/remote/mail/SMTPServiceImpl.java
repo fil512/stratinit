@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.remote.mail;
 import com.kenstevens.stratinit.type.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -16,19 +17,21 @@ import java.util.Properties;
 public class SMTPServiceImpl implements SMTPService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String smptHostname = "localhost";
+	@Value("${stratinit.email.hostname}")
+	private String smptHostname;
 
-	private boolean enabled = true;
+	@Value("${stratinit.email.enabled}")
+	private boolean enabled;
 
 	public void sendEmail(String to, String from, String subject, String body) {
 		if (!enabled) {
 			return;
 		}
 		//Get system properties
-        Properties props = System.getProperties();
+		Properties props = System.getProperties();
 
-        //Specify the desired SMTP server
-        props.put("mail.smtp.host", smptHostname);
+		//Specify the desired SMTP server
+		props.put("mail.smtp.host", smptHostname);
 
         // create a new Session object
         Session session = Session.getInstance(props,null);
