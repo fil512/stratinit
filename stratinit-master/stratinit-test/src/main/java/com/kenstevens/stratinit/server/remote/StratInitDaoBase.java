@@ -10,7 +10,6 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.*;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
-import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,9 +47,6 @@ public abstract class StratInitDaoBase {
 	protected DataCache dataCache;
 	@Autowired
 	private ExpungeSvc expungeSvc;
-	@PersistenceContext
-	private EntityManager entityManager;
-	private static boolean initialized = false;
 	protected Game testGame;
 	protected World testWorld;
 	protected static final String PLAYER_ME_NAME = "me";
@@ -157,18 +151,8 @@ public abstract class StratInitDaoBase {
 	@BeforeEach
 	public void stratInit() {
 		Constants.setRunMode(RunMode.PRODUCTION);
-		if (!initialized) {
-			SessionImpl session = getSession();
-			assertTrue(session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect, "Running in H2");
-			initialized = true;
-		}
-
 		// Note this creates a new game for every test
 		setupGame();
-	}
-
-	private SessionImpl getSession() {
-		return (SessionImpl) entityManager.getDelegate();
 	}
 
 	@AfterEach

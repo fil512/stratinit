@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.SectorSeen;
+import com.kenstevens.stratinit.repo.SectorSeenRepo;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class SectorDaoTest extends StratInitTest {
 	@Autowired
 	private SectorDao sectorDao;
+	@Autowired
+	private SectorSeenRepo sectorSeenRepo;
 
 	@Test
 	public void testSectorPersistance() {
@@ -21,14 +24,14 @@ public class SectorDaoTest extends StratInitTest {
 		Sector result = sectorDao.getWorld(testGame).getSector(testCoords);
 		assertEquals(testGame.getId(), result.getGame().getId());
 	}
-	
+
 	@Test
 	public void testSectorSeenDoubleSaveIfNew() {
 		createNation1();
 		Sector sector = sectorDao.getWorld(testGame).getSector(testCoords);
 		SectorSeen sectorSeen = new SectorSeen(testNation1, sector);
 		assertNull(sectorDao.findSectorSeen(testNation1, sector));
-		assertNull(entityManager.find(SectorSeen.class, sectorSeen.getSectorSeenPK()));
+		assertTrue(sectorSeenRepo.findById(sectorSeen.getSectorSeenPK()).isEmpty());
 		sectorDao.saveIfNew(testNation1, sector);
 		sectorDao.saveIfNew(testNation1, sector);
 	}
@@ -39,7 +42,7 @@ public class SectorDaoTest extends StratInitTest {
 		Sector sector = sectorDao.getWorld(testGame).getSector(testCoords);
 		SectorSeen sectorSeen = new SectorSeen(testNation1, sector);
 		assertNull(sectorDao.findSectorSeen(testNation1, sector));
-		assertNull(entityManager.find(SectorSeen.class, sectorSeen.getSectorSeenPK()));
+		assertTrue(sectorSeenRepo.findById(sectorSeen.getSectorSeenPK()).isEmpty());
 		sectorDao.saveIfNew(testNation1, sector);
 		sectorDao.save(sectorSeen);
 	}
@@ -50,10 +53,10 @@ public class SectorDaoTest extends StratInitTest {
 		Sector sector = sectorDao.getWorld(testGame).getSector(testCoords);
 		SectorSeen sectorSeen = new SectorSeen(testNation1, sector);
 		assertNull(sectorDao.findSectorSeen(testNation1, sector));
-		assertNull(entityManager.find(SectorSeen.class, sectorSeen.getSectorSeenPK()));
+		assertTrue(sectorSeenRepo.findById(sectorSeen.getSectorSeenPK()).isEmpty());
 		sectorDao.saveIfNew(testNation1, sector);
 		assertNotNull(sectorDao.findSectorSeen(testNation1, sector));
-		assertNotNull(entityManager.find(SectorSeen.class, sectorSeen.getSectorSeenPK()));
+		assertTrue(sectorSeenRepo.findById(sectorSeen.getSectorSeenPK()).isPresent());
 	}
 
 	@Test

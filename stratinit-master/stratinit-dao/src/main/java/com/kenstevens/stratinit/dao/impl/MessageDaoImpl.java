@@ -38,7 +38,6 @@ public class MessageDaoImpl implements MessageDao {
     public Iterable<Mail> getMessages(Nation nation) {
         QMail mail = QMail.mail;
         return mailRepo.findAll((mail.to.eq(nation).or(mail.from.eq(nation))).or(isAnnouncement(mail)));
-
     }
 
     private Predicate isAnnouncement(QMail mail) {

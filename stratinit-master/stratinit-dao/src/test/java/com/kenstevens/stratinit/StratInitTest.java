@@ -11,7 +11,6 @@ import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,13 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
@@ -36,8 +31,6 @@ public abstract class StratInitTest {
     protected static Player testPlayer1;
     protected static Player testPlayer2;
     final Logger logger = LoggerFactory.getLogger(getClass());
-    @PersistenceContext
-    protected EntityManager entityManager;
     @Autowired
     protected GameDao gameDao;
     @Autowired
@@ -59,8 +52,6 @@ public abstract class StratInitTest {
 
     @BeforeEach
     public void stratInit() {
-        SessionImpl session = (SessionImpl) entityManager.getDelegate();
-        assertTrue(session.getFactory().getJdbcServices().getDialect() instanceof org.hibernate.dialect.H2Dialect, "RUNNING IN H2");
         testPlayer1 = new Player(TEST_PLAYER1_USERNAME);
         testPlayer1.setEmail("foo@foo.com");
         playerDao.save(testPlayer1);

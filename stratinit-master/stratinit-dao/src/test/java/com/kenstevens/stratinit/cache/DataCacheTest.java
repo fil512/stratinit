@@ -47,14 +47,10 @@ public class DataCacheTest extends StratInitTest {
 		// create game 1 nation 1
 		createNation1();
 
-		clearPersistanceContext();
-
 		// create game 2 nation 1
 		
 		createGame2();
 		createNation1(testGame2);
-
-		clearPersistanceContext();
 
 		// score game 1
 		List<Nation> nations = gameDao.getNations(testGame);
@@ -72,10 +68,6 @@ public class DataCacheTest extends StratInitTest {
 		assertEquals(5, player2.getWins());
 	}
 
-	private void clearPersistanceContext() {
-		entityManager.clear();
-	}
-	
 	@Test
 	public void sectorMerge() {
 		createGame();
