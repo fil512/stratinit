@@ -31,7 +31,7 @@ public class LogDaoServiceImpl implements LogDaoService {
 	@Override
 	public int logError(Game game, Player player, String stackTrace) {
 		ErrorLog errorLog = new ErrorLog(game == null ? -1 : game.getId(), player == null ? "NO_PLAYER" : player.getUsername(), stackTrace);
-		logDao.persist(errorLog);
+		logDao.save(errorLog);
 		return errorLog.getId();
 	}
 	

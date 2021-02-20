@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.kenstevens.stratinit.type.NewsCategory;
+import com.kenstevens.stratinit.type.SectorCoords;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-
-import com.kenstevens.stratinit.type.NewsCategory;
-import com.kenstevens.stratinit.type.SectorCoords;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class UnitAttackedBattleLog extends BattleLog {

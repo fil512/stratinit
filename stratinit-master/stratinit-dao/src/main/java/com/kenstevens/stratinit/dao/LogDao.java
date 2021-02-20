@@ -8,13 +8,13 @@ public interface LogDao {
 
     void save(BattleLog BattleLog);
 
-    List<CityCapturedBattleLog> getCityCapturedBattleLogs(
-            Nation nation);
+    Iterable<CityCapturedBattleLog> getCityCapturedBattleLogs(
+			Nation nation);
 
-    List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
-            Nation nation);
+	Iterable<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
+			Nation nation);
 
-    List<FlakBattleLog> getFlakBattleLogs(Nation nation);
+	Iterable<FlakBattleLog> getFlakBattleLogs(Nation nation);
 
     void delete(CityCapturedBattleLog log);
 
@@ -28,16 +28,16 @@ public interface LogDao {
 
 	List<BattleLog> getBattleLogs(Game game);
 
-	List<CityCapturedBattleLog> getCityCapturedBattleLogs(
+	Iterable<CityCapturedBattleLog> getCityCapturedBattleLogs(
 			Game game);
 
-	List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
+	Iterable<UnitAttackedBattleLog> getUnitAttackedBattleLogs(
 			Game game);
 
-	List<FlakBattleLog> getFlakBattleLogs(Game game);
+	Iterable<FlakBattleLog> getFlakBattleLogs(Game game);
 
-	List<CityNukedBattleLog> getCityNukedBattleLogs(Game game);
+	Iterable<CityNukedBattleLog> getCityNukedBattleLogs(Game game);
 
-	void persist(ErrorLog errorLog);
+	void save(ErrorLog errorLog);
 
 }

@@ -2,15 +2,11 @@ package com.kenstevens.stratinit.dao.impl;
 
 import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.repo.CityCapturedBattleLogRepo;
-import com.kenstevens.stratinit.repo.CityNukedBattleLogRepo;
-import com.kenstevens.stratinit.repo.FlakBattleLogRepo;
-import com.kenstevens.stratinit.repo.UnitAttackedBattleLogRepo;
+import com.kenstevens.stratinit.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,8 +14,6 @@ import java.util.List;
 @Service
 public class LogDaoImpl implements LogDao {
     // FIXME remove all entity managers
-    @PersistenceContext
-    protected EntityManager entityManager;
     @Autowired
     UnitAttackedBattleLogRepo unitAttackedBattleLogRepo;
     @Autowired
@@ -28,6 +22,8 @@ public class LogDaoImpl implements LogDao {
     CityNukedBattleLogRepo cityNukedBattleLogRepo;
     @Autowired
     FlakBattleLogRepo flakBattleLogRepo;
+    @Autowired
+    ErrorLogRepo errorLogRepo;
 
     @Override
     public void save(BattleLog battleLog) {
@@ -55,126 +51,84 @@ public class LogDaoImpl implements LogDao {
     }
 
     @Override
-    public List<CityCapturedBattleLog> getCityCapturedBattleLogs(Nation nation) {
-        return entityManager
-                .createQuery(
-                        "from CityCapturedBattleLog b WHERE b.attacker = :nation or b.defender = :nation")
-                .setParameter("nation", nation).getResultList();
+    public Iterable<CityCapturedBattleLog> getCityCapturedBattleLogs(Nation nation) {
+        QCityCapturedBattleLog log = QCityCapturedBattleLog.cityCapturedBattleLog;
+        return cityCapturedBattleLogRepo.findAll(log.attacker.eq(nation).or(log.defender.eq(nation)));
     }
 
     @Override
-    public List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(Nation nation) {
-        return entityManager
-                .createQuery(
-                        "from UnitAttackedBattleLog b WHERE b.attacker = :nation or b.defender = :nation")
-                .setParameter("nation", nation).getResultList();
+    public Iterable<UnitAttackedBattleLog> getUnitAttackedBattleLogs(Nation nation) {
+        QUnitAttackedBattleLog log = QUnitAttackedBattleLog.unitAttackedBattleLog;
+        return unitAttackedBattleLogRepo.findAll(log.attacker.eq(nation).or(log.defender.eq(nation)));
     }
 
     @Override
-    public List<FlakBattleLog> getFlakBattleLogs(Nation nation) {
-        return entityManager
-                .createQuery(
-                        "from FlakBattleLog b WHERE b.attacker = :nation or b.defender = :nation")
-                .setParameter("nation", nation).getResultList();
+    public Iterable<FlakBattleLog> getFlakBattleLogs(Nation nation) {
+        QFlakBattleLog log = QFlakBattleLog.flakBattleLog;
+        return flakBattleLogRepo.findAll(log.attacker.eq(nation).or(log.defender.eq(nation)));
     }
 
     @Override
-    public void delete(CityCapturedBattleLog cityCapturedBattleLog) {
+    public void delete(@Nonnull CityCapturedBattleLog cityCapturedBattleLog) {
         cityCapturedBattleLogRepo.delete(cityCapturedBattleLog);
     }
 
     @Override
-    public void remove(UnitAttackedBattleLog log) {
-        if (log == null || log.getId() == null) {
-            return;
-        }
-        Integer battleLogId = log.getId();
-        UnitAttackedBattleLog foundLog = entityManager.find(UnitAttackedBattleLog.class, battleLogId);
-        if (foundLog != null) {
-            entityManager.remove(foundLog);
-            return;
-        }
+    public void remove(@Nonnull UnitAttackedBattleLog log) {
+        unitAttackedBattleLogRepo.deleteById(log.getId());
     }
 
 
     @Override
-    public void remove(FlakBattleLog log) {
-        if (log == null || log.getId() == null) {
-            return;
-        }
-        Integer battleLogId = log.getId();
-        FlakBattleLog foundLog = entityManager.find(FlakBattleLog.class, battleLogId);
-        if (foundLog != null) {
-            entityManager.remove(foundLog);
-            return;
-        }
+    public void remove(@Nonnull FlakBattleLog log) {
+        flakBattleLogRepo.deleteById(log.getId());
     }
 
     @Override
-    public void remove(CityNukedBattleLog log) {
-        if (log == null || log.getId() == null) {
-            return;
-        }
-        Integer battleLogId = log.getId();
-        CityNukedBattleLog foundLog = entityManager.find(CityNukedBattleLog.class, battleLogId);
-        if (foundLog != null) {
-            entityManager.remove(foundLog);
-            return;
-        }
+    public void remove(@Nonnull CityNukedBattleLog log) {
+        cityNukedBattleLogRepo.deleteById(log.getId());
     }
 
     @Override
     public void removeLogs(Game game) {
-        List<BattleLog> logs = getBattleLogs(game);
-        for (BattleLog log : logs) {
-            entityManager.remove(log);
-        }
+        getCityCapturedBattleLogs(game).forEach(cityCapturedBattleLogRepo::delete);
+        getUnitAttackedBattleLogs(game).forEach(unitAttackedBattleLogRepo::delete);
+        getFlakBattleLogs(game).forEach(flakBattleLogRepo::delete);
+        getCityNukedBattleLogs(game).forEach(cityNukedBattleLogRepo::delete);
     }
 
     @Override
     public List<BattleLog> getBattleLogs(Game game) {
         List<BattleLog> logs = new ArrayList<BattleLog>();
-        logs.addAll(getCityCapturedBattleLogs(game));
-        logs.addAll(getUnitAttackedBattleLogs(game));
-        logs.addAll(getFlakBattleLogs(game));
-        logs.addAll(getCityNukedBattleLogs(game));
+        getCityCapturedBattleLogs(game).forEach(logs::add);
+        getUnitAttackedBattleLogs(game).forEach(logs::add);
+        getFlakBattleLogs(game).forEach(logs::add);
+        getCityNukedBattleLogs(game).forEach(logs::add);
         return logs;
     }
 
     @Override
-    public List<CityCapturedBattleLog> getCityCapturedBattleLogs(Game game) {
-        return entityManager
-                .createQuery(
-                        "from CityCapturedBattleLog b WHERE b.attacker.nationPK.game = :game")
-                .setParameter("game", game).getResultList();
+    public Iterable<CityCapturedBattleLog> getCityCapturedBattleLogs(Game game) {
+        return cityCapturedBattleLogRepo.findAll(QCityCapturedBattleLog.cityCapturedBattleLog.attacker.nationPK.game.eq(game));
     }
 
     @Override
-    public List<UnitAttackedBattleLog> getUnitAttackedBattleLogs(Game game) {
-        return entityManager
-                .createQuery(
-                        "from UnitAttackedBattleLog b WHERE b.attacker.nationPK.game = :game")
-                .setParameter("game", game).getResultList();
+    public Iterable<UnitAttackedBattleLog> getUnitAttackedBattleLogs(Game game) {
+        return unitAttackedBattleLogRepo.findAll(QUnitAttackedBattleLog.unitAttackedBattleLog.attacker.nationPK.game.eq(game));
     }
 
     @Override
-    public List<FlakBattleLog> getFlakBattleLogs(Game game) {
-        return entityManager
-                .createQuery(
-                        "from FlakBattleLog b WHERE b.attacker.nationPK.game = :game")
-                .setParameter("game", game).getResultList();
+    public Iterable<FlakBattleLog> getFlakBattleLogs(Game game) {
+        return flakBattleLogRepo.findAll(QFlakBattleLog.flakBattleLog.attacker.nationPK.game.eq(game));
     }
 
     @Override
-    public List<CityNukedBattleLog> getCityNukedBattleLogs(Game game) {
-        return entityManager
-                .createQuery(
-                        "from CityNukedBattleLog b WHERE b.attacker.nationPK.game = :game")
-                .setParameter("game", game).getResultList();
+    public Iterable<CityNukedBattleLog> getCityNukedBattleLogs(Game game) {
+        return cityNukedBattleLogRepo.findAll(QCityNukedBattleLog.cityNukedBattleLog.attacker.nationPK.game.eq(game));
     }
 
     @Override
-    public void persist(ErrorLog errorLog) {
-        entityManager.persist(errorLog);
+    public void save(ErrorLog errorLog) {
+        errorLogRepo.save(errorLog);
     }
 }

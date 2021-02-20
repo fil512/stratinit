@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
@@ -9,6 +10,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,8 +52,7 @@ public class InterdictionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertFalseResult(result);
 		assertInterdiction(mdest, idest, result);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(nationMe);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedLogs();
 		assertEquals(1, logs.size());
 		UnitAttackedBattleLog log = logs.get(0);
 		assertEquals(nationThem, log.getAttacker());
@@ -74,8 +75,7 @@ public class InterdictionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertFalseResult(result);
 		assertInterdiction(mpatrol, ipatrol, result);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(nationMe);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedLogs();
 		assertEquals(1, logs.size());
 		UnitAttackedBattleLog log = logs.get(0);
 		assertEquals(nationThem, log.getAttacker());
@@ -111,8 +111,7 @@ public class InterdictionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertFalseResult(result);
 		assertInterdiction(mdest, ibb, result);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(nationMe);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedLogs();
 		assertEquals(1, logs.size());
 		UnitAttackedBattleLog log = logs.get(0);
 		assertEquals(nationThem, log.getAttacker());
@@ -134,8 +133,7 @@ public class InterdictionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertFalseResult(result);
 		assertInterdiction(mtransport, ipatrol, result);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(nationMe);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedLogs();
 		assertEquals(1, logs.size());
 		UnitAttackedBattleLog log = logs.get(0);
 		assertEquals(nationThem, log.getAttacker());
@@ -157,8 +155,7 @@ public class InterdictionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertFalseResult(result);
 		assertInterdiction(mdest, idest, result);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(nationMe);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedLogs();
 		assertEquals(1, logs.size());
 		UnitAttackedBattleLog log = logs.get(0);
 		assertEquals(nationThem, log.getAttacker());
@@ -180,9 +177,13 @@ public class InterdictionTest extends TwoPlayerBase {
 				BETWEEN);
 		assertResult(result);
 		assertNoInterdiction(msub, idest, result);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(nationMe);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedLogs();
 		assertEquals(0, logs.size());
+	}
+
+	private ArrayList<UnitAttackedBattleLog> getUnitAttackedLogs() {
+		return Lists.newArrayList(logDao
+				.getUnitAttackedBattleLogs(nationMe));
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
+import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -55,7 +56,7 @@ public class AttackRelationsTest extends TwoPlayerBase {
 	}
 
 	private int unitAttackLogCount() {
-		return logDao.getUnitAttackedBattleLogs(nationMe).size();
+		return Iterables.size(logDao.getUnitAttackedBattleLogs(nationMe));
 	}
 
 	@Test

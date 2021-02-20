@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.dao.impl;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.model.AttackType;
@@ -24,8 +25,7 @@ public class LogDaoTest extends StratInitTest {
 		CityCapturedBattleLog log = new CityCapturedBattleLog(
 				AttackType.INITIAL_ATTACK, testUnit1, testNation1, testCoords);
 		logDao.save(log);
-		List<CityCapturedBattleLog> logs = logDao
-				.getCityCapturedBattleLogs(testGame);
+		List<CityCapturedBattleLog> logs = Lists.newArrayList(logDao.getCityCapturedBattleLogs(testGame));
 		assertEquals(1, logs.size());
 		assertEquals(log.getId(), logs.get(0).getId());
 	}
@@ -37,8 +37,7 @@ public class LogDaoTest extends StratInitTest {
 				AttackType.INITIAL_ATTACK, testUnit1, testNation1, testCoords);
 		logDao.save(log);
 		logDao.delete(log);
-		List<CityCapturedBattleLog> logs = logDao
-				.getCityCapturedBattleLogs(testGame);
+		List<CityCapturedBattleLog> logs = Lists.newArrayList(logDao.getCityCapturedBattleLogs(testGame));
 		assertEquals(0, logs.size());
 	}
 
@@ -50,10 +49,14 @@ public class LogDaoTest extends StratInitTest {
 		UnitAttackedBattleLog log = new UnitAttackedBattleLog(
 				AttackType.INITIAL_ATTACK, testUnit1, unit2, testCoords);
 		logDao.save(log);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(testGame);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedBattleLogs();
 		assertEquals(1, logs.size());
 		assertEquals(log.getId(), logs.get(0).getId());
+	}
+
+	private List<UnitAttackedBattleLog> getUnitAttackedBattleLogs() {
+		return Lists.newArrayList(logDao
+				.getUnitAttackedBattleLogs(testGame));
 	}
 
 	@Test
@@ -64,8 +67,7 @@ public class LogDaoTest extends StratInitTest {
 		UnitAttackedBattleLog log = new UnitAttackedBattleLog(
 				AttackType.INITIAL_ATTACK, testUnit1, unit2, testCoords);
 		logDao.save(log);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(testGame);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedBattleLogs();
 		assertEquals(1, logs.size());
 		assertEquals(log.getId(), logs.get(0).getId());
 	}
@@ -80,8 +82,7 @@ public class LogDaoTest extends StratInitTest {
 		UnitAttackedBattleLog log = new UnitAttackedBattleLog(
 				AttackType.INITIAL_ATTACK, testUnit1, unit2, testCoords);
 		logDao.save(log);
-		List<UnitAttackedBattleLog> logs = logDao
-				.getUnitAttackedBattleLogs(testGame);
+		List<UnitAttackedBattleLog> logs = getUnitAttackedBattleLogs();
 		assertEquals(1, logs.size());
 		assertEquals(log.getId(), logs.get(0).getId());
 	}

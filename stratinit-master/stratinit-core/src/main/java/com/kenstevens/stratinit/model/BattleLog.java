@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.model;
 
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.querydsl.core.annotations.QueryInit;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
@@ -12,14 +13,16 @@ import java.util.List;
 public abstract class BattleLog implements NewsWorthy {
 	public static final int NO_DAMAGE = 0;
 	@Id
-	@SequenceGenerator(name="battle_id_seq", sequenceName="battle_id_sequence", allocationSize=1)
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="battle_id_seq")
+	@SequenceGenerator(name = "battle_id_seq", sequenceName = "battle_id_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "battle_id_seq")
 	private Integer id;
 	protected AttackType attackType;
-	@ManyToOne
-	private Nation attacker;
-	@ManyToOne(optional=true)
+	@ManyToOne(optional = true)
+	@QueryInit("nationPK.game")
 	protected Nation defender;
+	@ManyToOne
+	@QueryInit("nationPK.game")
+	private Nation attacker;
 	@ManyToOne
 	protected Unit attackerUnit;
 	@Embedded

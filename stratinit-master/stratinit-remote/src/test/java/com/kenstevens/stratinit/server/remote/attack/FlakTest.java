@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.remote.attack;
 
+import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.model.FlakBattleLog;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
@@ -34,11 +35,15 @@ public class FlakTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(fighter), FORT);
 		assertFalseResult(result);
-		List<FlakBattleLog> logs = logDao.getFlakBattleLogs(nationMe);
+		List<FlakBattleLog> logs = getFlakBattleLogs();
 		assertTrue(logs.size() > 0);
 		assertTrue(logs.get(0).getFlakDamage() > 0);
 	}
-	
+
+	private List<FlakBattleLog> getFlakBattleLogs() {
+		return Lists.newArrayList(logDao.getFlakBattleLogs(nationMe));
+	}
+
 	@Test
 	public void shipHasFlak() {
 		declareWar();
@@ -50,7 +55,7 @@ public class FlakTest extends TwoPlayerBase {
 		Result<MoveCost> result = moveUnits(
 				makeUnitList(fighter), SEA);
 		assertFalseResult(result);
-		List<FlakBattleLog> logs = logDao.getFlakBattleLogs(nationMe);
+		List<FlakBattleLog> logs = getFlakBattleLogs();
 		assertTrue(logs.size() > 0);
 		assertTrue(logs.get(0).getFlakDamage() > 0);
 	}
