@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import java.util.Set;
-
+import com.kenstevens.stratinit.type.SectorCoords;
 import org.eclipse.swt.graphics.GC;
 
-import com.kenstevens.stratinit.type.SectorCoords;
+import java.util.Set;
 
 public class UnknownReachDrawer extends Drawer {
 

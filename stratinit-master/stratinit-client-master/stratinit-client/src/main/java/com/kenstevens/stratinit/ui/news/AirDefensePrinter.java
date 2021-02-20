@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
-import org.eclipse.swt.custom.StyledText;
-
 import com.kenstevens.stratinit.dto.news.SINewsAirDefense;
 import com.kenstevens.stratinit.model.UnitBase;
+import org.eclipse.swt.custom.StyledText;
+
+import java.util.List;
 
 public class AirDefensePrinter extends
 		NewsListPrinter<SINewsAirDefense> {

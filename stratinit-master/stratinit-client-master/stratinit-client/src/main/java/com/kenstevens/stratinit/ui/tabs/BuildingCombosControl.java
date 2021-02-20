@@ -1,19 +1,5 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import javax.annotation.PostConstruct;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.ETAHelper;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
@@ -21,18 +7,21 @@ import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
 import com.kenstevens.stratinit.event.CityListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.SelectedCity;
-import com.kenstevens.stratinit.model.SelectedCoords;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.BuildHelper;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component

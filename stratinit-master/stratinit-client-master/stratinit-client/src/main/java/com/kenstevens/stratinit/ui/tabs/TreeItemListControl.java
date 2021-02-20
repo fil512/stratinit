@@ -1,28 +1,16 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.TreeItem;
-
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.LaunchedSatellite;
-import com.kenstevens.stratinit.model.SatelliteList;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.ContainerUnit;
 import com.kenstevens.stratinit.util.UpdateManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TreeItem;
+
+import java.util.*;
 
 public class TreeItemListControl {
 	private final Data db;

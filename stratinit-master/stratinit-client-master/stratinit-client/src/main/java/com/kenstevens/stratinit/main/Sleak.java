@@ -11,38 +11,15 @@ package com.kenstevens.stratinit.main;
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
+import com.kenstevens.stratinit.ui.MainWindow;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.DeviceData;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.graphics.Pattern;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.graphics.Region;
-import org.eclipse.swt.graphics.TextLayout;
-import org.eclipse.swt.graphics.Transform;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.widgets.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.kenstevens.stratinit.ui.MainWindow;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
  * Instructions on how to use the Sleak tool with a standlaone SWT example:
@@ -292,9 +269,9 @@ void paintCanvas (Event event) {
 		return;
 	}
 	if (object instanceof Transform) {
-		if (((Transform)object).isDisposed ()) return;
-		String string = ((Transform)object).toString();
-		gc.drawString (string, 0, 0);
+		if (((Transform) object).isDisposed()) return;
+		String string = object.toString();
+		gc.drawString(string, 0, 0);
 		return;
 	}
 }

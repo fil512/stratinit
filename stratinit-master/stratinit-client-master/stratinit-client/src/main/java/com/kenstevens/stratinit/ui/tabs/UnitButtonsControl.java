@@ -1,39 +1,26 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import javax.annotation.PostConstruct;
-
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Display;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
 import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.NationView;
-import com.kenstevens.stratinit.model.SelectedCoords;
-import com.kenstevens.stratinit.model.SelectedUnits;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.ui.adapter.BuildCitySelectionAdapter;
-import com.kenstevens.stratinit.ui.adapter.CancelMoveSelectionAdapter;
-import com.kenstevens.stratinit.ui.adapter.CedeUnitsSelectionAdapter;
-import com.kenstevens.stratinit.ui.adapter.CedeWindow;
-import com.kenstevens.stratinit.ui.adapter.CentreHomeSelectionAdapter;
-import com.kenstevens.stratinit.ui.adapter.DisbandSelectionAdapter;
-import com.kenstevens.stratinit.ui.adapter.SwitchTerrainSelectionAdapter;
-import com.kenstevens.stratinit.ui.adapter.UpdateUnitsSelectionAdapter;
+import com.kenstevens.stratinit.ui.adapter.*;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component
@@ -73,11 +60,7 @@ public class UnitButtonsControl {
 	@Subscribe
 	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
 		NationView ally = db.getAlly();
-		if (ally == null) {
-			unitButtons.getCedeButton().setEnabled(false);
-		} else {
-			unitButtons.getCedeButton().setEnabled(true);
-		}
+		unitButtons.getCedeButton().setEnabled(ally != null);
 	}
 
 	@Subscribe

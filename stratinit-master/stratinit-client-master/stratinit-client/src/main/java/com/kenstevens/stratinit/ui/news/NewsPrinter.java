@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.shell.ColourMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 
-import com.kenstevens.stratinit.shell.ColourMap;
+import java.util.List;
 
 public class NewsPrinter {
 

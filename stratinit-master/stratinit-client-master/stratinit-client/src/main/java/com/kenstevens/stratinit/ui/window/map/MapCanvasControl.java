@@ -1,45 +1,15 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import java.util.List;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.ScrollBar;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.MapController;
-import com.kenstevens.stratinit.control.selection.MapCentre;
-import com.kenstevens.stratinit.control.selection.SelectEvent;
-import com.kenstevens.stratinit.control.selection.SelectNationEvent;
-import com.kenstevens.stratinit.control.selection.SelectSectorEvent;
-import com.kenstevens.stratinit.control.selection.SelectUnitsEvent;
+import com.kenstevens.stratinit.control.selection.*;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.event.GameChangedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.event.WorldArrivedEvent;
 import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.model.Account;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.SelectedCity;
-import com.kenstevens.stratinit.model.SelectedCoords;
-import com.kenstevens.stratinit.model.SelectedNation;
-import com.kenstevens.stratinit.model.SelectedUnits;
-import com.kenstevens.stratinit.model.UnitList;
-import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.site.action.CityMover;
@@ -47,6 +17,18 @@ import com.kenstevens.stratinit.site.action.UnitMover;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.tabs.TabManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -376,7 +358,7 @@ public class MapCanvasControl implements MapController {
 
 	enum MouseClick {
 		MOVE, SELECT
-	};
+	}
 
 	public final void setCanvasListeners() {
 		canvas.addMouseListener(new CanvasMouseAdapter());

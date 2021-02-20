@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.news.SINewsFirst;
 import org.eclipse.swt.custom.StyledText;
 
-import com.kenstevens.stratinit.dto.news.SINewsFirst;
+import java.util.List;
 
 public class FirstsPrinter extends
 		NewsListPrinter<SINewsFirst> {

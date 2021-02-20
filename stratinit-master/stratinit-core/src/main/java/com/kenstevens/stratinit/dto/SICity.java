@@ -1,17 +1,15 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
+import java.util.Date;
 
 
-public class SICity implements Serializable {
+public class SICity implements StratInitDTO {
 	private static final long serialVersionUID = 882065030613499056L;
 	public SectorCoords coords;
 	public CityType type;

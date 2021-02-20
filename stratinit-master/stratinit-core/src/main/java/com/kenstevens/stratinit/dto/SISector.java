@@ -1,28 +1,22 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
+import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.type.*;
+
 import java.util.Date;
 
-import com.kenstevens.stratinit.model.WorldSector;
-import com.kenstevens.stratinit.type.CityType;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.type.SectorType;
-import com.kenstevens.stratinit.type.UnitType;
 
-
-public class SISector implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public SectorCoords coords;
-	public SectorType type;
-	public CityType cityType;
-	public int nationId = Constants.UNASSIGNED;
-	public Date lastSeen;
-	public RelationType myRelation;
-	public RelationType theirRelation;
-	public boolean holdsFriendlyCarrier = false;
-	public boolean holdsMyTransport = false;
+public class SISector implements StratInitDTO {
+    private static final long serialVersionUID = 1L;
+    public SectorCoords coords;
+    public SectorType type;
+    public CityType cityType;
+    public int nationId = Constants.UNASSIGNED;
+    public Date lastSeen;
+    public RelationType myRelation;
+    public RelationType theirRelation;
+    public boolean holdsFriendlyCarrier = false;
+    public boolean holdsMyTransport = false;
 	public boolean suppliesLand = false;
 	public boolean suppliesNavy = false;
 	public boolean holdsMyCapital = false;

@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.ui.window.WindowDirector;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class NewbHelper {

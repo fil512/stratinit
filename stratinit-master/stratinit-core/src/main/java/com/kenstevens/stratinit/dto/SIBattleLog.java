@@ -1,19 +1,14 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
-import com.kenstevens.stratinit.model.BattleLog;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.FlakBattleLog;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.SectorCoords;
 
+import java.util.Date;
+import java.util.List;
 
-public class SIBattleLog implements Serializable {
+
+public class SIBattleLog implements StratInitDTO {
 	private static final long serialVersionUID = 7730883345140043294L;
 	public int id;
 	public Date date;

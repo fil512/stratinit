@@ -1,12 +1,5 @@
 package com.kenstevens.stratinit.site.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.model.Unit;
@@ -17,6 +10,12 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.util.UnitHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 public class UnitMover {

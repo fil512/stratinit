@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.ui.news;
 
+import com.kenstevens.stratinit.dto.news.SINewsForeignAffairs;
+import com.kenstevens.stratinit.type.RelationType;
+import org.eclipse.swt.custom.StyledText;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.eclipse.swt.custom.StyledText;
-
-import com.kenstevens.stratinit.dto.news.SINewsForeignAffairs;
-import com.kenstevens.stratinit.type.RelationType;
 
 public class ForeignAffairsPrinter extends
 		NewsListPrinter<SINewsForeignAffairs> {

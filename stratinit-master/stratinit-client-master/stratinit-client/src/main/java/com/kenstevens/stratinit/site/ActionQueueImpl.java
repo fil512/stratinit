@@ -33,12 +33,16 @@ public class ActionQueueImpl implements ActionQueue {
 
 	private boolean paused;
 
-	public synchronized void put(Action action) throws InterruptedException {
+	public synchronized void put(Action action) {
 		if (!action.canRepeat() && queueContains(action.getClass())) {
 			return;
 		}
 		widgetContainer.getCommandListControl().addItem(action.getDescription());
-		queue.put(action);
+		try {
+			queue.put(action);
+		} catch (InterruptedException e) {
+			logger.error("Interrupted", e);
+		}
 	}
 
 	private boolean queueContains(Class<? extends Action> clazz) {

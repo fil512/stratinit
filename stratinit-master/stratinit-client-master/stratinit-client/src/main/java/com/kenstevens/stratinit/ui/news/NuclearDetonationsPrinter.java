@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.news.SINewsNuclearDetonations;
 import org.eclipse.swt.custom.StyledText;
 
-import com.kenstevens.stratinit.dto.news.SINewsNuclearDetonations;
+import java.util.List;
 
 public class NuclearDetonationsPrinter extends
 		NewsListPrinter<SINewsNuclearDetonations> {

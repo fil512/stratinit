@@ -1,21 +1,15 @@
 package com.kenstevens.stratinit.ui.window;
 
+import com.kenstevens.stratinit.model.GameView;
+import com.kenstevens.stratinit.shell.StratInitWindow;
+import com.kenstevens.stratinit.ui.tabs.GameTable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.*;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.model.GameView;
-import com.kenstevens.stratinit.shell.StratInitWindow;
-import com.kenstevens.stratinit.ui.tabs.GameTable;
 
 @Component
 public class ManageGamesWindow implements StratInitWindow {

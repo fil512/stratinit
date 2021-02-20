@@ -1,29 +1,23 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
+import com.kenstevens.stratinit.control.TopLevelController;
+import com.kenstevens.stratinit.control.selection.SelectEvent;
+import com.kenstevens.stratinit.control.selection.Selection.Source;
+import com.kenstevens.stratinit.model.Data;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.control.TopLevelController;
-import com.kenstevens.stratinit.control.selection.SelectEvent;
-import com.kenstevens.stratinit.control.selection.Selection.Source;
-import com.kenstevens.stratinit.model.Data;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Scope("prototype")
 @Component

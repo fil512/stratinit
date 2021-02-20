@@ -1,24 +1,23 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 
+import java.util.Date;
 
-public class SINation implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public static final double UNKNOWN = -1.0;
-	public int nationId;
-	public String name;
-	public double tech = UNKNOWN;
-	public double dailyTechGain = UNKNOWN;
-	public double dailyTechBleed = UNKNOWN;
-	public int hourlyCPGain = Constants.UNASSIGNED;
-	public int cities;
-	public Date lastAction;
+
+public class SINation implements StratInitDTO {
+    private static final long serialVersionUID = 1L;
+    public static final double UNKNOWN = -1.0;
+    public int nationId;
+    public String name;
+    public double tech = UNKNOWN;
+    public double dailyTechGain = UNKNOWN;
+    public double dailyTechBleed = UNKNOWN;
+    public int hourlyCPGain = Constants.UNASSIGNED;
+    public int cities;
+    public Date lastAction;
 	public int wins;
 	public int played;
 	public int power;

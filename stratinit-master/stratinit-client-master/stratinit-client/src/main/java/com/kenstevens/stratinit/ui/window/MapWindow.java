@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.ui.window;
 
+import com.kenstevens.stratinit.shell.StratInitWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
@@ -7,8 +8,6 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Shell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.shell.StratInitWindow;
 
 
 @Component

@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
+import com.kenstevens.stratinit.control.selection.MapCentre;
+import com.kenstevens.stratinit.main.ClientConstants;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.supply.Supply;
+import com.kenstevens.stratinit.type.SectorCoords;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
@@ -13,11 +13,10 @@ import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.control.selection.MapCentre;
-import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.supply.Supply;
-import com.kenstevens.stratinit.type.SectorCoords;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 public class MapImageManager {
@@ -31,12 +30,12 @@ public class MapImageManager {
 	@Autowired
 	MapCentre mapCentre;
 
-	private Map<Integer, Image> images = new Hashtable<Integer, Image>();
+	private final Map<Integer, Image> images = new Hashtable<Integer, Image>();
 
 	private Image defaultImage;
 
-	private Lock lock = new ReentrantLock();
-	
+	private final Lock lock = new ReentrantLock();
+
 	private Rectangle bounds = new Rectangle(0, 0, boardSize(ClientConstants.DEFAULT_BOARD_SIZE), boardSize(ClientConstants.DEFAULT_BOARD_SIZE));
 
 	private int boardSize(int size) {
@@ -44,7 +43,7 @@ public class MapImageManager {
 				* (size + ClientConstants.BOARD_EDGE_SQUARES);
 	}
 
-	private Map<Integer, Image> lastImages = new Hashtable<Integer, Image>();
+	private final Map<Integer, Image> lastImages = new Hashtable<Integer, Image>();
 
 	public MapImageManager() {
 	}

@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.Comparator;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.base.Predicate;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.control.UnitTableControl;
@@ -13,6 +7,11 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.util.Spring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.Comparator;
 
 @Scope("prototype")
 @Component

@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import java.util.Set;
-
+import com.kenstevens.stratinit.model.WorldSector;
 import org.eclipse.swt.graphics.GC;
 
-import com.kenstevens.stratinit.model.WorldSector;
+import java.util.Set;
 
 public class ReachDrawer extends Drawer {
 

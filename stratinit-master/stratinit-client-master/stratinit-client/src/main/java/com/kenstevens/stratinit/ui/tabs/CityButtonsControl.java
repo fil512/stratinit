@@ -1,12 +1,5 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import javax.annotation.PostConstruct;
-
-import org.eclipse.swt.widgets.Display;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
@@ -21,6 +14,12 @@ import com.kenstevens.stratinit.ui.adapter.CedeWindow;
 import com.kenstevens.stratinit.ui.adapter.UpdateCitiesSelectionAdapter;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.widgets.Display;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component
@@ -52,11 +51,7 @@ public class CityButtonsControl {
 	@Subscribe
 	public void handleNationListArrivedEvent(NationListArrivedEvent event) {
 		NationView ally = db.getAlly();
-		if (ally == null) {
-			cityButtons.getCedeButton().setEnabled(false);
-		} else {
-			cityButtons.getCedeButton().setEnabled(true);
-		}
+		cityButtons.getCedeButton().setEnabled(ally != null);
 	}
 
 	@SuppressWarnings("unused")

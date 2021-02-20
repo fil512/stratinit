@@ -1,23 +1,21 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
-
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
 
 
-public class SIUnitBase implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public CityType builtIn;
-	public UnitType type;
-	public int attack;
-	public int hp;
-	public int mobility;
-	public int sight;
-	public int productionTime; // hours
-	public int tech;
-	public int ammo;
+public class SIUnitBase implements StratInitDTO {
+    private static final long serialVersionUID = 1L;
+    public CityType builtIn;
+    public UnitType type;
+    public int attack;
+    public int hp;
+    public int mobility;
+    public int sight;
+    public int productionTime; // hours
+    public int tech;
+    public int ammo;
 	public int flak = 0;
 	public boolean lightAir;
 	public boolean canSeeSubs;

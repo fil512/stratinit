@@ -1,8 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
-
-public class SITeam implements Serializable {
+public class SITeam implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
 	// TODO REF generalize to support multiple players on a team
 	public String nation1;
@@ -72,11 +70,8 @@ public class SITeam implements Serializable {
 			return false;
 		SITeam other = (SITeam) obj;
 		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.getName()))
-			return false;
-		return true;
+			return other.name == null;
+		} else return name.equals(other.getName());
 	}
 
 	public boolean contains(String nation) {

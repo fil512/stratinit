@@ -5,12 +5,12 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multiset.Entry;
+import com.kenstevens.stratinit.dto.StratInitDTO;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SINewsLogsDay implements Serializable {
+public class SINewsLogsDay implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
 	private final int day;
 	private final List<SINewsBulletin> bulletins = new ArrayList<SINewsBulletin>();

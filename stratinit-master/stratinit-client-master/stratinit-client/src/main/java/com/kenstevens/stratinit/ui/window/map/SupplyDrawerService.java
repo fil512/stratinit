@@ -1,19 +1,7 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.eclipse.swt.graphics.GC;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Sets;
-import com.kenstevens.stratinit.model.CityView;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.supply.SupplyTree;
 import com.kenstevens.stratinit.type.Constants;
@@ -21,6 +9,13 @@ import com.kenstevens.stratinit.type.SectorCoordVector;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.window.LineStyle;
+import org.eclipse.swt.graphics.GC;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 @Service
 public class SupplyDrawerService {

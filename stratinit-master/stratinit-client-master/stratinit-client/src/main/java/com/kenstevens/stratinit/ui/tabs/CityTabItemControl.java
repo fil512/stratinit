@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.control.CityTableControl;
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.util.Spring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component

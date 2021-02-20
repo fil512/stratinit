@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.site.action;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CityMover {

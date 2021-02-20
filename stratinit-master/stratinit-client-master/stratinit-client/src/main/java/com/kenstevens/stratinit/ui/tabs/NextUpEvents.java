@@ -1,24 +1,18 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.util.UpdateManager;
 
+import java.util.*;
+
 public class NextUpEvents {
-	private Data db;
-	private final Map<Date, List<UnitEvent>>eventMap = new TreeMap<Date, List<UnitEvent>>();
-	private final Map<Date, Integer>createMap = new TreeMap<Date, Integer>();
-	private final Map<Date, Integer>moveMap = new TreeMap<Date, Integer>();
+	private final Data db;
+	private final Map<Date, List<UnitEvent>> eventMap = new TreeMap<Date, List<UnitEvent>>();
+	private final Map<Date, Integer> createMap = new TreeMap<Date, Integer>();
+	private final Map<Date, Integer> moveMap = new TreeMap<Date, Integer>();
 	private int maxCount = 0;
 
 	public NextUpEvents(Data db) {

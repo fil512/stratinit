@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.model.SelectedUnits;
 import com.kenstevens.stratinit.supply.Supply;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class MapImageBuilderService {

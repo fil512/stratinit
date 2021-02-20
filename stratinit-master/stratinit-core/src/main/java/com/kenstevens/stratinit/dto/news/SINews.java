@@ -1,12 +1,13 @@
 package com.kenstevens.stratinit.dto.news;
 
-import java.io.Serializable;
+import com.kenstevens.stratinit.dto.StratInitDTO;
+
 import java.util.HashMap;
 import java.util.Map;
 
-public class SINews implements Serializable {
+public class SINews implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
-	private Map<Integer, SINewsLogsDay> newsMap = new HashMap<Integer, SINewsLogsDay>();
+	private final Map<Integer, SINewsLogsDay> newsMap = new HashMap<Integer, SINewsLogsDay>();
 
 	public SINewsLogsDay get(int day) {
 		SINewsLogsDay retval = newsMap.get(day);

@@ -1,16 +1,17 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.Date;
-
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+
+import java.util.Date;
 
 public class UnitEvent {
 	private final Date time;
 	private final SectorCoords sectorCoords;
 	private final UnitType unitType;
 	private int move = -1;
-	private final UnitEvent.Type eventType; 
+	private final UnitEvent.Type eventType;
+
 	public enum Type {
 		CREATE, MOVE
 	}

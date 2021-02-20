@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component

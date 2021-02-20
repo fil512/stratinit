@@ -1,28 +1,23 @@
 package com.kenstevens.stratinit.ui.messages;
 
+import com.kenstevens.stratinit.model.Message;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
-
-import com.kenstevens.stratinit.model.Message;
+import org.eclipse.swt.widgets.*;
 
 public abstract class MessageViewer extends Composite {
 
-	private Button composeButton;
+	private final Button composeButton;
 	protected Button replyButton;
 	protected Button refreshButton;
 	protected StyledText body;
 	protected Table table;
 	protected Composite buttonGrid;
-	private Text subject;
+	private final Text subject;
 
 	public MessageViewer(Composite parent, int style) {
 		super(parent, style);

@@ -1,7 +1,12 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
+import com.kenstevens.stratinit.control.MapController;
+import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
+import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.shell.TabControl;
+import com.kenstevens.stratinit.site.action.ActionFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
@@ -10,13 +15,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Maps;
-import com.kenstevens.stratinit.control.MapController;
-import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
-import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.shell.TabControl;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import java.util.Map;
 
 @Service
 public class TabManager implements TabControl {

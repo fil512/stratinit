@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.control.TopLevelController;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.TopShell;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ControllerManager {
@@ -18,7 +17,7 @@ public class ControllerManager {
 	@Autowired
 	TopShell topShell;
 
-	private List<TopLevelController> controllers = new ArrayList<TopLevelController>();
+	private final List<TopLevelController> controllers = new ArrayList<TopLevelController>();
 
 	public void add(TopLevelController topLevelController) {
 		controllers.add(topLevelController);

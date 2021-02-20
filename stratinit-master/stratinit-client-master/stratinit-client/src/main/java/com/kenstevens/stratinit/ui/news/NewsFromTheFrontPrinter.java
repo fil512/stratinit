@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
-import org.eclipse.swt.custom.StyledText;
-
 import com.kenstevens.stratinit.dto.news.SINewsFromTheFront;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitType;
+import org.eclipse.swt.custom.StyledText;
+
+import java.util.List;
 
 public class NewsFromTheFrontPrinter extends
 		NewsListPrinter<SINewsFromTheFront> {

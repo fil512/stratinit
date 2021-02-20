@@ -1,20 +1,19 @@
 package com.kenstevens.stratinit.ui.image;
 
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.widgets.Display;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Display;
+import org.springframework.stereotype.Component;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 @Component
 public class ImageLibrary {

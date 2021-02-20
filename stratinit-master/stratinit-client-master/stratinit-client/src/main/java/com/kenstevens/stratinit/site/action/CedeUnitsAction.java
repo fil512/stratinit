@@ -1,13 +1,5 @@
 package com.kenstevens.stratinit.site.action;
 
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.UnitView;
@@ -16,6 +8,12 @@ import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.CedeCommand;
 import com.kenstevens.stratinit.site.command.CedeUnitsCommand;
 import com.kenstevens.stratinit.util.Spring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Scope("prototype")
 @Component

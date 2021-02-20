@@ -1,16 +1,11 @@
 package com.kenstevens.stratinit.dto.news;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
 import com.google.common.collect.Lists;
 
+import java.util.*;
+
 public class SINewsLogs implements Iterable<SINewsLogsDay> {
-	private SortedMap<Integer, SINewsLogsDay> newsMap = new TreeMap<Integer, SINewsLogsDay>();
+	private final SortedMap<Integer, SINewsLogsDay> newsMap = new TreeMap<Integer, SINewsLogsDay>();
 
 	public SINewsLogsDay get(int day) {
 		SINewsLogsDay retval = newsMap.get(day);

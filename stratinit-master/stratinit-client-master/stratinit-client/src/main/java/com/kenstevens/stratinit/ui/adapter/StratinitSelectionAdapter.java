@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import org.eclipse.swt.events.SelectionAdapter;
-
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.events.SelectionAdapter;
 
 public class StratinitSelectionAdapter extends SelectionAdapter {
 	protected final SelectEvent selectEvent;

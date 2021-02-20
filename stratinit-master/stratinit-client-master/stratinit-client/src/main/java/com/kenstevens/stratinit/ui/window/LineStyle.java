@@ -1,8 +1,7 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.eclipse.swt.graphics.GC;
-
 import com.kenstevens.stratinit.shell.ColourMap;
+import org.eclipse.swt.graphics.GC;
 
 public enum LineStyle {
 	UNIT_MOVE, UNIT_RANGE, SUPPLY_LINKED, SUPPLY_ISOLATED, CITY_MOVE;

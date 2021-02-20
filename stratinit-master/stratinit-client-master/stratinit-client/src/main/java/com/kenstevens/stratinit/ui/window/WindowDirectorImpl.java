@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.ui.window;
 
-import org.eclipse.swt.widgets.Display;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.util.Spring;
+import org.eclipse.swt.widgets.Display;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class WindowDirectorImpl implements WindowDirector {

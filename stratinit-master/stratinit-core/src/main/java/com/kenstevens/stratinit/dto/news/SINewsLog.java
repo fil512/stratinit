@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.dto.news;
 
-import java.io.Serializable;
-
+import com.kenstevens.stratinit.dto.StratInitDTO;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.NewsCategory;
 
-public abstract class SINewsLog implements Serializable {
+public abstract class SINewsLog implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
 
 	public final NewsCategory category;
@@ -37,10 +36,7 @@ public abstract class SINewsLog implements Serializable {
 			return false;
 		SINewsLog other = (SINewsLog) obj;
 		if (category == null) {
-			if (other.category != null)
-				return false;
-		} else if (!category.equals(other.category))
-			return false;
-		return true;
+			return other.category == null;
+		} else return category.equals(other.category);
 	}
 }

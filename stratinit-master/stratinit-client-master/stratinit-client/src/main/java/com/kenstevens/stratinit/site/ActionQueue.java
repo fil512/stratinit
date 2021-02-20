@@ -3,17 +3,17 @@ package com.kenstevens.stratinit.site;
 
 public interface ActionQueue {
 
-	void put(Action action) throws InterruptedException;
+    void put(Action action);
 
-	void start();
+    void start();
 
-	void shutdown();
+    void shutdown();
 
-	boolean isEmpty();
+    boolean isEmpty();
 
-	void pause();
+    void pause();
 
-	void resume();
+    void resume();
 
 	void stop();
 }

@@ -1,8 +1,7 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import org.eclipse.swt.graphics.GC;
-
 import com.kenstevens.stratinit.supply.Supply;
+import org.eclipse.swt.graphics.GC;
 
 public class MapBuilder extends Drawer {
 

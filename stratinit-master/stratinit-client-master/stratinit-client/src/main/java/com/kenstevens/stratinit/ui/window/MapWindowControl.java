@@ -1,5 +1,10 @@
 package com.kenstevens.stratinit.ui.window;
 
+import com.kenstevens.stratinit.control.selection.MapCentre;
+import com.kenstevens.stratinit.main.ClientConstants;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.shell.WidgetContainer;
+import com.kenstevens.stratinit.type.SectorCoords;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -12,12 +17,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.control.selection.MapCentre;
-import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.shell.WidgetContainer;
-import com.kenstevens.stratinit.type.SectorCoords;
 
 @Scope("prototype")
 @Component

@@ -1,17 +1,5 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import javax.annotation.PostConstruct;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.control.selection.SelectEvent;
@@ -20,6 +8,13 @@ import com.kenstevens.stratinit.event.BattleLogListArrivedEvent;
 import com.kenstevens.stratinit.model.BattleLogEntry;
 import com.kenstevens.stratinit.model.BattleLogList;
 import com.kenstevens.stratinit.model.Data;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component

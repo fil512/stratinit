@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.news.SINewsNeutralConquest;
 import org.eclipse.swt.custom.StyledText;
 
-import com.kenstevens.stratinit.dto.news.SINewsNeutralConquest;
+import java.util.List;
 
 public class NeutralConquestPrinter extends
 		NewsListPrinter<SINewsNeutralConquest> {

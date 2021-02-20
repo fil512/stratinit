@@ -1,21 +1,5 @@
 package com.kenstevens.stratinit.ui.window;
 
-import java.text.SimpleDateFormat;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.UnitBase;
@@ -27,6 +11,15 @@ import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.tabs.TableControl;
 import com.kenstevens.stratinit.util.BuildHelper;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.text.SimpleDateFormat;
 
 @Component
 public class GameInfoWindow extends TableControl implements StratInitWindow {

@@ -1,7 +1,9 @@
 package com.kenstevens.stratinit.ui.messages;
 
-import javax.annotation.PostConstruct;
-
+import com.kenstevens.stratinit.control.Controller;
+import com.kenstevens.stratinit.main.ClientConstants;
+import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.TabFolder;
@@ -10,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.control.Controller;
-import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.site.action.ActionFactory;
-import com.kenstevens.stratinit.util.Spring;
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component

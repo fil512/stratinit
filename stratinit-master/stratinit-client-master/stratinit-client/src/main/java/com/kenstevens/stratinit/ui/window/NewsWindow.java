@@ -1,8 +1,13 @@
 package com.kenstevens.stratinit.ui.window;
 
-import java.util.Date;
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.Message;
+import com.kenstevens.stratinit.model.NewsLogList;
+import com.kenstevens.stratinit.shell.ColourMap;
+import com.kenstevens.stratinit.shell.StratInitWindow;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.ui.news.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -13,18 +18,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.Message;
-import com.kenstevens.stratinit.model.NewsLogList;
-import com.kenstevens.stratinit.shell.ColourMap;
-import com.kenstevens.stratinit.shell.StratInitWindow;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.ui.news.BulletinPrinter;
-import com.kenstevens.stratinit.ui.news.FirstsPrinter;
-import com.kenstevens.stratinit.ui.news.ForeignAffairsPrinter;
-import com.kenstevens.stratinit.ui.news.NeutralConquestPrinter;
-import com.kenstevens.stratinit.ui.news.VersusPrinter;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class NewsWindow implements StratInitWindow {

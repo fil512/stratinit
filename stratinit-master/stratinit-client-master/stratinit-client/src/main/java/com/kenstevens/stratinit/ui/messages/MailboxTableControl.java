@@ -1,14 +1,5 @@
 package com.kenstevens.stratinit.ui.messages;
 
-import javax.annotation.PostConstruct;
-
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.event.MessageListArrivedEvent;
@@ -17,6 +8,14 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Message;
 import com.kenstevens.stratinit.model.MessageList;
 import com.kenstevens.stratinit.ui.tabs.TableControl;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
 
 public abstract class MailboxTableControl extends TableControl implements
 		Controller {
@@ -26,13 +25,13 @@ public abstract class MailboxTableControl extends TableControl implements
 	protected Data db;
 	@Autowired
 	protected StratinitEventBus eventBus;
-	private Font boldTableFont;
+	private final Font boldTableFont;
 
 	protected MailboxTableControl(Table table) {
 		this.table = table;
 		boldTableFont = getBoldTableFont(table, Display.getDefault());
 	}
-	
+
 	@Subscribe
 	public void handleMessageListArrivedEvent(MessageListArrivedEvent event) {
 		updateTable(getMessageList());

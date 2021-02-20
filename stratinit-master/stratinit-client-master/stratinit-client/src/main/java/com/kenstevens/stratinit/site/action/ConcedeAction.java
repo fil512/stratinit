@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.action;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.ConcedeCommand;
 import com.kenstevens.stratinit.util.Spring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component

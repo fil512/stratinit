@@ -1,8 +1,9 @@
 package com.kenstevens.stratinit.ui.messages;
 
 
-import javax.annotation.PostConstruct;
-
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.site.action.ActionFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -10,9 +11,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import javax.annotation.PostConstruct;
 
 @Component
 public abstract class MessageViewerControl {
@@ -24,7 +23,7 @@ public abstract class MessageViewerControl {
 	@Autowired
 	protected ActionFactory actionFactory;
 
-	private MessageViewer messageViewer;
+	private final MessageViewer messageViewer;
 
 	public MessageViewerControl(MessageViewer messageViewer) {
 		this.messageViewer = messageViewer;

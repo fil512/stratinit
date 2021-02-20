@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.ui.messages;
 
+import com.kenstevens.stratinit.model.Message;
+import com.kenstevens.stratinit.model.MessageList;
 import org.eclipse.swt.widgets.Table;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.model.Message;
-import com.kenstevens.stratinit.model.MessageList;
 
 @Scope("prototype")
 @Component

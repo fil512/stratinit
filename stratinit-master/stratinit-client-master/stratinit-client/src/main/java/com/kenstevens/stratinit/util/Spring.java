@@ -1,18 +1,19 @@
 package com.kenstevens.stratinit.util;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
+// FIXME remove this class
 public class Spring {
 	@Autowired
 	private ApplicationContext context;
 
 	public <T> T getBean(Class<? extends T> type) {
-		return (T) context.getBean(getBeanName(type), type);
+		return context.getBean(getBeanName(type), type);
 	}
 
 	private <T> String getBeanName(Class<? extends T> type) {

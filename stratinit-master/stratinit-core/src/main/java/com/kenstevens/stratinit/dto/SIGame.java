@@ -2,21 +2,20 @@ package com.kenstevens.stratinit.dto;
 
 import com.kenstevens.stratinit.model.Game;
 
-import java.io.Serializable;
 import java.util.Date;
 
 
-public class SIGame implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public int id;
-	public String name;
-	public int players;
-	public int noAlliancesVote;
-	public boolean noAlliances;
-	public boolean myNoAlliances;
-	public int islands;
-	public int size;
-	public Date started;
+public class SIGame implements StratInitDTO {
+    private static final long serialVersionUID = 1L;
+    public int id;
+    public String name;
+    public int players;
+    public int noAlliancesVote;
+    public boolean noAlliances;
+    public boolean myNoAlliances;
+    public int islands;
+    public int size;
+    public Date started;
 	public Date mapped;
 	public Date created;
 	public Date ends;

@@ -1,17 +1,11 @@
 package com.kenstevens.stratinit.ui.news;
 
+import com.kenstevens.stratinit.dto.news.*;
+import org.eclipse.swt.custom.StyledText;
+
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
-
-import org.eclipse.swt.custom.StyledText;
-
-import com.kenstevens.stratinit.dto.news.SINewsAirDefense;
-import com.kenstevens.stratinit.dto.news.SINewsFromTheFront;
-import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.dto.news.SINewsNuclearDetonations;
-import com.kenstevens.stratinit.dto.news.SINewsOpponentConquest;
-import com.kenstevens.stratinit.dto.news.SINewsOpponents;
 
 public class VersusPrinter extends NewsPrinter {
 
@@ -57,11 +51,8 @@ public class VersusPrinter extends NewsPrinter {
 			} else if (!nation.equals(other.nation))
 				return false;
 			if (opponent == null) {
-				if (other.opponent != null)
-					return false;
-			} else if (!opponent.equals(other.opponent))
-				return false;
-			return true;
+				return other.opponent == null;
+			} else return opponent.equals(other.opponent);
 		}
 
 		@Override

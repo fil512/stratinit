@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.ui.news;
 
-import java.util.List;
-
-import org.eclipse.swt.custom.StyledText;
-
 import com.kenstevens.stratinit.dto.news.SINewsLog;
 import com.kenstevens.stratinit.type.UnitType;
+import org.eclipse.swt.custom.StyledText;
+
+import java.util.List;
 
 public abstract class NewsListPrinter<T extends SINewsLog> extends NewsPrinter {
 	public NewsListPrinter(StyledText styledText) {

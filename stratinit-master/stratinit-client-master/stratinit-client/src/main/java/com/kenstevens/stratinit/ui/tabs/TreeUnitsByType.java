@@ -1,8 +1,5 @@
 package com.kenstevens.stratinit.ui.tabs;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -11,15 +8,18 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.type.UnitType;
 
+import java.util.Collection;
+import java.util.Set;
+
 public class TreeUnitsByType {
 
-	private final Multimap<UnitType, UnitView> unitsByType;
+    private final Multimap<UnitType, UnitView> unitsByType;
 
-	public TreeUnitsByType(Data db) {
-		unitsByType = Multimaps.index(db.getUnitList(), new Function<Unit, UnitType>() {
+    public TreeUnitsByType(Data db) {
+        unitsByType = Multimaps.index(db.getUnitList(), new Function<Unit, UnitType>() {
 
-			@Override
-			public UnitType apply(Unit unit) {
+            @Override
+            public UnitType apply(Unit unit) {
 				return unit.getType();
 			}
 		});

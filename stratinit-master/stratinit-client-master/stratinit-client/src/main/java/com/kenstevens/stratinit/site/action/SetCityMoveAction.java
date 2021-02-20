@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.site.action;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.model.City;
@@ -15,6 +9,11 @@ import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.SetCityMoveCommand;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.util.Spring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 @Scope("prototype")
 @Component

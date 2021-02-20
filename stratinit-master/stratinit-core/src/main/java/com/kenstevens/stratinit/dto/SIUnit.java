@@ -1,25 +1,24 @@
 package com.kenstevens.stratinit.dto;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 
+import java.util.Date;
 
-public class SIUnit implements Serializable {
-	private static final long serialVersionUID = 1L;
-	public int id;
-	public SectorCoords coords;
-	public SectorCoords nextCoords;
-	public int nationId;
-	public UnitType type;
-	public int mobility;
-	public int hp;
-	public int ammo;
-	public int fuel;
+
+public class SIUnit implements StratInitDTO {
+    private static final long serialVersionUID = 1L;
+    public int id;
+    public SectorCoords coords;
+    public SectorCoords nextCoords;
+    public int nationId;
+    public UnitType type;
+    public int mobility;
+    public int hp;
+    public int ammo;
+    public int fuel;
 	public Date lastUpdated;
 	public Date created;
 

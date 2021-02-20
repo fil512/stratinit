@@ -1,5 +1,9 @@
 package com.kenstevens.stratinit.ui.messages;
 
+import com.kenstevens.stratinit.main.ClientConstants;
+import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.shell.StratInitWindow;
+import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -10,11 +14,6 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.shell.StratInitWindow;
-import com.kenstevens.stratinit.util.Spring;
 
 @Component
 public class MessageWindow implements StratInitWindow {
