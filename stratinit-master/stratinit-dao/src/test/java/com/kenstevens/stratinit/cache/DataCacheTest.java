@@ -48,7 +48,7 @@ public class DataCacheTest extends StratInitTest {
 		createNation1();
 
 		// create game 2 nation 1
-		
+
 		createGame2();
 		createNation1(testGame2);
 
@@ -57,11 +57,11 @@ public class DataCacheTest extends StratInitTest {
 		assertEquals(1, nations.size());
 		Player player1 = nations.get(0).getPlayer();
 		player1.setWins(5);
-		playerDao.merge(player1);
+		playerDao.saveAndUpdateNations(player1);
 		assertEquals(5, player1.getWins());
-		
+
 		// check game 1 nation 1
-		
+
 		List<Nation> nations2 = gameDao.getNations(testGame2);
 		Player player2 = nations2.get(0).getPlayer();
 
@@ -91,7 +91,7 @@ public class DataCacheTest extends StratInitTest {
 		World world = dataCache.getGameCache(testGame).getWorld();
 		Sector newSector = world.getSector(coords);
 		newSector.setType(newType);
-		sectorDao.merge(newSector);
+		sectorDao.markCacheModified(newSector);
 
 		Game dbGame = gameRepo.findById(testGame.getId()).get();
 		Sector dbSector = findByGameAndCoords(dbGame, coords);

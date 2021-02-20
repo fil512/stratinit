@@ -122,7 +122,7 @@ public class RelationManager {
 		RelationChangeAudit relationChangeAudit = new RelationChangeAudit(
 				relation);
 		gameDao.save(relationChangeAudit);
-		gameDao.merge(relation);
+		gameDao.markCacheModified(relation);
 		return "scheduled relation change with " + relation.getTo() + " to "
 				+ nextType + " " + hours + " hours from now.";
 	}

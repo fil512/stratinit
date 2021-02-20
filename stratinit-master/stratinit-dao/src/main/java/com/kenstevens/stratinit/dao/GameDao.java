@@ -43,21 +43,21 @@ public interface GameDao {
 	Map<Nation, RelationType> getMyRelationsAsMap(Nation nation);
 
 	Map<Nation, RelationType> getTheirRelationTypesAsMap(
-			Nation nation);
+            Nation nation);
 
-	Map<Nation, Relation> getTheirRelationsAsMap(Nation nation);
+    Map<Nation, Relation> getTheirRelationsAsMap(Nation nation);
 
-	Collection<Relation> getMyRelations(Nation nation);
+    Collection<Relation> getMyRelations(Nation nation);
 
-	Collection<Relation> getTheirRelations(Nation nation);
+    Collection<Relation> getTheirRelations(Nation nation);
 
-	void merge(Game game);
+    void merge(Game game);
 
-	void merge(Nation nation);
+    void markCacheModified(Nation nation);
 
-	Nation getNation(int gameId, int nationId);
+    Nation getNation(int gameId, int nationId);
 
-    void merge(Relation relation);
+    void markCacheModified(Relation relation);
 
     Collection<Relation> getAllChangingRelations(Game game);
 

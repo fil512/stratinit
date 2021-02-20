@@ -248,12 +248,12 @@ public class GameDaoImpl extends CacheDaoImpl implements GameDao {
 	}
 
 	@Override
-	public void merge(Nation nation) {
+	public void markCacheModified(Nation nation) {
 		getNationCache(nation).setModified(true);
 	}
 
 	@Override
-	public void merge(Relation relation) {
+	public void markCacheModified(Relation relation) {
 		getGameCache(relation.getGame()).setModified(true);
 	}
 

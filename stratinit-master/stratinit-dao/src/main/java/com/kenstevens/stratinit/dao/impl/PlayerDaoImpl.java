@@ -66,9 +66,9 @@ public class PlayerDaoImpl implements PlayerDao {
 	}
 
 	@Override
-	public void merge(Player player) {
+	public void saveAndUpdateNations(Player player) {
 		playerRepo.save(player);
-		// Note this behavior is different from other daos.  We don't mind doing a db merge every time
+		// Note this behavior is different from other daos.  We don't mind doing a db save every time
 		// since player updates are rare.
 		List<Nation> nations = gameDao.getNations(player);
 		for (Nation nation : nations) {

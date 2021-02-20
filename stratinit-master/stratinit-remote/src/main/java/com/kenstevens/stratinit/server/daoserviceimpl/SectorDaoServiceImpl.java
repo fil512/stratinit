@@ -276,7 +276,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	}
 
 	public void merge(City city) {
-		sectorDao.merge(city);
+		sectorDao.markCacheModified(city);
 	}
 
 	// Returns old owner
@@ -295,7 +295,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		Sector citySector = dataCache.getWorld(nation.getGameId()).getSector(
 				sector.getCoords());
 		citySector.setType(SectorType.PLAYER_CITY);
-		sectorDao.merge(citySector);
+		sectorDao.markCacheModified(citySector);
 		cityChanged(city);
 		return opponent;
 	}
@@ -399,7 +399,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 			logDaoService.save(cityNukedBattleLog);
 			remove(city);
 			sector.setType(SectorType.WASTELAND);
-			sectorDao.merge(sector);
+			sectorDao.markCacheModified(sector);
 		}
 		List<Unit> units = Lists.newArrayList(unitDao.getUnits(sector));
 		for (Unit unit : units) {
@@ -503,7 +503,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		for (City city : cities) {
 			if (city.isSwitchOnTechChange()
 					&& cityBuilderService.switchCityProductionIfTechPermits(city, buildTime)) {
-				sectorDao.merge(city);
+				sectorDao.markCacheModified(city);
 			}
 		}
 	}
@@ -520,7 +520,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 		sectorDao.save(city);
 		cityChanged(city);
 		sector.setType(SectorType.PLAYER_CITY);
-		sectorDao.merge(sector);
+		sectorDao.markCacheModified(sector);
 		CityCapturedBattleLog battleLog = new CityCapturedBattleLog(AttackType.INITIAL_ATTACK, unit,
 				null, unit.getCoords());
 		logDaoService.save(battleLog);
@@ -537,8 +537,8 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 	public Result<None> destroyCity(City city) {
 
         Sector sector = sectorDao.getWorld(city.getParentGame()).getSector(city.getCoords());
-        sector.setType(SectorType.START_CITY);
-        sectorDao.merge(sector);
+		sector.setType(SectorType.START_CITY);
+		sectorDao.markCacheModified(sector);
 
         remove(city);
 
@@ -560,7 +560,7 @@ public class SectorDaoServiceImpl implements SectorDaoService {
 
 	@Override
 	public void merge(Sector sector) {
-		sectorDao.merge(sector);
+		sectorDao.markCacheModified(sector);
 	}
 	
 

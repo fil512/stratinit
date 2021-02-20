@@ -88,8 +88,6 @@ public interface UnitDao {
 
 	Collection<Unit> getMissiles(Nation nation);
 
-	void merge(UnitMove unitMove);
-
 	void save(UnitMove unitMove);
 
 	void delete(UnitMove unitMove);

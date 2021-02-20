@@ -41,7 +41,7 @@ public class MessageDaoServiceImpl implements MessageDaoService {
 			return;
 		}
 		to.setNewMail(true);
-		gameDao.merge(to);
+		gameDao.markCacheModified(to);
 	}
 
 	public void notify(Nation to, String subject, String body) {

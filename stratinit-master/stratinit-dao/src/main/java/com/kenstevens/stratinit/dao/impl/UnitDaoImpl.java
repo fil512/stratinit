@@ -64,7 +64,6 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 
 	@Override
 	public List<UnitBuildAudit> getBuildAudits(int gameId, String username) {
-		// FIXME is And right?
 		return unitBuildAuditRepo.findByGameIdAndUsername(gameId, username);
 	}
 
@@ -196,11 +195,6 @@ public class UnitDaoImpl extends CacheDaoImpl implements UnitDao {
 			unitSeenRepo.save(unitSeen);
 			getNationCache(unitSeen.getNation()).remove(unitSeen);
 		}
-	}
-
-	@Override
-	public void merge(UnitMove unitMove) {
-		unitMoveRepo.save(unitMove);
 	}
 
 	@Override

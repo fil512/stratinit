@@ -13,7 +13,6 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 @Service
 public class LogDaoImpl implements LogDao {
-    // FIXME remove all entity managers
     @Autowired
     UnitAttackedBattleLogRepo unitAttackedBattleLogRepo;
     @Autowired

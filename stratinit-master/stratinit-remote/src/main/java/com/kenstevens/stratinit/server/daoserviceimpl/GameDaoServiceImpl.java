@@ -248,14 +248,14 @@ public class GameDaoServiceImpl implements GameDaoService {
 			return;
 		}
 		moveRelationForward(relation);
-		gameDao.merge(relation);
+		gameDao.markCacheModified(relation);
 		// If the reverse relation is better than me, then degrade it down to
 		// me.
 		RelationType type = relation.getType();
 		if (reverse.getType().compareTo(type) > 0) {
 			changeRelation(reverse, type);
 		}
-		
+
 		if (type.compareTo(RelationType.NEUTRAL) < 0) {
 			degradeAllyRelations(relation);
 		} else if (type == RelationType.ALLIED) {
@@ -284,7 +284,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 	private void changeRelation(Relation relation, RelationType type) {
 		relation.setNextType(type);
 		moveRelationForward(relation);
-		gameDao.merge(relation);
+		gameDao.markCacheModified(relation);
 		eventQueue.cancel(relation);
 	}
 	
@@ -353,7 +353,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 		double netTechGain = totalDailyTechGain / updatesPerDay;
 		nation.increaseTech(netTechGain);
 		double techAfter = nation.getTech();
-		gameDao.merge(nation);
+		gameDao.markCacheModified(nation);
 		if (crossedThreshold(nationTech, techAfter)) {
 			sectorDaoService
 					.switchCityBuildsFromTechChange(nation, lastUpdated);
@@ -378,7 +378,7 @@ public class GameDaoServiceImpl implements GameDaoService {
 			int cpGain = capitalPointsToCommandPoints(getCapitalPoints(nation));
 			nation.increaseCommandPoints(cpGain);
 			nation.setHourlyCPGain(cpGain * 3600 / Constants.TECH_UPDATE_INTERVAL_SECONDS);
-			gameDao.merge(nation);
+			gameDao.markCacheModified(nation);
 		}
 	}
 
@@ -449,13 +449,13 @@ public class GameDaoServiceImpl implements GameDaoService {
 			if (score.get(nation) == topScore) {
 				player.addWins();
 			}
-			playerDao.merge(player);
+			playerDao.saveAndUpdateNations(player);
 		}
 	}
 
 	@Override
 	public void merge(Nation nation) {
-		gameDao.merge(nation);
+		gameDao.markCacheModified(nation);
 	}
 
 	@Override

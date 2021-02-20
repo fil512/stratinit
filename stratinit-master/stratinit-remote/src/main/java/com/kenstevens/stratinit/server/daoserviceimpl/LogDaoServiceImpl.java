@@ -20,7 +20,7 @@ public class LogDaoServiceImpl implements LogDaoService {
 		Nation defender = battleLog.getDefender();
 		if (defender != null && battleLog.getAttackType() == AttackType.INITIAL_ATTACK) {
 			defender.setNewBattle(true);
-			gameDao.merge(defender);
+			gameDao.markCacheModified(defender);
 		}
 	}
 

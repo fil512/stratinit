@@ -159,17 +159,17 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	}
 
 	@Override
-	public void merge(City city) {
+	public void markCacheModified(City city) {
 		getNationCache(city.getNation()).setCityCacheModified(true);
 	}
 
 	@Override
-	public void merge(SectorSeen sectorSeen) {
+	public void markCacheModified(SectorSeen sectorSeen) {
 		getNationCache(sectorSeen.getNation()).setSectorSeenModified(true);
 	}
 
 	@Override
-	public void merge(Sector sector) {
+	public void markCacheModified(Sector sector) {
 		getGameCache(sector.getGame()).setWorldModified(true);
 	}
 
@@ -211,10 +211,10 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 
 	@Override
 	public void transferCity(City city, Nation nation) {
-        clearCityMove(city);
-        merge(city);
-        getGameCache(city.getParentGame()).transferCity(city, nation);
-        merge(city);
+		clearCityMove(city);
+		markCacheModified(city);
+		getGameCache(city.getParentGame()).transferCity(city, nation);
+		markCacheModified(city);
     }
 
 	// TODO REF Move this method into a helper, it doesn't belong here
@@ -264,7 +264,7 @@ public class SectorDaoImpl extends CacheDaoImpl implements SectorDao {
 	}
 
 	@Override
-	public void merge(CityMove cityMove) {
+	public void markCacheModified(CityMove cityMove) {
 		cityMoveRepo.save(cityMove);
 	}
 

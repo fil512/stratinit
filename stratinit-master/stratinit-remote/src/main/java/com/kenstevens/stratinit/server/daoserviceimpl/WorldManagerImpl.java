@@ -49,12 +49,12 @@ public class WorldManagerImpl implements WorldManager {
 			throw new IllegalStateException("Island " + island + " on game " + game.getGamename() + " has no start cities.  game.players = " + game.getPlayers() + ".  nation = " + nation + "." + "  nation.nationId=" + nation.getNationId());
 		}
 		nation.setStartCoords(islandCities.get(0).getCoords());
-		gameDao.merge(nation);
+		gameDao.markCacheModified(nation);
 		boolean firstCity = true;
 		for (Sector sector : islandCities) {
 			City city;
 			sector.setType(SectorType.PLAYER_CITY);
-			sectorDao.merge(sector);
+			sectorDao.markCacheModified(sector);
 			if (firstCity) {
 				city = new City(sector, nation, UnitType.INFANTRY);
 				for (int i = 0; i < Constants.START_INFANTRY; ++i) {

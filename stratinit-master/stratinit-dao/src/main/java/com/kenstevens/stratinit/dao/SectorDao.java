@@ -33,12 +33,11 @@ public interface SectorDao {
 
 	long getNumberOfTechCentres(Nation nation);
 
-	// FIXME rename all merges to save
-	void merge(City city);
+	void markCacheModified(City city);
 
 	Collection<Sector> getNationSectorsSeenSectors(Nation nation);
 
-	void merge(SectorSeen sectorSeen);
+	void markCacheModified(SectorSeen sectorSeen);
 
 	Collection<Nation> getOtherNationsThatSeeThisSector(
 			Nation nation, SectorCoords coords);
@@ -50,7 +49,7 @@ public interface SectorDao {
 
 	List<City> getSeenCities(Nation nation);
 
-	void merge(Sector sector);
+	void markCacheModified(Sector sector);
 
 	void delete(City city);
 
@@ -70,7 +69,7 @@ public interface SectorDao {
 
 	List<CityMove> getCityMoves(Game game);
 
-	void merge(CityMove cityMove);
+	void markCacheModified(CityMove cityMove);
 
 	void save(CityMove cityMove);
 

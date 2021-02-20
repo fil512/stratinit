@@ -101,21 +101,21 @@ public class WorldManagerTest extends EventTimerMockedBase {
 			{
 				exactly(3).of(eventTimer).schedule((Event)with(a(CityBuildEvent.class)));
 				exactly(6).of(eventTimer).schedule((Event)with(a(UnitUpdateEvent.class)));
-				oneOf(eventTimer).cancel((EventKey)with(a(EventKey.class)));
+				oneOf(eventTimer).cancel((EventKey) with(a(EventKey.class)));
 			}
 		});
 
 		worldManager.addPlayerToMap(2, nation);
-		
+
 		List<City> cities = sectorDao.getCities(nation);
 		List<Unit> units = unitDao.getUnits(nation);
 		assertEquals(5, units.size());
- 		City city = cities.get(0);
-		sectorDao.merge(city);
+		City city = cities.get(0);
+		sectorDao.markCacheModified(city);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.NEXT_BUILD, null, UnitType.SATELLITE, false, null);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.SWITCH_ON_TECH_CHANGE, null, null, true, null);
 		nation.setTech(15.0);
-		gameDao.merge(nation);
+		gameDao.markCacheModified(nation);
 		cityBuilderService.switchCityProductionIfTechPermits(city, now);
 		cityBuilderService.buildUnit(city, now);
 		units = unitDao.getUnits(nation);
@@ -133,22 +133,22 @@ public class WorldManagerTest extends EventTimerMockedBase {
 			{
 				exactly(3).of(eventTimer).schedule((Event)with(a(CityBuildEvent.class)));
 				exactly(6).of(eventTimer).schedule((Event)with(a(UnitUpdateEvent.class)));
-				oneOf(eventTimer).cancel((EventKey)with(a(EventKey.class)));
+				oneOf(eventTimer).cancel((EventKey) with(a(EventKey.class)));
 			}
 		});
 
 		worldManager.addPlayerToMap(2, nation);
-		
+
 		List<City> cities = sectorDao.getCities(nation);
 		List<Unit> units = unitDao.getUnits(nation);
 		assertEquals(5, units.size());
- 		City city = cities.get(0);
-		sectorDao.merge(city);
+		City city = cities.get(0);
+		sectorDao.markCacheModified(city);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.NEXT_BUILD, null, UnitType.SATELLITE, false, null);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.SWITCH_ON_TECH_CHANGE, null, null, true, null);
 		cityBuilderService.buildUnit(city, now);
 		nation.setTech(15.0);
-		gameDao.merge(nation);
+		gameDao.markCacheModified(nation);
 		cityBuilderService.switchCityProductionIfTechPermits(city, now);
 		assertEquals(UnitType.SATELLITE, city.getBuild());
 		units = unitDao.getUnits(nation);
@@ -163,21 +163,21 @@ public class WorldManagerTest extends EventTimerMockedBase {
 		context.checking(new Expectations() {
 			{
 				exactly(2).of(eventTimer).schedule((Event)with(a(CityBuildEvent.class)));
-				exactly(6).of(eventTimer).schedule((Event)with(a(UnitUpdateEvent.class)));
+				exactly(6).of(eventTimer).schedule((Event) with(a(UnitUpdateEvent.class)));
 			}
 		});
 
 		worldManager.addPlayerToMap(2, nation);
-		
+
 		List<City> cities = sectorDao.getCities(nation);
 		List<Unit> units = unitDao.getUnits(nation);
 		assertEquals(5, units.size());
- 		City city = cities.get(0);
-		sectorDao.merge(city);
+		City city = cities.get(0);
+		sectorDao.markCacheModified(city);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.NEXT_BUILD, null, UnitType.INFANTRY, false, null);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.SWITCH_ON_TECH_CHANGE, null, null, true, null);
 		nation.setTech(15.0);
-		gameDao.merge(nation);
+		gameDao.markCacheModified(nation);
 		cityBuilderService.switchCityProductionIfTechPermits(city, now);
 		cityBuilderService.buildUnit(city, now);
 		units = unitDao.getUnits(nation);

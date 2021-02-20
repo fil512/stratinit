@@ -116,7 +116,7 @@ public class CityBuilderServiceImpl implements CityBuilderService {
 		UnitType unitType = city.getBuild();
 		if (UnitBase.isNotUnit(unitType)) {
 			city.setLastUpdated(buildTime);
-			sectorDao.merge(city);
+			sectorDao.markCacheModified(city);
 			return;
 		}
 		Nation nation = city.getNation();
@@ -148,7 +148,7 @@ public class CityBuilderServiceImpl implements CityBuilderService {
 			sectorDao.clearCityMove(city);
 		}
 		city.setLastUpdated(buildTime);
-		sectorDao.merge(city);
+		sectorDao.markCacheModified(city);
 		return;
 	}
 	

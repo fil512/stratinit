@@ -84,7 +84,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 		player.setEmailGameMail(newPlayer.isEmailGameMail());
 		player.setUserAgent(newPlayer.getUserAgent());
 		player.setLastLogin(new Date());
-		playerDao.merge(player);
+		playerDao.saveAndUpdateNations(player);
 
 		logger.info("UPDATING USER [" + player.getUsername() + "].");
 		mailService.sendEmail(player,
@@ -132,7 +132,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		player.setPassword(encoder.encode(password));
-		playerDao.merge(player);
+		playerDao.saveAndUpdateNations(player);
 
 		return new Result<None>("Password reset for user [" + username + "].",
 				true);
@@ -168,7 +168,7 @@ public class PlayerDaoServiceImpl implements PlayerDaoService {
 	public void setLastLogin(Player playerIn, Date now) {
 		Player player = playerDao.find(playerIn.getId());
 		player.setLastLogin(now);
-		playerDao.merge(player);
+		playerDao.saveAndUpdateNations(player);
 	}
 
 	@Override

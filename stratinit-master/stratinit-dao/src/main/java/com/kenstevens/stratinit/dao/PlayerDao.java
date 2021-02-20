@@ -21,7 +21,7 @@ public interface PlayerDao {
 
 	PlayerRole getPlayerRole(Player player, String roleName);
 
-	void merge(Player player);
+	void saveAndUpdateNations(Player player);
 
 	List<PlayerRole> getRoles(Player player);
 
