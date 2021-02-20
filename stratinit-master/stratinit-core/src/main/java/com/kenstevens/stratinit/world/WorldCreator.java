@@ -1,13 +1,16 @@
 package com.kenstevens.stratinit.world;
 
-import java.util.Random;
-
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.world.predicate.UnassignedAndIsolatedPredicate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Random;
 
 public class WorldCreator {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final WorldConfig worldConfig;
 	private static final Random RANDOM = new Random();
 
@@ -20,10 +23,14 @@ public class WorldCreator {
 	}
 
 	public World build(Game game) {
+		logger.info("Creating world for {}", game);
 		World world = new World(game, true);
 		ElectronCloud electronCloud = new ElectronCloud(world.size(), world.getIslands());
+		logger.info("Building player islands for {}", game);
 		buildPlayerIslands(game, world, electronCloud);
+		logger.info("Building continents for {}", game);
 		buildContinents(world);
+		logger.info("Finished creating world for {}", game);
 		return world;
 	}
 

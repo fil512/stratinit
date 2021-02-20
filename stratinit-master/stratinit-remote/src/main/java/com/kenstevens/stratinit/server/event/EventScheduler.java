@@ -7,6 +7,8 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.RunMode;
 import com.kenstevens.stratinit.util.UpdateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,10 +51,16 @@ public class EventScheduler {
 	private CityBuilderService cityBuilderService;
 	@Autowired
 	private IntegrityCheckerService integrityCheckerService;
+	@Autowired
+	private EventTimer eventTimer;
+
 	private FileLock fileLock;
 
 	@PostConstruct
 	public void scheduleInitialEvents() {
+		// FIXME remove test
+		Constants.setRunMode(RunMode.TEST);
+
 		ServerLocker serverLocker = new ServerLocker();
 		fileLock = serverLocker.getLock();
 		if (fileLock == null) {
@@ -63,16 +71,12 @@ public class EventScheduler {
 		logger.info("Event Queue starting up.");
 		updateGames();
 		eventQueue.scheduleFlushCache();
-		// TODO is this a race condition?
+		// FIXME fix race condition?
 		gameCreator.createGameIfAllMapped();
 		logger.info("All events scheduled.  Server started.");
 		serverStatus.setRunning();
+		eventTimer.start();
 	}
-
-	// private void shortenGameCreationTime() {
-	// Constants.setScheduledToMappedMillis(5000);
-	// Constants.setMappedToStartedMillis(5000);
-	// }
 
 	private void updateGames() {
 		List<Game> games = gameDao.getAllGames();

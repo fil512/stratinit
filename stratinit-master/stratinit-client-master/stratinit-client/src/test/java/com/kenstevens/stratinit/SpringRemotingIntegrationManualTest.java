@@ -59,6 +59,30 @@ public class SpringRemotingIntegrationManualTest extends StratInitClientTest {
 	}
 
 	@Test
+	public void testPlayersJoinGames() {
+		account.setUsername("test1");
+		account.setPassword("testy");
+		Result<List<SIGame>> games = stratInit.getUnjoinedGames();
+		SIGame game = games.getValue().get(0);
+		stratInit.joinGame(game.id, false);
+
+		account.setUsername("test2");
+		account.setPassword("testy");
+		stratInit.joinGame(game.id, false);
+
+
+		account.setUsername("test3");
+		account.setPassword("testy");
+		stratInit.joinGame(game.id, false);
+
+
+		account.setUsername("test4");
+		account.setPassword("testy");
+		stratInit.joinGame(game.id, false);
+
+	}
+
+	@Test
 	public void testGetUnjoinedGames() throws IOException {
 		goodLogin();
 		Result<List<SIGame>> unJoinedGames = stratInit.getUnjoinedGames();

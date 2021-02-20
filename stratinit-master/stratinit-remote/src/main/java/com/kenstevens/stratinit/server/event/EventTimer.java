@@ -14,4 +14,6 @@ public interface EventTimer {
 	boolean isShuttingDown();
 
 	Event getScheduledEvent(Updatable updatable);
+
+	void start();
 }

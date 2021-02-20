@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 @Service
 public class EventTimerImpl implements EventTimer {
@@ -16,6 +18,8 @@ public class EventTimerImpl implements EventTimer {
 	private final JavaTimer javaTimer = new JavaTimerImpl();
 	private final Map<EventKey, Event> eventMap = new HashMap<EventKey, Event>();
 	private boolean shuttingDown = false;
+	private final Queue<Event> queue = new LinkedList<>();
+	private boolean started = false;
 
 	public void shutdown() {
 		shuttingDown = true;
@@ -24,6 +28,11 @@ public class EventTimerImpl implements EventTimer {
 	}
 
 	public void schedule(Event event) {
+		if (!started) {
+			logger.info("Not started yet.  Queuing event {}", event);
+			queue(event);
+			return;
+		}
 		if (shuttingDown || event.getTime() == null) {
 			return;
 		}
@@ -63,5 +72,16 @@ public class EventTimerImpl implements EventTimer {
 	@Override
 	public Event getScheduledEvent(Updatable updatable) {
 		return eventMap.get(new EventKey(updatable));
+	}
+
+	@Override
+	public void start() {
+		started = true;
+		queue.forEach(this::schedule);
+		queue.clear();
+	}
+
+	private void queue(Event event) {
+		queue.add(event);
 	}
 }
