@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
+@TestPropertySource(properties = "stratinit.email.enabled=false")
 public abstract class StratInitDaoBase {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicInteger playerIndex = new AtomicInteger();

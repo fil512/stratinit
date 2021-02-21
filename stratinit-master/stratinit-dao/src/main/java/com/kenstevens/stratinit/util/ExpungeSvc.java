@@ -4,6 +4,8 @@ import com.kenstevens.stratinit.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class ExpungeSvc {
     @Autowired
@@ -45,6 +47,7 @@ public class ExpungeSvc {
     @Autowired
     LaunchedSatelliteRepo launchedSatelliteRepo;
 
+    @Transactional
     public void expungeAll() {
         unitAttackedBattleLog.deleteAll();
         cityCapturedBattleLogRepo.deleteAll();

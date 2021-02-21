@@ -32,9 +32,10 @@ public class JavaTimerMockedBase  extends StratInitDaoBase {
 
 	@BeforeEach
 	public void setupMocks() {
-		javaTimer = context.mock(JavaTimer.class);
-		ReflectionTestUtils.setField(eventTimer, "javaTimer", javaTimer);
-	}
+        javaTimer = context.mock(JavaTimer.class);
+        ReflectionTestUtils.setField(eventTimer, "javaTimer", javaTimer);
+        eventTimer.start();
+    }
 
 	@BeforeEach
 	public void makeCity() {

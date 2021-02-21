@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.server.event;
 
 import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
@@ -14,30 +13,30 @@ import java.util.Date;
 
 @Service
 public class EventQueueImpl implements EventQueue {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private Spring spring;
-    @Autowired
-    private EventTimer eventTimer;
-    @Autowired
-    private DataCache dataCache;
+	@Autowired
+	private EventTimer eventTimer;
+	@Autowired
+	private DataCache dataCache;
+	@Autowired
+	private EventFactory eventFactory;
 
-    public EventQueueImpl() {
-    }
+	public EventQueueImpl() {
+	}
 
 	public void shutdown() {
 		eventTimer.shutdown();
 	}
 
 	public void schedule(City city) {
-        if (UnitBase.isNotUnit(city.getBuild())) {
-            return;
-        }
+		if (UnitBase.isNotUnit(city.getBuild())) {
+			return;
+		}
         if (!city.getParentGame().hasStarted()) {
             return;
         }
-        CityBuildEvent cityBuildEvent = spring.autowire(new CityBuildEvent(city));
+		CityBuildEvent cityBuildEvent = eventFactory.getCityBuildEvent(city);
         eventTimer.schedule(cityBuildEvent);
     }
 
@@ -45,7 +44,8 @@ public class EventQueueImpl implements EventQueue {
 		if (!unitSeen.getGame().hasStarted()) {
 			return;
 		}
-		UnitSeenEvent unitSeenEvent = spring.autowire(new UnitSeenEvent( unitSeen ));
+
+		UnitSeenEvent unitSeenEvent = eventFactory.getUnitSeenEvent(unitSeen);
 		eventTimer.schedule(unitSeenEvent);
 	}
 
@@ -72,7 +72,7 @@ public class EventQueueImpl implements EventQueue {
 
 	private void scheduleGameStartEvent(Game game) {
 		logger.info("Scheduling game " + game + " to start at " + game.getStartTime());
-		GameStartEvent gameStartEvent = spring.autowire(new GameStartEvent( game ));
+		GameStartEvent gameStartEvent = eventFactory.getGameStartEvent(game);
 		eventTimer.schedule(gameStartEvent);
 	}
 
@@ -95,19 +95,19 @@ public class EventQueueImpl implements EventQueue {
 		} else if (game.getMapped() == null) {
 			Date oldStartTime = game.getStartTime();
 			Date newStartTime = new Date(now.getTime() + Constants.getMappedToStartedMillis());
-			logger.warn("Game "+game+" should have been mapped by now.  Mapping now and changing start time from "+oldStartTime+" to "+newStartTime);
+			logger.warn("Game " + game + " should have been mapped by now.  Mapping now and changing start time from " + oldStartTime + " to " + newStartTime);
 			GameScheduleHelper.setStartTime(game, newStartTime);
 		}
-		GameMapEvent gameMapEvent = spring.autowire(new GameMapEvent( game ));
+		GameMapEvent gameMapEvent = eventFactory.getGameMapEvent(game);
 		eventTimer.schedule(gameMapEvent);
 	}
 
 	private void scheduleStartedGameEvents(Game game) {
 		logger.info("Scheduling game " + game + " to end at " + game.getEnds());
-		GameEndEvent gameEndEvent = spring.autowire(new GameEndEvent( game ));
+		GameEndEvent gameEndEvent = eventFactory.getGameEndEvent(game);
 		eventTimer.schedule(gameEndEvent);
 
-		TechUpdateEvent techupdateEvent = spring.autowire(new TechUpdateEvent( game ));
+		TechUpdateEvent techupdateEvent = eventFactory.getTechUpdateEvent(game);
 		eventTimer.schedule(techupdateEvent);
 	}
 
@@ -116,7 +116,7 @@ public class EventQueueImpl implements EventQueue {
             return;
         }
 
-        UnitUpdateEvent unitUpdateEvent = spring.autowire(new UnitUpdateEvent(unit));
+		UnitUpdateEvent unitUpdateEvent = eventFactory.getUnitUpdateEvent(unit);
         eventTimer.schedule(unitUpdateEvent);
     }
 
@@ -125,7 +125,7 @@ public class EventQueueImpl implements EventQueue {
 			return;
 		}
 
-		RelationChangeEvent relationChangeEvent = spring.autowire(new RelationChangeEvent( relation ));
+		RelationChangeEvent relationChangeEvent = eventFactory.getRelationChangeEvent(relation);
 		eventTimer.schedule(relationChangeEvent);
 	}
 
