@@ -5,7 +5,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.UnitBase;
@@ -14,8 +13,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
-import com.kenstevens.stratinit.server.remote.request.*;
-import com.kenstevens.stratinit.server.remote.request.write.*;
+import com.kenstevens.stratinit.server.remote.request.RequestFactory;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
@@ -31,7 +29,7 @@ import java.util.Properties;
 @Component("stratInit")
 public class StratInitImpl implements StratInit {
 	@Autowired
-	private Spring spring;
+	private RequestFactory requestFactory;
 	@Autowired
 	private ServerManager serverManager;
 	@Autowired
@@ -79,7 +77,7 @@ public class StratInitImpl implements StratInit {
 	// FIXME Log this
 	// FIXME What does "Log this" mean?
 	public Result<None> setGame(int gameId, boolean noAlliances) {
-		return spring.autowire(new SetGameRequest(gameId, noAlliances)).process(gameId);
+		return requestFactory.getSetGameRequest(gameId, noAlliances).process(gameId);
 	}
 
 	/*
@@ -87,89 +85,89 @@ public class StratInitImpl implements StratInit {
 	 */
 
 	public Result<List<SIGame>> getJoinedGames() {
-		return spring.getBean(GetJoinedGamesRequest.class).processNoGame();
+		return requestFactory.getGetJoinedGamesRequest().processNoGame();
 	}
 
 	public Result<List<SIGame>> getUnjoinedGames() {
-		return spring.getBean(GetUnjoinedGamesRequest.class).processNoGame();
+		return requestFactory.getGetUnjoinedGamesRequest().processNoGame();
 	}
 
 	public Result<List<SINation>> getNations() {
-		return spring.getBean(GetNationsRequest.class).process();
+		return requestFactory.getGetNationsRequest().process();
 	}
 
 	public Result<List<SISector>> getSectors() {
-		return spring.getBean(GetSectorsRequest.class).process();
+		return requestFactory.getGetSectorsRequest().process();
 	}
 
 	@Override
 	public Result<List<SIUnit>> getUnits() {
-		return spring.getBean(GetUnitsRequest.class).process();
+		return requestFactory.getGetUnitsRequest().process();
 	}
 
 	@Override
 	public Result<List<SIUnit>> getSeenUnits() {
-		return spring.getBean(GetSeenUnitsRequest.class).process();
+		return requestFactory.getGetSeenUnitsRequest().process();
 	}
 
 	@Override
 	public Result<SINation> getMyNation() {
-		return spring.getBean(GetMyNationRequest.class).process();
+		return requestFactory.getGetMyNationRequest().process();
 	}
 
 	@Override
 	public Result<List<SICity>> getCities() {
-		return spring.getBean(GetCitiesRequest.class).process();
+		return requestFactory.getGetCitiesRequest().process();
 	}
 
 	@Override
 	public Result<List<SICity>> getSeenCities() {
-		return spring.getBean(GetSeenCitiesRequest.class).process();
+		return requestFactory.getGetSeenCitiesRequest().process();
 	}
 
 	@Override
 	public Result<SIUpdate> getUpdate() {
-		return spring.getBean(GetUpdateRequest.class).process();
+		return requestFactory.getGetUpdateRequest().process();
 	}
 
 	@Override
 	public Result<List<SIBattleLog>> getBattleLog() {
-		return spring.getBean(GetBattleLogRequest.class).process();
+		return requestFactory.getGetBattleLogRequest().process();
 	}
 
 	@Override
 	public Result<List<SIMessage>> getMail() {
-		return spring.getBean(GetMailRequest.class).process();
+		return requestFactory.getGetMailRequest().process();
 	}
 
 	@Override
 	public Result<List<SIRelation>> getRelations() {
-		return spring.getBean(GetRelationsRequest.class).process();
+		return requestFactory.getGetRelationsRequest().process();
 	}
 
 	@Override
 	public Result<List<SIMessage>> getMessages() {
-		return spring.getBean(GetMessagesRequest.class).process();
+		return requestFactory.getGetMessagesRequest().process();
 	}
 
 	@Override
 	public Result<List<SIMessage>> getSentMail() {
-		return spring.getBean(GetSentMailRequest.class).process();
+		return requestFactory.getGetSentMailRequest().process();
 	}
 
 	@Override
 	public Result<List<SIMessage>> getAnnouncements() {
-		return spring.getBean(GetAnnouncementsRequest.class).process();
+		return requestFactory.getGetAnnouncementsRequest().process();
 	}
 
 	@Override
 	public Result<List<SISatellite>> getSattelites() {
-		return spring.getBean(GetSattelitesRequest.class).process();
+		return requestFactory.getGetSattelitesRequest().process();
 	}
 
 	@Override
 	public Result<List<SIUnitBuilt>> getUnitsBuilt() {
-		return spring.getBean(GetUnitsBuiltRequest.class).process();
+		return requestFactory.getGetUnitsBuiltRequest().process();
 	}
 
 	/*
@@ -178,40 +176,40 @@ public class StratInitImpl implements StratInit {
 
 	@Override
 	public Result<SICity> updateCity(SICity sicity, UpdateCityField field) {
-		return spring.autowire(new UpdateCityRequest(sicity, field)).process();
+		return requestFactory.getUpdateCityRequest(sicity, field).process();
 	}
 
 	@Override
 	public Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {
-		return spring.autowire(new MoveUnitsRequest(units, target)).process();
+		return requestFactory.getMoveUnitsRequest(units, target).process();
 	}
 
 	@Override
 	public Result<SIUpdate> cedeUnits(List<SIUnit> siunits, int nationId) {
-		return spring.autowire(new CedeUnitsRequest(siunits, nationId)).process();
+		return requestFactory.getCedeUnitsRequest(siunits, nationId).process();
 	}
 
 	@Override
 	public Result<SIUpdate> cedeCity(SICity sicity, int nationId) {
-		return spring.autowire(new CedeCityRequest(sicity, nationId)).process();
+		return requestFactory.getCedeCityRequest(sicity, nationId).process();
 	}
 
 	@Override
 	public Result<SIRelation> setRelation(int nationId,
 										  RelationType relationType) {
-		return spring.autowire(new SetRelationRequest(nationId, relationType))
+		return requestFactory.getSetRelationRequest(nationId, relationType)
 				.process();
 	}
 
 	// FIXME factory
 	@Override
 	public Result<Integer> sendMessage(SIMessage simessage) {
-		return spring.autowire(new SendMessageRequest(simessage)).process();
+		return requestFactory.getSendMessageRequest(simessage).process();
 	}
 
 	@Override
 	public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
-		return spring.autowire(new JoinGameRequest(player, gameId, noAlliances)).process(
+		return requestFactory.getJoinGameRequest(player, gameId, noAlliances).process(
 				gameId);
 	}
 
@@ -227,48 +225,48 @@ public class StratInitImpl implements StratInit {
 
 	@Override
 	public Result<Nation> joinGame(int gameId, boolean noAlliances) {
-		return spring.autowire(new JoinGameRequest(null, gameId, noAlliances)).process(
+		return requestFactory.getJoinGameRequest(null, gameId, noAlliances).process(
 				gameId);
 	}
 
 	@Override
 	public Result<SIUpdate> disbandUnits(List<SIUnit> siunits) {
-		return spring.autowire(new DisbandUnitRequest(siunits)).process();
+		return requestFactory.getDisbandUnitRequest(siunits).process();
 	}
 
 	@Override
 	public Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
-		return spring.autowire(new CancelMoveOrderRequest(siunits)).process();
+		return requestFactory.getCancelMoveOrderRequest(siunits).process();
 	}
 
 	@Override
 	public Result<SIUpdate> buildCity(List<SIUnit> siunits) {
-		return spring.autowire(new BuildCityRequest(siunits)).process();
+		return requestFactory.getBuildCityRequest(siunits).process();
 	}
 
 	@Override
-	public Result<SIUpdate> switchTerrain(List<SIUnit> siunits) {		
-		return spring.autowire(new SwitchTerrainRequest(siunits)).process();
+	public Result<SIUpdate> switchTerrain(List<SIUnit> siunits) {
+		return requestFactory.getSwitchTerrainRequest(siunits).process();
 	}
 
 	@Override
 	public Result<List<SINewsLogsDay>> getNewsLogs() {
-		return spring.getBean(GetLogsRequest.class).process();
+		return requestFactory.getGetLogsRequest().process();
 	}
 
 	@Override
 	public Result<Integer> postAnnouncement(String subject, String body) {
-		return spring.autowire(new PostAnnouncementRequest(subject, body)).processNoGame();
+		return requestFactory.getPostAnnouncementRequest(subject, body).processNoGame();
 	}
 
 	@Override
 	public Result<List<SITeam>> getTeams() {
-		return spring.getBean(GetTeamsRequest.class).process();
+		return requestFactory.getGetTeamsRequest().process();
 	}
 
 	@Override
 	public Result<SIUpdate> concede() {
-		return spring.autowire(new ConcedeRequest()).process();
+		return requestFactory.getConcedeRequest().process();
 	}
 
 	@Override
