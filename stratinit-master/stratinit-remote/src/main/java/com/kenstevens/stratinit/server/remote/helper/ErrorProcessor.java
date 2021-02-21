@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.server.remote.helper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
+import com.kenstevens.stratinit.server.remote.session.PlayerSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ErrorProcessor {
@@ -16,15 +15,15 @@ public class ErrorProcessor {
 	@Autowired
 	private LogDaoService logDaoService;
 	@Autowired
-	private Spring spring;
+	private PlayerSessionFactory playerSessionFactory;
 
 	public Result<Integer> processError(String subject, String stackTrace) {
-		
-		PlayerSession playerSession = spring.autowire(new PlayerSession());
+
+		PlayerSession playerSession = playerSessionFactory.getPlayerSession();
 		int errno = logDaoService.logError(playerSession.getGame(), playerSession.getPlayer(), stackTrace);
-		String newSubject = subject+" error #"+errno;
+		String newSubject = subject + " error #" + errno;
 		smtpService.sendException(newSubject, stackTrace);
-		return new Result<Integer>("Error #"+errno+" logged.  When reporting this error, please make reference to this error number and what you were doing at the time.  Thanks!", true, errno);
+		return new Result<Integer>("Error #" + errno + " logged.  When reporting this error, please make reference to this error number and what you were doing at the time.  Thanks!", true, errno);
 	}
 
 }

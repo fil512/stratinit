@@ -1,15 +1,7 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
@@ -18,11 +10,17 @@ import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UnitCommandFactory {
 	@Autowired
-	private Spring spring;
+	private UnitMoveFactory unitMoveFactory;
 	@Autowired
 	private UnitDao unitDao;
 
@@ -34,7 +32,7 @@ public class UnitCommandFactory {
 	}
 
 	public UnitsMove getUnitsMove(UnitsToMove unitsToMove, WorldView worldView) {
-		return spring.autowire(new UnitsMove( unitsToMove, worldView ));
+		return unitMoveFactory.getUnitsMove(unitsToMove, worldView);
 	}
 
 	private List<Unit> getUnits(Nation nation, List<SIUnit> siunits,
@@ -69,44 +67,44 @@ public class UnitCommandFactory {
 
 	public UnitAttacksSector getUnitAttacksSector(Nation actor, AttackType attackType, Unit unit,
 			WorldSector targetSector, WorldView worldView, MoveSeen moveSeen) {
-		return spring.autowire(new UnitAttacksSector( actor, attackType, unit,
-				targetSector, worldView , moveSeen));
+		return unitMoveFactory.getUnitAttacksSector(actor, attackType, unit,
+				targetSector, worldView, moveSeen);
 	}
 
 	public UnitAttacksUnit getUnitAttacksUnit(WorldView worldView, Nation actor, AttackType attackType,
 			Unit unit, Unit enemyUnit, WorldSector targetSector, MoveSeen moveSeen) {
 
-		return spring.autowire(new UnitAttacksUnit( worldView, actor, attackType,
-				unit, enemyUnit, targetSector , moveSeen));
+		return unitMoveFactory.getUnitAttacksUnit(worldView, actor, attackType,
+				unit, enemyUnit, targetSector, moveSeen);
 	}
 
 	public UnitMoves getUnitMoves(UnitsToMove unitsToMove, Unit unit, WorldSector worldSector,
 			WorldView worldView) {
-		return spring.autowire(new UnitMoves( unitsToMove, unit, worldSector,
-				worldView));
+		return unitMoveFactory.getUnitMoves(unitsToMove, unit, worldSector,
+				worldView);
 	}
 
 	public UnitBombsSector getUnitBombsSector(Nation actor, Unit bomber,
 			WorldSector targetSector, Collection<Unit> units,
 			AttackReadiness attackReadiness) {
-		return spring.autowire(new UnitBombsSector( actor, bomber,
-				targetSector, units, attackReadiness ));
+		return unitMoveFactory.getUnitBombsSector(actor, bomber,
+				targetSector, units, attackReadiness);
 	}
 
 	public Interdiction getInterdiction(Unit targetUnit, SectorCoords excludeCoords) {
-		return spring.autowire(new Interdiction( targetUnit, excludeCoords ));
+		return unitMoveFactory.getInterdiction(targetUnit, excludeCoords);
 	}
 	public Interception getInterception(UnitsToMove unitsToMove, SectorCoords coords) {
-		return spring.autowire(new Interception(unitsToMove, coords));
+		return unitMoveFactory.getInterception(unitsToMove, coords);
 	}
 
 	public LaunchRocket getLaunchRocket(CoordMeasure coordMeasure, Unit unit, SectorCoords target, MoveSeen moveSeen) {
-		return spring.autowire(new LaunchRocket( coordMeasure, unit, target , moveSeen));
+		return unitMoveFactory.getLaunchRocket(coordMeasure, unit, target, moveSeen);
 	}
 
 	public UnitsCede getSIUnitsCede(Nation nation, List<SIUnit> siunits,
 			int nationId, WorldView worldView) {
 		List<Unit> units = getUnits(nation, siunits, null);
-		return spring.autowire(new UnitsCede( nation, units, nationId, worldView ));
+		return unitMoveFactory.getUnitsCede(nation, units, nationId, worldView);
 	}
 }

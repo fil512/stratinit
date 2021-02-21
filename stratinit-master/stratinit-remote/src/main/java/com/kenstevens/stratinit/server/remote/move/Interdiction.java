@@ -1,16 +1,8 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.Collection;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
@@ -21,6 +13,12 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.util.AttackHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.Map;
 
 @Scope("prototype")
 @Component
@@ -32,7 +30,7 @@ public class Interdiction {
 	@Autowired
 	private SectorDaoService sectorDaoService;
 	@Autowired
-	private Spring spring;
+	private UnitMoveFactory unitMoveFactory;
 
 	private final Unit targetUnit;
 	private final SectorCoords excludeCoords;
@@ -74,10 +72,8 @@ public class Interdiction {
 						.getUnitsThatCanInterdictThisUnit(worldView, nation,
 								targetUnit));
 			}
-			UnitsInterceptor unitsInterceptor = spring.autowire(new UnitsInterceptor(nation, worldView, targetUnit, excludeCoords, units));
+			UnitsInterceptor unitsInterceptor = unitMoveFactory.getUnitsInterceptor(nation, worldView, targetUnit, excludeCoords, units);
 			unitsInterceptor.unitsIntercept(retval);
 		}
 	}
-
-
 }
