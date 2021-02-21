@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.CityProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
@@ -24,7 +23,7 @@ public class SwitchCityOnTechCommand extends Command<SICity> {
 	}
 
 	@Override
-	public Result<SICity> execute() {
+	public SIResponseEntity<SICity> execute() {
 		SICity sicity = new SICity(city);
 		sicity.switchOnTechChange = city.isSwitchOnTechChange();
 		return stratInit.updateCity(sicity, UpdateCityField.SWITCH_ON_TECH_CHANGE);

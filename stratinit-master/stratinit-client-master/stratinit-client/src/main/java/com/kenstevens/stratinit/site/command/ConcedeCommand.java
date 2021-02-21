@@ -1,19 +1,18 @@
 package com.kenstevens.stratinit.site.command;
 
+import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.model.NationView;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.UpdateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.model.NationView;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.UpdateProcessor;
-
 @Scope("prototype")
 @Component
-public class ConcedeCommand extends Command<SIUpdate>{
+public class ConcedeCommand extends Command<SIUpdate> {
 	@Autowired
 	private UpdateProcessor updateProcessor;
 	@Autowired
@@ -23,7 +22,7 @@ public class ConcedeCommand extends Command<SIUpdate>{
 	}
 
 	@Override
-	public Result<SIUpdate> execute() {
+	public SIResponseEntity<SIUpdate> execute() {
 		return stratInit.concede();
 	}
 

@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SINation;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.NationListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.NationListProcessor;
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -18,7 +17,7 @@ public class GetNationsCommand extends Command<List<SINation>> {
 	private NationListProcessor nationListProcessor;
 
 	@Override
-	public Result<List<SINation>> execute() {
+	public SIResponseEntity<List<SINation>> execute() {
 		return stratInit.getNations();
 	}
 

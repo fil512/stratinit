@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SIRelation;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.RelationListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SIRelation;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.RelationListProcessor;
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -18,7 +17,7 @@ public class GetRelationsCommand extends Command<List<SIRelation>> {
 	private RelationListProcessor relationListProcessor;
 
 	@Override
-	public Result<List<SIRelation>> execute() {
+	public SIResponseEntity<List<SIRelation>> execute() {
 		return stratInit.getRelations();
 	}
 

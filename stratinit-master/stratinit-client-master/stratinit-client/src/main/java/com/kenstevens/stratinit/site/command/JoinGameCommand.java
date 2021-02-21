@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.site.command;
 
+import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
 
 @Scope("prototype")
 @Component
@@ -19,7 +18,7 @@ public class JoinGameCommand extends Command<Nation> {
 	}
 
 	@Override
-	public Result<Nation> execute() {
+	public SIResponseEntity<Nation> execute() {
 		return stratInit.joinGame(gameId, noAlliances);
 	}
 

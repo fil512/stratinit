@@ -9,7 +9,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
@@ -20,13 +20,17 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
-@Component("stratInit")
+@RestController
+@RequestMapping("/stratinit")
+//@Component("stratInit")
 public class StratInitImpl implements StratInit {
 	@Autowired
 	private RequestFactory requestFactory;
@@ -42,12 +46,13 @@ public class StratInitImpl implements StratInit {
 	 */
 
 	@Override
-	public Result<String> getVersion() {
-		return Result.make(Constants.SERVER_VERSION);
+	@GetMapping(value = "/version")
+	public SIResponseEntity<String> getVersion() {
+		return SIResponseEntity.make(Constants.SERVER_VERSION);
 	}
 
 	@Override
-	public Result<List<SIUnitBase>> getUnitBases() {
+	public SIResponseEntity<List<SIUnitBase>> getUnitBases() {
 		List<SIUnitBase> result = Lists.newArrayList(Collections2.transform(
 				Lists.newArrayList(UnitType.values()),
 				new Function<UnitType, SIUnitBase>() {
@@ -56,11 +61,12 @@ public class StratInitImpl implements StratInit {
 						return new SIUnitBase(UnitBase.getUnitBase(unitType));
 					}
 				}));
-		return Result.make(result);
+		return SIResponseEntity.make(result);
 	}
 
 	@Override
-	public Result<Properties> getServerConfig() {
+	@GetMapping(value = "/serverConfig")
+	public SIResponseEntity<Properties> getServerConfig() {
 		Properties properties = new Properties();
 		Class<Constants> clazz = Constants.class;
 		for (Field field : clazz.getFields()) {
@@ -71,12 +77,12 @@ public class StratInitImpl implements StratInit {
 				// won't happen
 			}
 		}
-		return Result.make(properties);
+		return SIResponseEntity.make(properties);
 	}
 
 	// FIXME Log this
 	// FIXME What does "Log this" mean?
-	public Result<None> setGame(int gameId, boolean noAlliances) {
+	public SIResponseEntity<None> setGame(int gameId, boolean noAlliances) {
 		return requestFactory.getSetGameRequest(gameId, noAlliances).process(gameId);
 	}
 
@@ -84,89 +90,90 @@ public class StratInitImpl implements StratInit {
 	 * Read-only database requests
 	 */
 
-	public Result<List<SIGame>> getJoinedGames() {
+	@GetMapping(value = "/joinedGames")
+	public SIResponseEntity<List<SIGame>> getJoinedGames() {
 		return requestFactory.getGetJoinedGamesRequest().processNoGame();
 	}
 
-	public Result<List<SIGame>> getUnjoinedGames() {
+	public SIResponseEntity<List<SIGame>> getUnjoinedGames() {
 		return requestFactory.getGetUnjoinedGamesRequest().processNoGame();
 	}
 
-	public Result<List<SINation>> getNations() {
+	public SIResponseEntity<List<SINation>> getNations() {
 		return requestFactory.getGetNationsRequest().process();
 	}
 
-	public Result<List<SISector>> getSectors() {
+	public SIResponseEntity<List<SISector>> getSectors() {
 		return requestFactory.getGetSectorsRequest().process();
 	}
 
 	@Override
-	public Result<List<SIUnit>> getUnits() {
+	public SIResponseEntity<List<SIUnit>> getUnits() {
 		return requestFactory.getGetUnitsRequest().process();
 	}
 
 	@Override
-	public Result<List<SIUnit>> getSeenUnits() {
+	public SIResponseEntity<List<SIUnit>> getSeenUnits() {
 		return requestFactory.getGetSeenUnitsRequest().process();
 	}
 
 	@Override
-	public Result<SINation> getMyNation() {
+	public SIResponseEntity<SINation> getMyNation() {
 		return requestFactory.getGetMyNationRequest().process();
 	}
 
 	@Override
-	public Result<List<SICity>> getCities() {
+	public SIResponseEntity<List<SICity>> getCities() {
 		return requestFactory.getGetCitiesRequest().process();
 	}
 
 	@Override
-	public Result<List<SICity>> getSeenCities() {
+	public SIResponseEntity<List<SICity>> getSeenCities() {
 		return requestFactory.getGetSeenCitiesRequest().process();
 	}
 
 	@Override
-	public Result<SIUpdate> getUpdate() {
+	public SIResponseEntity<SIUpdate> getUpdate() {
 		return requestFactory.getGetUpdateRequest().process();
 	}
 
 	@Override
-	public Result<List<SIBattleLog>> getBattleLog() {
+	public SIResponseEntity<List<SIBattleLog>> getBattleLog() {
 		return requestFactory.getGetBattleLogRequest().process();
 	}
 
 	@Override
-	public Result<List<SIMessage>> getMail() {
+	public SIResponseEntity<List<SIMessage>> getMail() {
 		return requestFactory.getGetMailRequest().process();
 	}
 
 	@Override
-	public Result<List<SIRelation>> getRelations() {
+	public SIResponseEntity<List<SIRelation>> getRelations() {
 		return requestFactory.getGetRelationsRequest().process();
 	}
 
 	@Override
-	public Result<List<SIMessage>> getMessages() {
+	public SIResponseEntity<List<SIMessage>> getMessages() {
 		return requestFactory.getGetMessagesRequest().process();
 	}
 
 	@Override
-	public Result<List<SIMessage>> getSentMail() {
+	public SIResponseEntity<List<SIMessage>> getSentMail() {
 		return requestFactory.getGetSentMailRequest().process();
 	}
 
 	@Override
-	public Result<List<SIMessage>> getAnnouncements() {
+	public SIResponseEntity<List<SIMessage>> getAnnouncements() {
 		return requestFactory.getGetAnnouncementsRequest().process();
 	}
 
 	@Override
-	public Result<List<SISatellite>> getSattelites() {
+	public SIResponseEntity<List<SISatellite>> getSattelites() {
 		return requestFactory.getGetSattelitesRequest().process();
 	}
 
 	@Override
-	public Result<List<SIUnitBuilt>> getUnitsBuilt() {
+	public SIResponseEntity<List<SIUnitBuilt>> getUnitsBuilt() {
 		return requestFactory.getGetUnitsBuiltRequest().process();
 	}
 
@@ -175,101 +182,101 @@ public class StratInitImpl implements StratInit {
 	 */
 
 	@Override
-	public Result<SICity> updateCity(SICity sicity, UpdateCityField field) {
+	public SIResponseEntity<SICity> updateCity(SICity sicity, UpdateCityField field) {
 		return requestFactory.getUpdateCityRequest(sicity, field).process();
 	}
 
 	@Override
-	public Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {
+	public SIResponseEntity<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {
 		return requestFactory.getMoveUnitsRequest(units, target).process();
 	}
 
 	@Override
-	public Result<SIUpdate> cedeUnits(List<SIUnit> siunits, int nationId) {
+	public SIResponseEntity<SIUpdate> cedeUnits(List<SIUnit> siunits, int nationId) {
 		return requestFactory.getCedeUnitsRequest(siunits, nationId).process();
 	}
 
 	@Override
-	public Result<SIUpdate> cedeCity(SICity sicity, int nationId) {
+	public SIResponseEntity<SIUpdate> cedeCity(SICity sicity, int nationId) {
 		return requestFactory.getCedeCityRequest(sicity, nationId).process();
 	}
 
 	@Override
-	public Result<SIRelation> setRelation(int nationId,
-										  RelationType relationType) {
+	public SIResponseEntity<SIRelation> setRelation(int nationId,
+													RelationType relationType) {
 		return requestFactory.getSetRelationRequest(nationId, relationType)
 				.process();
 	}
 
 	@Override
-	public Result<Integer> sendMessage(SIMessage simessage) {
+	public SIResponseEntity<Integer> sendMessage(SIMessage simessage) {
 		return requestFactory.getSendMessageRequest(simessage).process();
 	}
 
 	@Override
-	public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
+	public SIResponseEntity<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
 		return requestFactory.getJoinGameRequest(player, gameId, noAlliances).process(
 				gameId);
 	}
 
 	@Override
-	public synchronized Result<None> shutdown() {
+	public synchronized SIResponseEntity<None> shutdown() {
 		// TODO SEC block access to this method to admin only
 		if (!serverStatus.isRunning()) {
-			return new Result<None>("The server is not running.", false);
+			return SIResponseEntity.failure("The server is not running.");
 		}
 		serverManager.shutdown();
-		return new Result<None>("SERVER SHUTDOWN COMPLETE", true);
+		return SIResponseEntity.success("SERVER SHUTDOWN COMPLETE");
 	}
 
 	@Override
-	public Result<Nation> joinGame(int gameId, boolean noAlliances) {
+	public SIResponseEntity<Nation> joinGame(int gameId, boolean noAlliances) {
 		return requestFactory.getJoinGameRequest(null, gameId, noAlliances).process(
 				gameId);
 	}
 
 	@Override
-	public Result<SIUpdate> disbandUnits(List<SIUnit> siunits) {
+	public SIResponseEntity<SIUpdate> disbandUnits(List<SIUnit> siunits) {
 		return requestFactory.getDisbandUnitRequest(siunits).process();
 	}
 
 	@Override
-	public Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
+	public SIResponseEntity<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
 		return requestFactory.getCancelMoveOrderRequest(siunits).process();
 	}
 
 	@Override
-	public Result<SIUpdate> buildCity(List<SIUnit> siunits) {
+	public SIResponseEntity<SIUpdate> buildCity(List<SIUnit> siunits) {
 		return requestFactory.getBuildCityRequest(siunits).process();
 	}
 
 	@Override
-	public Result<SIUpdate> switchTerrain(List<SIUnit> siunits) {
+	public SIResponseEntity<SIUpdate> switchTerrain(List<SIUnit> siunits) {
 		return requestFactory.getSwitchTerrainRequest(siunits).process();
 	}
 
 	@Override
-	public Result<List<SINewsLogsDay>> getNewsLogs() {
+	public SIResponseEntity<List<SINewsLogsDay>> getNewsLogs() {
 		return requestFactory.getGetLogsRequest().process();
 	}
 
 	@Override
-	public Result<Integer> postAnnouncement(String subject, String body) {
+	public SIResponseEntity<Integer> postAnnouncement(String subject, String body) {
 		return requestFactory.getPostAnnouncementRequest(subject, body).processNoGame();
 	}
 
 	@Override
-	public Result<List<SITeam>> getTeams() {
+	public SIResponseEntity<List<SITeam>> getTeams() {
 		return requestFactory.getGetTeamsRequest().process();
 	}
 
 	@Override
-	public Result<SIUpdate> concede() {
+	public SIResponseEntity<SIUpdate> concede() {
 		return requestFactory.getConcedeRequest().process();
 	}
 
 	@Override
-	public Result<Integer> submitError(String subject, String stackTrace) {
+	public SIResponseEntity<Integer> submitError(String subject, String stackTrace) {
 		return errorProcessor.processError(subject, stackTrace);
 	}
 }

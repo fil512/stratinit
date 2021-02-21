@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Account;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.httpclient.HttpStatus;
@@ -37,7 +37,7 @@ public class SpringRemotingIntegrationManualTest extends StratInitClientTest {
 	public void testGoodLogin() throws IOException {
 		goodLogin();
 
-		Result<String> version = stratInit.getVersion();
+		SIResponseEntity<String> version = stratInit.getVersion();
 		String reply = version.getValue();
 		assertEquals(Constants.SERVER_VERSION, reply);
 	}
@@ -50,7 +50,7 @@ public class SpringRemotingIntegrationManualTest extends StratInitClientTest {
 	@Test
 	public void testGetMyGames() throws IOException {
 		goodLogin();
-		Result<List<SIGame>> joinedGames = stratInit.getJoinedGames();
+		SIResponseEntity<List<SIGame>> joinedGames = stratInit.getJoinedGames();
 		List<SIGame> games = joinedGames.getValue();
 
 		for (SIGame game : games) {
@@ -62,7 +62,7 @@ public class SpringRemotingIntegrationManualTest extends StratInitClientTest {
 	public void testPlayersJoinGames() {
 		account.setUsername("test1");
 		account.setPassword("testy");
-		Result<List<SIGame>> games = stratInit.getUnjoinedGames();
+		SIResponseEntity<List<SIGame>> games = stratInit.getUnjoinedGames();
 		SIGame game = games.getValue().get(0);
 		stratInit.joinGame(game.id, false);
 
@@ -85,7 +85,7 @@ public class SpringRemotingIntegrationManualTest extends StratInitClientTest {
 	@Test
 	public void testGetUnjoinedGames() throws IOException {
 		goodLogin();
-		Result<List<SIGame>> unJoinedGames = stratInit.getUnjoinedGames();
+		SIResponseEntity<List<SIGame>> unJoinedGames = stratInit.getUnjoinedGames();
 		List<SIGame> games = unJoinedGames.getValue();
 
 		for (SIGame game : games) {

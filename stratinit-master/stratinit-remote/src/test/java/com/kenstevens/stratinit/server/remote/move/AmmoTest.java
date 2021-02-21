@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,17 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AmmoTest extends StratInitWebBase {
-	private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);
-	private static final SectorCoords CLOSE_PORT = new SectorCoords(6, 7);
-	private static final SectorCoords NEAR_PORT = new SectorCoords(6, 8);
-	private static final SectorCoords PORT = new SectorCoords(7, 8);
+public class AmmoTest extends BaseStratInitWebTest {
+    private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);
+    private static final SectorCoords CLOSE_PORT = new SectorCoords(6, 7);
+    private static final SectorCoords NEAR_PORT = new SectorCoords(6, 8);
+    private static final SectorCoords PORT = new SectorCoords(7, 8);
 
-	@Autowired
-	protected SectorDaoService sectorDaoServiceImpl;
+    @Autowired
+    protected SectorDaoService sectorDaoServiceImpl;
 
-	@BeforeEach
-	public void doJoinGame() {
+    @BeforeEach
+    public void doJoinGame() {
 		joinGamePlayerMe();
 	}
 

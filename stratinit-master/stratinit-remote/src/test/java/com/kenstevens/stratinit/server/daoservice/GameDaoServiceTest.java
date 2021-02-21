@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,17 +16,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameDaoServiceTest extends StratInitWebBase {
-	@Autowired
-	private GameDaoService gameDaoService;
-	@Autowired
-	private PlayerDaoService playerDaoService;
+public class GameDaoServiceTest extends BaseStratInitWebTest {
+    @Autowired
+    private GameDaoService gameDaoService;
+    @Autowired
+    private PlayerDaoService playerDaoService;
 
-	// TODO test Constants.MAX_PLAYERS_PER_GAME works
+    // TODO test Constants.MAX_PLAYERS_PER_GAME works
 
-	@Test
-	public void testNoDup() {
-		Player player = createPlayer();
+    @Test
+    public void testNoDup() {
+        Player player = createPlayer();
 		joinGame(player);
 		Result<Nation> result = gameDaoService.joinGame(player, testGameId, false);
 		assertFalseResult(result);

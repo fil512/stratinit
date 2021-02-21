@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.remote.move;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,17 +11,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PortPathTest extends StratInitWebBase {
-	public static final SectorCoords START = new SectorCoords(6, 3);
-	public static final SectorCoords START2 = new SectorCoords(7, 4);
-	public static final SectorCoords PORT = new SectorCoords(8, 4);
-	public static final SectorCoords END = new SectorCoords(10, 5);
+public class PortPathTest extends BaseStratInitWebTest {
+    public static final SectorCoords START = new SectorCoords(6, 3);
+    public static final SectorCoords START2 = new SectorCoords(7, 4);
+    public static final SectorCoords PORT = new SectorCoords(8, 4);
+    public static final SectorCoords END = new SectorCoords(10, 5);
 
 
-	private final String[] myTypes = {
-			//             11111
-			//   012345678901234
-			"S##....S##.....", // 0
+    private final String[] myTypes = {
+            //             11111
+            //   012345678901234
+            "S##....S##.....", // 0
 			"###....###.....", // 1
 			"S##....S##.....", // 2
 			"###.....##.....", // 3

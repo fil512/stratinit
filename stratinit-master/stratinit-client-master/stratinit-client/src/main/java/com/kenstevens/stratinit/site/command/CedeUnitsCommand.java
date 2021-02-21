@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -23,7 +22,7 @@ public class CedeUnitsCommand extends CedeCommand {
 	}
 
 	@Override
-	public Result<SIUpdate> execute() {
+	public SIResponseEntity<SIUpdate> execute() {
 		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
 		return stratInit.cedeUnits(siunits, nation.getNationId());
 	}

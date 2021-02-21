@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.wicket.admin;
 
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.value.ValueMap;
-
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.StratInit;
-import com.kenstevens.stratinit.wicket.util.InfoResult;
 
 public class PostForm extends Form<ValueMap> {
 	private static final long serialVersionUID = 1L;
@@ -31,8 +30,8 @@ public class PostForm extends Form<ValueMap> {
 
 		String subject = (String) values.get("subject");
 		String body = (String) values.get("body");
-		Result<Integer> result = stratInit.postAnnouncement(
+		SIResponseEntity<Integer> result = stratInit.postAnnouncement(
 				subject, body);
-		new InfoResult<Integer>(this).info(result);
+		new InfoResult<Integer>(this).info(result.getBody());
 	}
 }

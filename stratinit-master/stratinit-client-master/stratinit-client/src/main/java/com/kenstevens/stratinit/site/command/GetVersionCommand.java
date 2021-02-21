@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.command;
 
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.shell.StatusReporter;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.type.Constants;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.shell.StatusReporter;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.type.Constants;
 
 @Scope("prototype")
 @Component
@@ -20,7 +19,7 @@ public class GetVersionCommand extends Command<String> {
 	private StatusReporter statusReporter;
 
 	@Override
-	public Result<String> execute() {
+	public SIResponseEntity<String> execute() {
 		return stratInit.getVersion();
 	}
 

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.remote;
 
 import com.kenstevens.stratinit.dto.SIUnitBase;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitType;
@@ -19,15 +19,15 @@ public class StratInitImplTest extends StratInitDaoBase {
 
     @Test
     public void getUnitBases() {
-        Result<List<SIUnitBase>> result = stratInit.getUnitBases();
+        SIResponseEntity<List<SIUnitBase>> result = stratInit.getUnitBases();
         List<SIUnitBase> unitBases = result.getValue();
         assertEquals(UnitType.INFANTRY, unitBases.get(0).type);
     }
 	
 	@Test
 	public void getServerConfig() {
-		Result<Properties> result = stratInit.getServerConfig();
-		Properties props = result.getValue();
-		assertEquals(""+Constants.MAX_PLAYERS_PER_GAME, props.get("MAX_PLAYERS_PER_GAME"));
-	}
+        SIResponseEntity<Properties> result = stratInit.getServerConfig();
+        Properties props = result.getValue();
+        assertEquals("" + Constants.MAX_PLAYERS_PER_GAME, props.get("MAX_PLAYERS_PER_GAME"));
+    }
 }

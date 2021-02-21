@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -13,17 +13,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UnitMoveTest extends StratInitWebBase {
-	public static final SectorCoords S00 = new SectorCoords(0, 0);
-	public static final SectorCoords S01 = new SectorCoords(0, 1);
-	public static final SectorCoords S02 = new SectorCoords(0, 2);
-	public static final SectorCoords NO_SUPPLY = new SectorCoords(0, 12);
-	public static final SectorCoords NO_SUPPLY_DEST = new SectorCoords(0, 13);
+public class UnitMoveTest extends BaseStratInitWebTest {
+    public static final SectorCoords S00 = new SectorCoords(0, 0);
+    public static final SectorCoords S01 = new SectorCoords(0, 1);
+    public static final SectorCoords S02 = new SectorCoords(0, 2);
+    public static final SectorCoords NO_SUPPLY = new SectorCoords(0, 12);
+    public static final SectorCoords NO_SUPPLY_DEST = new SectorCoords(0, 13);
 
-	@BeforeEach
-	public void doJoinGame() {
-		joinGamePlayerMe();
-	}
+    @BeforeEach
+    public void doJoinGame() {
+        joinGamePlayerMe();
+    }
 
 	@Test
 	public void sufMob() {

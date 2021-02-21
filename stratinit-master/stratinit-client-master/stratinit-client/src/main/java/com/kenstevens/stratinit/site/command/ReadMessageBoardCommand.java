@@ -1,16 +1,15 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SIMessage;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.MailProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SIMessage;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.MailProcessor;
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -21,7 +20,7 @@ public class ReadMessageBoardCommand extends Command<List<SIMessage>> {
 	private Data db;
 
 	@Override
-	public Result<List<SIMessage>> execute() {
+	public SIResponseEntity<List<SIMessage>> execute() {
 		return stratInit.getAnnouncements();
 	}
 

@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.remote.WithUnitsBase;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -56,19 +57,19 @@ public class MoveUnitsTest extends WithUnitsBase {
 
 	@Test
 	public void canMove() {
-		List<SIUnit> units = makeUnitList(testInfantry);
-		SectorCoords target = new SectorCoords(0,2);
-		Result<SIUpdate> result = stratInit.moveUnits(units, target);
-		assertResult(result);
-		assertCoords(result, testInfantryId, target);
-		List<SISector> sisectors = result.getValue().sectors;
-		for (SISector sisector : sisectors) {
-			if (sisector.coords.equals(target)) {
-				assertEquals(testInfantry.getType(), sisector.topUnitType);
-				assertEquals(testInfantry.getId().intValue(), sisector.topUnitId);
-			}
-		}
-	}
+        List<SIUnit> units = makeUnitList(testInfantry);
+        SectorCoords target = new SectorCoords(0, 2);
+        SIResponseEntity<SIUpdate> result = stratInit.moveUnits(units, target);
+        assertResult(result);
+        assertCoords(result, testInfantryId, target);
+        List<SISector> sisectors = result.getValue().sectors;
+        for (SISector sisector : sisectors) {
+            if (sisector.coords.equals(target)) {
+                assertEquals(testInfantry.getType(), sisector.topUnitType);
+                assertEquals(testInfantry.getId().intValue(), sisector.topUnitId);
+            }
+        }
+    }
 
 	// 20 Dec 2.4 s
 	@Test
@@ -96,11 +97,11 @@ public class MoveUnitsTest extends WithUnitsBase {
 
 	@Test
 	public void landEmptyTransport() {
-		List<SIUnit> units = makeUnitList(testInfantry);
-		Result<SIUpdate> result = stratInit.moveUnits(units, SEA1);
-		assertResult(result);
-		assertCoords(result, testInfantryId, SEA1);
-	}
+        List<SIUnit> units = makeUnitList(testInfantry);
+        SIResponseEntity<SIUpdate> result = stratInit.moveUnits(units, SEA1);
+        assertResult(result);
+        assertCoords(result, testInfantryId, SEA1);
+    }
 
 	@Test
 	public void landNeutralCity() {
@@ -158,26 +159,31 @@ public class MoveUnitsTest extends WithUnitsBase {
 		tank.addMobility();
 		result = moveUnits(makeUnitList(tank), SEA1);
 		assertResult(result);
-		assertFalse(SEA1.equals(tank.getCoords()));
-	}
-	private void assertCoords(Result<SIUpdate> result, int unitId, SectorCoords target) {
-		List<SIUnit> units = result.getValue().units;
-		for (SIUnit unit : units) {
-			if (unit.id == unitId) {
-				assertEquals(target, unit.coords);
-			}
-		}
-	}
-	
-	@Test
-	public void transportNoBlocksInf() {
-		Unit[] inf = new Unit[TRANSPORT_CAPACITY+1];
-		for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
-			inf[i] = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.TANK);
-		}
-		sectorDaoService.captureCity(nationMe, PORT);
-		unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
-		Result<MoveCost> result = moveUnits(makeUnitList(inf), PORT);
+        assertFalse(SEA1.equals(tank.getCoords()));
+    }
+
+    private void assertCoords(Result<SIUpdate> result, int unitId, SectorCoords target) {
+        List<SIUnit> units = result.getValue().units;
+        for (SIUnit unit : units) {
+            if (unit.id == unitId) {
+                assertEquals(target, unit.coords);
+            }
+        }
+    }
+
+    private void assertCoords(SIResponseEntity<SIUpdate> result, int unitId, SectorCoords target) {
+        assertCoords(result.getBody(), unitId, target);
+    }
+
+    @Test
+    public void transportNoBlocksInf() {
+        Unit[] inf = new Unit[TRANSPORT_CAPACITY + 1];
+        for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
+            inf[i] = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.TANK);
+        }
+        sectorDaoService.captureCity(nationMe, PORT);
+        unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
+        Result<MoveCost> result = moveUnits(makeUnitList(inf), PORT);
 		assertResult(result);
 		for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
 			assertEquals(inf[i].getCoords(), PORT, result.toString());

@@ -1,18 +1,17 @@
 package com.kenstevens.stratinit.site.command;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.NationView;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.RelationProcessor;
 import com.kenstevens.stratinit.type.RelationType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
@@ -31,7 +30,7 @@ public class SetRelationCommand extends Command<SIRelation> {
 	}
 
 	@Override
-	public Result<SIRelation> execute() {
+	public SIResponseEntity<SIRelation> execute() {
 		return stratInit.setRelation(nation.getNationId(), relationType);
 	}
 

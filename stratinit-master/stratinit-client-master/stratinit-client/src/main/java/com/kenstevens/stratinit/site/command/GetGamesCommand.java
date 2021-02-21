@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SIGame;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.GameListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.GameListProcessor;
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -18,7 +17,7 @@ public class GetGamesCommand extends Command<List<SIGame>> {
 	private GameListProcessor gameListProcessor;
 
 	@Override
-	public Result<List<SIGame>> execute() {
+	public SIResponseEntity<List<SIGame>> execute() {
 		return stratInit.getJoinedGames();
 	}
 

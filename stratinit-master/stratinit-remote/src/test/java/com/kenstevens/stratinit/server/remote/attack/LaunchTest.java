@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.*;
 import org.junit.jupiter.api.Test;
@@ -127,36 +128,36 @@ public class LaunchTest extends TwoPlayerBase {
 
 	@Test
 	public void allyNoSeesSectors() {
-		List<SISector> sseen = stratInit.getSectors().getValue();
-		List<SICity> cseen = stratInit.getSeenCities().getValue();
-		List<SIUnit> useen = stratInit.getSeenUnits().getValue();
-		Result<SIRelation> result = stratInit.setRelation(nationThemId, RelationType.ALLIED);
-		assertResult(result);
-		List<SISector> sseen2 = stratInit.getSectors().getValue();
-		List<SICity> cseen2 = stratInit.getSeenCities().getValue();
-		List<SIUnit> useen2 = stratInit.getSeenUnits().getValue();
-		assertFalse(sseen2.size() > sseen.size());
-		assertFalse(cseen2.size() > cseen.size());
-		assertFalse(useen2.size() > useen.size());
-	}
+        List<SISector> sseen = stratInit.getSectors().getValue();
+        List<SICity> cseen = stratInit.getSeenCities().getValue();
+        List<SIUnit> useen = stratInit.getSeenUnits().getValue();
+        SIResponseEntity<SIRelation> result = stratInit.setRelation(nationThemId, RelationType.ALLIED);
+        assertResult(result);
+        List<SISector> sseen2 = stratInit.getSectors().getValue();
+        List<SICity> cseen2 = stratInit.getSeenCities().getValue();
+        List<SIUnit> useen2 = stratInit.getSeenUnits().getValue();
+        assertFalse(sseen2.size() > sseen.size());
+        assertFalse(cseen2.size() > cseen.size());
+        assertFalse(useen2.size() > useen.size());
+    }
 
 	@Test
 	public void alliedSeesSectors() {
-		List<SISector> sseen = stratInit.getSectors().getValue();
-		List<SICity> cseen = stratInit.getSeenCities().getValue();
-		List<SIUnit> useen = stratInit.getSeenUnits().getValue();
-		setAuthentication(PLAYER_THEM_NAME);
-		Result<SIRelation> result = stratInit.setRelation(nationMeId, RelationType.ALLIED);
-		assertResult(result);
-		setAuthentication(PLAYER_ME_NAME);
-		result = stratInit.setRelation(nationThemId, RelationType.ALLIED);
-		assertResult(result);
-		List<SISector> sseen2 = stratInit.getSectors().getValue();
-		List<SICity> cseen2 = stratInit.getSeenCities().getValue();
-		List<SIUnit> useen2 = stratInit.getSeenUnits().getValue();
-		assertTrue(sseen2.size() > sseen.size());
-		assertTrue(cseen2.size() > cseen.size());
-		assertTrue(useen2.size() > useen.size());
+        List<SISector> sseen = stratInit.getSectors().getValue();
+        List<SICity> cseen = stratInit.getSeenCities().getValue();
+        List<SIUnit> useen = stratInit.getSeenUnits().getValue();
+        setAuthentication(PLAYER_THEM_NAME);
+        SIResponseEntity<SIRelation> result = stratInit.setRelation(nationMeId, RelationType.ALLIED);
+        assertResult(result);
+        setAuthentication(PLAYER_ME_NAME);
+        result = stratInit.setRelation(nationThemId, RelationType.ALLIED);
+        assertResult(result);
+        List<SISector> sseen2 = stratInit.getSectors().getValue();
+        List<SICity> cseen2 = stratInit.getSeenCities().getValue();
+        List<SIUnit> useen2 = stratInit.getSeenUnits().getValue();
+        assertTrue(sseen2.size() > sseen.size());
+        assertTrue(cseen2.size() > cseen.size());
+        assertTrue(useen2.size() > useen.size());
 	}
 
 }

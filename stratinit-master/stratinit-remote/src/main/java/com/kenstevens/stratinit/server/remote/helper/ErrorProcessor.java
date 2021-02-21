@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.remote.helper;
 
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
@@ -17,13 +18,12 @@ public class ErrorProcessor {
 	@Autowired
 	private PlayerSessionFactory playerSessionFactory;
 
-	public Result<Integer> processError(String subject, String stackTrace) {
-
+	public SIResponseEntity<Integer> processError(String subject, String stackTrace) {
 		PlayerSession playerSession = playerSessionFactory.getPlayerSession();
 		int errno = logDaoService.logError(playerSession.getGame(), playerSession.getPlayer(), stackTrace);
 		String newSubject = subject + " error #" + errno;
 		smtpService.sendException(newSubject, stackTrace);
-		return new Result<Integer>("Error #" + errno + " logged.  When reporting this error, please make reference to this error number and what you were doing at the time.  Thanks!", true, errno);
+		return new SIResponseEntity<>(new Result<Integer>("Error #" + errno + " logged.  When reporting this error, please make reference to this error number and what you were doing at the time.  Thanks!", true, errno));
 	}
 
 }

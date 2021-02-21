@@ -1,15 +1,14 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.UnitListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.UnitListProcessor;
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -18,7 +17,7 @@ public class GetUnitsCommand extends Command<List<SIUnit>> {
 	private UnitListProcessor unitListProcessor;
 
 	@Override
-	public Result<List<SIUnit>> execute() {
+	public SIResponseEntity<List<SIUnit>> execute() {
 		return stratInit.getUnits();
 	}
 

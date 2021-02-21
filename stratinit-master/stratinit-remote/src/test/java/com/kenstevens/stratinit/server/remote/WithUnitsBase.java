@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class WithUnitsBase extends StratInitWebBase {
-	@Autowired
-	protected UnitDaoService unitDaoServiceImpl;
+public abstract class WithUnitsBase extends BaseStratInitWebTest {
+    @Autowired
+    protected UnitDaoService unitDaoServiceImpl;
 
-	protected static final SectorCoords START_COORDS = new SectorCoords(0,0);
-	protected static final SectorCoords SEA1 = new SectorCoords(3,0);
-	protected static final SectorCoords SEA2 = new SectorCoords(3,1);
+    protected static final SectorCoords START_COORDS = new SectorCoords(0, 0);
+    protected static final SectorCoords SEA1 = new SectorCoords(3, 0);
+    protected static final SectorCoords SEA2 = new SectorCoords(3, 1);
     protected Unit testInfantry;
     protected int testInfantryId;
     protected Unit testHelicopter;

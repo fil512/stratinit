@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.remote;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
@@ -19,7 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class StratInitWebBase extends StratInitDaoBase {
+public abstract class BaseStratInitWebTest extends StratInitDaoBase {
 	@Autowired
 	protected GameDaoService gameDaoService;
 	@Autowired
@@ -32,8 +33,8 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	@Qualifier("stratInit")
 	protected StratInit stratInit;
 
-	protected Result<Nation> joinGamePlayerMe() {
-		Result<Nation> retval = joinGame(playerMe);
+	protected SIResponseEntity<Nation> joinGamePlayerMe() {
+		SIResponseEntity<Nation> retval = joinGame(playerMe);
 		nationMeId = retval.getValue().getNationId();
 		nationMe = gameDao.findNation(testGameId, playerMe);
 		setAuthentication(PLAYER_ME_NAME);
@@ -44,13 +45,14 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 		City city = sectorDao.getCity(testWorld.getSector(coords));
 		sectorDaoService.updateCity(city.getNation(), coords, UpdateCityField.BUILD, type, null, false, null);
 	}
+
 	protected void setAuthentication(String username) {
 		new AuthenticationHelper().setAuthentication(username);
 		stratInit.setGame(testGameId, false);
 	}
 
-	protected Result<Nation> joinGame(Player player) {
-		Result<Nation> result = stratInit.joinGame(player, testGameId, false);
+	protected SIResponseEntity<Nation> joinGame(Player player) {
+		SIResponseEntity<Nation> result = stratInit.joinGame(player, testGameId, false);
 		assertResult(result);
 		return result;
 	}
@@ -58,7 +60,7 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	protected Result<MoveCost> moveUnits(List<SIUnit> units, SectorCoords targetCoords) {
 		return moveService.move(nationMe, units, targetCoords);
 	}
-	
+
 	protected Result<MoveCost> moveUnits(Nation nation, List<SIUnit> units, SectorCoords targetCoords) {
 		return moveService.move(nation, units, targetCoords);
 	}

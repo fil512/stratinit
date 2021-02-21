@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.site.command;
 
+import com.kenstevens.stratinit.remote.None;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.remote.None;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
 
 @Scope("prototype")
 @Component
@@ -24,8 +23,8 @@ public class DescriptionCommand extends Command<None> {
 
 
 	@Override
-	public Result<None> execute() {
-		return Result.trueInstance();
+	public SIResponseEntity<None> execute() {
+		return SIResponseEntity.trueInstance();
 	}
 
 

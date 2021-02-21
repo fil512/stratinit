@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.remote.event;
 
 import com.kenstevens.stratinit.dto.SIRelation;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ public class TwoPlayerRelationChangeTest extends RelationManagerTest {
 
 	@Test
 	public void neutralToMe() {
-		Result<SIRelation> result = stratInit.setRelation(nationThemId, RelationType.ME);
+		SIResponseEntity<SIRelation> result = stratInit.setRelation(nationThemId, RelationType.ME);
 		assertFalseResult(result);
 	}
 

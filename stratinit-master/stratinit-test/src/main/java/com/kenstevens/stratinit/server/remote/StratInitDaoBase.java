@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.type.*;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
@@ -213,31 +214,40 @@ public abstract class StratInitDaoBase {
 		return player;
 	}
 
-	protected List<SIUnit> makeUnitList(Unit... units) {
-		Nation nation = units[0].getNation();
-		return makeUnitList(nation, units);
-	}
+    protected List<SIUnit> makeUnitList(Unit... units) {
+        Nation nation = units[0].getNation();
+        return makeUnitList(nation, units);
+    }
 
-	protected List<SIUnit> makeUnitList(List<Unit> units) {
-		Nation nation = units.get(0).getNation();
-		return makeUnitList(nation, units.toArray(new Unit[0]));
-	}
+    protected List<SIUnit> makeUnitList(List<Unit> units) {
+        Nation nation = units.get(0).getNation();
+        return makeUnitList(nation, units.toArray(new Unit[0]));
+    }
 
-	protected void assertResult(Result<? extends Object> result) {
-		assertTrue(result.isSuccess(), result.toString());
-	}
+    protected void assertResult(SIResponseEntity<?> result) {
+        assertTrue(result.isSuccess(), result.toString());
+    }
 
-	protected void assertFalseResult(Result<? extends Object> result) {
-		assertFalse(result.isSuccess(), result.toString());
-	}
+    protected void assertResult(Result<?> result) {
+        assertTrue(result.isSuccess(), result.toString());
+    }
 
-	protected void assertFalseResult(String string,
-			Result<? extends Object> result) {
-		assertFalse(result.isSuccess(), string);
-	}
-	protected void assertTimeNear(long time1, long time2) {
-		assertTrue(Math.abs(time2 - time1) < TIME_TOLERANCE,
-				new Date(time1) + " is not within " + TIME_TOLERANCE
+    protected void assertFalseResult(Result<?> result) {
+        assertFalse(result.isSuccess(), result.toString());
+    }
+
+    protected void assertFalseResult(SIResponseEntity<?> result) {
+        assertFalse(result.isSuccess(), result.toString());
+    }
+
+    protected void assertFalseResult(String string,
+                                     Result<? extends Object> result) {
+        assertFalse(result.isSuccess(), string);
+    }
+
+    protected void assertTimeNear(long time1, long time2) {
+        assertTrue(Math.abs(time2 - time1) < TIME_TOLERANCE,
+                new Date(time1) + " is not within " + TIME_TOLERANCE
 						+ " ms of " + new Date(time2) + ".  The difference is "
 						+ (time2 - time1) + " ms.");
 	}

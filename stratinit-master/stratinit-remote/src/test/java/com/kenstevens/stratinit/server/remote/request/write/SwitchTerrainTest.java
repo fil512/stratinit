@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.remote.request.write;
 
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -22,9 +22,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 	public void switchTerrainNotEnoughMob() {
 		Unit eng = unitDaoService.buildUnit(nationMe, COASTLAND,
 				UnitType.ENGINEER);
-		
+
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
 	}
@@ -35,7 +35,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 				UnitType.TANK);
 		tank.setMobility(tank.getMaxMobility());
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(tank));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(tank));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
 	}
@@ -47,9 +47,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 		unitDaoService.buildUnit(nationMe, COASTLAND,
 				UnitType.INFANTRY);
-		
+
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
 	}
@@ -59,9 +59,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		Unit eng = unitDaoService.buildUnit(nationMe, INLAND,
 				UnitType.ENGINEER);
 		eng.setMobility(eng.getMaxMobility());
-		
+
 		assertEquals(SectorType.LAND, testWorld.getSector(INLAND).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(INLAND).getType());
 	}
@@ -71,9 +71,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		Unit eng = unitDaoService.buildUnit(nationMe, COASTLAND,
 				UnitType.ENGINEER);
 		eng.setMobility(eng.getMaxMobility());
-		
+
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertResult(result);
 		assertEquals(SectorType.WATER, testWorld.getSector(COASTLAND).getType());
 	}
@@ -83,9 +83,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		Unit eng = unitDaoService.buildUnit(nationMe, BEACHWATER,
 				UnitType.ENGINEER);
 		eng.setMobility(eng.getMaxMobility());
-		
+
 		assertEquals(SectorType.WATER, testWorld.getSector(BEACHWATER).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(BEACHWATER).getType());
 	}
@@ -95,9 +95,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		Unit eng = unitDaoService.buildUnit(nationMe, DEEPSEA,
 				UnitType.ENGINEER);
 		eng.setMobility(eng.getMaxMobility());
-		
+
 		assertEquals(SectorType.WATER, testWorld.getSector(DEEPSEA).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.WATER, testWorld.getSector(DEEPSEA).getType());
 	}
@@ -107,9 +107,9 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		Unit eng = unitDaoService.buildUnit(nationMe, CITY,
 				UnitType.ENGINEER);
 		eng.setMobility(eng.getMaxMobility());
-		
+
 		assertEquals(SectorType.NEUTRAL_CITY, testWorld.getSector(CITY).getType());
-		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.NEUTRAL_CITY, testWorld.getSector(CITY).getType());
 	}

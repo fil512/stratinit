@@ -1,17 +1,16 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.model.UnitView;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.site.processor.UpdateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.model.UnitView;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
-import com.kenstevens.stratinit.site.processor.UpdateProcessor;
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -26,7 +25,7 @@ public class CancelMoveOrderCommand extends Command<SIUpdate>{
 	}
 
 	@Override
-	public Result<SIUpdate> execute() {
+	public SIResponseEntity<SIUpdate> execute() {
 		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
 		return stratInit.cancelMoveOrder(siunits);
 	}

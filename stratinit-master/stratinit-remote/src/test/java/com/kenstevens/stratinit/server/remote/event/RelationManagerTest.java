@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.remote.event;
 
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
@@ -17,7 +17,7 @@ public class RelationManagerTest extends TwoPlayerBase {
 	private EventQueue eventQueue;
 
 	protected void changedTo(RelationType nextType) {
-		Result<SIRelation> result = stratInit.setRelation(nationThemId, nextType);
+		SIResponseEntity<SIRelation> result = stratInit.setRelation(nationThemId, nextType);
 		assertResult(result);
 		Relation relation = gameDao.findRelation(nationMe, nationThem);
 		assertEquals(nextType, relation.getType(), result.toString());
@@ -29,7 +29,7 @@ public class RelationManagerTest extends TwoPlayerBase {
 	protected void changedToDelayed(RelationType nextType) {
 		Relation relation = gameDao.findRelation(nationMe, nationThem);
 		RelationType pre = relation.getType();
-		Result<SIRelation> result = stratInit.setRelation(nationThemId, nextType);
+		SIResponseEntity<SIRelation> result = stratInit.setRelation(nationThemId, nextType);
 		assertResult(result);
 		relation = gameDao.findRelation(nationMe, nationThem);
 		assertEquals(pre, relation.getType(), result.toString());

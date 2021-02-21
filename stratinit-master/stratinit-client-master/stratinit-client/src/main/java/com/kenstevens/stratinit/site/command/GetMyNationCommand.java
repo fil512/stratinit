@@ -1,13 +1,12 @@
 package com.kenstevens.stratinit.site.command;
 
+import com.kenstevens.stratinit.dto.SINation;
+import com.kenstevens.stratinit.model.Data;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.site.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
 
 @Scope("prototype")
 @Component
@@ -16,7 +15,7 @@ public class GetMyNationCommand extends Command<SINation> {
 	private Data db;
 
 	@Override
-	public Result<SINation> execute() {
+	public SIResponseEntity<SINation> execute() {
 		return stratInit.getMyNation();
 	}
 

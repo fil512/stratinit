@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
 import com.kenstevens.stratinit.server.remote.session.PlayerSessionFactory;
@@ -31,15 +32,15 @@ public abstract class PlayerRequest<T> {
 
 	protected abstract T execute();
 
-	public Result<T> process() {
+	public SIResponseEntity<T> process() {
 		Result<T> retval;
 		try {
 			// logger.info("Processing request: "+this.getClass());
 			if (!serverStatus.isRunning()) {
-				return new Result<T>("The server is not running.", false);
+				return SIResponseEntity.failure("The server is not running.");
 			}
 			if (getGame() == null && gameRequired) {
-				return new Result<T>("Game not set.", false);
+				return SIResponseEntity.failure("Game not set.");
 			}
 			resultValue = execute();
 			retval = getResult();
@@ -53,12 +54,12 @@ public abstract class PlayerRequest<T> {
 			logger.error(message, e);
 			Game game = getGame();
 			String subject = "Stratinit PlayerRequest Exception "
-				+ getNation().getName() + " " + (game == null ? "NO_GAME" : game.getId());
+					+ getNation().getName() + " " + (game == null ? "NO_GAME" : game.getId());
 			smtpService.sendException(subject, StackTraceHelper.getStackTrace(e));
 
 			retval = new Result<T>(message, false);
 		}
-		return retval;
+		return new SIResponseEntity<>(retval);
 	}
 
 	protected Game getGame() {
@@ -72,12 +73,12 @@ public abstract class PlayerRequest<T> {
 	}
 
 	// Required for game joining where no nation exists yet
-	public Result<T> process(int gameId) {
+	public SIResponseEntity<T> process(int gameId) {
 		playerSession.setGame(gameId);
 		return process();
 	}
 
-	public Result<T> processNoGame() {
+	public SIResponseEntity<T> processNoGame() {
 		gameRequired = false;
 		return process();
 	}

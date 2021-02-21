@@ -1,11 +1,5 @@
 package com.kenstevens.stratinit.site.command;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
@@ -13,10 +7,15 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.Attack;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.UpdateProcessor;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Scope("prototype")
 @Component
@@ -37,10 +36,10 @@ public class MoveUnitsCommand extends Command<SIUpdate> {
 	}
 
 	@Override
-	public Result<SIUpdate> execute() {
+	public SIResponseEntity<SIUpdate> execute() {
 		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
 
-		Result<SIUpdate> retval = stratInit.moveUnits(siunits,
+		SIResponseEntity<SIUpdate> retval = stratInit.moveUnits(siunits,
 				targetCoords);
 		if (!retval.isMoveSuccess()) {
 			wavPlayer.playEmpty();
