@@ -1,7 +1,8 @@
-package com.kenstevens.stratinit.server.event;
+package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.model.EventKey;
 import com.kenstevens.stratinit.model.Updatable;
+import com.kenstevens.stratinit.server.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

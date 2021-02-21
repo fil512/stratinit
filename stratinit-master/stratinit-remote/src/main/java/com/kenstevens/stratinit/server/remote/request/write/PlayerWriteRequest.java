@@ -1,13 +1,6 @@
 package com.kenstevens.stratinit.server.remote.request.write;
 
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
@@ -15,6 +8,12 @@ import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.server.remote.helper.DataWriter;
 import com.kenstevens.stratinit.server.remote.helper.SynchronizedDataAccess;
 import com.kenstevens.stratinit.server.remote.request.PlayerRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.Date;
 
 @Scope("prototype")
 @Component
@@ -25,15 +24,19 @@ public abstract class PlayerWriteRequest<T> extends PlayerRequest<T> implements
 	@Autowired
 	protected PlayerDaoService playerDaoService;
 	@Autowired
-	private Spring spring;
-	@Autowired
 	private DataCache dataCache;
 	private Result<T> result;
+	private SynchronizedDataAccess synchronizedDataAccess;
+
+	@PostConstruct
+	public void init() {
+		synchronizedDataAccess = new SynchronizedDataAccess(dataCache, this);
+	}
 
 	@Override
 	public final T execute() {
 		if (isGameRequired()) {
-			spring.autowire(new SynchronizedDataAccess( getGame(), this )).write();
+			synchronizedDataAccess.write(getGame());
 		} else {
 			writeData();
 		}

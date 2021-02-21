@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.event;
+package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.QuiesceService;
 import org.slf4j.Logger;
@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EventSchedulerQuiescer implements QuiesceService {
+public class EventQueueQuiescer implements QuiesceService {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private EventScheduler eventScheduler;
+	private EventQueue eventQueue;
 
 	@Override
 	public void quiesce() {
-		logger.info("Shutting down event scheduler.");
-		eventScheduler.shutdown();
+		logger.info("Shutting down event queue.");
+		eventQueue.shutdown();
 	}
 
 }

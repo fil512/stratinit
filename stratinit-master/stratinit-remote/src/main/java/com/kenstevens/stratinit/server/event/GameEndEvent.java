@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.server.event;
 
+import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.server.event.svc.StratInitUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import com.kenstevens.stratinit.model.Game;
 
 @Scope("prototype")
 @Component

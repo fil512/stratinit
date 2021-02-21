@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.remote.event;
 
-import com.kenstevens.stratinit.server.event.EventQueue;
-import com.kenstevens.stratinit.server.event.EventTimer;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventTimer;
 import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
 import org.jmock.Mockery;
 import org.junit.jupiter.api.AfterEach;

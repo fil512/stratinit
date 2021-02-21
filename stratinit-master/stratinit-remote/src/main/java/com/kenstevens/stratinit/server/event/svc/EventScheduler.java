@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.event;
+package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;

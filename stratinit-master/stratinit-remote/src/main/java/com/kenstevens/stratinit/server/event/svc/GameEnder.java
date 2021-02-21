@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.event;
+package com.kenstevens.stratinit.server.event.svc;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.GameDao;

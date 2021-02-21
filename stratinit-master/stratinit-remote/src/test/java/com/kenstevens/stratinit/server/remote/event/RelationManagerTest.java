@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.remote.event;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.Disabled;

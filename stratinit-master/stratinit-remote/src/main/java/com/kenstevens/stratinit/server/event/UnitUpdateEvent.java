@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.server.event;
 
-import java.util.Date;
-
+import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.server.event.svc.StratInitUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.Unit;
+import java.util.Date;
 
 @Scope("prototype")
 @Component

@@ -12,7 +12,7 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.daoservice.*;
-import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.*;
 import org.slf4j.Logger;

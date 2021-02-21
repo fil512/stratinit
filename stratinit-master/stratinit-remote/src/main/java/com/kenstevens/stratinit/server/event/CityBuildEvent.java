@@ -4,6 +4,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.CityPK;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.StratInitUpdater;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

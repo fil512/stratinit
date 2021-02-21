@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.GameHistoryTeam;
 import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
 import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
-import com.kenstevens.stratinit.server.event.GameArchiver;
+import com.kenstevens.stratinit.server.event.svc.GameArchiver;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

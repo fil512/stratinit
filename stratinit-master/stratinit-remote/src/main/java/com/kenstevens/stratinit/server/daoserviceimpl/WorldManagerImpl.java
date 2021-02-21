@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.daoservice.WorldManager;
-import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplateLibrary;
 import com.kenstevens.stratinit.type.Constants;

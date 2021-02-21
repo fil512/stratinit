@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.event;
+package com.kenstevens.stratinit.server.event.svc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

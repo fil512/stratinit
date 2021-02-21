@@ -13,7 +13,7 @@ import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
 import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.remote.move.UnitCommandFactory;
 import com.kenstevens.stratinit.server.remote.move.UnitsMove;
 import com.kenstevens.stratinit.server.remote.move.UnitsToMove;

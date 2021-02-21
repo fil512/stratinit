@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
 import com.kenstevens.stratinit.server.remote.mail.MailService;
 import com.kenstevens.stratinit.server.remote.mail.MailTemplate;

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.server.event.EventQueue;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
