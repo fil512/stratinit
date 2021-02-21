@@ -4,41 +4,27 @@ import com.kenstevens.stratinit.event.CityListReplacementArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.GetCitiesCommand;
-import com.kenstevens.stratinit.util.Spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 @Scope("prototype")
 @Component
-public class CityListAction extends Action {
-	@Autowired
-	private Spring spring;
+public class CityListAction extends Action<GetCitiesCommand> {
 	@Autowired
 	private Data db;
 	@Autowired
 	private StatusReporter statusReporter;
-	private GetCitiesCommand getCitiesCommand;
 
-	@SuppressWarnings("unused")
-	@PostConstruct
-	private void initialize() {
-		getCitiesCommand = spring.getBean(GetCitiesCommand.class);
-	}
-
-	@Override
-	public Command<? extends Object> getCommand() {
-		return getCitiesCommand;
+	protected GetCitiesCommand buildCommand() {
+		return new GetCitiesCommand();
 	}
 
 	@Override
 	public void postRequest() {
 		super.postRequest();
-		statusReporter.reportResult(db.getCityList().size()+" cities loaded.");
+		statusReporter.reportResult(db.getCityList().size() + " cities loaded.");
 		arrivedDataEventAccumulator.addEvent(new CityListReplacementArrivedEvent());
 	}
 

@@ -12,8 +12,8 @@ import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.shell.WidgetContainer;
-import com.kenstevens.stratinit.site.action.CityMover;
-import com.kenstevens.stratinit.site.action.UnitMover;
+import com.kenstevens.stratinit.site.mover.CityMover;
+import com.kenstevens.stratinit.site.mover.UnitMover;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.tabs.TabManager;
@@ -65,8 +65,6 @@ public class MapCanvasControl implements MapController {
 	private SectorDrawerService sectorDrawer;
 	@Autowired
 	private UnitDrawerService unitDrawer;
-	@Autowired
-	SelectedNation selectedNation;
 	@Autowired
 	private StratinitEventBus eventBus;
 

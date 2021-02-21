@@ -2,38 +2,23 @@ package com.kenstevens.stratinit.site.action;
 
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.BuildUnitCommand;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.util.Spring;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 @Scope("prototype")
 @Component
-public class BuildUnitAction extends Action {
+public class BuildUnitAction extends Action<BuildUnitCommand> {
 	private final City city;
 	private final UnitType choice;
-	private BuildUnitCommand buildUnitCommand;
-	@Autowired
-	private Spring spring;
-	
+
 	public BuildUnitAction(City city, UnitType choice) {
 		this.city = city;
 		this.choice = choice;
 	}
 
-	@SuppressWarnings("unused")
-	@PostConstruct
-	private void initialize() {
-		buildUnitCommand = spring.autowire(new BuildUnitCommand(city, choice));
-	}
-
-	@Override
-	public Command<? extends Object> getCommand() {
-		return buildUnitCommand;
+	protected BuildUnitCommand buildCommand() {
+		return new BuildUnitCommand(city, choice);
 	}
 }

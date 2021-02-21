@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.site.action;
+package com.kenstevens.stratinit.site.mover;
 
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.SelectedUnits;
@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.shell.StatusReporter;
+import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.util.UnitHelper;
 import org.springframework.beans.factory.annotation.Autowired;

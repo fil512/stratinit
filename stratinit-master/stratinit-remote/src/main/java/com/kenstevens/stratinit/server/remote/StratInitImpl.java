@@ -201,7 +201,6 @@ public class StratInitImpl implements StratInit {
 				.process();
 	}
 
-	// FIXME factory
 	@Override
 	public Result<Integer> sendMessage(SIMessage simessage) {
 		return requestFactory.getSendMessageRequest(simessage).process();

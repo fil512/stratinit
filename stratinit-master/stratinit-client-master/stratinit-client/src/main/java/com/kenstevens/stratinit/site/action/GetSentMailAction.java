@@ -3,40 +3,26 @@ package com.kenstevens.stratinit.site.action;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.GetSentMailCommand;
-import com.kenstevens.stratinit.util.Spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 @Scope("prototype")
 @Component
-public class GetSentMailAction extends Action {
-	@Autowired
-	private Spring spring;
-	private GetSentMailCommand getSentMailCommand;
+public class GetSentMailAction extends Action<GetSentMailCommand> {
 	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
 	private Data db;
 
-	@SuppressWarnings("unused")
-	@PostConstruct
-	private void initialize() {
-		getSentMailCommand = spring.getBean(GetSentMailCommand.class);
-	}
-	
-	@Override
-	public Command<? extends Object> getCommand() {
-		return getSentMailCommand;
+	protected GetSentMailCommand buildCommand() {
+		return new GetSentMailCommand();
 	}
 
 	@Override
 	public void postRequest() {
-		statusReporter.reportResult(db.getInbox().size()+" messages loaded.");
+		statusReporter.reportResult(db.getInbox().size() + " messages loaded.");
 	}
 
 	@Override

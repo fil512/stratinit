@@ -10,21 +10,15 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.UnitList;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.DescriptionCommand;
-import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 @Scope("prototype")
 @Component
-public class StartupAction extends Action {
-	@Autowired
-	private Spring spring;
+public class StartupAction extends Action<DescriptionCommand> {
 	@Autowired
 	private WavPlayer wavPlayer;
 	@Autowired
@@ -34,17 +28,8 @@ public class StartupAction extends Action {
 	@Autowired
 	private SelectEvent selectEvent;
 
-	private DescriptionCommand descriptionCommand;
-
-	@SuppressWarnings("unused")
-	@PostConstruct
-	private void initialize() {
-		descriptionCommand = spring.autowire(new DescriptionCommand( "Start up" ));
-	}
-
-	@Override
-	public Command<? extends Object> getCommand() {
-		return descriptionCommand;
+	protected DescriptionCommand buildCommand() {
+		return new DescriptionCommand("Start up");
 	}
 
 	@Override

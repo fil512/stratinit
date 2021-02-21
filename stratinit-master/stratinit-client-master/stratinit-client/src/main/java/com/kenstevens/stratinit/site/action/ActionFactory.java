@@ -28,9 +28,6 @@ public class ActionFactory {
 		actionQueue.put(battleLogAction);
 	}
 
-	public void mapAll() {
-	}
-
 	public void cityList() {
 		CityListAction cityListAction = spring.autowire(new CityListAction());
 		actionQueue.put(cityListAction);

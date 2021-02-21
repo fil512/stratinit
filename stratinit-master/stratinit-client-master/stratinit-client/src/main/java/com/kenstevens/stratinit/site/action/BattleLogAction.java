@@ -4,35 +4,21 @@ import com.kenstevens.stratinit.model.BattleLogList;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.GetBattleLogCommand;
-import com.kenstevens.stratinit.util.Spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 @Scope("prototype")
 @Component
-public class BattleLogAction extends Action {
-	@Autowired
-	private Spring spring;
-	private GetBattleLogCommand getBattleLogCommand;
+public class BattleLogAction extends Action<GetBattleLogCommand> {
 	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
 	private Data db;
 
-	@SuppressWarnings("unused")
-	@PostConstruct
-	private void initialize() {
-		getBattleLogCommand = spring.getBean(GetBattleLogCommand.class);
-	}
-
-	@Override
-	public Command<? extends Object> getCommand() {
-		return getBattleLogCommand;
+	protected GetBattleLogCommand buildCommand() {
+		return new GetBattleLogCommand();
 	}
 
 	@Override

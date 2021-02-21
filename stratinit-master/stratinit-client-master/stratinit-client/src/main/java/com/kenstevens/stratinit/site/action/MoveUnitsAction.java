@@ -5,11 +5,9 @@ import com.kenstevens.stratinit.control.selection.Selection.Source;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.ActionQueue;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.UnitAwareAction;
 import com.kenstevens.stratinit.site.command.MoveUnitsCommand;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.util.Spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -19,15 +17,11 @@ import java.util.List;
 
 @Scope("prototype")
 @Component
-public class MoveUnitsAction extends Action implements UnitAwareAction {
-	@Autowired
-	private Spring spring;
+public class MoveUnitsAction extends Action<MoveUnitsCommand> implements UnitAwareAction {
 	@Autowired
 	private SelectEvent selectEvent;
 	@Autowired
 	private ActionQueue actionQueue;
-
-	private MoveUnitsCommand moveUnitsCommand;
 
 	private final List<UnitView> units;
 	private final SectorCoords target;
@@ -41,18 +35,15 @@ public class MoveUnitsAction extends Action implements UnitAwareAction {
 		}
 	}
 
-	@SuppressWarnings("unused")
+	protected MoveUnitsCommand buildCommand() {
+		return new MoveUnitsCommand(units, target);
+	}
+
 	@PostConstruct
-	private void initialize() {
-		moveUnitsCommand = spring.autowire(new MoveUnitsCommand(units, target));
+	public void initUnitView() {
 		for (UnitView unit : units) {
 			unit.setInActionQueue(true);
 		}
-	}
-
-	@Override
-	public Command<? extends Object> getCommand() {
-		return moveUnitsCommand;
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.shell.WidgetContainer;
-import com.kenstevens.stratinit.site.action.UnitMover;
+import com.kenstevens.stratinit.site.mover.UnitMover;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;

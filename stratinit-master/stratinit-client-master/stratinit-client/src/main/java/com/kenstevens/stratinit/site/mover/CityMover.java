@@ -1,6 +1,7 @@
-package com.kenstevens.stratinit.site.action;
+package com.kenstevens.stratinit.site.mover;
 
 import com.kenstevens.stratinit.model.City;
+import com.kenstevens.stratinit.site.action.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -2,25 +2,17 @@ package com.kenstevens.stratinit.site.action;
 
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.site.Action;
-import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.command.SetRelationCommand;
 import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.util.Spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 @Scope("prototype")
 @Component
-public class SetRelationAction extends Action {
-	@Autowired
-	private Spring spring;
+public class SetRelationAction extends Action<SetRelationCommand> {
 	@Autowired
 	private ActionFactory actionFactory;
-
-	private SetRelationCommand setRelationCommand;
 
 	private final Nation nation;
 	private final RelationType relationType;
@@ -30,15 +22,8 @@ public class SetRelationAction extends Action {
 		this.relationType = relationType;
 	}
 
-	@SuppressWarnings("unused")
-	@PostConstruct
-	private void initialize() {
-		setRelationCommand = spring.autowire(new SetRelationCommand(nation, relationType));
-	}
-
-	@Override
-	public Command<? extends Object> getCommand() {
-		return setRelationCommand;
+	protected SetRelationCommand buildCommand() {
+		return new SetRelationCommand(nation, relationType);
 	}
 
 	@Override
