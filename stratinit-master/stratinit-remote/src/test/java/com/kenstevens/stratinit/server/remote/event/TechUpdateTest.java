@@ -1,11 +1,13 @@
 package com.kenstevens.stratinit.server.remote.event;
 
 import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.server.event.EventFactory;
 import com.kenstevens.stratinit.server.event.TechUpdateEvent;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,11 +17,13 @@ public class TechUpdateTest extends TwoPlayerBase {
     private final double FRACTION = (double) Constants.TECH_UPDATE_INTERVAL_SECONDS / secondsInDay;
     private final double MY_TECH_GAIN = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES[1] * FRACTION;
     private final double NATION2_TECH = 8.0;
+    @Autowired
+    private EventFactory eventFactory;
     private TechUpdateEvent techUpdateEvent;
 
     @BeforeEach
     public void techEvent() {
-        techUpdateEvent = spring.autowire(new TechUpdateEvent(testGame));
+        techUpdateEvent = eventFactory.getTechUpdateEvent(testGame);
     }
 
     @Test

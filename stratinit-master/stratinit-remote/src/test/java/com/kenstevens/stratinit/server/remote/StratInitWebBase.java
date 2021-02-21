@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.server.remote;
 
 import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
@@ -10,11 +9,10 @@ import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.server.daoservice.MoveService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
@@ -29,20 +27,10 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	@Autowired
 	protected UnitDaoService unitDaoService;
 	@Autowired
-	protected Spring spring;
-	@Autowired
-	private SMTPService smtpService;
-	@Autowired
 	private MoveService moveService;
-
+	@Autowired
+	@Qualifier("stratInit")
 	protected StratInit stratInit;
-
-	@BeforeEach
-	public void setup() {
-		stratInit = spring.getBean("stratInit", StratInit.class);
-		smtpService.disable();
-	}
-
 
 	protected Result<Nation> joinGamePlayerMe() {
 		Result<Nation> retval = joinGame(playerMe);

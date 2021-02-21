@@ -1,23 +1,8 @@
 package com.kenstevens.stratinit.server.remote.move;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.main.Spring;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.MoveCost;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.move.WorldView;
@@ -28,11 +13,17 @@ import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @Scope("prototype")
 @Component
 public class UnitsMove {
-
 	@Autowired
 	private UnitCommandFactory unitCommandFactory;
 	@Autowired
@@ -42,7 +33,7 @@ public class UnitsMove {
 	@Autowired
 	private SectorDao sectorDao;
 	@Autowired
-	private Spring spring;
+	private UnitMoveFactory unitMoveFactory;
 
 	private final WorldView worldView;
 	private boolean unknown;
@@ -67,8 +58,7 @@ public class UnitsMove {
 		this.unknown = checkUnknown();
 		this.moveSeen = new MoveSeen(unitsToMove.getNation(), sectorDaoService,
 				unitDaoService);
-		this.passengers = spring
-				.autowire(new Passengers(unitsToMove, worldView));
+		this.passengers = unitMoveFactory.getPassengers(unitsToMove, worldView);
 	}
 
 	private boolean checkUnknown() {

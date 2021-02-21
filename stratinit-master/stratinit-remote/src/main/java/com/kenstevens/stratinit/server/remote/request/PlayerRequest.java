@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.server.remote.request;
 
-import com.kenstevens.stratinit.main.Spring;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
+import com.kenstevens.stratinit.server.remote.session.PlayerSessionFactory;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.util.StackTraceHelper;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public abstract class PlayerRequest<T> {
 	@Autowired
 	private SMTPService smtpService;
 	@Autowired
-	private Spring spring;
+	private PlayerSessionFactory playerSessionFactory;
 
 	private T resultValue;
 	private boolean gameRequired = true;
@@ -89,7 +89,7 @@ public abstract class PlayerRequest<T> {
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void init() {
-		playerSession = spring.autowire(new PlayerSession());
+		playerSession = playerSessionFactory.getPlayerSession();
 	}
 
 	protected Player getPlayer() {

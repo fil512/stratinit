@@ -65,4 +65,9 @@ public class UnitMoveFactory {
     public UnitsCede getUnitsCede(Nation nation, List<Unit> units, int nationId, WorldView worldView) {
         return new UnitsCede(nation, units, nationId, worldView);
     }
+
+    @Lookup
+    public Passengers getPassengers(UnitsToMove unitsToMove, WorldView worldView) {
+        return new Passengers(unitsToMove, worldView);
+    }
 }
