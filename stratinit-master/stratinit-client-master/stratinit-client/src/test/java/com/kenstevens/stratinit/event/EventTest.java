@@ -1,22 +1,22 @@
 package com.kenstevens.stratinit.event;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.StratInitClientTest;
+import com.kenstevens.stratinit.BaseStratInitClientTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class EventTest extends StratInitClientTest {
-	public static final String TEST_STRING = "test";
-	FooEvent fooEvent = new FooEvent(TEST_STRING);
-	final int[] callCount = {0};
-	final String[] gotString = {""};
+public class EventTest extends BaseStratInitClientTest {
+    public static final String TEST_STRING = "test";
+    FooEvent fooEvent = new FooEvent(TEST_STRING);
+    final int[] callCount = {0};
+    final String[] gotString = {""};
 
-	@Autowired
-	StratinitEventBus eventBus;
+    @Autowired
+    StratinitEventBus eventBus;
 
-	static class FooEvent implements StratInitEvent {
+    static class FooEvent implements StratInitEvent {
 
 		private final String name;
 

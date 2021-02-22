@@ -20,13 +20,16 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
-@Component("stratInit")
+@RestController
+@RequestMapping("/stratinit")
+//@Component("stratInit")
 public class StratInitImpl implements StratInit {
 	@Autowired
 	private RequestFactory requestFactory;

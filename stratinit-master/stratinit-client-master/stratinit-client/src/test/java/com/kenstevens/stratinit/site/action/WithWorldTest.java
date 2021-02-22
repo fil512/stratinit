@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.site.action;
 
-import com.kenstevens.stratinit.StratInitClientTest;
+import com.kenstevens.stratinit.BaseStratInitClientTest;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.model.Data;
@@ -17,17 +17,17 @@ import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Disabled
-public class WithWorldTest extends StratInitClientTest {
-	protected static final SectorCoords CITY = new SectorCoords(0, 1);
+public class WithWorldTest extends BaseStratInitClientTest {
+    protected static final SectorCoords CITY = new SectorCoords(0, 1);
 
-	@Autowired
-	Data db;
-	protected NationView nation;
+    @Autowired
+    Data db;
+    protected NationView nation;
 
-	@BeforeEach
-	public void init() {
-		SIGame sigame = new SIGame();
-		GameView game = new GameView(sigame);
+    @BeforeEach
+    public void init() {
+        SIGame sigame = new SIGame();
+        GameView game = new GameView(sigame);
 		game.setGamesize(10);
 		SINation sination = new SINation();
 		nation = new NationView(game, sination);

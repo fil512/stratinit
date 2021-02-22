@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "value": [
+    {
+      "id": 100,
+      "name": "Aachen",
+      "players": 4,
+      "noAlliancesVote": 0,
+      "noAlliances": false,
+      "myNoAlliances": false,
+      "islands": 6,
+      "size": 100,
+      "started": 1613860074105,
+      "mapped": 1613860091539,
+      "created": 1613860039391,
+      "ends": 1614724074105,
+      "blitz": false
+    }
+  ],
+  "messages": [],
+  "moveSuccess": true,
+  "commandPoints": -1,
+  "battleLogs": []
+}

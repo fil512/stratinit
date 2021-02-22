@@ -17,16 +17,16 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfig.class)
-public abstract class StratInitClientTest {
-	@Autowired
-	protected Mockery context;
-	@Autowired
-	protected WidgetContainer widgetContainer;
+public abstract class BaseStratInitClientTest {
+    @Autowired
+    protected Mockery context;
+    @Autowired
+    protected WidgetContainer widgetContainer;
 
-	private final ProgressBarControl progressBarControlMock = new ProgressBarControl() {
-		@Override
-		public void incrementSelection() {
-		}
+    private final ProgressBarControl progressBarControlMock = new ProgressBarControl() {
+        @Override
+        public void incrementSelection() {
+        }
 
 		@Override
 		public void reset() {

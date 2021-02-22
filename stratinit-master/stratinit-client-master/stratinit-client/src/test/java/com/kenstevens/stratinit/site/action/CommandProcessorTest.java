@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.site.action;
 
-import com.kenstevens.stratinit.StratInitClientTest;
+import com.kenstevens.stratinit.BaseStratInitClientTest;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.model.Data;
@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CommandProcessorTest extends StratInitClientTest {
+public class CommandProcessorTest extends BaseStratInitClientTest {
 	@Autowired
 	private CommandProcessor commandProcessor;
 	@Autowired

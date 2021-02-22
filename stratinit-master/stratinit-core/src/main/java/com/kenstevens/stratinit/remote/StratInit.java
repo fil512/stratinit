@@ -6,24 +6,34 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.Properties;
 
 public interface StratInit {
+	String VERSION = "/version";
+	String SERVER_CONFIG = "/serverConfig";
+	String JOINED_GAMES = "/joinedGames";
+	String UNJOINED_GAMES = "/unjoinedGames";
+
 	// TODO Return incremental battle logs and nation with all commands
+	@GetMapping(value = VERSION)
 	Result<String> getVersion();
 
 	Result<List<SIUnitBase>> getUnitBases();
 
+	@GetMapping(value = SERVER_CONFIG)
 	Result<Properties> getServerConfig();
 
 	Result<None> setGame(int gameId, boolean noAlliances);
 
 	Result<Nation> joinGame(int gameId, boolean noAlliances);
 
+	@GetMapping(value = JOINED_GAMES)
 	Result<List<SIGame>> getJoinedGames();
 
+	@GetMapping(value = UNJOINED_GAMES)
 	Result<List<SIGame>> getUnjoinedGames();
 
 	Result<List<SISector>> getSectors();
