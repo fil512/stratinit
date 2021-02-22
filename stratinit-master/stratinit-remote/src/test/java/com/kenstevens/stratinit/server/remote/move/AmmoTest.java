@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AmmoTest extends BaseStratInitWebTest {
+public class AmmoTest extends StratInitWebBase {
     private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);
     private static final SectorCoords CLOSE_PORT = new SectorCoords(6, 7);
     private static final SectorCoords NEAR_PORT = new SectorCoords(6, 8);
@@ -25,16 +25,16 @@ public class AmmoTest extends BaseStratInitWebTest {
 
     @BeforeEach
     public void doJoinGame() {
-		joinGamePlayerMe();
-	}
+        joinGamePlayerMe();
+    }
 
 
-	@Test
-	public void shipMoveIntoSupplyToGetAmmo() {
-		Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
-				UnitType.DESTROYER);
-		dest.setMobility(UnitBase.getUnitBase(UnitType.DESTROYER).getMaxMobility());
-		dest.decreaseAmmo();
+    @Test
+    public void shipMoveIntoSupplyToGetAmmo() {
+        Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
+                UnitType.DESTROYER);
+        dest.setMobility(UnitBase.getUnitBase(UnitType.DESTROYER).getMaxMobility());
+        dest.decreaseAmmo();
 		assertEquals(dest.getUnitBase().getAmmo() - 1, dest.getAmmo());
 		sectorDaoServiceImpl.captureCity(nationMe, PORT);
 		setBuild(PORT, UnitType.TRANSPORT);

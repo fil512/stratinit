@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import org.junit.jupiter.api.Test;
 
@@ -47,12 +47,12 @@ public class CedeCityTest extends TwoPlayerBase {
 	}
 
 	private SICity findSeenCity(SICity sicity) {
-		SIResponseEntity<List<SICity>> seencities = stratInit.getSeenCities();
-		for (SICity seenCity : seencities.getValue()) {
-			if (seenCity.coords.equals(sicity.coords)) {
-				return seenCity;
-			}
-		}
-		return null;
-	}
+        Result<List<SICity>> seencities = stratInit.getSeenCities();
+        for (SICity seenCity : seencities.getValue()) {
+            if (seenCity.coords.equals(sicity.coords)) {
+                return seenCity;
+            }
+        }
+        return null;
+    }
 }

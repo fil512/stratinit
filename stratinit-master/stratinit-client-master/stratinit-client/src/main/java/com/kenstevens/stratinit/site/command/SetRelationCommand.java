@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.NationView;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.RelationProcessor;
 import com.kenstevens.stratinit.type.RelationType;
@@ -30,7 +30,7 @@ public class SetRelationCommand extends Command<SIRelation> {
 	}
 
 	@Override
-	public SIResponseEntity<SIRelation> execute() {
+	public Result<SIRelation> execute() {
 		return stratInit.setRelation(nation.getNationId(), relationType);
 	}
 

@@ -3,7 +3,6 @@ package com.kenstevens.stratinit.server.remote;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
@@ -20,7 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public abstract class BaseStratInitWebTest extends StratInitDaoBase {
+public abstract class StratInitWebBase extends StratInitDaoBase {
 	@Autowired
 	protected GameDaoService gameDaoService;
 	@Autowired
@@ -33,8 +32,8 @@ public abstract class BaseStratInitWebTest extends StratInitDaoBase {
 	@Qualifier("stratInit")
 	protected StratInit stratInit;
 
-	protected SIResponseEntity<Nation> joinGamePlayerMe() {
-		SIResponseEntity<Nation> retval = joinGame(playerMe);
+	protected Result<Nation> joinGamePlayerMe() {
+		Result<Nation> retval = joinGame(playerMe);
 		nationMeId = retval.getValue().getNationId();
 		nationMe = gameDao.findNation(testGameId, playerMe);
 		setAuthentication(PLAYER_ME_NAME);
@@ -51,8 +50,8 @@ public abstract class BaseStratInitWebTest extends StratInitDaoBase {
 		stratInit.setGame(testGameId, false);
 	}
 
-	protected SIResponseEntity<Nation> joinGame(Player player) {
-		SIResponseEntity<Nation> result = stratInit.joinGame(player, testGameId, false);
+	protected Result<Nation> joinGame(Player player) {
+		Result<Nation> result = stratInit.joinGame(player, testGameId, false);
 		assertResult(result);
 		return result;
 	}

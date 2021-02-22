@@ -4,7 +4,6 @@ import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.remote.mail.SMTPService;
 import com.kenstevens.stratinit.server.remote.session.PlayerSession;
 import com.kenstevens.stratinit.server.remote.session.PlayerSessionFactory;
@@ -32,15 +31,15 @@ public abstract class PlayerRequest<T> {
 
 	protected abstract T execute();
 
-	public SIResponseEntity<T> process() {
+	public Result<T> process() {
 		Result<T> retval;
 		try {
 			// logger.info("Processing request: "+this.getClass());
 			if (!serverStatus.isRunning()) {
-				return SIResponseEntity.failure("The server is not running.");
+				return new Result<T>("The server is not running.", false);
 			}
 			if (getGame() == null && gameRequired) {
-				return SIResponseEntity.failure("Game not set.");
+				return new Result<T>("Game not set.", false);
 			}
 			resultValue = execute();
 			retval = getResult();
@@ -59,7 +58,7 @@ public abstract class PlayerRequest<T> {
 
 			retval = new Result<T>(message, false);
 		}
-		return new SIResponseEntity<>(retval);
+		return retval;
 	}
 
 	protected Game getGame() {
@@ -73,12 +72,12 @@ public abstract class PlayerRequest<T> {
 	}
 
 	// Required for game joining where no nation exists yet
-	public SIResponseEntity<T> process(int gameId) {
+	public Result<T> process(int gameId) {
 		playerSession.setGame(gameId);
 		return process();
 	}
 
-	public SIResponseEntity<T> processNoGame() {
+	public Result<T> processNoGame() {
 		gameRequired = false;
 		return process();
 	}

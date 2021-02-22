@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SIMessage;
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.MailProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class GetSentMailCommand extends Command<List<SIMessage>> {
 	private Data db;
 
 	@Override
-	public SIResponseEntity<List<SIMessage>> execute() {
+	public Result<List<SIMessage>> execute() {
 		return stratInit.getSentMail();
 	}
 

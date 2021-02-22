@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.type.Constants;
@@ -19,7 +19,7 @@ public class GetVersionCommand extends Command<String> {
 	private StatusReporter statusReporter;
 
 	@Override
-	public SIResponseEntity<String> execute() {
+	public Result<String> execute() {
 		return stratInit.getVersion();
 	}
 

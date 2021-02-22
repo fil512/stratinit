@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.server.remote.commands;
 
 import com.kenstevens.stratinit.dto.SICity;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BuildUnitTest extends BaseStratInitWebTest {
+public class BuildUnitTest extends StratInitWebBase {
 	private SICity sicity;
 
 	@BeforeEach
@@ -27,14 +27,14 @@ public class BuildUnitTest extends BaseStratInitWebTest {
 	@Test
 	public void airport() {
 		sicity.build = UnitType.FIGHTER;
-		SIResponseEntity<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+		Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
 		assertFalseResult(result);
 	}
 
 	@Test
 	public void tech() {
 		sicity.build = UnitType.ZEPPELIN;
-		SIResponseEntity<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+		Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
 		assertTrue(result.isSuccess());
 		assertEquals(UnitType.ZEPPELIN, result.getValue().build);
 		assertEquals(CityType.TECH, result.getValue().type);
@@ -43,21 +43,21 @@ public class BuildUnitTest extends BaseStratInitWebTest {
 	@Test
 	public void noWater() {
 		sicity.build = UnitType.PATROL;
-		SIResponseEntity<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+		Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
 		assertFalseResult(result);
 	}
 
 	@Test
 	public void insufficientTech() {
 		sicity.build = UnitType.TANK;
-		SIResponseEntity<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+		Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
 		assertFalseResult(result);
 	}
 
 	@Test
 	public void fort() {
 		sicity.build = UnitType.ZEPPELIN;
-		SIResponseEntity<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+		Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
 		assertTrue(result.isSuccess());
 		assertEquals(UnitType.ZEPPELIN, result.getValue().build);
 		assertEquals(CityType.TECH, result.getValue().type);

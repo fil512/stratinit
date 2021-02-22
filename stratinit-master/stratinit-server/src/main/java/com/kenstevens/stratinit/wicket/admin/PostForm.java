@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.admin;
 
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,8 +30,8 @@ public class PostForm extends Form<ValueMap> {
 
 		String subject = (String) values.get("subject");
 		String body = (String) values.get("body");
-		SIResponseEntity<Integer> result = stratInit.postAnnouncement(
+		Result<Integer> result = stratInit.postAnnouncement(
 				subject, body);
-		new InfoResult<Integer>(this).info(result.getBody());
+		new InfoResult<Integer>(this).info(result);
 	}
 }

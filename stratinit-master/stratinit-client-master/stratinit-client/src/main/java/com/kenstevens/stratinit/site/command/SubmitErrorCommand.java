@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.util.StackTraceHelper;
@@ -30,16 +30,18 @@ public class SubmitErrorCommand extends Command<Integer> {
 	}
 
 	@Override
-	public SIResponseEntity<Integer> execute() {
+	public Result<Integer> execute() {
+		Result<Integer> retval = null;
 		try {
 			String subject = "Stratinit Player Exception "
 					+ account.getUsername() + " " + data.getSelectedGameId();
-			return stratInit.submitError(subject, StackTraceHelper.getStackTrace(exception));
+			retval = stratInit.submitError(subject, StackTraceHelper.getStackTrace(exception));
 		} catch (Exception e) {
 			logger.error(exception.getMessage(), exception);
 			logger.error(e.getMessage(), e);
-			return SIResponseEntity.failure(exception.getMessage());
+			retval = new Result<Integer>(exception.getMessage(), false, -1);
 		}
+		return retval;
 	}
 
 	@Override

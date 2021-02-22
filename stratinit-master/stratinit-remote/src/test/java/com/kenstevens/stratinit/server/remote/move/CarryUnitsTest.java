@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class CarryUnitsTest extends BaseStratInitWebTest {
+public class CarryUnitsTest extends StratInitWebBase {
     @Autowired
     protected SectorDaoService sectorDaoServiceImpl;
     private static final SectorCoords PORT = new SectorCoords(2, 2);

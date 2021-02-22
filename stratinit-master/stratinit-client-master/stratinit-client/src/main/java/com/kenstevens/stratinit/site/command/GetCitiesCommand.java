@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SICity;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.CityListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class GetCitiesCommand extends Command<List<SICity>> {
 	private CityListProcessor cityListProcessor;
 
 	@Override
-	public SIResponseEntity<List<SICity>> execute() {
+	public Result<List<SICity>> execute() {
 		return stratInit.getCities();
 	}
 

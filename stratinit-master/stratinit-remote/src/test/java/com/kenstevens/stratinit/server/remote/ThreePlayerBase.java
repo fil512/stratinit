@@ -4,7 +4,7 @@ package com.kenstevens.stratinit.server.remote;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -22,7 +22,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     @BeforeEach
     public void joinThreePlayers() {
         playerThree = createPlayer(PLAYER_THREE_NAME);
-		SIResponseEntity<Nation> retval = joinGame(playerThree);
+		Result<Nation> retval = joinGame(playerThree);
         nationThreeId = retval.getValue().getNationId();
         nationThird = gameDao.findNation(testGameId, playerThree);
         setAuthentication(PLAYER_ME_NAME);

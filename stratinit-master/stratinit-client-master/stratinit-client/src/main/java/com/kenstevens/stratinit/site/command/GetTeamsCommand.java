@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.site.command;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.event.TeamListArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +18,7 @@ public class GetTeamsCommand extends Command<List<SITeam>> {
 	private Data db;
 
 	@Override
-	public SIResponseEntity<List<SITeam>> execute() {
+	public Result<List<SITeam>> execute() {
 		return stratInit.getTeams();
 	}
 

@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameDaoServiceTest extends BaseStratInitWebTest {
+public class GameDaoServiceTest extends StratInitWebBase {
     @Autowired
     private GameDaoService gameDaoService;
     @Autowired
@@ -27,16 +27,16 @@ public class GameDaoServiceTest extends BaseStratInitWebTest {
     @Test
     public void testNoDup() {
         Player player = createPlayer();
-		joinGame(player);
-		Result<Nation> result = gameDaoService.joinGame(player, testGameId, false);
-		assertFalseResult(result);
-	}
+        joinGame(player);
+        Result<Nation> result = gameDaoService.joinGame(player, testGameId, false);
+        assertFalseResult(result);
+    }
 
-	@Test
-	public void audit() {
-		Player player = createPlayer();
-		joinGame(player);
-		List<UnitBuildAudit> buildAuditList = unitDao.getBuildAudits(testGameId, player.getUsername());
+    @Test
+    public void audit() {
+        Player player = createPlayer();
+        joinGame(player);
+        List<UnitBuildAudit> buildAuditList = unitDao.getBuildAudits(testGameId, player.getUsername());
 		assertEquals(5, buildAuditList.size());
 		UnitBuildAudit audit = buildAuditList.get(0);
 		assertEquals(UnitType.INFANTRY, audit.getType());

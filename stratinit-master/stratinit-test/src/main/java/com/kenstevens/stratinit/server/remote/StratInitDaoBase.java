@@ -7,7 +7,6 @@ import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.type.*;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
@@ -205,14 +204,14 @@ public abstract class StratInitDaoBase {
 		return retval;
 	}
 
-	protected Player createPlayer() {
-		String name = PLAYER_NAME + playerIndex.incrementAndGet();
-		Player player = new Player(name);
-		logger.info("Creating player with name {}", name);
-		player.setEmail("foo@foo.com");
-		playerDao.save(player);
-		return player;
-	}
+    protected Player createPlayer() {
+        String name = PLAYER_NAME + playerIndex.incrementAndGet();
+        Player player = new Player(name);
+        logger.info("Creating player with name {}", name);
+        player.setEmail("foo@foo.com");
+        playerDao.save(player);
+        return player;
+    }
 
     protected List<SIUnit> makeUnitList(Unit... units) {
         Nation nation = units[0].getNation();
@@ -224,19 +223,11 @@ public abstract class StratInitDaoBase {
         return makeUnitList(nation, units.toArray(new Unit[0]));
     }
 
-    protected void assertResult(SIResponseEntity<?> result) {
+    protected void assertResult(Result<? extends Object> result) {
         assertTrue(result.isSuccess(), result.toString());
     }
 
-    protected void assertResult(Result<?> result) {
-        assertTrue(result.isSuccess(), result.toString());
-    }
-
-    protected void assertFalseResult(Result<?> result) {
-        assertFalse(result.isSuccess(), result.toString());
-    }
-
-    protected void assertFalseResult(SIResponseEntity<?> result) {
+    protected void assertFalseResult(Result<? extends Object> result) {
         assertFalse(result.isSuccess(), result.toString());
     }
 
@@ -248,7 +239,7 @@ public abstract class StratInitDaoBase {
     protected void assertTimeNear(long time1, long time2) {
         assertTrue(Math.abs(time2 - time1) < TIME_TOLERANCE,
                 new Date(time1) + " is not within " + TIME_TOLERANCE
-						+ " ms of " + new Date(time2) + ".  The difference is "
-						+ (time2 - time1) + " ms.");
-	}
+                        + " ms of " + new Date(time2) + ".  The difference is "
+                        + (time2 - time1) + " ms.");
+    }
 }

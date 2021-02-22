@@ -4,8 +4,8 @@ import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.world.WorldHelper;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GetGamesTest extends BaseStratInitWebTest {
+public class GetGamesTest extends StratInitWebBase {
 
 	@Test
 	public void validateWorld() {
@@ -30,7 +30,7 @@ public class GetGamesTest extends BaseStratInitWebTest {
 
 	@Test
 	public void getUnjoinedGames() {
-		SIResponseEntity<List<SIGame>> result = stratInit.getUnjoinedGames();
+		Result<List<SIGame>> result = stratInit.getUnjoinedGames();
 		assertResult(result);
 		List<SIGame> games = result.getValue();
 		assertEquals(testGame.getId(), Integer.valueOf(testGameId));
@@ -48,7 +48,7 @@ public class GetGamesTest extends BaseStratInitWebTest {
 	public void joinGameGetPlayerGames() {
 		List<SIGame> games = stratInit.getJoinedGames().getValue();
 		assertTrue(games.isEmpty());
-		SIResponseEntity<Nation> result = joinGamePlayerMe();
+		Result<Nation> result = joinGamePlayerMe();
 		assertTrue(result.isSuccess());
 		assertEquals(nationMe, result.getValue());
 		games = stratInit.getJoinedGames().getValue();

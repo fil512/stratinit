@@ -6,7 +6,6 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.server.remote.WithUnitsBase;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -59,7 +58,7 @@ public class MoveUnitsTest extends WithUnitsBase {
 	public void canMove() {
         List<SIUnit> units = makeUnitList(testInfantry);
         SectorCoords target = new SectorCoords(0, 2);
-        SIResponseEntity<SIUpdate> result = stratInit.moveUnits(units, target);
+        Result<SIUpdate> result = stratInit.moveUnits(units, target);
         assertResult(result);
         assertCoords(result, testInfantryId, target);
         List<SISector> sisectors = result.getValue().sectors;
@@ -98,7 +97,7 @@ public class MoveUnitsTest extends WithUnitsBase {
 	@Test
 	public void landEmptyTransport() {
         List<SIUnit> units = makeUnitList(testInfantry);
-        SIResponseEntity<SIUpdate> result = stratInit.moveUnits(units, SEA1);
+        Result<SIUpdate> result = stratInit.moveUnits(units, SEA1);
         assertResult(result);
         assertCoords(result, testInfantryId, SEA1);
     }
@@ -149,16 +148,16 @@ public class MoveUnitsTest extends WithUnitsBase {
 			UNITS.add(unit);
 		}
 		Result<MoveCost> result = moveUnits(makeUnitList(UNITS), SEA1);
-		assertResult(result);
-		Unit first = unitDao.findUnit(UNITS.get(0).getId());
-		Unit last = unitDao.findUnit(UNITS.get(4).getId());
-		assertEquals(SEA1, first.getCoords());
-		assertEquals(SEA1, last.getCoords());
-		Unit tank = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.TANK);
-		tank.addMobility();
-		tank.addMobility();
-		result = moveUnits(makeUnitList(tank), SEA1);
-		assertResult(result);
+        assertResult(result);
+        Unit first = unitDao.findUnit(UNITS.get(0).getId());
+        Unit last = unitDao.findUnit(UNITS.get(4).getId());
+        assertEquals(SEA1, first.getCoords());
+        assertEquals(SEA1, last.getCoords());
+        Unit tank = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.TANK);
+        tank.addMobility();
+        tank.addMobility();
+        result = moveUnits(makeUnitList(tank), SEA1);
+        assertResult(result);
         assertFalse(SEA1.equals(tank.getCoords()));
     }
 
@@ -171,10 +170,6 @@ public class MoveUnitsTest extends WithUnitsBase {
         }
     }
 
-    private void assertCoords(SIResponseEntity<SIUpdate> result, int unitId, SectorCoords target) {
-        assertCoords(result.getBody(), unitId, target);
-    }
-
     @Test
     public void transportNoBlocksInf() {
         Unit[] inf = new Unit[TRANSPORT_CAPACITY + 1];
@@ -184,16 +179,16 @@ public class MoveUnitsTest extends WithUnitsBase {
         sectorDaoService.captureCity(nationMe, PORT);
         unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), PORT);
-		assertResult(result);
-		for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
-			assertEquals(inf[i].getCoords(), PORT, result.toString());
-		}
-		assertEquals(inf[TRANSPORT_CAPACITY].getCoords(), PORT, result.toString());
-	}
+        assertResult(result);
+        for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
+            assertEquals(inf[i].getCoords(), PORT, result.toString());
+        }
+        assertEquals(inf[TRANSPORT_CAPACITY].getCoords(), PORT, result.toString());
+    }
 
-	@Test
-	public void navyMyCity() {
-		Unit dest = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.DESTROYER);
+    @Test
+    public void navyMyCity() {
+        Unit dest = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.DESTROYER);
 		List<SIUnit> units = makeUnitList(dest);
 		sectorDaoService.captureCity(nationMe, PORT);
 		Result<MoveCost> result = moveUnits(units, PORT);

@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.remote.move;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AttackValueHelperTest extends BaseStratInitWebTest {
+public class AttackValueHelperTest extends StratInitWebBase {
     private static final SectorCoords SEA = new SectorCoords(4, 0);
 
     @BeforeEach
@@ -23,16 +23,16 @@ public class AttackValueHelperTest extends BaseStratInitWebTest {
     @Test
     public void testBBDestValues() {
         Unit att = unitDaoService.buildUnit(nationMe, SEA, UnitType.BATTLESHIP);
-		Unit def = unitDaoService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
-		UnitBase attType = UnitBase.getUnitBase(UnitType.BATTLESHIP);
-		assertEquals(attType.getAttack(), AttackValueHelper.getInitialAttackValue(AttackType.INITIAL_ATTACK, att, def));
-	}
+        Unit def = unitDaoService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
+        UnitBase attType = UnitBase.getUnitBase(UnitType.BATTLESHIP);
+        assertEquals(attType.getAttack(), AttackValueHelper.getInitialAttackValue(AttackType.INITIAL_ATTACK, att, def));
+    }
 
-	@Test
-	public void testTankInfValues() {
-		Unit att = unitDaoService.buildUnit(nationMe, SEA, UnitType.TANK);
-		Unit def = unitDaoService.buildUnit(nationMe, SEA, UnitType.INFANTRY);
-		UnitBase attType = UnitBase.getUnitBase(UnitType.TANK);
+    @Test
+    public void testTankInfValues() {
+        Unit att = unitDaoService.buildUnit(nationMe, SEA, UnitType.TANK);
+        Unit def = unitDaoService.buildUnit(nationMe, SEA, UnitType.INFANTRY);
+        UnitBase attType = UnitBase.getUnitBase(UnitType.TANK);
 		assertEquals(attType.getAttack(), AttackValueHelper.getInitialAttackValue(AttackType.INITIAL_ATTACK, att, def));
 	}
 	@Test

@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.CityProcessor;
@@ -26,7 +26,7 @@ public class SetCityMoveCommand extends Command<SICity> {
 	}
 
 	@Override
-	public SIResponseEntity<SICity> execute() {
+	public Result<SICity> execute() {
 		SICity sicity = new SICity(city);
 		sicity.nextCoords = coords;
 		return stratInit.updateCity(sicity, UpdateCityField.NEXT_COORDS);

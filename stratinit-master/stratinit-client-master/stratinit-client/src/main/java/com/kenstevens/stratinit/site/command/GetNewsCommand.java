@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.site.command;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.event.NewsListArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -18,7 +18,7 @@ public class GetNewsCommand extends Command<List<SINewsLogsDay>> {
 	private Data db;
 
 	@Override
-	public SIResponseEntity<List<SINewsLogsDay>> execute() {
+	public Result<List<SINewsLogsDay>> execute() {
 		return stratInit.getNewsLogs();
 	}
 

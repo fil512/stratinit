@@ -6,7 +6,6 @@ import com.kenstevens.stratinit.event.CommandPointsArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
@@ -26,32 +25,31 @@ public abstract class Command<T> {
 	protected StratInit stratInit;
 	@Autowired
 	private StatusReporter statusReporter;
-    @Autowired
-    private ResultBattleLogProcessor resultBattleLogProcessor;
-    @Autowired
-    private BattleLogProcessor battleLogProcessor;
-    @Autowired
-    private Data db;
+	@Autowired
+	protected ArrivedDataEventAccumulator arrivedDataEventAccumulator;
+	@Autowired
+	private ResultBattleLogProcessor resultBattleLogProcessor;
+	@Autowired
+	private BattleLogProcessor battleLogProcessor;
+	@Autowired
+	private Data db;
 
-    @Autowired
-    protected ArrivedDataEventAccumulator arrivedDataEventAccumulator;
+	public abstract Result<T> execute();
 
-    public abstract SIResponseEntity<T> execute();
+	public abstract String getDescription();
 
-    public abstract String getDescription();
-
-    public void process() {
-        try {
-            Result<T> result = execute().getBody();
-            if (result.isSuccess()) {
-                handleSuccess(result.getValue());
-                processResult(result);
-                processBattleLogs(result.getBattleLogs());
-            } else {
-                reportError(getDescription());
-            }
-            statusReporter.reportResult(result);
-        } catch (RemoteConnectFailureException e) {
+	public void process() {
+		try {
+			Result<T> result = execute();
+			if (result.isSuccess()) {
+				handleSuccess(result.getValue());
+				processResult(result);
+				processBattleLogs(result.getBattleLogs());
+			} else {
+				reportError(getDescription());
+			}
+			statusReporter.reportResult(result);
+		} catch (RemoteConnectFailureException e) {
 			statusReporter.reportError("The server is down.  Try again later.");
 			logger.error(e.getMessage(), e);
 		} catch (RemoteAccessException e) {

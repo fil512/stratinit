@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.remote.move;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SupplyPathTest extends BaseStratInitWebTest {
+public class SupplyPathTest extends StratInitWebBase {
     public static final SectorCoords SUPPLY = new SectorCoords(6, 6);
     public static final SectorCoords START = new SectorCoords(6, 11);
     public static final SectorCoords END = new SectorCoords(10, 11);

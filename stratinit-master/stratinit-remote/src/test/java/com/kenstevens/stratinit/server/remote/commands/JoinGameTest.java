@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.remote.commands;
 
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,25 +12,25 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JoinGameTest extends BaseStratInitWebTest {
-    @BeforeEach
-    public void doJoinGame() {
-        joinGamePlayerMe();
-    }
-
-    @Test
-    public void getJoinedGames() {
-        List<SIGame> games = stratInit.getJoinedGames().getValue();
-        assertEquals(1, games.size());
-        assertEquals(1, games.get(0).players);
+public class JoinGameTest extends StratInitWebBase {
+	@BeforeEach
+	public void doJoinGame() {
+		joinGamePlayerMe();
 	}
-	
+
+	@Test
+	public void getJoinedGames() {
+		List<SIGame> games = stratInit.getJoinedGames().getValue();
+		assertEquals(1, games.size());
+		assertEquals(1, games.get(0).players);
+	}
+
 	@Test
 	public void getSectors() {
 		List<SISector> sectors = stratInit.getSectors().getValue();
 		assertEquals(49, sectors.size());
 	}
-	
+
 	@Test
 	public void getCities() {
 		List<SICity> cities = stratInit.getCities().getValue();

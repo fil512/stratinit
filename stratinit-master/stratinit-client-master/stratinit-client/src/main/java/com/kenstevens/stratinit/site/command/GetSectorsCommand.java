@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.site.command;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.event.WorldArrivedEvent;
 import com.kenstevens.stratinit.model.Account;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.FogOfWar;
 import com.kenstevens.stratinit.site.processor.SectorListProcessor;
@@ -24,7 +24,7 @@ public class GetSectorsCommand extends Command<List<SISector>> {
 	private FogOfWar fogOfWar;
 
 	@Override
-	public SIResponseEntity<List<SISector>> execute() {
+	public Result<List<SISector>> execute() {
 		return stratInit.getSectors();
 	}
 

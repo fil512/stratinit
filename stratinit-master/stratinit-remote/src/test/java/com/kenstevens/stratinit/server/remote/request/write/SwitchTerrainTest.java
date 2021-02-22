@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.remote.request.write;
 
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -24,7 +24,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 				UnitType.ENGINEER);
 
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
 	}
@@ -35,7 +35,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 				UnitType.TANK);
 		tank.setMobility(tank.getMaxMobility());
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(tank));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(tank));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
 	}
@@ -49,7 +49,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 				UnitType.INFANTRY);
 
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
 	}
@@ -61,7 +61,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 
 		assertEquals(SectorType.LAND, testWorld.getSector(INLAND).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(INLAND).getType());
 	}
@@ -73,7 +73,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 
 		assertEquals(SectorType.LAND, testWorld.getSector(COASTLAND).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertResult(result);
 		assertEquals(SectorType.WATER, testWorld.getSector(COASTLAND).getType());
 	}
@@ -85,7 +85,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 
 		assertEquals(SectorType.WATER, testWorld.getSector(BEACHWATER).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertResult(result);
 		assertEquals(SectorType.LAND, testWorld.getSector(BEACHWATER).getType());
 	}
@@ -97,7 +97,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 
 		assertEquals(SectorType.WATER, testWorld.getSector(DEEPSEA).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.WATER, testWorld.getSector(DEEPSEA).getType());
 	}
@@ -109,7 +109,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 
 		assertEquals(SectorType.NEUTRAL_CITY, testWorld.getSector(CITY).getType());
-		SIResponseEntity<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.switchTerrain(makeUnitList(eng));
 		assertFalseResult(result);
 		assertEquals(SectorType.NEUTRAL_CITY, testWorld.getSector(CITY).getType());
 	}

@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -28,7 +28,7 @@ public class BuildCityTest extends TwoPlayerBase {
 		List<City> cities = sectorDao.getCities(nationMe);
 		assertEquals(2, cities.size());
 		int cp = nationMe.getCommandPoints();
-		SIResponseEntity<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
 		assertEquals(cp, nationMe.getCommandPoints());
 		assertFalseResult(result);
 		assertTrue(result.toString().contains("mobility"));
@@ -42,7 +42,7 @@ public class BuildCityTest extends TwoPlayerBase {
 		tank.setMobility(9);
 		List<City> cities = sectorDao.getCities(nationMe);
 		assertEquals(2, cities.size());
-		SIResponseEntity<SIUpdate> result = stratInit.buildCity(makeUnitList(tank));
+		Result<SIUpdate> result = stratInit.buildCity(makeUnitList(tank));
 		assertFalseResult(result);
 		cities = sectorDao.getCities(nationMe);
 		assertEquals(2, cities.size());
@@ -59,7 +59,7 @@ public class BuildCityTest extends TwoPlayerBase {
 		assertEquals(58, sectors.size());
 		SectorSeen near = new SectorSeen(nationMe, NEAR);
 		assertFalse(sectors.contains(near));
-		SIResponseEntity<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
 		sectors = sectorDao.getSectorsSeen(nationMe);
 		assertEquals(84, sectors.size());
 		assertTrue(sectors.contains(near));
@@ -78,7 +78,7 @@ public class BuildCityTest extends TwoPlayerBase {
 		eng.setMobility(eng.getMaxMobility());
 		List<City> cities = sectorDao.getCities(nationMe);
 		assertEquals(2, cities.size());
-		SIResponseEntity<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
+		Result<SIUpdate> result = stratInit.buildCity(makeUnitList(eng));
 		assertFalseResult(result);
 		cities = sectorDao.getCities(nationMe);
 		assertEquals(2, cities.size());

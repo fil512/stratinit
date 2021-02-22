@@ -12,85 +12,85 @@ import java.util.Properties;
 
 public interface StratInit {
 	// TODO Return incremental battle logs and nation with all commands
-	SIResponseEntity<String> getVersion();
+	Result<String> getVersion();
 
-	SIResponseEntity<List<SIUnitBase>> getUnitBases();
+	Result<List<SIUnitBase>> getUnitBases();
 
-	SIResponseEntity<Properties> getServerConfig();
+	Result<Properties> getServerConfig();
 
-	SIResponseEntity<None> setGame(int gameId, boolean noAlliances);
+	Result<None> setGame(int gameId, boolean noAlliances);
 
-	SIResponseEntity<Nation> joinGame(int gameId, boolean noAlliances);
+	Result<Nation> joinGame(int gameId, boolean noAlliances);
 
-	SIResponseEntity<List<SIGame>> getJoinedGames();
+	Result<List<SIGame>> getJoinedGames();
 
-	SIResponseEntity<List<SIGame>> getUnjoinedGames();
+	Result<List<SIGame>> getUnjoinedGames();
 
-	SIResponseEntity<List<SISector>> getSectors();
+	Result<List<SISector>> getSectors();
 
-	SIResponseEntity<List<SIUnit>> getUnits();
+	Result<List<SIUnit>> getUnits();
 
-	SIResponseEntity<List<SINation>> getNations();
+	Result<List<SINation>> getNations();
 
-	SIResponseEntity<List<SICity>> getCities();
+	Result<List<SICity>> getCities();
 
-	SIResponseEntity<List<SIBattleLog>> getBattleLog();
+	Result<List<SIBattleLog>> getBattleLog();
 
-	SIResponseEntity<SICity> updateCity(SICity sicity, UpdateCityField field);
+	Result<SICity> updateCity(SICity sicity, UpdateCityField field);
 
-	SIResponseEntity<SIUpdate> getUpdate();
+	Result<SIUpdate> getUpdate();
 
-	SIResponseEntity<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target);
+	Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target);
 
-	SIResponseEntity<List<SIUnit>> getSeenUnits();
+	Result<List<SIUnit>> getSeenUnits();
 
-	SIResponseEntity<List<SICity>> getSeenCities();
+	Result<List<SICity>> getSeenCities();
 
-	SIResponseEntity<List<SIRelation>> getRelations();
+	Result<List<SIRelation>> getRelations();
 
-	SIResponseEntity<SIRelation> setRelation(int nationId, RelationType relationType);
+	Result<SIRelation> setRelation(int nationId, RelationType relationType);
 
-	SIResponseEntity<SIUpdate> cedeUnits(List<SIUnit> units, int nationId);
+	Result<SIUpdate> cedeUnits(List<SIUnit> units, int nationId);
 
-	SIResponseEntity<SIUpdate> cedeCity(SICity city, int nationId);
+	Result<SIUpdate> cedeCity(SICity city, int nationId);
 
-	SIResponseEntity<List<SIMessage>> getMessages();
+	Result<List<SIMessage>> getMessages();
 
-	SIResponseEntity<Integer> sendMessage(SIMessage message);
+	Result<Integer> sendMessage(SIMessage message);
 
-	SIResponseEntity<Integer> postAnnouncement(String subject, String body);
+	Result<Integer> postAnnouncement(String subject, String body);
 
-	SIResponseEntity<List<SISatellite>> getSattelites();
+	Result<List<SISatellite>> getSattelites();
 
-	SIResponseEntity<List<SIMessage>> getMail();
+	Result<List<SIMessage>> getMail();
 
-	SIResponseEntity<List<SIMessage>> getSentMail();
+	Result<List<SIMessage>> getSentMail();
 
-	SIResponseEntity<List<SIMessage>> getAnnouncements();
+	Result<List<SIMessage>> getAnnouncements();
 
-	SIResponseEntity<List<SINewsLogsDay>> getNewsLogs();
+	Result<List<SINewsLogsDay>> getNewsLogs();
 
-	SIResponseEntity<List<SIUnitBuilt>> getUnitsBuilt();
+	Result<List<SIUnitBuilt>> getUnitsBuilt();
 
-	SIResponseEntity<SINation> getMyNation();
+	Result<SINation> getMyNation();
 
-	SIResponseEntity<Nation> joinGame(Player player, int gameId, boolean noAlliances);
+	Result<Nation> joinGame(Player player, int gameId, boolean noAlliances);
 
-	SIResponseEntity<None> shutdown();
+	Result<None> shutdown();
 
-	SIResponseEntity<SIUpdate> disbandUnits(List<SIUnit> siUnits);
+	Result<SIUpdate> disbandUnits(List<SIUnit> siUnits);
 
-	SIResponseEntity<List<SITeam>> getTeams();
+	Result<List<SITeam>> getTeams();
 
-	SIResponseEntity<SIUpdate> concede();
+	Result<SIUpdate> concede();
 
-	SIResponseEntity<Integer> submitError(String subject, String stackTrace);
+	Result<Integer> submitError(String subject, String stackTrace);
 
-	SIResponseEntity<SIUpdate> buildCity(List<SIUnit> siunits);
+	Result<SIUpdate> buildCity(List<SIUnit> siunits);
 
-	SIResponseEntity<SIUpdate> switchTerrain(List<SIUnit> siunits);
+	Result<SIUpdate> switchTerrain(List<SIUnit> siunits);
 
-	SIResponseEntity<SIUpdate> cancelMoveOrder(List<SIUnit> siunits);
+	Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits);
 
 	// TODO OPT Add timestamp to units and cities and only send back data that has changed.
 }

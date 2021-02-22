@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.GameListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class GetGamesCommand extends Command<List<SIGame>> {
 	private GameListProcessor gameListProcessor;
 
 	@Override
-	public SIResponseEntity<List<SIGame>> execute() {
+	public Result<List<SIGame>> execute() {
 		return stratInit.getJoinedGames();
 	}
 

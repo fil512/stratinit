@@ -4,11 +4,11 @@ package com.kenstevens.stratinit.server.remote;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.BeforeEach;
 
-public abstract class TwoPlayerBase extends BaseStratInitWebTest {
+public abstract class TwoPlayerBase extends StratInitWebBase {
 	protected static final String PLAYER_THEM_NAME = "them";
 	protected Player playerThem;
 	protected Nation nationThem;
@@ -19,11 +19,11 @@ public abstract class TwoPlayerBase extends BaseStratInitWebTest {
 		setAuthentication(PLAYER_ME_NAME);
 		joinGamePlayerMe();
 		playerThem = createPlayer(PLAYER_THEM_NAME);
-		SIResponseEntity<Nation> retval = joinGame(playerThem);
-        nationThemId = retval.getValue().getNationId();
-        nationThem = gameDao.findNation(testGameId, playerThem);
-        setAuthentication(PLAYER_ME_NAME);
-    }
+		Result<Nation> retval = joinGame(playerThem);
+		nationThemId = retval.getValue().getNationId();
+		nationThem = gameDao.findNation(testGameId, playerThem);
+		setAuthentication(PLAYER_ME_NAME);
+	}
 
 	private void setMyRelation(RelationType relationType) {
 		Relation relation = gameDao.findRelation(nationMe, nationThem);

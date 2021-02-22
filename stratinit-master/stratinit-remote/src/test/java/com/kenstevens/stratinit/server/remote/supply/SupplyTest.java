@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.remote.BaseStratInitWebTest;
+import com.kenstevens.stratinit.server.remote.StratInitWebBase;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -15,14 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SupplyTest extends BaseStratInitWebTest {
-    @Autowired
-    protected SectorDaoService sectorDaoService;
+public class SupplyTest extends StratInitWebBase {
     private static final SectorCoords IN_SUPPLY = new SectorCoords(0, 0);
     private static final SectorCoords OUT_SUPPLY = new SectorCoords(0, 12);
     private static final SectorCoords ENGINEER = new SectorCoords(0, 7);
     private static final SectorCoords SEA_IN_REACH = new SectorCoords(6, 0);
     private static final SectorCoords IN_TSUPPLY = new SectorCoords(9, 5);
+    @Autowired
+    protected SectorDaoService sectorDaoService;
     private static final SectorCoords OUT_TSUPPLY = new SectorCoords(9, 6);
     private static final SectorCoords SEA_OUT_OF_REACH = new SectorCoords(11, 0);
     private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);

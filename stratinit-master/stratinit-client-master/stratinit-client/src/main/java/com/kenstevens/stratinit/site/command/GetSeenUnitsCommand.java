@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.SeenUnitListProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class GetSeenUnitsCommand extends Command<List<SIUnit>> {
 	private SeenUnitListProcessor seenUnitListProcessor;
 
 	@Override
-	public SIResponseEntity<List<SIUnit>> execute() {
+	public Result<List<SIUnit>> execute() {
 		return stratInit.getSeenUnits();
 	}
 

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.wicket.admin;
 
 import com.kenstevens.stratinit.remote.None;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.markup.html.form.Form;
@@ -19,7 +19,7 @@ public class ShutdownForm extends Form<ValueMap> {
 	
     @Override
     public final void onSubmit() {
-		SIResponseEntity<None> result = stratInit.shutdown();
-		new InfoResult<None>(this).info(result.getBody());
+		Result<None> result = stratInit.shutdown();
+		new InfoResult<None>(this).info(result);
 	}
 }

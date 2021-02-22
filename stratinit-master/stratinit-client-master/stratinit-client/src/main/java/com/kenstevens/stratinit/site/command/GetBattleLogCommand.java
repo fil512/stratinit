@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SIBattleLog;
-import com.kenstevens.stratinit.remote.SIResponseEntity;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class GetBattleLogCommand extends Command<List<SIBattleLog>> {
 	private BattleLogProcessor battleLogProcessor;
 
 	@Override
-	public SIResponseEntity<List<SIBattleLog>> execute() {
+	public Result<List<SIBattleLog>> execute() {
 		return stratInit.getBattleLog();
 	}
 
