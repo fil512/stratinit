@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,15 +32,19 @@ public interface StratInit {
 	@GetMapping(value = SERVER_CONFIG)
 	Result<Properties> getServerConfig();
 
+	@PreAuthorize(Roles.USER)
 	@PostMapping(value = SET_GAME)
 	Result<None> setGame(@RequestBody SetGameRequest request);
 
+	@PreAuthorize(Roles.USER)
 	@PostMapping(value = JOIN_GAME)
 	Result<Nation> joinGame(@RequestBody SetGameRequest request);
 
+	@PreAuthorize(Roles.USER)
 	@GetMapping(value = JOINED_GAMES)
 	Result<List<SIGame>> getJoinedGames();
 
+	@PreAuthorize(Roles.USER)
 	@GetMapping(value = UNJOINED_GAMES)
 	Result<List<SIGame>> getUnjoinedGames();
 

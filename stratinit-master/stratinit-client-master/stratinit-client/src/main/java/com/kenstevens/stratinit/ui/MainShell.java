@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 @Component("MainShell")
 public class MainShell {
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired

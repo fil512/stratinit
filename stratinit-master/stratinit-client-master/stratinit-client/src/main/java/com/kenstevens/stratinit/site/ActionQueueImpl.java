@@ -55,6 +55,8 @@ public class ActionQueueImpl implements ActionQueue {
 	}
 
 	public void start() {
+		logger.info("Starting ActionQueue");
+
 		poll = new Thread() {
 			@Override
 			public void run() {

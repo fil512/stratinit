@@ -1,29 +1,34 @@
 package com.kenstevens.stratinit.util;
 
-import java.io.File;
-
+import com.kenstevens.stratinit.main.ClientConstants;
+import com.kenstevens.stratinit.model.Account;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.simpleframework.xml.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 
-import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.model.Account;
+import java.io.File;
 
 @Component
 public class AccountPersister extends XMLPersister {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	private Account account;
 
-	private BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+	private final BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 
 	public String load() {
-		return load(System.getProperty("user.home")+"/"+ClientConstants.ACCOUNT_FILENAME);
+		String filename = System.getProperty("user.home") + "/" + ClientConstants.ACCOUNT_FILENAME;
+		logger.info("Loading config file {}", filename);
+		return load(filename);
 	}
 
 	public void save() throws XMLException {
-		save(System.getProperty("user.home")+"/"+ClientConstants.ACCOUNT_FILENAME);
+		save(System.getProperty("user.home") + "/" + ClientConstants.ACCOUNT_FILENAME);
 	}
 
 	public AccountPersister() {

@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.config;
 
+import com.kenstevens.stratinit.model.PlayerRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -60,8 +61,8 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/remote/**").hasAuthority("ROLE_USER")
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/remote/**").hasAuthority(PlayerRole.ROLE_USER)
+                .antMatchers("/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
                 .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

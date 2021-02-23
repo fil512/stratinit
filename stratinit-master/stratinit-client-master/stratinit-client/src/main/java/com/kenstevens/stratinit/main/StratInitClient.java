@@ -20,6 +20,7 @@ public final class StratInitClient {
 		WavPlayer wavPlayer = null;
 		ActionFactory actionFactory = null;
 		try {
+			logger.info("Starting StratInitClient version {}", ClientConstants.CLIENT_VERSION);
 			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 			context.register(SpringConfig.class);
 			context.refresh();

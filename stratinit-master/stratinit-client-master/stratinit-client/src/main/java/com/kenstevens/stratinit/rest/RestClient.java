@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.RestRequest;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -50,6 +51,9 @@ public class RestClient {
             HttpGet httpGet = new HttpGet(baseUrl + path);
             httpGet.setHeader("Accept", "application/json");
             try (CloseableHttpResponse response = client.execute(httpGet)) {
+                if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+                    return new Result<>("Request failed with status code " + response.getStatusLine().getStatusCode(), false);
+                }
                 return mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
             }
         } catch (Exception e) {
@@ -69,7 +73,7 @@ public class RestClient {
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
             try (CloseableHttpResponse response = client.execute(httpPost)) {
-                if (response.getStatusLine().getStatusCode() != 200) {
+                if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                     return new Result<>("Request failed with status code " + response.getStatusLine().getStatusCode(), false);
                 }
                 return mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
