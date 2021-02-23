@@ -1,23 +1,14 @@
 package com.kenstevens.stratinit.model;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 import org.springframework.stereotype.Repository;
 
-@Root
 @Repository
 public class Preferences {
-	@Element
 	private boolean showBuilding = false;
-	@Element
 	private boolean playSounds = true;
-	@Element(required=false)
 	private boolean liberator = true;
-	@Element(required=false)
 	private boolean switchMouse = false;
-	@Element(required=false)
 	private boolean showFOW = true;
-	@Element(required=false)
 	private boolean canvasScroll = true;
 	
 	public void setShowBuilding(boolean showBuilding) {
@@ -56,6 +47,4 @@ public class Preferences {
 	public void setCanvasScroll(boolean canvasScroll) {
 		this.canvasScroll = canvasScroll;
 	}
-	
-
 }

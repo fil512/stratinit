@@ -1,67 +1,61 @@
 package com.kenstevens.stratinit.util;
 
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Account;
 import org.jasypt.util.text.BasicTextEncryptor;
-import org.simpleframework.xml.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.w3c.dom.Document;
 
 import java.io.File;
+import java.io.IOException;
 
 @Component
-public class AccountPersister extends XMLPersister {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+public class AccountPersister extends JsonPersister {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+    @Autowired
+    private Account account;
 
-	@Autowired
-	private Account account;
+    public AccountPersister() {
+        textEncryptor.setPassword(ClientConstants.KEY);
+    }
 
-	private final BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+    public String load() {
+        String filename = System.getProperty("user.home") + "/" + ClientConstants.ACCOUNT_FILENAME;
+        logger.info("Loading config file {}", filename);
+        return load(filename);
+    }
 
-	public String load() {
-		String filename = System.getProperty("user.home") + "/" + ClientConstants.ACCOUNT_FILENAME;
-		logger.info("Loading config file {}", filename);
-		return load(filename);
-	}
+    public void save() throws IOException {
+        save(System.getProperty("user.home") + "/" + ClientConstants.ACCOUNT_FILENAME);
+    }
 
-	public void save() throws XMLException {
-		save(System.getProperty("user.home") + "/" + ClientConstants.ACCOUNT_FILENAME);
-	}
+    public String decryptPassword(String encryptedPassword) {
+        return textEncryptor.decrypt(encryptedPassword);
+    }
 
-	public AccountPersister() {
-		textEncryptor.setPassword(ClientConstants.KEY);
-	}
+    protected String deserialize(File source) throws IOException {
+        Account loadedAccount;
+        ObjectMapper mapper = new ObjectMapper();
+        loadedAccount = mapper.readValue(source, Account.class);
+        String password = decryptPassword(loadedAccount.getPassword());
+        loadedAccount.setPassword(password);
+        account.load(loadedAccount);
+        return "";
+    }
 
-	public String decryptPassword(String encryptedPassword) {
-		return textEncryptor.decrypt(encryptedPassword);
-	}
-
-	protected String deserialize(Serializer serializer,
-			File source, Document doc) throws XMLException {
-		Account loadedAccount;
-		try {
-			loadedAccount = serializer.read(Account.class, source);
-		} catch (Exception e) {
-			throw new XMLException(e);
-		}
-		String password = decryptPassword(loadedAccount.getPassword());
-		loadedAccount.setPassword(password);
-		account.load(loadedAccount);
-		return "";
-	}
-
-	protected void serialize(Serializer serializer, File result) throws XMLException {
-		Account savedAccount = new Account();
-		savedAccount.load(account);
-		String encryptedPassword = textEncryptor.encrypt(account.getPassword());
-		savedAccount.setPassword(encryptedPassword);
-		try {
-			serializer.write(savedAccount, result);
-		} catch (Exception e) {
-			throw new XMLException(e);
-		}
-	}
+    protected void serialize(File result) throws IOException {
+        Account savedAccount = new Account();
+        savedAccount.load(account);
+        String encryptedPassword = textEncryptor.encrypt(account.getPassword());
+        savedAccount.setPassword(encryptedPassword);
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
+        writer.writeValue(result, savedAccount);
+    }
 }

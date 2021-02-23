@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.ui;
 
 import com.kenstevens.stratinit.main.ClientConstants;
 import com.kenstevens.stratinit.model.Account;
+import com.kenstevens.stratinit.rest.RestClient;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.site.action.ActionFactory;
@@ -41,6 +42,8 @@ public class MainShell {
 	private ActionFactory actionFactory;
 	@Autowired
 	private NewbHelper newbHelper;
+	@Autowired
+	private RestClient restClient;
 
 	private Shell shell;
 
@@ -50,6 +53,8 @@ public class MainShell {
 
 		try {
 			loadFiles();
+
+			restClient.setAccount();
 
 			display.asyncExec(new Runnable() {
 				public void run() {

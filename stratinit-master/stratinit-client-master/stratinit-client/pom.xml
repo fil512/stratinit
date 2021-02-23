@@ -57,10 +57,6 @@
             -->
         </dependency>
         <dependency>
-            <groupId>org.simpleframework</groupId>
-            <artifactId>simple-xml</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>
         </dependency>

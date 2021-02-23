@@ -1,26 +1,16 @@
 package com.kenstevens.stratinit.model;
 
 import org.eclipse.swt.graphics.Point;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
 import org.springframework.stereotype.Repository;
 
-@Root
 @Repository
 public class Account {
-	@Element
 	private String username = "";
-	@Element
 	private String password = "";
-	@Element
 	private Preferences preferences = new Preferences();
-	@Element
 	private int x = -1;
-	@Element
 	private int y = -1;
-	@Element
 	private int width = 0;
-	@Element
 	private int height = 0;
 
 	public String getUsername() {

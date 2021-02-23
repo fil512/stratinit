@@ -1,17 +1,15 @@
 package com.kenstevens.stratinit.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Transient;
-
 public class DatedItem {
-
-	@Attribute(required=false)
 	protected String dateString;
-	@Transient
+	@JsonIgnore
 	private Date date;
+
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("MM/dd HH:mm");
 
 	public DatedItem() {

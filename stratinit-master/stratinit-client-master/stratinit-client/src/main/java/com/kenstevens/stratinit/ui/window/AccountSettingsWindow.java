@@ -3,7 +3,6 @@ package com.kenstevens.stratinit.ui.window;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.shell.StratInitWindow;
 import com.kenstevens.stratinit.util.AccountPersister;
-import com.kenstevens.stratinit.util.XMLException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 @Component
 public class AccountSettingsWindow implements StratInitWindow {
@@ -83,7 +84,7 @@ public class AccountSettingsWindow implements StratInitWindow {
 			public void widgetSelected(final SelectionEvent e) {
 				try {
 					saveAndClose();
-				} catch (XMLException e1) {
+				} catch (IOException e1) {
 					logger.error(e1.getMessage(), e1);
 				}
 			}
@@ -102,7 +103,7 @@ public class AccountSettingsWindow implements StratInitWindow {
 			public void handleEvent(Event e) {
 				try {
 					saveAndClose();
-				} catch (XMLException e1) {
+				} catch (IOException e1) {
 					logger.error(e1.getMessage(), e1);
 				}
 			}
@@ -118,7 +119,7 @@ public class AccountSettingsWindow implements StratInitWindow {
 		}
 	}
 
-	private void saveAndClose() throws XMLException {
+	private void saveAndClose() throws IOException {
 		account.setUsername(username.getText());
 		account.setPassword(password.getText());
 		accountPersister.save();

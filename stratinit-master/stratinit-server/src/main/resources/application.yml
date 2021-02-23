@@ -2,7 +2,7 @@ logging:
   level:
     org:
       springframework:
-        security: INFO
+        security: DEBUG
 stratinit:
   email:
     hostname: localhost

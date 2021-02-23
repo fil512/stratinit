@@ -21,7 +21,7 @@ public final class ClientConstants {
 	public static final int VMARGIN = 64;
 	public static final int HMARGIN = 32;
 	public static final String DATA_DIR = "stratinit";
-	public static final String ACCOUNT_FILENAME = DATA_DIR+"/account.xml";
+	public static final String ACCOUNT_FILENAME = DATA_DIR + "/account.json";
 	public static final String KEY = "modicum of snuff";
 	public static final boolean DEBUG = true;
 	public static final String NO_CHANGE = "(no change)";

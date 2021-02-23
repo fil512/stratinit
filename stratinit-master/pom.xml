@@ -45,6 +45,7 @@
         <swt.version>3.5.2</swt.version>
         <!-- flyway 7.5.3 doesn't work with boot 2.3.8 -->
         <flyway.version>6.5.7</flyway.version>
+        <jackson.version>2.12.1</jackson.version>
     </properties>
     <build>
         <pluginManagement>
@@ -271,11 +272,6 @@
                 <version>1.2.3</version>
             </dependency>
             <dependency>
-                <groupId>org.simpleframework</groupId>
-                <artifactId>simple-xml</artifactId>
-                <version>2.5.3</version>
-            </dependency>
-            <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>42.2.18</version>
@@ -358,7 +354,12 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-                <version>2.12.1</version>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

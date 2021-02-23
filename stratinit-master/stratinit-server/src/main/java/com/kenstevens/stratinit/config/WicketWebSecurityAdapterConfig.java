@@ -59,11 +59,12 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/remote/**").hasAuthority(PlayerRole.ROLE_USER)
+                .antMatchers("/images/**").permitAll()
+                .antMatchers("/static/**").permitAll()
+                .antMatchers("/stratinit/**").hasAuthority(PlayerRole.ROLE_USER)
+//                .antMatchers("/stratinit/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
-                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -72,8 +73,7 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().permitAll()
                 .and()
-                .exceptionHandling().accessDeniedPage("/403");
-        http.headers().frameOptions().disable();
+                .csrf().disable();
     }
 
     private LogoutSuccessHandler logoutSuccessHandler() {

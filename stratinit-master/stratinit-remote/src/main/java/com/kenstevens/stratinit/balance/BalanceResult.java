@@ -1,25 +1,14 @@
 package com.kenstevens.stratinit.balance;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Root;
-
 import com.kenstevens.stratinit.type.UnitType;
 
-@Root
 public class BalanceResult {
-	@Attribute
 	UnitType attackerType;
-	@Attribute
 	UnitType defenderType;
-	@Attribute
 	float avgNumAttacks;
-	@Attribute
 	float avgAttHpRemaining;
-	@Attribute
 	float avgDefHpRemaining;
-	@Attribute
 	int percAttackerDied;
-	@Attribute
 	String defSector;
 	
 	public UnitType getAttackerType() {

@@ -30,6 +30,10 @@
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
         <!-- test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -45,10 +49,6 @@
             <groupId>org.jmock</groupId>
             <artifactId>jmock</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.simpleframework</groupId>
-            <artifactId>simple-xml</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
