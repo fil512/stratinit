@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.httpclient.HttpStatus;
 import org.junit.jupiter.api.Disabled;
@@ -64,21 +65,22 @@ public class SpringRemotingIntegrationManualTest extends BaseStratInitClientTest
 		account.setPassword("testy");
 		Result<List<SIGame>> games = stratInit.getUnjoinedGames();
 		SIGame game = games.getValue().get(0);
-		stratInit.joinGame(game.id, false);
+		SetGameRequest request = new SetGameRequest(game.id, false);
+		stratInit.joinGame(request);
 
 		account.setUsername("test2");
 		account.setPassword("testy");
-		stratInit.joinGame(game.id, false);
+		stratInit.joinGame(request);
 
 
 		account.setUsername("test3");
 		account.setPassword("testy");
-		stratInit.joinGame(game.id, false);
+		stratInit.joinGame(request);
 
 
 		account.setUsername("test4");
 		account.setPassword("testy");
-		stratInit.joinGame(game.id, false);
+		stratInit.joinGame(request);
 
 	}
 

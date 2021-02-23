@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.site.action;
 
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -120,10 +121,11 @@ public class ActionFactory {
 	}
 
 	public void setGame(int gameId, boolean noAlliances) {
-		SetGameAction setGameAction = spring.autowire(new SetGameAction(gameId, noAlliances));
-		actionQueue.put(setGameAction);
-		getMyNation();
-	}
+        SetGameRequest request = new SetGameRequest(gameId, noAlliances);
+        SetGameAction setGameAction = spring.autowire(new SetGameAction(request));
+        actionQueue.put(setGameAction);
+        getMyNation();
+    }
 
 	public void getVersion() {
 		GetVersionAction getVersionAction = spring.getBean(GetVersionAction.class);
@@ -146,27 +148,27 @@ public class ActionFactory {
 		actionQueue.put(cedeCityAction);
 	}
 
-	public void cede(List<UnitView> units, NationView nation) {
-		CedeUnitsAction cedeUnitsAction = spring.autowire(new CedeUnitsAction(units, nation));
-		actionQueue.put(cedeUnitsAction);
-	}
+    public void cede(List<UnitView> units, NationView nation) {
+        CedeUnitsAction cedeUnitsAction = spring.autowire(new CedeUnitsAction(units, nation));
+        actionQueue.put(cedeUnitsAction);
+    }
 
-	public void getUnjoinedGames() {
-		GetUnjoinedGamesAction getUnjoinedGamesAction = spring.getBean(GetUnjoinedGamesAction.class);
-		actionQueue.put(getUnjoinedGamesAction);
-	}
+    public void getUnjoinedGames() {
+        GetUnjoinedGamesAction getUnjoinedGamesAction = spring.getBean(GetUnjoinedGamesAction.class);
+        actionQueue.put(getUnjoinedGamesAction);
+    }
 
-	public void joinGame(int gameId, boolean noAlliances) {
-		JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(gameId, noAlliances));
-		actionQueue.put(joinGameAction);
-		getUnjoinedGames();
-		getGames();
-	}
+    public void joinGame(SetGameRequest request) {
+        JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(request));
+        actionQueue.put(joinGameAction);
+        getUnjoinedGames();
+        getGames();
+    }
 
-	public void switchOnTechChange(City city) {
-		SwitchCityOnTechAction switchCityOnTechAction = spring.autowire(new SwitchCityOnTechAction(city));
-		actionQueue.put(switchCityOnTechAction);
-	}
+    public void switchOnTechChange(City city) {
+        SwitchCityOnTechAction switchCityOnTechAction = spring.autowire(new SwitchCityOnTechAction(city));
+        actionQueue.put(switchCityOnTechAction);
+    }
 
 	public void disbandUnit(List<UnitView> units) {
 		DisbandAction disbandAction = spring.autowire(new DisbandAction(units));

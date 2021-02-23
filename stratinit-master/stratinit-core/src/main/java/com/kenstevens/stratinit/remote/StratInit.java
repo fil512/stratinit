@@ -4,9 +4,12 @@ import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Properties;
@@ -16,6 +19,8 @@ public interface StratInit {
 	String SERVER_CONFIG = "/serverConfig";
 	String JOINED_GAMES = "/joinedGames";
 	String UNJOINED_GAMES = "/unjoinedGames";
+	String SET_GAME = "/setGame";
+	String JOIN_GAME = "/joinGame";
 
 	// TODO Return incremental battle logs and nation with all commands
 	@GetMapping(value = VERSION)
@@ -26,9 +31,11 @@ public interface StratInit {
 	@GetMapping(value = SERVER_CONFIG)
 	Result<Properties> getServerConfig();
 
-	Result<None> setGame(int gameId, boolean noAlliances);
+	@PostMapping(value = SET_GAME)
+	Result<None> setGame(@RequestBody SetGameRequest request);
 
-	Result<Nation> joinGame(int gameId, boolean noAlliances);
+	@PostMapping(value = JOIN_GAME)
+	Result<Nation> joinGame(@RequestBody SetGameRequest request);
 
 	@GetMapping(value = JOINED_GAMES)
 	Result<List<SIGame>> getJoinedGames();

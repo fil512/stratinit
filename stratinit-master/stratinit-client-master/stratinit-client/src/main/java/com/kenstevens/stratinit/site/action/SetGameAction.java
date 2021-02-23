@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.site.action;
 
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.command.SetGameCommand;
 import org.springframework.context.annotation.Scope;
@@ -7,16 +8,15 @@ import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
+// FIXME parameterize by request type
 public class SetGameAction extends Action<SetGameCommand> {
-	private final int gameId;
-	private final boolean noAlliances;
+	private final SetGameRequest request;
 
-	public SetGameAction(Integer gameId, boolean noAlliances) {
-		this.gameId = gameId;
-		this.noAlliances = noAlliances;
+	public SetGameAction(SetGameRequest request) {
+		this.request = request;
 	}
 
 	protected SetGameCommand buildCommand() {
-		return new SetGameCommand(gameId, noAlliances);
+		return new SetGameCommand(request);
 	}
 }

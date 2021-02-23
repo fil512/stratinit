@@ -12,6 +12,7 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.remote.request.RequestFactory;
 import com.kenstevens.stratinit.server.remote.state.ServerStatus;
@@ -79,8 +80,8 @@ public class StratInitImpl implements StratInit {
 
 	// FIXME Log this
 	// FIXME What does "Log this" mean?
-	public Result<None> setGame(int gameId, boolean noAlliances) {
-		return requestFactory.getSetGameRequest(gameId, noAlliances).process(gameId);
+	public Result<None> setGame(SetGameRequest request) {
+		return requestFactory.getSetGameRequest(request.gameId, request.noAlliances).process(request.gameId);
 	}
 
 	/*
@@ -226,9 +227,8 @@ public class StratInitImpl implements StratInit {
 	}
 
 	@Override
-	public Result<Nation> joinGame(int gameId, boolean noAlliances) {
-		return requestFactory.getJoinGameRequest(null, gameId, noAlliances).process(
-				gameId);
+	public Result<Nation> joinGame(SetGameRequest request) {
+		return requestFactory.getJoinGameRequest(null, request.gameId, request.noAlliances).process(request.gameId);
 	}
 
 	@Override

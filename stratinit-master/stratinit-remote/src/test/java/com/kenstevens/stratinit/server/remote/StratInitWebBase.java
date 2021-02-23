@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.server.daoservice.MoveService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
@@ -46,9 +47,9 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	}
 
 	protected void setAuthentication(String username) {
-		new AuthenticationHelper().setAuthentication(username);
-		stratInit.setGame(testGameId, false);
-	}
+        new AuthenticationHelper().setAuthentication(username);
+        stratInit.setGame(new SetGameRequest(testGameId, false));
+    }
 
 	protected Result<Nation> joinGame(Player player) {
 		Result<Nation> result = stratInit.joinGame(player, testGameId, false);

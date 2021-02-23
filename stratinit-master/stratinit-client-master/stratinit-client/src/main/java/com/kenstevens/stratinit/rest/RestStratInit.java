@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +38,13 @@ public class RestStratInit implements StratInit {
     }
 
     @Override
-    public Result<None> setGame(int gameId, boolean noAlliances) {
-        return null;
+    public Result<None> setGame(SetGameRequest request) {
+        return restClient.post(StratInit.SET_GAME, request, None.class);
     }
 
     @Override
-    public Result<Nation> joinGame(int gameId, boolean noAlliances) {
-        return null;
+    public Result<Nation> joinGame(SetGameRequest request) {
+        return restClient.post(StratInit.JOIN_GAME, request, Nation.class);
     }
 
     @Override
