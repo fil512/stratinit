@@ -15,26 +15,32 @@ public class StatusReporter {
 	private StratinitEventBus eventBus;
 
 	public void reportResult(String text) {
-		Message message = new Message(text, Message.Type.RESPONSE);
-		eventBus.post(new StatusReportEvent(message));
-	}
+        Message message = new Message(text, Message.Type.RESPONSE);
+        eventBus.post(new StatusReportEvent(message));
+        logger.info("Response: {}", text);
+    }
 
 	public void reportAction(String text) {
-		Message message = new Message(text, Message.Type.ACTION);
-		eventBus.post(new StatusReportEvent(message));
-	}
+        Message message = new Message(text, Message.Type.ACTION);
+        eventBus.post(new StatusReportEvent(message));
+        logger.info("Action: {}", text);
+    }
+
 	public void reportError(String text) {
-		logger.error(text);
-		Message message = new Message(text, Message.Type.ERROR);
-		eventBus.post(new StatusReportEvent(message));
-	}
-	public void reportError(Exception e) {
-		if (e != null && e.getMessage() != null) {
-			reportError(e.getMessage());
-		} else {
-			reportError(e.getClass().getName());
-		}
-	}
+        logger.error(text);
+        Message message = new Message(text, Message.Type.ERROR);
+        eventBus.post(new StatusReportEvent(message));
+        logger.error("Error: {}", text);
+    }
+
+    public void reportError(Exception e) {
+        if (e != null && e.getMessage() != null) {
+            reportError(e.getMessage());
+        } else {
+            reportError(e.getClass().getName());
+        }
+        logger.error(e.getMessage(), e);
+    }
 
 	public void reportLoginError() {
 		reportError("Not logged in.  Please login before performing any actions.");

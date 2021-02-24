@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.UnitType;
 
 
-public class SINewsAirDefense extends SINewsOpponents {
+public class SINewsAirDefense extends SINewsOpponents implements SINewsCountable {
 	private static final long serialVersionUID = 1L;
 	public int count;
 	public final UnitType nationUnitType;
@@ -42,10 +42,17 @@ public class SINewsAirDefense extends SINewsOpponents {
 			return false;
 		SINewsAirDefense other = (SINewsAirDefense) obj;
 		if (nationUnitType == null) {
-			if (other.nationUnitType != null)
-				return false;
-		} else if (!nationUnitType.equals(other.nationUnitType))
-			return false;
-		return true;
+			return other.nationUnitType == null;
+		} else return nationUnitType.equals(other.nationUnitType);
+	}
+
+	@Override
+	public void increment(int count) {
+		this.count += count;
+	}
+
+	@Override
+	public int getCount() {
+		return count;
 	}
 }

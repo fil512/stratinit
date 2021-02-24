@@ -165,11 +165,6 @@ public class StratInitImpl implements StratInit {
 	}
 
 	@Override
-	public Result<List<SISatellite>> getSattelites() {
-		return requestFactory.getGetSattelitesRequest().process();
-	}
-
-	@Override
 	public Result<List<SIUnitBuilt>> getUnitsBuilt() {
 		return requestFactory.getGetUnitsBuiltRequest().process();
 	}

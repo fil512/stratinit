@@ -62,16 +62,16 @@ public class World implements CoordMeasure {
 
 	public List<Sector> getSectorsWithin(SectorCoords coords, int distance,
 			boolean includeSelf) {
-		List<Sector> retval = new ArrayList<Sector>();
-		for (SectorCoords neighbour : coords.getSectorsWithin(size, distance,
-				includeSelf)) {
-			Sector sector = getSector(neighbour.x, neighbour.y);
-			if (sector != null) {
-				retval.add(sector);
-			}
-		}
-		return retval;
-	}
+        List<Sector> retval = new ArrayList<Sector>();
+        for (SectorCoords neighbour : coords.sectorsWithin(size, distance,
+                includeSelf)) {
+            Sector sector = getSector(neighbour.x, neighbour.y);
+            if (sector != null) {
+                retval.add(sector);
+            }
+        }
+        return retval;
+    }
 
 	public List<Sector> getNeighbours(Sector sector, int distance) {
 		return getSectorsWithin(sector.getCoords(), distance, false);

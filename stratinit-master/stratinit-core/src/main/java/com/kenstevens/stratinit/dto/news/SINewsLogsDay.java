@@ -1,10 +1,5 @@
 package com.kenstevens.stratinit.dto.news;
 
-import com.google.common.base.Function;
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multiset;
-import com.google.common.collect.Multiset.Entry;
 import com.kenstevens.stratinit.dto.StratInitDTO;
 
 import java.util.ArrayList;
@@ -13,14 +8,15 @@ import java.util.List;
 public class SINewsLogsDay implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
 	private final int day;
-	private final List<SINewsBulletin> bulletins = new ArrayList<SINewsBulletin>();
-	private final List<SINewsFirst> firsts = new ArrayList<SINewsFirst>();
-	private final Multiset<SINewsNeutralConquest> neutralConquests = HashMultiset.create();
-	private final Multiset<SINewsNuclearDetonations> nuclearDetonations = HashMultiset.create();
-	private final Multiset<SINewsAirDefense> airDefense = HashMultiset.create();
-	private final List<SINewsForeignAffairs> foreignAffairs = new ArrayList<SINewsForeignAffairs>();
-	private final Multiset<SINewsFromTheFront> newsFromTheFront = HashMultiset.create();
-	private final Multiset<SINewsOpponentConquest> opponentConquest = HashMultiset.create();
+	private final List<SINewsBulletin> bulletins = new ArrayList<>();
+	private final List<SINewsFirst> firsts = new ArrayList<>();
+	private final List<SINewsForeignAffairs> foreignAffairs = new ArrayList<>();
+
+	private final List<SINewsNeutralConquest> neutralConquests = new ArrayList<>();
+	private final List<SINewsNuclearDetonations> nuclearDetonations = new ArrayList<>();
+	private final List<SINewsAirDefense> airDefense = new ArrayList<>();
+	private final List<SINewsFromTheFront> newsFromTheFront = new ArrayList<>();
+	private final List<SINewsOpponentConquest> opponentConquest = new ArrayList<>();
 
 	public SINewsLogsDay(int day) {
 		this.day = day;
@@ -47,42 +43,37 @@ public class SINewsLogsDay implements StratInitDTO {
 	}
 
 	public List<SINewsNeutralConquest> getNeutralConquests() {
-		return Lists.transform(Lists.newArrayList(neutralConquests.entrySet()), new Function<Entry<SINewsNeutralConquest>, SINewsNeutralConquest>() {
-			public SINewsNeutralConquest apply(Entry<SINewsNeutralConquest> entry) {
-				return new SINewsNeutralConquest(entry.getElement().nationName, entry.getCount());
-			}
-		});
+		return neutralConquests;
 	}
 
 	public void addNeutralConquest(SINewsNeutralConquest siNewsNeutralConquest) {
-		neutralConquests.add(siNewsNeutralConquest, siNewsNeutralConquest.count);
+		add(neutralConquests, siNewsNeutralConquest);
+	}
+
+	// FIXME test
+	private <T extends SINewsCountable> void add(List<T> list, T item) {
+		int index = list.indexOf(item);
+		if (index == -1) {
+			list.add(item);
+		} else {
+			list.get(index).increment(item.getCount());
+		}
 	}
 
 	public List<SINewsNuclearDetonations> getNuclearDetonations() {
-		return Lists.transform(Lists.newArrayList(nuclearDetonations.entrySet()), new Function<Multiset.Entry<SINewsNuclearDetonations>, SINewsNuclearDetonations>() {
-			public SINewsNuclearDetonations apply(Entry<SINewsNuclearDetonations> entry) {
-				SINewsNuclearDetonations element = entry.getElement();
-				return new SINewsNuclearDetonations(element.nationName, element.launchableUnit, element.opponentName, entry.getCount());
-			}
-		});
+		return nuclearDetonations;
 	}
 
-	public void addNuclearDetonations(
-			SINewsNuclearDetonations siNewsNuclearDetonations) {
-		nuclearDetonations.add(siNewsNuclearDetonations, siNewsNuclearDetonations.count);
+	public void addNuclearDetonations(SINewsNuclearDetonations siNewsNuclearDetonations) {
+		add(nuclearDetonations, siNewsNuclearDetonations);
 	}
 
 	public List<SINewsAirDefense> getAirDefense() {
-		return Lists.transform(Lists.newArrayList(airDefense.entrySet()), new Function<Multiset.Entry<SINewsAirDefense>, SINewsAirDefense>() {
-			public SINewsAirDefense apply(Entry<SINewsAirDefense> entry) {
-				SINewsAirDefense element = entry.getElement();
-				return new SINewsAirDefense(element.nationName, element.nationUnitType, element.opponentName, entry.getCount());
-			}
-		});
+		return airDefense;
 	}
 
 	public void addAirDefense(SINewsAirDefense siNewsAirDefense) {
-		airDefense.add(siNewsAirDefense, siNewsAirDefense.count);
+		add(airDefense, siNewsAirDefense);
 	}
 
 	public List<SINewsForeignAffairs> getForeignAffairs() {
@@ -94,36 +85,19 @@ public class SINewsLogsDay implements StratInitDTO {
 	}
 
 	public List<SINewsFromTheFront> getNewsFromTheFront() {
-		return Lists.transform(Lists.newArrayList(newsFromTheFront.entrySet()), new Function<Multiset.Entry<SINewsFromTheFront>, SINewsFromTheFront>() {
-			public SINewsFromTheFront apply(Entry<SINewsFromTheFront> entry) {
-				SINewsFromTheFront element = entry.getElement();
-				return new SINewsFromTheFront(element.nationName, element.nationUnitType, element.opponentName, element.opponentUnitType, element.killed, entry.getCount());
-			}
-		});
+		return newsFromTheFront;
 	}
 
 	public void addNewsFromTheFront(SINewsFromTheFront siNewsFromTheFront) {
-		newsFromTheFront.add(siNewsFromTheFront, siNewsFromTheFront.count);
+		add(newsFromTheFront, siNewsFromTheFront);
 	}
 
 	public List<SINewsOpponentConquest> getOpponentConquest() {
-		return Lists.transform(Lists.newArrayList(opponentConquest.entrySet()), new Function<Multiset.Entry<SINewsOpponentConquest>, SINewsOpponentConquest>() {
-			public SINewsOpponentConquest apply(Entry<SINewsOpponentConquest> entry) {
-				SINewsOpponentConquest element = entry.getElement();
-				return new SINewsOpponentConquest(element.nationName, element.opponentName, entry.getCount());
-			}
-		});
+		return opponentConquest;
 	}
 
-	public void addOpponentConquest(
-			SINewsOpponentConquest siNewsOpponentConquest) {
-		SINewsOpponentConquest reverseConquest = siNewsOpponentConquest.reverse();
-		if (opponentConquest.count(reverseConquest) > 0) {
-			// TODO REF should really compare reverse to count and flip it
-			opponentConquest.remove(reverseConquest);
-		} else {
-			opponentConquest.add(siNewsOpponentConquest, siNewsOpponentConquest.count);
-		}
+	public void addOpponentConquest(SINewsOpponentConquest siNewsOpponentConquest) {
+		add(opponentConquest, siNewsOpponentConquest);
 	}
 
 	public int getDay() {

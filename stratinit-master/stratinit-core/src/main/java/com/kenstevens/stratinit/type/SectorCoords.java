@@ -1,10 +1,9 @@
 package com.kenstevens.stratinit.type;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Embeddable;
 
 
 @Embeddable
@@ -54,9 +53,7 @@ public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 		SectorCoords other = (SectorCoords) obj;
 		if (x != other.x)
 			return false;
-		if (y != other.y)
-			return false;
-		return true;
+		return y == other.y;
 	}
 
 	@Override
@@ -73,18 +70,18 @@ public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 	}
 
 	public int euclidianDistanceSquared(CoordMeasure coordMeasure,
-			SectorCoords target) {
+										SectorCoords target) {
 		int xdist = distance(coordMeasure.size(), x, target.x);
 		int ydist = distance(coordMeasure.size(), y, target.y);
 		return xdist * xdist + ydist * ydist;
 	}
 
-	public List<SectorCoords> getNeighbours(int size) {
-		return getSectorsWithin(size, 1, false);
+	public List<SectorCoords> neighbours(int size) {
+		return sectorsWithin(size, 1, false);
 	}
 
-	public List<SectorCoords> getSectorsWithin(int size, int distance,
-			boolean includeSelf) {
+	public List<SectorCoords> sectorsWithin(int size, int distance,
+											boolean includeSelf) {
 		List<SectorCoords> neighbours = new ArrayList<SectorCoords>();
 		for (int sx = x - distance; sx <= x + distance; ++sx) {
 			for (int sy = y - distance; sy <= y + distance; ++sy) {
@@ -101,20 +98,20 @@ public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 		return (((a) < 0) ? (size - 1 - ((-(a) - 1) % size)) : ((a) % size));
 	}
 
-	public List<SectorCoords> getNeighbours() {
-		return getNeighbours(1);
+	public List<SectorCoords> neighbours() {
+		return neighbours(1);
 	}
 
 	public boolean adjacentTo(CoordMeasure coordMeasure, SectorCoords coords) {
 		return distanceTo(coordMeasure, coords) <= 1;
 	}
 
-	public List<SectorCoords> getNeighbours(int size, int distance) {
-		return getSectorsWithin(size, distance, false);
+	public List<SectorCoords> neighbours(int size, int distance) {
+		return sectorsWithin(size, distance, false);
 	}
 
 	public static int distance(int size, SectorCoords source,
-			SectorCoords target) {
+							   SectorCoords target) {
 		int xdist = distance(size, source.x, target.x);
 		int ydist = distance(size, source.y, target.y);
 		return Math.max(xdist, ydist);

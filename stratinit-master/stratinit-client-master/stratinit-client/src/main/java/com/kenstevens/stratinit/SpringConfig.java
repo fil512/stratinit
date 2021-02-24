@@ -2,7 +2,7 @@ package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.rest.RestClient;
-import com.kenstevens.stratinit.rest.RestStratInit;
+import com.kenstevens.stratinit.rest.RestClientStratInit;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ public class SpringConfig {
 
     @Bean
     public StratInit stratInit() {
-        return new RestStratInit();
+        return new RestClientStratInit();
     }
 
     @Bean

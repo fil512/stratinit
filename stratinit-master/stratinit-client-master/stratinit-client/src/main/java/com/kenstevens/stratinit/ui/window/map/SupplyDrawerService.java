@@ -76,9 +76,9 @@ public class SupplyDrawerService {
 		Set<SectorCoords> retval = new HashSet<SectorCoords>();
 		int size = db.getWorld().size();
 		for (SectorCoords supplier : suppliers) {
-			retval.addAll(supplier.getSectorsWithin(size,
-					Constants.SUPPLY_RADIUS, true));
-		}
+            retval.addAll(supplier.sectorsWithin(size,
+                    Constants.SUPPLY_RADIUS, true));
+        }
 		return retval;
 	}
 	

@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.UnitType;
 
-public class SINewsFromTheFront extends SINewsOpponents {
+public class SINewsFromTheFront extends SINewsOpponents implements SINewsCountable {
 	private static final long serialVersionUID = 1L;
 	public int count;
 	public final boolean killed;
@@ -12,7 +12,7 @@ public class SINewsFromTheFront extends SINewsOpponents {
 	public final UnitType opponentUnitType;
 
 	public SINewsFromTheFront(Unit nationUnit, Unit opponentUnit, boolean killed,
-			int count) {
+							  int count) {
 		super(nationUnit.getNation(), opponentUnit.getNation(), NewsCategory.NEWS_FROM_THE_FRONT);
 		this.count = count;
 		this.killed = killed;
@@ -51,7 +51,7 @@ public class SINewsFromTheFront extends SINewsOpponents {
 			return false;
 		return typedEquals((SINewsFromTheFront) obj);
 	}
-	
+
 	private boolean typedEquals(SINewsFromTheFront other) {
 		if (killed != other.killed)
 			return false;
@@ -61,10 +61,17 @@ public class SINewsFromTheFront extends SINewsOpponents {
 		} else if (!nationUnitType.equals(other.nationUnitType))
 			return false;
 		if (opponentUnitType == null) {
-			if (other.opponentUnitType != null)
-				return false;
-		} else if (!opponentUnitType.equals(other.opponentUnitType))
-			return false;
-		return true;
+			return other.opponentUnitType == null;
+		} else return opponentUnitType.equals(other.opponentUnitType);
+	}
+
+	@Override
+	public void increment(int count) {
+		this.count += count;
+	}
+
+	@Override
+	public int getCount() {
+		return count;
 	}
 }

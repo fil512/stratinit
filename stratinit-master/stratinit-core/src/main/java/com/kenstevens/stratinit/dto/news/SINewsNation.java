@@ -43,11 +43,8 @@ public abstract class SINewsNation extends SINewsLog {
 			return false;
 		SINewsNation other = (SINewsNation) obj;
 		if (nationName == null) {
-			if (other.nationName != null)
-				return false;
-		} else if (!nationName.equals(other.nationName))
-			return false;
-		return true;
+			return other.nationName == null;
+		} else return nationName.equals(other.nationName);
 	}
 
 

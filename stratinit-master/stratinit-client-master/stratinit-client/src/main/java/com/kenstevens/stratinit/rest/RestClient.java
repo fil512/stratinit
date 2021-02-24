@@ -3,7 +3,6 @@ package com.kenstevens.stratinit.rest;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.RestRequest;
@@ -42,22 +41,22 @@ public class RestClient {
         this.baseUrl = baseUrl;
     }
 
-    public <T> Result<T> get(String path, Class<T> valueClass, Object... args) {
+    public <T> Result<T> get(String path, final Class<T> valueClass) {
         return getResult(path, valueClass, resultFunction());
     }
 
-    public <T> Result<List<T>> getList(String path, Class<T> valueClass, Object... args) {
-        return getResult(path, List.class, listResultFunction());
+    public <T> Result<List<T>> getList(String path, final Class<T> valueClass) {
+        return getResult(path, List.class, listResultFunction(valueClass));
     }
 
     private Function<Class<?>, JavaType> resultFunction() {
         return vc -> mapper.getTypeFactory().constructParametricType(Result.class, vc);
     }
 
-    private Function<Class<?>, JavaType> listResultFunction() {
+    private Function<Class<?>, JavaType> listResultFunction(final Class<?> valueClass) {
         return vc -> {
             TypeFactory typeFactory = mapper.getTypeFactory();
-            JavaType inner = typeFactory.constructParametricType(ArrayList.class, SIGame.class);
+            JavaType inner = typeFactory.constructParametricType(ArrayList.class, valueClass);
             return typeFactory.constructParametricType(Result.class, inner);
         };
     }

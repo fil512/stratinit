@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-public class RestStratInit implements StratInit {
+public class RestClientStratInit implements StratInit {
     @Autowired
     RestClient restClient;
 
@@ -29,12 +29,12 @@ public class RestStratInit implements StratInit {
 
     @Override
     public Result<List<SIUnitBase>> getUnitBases() {
-        return null;
+        return restClient.getList(StratInit.UNIT_BASE, SIUnitBase.class);
     }
 
     @Override
     public Result<Properties> getServerConfig() {
-        return null;
+        return restClient.get(StratInit.SERVER_CONFIG, Properties.class);
     }
 
     @Override
@@ -49,39 +49,39 @@ public class RestStratInit implements StratInit {
 
     @Override
     public Result<List<SIGame>> getJoinedGames() {
-        return restClient.getList(StratInit.JOINED_GAMES, SIGame.class);
+        return restClient.getList(StratInit.GAME_JOINED, SIGame.class);
 
     }
 
     @Override
     public Result<List<SIGame>> getUnjoinedGames() {
-        return restClient.getList(StratInit.UNJOINED_GAMES, SIGame.class);
+        return restClient.getList(StratInit.GAME_UNJOINED, SIGame.class);
 
     }
 
     @Override
     public Result<List<SISector>> getSectors() {
-        return null;
+        return restClient.getList(StratInit.SECTOR, SISector.class);
     }
 
     @Override
     public Result<List<SIUnit>> getUnits() {
-        return null;
+        return restClient.getList(StratInit.UNIT, SIUnit.class);
     }
 
     @Override
     public Result<List<SINation>> getNations() {
-        return null;
+        return restClient.getList(StratInit.NATION, SINation.class);
     }
 
     @Override
     public Result<List<SICity>> getCities() {
-        return null;
+        return restClient.getList(StratInit.CITY, SICity.class);
     }
 
     @Override
     public Result<List<SIBattleLog>> getBattleLog() {
-        return null;
+        return restClient.getList(StratInit.BATTLE_LOG, SIBattleLog.class);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class RestStratInit implements StratInit {
 
     @Override
     public Result<SIUpdate> getUpdate() {
-        return null;
+        return restClient.get(StratInit.UPDATE, SIUpdate.class);
     }
 
     @Override
@@ -101,17 +101,17 @@ public class RestStratInit implements StratInit {
 
     @Override
     public Result<List<SIUnit>> getSeenUnits() {
-        return null;
+        return restClient.getList(StratInit.UNIT_SEEN, SIUnit.class);
     }
 
     @Override
     public Result<List<SICity>> getSeenCities() {
-        return null;
+        return restClient.getList(StratInit.CITY_SEEN, SICity.class);
     }
 
     @Override
     public Result<List<SIRelation>> getRelations() {
-        return null;
+        return restClient.getList(StratInit.RELATION, SIRelation.class);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class RestStratInit implements StratInit {
 
     @Override
     public Result<List<SIMessage>> getMessages() {
-        return null;
+        return restClient.getList(StratInit.MESSAGE, SIMessage.class);
     }
 
     @Override
@@ -145,38 +145,33 @@ public class RestStratInit implements StratInit {
     }
 
     @Override
-    public Result<List<SISatellite>> getSattelites() {
-        return null;
-    }
-
-    @Override
     public Result<List<SIMessage>> getMail() {
-        return null;
+        return restClient.getList(StratInit.MESSAGE_MAIL, SIMessage.class);
     }
 
     @Override
     public Result<List<SIMessage>> getSentMail() {
-        return null;
+        return restClient.getList(StratInit.MESSAGE_SENT, SIMessage.class);
     }
 
     @Override
     public Result<List<SIMessage>> getAnnouncements() {
-        return null;
+        return restClient.getList(StratInit.MESSAGE_ANNOUNCEMENT, SIMessage.class);
     }
 
     @Override
     public Result<List<SINewsLogsDay>> getNewsLogs() {
-        return null;
+        return restClient.getList(StratInit.NEWS_LOG, SINewsLogsDay.class);
     }
 
     @Override
     public Result<List<SIUnitBuilt>> getUnitsBuilt() {
-        return null;
+        return restClient.getList(StratInit.UNIT_BUILT, SIUnitBuilt.class);
     }
 
     @Override
     public Result<SINation> getMyNation() {
-        return null;
+        return restClient.get(StratInit.NATION_ME, SINation.class);
     }
 
     @Override
@@ -196,7 +191,7 @@ public class RestStratInit implements StratInit {
 
     @Override
     public Result<List<SITeam>> getTeams() {
-        return null;
+        return restClient.getList(StratInit.TEAM, SITeam.class);
     }
 
     @Override

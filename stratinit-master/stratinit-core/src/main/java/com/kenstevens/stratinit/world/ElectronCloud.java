@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.world;
 
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.Random;
-
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
+
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Random;
 
 public class ElectronCloud implements CoordMeasure {
 	private static final double PLAYER_CHARGE = 1.0;
@@ -78,7 +78,7 @@ public class ElectronCloud implements CoordMeasure {
 		for (int i = 0; i < numPlayers; ++i) {
 			SectorCoords sectorCoords = playerCoords[i];
 			double startEnergy = getEnergy(i, sectorCoords);
-			for (SectorCoords neighbour : sectorCoords.getNeighbours(size, 1)) {
+			for (SectorCoords neighbour : sectorCoords.neighbours(size, 1)) {
 				if (alreadyExists(i, neighbour)) {
 					continue;
 				}
