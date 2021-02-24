@@ -99,6 +99,7 @@ public interface StratInit {
 	@GetMapping(value = RELATION)
 	Result<List<SIRelation>> getRelations();
 
+	// FIXME finish the rest of the puts
 	Result<SIRelation> setRelation(int nationId, RelationType relationType);
 
 	Result<SIUpdate> cedeUnits(List<SIUnit> units, int nationId);
