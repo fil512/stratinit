@@ -29,6 +29,7 @@
         <module>stratinit-test</module>
         <module>stratinit-server</module>
         <module>stratinit-wicket</module>
+        <module>stratinit-rest</module>
     </modules>
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -124,7 +125,7 @@
             </dependency>
             <dependency>
                 <groupId>com.kenstevens.stratinit</groupId>
-                <artifactId>stratinit-remote</artifactId>
+                <artifactId>stratinit-server</artifactId>
                 <version>${stratinit.version}</version>
             </dependency>
             <dependency>

@@ -4,12 +4,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
-public class BootApp {
+public class WicketApp {
 
     public static void main(String[] args) {
-
         new SpringApplicationBuilder()
-                .sources(BootApp.class)
+                .sources(WicketApp.class)
                 .run(args);
     }
 }

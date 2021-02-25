@@ -56,7 +56,7 @@ Compile Console (java com.google.gwt.dev.Compiler)
 mvn gwt:run
 	./war/WEB-INF/classes (copies source)
 
-When modifying stratinit-remote:
+When modifying stratinit-server:
 stratinit-server> ./compile.bat
 eclipse refresh
 

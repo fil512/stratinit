@@ -15,10 +15,6 @@
             <artifactId>stratinit-dao</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.kenstevens.stratinit</groupId>
-            <artifactId>stratinit-test</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
@@ -35,6 +31,11 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
         <!-- test -->
+        <dependency>
+            <groupId>com.kenstevens.stratinit</groupId>
+            <artifactId>stratinit-test</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
