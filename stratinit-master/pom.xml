@@ -27,7 +27,7 @@
         <module>stratinit-core</module>
         <module>stratinit-dao</module>
         <module>stratinit-test</module>
-        <module>stratinit-remote</module>
+        <module>stratinit-server</module>
         <module>stratinit-wicket</module>
     </modules>
     <properties>
