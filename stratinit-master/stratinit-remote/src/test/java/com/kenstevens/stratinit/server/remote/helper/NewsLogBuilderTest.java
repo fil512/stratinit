@@ -15,6 +15,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -384,6 +385,9 @@ public class NewsLogBuilderTest extends TwoPlayerBase {
 		assertEquals(1, sicon.count);
 		context.assertIsSatisfied();
 	}
+
+	@Disabled
+	// Simplified this when switching from spring-remote to REST
 	@Test
 	public void getOpponentConquestCancel() {
 		List<BattleLog> battleLogs = new ArrayList<BattleLog>();
@@ -399,6 +403,8 @@ public class NewsLogBuilderTest extends TwoPlayerBase {
 		context.assertIsSatisfied();
 	}
 
+	@Disabled
+	// Simplified this when switching from spring-remote to REST
 	@Test
 	public void getOpponentConquest1up2down() {
 		List<BattleLog> battleLogs = new ArrayList<BattleLog>();

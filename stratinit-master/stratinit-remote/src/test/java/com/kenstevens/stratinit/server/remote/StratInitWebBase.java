@@ -13,7 +13,6 @@ import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.List;
 
@@ -30,7 +29,6 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	@Autowired
 	private MoveService moveService;
 	@Autowired
-	@Qualifier("stratInit")
 	protected StratInit stratInit;
 
 	protected Result<Nation> joinGamePlayerMe() {

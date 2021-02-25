@@ -25,10 +25,10 @@
     </organization>
     <modules>
         <module>stratinit-core</module>
-        <module>stratinit-server</module>
         <module>stratinit-dao</module>
         <module>stratinit-test</module>
         <module>stratinit-remote</module>
+        <module>stratinit-wicket</module>
     </modules>
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
