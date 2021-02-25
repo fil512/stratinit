@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
+class RestWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
     final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -51,9 +51,8 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/images/**").permitAll()
-                .antMatchers("/static/**").permitAll()
-                .antMatchers("/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
+                .antMatchers("/stratinit/**").hasAuthority(PlayerRole.ROLE_USER)
+                .antMatchers("/swagger-ui/**").hasAnyAuthority(PlayerRole.ROLE_ADMIN, PlayerRole.ROLE_USER)
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
