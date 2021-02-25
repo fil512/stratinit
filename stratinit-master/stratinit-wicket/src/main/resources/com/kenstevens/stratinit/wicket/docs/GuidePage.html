@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+	<head>
+		<title>Guide</title>
+	</head>
+	<body>
+		<wicket:extend>
+  <h1>Basic Concepts</h1>
+  <P>
+  Strategic Initiative is an online multiplayer military strategy game played over 10 days where the objective is for you and your ally to control the most cities on the map.
+  Explore the map using zeppelins, patrol boats and satellites.  Conquer neutral (white) or enemy (red) cities using tanks and infantry.  Create your own cities using engineers. Transport your
+  tanks and infantry to other islands using transport ships.  Protect your units from air attacks by building fighter planes and
+  aircraft carriers.  Assert naval supremacy with destroyers, cruisers and battleships.  Hunt enemy ships with submarines.  Pick off enemy ships with naval bombers,
+  and flatten stacks of enemy units with heavy bombers.  Late game, turn sections of the map into nuclear wasteland with ICBMs.
+  </P>
+<P>
+  Initially, you will only be able to build <b>technology</b> level 0 units.  You can increase your tech level by building zeppelins or engineers, which has the effect of turning those
+  cities into tech centres that generate technology.  You will also receive &quot;leaked&quot; technology from your ally and other players more advanced than you.
+  </P>
+  <P>
+  A key concept in Strategic Initiative is <b>supply</b>.  Ships near ports and supply ships will be in supply.  Land units near cities, supply ships,  transports, and engineers are
+  in supply.  Units in supply heal, move twice as fast, and get their ammunition replenished when they attack.  Units out of supply move slowly,
+  stop healing, and run out of ammunition.  If you find an enemy supply ship, sink it!
+  </P>
+  <P>
+  When you're not logged in, your units will continue to fight for you.  When unfriendly units enter your air space, your fighters will  intercept
+  them.  Similarly, your ships will interdict unfriendly ships that sail near them.
+  </P>
+<P>
+  Units are built in cities.  What you build in a city determines the kind of city it will be.  Land units are built in Forts, that offer a defensive bonus.
+  Ships are built in ports that provide supply to nearby ships and have powerful cannons to defend against attacking ships.  Planes are built in airports that refuel planes and have heavy flak to defend against
+  air attacks.  Zeppelins, engineers, satellites and ICBMs are built in tech centres that generate technology and have long-range radar.
+  </P>
+  <P>You can have different diplomatic relations with different players.  You can only have one <b>ally</b> in a game.  You <b>win</b> a game by
+holding the most cities with your ally when the game ends.  You may only attack enemy units/cities if you are at WAR with them.    You can  declare "Friendly" relations towards another player to open your air space and waters to them, share spotted enemy units, and to require 24 hour notice before declaring war.</P>
+<h3>How to Play</h3>
+<P>To get into a game, <A HREF="http://www.strategicinitiative.org:8080/stratinit/register/Register.html">REGISTER</A>, then click <A HREF="../docs/play.shtml">PLAY</A> to download and run stratinit-client-1.1.jnlp. If you have trouble with these steps, check out the <A HREF="FAQ.shtml">FAQ</A> for tips on getting started.</P>
+<P>Once you login to the game you joined, you will be faced with a map on the left, tabs on the right, and  menu buttons across the top. Details on the tabs and buttons are covered below.</P>
+<h3>The Three Main Commands</h3>
+<P>1. To <b>BUILD</b> a unit in a city, right-click on the city and select the type of unit you want to build from the drop-down on the right.</P>
+<P>2. To <b>MOVE</b> a unit, right-click on the unit on the map and then left click where you want to move it to.  If there is more than one unit
+in the square, then click the unit(s) on the table in the Sector Tab.  When you select unit(s) to move, the map will shade to indicate where you can move
+that unit.</P>
+<P>3. To <B>ATTACK </B>an enemy unit or city, move your units to the square you want to attack.  Certain units have attack bonuses against other units.  Only infantry and tanks can attack empty cities. See the "Attacking" section
+of <A HREF="rules.shtml">Strategic Initiative Game Mechanics</A> for details on attacking.</P>
+<h3>The Map</h3>
+  <p>Units on the map can have a yellow or a red underline.  A red underline indicates that a unit is
+  out of supply.  A yellow underline indicates it is low on ammunition. See <a href="rules.shtml"><b>Game Mechanics</b></a> for more details about how supply works.</p>
+<p>When you click on a unit, the squares around the unit will change colour.</p>
+<p>If the unit you selected is a ship or land unit, there are two possible shades:</p>
+<ul>
+  <li><strong>light blue:</strong> the squre is in supply and costs 1 mobility to enter.</li>
+  <li><strong>dark blue:</strong> the square is out of supply and costs 2 mobility to enter.</li>
+</ul>
+<p>If the unit you selected is an air unit, there are four possible shades:</p>
+
+ <ul>
+    <li><strong>White:</strong> The air unit can fly to the sector
+    and safely land to refuel now.</li>
+
+    <li><strong>Yellow:</strong> The air unit can fly to the sector
+    and safely land to refuel later, once it gains more mobility.</li>
+
+    <li><strong>Dark:</strong> The air unit can fly to the sector
+    now but it will be stranded.</li>
+
+    <li><strong>Very Dark:</strong> The air unit can fly to the
+    sector later, once it gains movement, but it will be
+    stranded.</li>
+  </ul>
+
+  <p>Squares on the map with a &quot;//&quot; in them are squares that you do not have line of sight to. That means there could be an enemy unit in that square and you aren't able to see it.</p>
+  <p>When you click on a unit in supply, a white line on the map will display that unit's current supply chain. If the supply chain eventually ends in a port, the line will be thicker and brighter. If the supply line is limited to units, i.e. if you have a finite amount of ammo, then the line will be thinner and feinter.</p>
+<h1>Tabs</h1>
+<h3>Sector Tab<img height="581" hspace="0" src=
+  "../images/tabs/Sector.gif" width="422" border="0" align="right"/></h3>
+<p>The Sector Tab to the right is the  tab that will be active most of the time you are playing. The top of the tab indicates the coordinates of the selected sector (where you right-clicked), who owns the sector and what kind of sector it is</p>
+<p>If the selected sector is one of your cities, then beneath that will be a dropdown of unit types indicating the type of unit currently being built in that city. To the right of that is the % complete the unit is and the date and time the unit build will be complete.</p>
+<p>Under that is a &quot;Next build&quot; dropdown which you can use to specify the type of unit you want to build once the current unit is finished building. If you check the &quot;Switch on tech gain&quot; box, then your current build will be abandoned and you will start building the next unit type the instant you have sufficient tech to do so.</p>
+<p>Beneath that is the list of units in that sector. Black units are yours, red units belong to other players. If you hover your mouse over a red unit it will pop-up the owner of that unit. Here you can select multiple units at once in a number of
+ways.</p>
+<ul>
+  <li><strong>Double-click:</strong> Selects all units in the
+    sector of the same type.</li>
+  <li><strong>Shift-click:</strong> Selects all units on the list
+    between the selected unit to the unit you are clicking on.</li>
+  <li><strong>Control-click:</strong> Adds the unit you are
+    clicking on to the list of selected units.</li>
+</ul>
+<p>Once you have selected a group of units, the map will display
+  the range that the group of units can move.  You can then
+  left-click on the map to direct <em><b>all</b></em> selected units to
+  move to the target location.</p>
+<p>For each unit, the mobility, ammunition, hp, fuel, and time of next update (mobility gain / heal).</p>
+<p>Under the unit list is the current queue of commands you've requested.  For example, you might have set a number of unit move orders faster than the server could process them. Under this is a progress bar of the command being executed.</p>
+<p>Under that is the most recent command result. E.g. if you just attacked, the attacked result will appear there.</p>
+<p>At the very bottom, the coordinates of the sector under the mouse are displayed along with the distance from the selected sector to the sector under the mouse.</p>
+<p>On the centre-bottom, you will see something like &quot;CP: 175&quot;. These are your Command Points. It costs 1 Command Point to perform an action. When your Command Points reach 0, you will not be able to do any commands.  You gradually regain Command Points from your cities and capital ships. See <a href="rules.shtml"><b>Game Mechanics</b></a> for more details on Command Points.</p>
+<p>Lastly, the &quot;Update&quot; button updates your map, units and cities.</p>
+<p>&nbsp;</p>
+<h3>Units Tab<img src="../images/tabs/Units.gif" alt="Units Tab" width="421" height="661" border="0" align="right" /></h3>
+<p>The Units Tab organizes all of your units into groups: Navy, Air, Land, Tech, and Orbit. Units are then grouped by type under each of these. For each unit, the coordinates, mobility, ammunition, hit points, fuel and time of next update (heal &amp; mobility gain) are listed. You can select units to move directly from this list.</p>
+<p>The units on this list are colour coded as follows.</p>
+
+ <ul>
+    <li><strong>Green:</strong> This unit was built since the last
+    time you logged in.</li>
+
+    <li><strong>Red:</strong> This unit gained movement points
+    since the last time you logged in.</li>
+
+    <li><strong>Grey:</strong> The unit is being moved.</li>
+
+    <li><strong>Black:</strong> The rest of the units.</li>
+  </ul>
+
+  <p>Units on this tab that are marked with a * are in ports.
+  Generally you don't want your units to be in ports as they will
+  be vulnerable to naval attacks.  Units are further grouped
+  as follows.</p>
+
+ <ul>
+    <li><strong>Moved:</strong> The unit has 0 movement
+    points.</li>
+
+    <li><strong>Repairing:</strong> The unit only has 1 or 2 hit
+    points.</li>
+
+    <li><strong>Stranded:</strong> The air unit does not
+    have enough fuel to reach a city or carrier.</li>
+
+    <li><strong>At Sea:</strong> The land unit is on a transport out
+  at sea</li>
+
+    <li><strong>Boarding:</strong> The land unit is in a port with a
+    transport</li>
+
+    <li><strong>Hold:</strong> The land unit is at full hit points,
+    is not in a port, and has not gained movement points since you
+    last logged in.</li>
+    <li><strong>Hold:</strong> The supply ship or zeppelin are at full mobility.</li>
+  </ul>
+
+  <p>If there is a number to the left of a transport, carrier or helicopter, that number indicates the number of units on board that ship. If there is a &quot;*&quot; to the left of a unit, that indicates that unit is in port.</p>
+  <p>There are three buttons on the Unit Tab.  "Update" updates your unit data. &quot;Centre Unit&quot; centres your map on that unit. &quot;Centre Home&quot; centres the map back on your starting island.  </p>
+  <p>&quot;Cede&quot; allows you to give one of your units your ally. &quot;Disband&quot; allows you to remove a unit (e.g. if you have hit your power max).</p>
+<p>Orbit lists your satellites in orbit.</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <h3>Cities Tab</h3>
+<p>On the Cities Tab, you can view all of your cities at a glance and see what units you are building in them. When you are on the cities tab, your cities on the map change to display the kind of unit you are building in each city. You can click on a city in the Cities Tab to select the square of that city. The &quot;Cede&quot; button on the Cities tab allows you to give one of your cities to your ally. When you do this, all units in that city will also be ceded to the other player. Cities may be sorted by any header in the table, e.g. you might find it useful to sort your cities by the second column--the island that city is on. A &quot;*&quot; beside the island number indicates that city is a port.</p>
+<h3>Log Tab</h3>
+<p>When you are attacked, a red flag will appear beside the Log Tab. The Log Tab is a log of all of your battles. While on the Log Tab, icons of your dead units will appear on the map in purple. The colours of the rows in the battle log have the following meaning.</p>
+<ul>
+  <li><strong>Dark Green:</strong> I attacked an enemy</li>
+  <li><strong>Dark Red: </strong>An enemy attacked me</li>
+  <li><strong>Light Green: </strong>I killed an enemy unit.</li>
+  <li><strong>Light Red: </strong>One of my units was killed.</li>
+</ul>
+<p>When you click on a row in the Log tab, the full message for that log is displayed below and the location where the battle occurred will be selected on the map.</p>
+<p>The &quot;Update&quot; button refreshes the data in the Log Tab. The &quot;Download&quot; button allows you to download all battle data as a spreadsheet so you can analyse it.</p>
+<h3>Players Tab</h3>
+
+<p>This is where you see how your nation ranks against the other players in the game. The players are listed in order of &quot;power&quot; which is the total cost in hours of all their units (divided by 10). Also important are the number of cities each player has. If you click on a player, the display below will indicate your diplomatic relation towards them and their diplomatic relation towards you. As well, if that relation is changing and there was a notification period (e.g. cancelling an alliance), then the new relation will be indicated along with the time the relation change will take place. Also listed beside each player is the total number of games they have played and the percentage of games they have won.</p>
+<p>You can change your diplomatic relations towards another country by clicking on their country and selecting the new relation from the dropdown list.</p>
+<p>Selecting a player on the player tab makes all of their cities and units on the map purple. This can be useful if you are at war with multiple nations.</p>
+<p>Below the list of players is the list of teams in order of their score. A team is a pair of allied players and their score is their combined total number of cities. Whichever team has the most cities at the end of the game wins.</p>
+<p>You can update the list by clicking the &quot;Update&quot; button.</p>
+<h3>Cmds Tab</h3>
+<p>This tab lists all of the commands you have sent to the server and the results of those commands. If you need to go back and check the result of a recent battle, this might be a handy place to check. Or if you need to remember what you did recently, it will be recorded here.</p>
+
+  <h3>Plan Tab</h3>
+<p>On this tab, it lists up-coming events chronologically into
+  the future.  Units gaining movement are marked as red.
+  Cities building units are marked as green.  If you select a
+  time-slot, it will list all the events happening in that 1/2 hour
+  time-slot.</p>
+  <h3>Prefs Tab</h3>
+<p>On the Prefs tab, you can toggle a number of features.
+    Such as the following.</p>
+<ul>
+    <li><strong>Show Building:</strong> This displays an icon of
+      what unit you are building in each of your cities.  (Rather than only displaying this when you're on the Cities Tab.)</li>
+    <li> <strong>Play Sounds:</strong> If this is checked, you will
+      receive sound queues for important events.  For example:
+      <ul>
+        <li><strong>Explosion:</strong> If you destroy an enemy
+          unit.</li>
+        <li><strong>Scream:</strong> If your unit is
+          destroyed.</li>
+        <li><strong>Click:</strong> If your move didn't succeed.</li>
+        <li><strong>Fanfare (or terror): </strong>When you capture a city.</li>
+      </ul>
+    </li>
+    <li><strong>Liberator vs. Conquerer: </strong>Plays different sounds when you capture a city.</li>
+    <li><strong>Switch Mouse Buttons: </strong>To reverse the meaning of the mouse buttons (and play like a traditional RTS)</li>
+    <li><strong>Show Fog of War: </strong>This switches on and off the display of &quot;//&quot; on the map that indicates which squares your units can currently see.</li>
+</ul>
+<h1>Menu Items</h1>
+<h3>Map Menu Item</h3>
+
+<p>This displays a map on a smaller scale so you can see the entire world at once. If you click on the map, it will re-centre the map on the square you clicked.</p>
+
+  <h3>Messages Menu Item</h3>
+
+  <p>This is an e-mail like interface for managing your
+  messages.  In this interface, you can read messages in your inbox, compose messages, post
+  to the Message Board, reply, and forward messages.</p>
+
+  <h3>News Menu Item</h3>
+
+  <p>This summarizes newsworthy events happening in the game.</p>
+
+  <h3>Stats Menu Item</h3>
+
+  <p>This window shows you how you are doing against various
+  opponents.  It keeps track of all your kills (except bomber
+  kills which are hidden) so you can know whether you're ahead or
+  behind against a particular opponent.  There are three
+  tabs.</p>
+
+ <ul>
+    <li><strong>Opponents: </strong>Summarizes how you're
+    doing against each opponent.  You want the Dominance
+    number to be over 50%.</li>
+
+    <li><strong>Details:</strong> On this tab, you select an
+    opponent and it lists how many units you have killed/lost by
+    unit type.  It then multiplies those by the cost in hours
+    to build those units to determine an over-all cost.</li>
+
+    <li><strong>Units:</strong> On this tab, your general unit
+    preservation is calculated--e.g. of all the destroyers you ever
+    built, how many are still alive.</li>
+  </ul>
+
+  <h3>Technology</h3>
+
+  <p>This window lists which Day the game is in (1-16), when the game starts and ends, the version of the server,
+  and your current technology level and rate of technology gain.  It also lists the unit stats and indicates
+  by colour which units you'll be able to build when.</p>
+
+  <h3>Games</h3>
+
+  <p>This is where you select the game you want to play.  You can also join games here.</p>
+  <p>Once 4 players have joined a game, the game will be scheduled to map 16 hours later. In that 16 hours, up to a total of 10 players can join the game. When the game is mapped, it will be mapped with 2 extra available player islands and will be open for players to login and set up their country. 8 hours after the game is mapped, it will &quot;start&quot; and units will start building and accumulating mobility.</p>
+<h3>Account Settings</h3>
+
+  <p>This is where your username and password are stored.
+  Note your password is encrypted when it is saved.</p>
+
+  <h3>Resign</h3>
+  <p>Sometimes it's clear that you have lost a game. In this case, the noble thing to do is to resign fromthe game. When you press the &quot;Resign&quot; button, you'll be given a couple of warning screens before you lose all your cities and units. If you have an ally, then all your stuff will be transferred to your ally. If you have an ally, but they have 0 cities, then all your stuff will simply be destroyed.</p>
+<h3>Help</h3>
+
+  <p>Takes you to this page.</p>
+		</wicket:extend>
+	</body>
+</html>

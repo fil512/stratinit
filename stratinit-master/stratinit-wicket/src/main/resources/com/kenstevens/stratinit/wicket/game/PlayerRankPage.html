@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+	<wicket:extend>
+		<h2>Leader Board</h2>
+		<span>
+			<p>
+				Player Rank is the weighted average of a player's
+				<a wicket:id="TeamRankPage2">Team Ranks</a>.
+				Ranks are weighted by the number of opponent teams defeated by each team you played on.
+				To be precise, Player Rank = sum((team rank) * (team victories)) / (total team victories).
+			</p>
+			<p>
+				The original
+				<a wicket:id="LeaderBoardPage">Leader Board</a>
+				is still available, although I consider the
+				Elo ranking to be a
+				better measurement of player skill as it takes into
+				consideration the
+				skill level of the players
+				you beat.
+			</p>
+			<span wicket:id="rankedPanel" />
+
+		</span>
+	</wicket:extend>
+</HTML>
