@@ -15,7 +15,7 @@ public class GetRelationsTest extends TwoPlayerBase {
 
     @Test
     public void nation2() {
-        relations = stratInit.getRelations().getValue();
+        relations = stratInitController.getRelations().getValue();
         SIRelation sirelation = getRelation(nationThemId);
         assertEquals(RelationType.NEUTRAL, sirelation.meToThem);
         assertEquals(RelationType.NEUTRAL, sirelation.themToMe);
@@ -26,7 +26,7 @@ public class GetRelationsTest extends TwoPlayerBase {
     @Test
     public void nation2war() {
         declareWar();
-        relations = stratInit.getRelations().getValue();
+        relations = stratInitController.getRelations().getValue();
         SIRelation sirelation = getRelation(nationThemId);
         assertEquals(RelationType.WAR, sirelation.themToMe);
         assertEquals(RelationType.WAR, sirelation.meToThem);
@@ -37,7 +37,7 @@ public class GetRelationsTest extends TwoPlayerBase {
     @Test
     public void nation2warBack() {
         warDeclared();
-        relations = stratInit.getRelations().getValue();
+        relations = stratInitController.getRelations().getValue();
         SIRelation sirelation = getRelation(nationThemId);
         assertEquals(RelationType.NEUTRAL, sirelation.meToThem);
         assertEquals(RelationType.WAR, sirelation.themToMe);
@@ -47,7 +47,7 @@ public class GetRelationsTest extends TwoPlayerBase {
 
     @Test
     public void nation1() {
-        relations = stratInit.getRelations().getValue();
+        relations = stratInitController.getRelations().getValue();
         SIRelation sirelation = getRelation(nationMeId);
         assertEquals(RelationType.ME, sirelation.meToThem);
         assertEquals(RelationType.ME, sirelation.themToMe);

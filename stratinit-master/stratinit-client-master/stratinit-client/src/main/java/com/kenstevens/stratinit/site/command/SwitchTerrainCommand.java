@@ -26,9 +26,9 @@ public class SwitchTerrainCommand extends Command<SIUpdate>{
 
 	@Override
 	public Result<SIUpdate> execute() {
-		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-		return stratInit.switchTerrain(siunits);
-	}
+        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+        return stratInitServer.switchTerrain(siunits);
+    }
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {

@@ -18,8 +18,8 @@ public class GetNationsCommand extends Command<List<SINation>> {
 
 	@Override
 	public Result<List<SINation>> execute() {
-		return stratInit.getNations();
-	}
+        return stratInitServer.getNations();
+    }
 
 	@Override
 	public String getDescription() {

@@ -23,8 +23,8 @@ public class ConcedeCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		return stratInit.concede();
-	}
+        return stratInitServer.concede();
+    }
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class GetNationsTest extends TwoPlayerBase {
     @Test
     public void getNations() {
-        List<SINation> nations = stratInit.getNations().getValue();
+        List<SINation> nations = stratInitController.getNations().getValue();
         assertEquals(2, nations.size());
         SINation nationMe = nations.get(0);
 

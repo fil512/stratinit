@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.server.remote;
 
+import com.kenstevens.stratinit.controller.StratInitController;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
@@ -27,7 +27,7 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 	@Autowired
 	protected UnitDaoService unitDaoService;
 	@Autowired
-	protected StratInit stratInit;
+	protected StratInitController stratInitController;
 	@Autowired
 	private MoveService moveService;
 
@@ -46,11 +46,11 @@ public abstract class StratInitWebBase extends StratInitDaoBase {
 
 	protected void setAuthentication(String username) {
 		new AuthenticationHelper().setAuthentication(username);
-		stratInit.setGame(new SetGameRequest(testGameId, false));
+		stratInitController.setGame(new SetGameRequest(testGameId, false));
 	}
 
 	protected Result<Nation> joinGame(Player player) {
-		Result<Nation> result = stratInit.joinGame(player, testGameId, false);
+		Result<Nation> result = stratInitController.joinGame(player, testGameId, false);
 		assertResult(result);
 		return result;
 	}

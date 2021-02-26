@@ -20,8 +20,8 @@ public class GetVersionCommand extends Command<String> {
 
 	@Override
 	public Result<String> execute() {
-		return stratInit.getVersion();
-	}
+        return stratInitServer.getVersion();
+    }
 
 	@Override
 	public String getDescription() {

@@ -18,8 +18,8 @@ public class SendMessageCommand extends Command<Integer> {
 
 	@Override
 	public Result<Integer> execute() {
-		return stratInit.sendMessage(new SIMessage(message));
-	}
+        return stratInitServer.sendMessage(new SIMessage(message));
+    }
 
 	@Override
 	public String getDescription() {

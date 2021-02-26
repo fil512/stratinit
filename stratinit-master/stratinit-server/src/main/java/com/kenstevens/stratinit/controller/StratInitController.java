@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.remote;
+package com.kenstevens.stratinit.controller;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -10,17 +10,18 @@ import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.rest.SIRestPaths;
 import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.remote.request.RequestFactory;
-import com.kenstevens.stratinit.server.remote.state.ServerStatus;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,16 +29,13 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
+// FIXME remove web dependencies from core
+// FIXME remove web depdendcies from server--this means splitting service from controller--they are currently mixed in this class
 @RestController
 @RequestMapping("/stratinit")
-//@Component("stratInit")
-public class StratInitImpl implements StratInit {
+public class StratInitController {
     @Autowired
     private RequestFactory requestFactory;
-    @Autowired
-    private ServerManager serverManager;
-    @Autowired
-    private ServerStatus serverStatus;
     @Autowired
     private ErrorProcessor errorProcessor;
 
@@ -45,17 +43,17 @@ public class StratInitImpl implements StratInit {
      * Non database requests
      */
 
-    @Override
+    // TODO Return incremental battle logs and nation with all commands
+    @GetMapping(value = SIRestPaths.VERSION)
     public Result<String> getVersion() {
         return Result.make(Constants.SERVER_VERSION);
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.UNIT_BASE)
     public Result<List<SIUnitBase>> getUnitBases() {
         List<SIUnitBase> result = Lists.newArrayList(Collections2.transform(
                 Lists.newArrayList(UnitType.values()),
                 new Function<UnitType, SIUnitBase>() {
-                    @Override
                     public SIUnitBase apply(UnitType unitType) {
                         return new SIUnitBase(UnitBase.getUnitBase(unitType));
                     }
@@ -63,7 +61,7 @@ public class StratInitImpl implements StratInit {
         return Result.make(result);
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.SERVER_CONFIG)
     public Result<Properties> getServerConfig() {
         Properties properties = new Properties();
         Class<Constants> clazz = Constants.class;
@@ -80,6 +78,7 @@ public class StratInitImpl implements StratInit {
 
     // FIXME Log this
     // FIXME What does "Log this" mean?
+    @PostMapping(value = SIRestPaths.SET_GAME)
     public Result<None> setGame(SetGameRequest request) {
         return requestFactory.getSetGameRequest(request.gameId, request.noAlliances).process(request.gameId);
     }
@@ -88,83 +87,88 @@ public class StratInitImpl implements StratInit {
      * Read-only database requests
      */
 
+    @GetMapping(value = SIRestPaths.GAME_JOINED)
     public Result<List<SIGame>> getJoinedGames() {
         return requestFactory.getGetJoinedGamesRequest().processNoGame();
     }
 
+    @GetMapping(value = SIRestPaths.GAME_UNJOINED)
     public Result<List<SIGame>> getUnjoinedGames() {
         return requestFactory.getGetUnjoinedGamesRequest().processNoGame();
     }
 
+    @GetMapping(value = SIRestPaths.NATION)
     public Result<List<SINation>> getNations() {
         return requestFactory.getGetNationsRequest().process();
     }
 
+    @GetMapping(value = SIRestPaths.SECTOR)
     public Result<List<SISector>> getSectors() {
         return requestFactory.getGetSectorsRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.UNIT)
     public Result<List<SIUnit>> getUnits() {
         return requestFactory.getGetUnitsRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.UNIT_SEEN)
     public Result<List<SIUnit>> getSeenUnits() {
         return requestFactory.getGetSeenUnitsRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.NATION_ME)
     public Result<SINation> getMyNation() {
         return requestFactory.getGetMyNationRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.CITY)
     public Result<List<SICity>> getCities() {
         return requestFactory.getGetCitiesRequest().process();
     }
 
-    @Override
+    // FIXME collapse with city
+    @GetMapping(value = SIRestPaths.CITY_SEEN)
     public Result<List<SICity>> getSeenCities() {
         return requestFactory.getGetSeenCitiesRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.UPDATE)
     public Result<SIUpdate> getUpdate() {
         return requestFactory.getGetUpdateRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.BATTLE_LOG)
     public Result<List<SIBattleLog>> getBattleLog() {
         return requestFactory.getGetBattleLogRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.MESSAGE_MAIL)
     public Result<List<SIMessage>> getMail() {
         return requestFactory.getGetMailRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.RELATION)
     public Result<List<SIRelation>> getRelations() {
         return requestFactory.getGetRelationsRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.MESSAGE)
     public Result<List<SIMessage>> getMessages() {
         return requestFactory.getGetMessagesRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.MESSAGE_SENT)
     public Result<List<SIMessage>> getSentMail() {
         return requestFactory.getGetSentMailRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.MESSAGE_ANNOUNCEMENT)
     public Result<List<SIMessage>> getAnnouncements() {
         return requestFactory.getGetAnnouncementsRequest().process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.UNIT_BUILT)
     public Result<List<SIUnitBuilt>> getUnitsBuilt() {
         return requestFactory.getGetUnitsBuiltRequest().process();
     }
@@ -173,100 +177,72 @@ public class StratInitImpl implements StratInit {
      * Database update requests
      */
 
-    @Override
     public Result<SICity> updateCity(SICity sicity, UpdateCityField field) {
         return requestFactory.getUpdateCityRequest(sicity, field).process();
     }
 
-    @Override
     public Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {
         return requestFactory.getMoveUnitsRequest(units, target).process();
     }
 
-    @Override
     public Result<SIUpdate> cedeUnits(List<SIUnit> siunits, int nationId) {
         return requestFactory.getCedeUnitsRequest(siunits, nationId).process();
     }
 
-    @Override
     public Result<SIUpdate> cedeCity(SICity sicity, int nationId) {
         return requestFactory.getCedeCityRequest(sicity, nationId).process();
     }
 
-    @Override
     public Result<SIRelation> setRelation(int nationId,
                                           RelationType relationType) {
         return requestFactory.getSetRelationRequest(nationId, relationType)
                 .process();
     }
 
-    @Override
     public Result<Integer> sendMessage(SIMessage simessage) {
         return requestFactory.getSendMessageRequest(simessage).process();
     }
 
-    @Override
+    @PostMapping(value = SIRestPaths.JOIN_GAME)
     public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
         return requestFactory.getJoinGameRequest(player, gameId, noAlliances).process(
                 gameId);
     }
 
-    @Override
-    public synchronized Result<None> shutdown() {
-        // TODO SEC block access to this method to admin only
-        if (!serverStatus.isRunning()) {
-            return new Result<None>("The server is not running.", false);
-        }
-        serverManager.shutdown();
-        return new Result<None>("SERVER SHUTDOWN COMPLETE", true);
-    }
-
-    @Override
     public Result<Nation> joinGame(SetGameRequest request) {
         return requestFactory.getJoinGameRequest(null, request.gameId, request.noAlliances).process(request.gameId);
     }
 
-    @Override
     public Result<SIUpdate> disbandUnits(List<SIUnit> siunits) {
         return requestFactory.getDisbandUnitRequest(siunits).process();
     }
 
-    @Override
     public Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
         return requestFactory.getCancelMoveOrderRequest(siunits).process();
     }
 
-    @Override
     public Result<SIUpdate> buildCity(List<SIUnit> siunits) {
         return requestFactory.getBuildCityRequest(siunits).process();
     }
 
-    @Override
     public Result<SIUpdate> switchTerrain(List<SIUnit> siunits) {
         return requestFactory.getSwitchTerrainRequest(siunits).process();
     }
 
-    @Override
+    @GetMapping(value = SIRestPaths.NEWS_LOG)
     public Result<List<SINewsLogsDay>> getNewsLogs() {
         return requestFactory.getGetLogsRequest().process();
     }
 
-    @Override
-    public Result<Integer> postAnnouncement(String subject, String body) {
-        return requestFactory.getPostAnnouncementRequest(subject, body).processNoGame();
-    }
-
-    @Override
+    @GetMapping(value = SIRestPaths.TEAM)
     public Result<List<SITeam>> getTeams() {
         return requestFactory.getGetTeamsRequest().process();
     }
 
-    @Override
     public Result<SIUpdate> concede() {
         return requestFactory.getConcedeRequest().process();
     }
 
-    @Override
     public Result<Integer> submitError(String subject, String stackTrace) {
         return errorProcessor.processError(subject, stackTrace);
     }

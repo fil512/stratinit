@@ -20,8 +20,8 @@ public class CedeCityCommand extends CedeCommand {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		return stratInit.cedeCity(new SICity(city), nation.getNationId());
-	}
+        return stratInitServer.cedeCity(new SICity(city), nation.getNationId());
+    }
 
 	@Override
 	public String getDescription() {

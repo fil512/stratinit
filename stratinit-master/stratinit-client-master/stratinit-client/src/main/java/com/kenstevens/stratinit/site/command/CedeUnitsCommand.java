@@ -23,9 +23,9 @@ public class CedeUnitsCommand extends CedeCommand {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-		return stratInit.cedeUnits(siunits, nation.getNationId());
-	}
+        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+        return stratInitServer.cedeUnits(siunits, nation.getNationId());
+    }
 
 	@Override
 	public String getDescription() {

@@ -18,8 +18,8 @@ public class GetUnitsCommand extends Command<List<SIUnit>> {
 
 	@Override
 	public Result<List<SIUnit>> execute() {
-		return stratInit.getUnits();
-	}
+        return stratInitServer.getUnits();
+    }
 
 	@Override
 	public String getDescription() {

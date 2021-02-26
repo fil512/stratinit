@@ -20,21 +20,21 @@ public class BuildUnitTest extends StratInitWebBase {
     @BeforeEach
     public void doJoinGame() throws InterruptedException {
         joinGamePlayerMe();
-        List<SICity> cities = stratInit.getCities().getValue();
+        List<SICity> cities = stratInitController.getCities().getValue();
         sicity = cities.get(0);
     }
 
     @Test
     public void airport() {
         sicity.build = UnitType.FIGHTER;
-        Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+        Result<SICity> result = stratInitController.updateCity(sicity, UpdateCityField.BUILD);
         assertFalseResult(result);
     }
 
     @Test
     public void tech() {
         sicity.build = UnitType.ZEPPELIN;
-        Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+        Result<SICity> result = stratInitController.updateCity(sicity, UpdateCityField.BUILD);
         assertTrue(result.isSuccess());
         assertEquals(UnitType.ZEPPELIN, result.getValue().build);
         assertEquals(CityType.TECH, result.getValue().type);
@@ -43,27 +43,27 @@ public class BuildUnitTest extends StratInitWebBase {
     @Test
     public void noWater() {
         sicity.build = UnitType.PATROL;
-        Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+        Result<SICity> result = stratInitController.updateCity(sicity, UpdateCityField.BUILD);
         assertFalseResult(result);
     }
 
     @Test
     public void insufficientTech() {
         sicity.build = UnitType.TANK;
-        Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+        Result<SICity> result = stratInitController.updateCity(sicity, UpdateCityField.BUILD);
         assertFalseResult(result);
     }
 
     @Test
     public void fort() {
         sicity.build = UnitType.ZEPPELIN;
-        Result<SICity> result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+        Result<SICity> result = stratInitController.updateCity(sicity, UpdateCityField.BUILD);
         assertTrue(result.isSuccess());
         assertEquals(UnitType.ZEPPELIN, result.getValue().build);
         assertEquals(CityType.TECH, result.getValue().type);
 
         sicity.build = UnitType.INFANTRY;
-        result = stratInit.updateCity(sicity, UpdateCityField.BUILD);
+        result = stratInitController.updateCity(sicity, UpdateCityField.BUILD);
         assertTrue(result.isSuccess());
         assertEquals(UnitType.INFANTRY, result.getValue().build);
         assertEquals(CityType.FORT, result.getValue().type);

@@ -18,7 +18,7 @@ public class SetGameCommand extends Command<None> {
 
 	@Override
 	public Result<None> execute() {
-		return stratInit.setGame(request);
+		return stratInitServer.setGame(request);
 	}
 
 	@Override

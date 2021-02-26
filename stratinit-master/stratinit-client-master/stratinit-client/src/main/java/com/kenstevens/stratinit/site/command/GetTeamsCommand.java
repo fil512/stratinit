@@ -19,8 +19,8 @@ public class GetTeamsCommand extends Command<List<SITeam>> {
 
 	@Override
 	public Result<List<SITeam>> execute() {
-		return stratInit.getTeams();
-	}
+        return stratInitServer.getTeams();
+    }
 
 	@Override
 	public String getDescription() {

@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.rest;
 
-import com.kenstevens.stratinit.remote.StratInit;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -19,8 +18,7 @@ public class ManualRestTest {
     @Test
     public void getConfig() throws IOException {
         try (CloseableHttpClient client = HttpClients.createDefault()) {
-            HttpGet httpGet = new HttpGet("http://localhost:8080/stratinit/" + StratInit.SERVER_CONFIG);
-
+            HttpGet httpGet = new HttpGet("http://localhost:8080/stratinit/" + SIRestPaths.SERVER_CONFIG);
 
             httpGet.setHeader("Accept", "application/json");
 

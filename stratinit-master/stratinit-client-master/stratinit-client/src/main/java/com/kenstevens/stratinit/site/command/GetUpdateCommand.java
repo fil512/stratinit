@@ -21,7 +21,7 @@ public class GetUpdateCommand extends Command<SIUpdate> {
 
     @Override
     public Result<SIUpdate> execute() {
-        return stratInit.getUpdate();
+        return stratInitServer.getUpdate();
     }
 
     @Override

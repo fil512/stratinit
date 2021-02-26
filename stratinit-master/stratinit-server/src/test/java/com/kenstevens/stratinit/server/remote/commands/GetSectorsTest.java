@@ -13,7 +13,7 @@ public class GetSectorsTest extends WithUnitsBase {
 
     @Test
     public void getSectors() {
-        List<SISector> sectors = stratInit.getSectors().getValue();
+        List<SISector> sectors = stratInitController.getSectors().getValue();
         assertEquals(82, sectors.size());
         for (SISector sector : sectors) {
             assertNotNull(sector.type);

@@ -21,8 +21,8 @@ public class ReadMessageBoardCommand extends Command<List<SIMessage>> {
 
 	@Override
 	public Result<List<SIMessage>> execute() {
-		return stratInit.getAnnouncements();
-	}
+        return stratInitServer.getAnnouncements();
+    }
 
 	@Override
 	public String getDescription() {

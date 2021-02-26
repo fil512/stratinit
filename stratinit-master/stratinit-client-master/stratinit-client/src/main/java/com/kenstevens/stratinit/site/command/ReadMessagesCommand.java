@@ -21,8 +21,8 @@ public class ReadMessagesCommand extends Command<List<SIMessage>> {
 
 	@Override
 	public Result<List<SIMessage>> execute() {
-		return stratInit.getMail();
-	}
+        return stratInitServer.getMail();
+    }
 
 	@Override
 	public String getDescription() {

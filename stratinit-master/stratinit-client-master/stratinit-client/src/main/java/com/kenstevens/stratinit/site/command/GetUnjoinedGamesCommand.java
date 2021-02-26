@@ -18,8 +18,8 @@ public class GetUnjoinedGamesCommand extends Command<List<SIGame>> {
 
 	@Override
 	public Result<List<SIGame>> execute() {
-		return stratInit.getUnjoinedGames();
-	}
+        return stratInitServer.getUnjoinedGames();
+    }
 
 	@Override
 	public String getDescription() {

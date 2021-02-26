@@ -18,8 +18,8 @@ public class GetGamesCommand extends Command<List<SIGame>> {
 
 	@Override
 	public Result<List<SIGame>> execute() {
-		return stratInit.getJoinedGames();
-	}
+        return stratInitServer.getJoinedGames();
+    }
 
 	@Override
 	public String getDescription() {

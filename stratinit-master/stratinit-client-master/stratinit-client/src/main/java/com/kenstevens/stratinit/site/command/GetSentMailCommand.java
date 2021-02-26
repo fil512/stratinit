@@ -21,8 +21,8 @@ public class GetSentMailCommand extends Command<List<SIMessage>> {
 
 	@Override
 	public Result<List<SIMessage>> execute() {
-		return stratInit.getSentMail();
-	}
+        return stratInitServer.getSentMail();
+    }
 
 	@Override
 	public String getDescription() {

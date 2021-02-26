@@ -18,8 +18,8 @@ public class GetBattleLogCommand extends Command<List<SIBattleLog>> {
 
 	@Override
 	public Result<List<SIBattleLog>> execute() {
-		return stratInit.getBattleLog();
-	}
+        return stratInitServer.getBattleLog();
+    }
 
 	@Override
 	public void handleSuccess(List<SIBattleLog> silogs) {

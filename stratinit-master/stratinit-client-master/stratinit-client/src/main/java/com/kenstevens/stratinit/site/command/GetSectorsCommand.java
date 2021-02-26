@@ -25,8 +25,8 @@ public class GetSectorsCommand extends Command<List<SISector>> {
 
 	@Override
 	public Result<List<SISector>> execute() {
-		return stratInit.getSectors();
-	}
+        return stratInitServer.getSectors();
+    }
 
 
 	@Override

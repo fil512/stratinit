@@ -35,7 +35,7 @@ public class TwoPlayerRelationChangeTest extends RelationManagerTest {
 
     @Test
     public void neutralToMe() {
-        Result<SIRelation> result = stratInit.setRelation(nationThemId, RelationType.ME);
+        Result<SIRelation> result = stratInitController.setRelation(nationThemId, RelationType.ME);
         assertFalseResult(result);
     }
 

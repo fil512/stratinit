@@ -1,23 +1,22 @@
 package com.kenstevens.stratinit.site.processor;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.dto.SIUnitBuilt;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.stats.StatsHolder;
-import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.server.StratInitServer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class StatsManager {
 	@Autowired
 	private Data db;
 	@Autowired
-	private StratInit stratInit;
+	private StratInitServer stratInitServer;
 	@Autowired
 	private BattleLogProcessor battleLogProcessor;
 	
@@ -27,14 +26,14 @@ public class StatsManager {
 		downloadBattleLogs();
 		statsHolder.clear();
 		// TODO REF Move to ActionFactory with Observer
-		List<SIUnitBuilt> unitsBuilt = stratInit.getUnitsBuilt().getValue();
+		List<SIUnitBuilt> unitsBuilt = stratInitServer.getUnitsBuilt().getValue();
 		statsHolder.addBuilt(unitsBuilt);
 		statsHolder.rebuildStats(db.getBattleLogList());
 	}
 
 	// TODO REF this is in the wrong place
 	private void downloadBattleLogs() {
-		List<SIBattleLog> silogs = stratInit.getBattleLog().getValue();
+		List<SIBattleLog> silogs = stratInitServer.getBattleLog().getValue();
 		battleLogProcessor.process(silogs);
 	}
 

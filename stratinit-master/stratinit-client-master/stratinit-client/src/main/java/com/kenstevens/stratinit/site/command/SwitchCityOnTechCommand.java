@@ -24,10 +24,10 @@ public class SwitchCityOnTechCommand extends Command<SICity> {
 
 	@Override
 	public Result<SICity> execute() {
-		SICity sicity = new SICity(city);
-		sicity.switchOnTechChange = city.isSwitchOnTechChange();
-		return stratInit.updateCity(sicity, UpdateCityField.SWITCH_ON_TECH_CHANGE);
-	}
+        SICity sicity = new SICity(city);
+        sicity.switchOnTechChange = city.isSwitchOnTechChange();
+        return stratInitServer.updateCity(sicity, UpdateCityField.SWITCH_ON_TECH_CHANGE);
+    }
 
 	@Override
 	public String getDescription() {

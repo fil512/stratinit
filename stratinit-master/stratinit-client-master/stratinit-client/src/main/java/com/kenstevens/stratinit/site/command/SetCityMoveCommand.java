@@ -27,10 +27,10 @@ public class SetCityMoveCommand extends Command<SICity> {
 
 	@Override
 	public Result<SICity> execute() {
-		SICity sicity = new SICity(city);
-		sicity.nextCoords = coords;
-		return stratInit.updateCity(sicity, UpdateCityField.NEXT_COORDS);
-	}
+        SICity sicity = new SICity(city);
+        sicity.nextCoords = coords;
+        return stratInitServer.updateCity(sicity, UpdateCityField.NEXT_COORDS);
+    }
 
 	@Override
 	public String getDescription() {

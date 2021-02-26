@@ -18,7 +18,7 @@ public class JoinGameCommand extends Command<Nation> {
 
     @Override
     public Result<Nation> execute() {
-        return stratInit.joinGame(request);
+        return stratInitServer.joinGame(request);
     }
 
     @Override

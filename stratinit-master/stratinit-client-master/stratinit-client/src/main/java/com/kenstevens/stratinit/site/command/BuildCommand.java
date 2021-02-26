@@ -25,10 +25,10 @@ public abstract class BuildCommand extends Command<SICity> {
 
 	@Override
 	public Result<SICity> execute() {
-		SICity sicity = new SICity(city);
-		setBuild(sicity);
-		return stratInit.updateCity(sicity, field);
-	}
+        SICity sicity = new SICity(city);
+        setBuild(sicity);
+        return stratInitServer.updateCity(sicity, field);
+    }
 
 	protected abstract void setBuild(SICity sicity);
 

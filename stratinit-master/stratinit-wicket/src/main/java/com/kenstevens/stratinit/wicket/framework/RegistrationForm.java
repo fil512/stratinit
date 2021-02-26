@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.wicket.framework;
 
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -21,15 +20,12 @@ public class RegistrationForm extends Form<Player> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	StratInit stratInit;
-	@SpringBean
 	PlayerDaoService playerDaoService;
 	@SpringBean
 	BCryptPasswordEncoder passwordEncoder;
 
 	public RegistrationForm(String id, Player player) {
 		super(id, new CompoundPropertyModel<Player>(player));
-
 
 		RequiredTextField<String> usernameField = new RequiredTextField<String>("username", String.class);
 		add(usernameField);

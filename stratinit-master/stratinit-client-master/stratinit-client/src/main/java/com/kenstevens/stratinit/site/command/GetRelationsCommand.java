@@ -18,8 +18,8 @@ public class GetRelationsCommand extends Command<List<SIRelation>> {
 
 	@Override
 	public Result<List<SIRelation>> execute() {
-		return stratInit.getRelations();
-	}
+        return stratInitServer.getRelations();
+    }
 
 	@Override
 	public String getDescription() {

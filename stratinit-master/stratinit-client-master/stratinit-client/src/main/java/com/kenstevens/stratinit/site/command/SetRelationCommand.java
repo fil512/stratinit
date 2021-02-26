@@ -31,8 +31,8 @@ public class SetRelationCommand extends Command<SIRelation> {
 
 	@Override
 	public Result<SIRelation> execute() {
-		return stratInit.setRelation(nation.getNationId(), relationType);
-	}
+        return stratInitServer.setRelation(nation.getNationId(), relationType);
+    }
 
 	@Override
 	public String getDescription() {

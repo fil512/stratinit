@@ -20,7 +20,7 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
 
     // TODO REF repeated with TwoPlayerBase
     protected void changedTo(RelationType nextType) {
-        Result<SIRelation> result = stratInit.setRelation(nationThemId, nextType);
+        Result<SIRelation> result = stratInitController.setRelation(nationThemId, nextType);
         assertResult(result);
         assertRelationChanged(nationThem, nextType);
     }
@@ -41,7 +41,7 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     protected void changedToDelayed(RelationType nextType) {
         Relation relation = gameDao.findRelation(nationMe, nationThem);
         RelationType pre = relation.getType();
-        Result<SIRelation> result = stratInit.setRelation(nationThemId, nextType);
+        Result<SIRelation> result = stratInitController.setRelation(nationThemId, nextType);
         assertResult(result);
         assertEquals(pre, relation.getType(), result.toString());
         assertRelationDelayed(nationThem, nextType);
@@ -60,7 +60,7 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     }
 
     protected void thirdChangedTo(RelationType nextType) {
-        Result<SIRelation> result = stratInit.setRelation(nationThreeId, nextType);
+        Result<SIRelation> result = stratInitController.setRelation(nationThreeId, nextType);
         assertResult(result);
         Relation relation = gameDao.findRelation(nationMe, nationThird);
         assertEquals(nextType, relation.getType(), result.toString());
@@ -72,7 +72,7 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     protected void thirdChangedToDelayed(RelationType nextType) {
         Relation relation = gameDao.findRelation(nationMe, nationThird);
         RelationType pre = relation.getType();
-        Result<SIRelation> result = stratInit.setRelation(nationThreeId, nextType);
+        Result<SIRelation> result = stratInitController.setRelation(nationThreeId, nextType);
         assertResult(result);
         relation = gameDao.findRelation(nationMe, nationThird);
         assertEquals(pre, relation.getType(), result.toString());

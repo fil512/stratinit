@@ -19,8 +19,8 @@ public class GetNewsCommand extends Command<List<SINewsLogsDay>> {
 
 	@Override
 	public Result<List<SINewsLogsDay>> execute() {
-		return stratInit.getNewsLogs();
-	}
+        return stratInitServer.getNewsLogs();
+    }
 
 	@Override
 	public String getDescription() {

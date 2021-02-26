@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.StratInit;
+import com.kenstevens.stratinit.server.StratInitServer;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.CommandProcessor;
 import com.kenstevens.stratinit.util.Spring;
@@ -31,13 +31,13 @@ public class CommandProcessorTest extends BaseStratInitClientTest {
 		final GetGamesAction getGamesAction = spring
 				.getBean(GetGamesAction.class);
 		Command<? extends Object> getGamesCommand = getGamesAction.getCommand();
-		final StratInit stratInit = context.mock(StratInit.class);
+		final StratInitServer stratInitServer = context.mock(StratInitServer.class);
 		final ArrivedDataEventAccumulator arrivedDataEventAccumulator = context.mock(ArrivedDataEventAccumulator.class);
-		ReflectionTestUtils.setField(getGamesCommand, "stratInit", stratInit);
+		ReflectionTestUtils.setField(getGamesCommand, "stratInitServer", stratInitServer);
 		ReflectionTestUtils.setField(commandProcessor, "arrivedDataEventAccumulator", arrivedDataEventAccumulator);
 		context.checking(new Expectations() {
 			{
-				oneOf(stratInit).getJoinedGames();
+				oneOf(stratInitServer).getJoinedGames();
 				will(returnValue(new Result<List<SIGame>>(makeSIGames())));
 				oneOf(arrivedDataEventAccumulator).clear();
 				oneOf(arrivedDataEventAccumulator).fireEvents();

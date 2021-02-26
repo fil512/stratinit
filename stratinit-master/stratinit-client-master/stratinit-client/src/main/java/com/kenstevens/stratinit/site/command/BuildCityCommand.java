@@ -26,9 +26,9 @@ public class BuildCityCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-		return stratInit.buildCity(siunits);
-	}
+        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+        return stratInitServer.buildCity(siunits);
+    }
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {

@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit;
 
-import com.kenstevens.stratinit.remote.StratInit;
 import com.kenstevens.stratinit.rest.RestClient;
-import com.kenstevens.stratinit.rest.RestClientStratInit;
+import com.kenstevens.stratinit.rest.RestStratInitServer;
+import com.kenstevens.stratinit.server.StratInitServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,18 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan
 public class SpringConfig {
-//    @Bean
-//    public HttpInvokerProxyFactoryBean invoker(BasicAuthenticationCommonsHttpInvokerRequestExecutor executor) {
-//        HttpInvokerProxyFactoryBean invoker = new HttpInvokerProxyFactoryBean();
-//        invoker.setServiceUrl("http://localhost:8080/remote");
-//        invoker.setServiceInterface(StratInit.class);
-//        invoker.setHttpInvokerRequestExecutor(executor);
-//        return invoker;
-//    }
 
     @Bean
-    public StratInit stratInit() {
-        return new RestClientStratInit();
+    public StratInitServer stratInitServer() {
+        return new RestStratInitServer();
     }
 
     @Bean

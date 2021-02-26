@@ -16,8 +16,8 @@ public class GetMyNationCommand extends Command<SINation> {
 
 	@Override
 	public Result<SINation> execute() {
-		return stratInit.getMyNation();
-	}
+        return stratInitServer.getMyNation();
+    }
 
 	@Override
 	public String getDescription() {

@@ -58,7 +58,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void canMove() {
         List<SIUnit> units = makeUnitList(testInfantry);
         SectorCoords target = new SectorCoords(0, 2);
-        Result<SIUpdate> result = stratInit.moveUnits(units, target);
+        Result<SIUpdate> result = stratInitController.moveUnits(units, target);
         assertResult(result);
         assertCoords(result, testInfantryId, target);
         List<SISector> sisectors = result.getValue().sectors;
@@ -97,7 +97,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     @Test
     public void landEmptyTransport() {
         List<SIUnit> units = makeUnitList(testInfantry);
-        Result<SIUpdate> result = stratInit.moveUnits(units, SEA1);
+        Result<SIUpdate> result = stratInitController.moveUnits(units, SEA1);
         assertResult(result);
         assertCoords(result, testInfantryId, SEA1);
     }

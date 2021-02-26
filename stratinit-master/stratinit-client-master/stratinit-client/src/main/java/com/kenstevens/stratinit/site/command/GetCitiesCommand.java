@@ -18,8 +18,8 @@ public class GetCitiesCommand extends Command<List<SICity>> {
 
 	@Override
 	public Result<List<SICity>> execute() {
-		return stratInit.getCities();
-	}
+        return stratInitServer.getCities();
+    }
 
 	@Override
 	public void handleSuccess(List<SICity> sicities) {

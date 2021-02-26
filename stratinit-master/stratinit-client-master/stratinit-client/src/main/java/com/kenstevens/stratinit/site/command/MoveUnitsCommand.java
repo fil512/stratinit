@@ -37,15 +37,15 @@ public class MoveUnitsCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
 
-		Result<SIUpdate> retval = stratInit.moveUnits(siunits,
-				targetCoords);
-		if (!retval.isMoveSuccess()) {
-			wavPlayer.playEmpty();
-		}
-		return retval;
-	}
+        Result<SIUpdate> retval = stratInitServer.moveUnits(siunits,
+                targetCoords);
+        if (!retval.isMoveSuccess()) {
+            wavPlayer.playEmpty();
+        }
+        return retval;
+    }
 
 	@Override
 	public String getDescription() {

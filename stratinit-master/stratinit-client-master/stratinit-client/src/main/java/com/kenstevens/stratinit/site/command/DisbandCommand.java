@@ -26,9 +26,9 @@ public class DisbandCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-		return stratInit.disbandUnits(siunits);
-	}
+        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+        return stratInitServer.disbandUnits(siunits);
+    }
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {

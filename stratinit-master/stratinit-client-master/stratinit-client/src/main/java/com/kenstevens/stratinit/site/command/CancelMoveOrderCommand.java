@@ -26,9 +26,9 @@ public class CancelMoveOrderCommand extends Command<SIUpdate>{
 
 	@Override
 	public Result<SIUpdate> execute() {
-		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-		return stratInit.cancelMoveOrder(siunits);
-	}
+        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+        return stratInitServer.cancelMoveOrder(siunits);
+    }
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {
