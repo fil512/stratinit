@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>stratinit-server</artifactId>
-    <name>Strategic Initiative Remote</name>
+    <name>Strategic Initiative Server</name>
     <description>Stratinit Game Server</description>
     <dependencies>
         <dependency>
@@ -16,7 +16,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
+            <artifactId>spring-security-web</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-validator</groupId>
