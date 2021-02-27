@@ -44,7 +44,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 	</tx:advice>
 	<aop:config>
 		<aop:pointcut id="wsMethods"
-					  expression="execution(* com.kenstevens.stratinit.server.remote.*.*(..))"/>
+					  expression="execution(* com.kenstevens.stratinit.server.rest.*.*(..))"/>
 	</aop:config>
 
 	<aop:aspectj-autoproxy/>

@@ -1,14 +1,14 @@
 package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PlayerDaoTest extends StratInitWebBase {
+public class PlayerDaoTest extends BaseStratInitControllerTest {
     private final String PLAYER2_NAME = "player2";
     @Autowired
     private PlayerDao playerDao;

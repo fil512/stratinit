@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.jmock.Expectations;
@@ -18,7 +18,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CityBuilderServiceTest extends StratInitWebBase {
+public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     protected static final SectorCoords INF_CITY = new SectorCoords(1, 4);
     private final Mockery context = new Mockery();
     private final Date now = new Date();

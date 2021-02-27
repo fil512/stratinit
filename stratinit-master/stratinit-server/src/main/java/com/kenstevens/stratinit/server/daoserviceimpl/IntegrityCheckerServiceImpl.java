@@ -14,7 +14,7 @@ import com.kenstevens.stratinit.server.daoservice.IntegrityCheckerService;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.remote.ServerManager;
+import com.kenstevens.stratinit.server.rest.ServerManager;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

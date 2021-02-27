@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class GameDaoServiceTest extends StratInitWebBase {
+public class GameDaoServiceTest extends BaseStratInitControllerTest {
     @Autowired
     private GameDaoService gameDaoService;
     @Autowired

@@ -2,9 +2,9 @@ package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
-import com.kenstevens.stratinit.server.remote.mail.MailService;
-import com.kenstevens.stratinit.server.remote.mail.MailTemplate;
+import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
+import com.kenstevens.stratinit.server.rest.mail.MailService;
+import com.kenstevens.stratinit.server.rest.mail.MailTemplate;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.jupiter.api.AfterEach;

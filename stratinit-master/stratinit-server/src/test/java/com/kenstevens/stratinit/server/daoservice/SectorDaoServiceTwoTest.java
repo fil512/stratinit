@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.remote.TwoPlayerBase;
+import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.*;
 import org.junit.jupiter.api.Test;
 

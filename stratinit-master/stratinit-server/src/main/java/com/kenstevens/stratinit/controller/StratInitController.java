@@ -13,8 +13,8 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.rest.SIRestPaths;
-import com.kenstevens.stratinit.server.remote.helper.ErrorProcessor;
-import com.kenstevens.stratinit.server.remote.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.helper.ErrorProcessor;
+import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -29,7 +29,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
-// FIXME remove web dependencies from core
 // FIXME remove web depdendcies from server--this means splitting service from controller--they are currently mixed in this class
 @RestController
 @RequestMapping("/stratinit")

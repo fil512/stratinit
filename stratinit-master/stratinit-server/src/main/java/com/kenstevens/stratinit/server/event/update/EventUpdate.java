@@ -3,10 +3,10 @@ package com.kenstevens.stratinit.server.event.update;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.server.remote.helper.DataWriter;
-import com.kenstevens.stratinit.server.remote.helper.SynchronizedDataAccess;
-import com.kenstevens.stratinit.server.remote.mail.SMTPService;
-import com.kenstevens.stratinit.server.remote.state.ServerStatus;
+import com.kenstevens.stratinit.server.rest.helper.DataWriter;
+import com.kenstevens.stratinit.server.rest.helper.SynchronizedDataAccess;
+import com.kenstevens.stratinit.server.rest.mail.SMTPService;
+import com.kenstevens.stratinit.server.rest.state.ServerStatus;
 import com.kenstevens.stratinit.util.StackTraceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.remote.StratInitWebBase;
+import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -14,7 +14,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SectorDaoServiceTest extends StratInitWebBase {
+public class SectorDaoServiceTest extends BaseStratInitControllerTest {
     private static final SectorCoords PORT = new SectorCoords(2, 2);
 
     @Test

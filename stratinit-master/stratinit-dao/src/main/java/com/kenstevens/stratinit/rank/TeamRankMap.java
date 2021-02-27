@@ -1,27 +1,27 @@
 package com.kenstevens.stratinit.rank;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
 import com.kenstevens.stratinit.model.Rankable;
-import com.kenstevens.stratinit.server.remote.rank.ELOCalculator;
+import com.kenstevens.stratinit.server.rest.rank.ELOCalculator;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 public class TeamRankMap {
 	public static final double START_RANK = 1500;
-	private Set<String> nations = Sets.newHashSet();
-	private Map<SITeam, SITeamRank> teamRankMap = Maps.newHashMap();
+	private final Set<String> nations = Sets.newHashSet();
+	private final Map<SITeam, SITeamRank> teamRankMap = Maps.newHashMap();
 
 
 	public void recordWin(SITeam team) {
 		Rankable teamRank = getRank(team);
 		teamRank.won();
 	}
-	
+
 	public void recordVictory(SITeam winner, SITeam loser) {
 		Rankable winRank = getRank(winner);
 		Rankable loseRank = getRank(loser);

@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.server.remote.StratInitDaoBase;
+import com.kenstevens.stratinit.server.rest.StratInitDaoBase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
