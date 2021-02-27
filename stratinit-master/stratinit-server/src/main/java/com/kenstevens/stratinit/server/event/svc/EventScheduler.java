@@ -58,7 +58,7 @@ public class EventScheduler {
 
     @PostConstruct
     public void scheduleInitialEvents() {
-        // FIXME remove test
+        // FIXME switch to Spring Profile
         Constants.setRunMode(RunMode.TEST);
 
         ServerLocker serverLocker = new ServerLocker();
@@ -71,7 +71,6 @@ public class EventScheduler {
         logger.info("Event Queue starting up.");
         updateGames();
         eventQueue.scheduleFlushCache();
-        // FIXME fix race condition?
         gameCreator.createGameIfAllMapped();
         logger.info("All events scheduled.  Server started.");
         serverStatus.setRunning();

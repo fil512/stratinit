@@ -29,7 +29,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Properties;
 
-// FIXME remove web depdendcies from server--this means splitting service from controller--they are currently mixed in this class
 @RestController
 @RequestMapping("/stratinit")
 public class StratInitController {
@@ -75,8 +74,6 @@ public class StratInitController {
         return Result.make(properties);
     }
 
-    // FIXME Log this
-    // FIXME What does "Log this" mean?
     @PostMapping(value = SIRestPaths.SET_GAME)
     public Result<None> setGame(SetGameRequest request) {
         return requestFactory.getSetGameRequest(request.gameId, request.noAlliances).process(request.gameId);
@@ -126,7 +123,6 @@ public class StratInitController {
         return requestFactory.getGetCitiesRequest().process();
     }
 
-    // FIXME collapse with city
     @GetMapping(value = SIRestPaths.CITY_SEEN)
     public Result<List<SICity>> getSeenCities() {
         return requestFactory.getGetSeenCitiesRequest().process();
