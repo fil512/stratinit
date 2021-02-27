@@ -8,7 +8,7 @@ import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameView;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.ui.tabs.GameTable;
@@ -188,7 +188,7 @@ public class ManageGamesWindowControl implements TopLevelController {
 			return;
 		}
 		int gameId = game.getId();
-		SetGameRequest request = new SetGameRequest(gameId, noAlliances);
+		SetGameJson request = new SetGameJson(gameId, noAlliances);
 		actionFactory.joinGame(request);
 	}
 

@@ -1,11 +1,9 @@
 package com.kenstevens.stratinit.server.rest;
 
 
-import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -20,8 +18,9 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
         setAuthentication(PLAYER_ME_NAME);
         joinGamePlayerMe();
         playerThem = createPlayer(PLAYER_THEM_NAME);
-        Result<SINation> retval = joinGame(playerThem);
+        joinGame(playerThem);
         nationThem = gameDao.findNation(testGameId, playerThem);
+        nationThemId = nationThem.getNationId();
         setAuthentication(PLAYER_ME_NAME);
     }
 

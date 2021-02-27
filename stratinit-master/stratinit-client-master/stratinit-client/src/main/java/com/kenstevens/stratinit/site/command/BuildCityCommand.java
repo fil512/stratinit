@@ -2,9 +2,9 @@ package com.kenstevens.stratinit.site.command;
 
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.Command;
+import com.kenstevens.stratinit.remote.request.UnitListJson;
+import com.kenstevens.stratinit.site.PostCommand;
 import com.kenstevens.stratinit.site.processor.UpdateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -14,21 +14,19 @@ import java.util.List;
 
 @Scope("prototype")
 @Component
-public class BuildCityCommand extends Command<SIUpdate> {
+public class BuildCityCommand extends PostCommand<SIUpdate, UnitListJson> {
 	@Autowired
 	private UpdateProcessor updateProcessor;
 
-	private final List<UnitView> units;
-
-	public BuildCityCommand(List<UnitView> units) {
-		this.units = units;
+	public BuildCityCommand(UnitListJson request) {
+		super(request);
 	}
 
 	@Override
 	public Result<SIUpdate> execute() {
-        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-        return stratInitServer.buildCity(siunits);
-    }
+		List<SIUnit> siunits = UnitsToSIUnits.transform(getRequest());
+		return stratInitServer.buildCity(siunits);
+	}
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {
@@ -37,10 +35,11 @@ public class BuildCityCommand extends Command<SIUpdate> {
 
 	@Override
 	public String getDescription() {
-		if (units.size() == 0) {
+		UnitListJson request = getRequest();
+		if (request.units.size() == 0) {
 			return "No unit selected to build with.";
 		} else {
-			return "New city built at "+units.get(0).getCoords(); 
+			return "New city built at " + request.units.get(0).getCoords();
 		}
 	}
 }

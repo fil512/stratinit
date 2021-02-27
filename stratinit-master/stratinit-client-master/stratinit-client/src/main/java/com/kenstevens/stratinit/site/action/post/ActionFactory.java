@@ -1,7 +1,8 @@
 package com.kenstevens.stratinit.site.action.post;
 
 import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.remote.request.UnitListJson;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.site.action.get.*;
 import com.kenstevens.stratinit.type.RelationType;
@@ -122,8 +123,8 @@ public class ActionFactory {
 	}
 
 	public void setGame(int gameId, boolean noAlliances) {
-        SetGameRequest request = new SetGameRequest(gameId, noAlliances);
-        SetGameAction setGameAction = spring.autowire(new SetGameAction(request));
+		SetGameJson request = new SetGameJson(gameId, noAlliances);
+		SetGameAction setGameAction = spring.autowire(new SetGameAction(request));
         actionQueue.put(setGameAction);
         getMyNation();
     }
@@ -159,12 +160,12 @@ public class ActionFactory {
         actionQueue.put(getUnjoinedGamesAction);
     }
 
-    public void joinGame(SetGameRequest request) {
-        JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(request));
-        actionQueue.put(joinGameAction);
-        getUnjoinedGames();
-        getGames();
-    }
+	public void joinGame(SetGameJson request) {
+		JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(request));
+		actionQueue.put(joinGameAction);
+		getUnjoinedGames();
+		getGames();
+	}
 
     public void switchOnTechChange(City city) {
         SwitchCityOnTechAction switchCityOnTechAction = spring.autowire(new SwitchCityOnTechAction(city));
@@ -192,7 +193,8 @@ public class ActionFactory {
 	}
 
 	public void buildCity(List<UnitView> units) {
-		BuildCityAction buildCityAction = spring.autowire(new BuildCityAction(units));
+		UnitListJson unitListJson = new UnitListJson((List<Unit>) (List<?>) units);
+		BuildCityAction buildCityAction = spring.autowire(new BuildCityAction(unitListJson));
 		actionQueue.put(buildCityAction);
 	}
 

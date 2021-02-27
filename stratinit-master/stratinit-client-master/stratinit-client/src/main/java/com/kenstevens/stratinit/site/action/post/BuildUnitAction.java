@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
+// FIXME continue converting these to PostAction
 public class BuildUnitAction extends Action<BuildUnitCommand> {
 	private final City city;
 	private final UnitType choice;

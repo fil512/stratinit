@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.rest.RestClient;
 import com.kenstevens.stratinit.server.StratInitServer;
 import com.kenstevens.stratinit.type.Constants;
@@ -69,7 +69,7 @@ public class SpringRestIntegrationManualTest extends BaseStratInitClientTest {
 		setPlayer("test1");
 		Result<List<SIGame>> games = stratInitServer.getUnjoinedGames();
 		SIGame game = games.getValue().get(0);
-		SetGameRequest request = new SetGameRequest(game.id, false);
+		SetGameJson request = new SetGameJson(game.id, false);
 		Result<SINation> result = stratInitServer.joinGame(request);
 		assertResult(result);
 

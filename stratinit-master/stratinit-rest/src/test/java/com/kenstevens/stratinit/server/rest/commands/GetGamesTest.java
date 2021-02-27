@@ -50,7 +50,7 @@ public class GetGamesTest extends BaseStratInitControllerTest {
         assertTrue(games.isEmpty());
         Result<SINation> result = joinGamePlayerMe();
         assertTrue(result.isSuccess());
-        assertEquals(nationMe, result.getValue());
+        assertEquals(nationMe.getPlayer().getUsername(), result.getValue().getName());
         games = stratInitController.getJoinedGames().getValue();
         assertEquals(1, games.size());
     }

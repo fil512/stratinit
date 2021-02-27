@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.site.action.post;
 
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.site.Action;
 import com.kenstevens.stratinit.site.command.JoinGameCommand;
 import org.springframework.context.annotation.Scope;
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class JoinGameAction extends Action<JoinGameCommand> {
 
-	private final SetGameRequest request;
+    private final SetGameJson request;
 
-	public JoinGameAction(SetGameRequest request) {
-		this.request = request;
-	}
+    public JoinGameAction(SetGameJson request) {
+        this.request = request;
+    }
 
-	protected JoinGameCommand buildCommand() {
-		return new JoinGameCommand(request);
-	}
+    protected JoinGameCommand buildCommand() {
+        return new JoinGameCommand(request);
+    }
 }

@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +17,9 @@ public interface StratInitServer {
 
 	Result<String> getVersion();
 
-	Result<None> setGame(@RequestBody SetGameRequest request);
+	Result<None> setGame(@RequestBody SetGameJson request);
 
-	Result<SINation> joinGame(@RequestBody SetGameRequest request);
+	Result<SINation> joinGame(@RequestBody SetGameJson request);
 
 	Result<List<SIGame>> getJoinedGames();
 

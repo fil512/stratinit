@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.request.RestRequest;
+import com.kenstevens.stratinit.remote.request.RestRequestJson;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
@@ -81,11 +81,11 @@ public class RestClient {
         return new Result<>("Request failed with status code " + statusCode + ": " + HttpStatus.getStatusText(statusCode), false);
     }
 
-    public <T> Result<T> post(String path, RestRequest request, Class<T> valueClass) {
+    public <T> Result<T> post(String path, RestRequestJson request, Class<T> valueClass) {
         return postResult(path, request, valueClass, resultFunction());
     }
 
-    private <T> Result<T> postResult(String path, RestRequest request, Class<?> resultClass, Function<Class<?>, JavaType> typeFunction) {
+    private <T> Result<T> postResult(String path, RestRequestJson request, Class<?> resultClass, Function<Class<?>, JavaType> typeFunction) {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             HttpPost httpPost = new HttpPost(baseUrl + path);
             String json = mapper.writeValueAsString(request);

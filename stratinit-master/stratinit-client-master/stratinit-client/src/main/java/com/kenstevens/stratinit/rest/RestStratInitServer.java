@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.server.StratInitServer;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -26,12 +26,12 @@ public class RestStratInitServer implements StratInitServer {
     }
 
     @Override
-    public Result<None> setGame(SetGameRequest request) {
+    public Result<None> setGame(SetGameJson request) {
         return restClient.post(SIRestPaths.SET_GAME, request, None.class);
     }
 
     @Override
-    public Result<SINation> joinGame(SetGameRequest request) {
+    public Result<SINation> joinGame(SetGameJson request) {
         return restClient.post(SIRestPaths.JOIN_GAME, request, SINation.class);
     }
 

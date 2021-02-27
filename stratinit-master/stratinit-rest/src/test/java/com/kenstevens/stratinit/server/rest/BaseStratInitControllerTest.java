@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.server.daoservice.MoveService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
@@ -45,15 +45,16 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
     }
 
     protected void setAuthentication(String username) {
-        new AuthenticationHelper().setAuthentication(username);
-        stratInitController.setGame(new SetGameRequest(testGameId, false));
+		new AuthenticationHelper().setAuthentication(username);
+		stratInitController.setGame(new SetGameJson(testGameId, false));
     }
 
     protected Result<SINation> joinGame(Player player) {
-        Result<SINation> result = stratInitController.joinGame(new SetGameRequest(testGameId, false));
-        assertResult(result);
-        return result;
-    }
+		setAuthentication(player.getUsername());
+		Result<SINation> result = stratInitController.joinGame(new SetGameJson(testGameId, false));
+		assertResult(result);
+		return result;
+	}
 
     protected Result<MoveCost> moveUnits(List<SIUnit> units, SectorCoords targetCoords) {
         return moveService.move(nationMe, units, targetCoords);

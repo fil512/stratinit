@@ -9,7 +9,7 @@ import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.rest.SIRestPaths;
 import com.kenstevens.stratinit.server.rest.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
@@ -70,7 +70,7 @@ public class StratInitController {
     }
 
     @PostMapping(value = SIRestPaths.SET_GAME)
-    public Result<None> setGame(@RequestBody SetGameRequest request) {
+    public Result<None> setGame(@RequestBody SetGameJson request) {
         return requestFactory.getSetGameRequest(request.gameId, request.noAlliances).process(request.gameId);
     }
 
@@ -194,7 +194,7 @@ public class StratInitController {
     }
 
     @PostMapping(value = SIRestPaths.JOIN_GAME)
-    public Result<SINation> joinGame(@RequestBody SetGameRequest request) {
+    public Result<SINation> joinGame(@RequestBody SetGameJson request) {
         return requestFactory.getJoinGameRequest(null, request.gameId, request.noAlliances).process(request.gameId);
     }
 

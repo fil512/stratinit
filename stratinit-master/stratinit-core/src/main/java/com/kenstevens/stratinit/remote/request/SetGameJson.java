@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.remote.request;
 
-public class SetGameRequest implements RestRequest {
+public class SetGameJson implements RestRequestJson {
     public int gameId;
     public boolean noAlliances;
 
-    public SetGameRequest() {
+    public SetGameJson() {
     }
 
-    public SetGameRequest(int gameId, boolean noAlliances) {
+    public SetGameJson(int gameId, boolean noAlliances) {
         this.gameId = gameId;
         this.noAlliances = noAlliances;
     }

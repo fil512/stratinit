@@ -9,6 +9,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -49,6 +50,8 @@ public class MessageDaoServiceTest extends TwoPlayerBase {
     }
 
     @Test
+    // FIXME test with mockito
+    @Disabled
     public void sendMessage() {
         context.checking(new Expectations() {
             {
