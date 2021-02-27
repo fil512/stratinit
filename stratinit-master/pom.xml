@@ -316,7 +316,7 @@
             <!-- test -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
+                <artifactId>spring-boot-test</artifactId>
                 <version>${spring.boot.version}</version>
                 <scope>test</scope>
             </dependency>
@@ -324,6 +324,12 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>${spring.core.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.28</version>
                 <scope>test</scope>
             </dependency>
             <!-- FIXME replace with mockito -->
