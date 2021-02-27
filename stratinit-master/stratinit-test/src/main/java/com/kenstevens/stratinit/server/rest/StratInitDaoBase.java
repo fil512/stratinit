@@ -10,16 +10,20 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.*;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
+import org.hibernate.dialect.Dialect;
+import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigFileApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,12 +33,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
-@TestPropertySource(properties = "stratinit.email.enabled=false")
+@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, TestConfig.class})
 public abstract class StratInitDaoBase {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicInteger playerIndex = new AtomicInteger();
 
+
+	@PersistenceContext
+	private EntityManager entityManager;
 	@Autowired
 	protected GameDao gameDao;
 	@Autowired
@@ -109,7 +115,14 @@ public abstract class StratInitDaoBase {
 			"000....121.....", // 12
 			"000....111.....", // 13
 			"000....121.....", // 14
-			};
+	};
+
+	@BeforeEach
+	public void validateRunningUnderH2() {
+		SessionImpl session = (SessionImpl) entityManager.getDelegate();
+		Dialect dialect = session.getFactory().getJdbcServices().getDialect();
+		assertTrue(dialect instanceof org.hibernate.dialect.H2Dialect, "RUNNING IN H2.  Actual dialect = " + dialect);
+	}
 
 	public void setupGame() {
 		testGame = new Game(null, GAME_SIZE);

@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.type.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -13,6 +14,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@Lazy
 @Service
 public class SMTPServiceImpl implements SMTPService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -48,18 +50,6 @@ public class SMTPServiceImpl implements SMTPService {
         } catch (Exception e) {
             logger.error("Unable to send e-mail to " + to, e);
         }
-    }
-
-    public String getSmptHostname() {
-        return smptHostname;
-    }
-
-    public void setSmptHostname(String smptHostname) {
-        this.smptHostname = smptHostname;
-    }
-
-    public void disable() {
-        enabled = false;
     }
 
     @Override

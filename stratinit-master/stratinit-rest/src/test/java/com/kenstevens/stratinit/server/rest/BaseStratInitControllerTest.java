@@ -35,7 +35,7 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 		Result<Nation> retval = joinGame(playerMe);
 		nationMeId = retval.getValue().getNationId();
 		nationMe = gameDao.findNation(testGameId, playerMe);
-		setAuthentication(PLAYER_ME_NAME);
+		setAuthentication(StratInitDaoBase.PLAYER_ME_NAME);
 		return retval;
 	}
 

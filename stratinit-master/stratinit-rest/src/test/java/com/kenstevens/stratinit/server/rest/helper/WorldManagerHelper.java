@@ -5,7 +5,6 @@ import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.server.rest.mail.SMTPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +14,12 @@ public class WorldManagerHelper {
     PlayerDao playerDao;
     @Autowired
     GameDao gameDao;
-    @Autowired
-    SMTPService smtpService;
 
     public Nation createNation(int gameId) {
         Player player = createPlayer();
         Game game = gameDao.findGame(gameId);
         Nation nation = new Nation(game, player);
         gameDao.save(nation);
-        smtpService.disable();
         return nation;
     }
 
