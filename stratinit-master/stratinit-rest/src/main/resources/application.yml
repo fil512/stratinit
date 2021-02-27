@@ -2,7 +2,7 @@ logging:
   level:
     org:
       springframework:
-        security: DEBUG
+        security: INFO
 server:
   port: 8081
 stratinit:

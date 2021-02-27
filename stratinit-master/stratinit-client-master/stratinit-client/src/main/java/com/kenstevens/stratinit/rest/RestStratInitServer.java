@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.rest;
 
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -32,8 +31,8 @@ public class RestStratInitServer implements StratInitServer {
     }
 
     @Override
-    public Result<Nation> joinGame(SetGameRequest request) {
-        return restClient.post(SIRestPaths.JOIN_GAME, request, Nation.class);
+    public Result<SINation> joinGame(SetGameRequest request) {
+        return restClient.post(SIRestPaths.JOIN_GAME, request, SINation.class);
     }
 
     @Override
@@ -158,7 +157,7 @@ public class RestStratInitServer implements StratInitServer {
     }
 
     @Override
-    public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
+    public Result<SINation> joinGame(Player player, int gameId, boolean noAlliances) {
         return null;
     }
 

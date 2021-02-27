@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest;
 
 import com.kenstevens.stratinit.controller.StratInitController;
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
@@ -21,46 +22,45 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 	@Autowired
-	protected GameDaoService gameDaoService;
-	@Autowired
-	protected SectorDaoService sectorDaoService;
-	@Autowired
-	protected UnitDaoService unitDaoService;
-	@Autowired
-	protected StratInitController stratInitController;
-	@Autowired
-	private MoveService moveService;
+    protected GameDaoService gameDaoService;
+    @Autowired
+    protected SectorDaoService sectorDaoService;
+    @Autowired
+    protected UnitDaoService unitDaoService;
+    @Autowired
+    protected StratInitController stratInitController;
+    @Autowired
+    private MoveService moveService;
 
-	protected Result<Nation> joinGamePlayerMe() {
-		Result<Nation> retval = joinGame(playerMe);
-		nationMeId = retval.getValue().getNationId();
-		nationMe = gameDao.findNation(testGameId, playerMe);
-		setAuthentication(StratInitDaoBase.PLAYER_ME_NAME);
-		return retval;
-	}
+    protected Result<SINation> joinGamePlayerMe() {
+        Result<SINation> retval = joinGame(playerMe);
+        nationMe = gameDao.findNation(testGameId, playerMe);
+        setAuthentication(StratInitDaoBase.PLAYER_ME_NAME);
+        return retval;
+    }
 
-	protected void setBuild(SectorCoords coords, UnitType type) {
-		City city = sectorDao.getCity(testWorld.getSector(coords));
-		sectorDaoService.updateCity(city.getNation(), coords, UpdateCityField.BUILD, type, null, false, null);
-	}
+    protected void setBuild(SectorCoords coords, UnitType type) {
+        City city = sectorDao.getCity(testWorld.getSector(coords));
+        sectorDaoService.updateCity(city.getNation(), coords, UpdateCityField.BUILD, type, null, false, null);
+    }
 
-	protected void setAuthentication(String username) {
-		new AuthenticationHelper().setAuthentication(username);
-		stratInitController.setGame(new SetGameRequest(testGameId, false));
-	}
+    protected void setAuthentication(String username) {
+        new AuthenticationHelper().setAuthentication(username);
+        stratInitController.setGame(new SetGameRequest(testGameId, false));
+    }
 
-	protected Result<Nation> joinGame(Player player) {
-		Result<Nation> result = stratInitController.joinGame(player, testGameId, false);
-		assertResult(result);
-		return result;
-	}
+    protected Result<SINation> joinGame(Player player) {
+        Result<SINation> result = stratInitController.joinGame(new SetGameRequest(testGameId, false));
+        assertResult(result);
+        return result;
+    }
 
-	protected Result<MoveCost> moveUnits(List<SIUnit> units, SectorCoords targetCoords) {
-		return moveService.move(nationMe, units, targetCoords);
-	}
+    protected Result<MoveCost> moveUnits(List<SIUnit> units, SectorCoords targetCoords) {
+        return moveService.move(nationMe, units, targetCoords);
+    }
 
-	protected Result<MoveCost> moveUnits(Nation nation, List<SIUnit> units, SectorCoords targetCoords) {
-		return moveService.move(nation, units, targetCoords);
+    protected Result<MoveCost> moveUnits(Nation nation, List<SIUnit> units, SectorCoords targetCoords) {
+        return moveService.move(nation, units, targetCoords);
 	}
 
 	protected void assertNotFired(Result<MoveCost> result, Unit itank) {

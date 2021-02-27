@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.dto.SIGame;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.shell.ProgressBarControl;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import org.jmock.Mockery;
@@ -14,14 +15,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfig.class)
 public abstract class BaseStratInitClientTest {
-    @Autowired
-    protected Mockery context;
-    @Autowired
-    protected WidgetContainer widgetContainer;
+	@Autowired
+	protected Mockery context;
+	@Autowired
+	protected WidgetContainer widgetContainer;
 
     private final ProgressBarControl progressBarControlMock = new ProgressBarControl() {
         @Override
@@ -52,5 +55,9 @@ public abstract class BaseStratInitClientTest {
 		List<SIGame> sigames = new ArrayList<SIGame>();
 		sigames.add(sigame);
 		return sigames;
+	}
+
+	protected void assertResult(Result<?> result) {
+		assertTrue(result.isSuccess(), result.toString());
 	}
 }

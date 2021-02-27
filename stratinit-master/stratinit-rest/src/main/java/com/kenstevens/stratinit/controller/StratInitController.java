@@ -5,8 +5,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -20,10 +18,7 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -75,7 +70,7 @@ public class StratInitController {
     }
 
     @PostMapping(value = SIRestPaths.SET_GAME)
-    public Result<None> setGame(SetGameRequest request) {
+    public Result<None> setGame(@RequestBody SetGameRequest request) {
         return requestFactory.getSetGameRequest(request.gameId, request.noAlliances).process(request.gameId);
     }
 
@@ -199,12 +194,7 @@ public class StratInitController {
     }
 
     @PostMapping(value = SIRestPaths.JOIN_GAME)
-    public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
-        return requestFactory.getJoinGameRequest(player, gameId, noAlliances).process(
-                gameId);
-    }
-
-    public Result<Nation> joinGame(SetGameRequest request) {
+    public Result<SINation> joinGame(@RequestBody SetGameRequest request) {
         return requestFactory.getJoinGameRequest(null, request.gameId, request.noAlliances).process(request.gameId);
     }
 

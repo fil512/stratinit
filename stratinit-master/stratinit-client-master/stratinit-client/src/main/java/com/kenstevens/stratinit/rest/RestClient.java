@@ -91,7 +91,7 @@ public class RestClient {
             String json = mapper.writeValueAsString(request);
             httpPost.setEntity(new StringEntity(json));
             httpPost.setHeader("Accept", "application/json");
-            httpPost.setHeader("Content-type", "application/json");
+            httpPost.setHeader("Content-Type", "application/json");
             try (CloseableHttpResponse response = client.execute(httpPost, context)) {
                 if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                     return failedResultFromStatusCode(response);

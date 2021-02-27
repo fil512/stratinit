@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.rest.commands;
 
 import com.kenstevens.stratinit.dto.SIGame;
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
@@ -48,7 +48,7 @@ public class GetGamesTest extends BaseStratInitControllerTest {
     public void joinGameGetPlayerGames() {
         List<SIGame> games = stratInitController.getJoinedGames().getValue();
         assertTrue(games.isEmpty());
-        Result<Nation> result = joinGamePlayerMe();
+        Result<SINation> result = joinGamePlayerMe();
         assertTrue(result.isSuccess());
         assertEquals(nationMe, result.getValue());
         games = stratInitController.getJoinedGames().getValue();

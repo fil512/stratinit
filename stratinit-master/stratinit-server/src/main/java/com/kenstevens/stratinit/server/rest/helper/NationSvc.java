@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
-public class PlayerNationList {
+public class NationSvc {
     @Autowired
     private DataCache dataCache;
     @Autowired
@@ -47,8 +47,8 @@ public class PlayerNationList {
                 }));
     }
 
-    private SINation nationToSINation(Nation me, Nation nation,
-                                      boolean includePower, boolean isAlly) {
+    public SINation nationToSINation(Nation me, Nation nation,
+                                     boolean includePower, boolean isAlly) {
         SINation sination = new SINation(nation);
         if (includePower) {
             sination.cities = sectorDao.getNumberOfCities(nation);

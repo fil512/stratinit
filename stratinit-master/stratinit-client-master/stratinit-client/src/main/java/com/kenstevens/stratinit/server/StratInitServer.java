@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.server;
 
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -20,7 +19,7 @@ public interface StratInitServer {
 
 	Result<None> setGame(@RequestBody SetGameRequest request);
 
-	Result<Nation> joinGame(@RequestBody SetGameRequest request);
+	Result<SINation> joinGame(@RequestBody SetGameRequest request);
 
 	Result<List<SIGame>> getJoinedGames();
 
@@ -71,7 +70,7 @@ public interface StratInitServer {
 
 	Result<SINation> getMyNation();
 
-	Result<Nation> joinGame(Player player, int gameId, boolean noAlliances);
+	Result<SINation> joinGame(Player player, int gameId, boolean noAlliances);
 
 	Result<SIUpdate> disbandUnits(List<SIUnit> siUnits);
 

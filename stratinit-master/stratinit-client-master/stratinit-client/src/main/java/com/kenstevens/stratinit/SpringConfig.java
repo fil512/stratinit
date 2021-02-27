@@ -18,6 +18,6 @@ public class SpringConfig {
 
     @Bean
     public RestClient restClient() {
-        return new RestClient("http://localhost:8080/stratinit");
+        return new RestClient("http://localhost:8081/stratinit");
     }
 }

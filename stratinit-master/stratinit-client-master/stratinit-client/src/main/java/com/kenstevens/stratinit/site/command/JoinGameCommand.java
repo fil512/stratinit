@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.site.command;
 
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.site.Command;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
-public class JoinGameCommand extends Command<Nation> {
+public class JoinGameCommand extends Command<SINation> {
     private final SetGameRequest request;
 
     public JoinGameCommand(SetGameRequest request) {
@@ -17,7 +17,7 @@ public class JoinGameCommand extends Command<Nation> {
     }
 
     @Override
-    public Result<Nation> execute() {
+    public Result<SINation> execute() {
         return stratInitServer.joinGame(request);
     }
 
@@ -26,7 +26,7 @@ public class JoinGameCommand extends Command<Nation> {
         return "Joining Game #" + request.gameId;
     }
 
-	@Override
-	public void handleSuccess(Nation nation) {
-	}
+    @Override
+    public void handleSuccess(SINation nation) {
+    }
 }

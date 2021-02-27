@@ -1,20 +1,22 @@
 package com.kenstevens.stratinit.type;
 
 public final class Constants {
-    private Constants() {
-    }
+	private Constants() {
+	}
 
-    private static RunMode runMode = RunMode.PRODUCTION;
+	// FIXME
+//    private static RunMode runMode = RunMode.PRODUCTION;
+	private static RunMode runMode = RunMode.TEST;
 
-    public static final String EMAIL_FROM_ADDRESS = "hq@strategicinitiative.org";
-    public static final String EMAIL_ADMIN_ADDRESS = "ken.stevens@sympatico.ca";
+	public static final String EMAIL_FROM_ADDRESS = "hq@strategicinitiative.org";
+	public static final String EMAIL_ADMIN_ADDRESS = "ken.stevens@sympatico.ca";
 
-    public static final String SERVER_VERSION = "1.2.8";
-    public static final int UNASSIGNED = -1;
-    public static final int HOURS_BETWEEN_UNIT_UPDATES = 4;
-    public static final int TECH_UPDATE_INTERVAL_SECONDS = 15 * 60;
-    public static final double[] TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES = {0,
-            0.8, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4,
+	public static final String SERVER_VERSION = "1.2.8";
+	public static final int UNASSIGNED = -1;
+	public static final int HOURS_BETWEEN_UNIT_UPDATES = 4;
+	public static final int TECH_UPDATE_INTERVAL_SECONDS = 15 * 60;
+	public static final double[] TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES = {0,
+			0.8, 1.2, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4,
             2.5};
     public static final int MAX_RANGE = 24;
     public static final int NO_FUEL_REQUIRED = -1;

@@ -52,24 +52,29 @@ public class Result<T> implements Serializable {
 		this.messages = messages;
 	}
 
-	public Result(String message, boolean success) {
-		this(message, success, null);
-	}
+    public Result(String message, boolean success) {
+        this(message, success, null);
+    }
 
-	// Only use this constructor for <None> or failed results
-	public Result(Result<? extends Object> result) {
-		this(result.getMessages(), result.success, null, result.silogs, result.moveSuccess);
-	}
+    // Only use this constructor for <None> or failed results
+    public Result(Result<? extends Object> result) {
+        this(result.getMessages(), result.success, null, result.silogs, result.moveSuccess);
+    }
 
-	public Result(List<String> messages, boolean success, T value) {
-		this.messages = messages;
-		this.success = success;
-		this.value = value;
-	}
+    // Only use this constructor when you're changing the type of the result
+    public Result(Result<? extends Object> result, T value) {
+        this(result.getMessages(), result.success, value, result.silogs, result.moveSuccess);
+    }
 
-	public Result(SIBattleLog battleLog, boolean success) {
-		this(battleLog.messages, success);
-		this.silogs.add(battleLog);
+    public Result(List<String> messages, boolean success, T value) {
+        this.messages = messages;
+        this.success = success;
+        this.value = value;
+    }
+
+    public Result(SIBattleLog battleLog, boolean success) {
+        this(battleLog.messages, success);
+        this.silogs.add(battleLog);
 	}
 
 	public Result(SIBattleLog battleLog) {

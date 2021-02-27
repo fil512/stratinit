@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest;
 
 
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
@@ -22,8 +23,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     @BeforeEach
     public void joinThreePlayers() {
         playerThree = createPlayer(PLAYER_THREE_NAME);
-        Result<Nation> retval = joinGame(playerThree);
-        nationThreeId = retval.getValue().getNationId();
+        Result<SINation> retval = joinGame(playerThree);
         nationThird = gameDao.findNation(testGameId, playerThree);
         setAuthentication(PLAYER_ME_NAME);
     }

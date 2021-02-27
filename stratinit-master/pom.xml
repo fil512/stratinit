@@ -330,7 +330,6 @@
                 <groupId>org.yaml</groupId>
                 <artifactId>snakeyaml</artifactId>
                 <version>1.28</version>
-                <scope>test</scope>
             </dependency>
             <!-- FIXME replace with mockito -->
             <dependency>

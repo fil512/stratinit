@@ -2,10 +2,12 @@ package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIGame;
+import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
+import com.kenstevens.stratinit.rest.RestClient;
 import com.kenstevens.stratinit.server.StratInitServer;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.httpclient.HttpStatus;
@@ -26,33 +28,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Disabled
-public class SpringRemotingIntegrationManualTest extends BaseStratInitClientTest {
+public class SpringRestIntegrationManualTest extends BaseStratInitClientTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
 	private StratInitServer stratInitServer;
 	@Autowired
 	private Account account;
+	@Autowired
+	private RestClient restClient;
 
 	@Test
 	public void testGoodLogin() throws IOException {
 		goodLogin();
 
-		Result<String> version = stratInitServer.getVersion();
-		String reply = version.getValue();
+		Result<String> result = stratInitServer.getVersion();
+		assertResult(result);
+		String reply = result.getValue();
 		assertEquals(Constants.SERVER_VERSION, reply);
 	}
 
 	private void goodLogin() throws IOException {
-		account.setUsername("test1");
-		account.setPassword("testy");
+		setPlayer("test1");
 	}
 
 	@Test
 	public void testGetMyGames() throws IOException {
 		goodLogin();
-		Result<List<SIGame>> joinedGames = stratInitServer.getJoinedGames();
-		List<SIGame> games = joinedGames.getValue();
+		Result<List<SIGame>> result = stratInitServer.getJoinedGames();
+		assertResult(result);
+		List<SIGame> games = result.getValue();
 
 		for (SIGame game : games) {
 			logger.info("Game #" + game.id + ": " + game.name);
@@ -61,34 +66,38 @@ public class SpringRemotingIntegrationManualTest extends BaseStratInitClientTest
 
 	@Test
 	public void testPlayersJoinGames() {
-		account.setUsername("test1");
-		account.setPassword("testy");
+		setPlayer("test1");
 		Result<List<SIGame>> games = stratInitServer.getUnjoinedGames();
 		SIGame game = games.getValue().get(0);
 		SetGameRequest request = new SetGameRequest(game.id, false);
-		stratInitServer.joinGame(request);
+		Result<SINation> result = stratInitServer.joinGame(request);
+		assertResult(result);
 
-		account.setUsername("test2");
+		setPlayer("test2");
+		result = stratInitServer.joinGame(request);
+		assertResult(result);
+
+		setPlayer("test3");
+		result = stratInitServer.joinGame(request);
+		assertResult(result);
+
+		setPlayer("test4");
+		result = stratInitServer.joinGame(request);
+		assertResult(result);
+	}
+
+	private void setPlayer(String test1) {
+		account.setUsername(test1);
 		account.setPassword("testy");
-		stratInitServer.joinGame(request);
-
-
-		account.setUsername("test3");
-		account.setPassword("testy");
-		stratInitServer.joinGame(request);
-
-
-		account.setUsername("test4");
-		account.setPassword("testy");
-		stratInitServer.joinGame(request);
-
+		restClient.setAccount();
 	}
 
 	@Test
 	public void testGetUnjoinedGames() throws IOException {
 		goodLogin();
-		Result<List<SIGame>> unJoinedGames = stratInitServer.getUnjoinedGames();
-		List<SIGame> games = unJoinedGames.getValue();
+		Result<List<SIGame>> result = stratInitServer.getUnjoinedGames();
+		assertResult(result);
+		List<SIGame> games = result.getValue();
 
 		for (SIGame game : games) {
 			logger.info("Game #" + game.id + ": " + game.name);

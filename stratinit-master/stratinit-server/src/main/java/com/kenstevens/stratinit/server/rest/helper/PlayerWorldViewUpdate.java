@@ -20,9 +20,9 @@ public class PlayerWorldViewUpdate {
     @Autowired
     private RequestFactory requestFactory;
     @Autowired
-    private PlayerWorldView playerWorldView;
+	private PlayerWorldView playerWorldView;
 	@Autowired
-	private PlayerNationList playerNationList;
+	private NationSvc nationSvc;
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired
@@ -36,9 +36,9 @@ public class PlayerWorldViewUpdate {
 
         // FIXME this messy code should move down a layer
         siupdate.sectors = playerWorldView.getWorldViewSectors(nation);
-        siupdate.cities = requestFactory.getGetCitiesRequest().process().getValue();
-        siupdate.nations = playerNationList.getNations(nation, false);
-        siupdate.relations = requestFactory.getGetRelationsRequest().process().getValue();
+		siupdate.cities = requestFactory.getGetCitiesRequest().process().getValue();
+		siupdate.nations = nationSvc.getNations(nation, false);
+		siupdate.relations = requestFactory.getGetRelationsRequest().process().getValue();
         siupdate.units = requestFactory.getGetUnitsRequest().process().getValue();
         siupdate.seenUnits = requestFactory.getGetSeenUnitsRequest().process().getValue();
         siupdate.launchedSatellites = getLaunchedSatellites(nation);
