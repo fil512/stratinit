@@ -1,84 +1,59 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
+import com.kenstevens.stratinit.helper.NationHelper;
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
+import com.kenstevens.stratinit.server.daoserviceimpl.MessageDaoServiceImpl;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
-import com.kenstevens.stratinit.server.rest.mail.MailTemplate;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
-public class MessageDaoServiceTest extends TwoPlayerBase {
-    private final Mockery context = new Mockery();
-    private MailService mailService;
+@ExtendWith(MockitoExtension.class)
+public class MessageDaoServiceTest {
+
+    static final NationHelper nationHelper = new NationHelper();
+
+    @Mock
     private MessageDao messageDao;
+    @Mock
+    private GameDao gameDao;
+    @Mock
+    private MailService mailService;
 
-    @Autowired
-    private MailService origMailService;
-    @Autowired
-    private MessageDao origMessageDao;
-
-    @Autowired
-    private MessageDaoService messageDaoService;
-
-    @BeforeEach
-    public void setupMocks() {
-
-        mailService = context.mock(MailService.class);
-        messageDao = context.mock(MessageDao.class);
-        ReflectionTestUtils
-                .setField(messageDaoService, "mailService", mailService);
-        ReflectionTestUtils
-                .setField(messageDaoService, "messageDao", messageDao);
-    }
-
-    @AfterEach
-    public void undoMocks() {
-        ReflectionTestUtils.setField(messageDaoService, "mailService",
-                origMailService);
-        ReflectionTestUtils.setField(messageDaoService, "messageDao",
-                origMessageDao);
-    }
+    @InjectMocks
+    private MessageDaoServiceImpl messageDaoService;
 
     @Test
-    // FIXME test with mockito
-    @Disabled
     public void sendMessage() {
-        context.checking(new Expectations() {
-            {
-                oneOf(mailService).sendEmail(with(same(playerThem)), with(any(MailTemplate.class)));
-                oneOf(messageDao).save(with(any(Mail.class)));
-            }
-        });
-        Mail result = messageDaoService.sendMail(nationMe, nationThem, "test subject", "test body");
+        Mail result = messageDaoService.sendMail(nationHelper.nationMe, nationHelper.nationThem, "test subject", "test body");
         assertEquals("test body", result.getBody());
         assertEquals("test subject", result.getSubject());
-        assertEquals(nationMe, result.getFrom());
-        assertEquals(nationThem, result.getTo());
-        context.assertIsSatisfied();
+        assertEquals(nationHelper.nationMe, result.getFrom());
+        assertEquals(nationHelper.nationThem, result.getTo());
+        verify(messageDao).save(any());
+        verify(gameDao).markCacheModified(nationHelper.nationThem);
+        verify(mailService).sendEmail(any(), any());
     }
 
     @Test
     public void sendMessageBoard() {
-        context.checking(new Expectations() {
-            {
-                oneOf(messageDao).save(with(any(Mail.class)));
-            }
-        });
-        Mail result = messageDaoService.sendMail(nationMe, null, "test subject", "test body");
+        Mail result = messageDaoService.sendMail(nationHelper.nationMe, null, "test subject", "test body");
         assertEquals("test body", result.getBody());
         assertEquals("test subject", result.getSubject());
-        assertEquals(nationMe, result.getFrom());
+        assertEquals(nationHelper.nationMe, result.getFrom());
         assertNull(result.getTo());
-        context.assertIsSatisfied();
+        verify(messageDao).save(any());
+        verifyNoInteractions(gameDao);
+        verifyNoInteractions(mailService);
     }
 }
