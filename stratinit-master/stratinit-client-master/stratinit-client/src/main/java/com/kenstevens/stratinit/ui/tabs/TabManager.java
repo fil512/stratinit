@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.shell.TabControl;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;

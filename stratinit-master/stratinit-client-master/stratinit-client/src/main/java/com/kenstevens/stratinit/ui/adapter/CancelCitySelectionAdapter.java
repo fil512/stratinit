@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.ui.adapter;
 
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.SelectedCity;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.slf4j.Logger;

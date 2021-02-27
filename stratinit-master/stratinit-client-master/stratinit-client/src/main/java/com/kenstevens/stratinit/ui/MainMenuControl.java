@@ -9,7 +9,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.messages.MessageWindow;
 import com.kenstevens.stratinit.ui.messages.MessageWindowControl;

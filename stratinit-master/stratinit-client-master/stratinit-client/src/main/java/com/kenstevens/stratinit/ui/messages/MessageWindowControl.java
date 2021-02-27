@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.ui.messages;
 
 import com.kenstevens.stratinit.control.Controller;
 import com.kenstevens.stratinit.main.ClientConstants;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;

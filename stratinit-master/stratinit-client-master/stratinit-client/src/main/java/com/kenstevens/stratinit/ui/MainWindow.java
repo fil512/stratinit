@@ -15,7 +15,7 @@ import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.shell.Message;
 import com.kenstevens.stratinit.shell.*;
 import com.kenstevens.stratinit.site.ProgressBarControlImpl;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.tabs.*;

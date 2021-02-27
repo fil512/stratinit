@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.StratInitServer;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.CommandProcessor;
+import com.kenstevens.stratinit.site.action.get.GetGamesAction;
 import com.kenstevens.stratinit.util.Spring;
 import org.jmock.Expectations;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,7 @@ public class CommandProcessorTest extends BaseStratInitClientTest {
 
 	@Test
 	public void getGames() throws InterruptedException {
-		final GetGamesAction getGamesAction = spring
-				.getBean(GetGamesAction.class);
+		final GetGamesAction getGamesAction = spring.getBean(GetGamesAction.class);
 		Command<? extends Object> getGamesCommand = getGamesAction.getCommand();
 		final StratInitServer stratInitServer = context.mock(StratInitServer.class);
 		final ArrivedDataEventAccumulator arrivedDataEventAccumulator = context.mock(ArrivedDataEventAccumulator.class);

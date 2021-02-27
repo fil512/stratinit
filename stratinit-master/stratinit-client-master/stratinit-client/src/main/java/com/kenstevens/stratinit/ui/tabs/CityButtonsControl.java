@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedCity;
 import com.kenstevens.stratinit.shell.TopShell;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.ui.adapter.CancelCitySelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.CedeCitySelectionAdapter;
 import com.kenstevens.stratinit.ui.adapter.CedeWindow;

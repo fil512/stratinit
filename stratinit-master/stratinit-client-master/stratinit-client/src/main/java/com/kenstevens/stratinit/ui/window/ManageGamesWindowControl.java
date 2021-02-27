@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.remote.request.SetGameRequest;
 import com.kenstevens.stratinit.shell.WidgetContainer;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.ui.tabs.GameTable;
 import com.kenstevens.stratinit.ui.tabs.GameTableControl;
 import com.kenstevens.stratinit.util.Spring;

@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.ui.messages;
 
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;

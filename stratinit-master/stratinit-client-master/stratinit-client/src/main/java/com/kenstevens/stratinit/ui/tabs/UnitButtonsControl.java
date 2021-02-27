@@ -9,7 +9,7 @@ import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.shell.WidgetContainer;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.adapter.*;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;

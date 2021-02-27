@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.ui.adapter;
 
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.shell.TopShell;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.events.SelectionAdapter;
 

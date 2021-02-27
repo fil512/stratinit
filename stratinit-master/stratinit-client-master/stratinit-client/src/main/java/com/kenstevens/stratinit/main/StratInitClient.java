@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.main;
 import com.kenstevens.stratinit.SpringConfig;
 import com.kenstevens.stratinit.audio.WavPlayer;
 import com.kenstevens.stratinit.site.ActionQueue;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.ui.MainShell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

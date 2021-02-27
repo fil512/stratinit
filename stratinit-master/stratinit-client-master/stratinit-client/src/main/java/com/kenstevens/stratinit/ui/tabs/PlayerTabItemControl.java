@@ -12,7 +12,7 @@ import com.kenstevens.stratinit.model.GameView;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.model.SelectedNation;
 import com.kenstevens.stratinit.shell.StatusReporter;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.SWT;

@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.ui.tabs;
 
 import com.kenstevens.stratinit.control.BattleLogDownloader;
 import com.kenstevens.stratinit.control.TopLevelController;
-import com.kenstevens.stratinit.site.action.ActionFactory;
+import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.Spring;
 import org.eclipse.swt.SWT;
