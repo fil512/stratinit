@@ -11,12 +11,11 @@ public class EventSchedulerQuiescer implements QuiesceService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private EventScheduler eventScheduler;
+    private EventSchedulerImpl eventScheduler;
 
     @Override
     public void quiesce() {
         logger.info("Shutting down event scheduler.");
         eventScheduler.shutdown();
     }
-
 }

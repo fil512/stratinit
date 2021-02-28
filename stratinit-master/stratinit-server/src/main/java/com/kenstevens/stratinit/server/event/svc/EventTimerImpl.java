@@ -95,6 +95,11 @@ public class EventTimerImpl implements EventTimer {
         queue.clear();
     }
 
+    @Override
+    public boolean isStarted() {
+        return started;
+    }
+
     private void queue(Event event) {
         queue.add(event);
     }

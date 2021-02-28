@@ -24,11 +24,6 @@ public class StratInitControllerTest extends StratInitDaoBase {
         assertEquals(UnitType.INFANTRY, unitBases.get(0).type);
     }
 
-    @Override
-    public void stratInit() {
-        super.stratInit();
-    }
-
     @Test
     public void getServerConfig() {
         Result<Properties> result = stratInitController.getServerConfig();

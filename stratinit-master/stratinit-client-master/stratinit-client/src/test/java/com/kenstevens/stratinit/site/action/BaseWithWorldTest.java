@@ -13,21 +13,19 @@ import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Disabled
-public class WithWorldTest extends BaseStratInitClientTest {
-    protected static final SectorCoords CITY = new SectorCoords(0, 1);
+public abstract class BaseWithWorldTest extends BaseStratInitClientTest {
+	protected static final SectorCoords CITY = new SectorCoords(0, 1);
 
-    @Autowired
-    Data db;
-    protected NationView nation;
+	@Autowired
+	Data db;
+	protected NationView nation;
 
-    @BeforeEach
-    public void init() {
-        SIGame sigame = new SIGame();
-        GameView game = new GameView(sigame);
+	@BeforeEach
+	public void init() {
+		SIGame sigame = new SIGame();
+		GameView game = new GameView(sigame);
 		game.setGamesize(10);
 		SINation sination = new SINation();
 		nation = new NationView(game, sination);

@@ -8,7 +8,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @Disabled
 @ExtendWith(SpringExtension.class)
-public class MailServiceTest {
+public class ManualMailServiceTest {
     @Autowired
     private SMTPService smtpService;
 

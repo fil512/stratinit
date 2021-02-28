@@ -36,7 +36,7 @@ public abstract class PlayerRequest<T> {
         try {
             // logger.info("Processing request: "+this.getClass());
             if (!serverStatus.isRunning()) {
-                return new Result<T>("The server is not running.", false);
+                return new Result<T>("The server is not running.  Server is " + serverStatus.getState(), false);
             }
             if (getGame() == null && gameRequired) {
                 return new Result<T>("Game not set.", false);

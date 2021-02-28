@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @Disabled
-public class SpringRestIntegrationManualTest extends BaseStratInitClientTest {
+public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired

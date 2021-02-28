@@ -39,7 +39,8 @@ public class WorldManagerTest extends EventTimerMockedBase {
 	private Date now;
 
 	@BeforeEach
-	public void createNation() {
+	public void init() {
+		super.init();
 		nation = worldManagerHelper.createNation(testGameId);
 		now = new Date();
 	}

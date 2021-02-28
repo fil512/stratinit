@@ -11,7 +11,7 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled
-public class ImageManagerTest {
+public class ManualImageManagerTest {
 
 	private static final String GIF = "red.gif";
 	private static final String WRITE_FOLDER = "target/test/images";

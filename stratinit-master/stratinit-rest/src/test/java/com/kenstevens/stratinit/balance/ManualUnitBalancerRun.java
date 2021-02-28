@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Disabled
-public class UnitBalancer extends TwoPlayerBase {
+public class ManualUnitBalancerRun extends TwoPlayerBase {
     public static final SectorCoords LAND_ATT_COORDS = new SectorCoords(2, 1);
     public static final SectorCoords SEA_ATT_COORDS = new SectorCoords(3, 1);
     public static final SectorCoords DEF_LAND = new SectorCoords(2, 0);

@@ -65,6 +65,7 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
         assertEquals(unjoined - 1, games.size());
     }
 
+    // FIXME enable disabled tests
     @Disabled
     @Test
     public void sevenPlayersMapped() throws InterruptedException {

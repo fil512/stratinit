@@ -22,7 +22,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DirtiesContext
 public class EventTimerTest extends StratInitDaoBase {
     protected City city;
     @MockBean
@@ -34,6 +34,7 @@ public class EventTimerTest extends StratInitDaoBase {
 
     @BeforeEach
     public void init() {
+        super.init();
         eventTimer.clearForUnitTest();
         eventTimer.start();
         Nation nation = worldManagerHelper.createNation(testGameId);

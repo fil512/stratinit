@@ -1,11 +1,12 @@
 package com.kenstevens.stratinit.server.event.svc;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.event.EventScheduler;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.*;
-import com.kenstevens.stratinit.server.rest.mail.SMTPService;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RunMode;
@@ -16,13 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.nio.channels.FileLock;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class EventScheduler {
+public class EventSchedulerImpl implements EventScheduler {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -46,8 +48,6 @@ public class EventScheduler {
     @Autowired
     private GameCreator gameCreator;
     @Autowired
-    private SMTPService smtpService;
-    @Autowired
     private CityBuilderService cityBuilderService;
     @Autowired
     private IntegrityCheckerService integrityCheckerService;
@@ -64,7 +64,21 @@ public class EventScheduler {
         ServerLocker serverLocker = new ServerLocker();
         fileLock = serverLocker.getLock();
         if (fileLock == null) {
-            logger.warn("EventScheduler already running.  Skipping startup.\n");
+            if (eventTimer.isStarted()) {
+                logger.warn("EventScheduler already running.  Skipping startup.\n");
+            } else {
+                logger.error("Unable to start scheduler.  Is another server already running?");
+            }
+            return;
+        }
+        updateGamesAndStartTimer();
+    }
+
+    @VisibleForTesting
+    @Override
+    public void updateGamesAndStartTimer() {
+        if (eventTimer.isStarted()) {
+            logger.info("EventScheduler already running.  Skipping startup.\n");
             return;
         }
         logger.info("Server Lock File locked.\n");
@@ -197,6 +211,7 @@ public class EventScheduler {
         logger.info(units.size() + " units scheduled.");
     }
 
+    @PreDestroy
     public void shutdown() {
         if (fileLock != null) {
             ServerLocker serverLocker = new ServerLocker();

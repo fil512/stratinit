@@ -5,10 +5,8 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 
-@Disabled
-public class TwoPlayerTest {
+public abstract class TwoPlayerTest {
 	protected SectorCoords coords = new SectorCoords(0, 0);
 	protected Player playerA = new Player("A");
 	protected Player playerB = new Player("B");

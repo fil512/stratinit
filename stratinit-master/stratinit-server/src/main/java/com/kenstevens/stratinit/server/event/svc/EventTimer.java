@@ -19,4 +19,6 @@ public interface EventTimer {
     void start();
 
     void clearForUnitTest();
+
+    boolean isStarted();
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 @Disabled
-public class BalanceResultPersisterTest {
+public class ManualBalanceResultPersisterTest {
     @Test
     public void load() throws IOException {
         BalanceResultPersister balanceResultPersister = new BalanceResultPersister();

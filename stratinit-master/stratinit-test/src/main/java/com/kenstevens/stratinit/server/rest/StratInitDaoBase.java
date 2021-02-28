@@ -5,9 +5,13 @@ import com.kenstevens.stratinit.TestConfig;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.event.EventScheduler;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.type.*;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.RunMode;
+import com.kenstevens.stratinit.type.SectorType;
+import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.hibernate.dialect.Dialect;
@@ -54,6 +58,9 @@ public abstract class StratInitDaoBase {
 	protected DataCache dataCache;
 	@Autowired
 	private ExpungeSvc expungeSvc;
+	@Autowired
+	private EventScheduler eventScheduler;
+
 	protected Game testGame;
 	protected World testWorld;
 	protected static final String PLAYER_ME_NAME = "me";
@@ -75,7 +82,6 @@ public abstract class StratInitDaoBase {
 	protected static final int SUB_CAPACITY = UnitBase.getUnitBase(
 			UnitType.SUBMARINE).getCapacity();
 	protected static final int CARGO_CAPACITY = UnitBase.getUnitBase(UnitType.CARGO_PLANE).getCapacity();
-	protected static final SectorCoords TEST_COORDS = new SectorCoords(0, 0);
 	private static final int TIME_TOLERANCE = 100;
 
 	protected String[] types = {
@@ -123,6 +129,14 @@ public abstract class StratInitDaoBase {
 		assertTrue(dialect instanceof org.hibernate.dialect.H2Dialect, "RUNNING IN H2.  Actual dialect = " + dialect);
 	}
 
+	@BeforeEach
+	public void init() {
+		Constants.setRunMode(RunMode.PRODUCTION);
+		// Note this creates a new game for every test
+		setupGame();
+		eventScheduler.updateGamesAndStartTimer();
+	}
+
 	public void setupGame() {
 		testGame = new Game(null, GAME_SIZE);
 		testGame.setBlitz(true);
@@ -160,13 +174,6 @@ public abstract class StratInitDaoBase {
 
 	protected String[] getTypes() {
 		return types;
-	}
-
-	@BeforeEach
-	public void stratInit() {
-		Constants.setRunMode(RunMode.PRODUCTION);
-		// Note this creates a new game for every test
-		setupGame();
 	}
 
 	@AfterEach

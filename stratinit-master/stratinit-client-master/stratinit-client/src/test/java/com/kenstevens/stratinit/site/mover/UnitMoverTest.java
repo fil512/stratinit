@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.site.action.WithWorldTest;
+import com.kenstevens.stratinit.site.action.BaseWithWorldTest;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.UnitHelper;
@@ -15,10 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UnitMoverTest extends WithWorldTest {
+public class UnitMoverTest extends BaseWithWorldTest {
 	@Autowired
 	UnitMover unitMover;
-	
+
 	@Test
 	public void maxRangeTest() {
 		SIUnit siunit = new SIUnit();
