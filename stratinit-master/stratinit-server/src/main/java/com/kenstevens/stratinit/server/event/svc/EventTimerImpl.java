@@ -1,10 +1,12 @@
 package com.kenstevens.stratinit.server.event.svc;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.kenstevens.stratinit.model.EventKey;
 import com.kenstevens.stratinit.model.Updatable;
 import com.kenstevens.stratinit.server.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -16,7 +18,9 @@ import java.util.Queue;
 public class EventTimerImpl implements EventTimer {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final JavaTimer javaTimer = new JavaTimerImpl();
+    @Autowired
+    private JavaTimer javaTimer;
+
     private final Map<EventKey, Event> eventMap = new HashMap<EventKey, Event>();
     private final Queue<Event> queue = new LinkedList<>();
     private boolean shuttingDown = false;
@@ -44,6 +48,7 @@ public class EventTimerImpl implements EventTimer {
                 cancel(eventKey);
             }
         }
+        logger.info("Scheduling {}", event);
         long periodMillis = event.getPeriodMilliseconds();
         if (periodMillis != Event.NO_PERIOD) {
             javaTimer.schedule(event.getTask(), event.getTime(), periodMillis);
@@ -78,7 +83,15 @@ public class EventTimerImpl implements EventTimer {
     @Override
     public void start() {
         started = true;
+        shuttingDown = false;
         queue.forEach(this::schedule);
+        queue.clear();
+    }
+
+    @Override
+    @VisibleForTesting
+    public void clearForUnitTest() {
+        eventMap.clear();
         queue.clear();
     }
 

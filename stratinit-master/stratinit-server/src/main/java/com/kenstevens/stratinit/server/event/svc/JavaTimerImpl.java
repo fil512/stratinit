@@ -1,11 +1,13 @@
 package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.server.event.Event;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Service
 public class JavaTimerImpl implements JavaTimer {
 
     private final Timer timer = new Timer();

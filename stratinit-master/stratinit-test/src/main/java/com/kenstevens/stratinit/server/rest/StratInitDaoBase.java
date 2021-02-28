@@ -38,7 +38,6 @@ public abstract class StratInitDaoBase {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicInteger playerIndex = new AtomicInteger();
 
-
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Autowired

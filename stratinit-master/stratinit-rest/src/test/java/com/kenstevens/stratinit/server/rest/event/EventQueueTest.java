@@ -3,30 +3,32 @@ package com.kenstevens.stratinit.server.rest.event;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.server.event.*;
+import com.kenstevens.stratinit.server.event.CityBuildEvent;
+import com.kenstevens.stratinit.server.event.GameMapEvent;
+import com.kenstevens.stratinit.server.event.GameStartEvent;
+import com.kenstevens.stratinit.server.event.UnitUpdateEvent;
+import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
-import org.jmock.Expectations;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
-@SuppressWarnings("deprecation")
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+
 public class EventQueueTest extends EventTimerMockedBase {
+	@Autowired
+	private EventQueue eventQueue;
 
 	private final Date now = new Date();
 	private final Date started = new Date(now.getTime() - 1);
 
 	@Test
 	public void shutdown() {
-		context.checking(new Expectations() {
-			{
-				oneOf(eventTimer).shutdown();
-			}
-		});
-
 		eventQueue.shutdown();
-		context.assertIsSatisfied();
+		verify(eventTimer).shutdown();
 	}
 
 	@Test
@@ -36,14 +38,9 @@ public class EventQueueTest extends EventTimerMockedBase {
 		Nation nation = new Nation(testGame, playerMe);
 		city.setNation(nation);
 		city.setBuild(UnitType.INFANTRY, new Date());
-		context.checking(new Expectations() {
-			{
-				oneOf(eventTimer).schedule((Event) with(a(CityBuildEvent.class)));
-			}
-		});
 
 		eventQueue.schedule(city);
-		context.assertIsSatisfied();
+		verify(eventTimer).schedule(any(CityBuildEvent.class));
 	}
 
 	@Test
@@ -53,14 +50,9 @@ public class EventQueueTest extends EventTimerMockedBase {
 		Nation nation = new Nation(testGame, playerMe);
 		unit.setNation(nation);
 		unit.setType(UnitType.INFANTRY);
-		context.checking(new Expectations() {
-			{
-				oneOf(eventTimer).schedule((Event) with(a(UnitUpdateEvent.class)));
-			}
-		});
 
 		eventQueue.schedule(unit);
-		context.assertIsSatisfied();
+		verify(eventTimer).schedule(any(UnitUpdateEvent.class));
 	}
 
 	@Test
@@ -68,33 +60,23 @@ public class EventQueueTest extends EventTimerMockedBase {
 		GameScheduleHelper.setStartTime(testGame, null);
 		testGame.setMapped(null);
 		eventQueue.schedule(testGame, false);
-		context.assertIsSatisfied();
+		// FIXME add verifys
 	}
 
 	@Test
 	public void scheduleStartedGame() {
 		GameScheduleHelper.setStartTime(testGame, started);
 		testGame.setMapped(null);
-		context.checking(new Expectations() {
-			{
-				oneOf(eventTimer).schedule((Event) with(a(GameMapEvent.class)));
-				oneOf(eventTimer).schedule((Event) with(a(GameStartEvent.class)));
-			}
-		});
 		eventQueue.schedule(testGame, false);
-		context.assertIsSatisfied();
+		verify(eventTimer).schedule(any(GameMapEvent.class));
+		verify(eventTimer).schedule(any(GameStartEvent.class));
 	}
 
 	@Test
 	public void scheduleMappedGame() {
 		GameScheduleHelper.setStartTime(testGame, started);
 		testGame.setMapped(started);
-		context.checking(new Expectations() {
-			{
-				oneOf(eventTimer).schedule((Event) with(a(GameStartEvent.class)));
-			}
-		});
 		eventQueue.schedule(testGame, false);
-		context.assertIsSatisfied();
+		verify(eventTimer).schedule(any(GameStartEvent.class));
 	}
 }

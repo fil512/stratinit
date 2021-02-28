@@ -17,4 +17,6 @@ public interface EventTimer {
     Event getScheduledEvent(Updatable updatable);
 
     void start();
+
+    void clearForUnitTest();
 }
