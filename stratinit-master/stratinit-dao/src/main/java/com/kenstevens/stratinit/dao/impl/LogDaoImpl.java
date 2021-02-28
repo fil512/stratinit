@@ -12,6 +12,7 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 @Service
+// FIXME remove the rest of the interfaces
 public class LogDaoImpl implements LogDao {
     @Autowired
     UnitAttackedBattleLogRepo unitAttackedBattleLogRepo;
