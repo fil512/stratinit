@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestTeamProviderTest {
-	TeamProvider tp = new TestTeamProvider();
+	ITeamProvider tp = new TestTeamProvider();
 
 	@Test
 	public void testGetAllies() {
 		assertEquals(TestTeamProvider.nation1b, Iterables.getOnlyElement(tp.getAllies(TestTeamProvider.nation1a)));
 	}
-	
+
 	@Test
 	public void testGetNations() {
 		assertEquals(5, tp.getNations(TestTeamProvider.game2).size());

@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.server.daoserviceimpl.IntegrityCheckerServiceImpl;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -22,7 +21,7 @@ public class IntegrityCheckerServiceTest extends TwoPlayerBase {
     @Autowired
     protected SectorDaoService sectorDaoService;
     @Autowired
-    protected IntegrityCheckerServiceImpl integrityCheckerService;
+    protected IntegrityCheckerService integrityCheckerService;
 
     @Test
     public void noEnemyUnitInMycity() {

@@ -4,7 +4,6 @@ import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.helper.NationHelper;
 import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.server.daoserviceimpl.MessageDaoServiceImpl;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,26 +30,26 @@ public class MessageDaoServiceTest {
     private MailService mailService;
 
     @InjectMocks
-    private MessageDaoServiceImpl messageDaoService;
+    private MessageDaoService messageDaoService;
 
     @Test
     public void sendMessage() {
-        Mail result = messageDaoService.sendMail(nationHelper.nationMe, nationHelper.nationThem, "test subject", "test body");
+        Mail result = messageDaoService.sendMail(NationHelper.nationMe, NationHelper.nationThem, "test subject", "test body");
         assertEquals("test body", result.getBody());
         assertEquals("test subject", result.getSubject());
-        assertEquals(nationHelper.nationMe, result.getFrom());
-        assertEquals(nationHelper.nationThem, result.getTo());
+        assertEquals(NationHelper.nationMe, result.getFrom());
+        assertEquals(NationHelper.nationThem, result.getTo());
         verify(messageDao).save(any());
-        verify(gameDao).markCacheModified(nationHelper.nationThem);
+        verify(gameDao).markCacheModified(NationHelper.nationThem);
         verify(mailService).sendEmail(any(), any());
     }
 
     @Test
     public void sendMessageBoard() {
-        Mail result = messageDaoService.sendMail(nationHelper.nationMe, null, "test subject", "test body");
+        Mail result = messageDaoService.sendMail(NationHelper.nationMe, null, "test subject", "test body");
         assertEquals("test body", result.getBody());
         assertEquals("test subject", result.getSubject());
-        assertEquals(nationHelper.nationMe, result.getFrom());
+        assertEquals(NationHelper.nationMe, result.getFrom());
         assertNull(result.getTo());
         verify(messageDao).save(any());
         verifyNoInteractions(gameDao);

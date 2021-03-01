@@ -27,7 +27,7 @@ public class BuildCityTest extends TwoPlayerBase {
                 UnitType.ENGINEER);
         List<City> cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());
-        int cp = nationMe.getCommandPoints();
+        long cp = nationMe.getCommandPoints();
         Result<SIUpdate> result = stratInitController.buildCity(makeUnitList(eng));
         assertEquals(cp, nationMe.getCommandPoints());
         assertFalseResult(result);
@@ -56,7 +56,7 @@ public class BuildCityTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
         List<City> cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());
-        int cp = nationMe.getCommandPoints();
+        long cp = nationMe.getCommandPoints();
         Collection<SectorSeen> sectors = sectorDao.getSectorsSeen(nationMe);
         assertEquals(58, sectors.size());
         SectorSeen near = new SectorSeen(nationMe, NEAR);

@@ -10,7 +10,6 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoserviceimpl.GameDaoServiceImpl;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.type.Constants;
@@ -46,7 +45,7 @@ public class GameDaoStateChangeTest {
     private Game game;
 
     @InjectMocks
-    private GameDaoServiceImpl gameDaoService;
+    private GameDaoService gameDaoService;
 
     @BeforeEach
     public void before() {

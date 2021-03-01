@@ -18,10 +18,22 @@
 			<version>${swt.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- FIXME remove -->
 		<dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
+			<groupId>dijkstra-java</groupId>
+			<artifactId>rollerjm-graphs</artifactId>
+			<version>1.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>maven-sourceforge-plugin</artifactId>
+					<groupId>maven-plugins</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
