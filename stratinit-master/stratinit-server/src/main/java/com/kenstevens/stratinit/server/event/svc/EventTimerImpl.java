@@ -48,7 +48,6 @@ public class EventTimerImpl implements EventTimer {
                 cancel(eventKey);
             }
         }
-        logger.info("Scheduling {}", event);
         long periodMillis = event.getPeriodMilliseconds();
         if (periodMillis != Event.NO_PERIOD) {
             javaTimer.schedule(event.getTask(), event.getTime(), periodMillis);

@@ -331,13 +331,6 @@
                 <artifactId>snakeyaml</artifactId>
                 <version>1.28</version>
             </dependency>
-            <!-- FIXME replace with mockito -->
-            <dependency>
-                <groupId>org.jmock</groupId>
-                <artifactId>jmock</artifactId>
-                <version>2.12.0</version>
-                <scope>test</scope>
-            </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
