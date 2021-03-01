@@ -1,27 +1,26 @@
 package com.kenstevens.stratinit.move;
 
+import com.kenstevens.stratinit.graph.IGraph;
+import com.kenstevens.stratinit.graph.Path;
+import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.model.WorldSector;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.rollerjm.graph.IGraph;
-import org.rollerjm.graph.Path;
+public class SectorGraph implements IGraph<WorldSector> {
+	private final WorldView worldView;
+	private final Unit unit;
 
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
-
-public class SectorGraph implements IGraph<WorldSector>{
-	private WorldView worldView;
-	private Unit unit;
-	
 	public SectorGraph(Unit unit, WorldView world) {
 		this.worldView = world;
 		this.unit = unit;
 	}
-	
+
 	@Override
 	public void addEdge(WorldSector startVertex, WorldSector destinationVertex,
-			double weight) {
+						double weight) {
 		// not used
 	}
 
@@ -35,10 +34,7 @@ public class SectorGraph implements IGraph<WorldSector>{
 		if (!worldView.getNeighbours(startVertex).contains(destinationVertex)) {
 			return false;
 		}
-		if (!destinationVertex.canEnter(unit)) {
-			return false;
-		}
-		return true;
+		return destinationVertex.canEnter(unit);
 	}
 
 	@Override

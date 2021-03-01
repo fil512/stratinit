@@ -24,6 +24,7 @@
         <url>http://www.strategicinitiative.org/</url>
     </organization>
     <modules>
+        <module>stratinit-graph</module>
         <module>stratinit-core</module>
         <module>stratinit-dao</module>
         <module>stratinit-test</module>
@@ -97,6 +98,11 @@
     </build>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.kenstevens.stratinit</groupId>
+                <artifactId>stratinit-graph</artifactId>
+                <version>${stratinit.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.kenstevens.stratinit</groupId>
                 <artifactId>stratinit-core</artifactId>
@@ -257,17 +263,6 @@
             </dependency>
 
             <dependency>
-                <groupId>dijkstra-java</groupId>
-                <artifactId>rollerjm-graphs</artifactId>
-                <version>1.0</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>maven-sourceforge-plugin</artifactId>
-                        <groupId>maven-plugins</groupId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>1.2.3</version>
@@ -403,16 +398,6 @@
         <repository>
             <id>mvn</id>
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-        </repository>
-        <repository>
-            <id>dijkstra-java.sf.net</id>
-            <url>http://downloads.sourceforge.net/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
     <pluginRepositories>

@@ -1,13 +1,8 @@
 package com.kenstevens.stratinit.move;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.rollerjm.graph.Dijkstra;
-import org.rollerjm.graph.Path;
-
 import com.google.common.collect.Sets;
+import com.kenstevens.stratinit.graph.Dijkstra;
+import com.kenstevens.stratinit.graph.Path;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.Unit;
@@ -17,6 +12,10 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.util.UnitHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Movement {
 	private final Unit unit;
@@ -40,8 +39,6 @@ public class Movement {
 		movementSupply.addSupply();
 		return reacher.canReach();
 	}
-
-
 
 	public boolean isStranded() {
 		// Only air units can get stranded
@@ -173,10 +170,7 @@ public class Movement {
 		if (targetSector.isWater()) {
 			return false;
 		}
-		if (worldView.isCoastal(targetSector)) {
-			return false;
-		}
-		return true;
+		return !worldView.isCoastal(targetSector);
 	}
 
 	public Result<None> inRange(Unit unit, SectorCoords targetCoords, int moveCost) {

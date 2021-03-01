@@ -59,10 +59,6 @@
             <artifactId>jasypt</artifactId>
         </dependency>
         <dependency>
-            <groupId>dijkstra-java</groupId>
-            <artifactId>rollerjm-graphs</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
