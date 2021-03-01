@@ -5,13 +5,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 
 public final class PlayerCommandPointWarner {
-	
-	public PlayerCommandPointWarner() {}
+
+	public PlayerCommandPointWarner() {
+	}
 
 	public static boolean beenWarned = false;
 
-	public static boolean warnUserLowCommandPoints(TopShell topShell,
-			int commandPoints) {
+	public static boolean warnUserLowCommandPoints(TopShell topShell, long commandPoints) {
 		if (beenWarned) {
 			return true;
 		}
