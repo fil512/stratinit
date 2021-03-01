@@ -7,7 +7,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.cache.GameLoader;
-import com.kenstevens.stratinit.dao.impl.CacheDaoImpl;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.repo.*;
@@ -20,7 +19,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
-public class GameDao extends CacheDaoImpl {
+public class GameDao extends CacheDao {
     @Autowired
     private GameRepo gameRepo;
     @Autowired

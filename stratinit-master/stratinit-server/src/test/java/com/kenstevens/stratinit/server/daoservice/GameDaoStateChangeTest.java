@@ -1,119 +1,82 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.helper.GameHelper;
+import com.kenstevens.stratinit.helper.NationHelper;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoserviceimpl.GameDaoServiceImpl;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
-import com.kenstevens.stratinit.server.rest.StratInitDaoBase;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
-import com.kenstevens.stratinit.server.rest.mail.MailTemplate;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.util.ExpungeSvc;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
-public class GameDaoStateChangeTest extends StratInitDaoBase {
-    private final Mockery context = new Mockery();
+@ExtendWith(MockitoExtension.class)
+public class GameDaoStateChangeTest {
+    @Mock
     private EventQueue eventQueue;
+    @Mock
     private MailService mailService;
+    @Mock
     private WorldManager worldManager;
+    @Mock
     private SectorDao sectorDao;
+    @Mock
+    private GameDao gameDao;
+    @Mock
+    private GameCreator gameCreator;
 
-    @Autowired
-    private EventQueue origEventQueue;
-    @Autowired
-    private MailService origMailService;
-    @Autowired
-    private WorldManager origWorldManager;
-    @Autowired
-    private SectorDao origSectorDao;
-    @Autowired
-    private ExpungeSvc expungeSvc;
-    @Autowired
-    private DataCache dataCache;
+    private Game game;
 
-    @Autowired
-    private GameDaoService gameDaoService;
+    @InjectMocks
+    private GameDaoServiceImpl gameDaoService;
 
     @BeforeEach
-    public void setupMocks() {
-
-        eventQueue = context.mock(EventQueue.class);
-        mailService = context.mock(MailService.class);
-        worldManager = context.mock(WorldManager.class);
-        sectorDao = context.mock(SectorDao.class);
-
-        ReflectionTestUtils.setField(gameDaoService, "eventQueue", eventQueue);
-        ReflectionTestUtils
-                .setField(gameDaoService, "mailService", mailService);
-        ReflectionTestUtils.setField(gameDaoService, "worldManager",
-                worldManager);
-        ReflectionTestUtils.setField(gameDaoService, "sectorDao", sectorDao);
-    }
-
-    @AfterEach
-    public void undoMocks() {
-        // FIXME convert to mockito and remove these
-        ReflectionTestUtils.setField(gameDaoService, "eventQueue",
-                origEventQueue);
-        ReflectionTestUtils.setField(gameDaoService, "mailService",
-                origMailService);
-        ReflectionTestUtils.setField(gameDaoService, "worldManager",
-                origWorldManager);
-        ReflectionTestUtils.setField(gameDaoService, "sectorDao",
-                origSectorDao);
-
-        expungeSvc.expungeAll();
-        dataCache.clear();
+    public void before() {
+        game = GameHelper.newGame();
     }
 
     @Test
     public void createGame() {
-        Game game = makeGame();
+        Game game = gameDaoService.createGame("test");
         assertNotNull(game);
         assertTrue(game.isEnabled());
-        assertNotNull(game.getCreated());
+// FIXME ensure this is tested elsewhere
+        //        assertNotNull(game.getCreated());
         assertNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(0, game.getPlayers());
         assertFalse(game.isBlitz());
     }
 
-    private Game makeGame() {
-        return gameDaoService.createGame("test");
-    }
-
-    private Game makeBlitzGame() {
-        return gameDaoService.createBlitzGame("test", 2);
-    }
-
     @Test
     public void createBlitzGame() {
-        context.checking(new Expectations() {
-            {
-                oneOf(worldManager).build(with(any(Game.class)));
-                oneOf(sectorDao).save(with(aNull(World.class)));
-            }
-        });
+        World world = prepWorld();
 
-        Game game = makeBlitzGame();
-        assertNotNull(game.getCreated());
+        Game game = gameDaoService.createBlitzGame("test", 2);
         assertNotNull(game.getStartTime());
         assertIsMapped(game);
         assertEquals(0, game.getPlayers());
         assertTrue(game.isBlitz());
-        context.assertIsSatisfied();
+        verify(worldManager).build(any(Game.class));
+        verify(sectorDao).save(world);
     }
 
     private void assertNotMapped(Game game) {
@@ -132,199 +95,185 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 
     @Test
     public void scheduleGameNoPlayers() {
-        final Game game = makeGame();
-
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-            }
-        });
 
         gameDaoService.scheduleGame(game);
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(0, game.getPlayers());
-        context.assertIsSatisfied();
+        verify(eventQueue).schedule(game, false);
     }
 
     @Test
     public void scheduleGameTwice() {
-        final Game game = makeGame();
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-            }
-        });
 
         gameDaoService.scheduleGame(game);
         gameDaoService.scheduleGame(game);
-        context.assertIsSatisfied();
+        verify(eventQueue).schedule(game, false);
     }
 
     @Test
     public void scheduleGameOnePlayer() {
-        final Game game = makeGame();
-        final Player player = createPlayer();
+
+        final Player player = PlayerHelper.me;
+
+        prepJoinGame(1);
+
         gameDaoService.joinGame(player, game.getId(), false);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(mailService).sendEmail(with(same(player)),
-                        with(any(MailTemplate.class)));
-            }
-        });
-
         gameDaoService.scheduleGame(game);
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(1, game.getPlayers());
-        context.assertIsSatisfied();
+
+        verify(eventQueue).schedule(game, false);
+        verify(mailService).sendEmail(any(), any());
     }
 
+    private void prepJoinGame(int numPlayers) {
+        when(gameDao.findGame(GameHelper.gameId)).thenReturn(GameHelper.game);
+        List<Nation> nations = new ArrayList<>();
+        for (int i = 0; i < numPlayers; ++i) {
+            nations.add(NationHelper.newNation(PlayerHelper.newPlayer(i)));
+        }
+        when(gameDao.getNations(GameHelper.game)).thenReturn(nations);
+    }
+
+    @Test
     public void mapGameNotStarted() {
-        Game game = makeGame();
+
         try {
             gameDaoService.mapGame(game);
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("", e.getMessage());
+            assertEquals("Game " + GameHelper.gameName + " can not be mapped.  It has not been started yet.", e.getMessage());
         }
     }
 
     @Test
     public void mapGameTwice() {
-        final Game game = makeGame();
-        final Player player = createPlayer();
-        final Result<Nation> result = gameDaoService.joinGame(player, game
-                .getId(), false);
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                oneOf(sectorDao).save(with(aNull(World.class)));
-                oneOf(worldManager).addPlayerToMap(0, result.getValue());
-                oneOf(mailService).sendEmail(with(same(player)), with(any(MailTemplate.class)));
-            }
-        });
+
+        final Player player = PlayerHelper.me;
+
+        World world = prepWorld();
+
+        prepJoinGame(1);
+
+        final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
         gameDaoService.scheduleGame(game);
         gameDaoService.mapGame(game);
         try {
             gameDaoService.mapGame(game);
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("Game test is already mapped.  It cannot be mapped again.", e.getMessage());
+            assertEquals("Game " + GameHelper.gameName + " is already mapped.  It cannot be mapped again.", e.getMessage());
         }
-        context.assertIsSatisfied();
+        verify(eventQueue).schedule(game, false);
+        verify(worldManager).build(game);
+        verify(sectorDao).save(world);
+        verify(worldManager).addPlayerToMap(0, result.getValue());
+        verify(mailService).sendEmail(any(), any());
     }
 
     @Test
     public void mapGameNoPlayers() {
-        final Game game = makeGame();
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                oneOf(sectorDao).save(with(any(World.class)));
-            }
-        });
+
         gameDaoService.scheduleGame(game);
         try {
             gameDaoService.mapGame(game);
             fail();
         } catch (IllegalStateException e) {
-            assertEquals("Game test may not be mapped.  It has no players.", e.getMessage());
+            assertEquals("Game " + GameHelper.gameName + " may not be mapped.  It has no players.", e.getMessage());
         }
+        verify(eventQueue).schedule(game, false);
     }
 
     @Test
     public void joinBeforeMapped() {
-        final Game game = makeGame();
-        final Player player = createPlayer();
+
+        final Player player = PlayerHelper.me;
+
+        World world = prepWorld();
+
+        prepJoinGame(1);
+
         final Result<Nation> result = gameDaoService.joinGame(player, game
                 .getId(), false);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                oneOf(worldManager).addPlayerToMap(0, result.getValue());
-                oneOf(sectorDao).save(with(aNull(World.class)));
-                oneOf(mailService).sendEmail(with(same(player)), with(any(MailTemplate.class)));
-            }
-        });
         gameDaoService.scheduleGame(game);
         gameDaoService.mapGame(game);
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertIsMapped(game);
         assertEquals(1, game.getPlayers());
-        context.assertIsSatisfied();
+
+        // FIXME extract similar sets of asserts
+        verify(eventQueue).schedule(game, false);
+        verify(worldManager).build(game);
+        verify(worldManager).addPlayerToMap(0, result.getValue());
+        verify(sectorDao).save(world);
+        verify(mailService).sendEmail(any(), any());
+    }
+
+    private World prepWorld() {
+        World world = new World(GameHelper.game, true);
+        when(worldManager.build(any())).thenReturn(world);
+        return world;
     }
 
     @Test
     public void joinAfterMapped() {
-        final Game game = makeGame();
 
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                exactly(3).of(worldManager).addPlayerToMap(with(any(Integer.class)),
-                        with(any(Nation.class)));
-                oneOf(sectorDao).save(with(aNull(World.class)));
-            }
-        });
-        gameDaoService.scheduleGame(game);
-        playersJoinGame(game, 2);
-        gameDaoService.mapGame(game);
-        Player player = createPlayer();
-        final Result<Nation> result = gameDaoService.joinGame(player, game
-                .getId(), false);
+        World world = setupTwoPlayers(game);
+        Player player = PlayerHelper.me;
+
+        final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
+
         assertResult(result);
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertIsMapped(game);
         assertEquals(3, game.getPlayers());
-        context.assertIsSatisfied();
+
+        verify(eventQueue).schedule(game, false);
+        verify(worldManager).build(game);
+        verify(worldManager, times(3)).addPlayerToMap(any(Integer.class), any(Nation.class));
+        verify(sectorDao).save(world);
+    }
+
+    private World setupTwoPlayers(Game game) {
+        World world = prepWorld();
+
+        gameDaoService.scheduleGame(game);
+        prepJoinGame(2);
+        playersJoinGame(game, 2);
+        gameDaoService.mapGame(game);
+        return world;
     }
 
     @Test
     public void joinTooManyAfterMapped() {
-        final Game game = makeGame();
+        World world = setupTwoPlayers(game);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                oneOf(worldManager).build(game);
-                exactly(Constants.MAP_EXTRA_SLOTS + 2).of(worldManager).addPlayerToMap(with(any(Integer.class)),
-                        with(any(Nation.class)));
-                oneOf(sectorDao).save(with(aNull(World.class)));
-            }
-        });
-        gameDaoService.scheduleGame(game);
-        playersJoinGame(game, 2);
-        gameDaoService.mapGame(game);
         assertEquals(Constants.MAP_EXTRA_SLOTS + 2, game.getIslands());
 
         playersJoinGame(game, Constants.MAP_EXTRA_SLOTS);
 
-        final Player player = createPlayer();
+        final Player player = PlayerHelper.me;
         final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
         assertFalseResult(result);
 
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertIsMapped(game);
         assertEquals(Constants.MAP_EXTRA_SLOTS + 2, game.getPlayers());
-        context.assertIsSatisfied();
+        verify(eventQueue).schedule(game, false);
+        verify(worldManager).build(game);
+
+        verify(worldManager, times(Constants.MAP_EXTRA_SLOTS + 2)).addPlayerToMap(any(Integer.class), any(Nation.class));
+        verify(sectorDao).save(world);
+
     }
 
     private void playersJoinGame(final Game game, int numPlayers) {
         for (int i = 0; i < numPlayers; ++i) {
-            final Player player = createPlayer();
+            final Player player = PlayerHelper.newPlayer(i);
             final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
             assertResult(result);
         }
@@ -332,50 +281,40 @@ public class GameDaoStateChangeTest extends StratInitDaoBase {
 
     @Test
     public void scheduleGameMinPlayersToMap() {
-        final Game game = makeGame();
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                exactly(Constants.MIN_PLAYERS_TO_SCHEDULE).of(mailService)
-                        .sendEmail(with(any(Player.class)),
-                                with(any(MailTemplate.class)));
-                // TODO TEST assert specific template types in these sendEmail
-                // expectations.
-            }
-        });
-
         assertNull(game.getStartTime());
-
+        prepJoinGame(Constants.MIN_PLAYERS_TO_SCHEDULE);
         playersJoinGame(game, Constants.MIN_PLAYERS_TO_SCHEDULE);
 
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(Constants.MIN_PLAYERS_TO_SCHEDULE, game.getPlayers());
-        context.assertIsSatisfied();
+        verify(eventQueue).schedule(game, false);
+
+        verify(mailService, times(Constants.MIN_PLAYERS_TO_SCHEDULE)).sendEmail(any(), any());
     }
 
     @Test
+    // FIXME not confident this is testing what we want to test here
     public void scheduleGameMinPlayersPlusOneToMap() {
-        final Game game = makeGame();
         final int numPlayers = Constants.MIN_PLAYERS_TO_SCHEDULE + 1;
-        context.checking(new Expectations() {
-            {
-                oneOf(eventQueue).schedule(game, false);
-                exactly(numPlayers - 1).of(mailService).sendEmail(
-                        with(any(Player.class)), with(any(MailTemplate.class)));
-            }
-        });
 
         assertNull(game.getStartTime());
 
+        prepJoinGame(numPlayers - 1);
         playersJoinGame(game, numPlayers);
 
-        assertNotNull(game.getCreated());
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(numPlayers, game.getPlayers());
-        context.assertIsSatisfied();
+        verify(eventQueue).schedule(game, false);
+        verify(mailService, times(numPlayers - 1)).sendEmail(any(), any());
     }
 
+    protected void assertResult(Result<?> result) {
+        assertTrue(result.isSuccess(), result.toString());
+    }
+
+    protected void assertFalseResult(Result<? extends Object> result) {
+        assertFalse(result.isSuccess(), result.toString());
+    }
 }

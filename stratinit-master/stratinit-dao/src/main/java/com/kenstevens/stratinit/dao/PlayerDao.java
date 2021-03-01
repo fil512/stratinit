@@ -1,32 +1,88 @@
 package com.kenstevens.stratinit.dao;
 
+import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.PlayerRole;
+import com.kenstevens.stratinit.repo.PlayerRepo;
+import com.kenstevens.stratinit.repo.PlayerRoleRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-public interface PlayerDao {
+@Service
+public class PlayerDao {
+	@Autowired
+	protected DataCache dataCache;
+	@Autowired
+	private PlayerRepo playerRepo;
+	@Autowired
+	private PlayerRoleRepo playerRoleRepo;
+	@Autowired
+	private GameDao gameDao;
 
-	void save(Player player);
+	public List<Player> getAllPlayers() {
+		return dataCache.getAllPlayers();
+	}
 
-	void save(PlayerRole playerRole);
+	public void save(Player player) {
+		playerRepo.save(player);
+		dataCache.add(player);
+	}
 
-	List<Player> getAllPlayers();
+	public void save(PlayerRole playerRole) {
+		playerRoleRepo.save(playerRole);
+	}
 
-	Player find(String username);
+	public Player find(String username) {
+		return playerRepo.findByUsername(username);
+	}
 
-	void deleteByUsername(String username);
+	@Transactional
+	public void deleteByUsername(String username) {
+		playerRoleRepo.deleteByPlayerUsername(username);
+		playerRepo.deleteByUsername(username);
+	}
 
-	void delete(Player player);
+	public void delete(Player player) {
+		playerRoleRepo.deleteByPlayer(player);
+		playerRepo.delete(player);
+		dataCache.remove(player);
+	}
 
-	PlayerRole getPlayerRole(Player player, String roleName);
+	public PlayerRole getPlayerRole(Player player, String roleName) {
+		return playerRoleRepo.findByPlayerAndRoleName(player, roleName);
+	}
 
-	void saveAndUpdateNations(Player player);
+	public void saveAndUpdateNations(Player player) {
+		playerRepo.save(player);
+		// Note this behavior is different from other daos.  We don't mind doing a db save every time
+		// since player updates are rare.
+		List<Nation> nations = gameDao.getNations(player);
+		for (Nation nation : nations) {
+			nation.getPlayer().copyFrom(player);
+		}
+	}
 
-	List<PlayerRole> getRoles(Player player);
+	public List<PlayerRole> getRoles(Player player) {
+		return playerRoleRepo.findByPlayer(player);
+	}
 
-	Player findByEmail(String email);
+	public Player findByEmail(String email) {
+		if (email == null) {
+			return null;
+		}
+		for (Player player : dataCache.getAllPlayers()) {
+			if (email.equals(player.getEmail())) {
+				return player;
+			}
+		}
+		return null;
+	}
 
-	Player find(Integer id);
-
+	public Player find(Integer id) {
+		return dataCache.getPlayer(id);
+	}
 }

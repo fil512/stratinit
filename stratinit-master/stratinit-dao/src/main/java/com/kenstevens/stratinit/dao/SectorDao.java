@@ -1,77 +1,254 @@
 package com.kenstevens.stratinit.dao;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.cache.NationCache;
+import com.kenstevens.stratinit.cache.NationCacheToNationFunction;
+import com.kenstevens.stratinit.dao.predicates.BaseCityPredicate;
+import com.kenstevens.stratinit.dao.predicates.OtherNationPredicate;
+import com.kenstevens.stratinit.dao.predicates.SeesSectorPredicate;
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.repo.CityMoveRepo;
+import com.kenstevens.stratinit.repo.CityRepo;
+import com.kenstevens.stratinit.repo.SectorRepo;
+import com.kenstevens.stratinit.repo.SectorSeenRepo;
+import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.SectorType;
+import com.kenstevens.stratinit.type.UnitType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public interface SectorDao {
+import static com.google.common.base.Predicates.and;
 
-	void save(SectorSeen sectorSeen);
+@Service
+public class SectorDao extends CacheDao {
+    @Autowired
+    private SectorRepo sectorRepo;
+    @Autowired
+    private SectorSeenRepo sectorSeenRepo;
+    @Autowired
+    private CityRepo cityRepo;
+    @Autowired
+    private CityMoveRepo cityMoveRepo;
 
-	List<City> getCities(Nation nation);
+    public City findCity(CityPK cityPK) {
+        return getGameCache(cityPK.getGameId()).getCity(cityPK.getCoords());
+    }
 
-	Collection<SectorSeen> getSectorsSeen(Nation nation);
+    public SectorSeen findSectorSeen(Nation nation, SectorCoords coords) {
+        return getNationCache(nation).getSectorSeen(coords);
+    }
 
-	Collection<Sector> getStartCitiesOnIsland(Game game, int island);
+    public SectorSeen findSectorSeen(Nation nation, Sector sector) {
+        return findSectorSeen(nation, sector.getCoords());
+    }
 
-	Collection<City> getCities(Game game);
+    public List<City> getCities(Nation nation) {
+        return getNationCache(nation).getCities();
+    }
 
-	City getCity(Sector sector);
+    public Collection<City> getCities(Game game) {
+        return getGameCache(game).getCities();
+    }
 
-	City getCity(Nation nation, SectorCoords coords);
+    public City getCity(Sector sector) {
+        return getGameCache(sector.getGame()).getCity(sector.getCoords());
+    }
 
-	void save(World world);
+    public Map<SectorCoords, City> getCityMap(Game game) {
+        return getGameCache(game).getCityMap();
+    }
 
-	City findCity(CityPK cityPK);
+    public Collection<Sector> getNationSectorsSeenSectors(Nation nation) {
+        return getNationCache(nation).getSectorsSeenSectors(
+                getGameCache(nation).getWorld());
+    }
 
-	SectorSeen findSectorSeen(Nation nation, SectorCoords coords);
+    public int getNumberOfCities(Nation nation) {
+        return getCities(nation).size();
+    }
 
-	int getNumberOfCities(Nation nation);
+    public int getNumberOfBases(Nation nation) {
+        return Collections2.filter(getCities(nation), new BaseCityPredicate())
+                .size();
+    }
 
-	long getNumberOfTechCentres(Nation nation);
+    // TODO REF use filter
+    public long getNumberOfTechCentres(Nation nation) {
+        List<City> cities = getCities(nation);
+        int retval = 0;
+        for (City city : cities) {
+            if (city.getType() == CityType.TECH) {
+                ++retval;
+                if (city.getBuild() == UnitType.RESEARCH) {
+                    ++retval;
+                }
+            }
+        }
+        return retval;
+    }
 
-	void markCacheModified(City city);
+    public Collection<Nation> getOtherNationsThatSeeThisSector(Nation nation,
+                                                               SectorCoords coords) {
 
-	Collection<Sector> getNationSectorsSeenSectors(Nation nation);
+        List<NationCache> nationCaches = getGameCache(nation).getNationCaches();
+        return Collections2.transform(Collections2.filter(
+                nationCaches,
+                and(new OtherNationPredicate(nation), new SeesSectorPredicate(
+                        coords))), new NationCacheToNationFunction());
+    }
 
-	void markCacheModified(SectorSeen sectorSeen);
+    public Collection<SectorSeen> getSectorsSeen(Nation nation) {
+        return getNationCache(nation).getSectorsSeen();
+    }
 
-	Collection<Nation> getOtherNationsThatSeeThisSector(
-			Nation nation, SectorCoords coords);
+    public List<City> getSeenCities(Nation nation) {
+        List<City> retval = new ArrayList<City>();
+        NationCache nationCache = getNationCache(nation);
+        for (City city : getGameCache(nation).getCities()) {
+            if (nationCache.getSectorSeen(city.getCoords()) != null) {
+                retval.add(city);
+            }
+        }
+        return retval;
+    }
 
-	SectorSeen findSectorSeen(Nation nation, Sector sector);
+    public Collection<Sector> getStartCitiesOnIsland(Game game, final int island) {
+        List<Sector> sectors = getGameCache(game).getSectors();
+        return Collections2.filter(sectors, new Predicate<Sector>() {
+            @Override
+            public boolean apply(Sector sector) {
+                return sector.getType() == SectorType.START_CITY
+                        && sector.getIsland() == island;
+            }
+        });
+    }
 
-	// TODO REF rename to make consistent with unitSectorSeen
-	void saveIfNew(Nation nation, Sector sector);
+    public World getWorld(Game game) {
+        return getGameCache(game.getId()).getWorld();
+    }
 
-	List<City> getSeenCities(Nation nation);
+    public City getCity(Nation nation, SectorCoords coords) {
+        return getGameCache(nation.getGame()).getCity(coords);
+    }
 
-	void markCacheModified(Sector sector);
+    public void markCacheModified(City city) {
+        getNationCache(city.getNation()).setCityCacheModified(true);
+    }
 
-	void delete(City city);
+    public void markCacheModified(SectorSeen sectorSeen) {
+        getNationCache(sectorSeen.getNation()).setSectorSeenModified(true);
+    }
 
-	World getWorld(Game game);
+    public void markCacheModified(Sector sector) {
+        getGameCache(sector.getGame()).setWorldModified(true);
+    }
 
-	Map<SectorCoords, City> getCityMap(Game game);
+    public void save(City city) {
+        cityRepo.save(city);
+        getGameCache(city.getParentGame()).add(city);
+    }
 
-	void save(City city);
+    public void save(SectorSeen sectorSeen) {
+        sectorSeenRepo.save(sectorSeen);
+        getNationCache(sectorSeen.getNation()).add(sectorSeen);
+    }
 
-	void transferCity(City city, Nation nation);
+    @Transactional
+    public void save(World world) {
+        for (Sector sector : world.getSectors()) {
+            sectorRepo.save(sector);
+        }
+        getGameCache(world.getGame()).setWorld(world);
+    }
 
-	int getNumberOfBases(Nation nation);
+    public void delete(City city) {
+        cityRepo.delete(city);
+        getGameCache(city.getParentGame()).remove(city);
+    }
 
-	boolean canEstablishCity(Nation nation, Sector sector);
+    public void saveIfNew(Nation nation, Sector sector) {
+        SectorSeen foundSectorSeen = findSectorSeen(nation, sector);
+        if (foundSectorSeen == null) {
+            SectorSeen sectorSeen = new SectorSeen(nation, sector);
+            save(sectorSeen);
+        }
+    }
 
-	void clearCityMove(City city);
+    public void transferCity(City city, Nation nation) {
+        clearCityMove(city);
+        markCacheModified(city);
+        getGameCache(city.getParentGame()).transferCity(city, nation);
+        markCacheModified(city);
+    }
 
-	List<CityMove> getCityMoves(Game game);
+    // TODO REF Move this method into a helper, it doesn't belong here
+    public boolean canEstablishCity(Nation nation, Sector sector) {
+        if (!sector.isLand() && !sector.isWater()) {
+            return false;
+        }
+        World world = getWorld(nation.getGame());
+        if (isBesideCity(world, nation, sector)) {
+            return false;
+        }
+        return !world.isAtSea(sector);
+    }
 
-	void markCacheModified(CityMove cityMove);
+    private boolean isBesideCity(World world, Nation nation, Sector sector) {
+        for (Sector neighbour : world.getNeighbours(sector)) {
+            if (neighbour.isPlayerCity()) {
+                City city = getCity(neighbour);
+                if (city == null) {
+                    return true;
+                }
+                if (!city.getNation().equals(nation)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-	void save(CityMove cityMove);
+    public void clearCityMove(City city) {
+        List<CityMove> cityMoves = cityMoveRepo.findByCity(city);
+        city.setCityMove(null);
+        for (CityMove cityMove : cityMoves) {
+            delete(cityMove);
+        }
+    }
 
-	void delete(CityMove cityMove);
+    public List<CityMove> getCityMoves(Game game) {
+        List<CityMove> retval = Lists.newArrayList();
+        for (NationCache nationCache : getGameCache(game).getNationCaches()) {
+            retval.addAll(nationCache.getCityMoves());
+        }
+        return retval;
+    }
+
+    public void markCacheModified(CityMove cityMove) {
+        cityMoveRepo.save(cityMove);
+    }
+
+    public void save(CityMove cityMove) {
+        City city = findCity(cityMove.getCity().getCityPK());
+        if (city == null) {
+            return;
+        }
+        cityMoveRepo.save(cityMove);
+        getNationCache(city.getNation()).add(cityMove);
+    }
+
+    public void delete(CityMove cityMove) {
+        cityMoveRepo.delete(cityMove);
+        getNationCache(cityMove.getCity().getNation()).remove(cityMove);
+    }
+
 }

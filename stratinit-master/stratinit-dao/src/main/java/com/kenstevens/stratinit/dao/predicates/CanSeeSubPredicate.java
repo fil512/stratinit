@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.dao.impl.predicates;
+package com.kenstevens.stratinit.dao.predicates;
 
 import com.google.common.base.Predicate;
 import com.kenstevens.stratinit.cache.NationCache;

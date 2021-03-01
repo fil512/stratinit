@@ -7,4 +7,8 @@ public class PlayerHelper {
     private static final String PLAYER_THEM = "PLAYER_THEM";
     public static final Player me = new Player(PLAYER_ME);
     public static final Player them = new Player(PLAYER_THEM);
+
+    public static Player newPlayer(int i) {
+        return new Player(PLAYER_THEM + i);
+    }
 }
