@@ -5,7 +5,6 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.cache.NationCacheToNationFunction;
-import com.kenstevens.stratinit.dao.predicates.BaseCityPredicate;
 import com.kenstevens.stratinit.dao.predicates.OtherNationPredicate;
 import com.kenstevens.stratinit.dao.predicates.SeesSectorPredicate;
 import com.kenstevens.stratinit.model.*;
@@ -76,9 +75,8 @@ public class SectorDao extends CacheDao {
         return getCities(nation).size();
     }
 
-    public int getNumberOfBases(Nation nation) {
-        return Collections2.filter(getCities(nation), new BaseCityPredicate())
-                .size();
+    public long getNumberOfBases(Nation nation) {
+        return getCities(nation).stream().filter(City::isBase).count();
     }
 
     // TODO REF use filter

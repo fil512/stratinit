@@ -1,25 +1,20 @@
 package com.kenstevens.stratinit.rank;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.Nation;
 
-public class TeamHelper {
+import java.util.*;
 
-	private final TeamProvider teamProvider;
+public class TeamHelper {
 
 	private static final Comparator<SITeam> BY_SCORE = new Comparator<SITeam>() {
 		public int compare(SITeam p1, SITeam p2) {
 			return Integer.valueOf(p2.score).compareTo(p1.score);
 		}
-	};;
+	};
+	private final ITeamProvider teamProvider;
 
 	public List<SITeam> findTeams(Game game) {
 		List<SITeam> retval = findUnsortedTeams(game);
@@ -27,7 +22,7 @@ public class TeamHelper {
 		return retval;
 	}
 
-	public TeamHelper(TeamProvider teamProvider) {
+	public TeamHelper(ITeamProvider teamProvider) {
 		this.teamProvider = teamProvider;
 	}
 

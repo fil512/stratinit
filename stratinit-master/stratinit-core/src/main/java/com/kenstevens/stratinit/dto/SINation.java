@@ -15,36 +15,37 @@ public class SINation implements StratInitDTO {
     public double tech = UNKNOWN;
     public double dailyTechGain = UNKNOWN;
     public double dailyTechBleed = UNKNOWN;
-    public int hourlyCPGain = Constants.UNASSIGNED;
+    public long hourlyCPGain = Constants.UNASSIGNED;
     public int cities;
     public Date lastAction;
-	public int wins;
-	public int played;
-	public int power;
-	public boolean newMail;
-	public boolean newBattle;
-	public SectorCoords startCoords;
-	public int commandPoints;
-	public int gameId;
+    public int wins;
+    public int played;
+    public int power;
+    public boolean newMail;
+    public boolean newBattle;
+    public SectorCoords startCoords;
+    public long commandPoints;
+    public int gameId;
 
-	public SINation() {}
-	
-	public SINation(Nation nation) {
-		name = nation.getName();
-		nationId = nation.getNationId();
-		lastAction = nation.getLastAction();
-		wins = nation.getPlayer().getWins();
-		played = nation.getPlayer().getPlayed();
-		gameId = nation.getGameId();
-	}
+    public SINation() {
+    }
 
-	public void addPrivateData(Nation me, Nation nation) {
-		if (me.equals(nation)) {
-			startCoords = nation.getStartCoords();
-			tech = nation.getTech();
-			dailyTechBleed = nation.getDailyTechBleed();
-			dailyTechGain = nation.getDailyTechGain();
-			hourlyCPGain = nation.getHourlyCPGain();
+    public SINation(Nation nation) {
+        name = nation.getName();
+        nationId = nation.getNationId();
+        lastAction = nation.getLastAction();
+        wins = nation.getPlayer().getWins();
+        played = nation.getPlayer().getPlayed();
+        gameId = nation.getGameId();
+    }
+
+    public void addPrivateData(Nation me, Nation nation) {
+        if (me.equals(nation)) {
+            startCoords = nation.getStartCoords();
+            tech = nation.getTech();
+            dailyTechBleed = nation.getDailyTechBleed();
+            dailyTechGain = nation.getDailyTechGain();
+            hourlyCPGain = nation.getHourlyCPGain();
 			newMail = nation.isNewMail();
 			newBattle = nation.isNewBattle();
 			commandPoints = nation.getCommandPoints();

@@ -11,7 +11,7 @@ import com.kenstevens.stratinit.model.Player;
 import java.util.Collection;
 import java.util.List;
 
-public class TestTeamProvider implements TeamProvider {
+public class TestTeamProvider implements ITeamProvider {
 	public static Game game1 = new Game("game1");
 	public static Game game2 = new Game("game2");
 	public static Nation nation1a;

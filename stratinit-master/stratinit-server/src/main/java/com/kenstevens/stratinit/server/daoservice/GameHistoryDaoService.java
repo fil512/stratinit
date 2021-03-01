@@ -3,12 +3,31 @@ package com.kenstevens.stratinit.server.daoservice;
 import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.model.GameHistoryNation;
 import com.kenstevens.stratinit.model.GameHistoryTeam;
+import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
+import com.kenstevens.stratinit.repo.GameHistoryRepo;
+import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
-public interface GameHistoryDaoService {
-    void save(GameHistory gameHistory);
+@Service
+public class GameHistoryDaoService {
+    @Autowired
+    private GameHistoryRepo gameHistoryRepo;
+    @Autowired
+    private GameHistoryTeamRepo gameHistoryTeamRepo;
+    @Autowired
+    private GameHistoryNationRepo gameHistoryNationRepo;
 
-    void save(GameHistoryTeam gameHistoryTeam);
+    public void save(GameHistory gameHistory) {
+        gameHistoryRepo.save(gameHistory);
+    }
 
-    void save(GameHistoryNation gameHistoryNation);
+    public void save(GameHistoryTeam gameHistoryTeam) {
+        gameHistoryTeamRepo.save(gameHistoryTeam);
+    }
+
+    public void save(GameHistoryNation gameHistoryNation) {
+        gameHistoryNationRepo.save(gameHistoryNation);
+    }
 }

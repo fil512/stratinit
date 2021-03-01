@@ -1,14 +1,13 @@
 package com.kenstevens.stratinit.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.SectorCoords;
 
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.SectorCoords;
+import java.io.Serializable;
+import java.util.Date;
 
 
 @Entity
@@ -23,15 +22,16 @@ public class Nation implements Serializable {
 	private Date lastAction;
 	private double dailyTechBleed = 0.0;
 	private double dailyTechGain = 0.0;
-	private int hourlyCPGain = 0;
+	@Embedded
+	protected SectorCoords startCoords = new SectorCoords(0, 0);
 	private boolean newMail = false;
 	private boolean newBattle = false;
-	@Embedded
-	protected SectorCoords startCoords = new SectorCoords(0,0);
-	private int commandPoints = Constants.START_COMMAND_POINTS;
+	private long hourlyCPGain = 0;
+	private long commandPoints = Constants.START_COMMAND_POINTS;
 	private boolean noAlliances; // preference vote whether player prefers alliances or not
 
-	public Nation() {}
+	public Nation() {
+	}
 
 	public Nation(Game game, Player player) {
 		this.nationPK = new NationPK(game, player);
@@ -56,11 +56,8 @@ public class Nation implements Serializable {
 			return false;
 		Nation other = (Nation) obj;
 		if (nationPK == null) {
-			if (other.nationPK != null)
-				return false;
-		} else if (!nationPK.equals(other.nationPK))
-			return false;
-		return true;
+			return other.nationPK == null;
+		} else return nationPK.equals(other.nationPK);
 	}
 
 	@Override
@@ -163,15 +160,15 @@ public class Nation implements Serializable {
 		return startCoords;
 	}
 
-	public void setCommandPoints(int commandPoints) {
+	public long getCommandPoints() {
+		return commandPoints;
+	}
+
+	public void setCommandPoints(long commandPoints) {
 		this.commandPoints = commandPoints;
 		if (commandPoints > Constants.MAX_COMMAND_POINTS) {
 			this.commandPoints = Constants.MAX_COMMAND_POINTS;
 		}
-	}
-
-	public int getCommandPoints() {
-		return commandPoints;
 	}
 
 	public void decreaseCommandPoints(int cost) {
@@ -181,16 +178,16 @@ public class Nation implements Serializable {
 		}
 	}
 
-	public void increaseCommandPoints(int cpGain) {
+	public void increaseCommandPoints(long cpGain) {
 		setCommandPoints(commandPoints + cpGain);
 	}
 
-	public void setHourlyCPGain(int hourlyCPGain) {
-		this.hourlyCPGain = hourlyCPGain;
+	public long getHourlyCPGain() {
+		return hourlyCPGain;
 	}
 
-	public int getHourlyCPGain() {
-		return hourlyCPGain;
+	public void setHourlyCPGain(long hourlyCPGain) {
+		this.hourlyCPGain = hourlyCPGain;
 	}
 
 	public boolean isNoAlliances() {

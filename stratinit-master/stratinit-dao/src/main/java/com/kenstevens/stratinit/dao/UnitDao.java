@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.google.common.base.Predicates.and;
 
@@ -152,7 +153,8 @@ public class UnitDao extends CacheDao {
 
     public Collection<Unit> getUnitsWithin(CoordMeasure coordMeasure, Nation nation,
                                            SectorCoords coords, int distance) {
-        return Collections2.filter(getNationUnits(nation), new UnitWithinPredicate(coordMeasure, coords, distance));
+        UnitWithinPredicate predicate = new UnitWithinPredicate(coordMeasure, coords, distance);
+        return getNationUnits(nation).stream().filter(predicate).collect(Collectors.toList());
     }
 
     public void merge(Unit unit) {
