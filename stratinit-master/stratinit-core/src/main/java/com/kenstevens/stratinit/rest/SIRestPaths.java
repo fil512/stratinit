@@ -33,4 +33,8 @@ public class SIRestPaths {
     public static final String UPDATE_CITY = "/update-city";
     public static final String MOVE_UNITS = "/move-units";
     public static final String SET_RELATION = "/set-relation";
+    public static final String CEDE_UNITS = "/cede-units";
+    public static final String CEDE_CITY = "/cede-city";
+    public static final String SEND_MESSAGE = "/send-message";
+    public static final String DISBAND_UNITS = "/disband-units";
 }

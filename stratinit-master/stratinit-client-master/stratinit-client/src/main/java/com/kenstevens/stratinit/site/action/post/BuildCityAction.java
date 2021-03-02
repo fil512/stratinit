@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.site.action.post;
 
 import com.kenstevens.stratinit.control.selection.SelectEvent;
 import com.kenstevens.stratinit.control.selection.Selection.Source;
-import com.kenstevens.stratinit.remote.request.UnitListJson;
+import com.kenstevens.stratinit.remote.request.SIUnitListJson;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.site.PostAction;
 import com.kenstevens.stratinit.site.command.BuildCityCommand;
@@ -18,7 +18,7 @@ public class BuildCityAction extends PostAction<BuildCityCommand> {
 	@Autowired
 	private SelectEvent selectEvent;
 
-	public BuildCityAction(UnitListJson request) {
+	public BuildCityAction(SIUnitListJson request) {
 		super(new BuildCityCommand(request));
 	}
 

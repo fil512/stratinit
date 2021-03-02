@@ -4,10 +4,7 @@ import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
-import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.remote.request.SetRelationJson;
-import com.kenstevens.stratinit.remote.request.UpdateCityJson;
+import com.kenstevens.stratinit.remote.request.*;
 
 import java.util.List;
 
@@ -48,9 +45,9 @@ public interface IStratInitServer {
 	// FIXME finish the rest of the puts
 	Result<SIRelation> setRelation(SetRelationJson request);
 
-	Result<SIUpdate> cedeUnits(List<SIUnit> units, int nationId);
+	Result<SIUpdate> cedeUnits(CedeUnitsJson request);
 
-	Result<SIUpdate> cedeCity(SICity city, int nationId);
+	Result<SIUpdate> cedeCity(CedeCityJson request);
 
 	Result<List<SIMessage>> getMessages();
 
@@ -68,7 +65,7 @@ public interface IStratInitServer {
 
 	Result<SINation> getMyNation();
 
-	Result<SIUpdate> disbandUnits(List<SIUnit> siUnits);
+	Result<SIUpdate> disbandUnits(SIUnitListJson request);
 
 	Result<List<SITeam>> getTeams();
 

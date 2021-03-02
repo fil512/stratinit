@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.model.Sector;
 import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.CedeCityJson;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ public class CedeCityTest extends TwoPlayerBase {
         assertEquals(4, units.size());
         assertEquals(nationMe, units.get(0).getNation());
 
-        stratInitController.cedeCity(sicity, nationThemId);
+        stratInitController.cedeCity(new CedeCityJson(sicity, nationThemId));
 
         cities = stratInitController.getCities().getValue();
         assertEquals(1, cities.size());

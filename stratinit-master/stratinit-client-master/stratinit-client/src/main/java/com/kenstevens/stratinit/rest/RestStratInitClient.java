@@ -4,10 +4,7 @@ import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
-import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.remote.request.SetRelationJson;
-import com.kenstevens.stratinit.remote.request.UpdateCityJson;
+import com.kenstevens.stratinit.remote.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -105,13 +102,13 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<SIUpdate> cedeUnits(List<SIUnit> units, int nationId) {
-        return null;
+    public Result<SIUpdate> cedeUnits(CedeUnitsJson request) {
+        return restClient.post(SIRestPaths.CEDE_UNITS, request, SIUpdate.class);
     }
 
     @Override
-    public Result<SIUpdate> cedeCity(SICity city, int nationId) {
-        return null;
+    public Result<SIUpdate> cedeCity(CedeCityJson request) {
+        return restClient.post(SIRestPaths.CEDE_CITY, request, SIUpdate.class);
     }
 
     @Override
@@ -121,7 +118,7 @@ public class RestStratInitClient implements IStratInitServer {
 
     @Override
     public Result<Integer> sendMessage(SIMessage message) {
-        return null;
+        return restClient.post(SIRestPaths.SEND_MESSAGE, message, Integer.class);
     }
 
     @Override
@@ -155,8 +152,8 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<SIUpdate> disbandUnits(List<SIUnit> siUnits) {
-        return null;
+    public Result<SIUpdate> disbandUnits(SIUnitListJson request) {
+        return restClient.post(SIRestPaths.DISBAND_UNITS, request, SIUpdate.class);
     }
 
     @Override

@@ -1,22 +1,23 @@
 package com.kenstevens.stratinit.dto;
 
 import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 import com.kenstevens.stratinit.type.Constants;
 
 import java.util.Date;
 
 
-public class SIMessage implements StratInitDTO {
-    private static final long serialVersionUID = 1L;
-    public int messageId;
-    public int fromNationId = Constants.UNASSIGNED;
-    public int toNationId = Constants.UNASSIGNED;
-    public String subject;
-    public String body;
-    public Date date;
+public class SIMessage implements StratInitDTO, IRestRequestJson {
+	private static final long serialVersionUID = 1L;
+	public int messageId;
+	public int fromNationId = Constants.UNASSIGNED;
+	public int toNationId = Constants.UNASSIGNED;
+	public String subject;
+	public String body;
+	public Date date;
 
-    public SIMessage() {
-    }
+	public SIMessage() {
+	}
 	
 	public SIMessage(Mail mail) {
 		if (mail.getMessageId() != null) {

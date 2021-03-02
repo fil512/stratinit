@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.SIUnitListJson;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.UpdateProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,10 @@ public class DisbandCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-        return stratInitServer.disbandUnits(siunits);
-    }
+		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+		SIUnitListJson request = new SIUnitListJson(siunits);
+		return stratInitServer.disbandUnits(request);
+	}
 
 	@Override
 	public void handleSuccess(SIUpdate siupdate) {

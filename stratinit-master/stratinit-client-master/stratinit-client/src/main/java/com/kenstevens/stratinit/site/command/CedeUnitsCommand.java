@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.CedeUnitsJson;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +24,10 @@ public class CedeUnitsCommand extends CedeCommand {
 
 	@Override
 	public Result<SIUpdate> execute() {
-        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
-        return stratInitServer.cedeUnits(siunits, nation.getNationId());
-    }
+		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+		CedeUnitsJson request = new CedeUnitsJson(siunits, nation.getNationId());
+		return stratInitServer.cedeUnits(request);
+	}
 
 	@Override
 	public String getDescription() {

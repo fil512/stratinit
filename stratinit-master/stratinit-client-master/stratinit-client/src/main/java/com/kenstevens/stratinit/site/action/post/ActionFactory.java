@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.site.action.post;
 
 import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.remote.request.SIUnitListJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.remote.request.UnitListJson;
 import com.kenstevens.stratinit.site.ActionQueue;
 import com.kenstevens.stratinit.site.action.get.*;
 import com.kenstevens.stratinit.type.RelationType;
@@ -193,8 +193,8 @@ public class ActionFactory {
 	}
 
 	public void buildCity(List<UnitView> units) {
-		UnitListJson unitListJson = new UnitListJson((List<Unit>) (List<?>) units);
-		BuildCityAction buildCityAction = spring.autowire(new BuildCityAction(unitListJson));
+		SIUnitListJson SIUnitListJson = new SIUnitListJson();
+		BuildCityAction buildCityAction = spring.autowire(new BuildCityAction(SIUnitListJson));
 		actionQueue.put(buildCityAction);
 	}
 

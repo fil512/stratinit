@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.CedeCityJson;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +21,9 @@ public class CedeCityCommand extends CedeCommand {
 
 	@Override
 	public Result<SIUpdate> execute() {
-        return stratInitServer.cedeCity(new SICity(city), nation.getNationId());
-    }
+		CedeCityJson request = new CedeCityJson(new SICity(city), nation.getNationId());
+		return stratInitServer.cedeCity(request);
+	}
 
 	@Override
 	public String getDescription() {

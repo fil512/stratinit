@@ -8,10 +8,7 @@ import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
-import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.remote.request.SetRelationJson;
-import com.kenstevens.stratinit.remote.request.UpdateCityJson;
+import com.kenstevens.stratinit.remote.request.*;
 import com.kenstevens.stratinit.rest.IStratInitServer;
 import com.kenstevens.stratinit.rest.SIRestPaths;
 import com.kenstevens.stratinit.server.rest.helper.ErrorProcessor;
@@ -178,20 +175,25 @@ public class StratInitController implements IStratInitServer {
         return requestFactory.getMoveUnitsRequest(moveUnitsJson.units, moveUnitsJson.target).process();
     }
 
-    public Result<SIUpdate> cedeUnits(List<SIUnit> siunits, int nationId) {
-        return requestFactory.getCedeUnitsRequest(siunits, nationId).process();
+    @PostMapping(value = SIRestPaths.CEDE_UNITS)
+    public Result<SIUpdate> cedeUnits(@RequestBody CedeUnitsJson request) {
+        return requestFactory.getCedeUnitsRequest(request.siunits, request.nationId).process();
     }
 
-    public Result<SIUpdate> cedeCity(SICity sicity, int nationId) {
-        return requestFactory.getCedeCityRequest(sicity, nationId).process();
+    @PostMapping(value = SIRestPaths.CEDE_CITY)
+    public Result<SIUpdate> cedeCity(@RequestBody CedeCityJson request) {
+        return requestFactory.getCedeCityRequest(request.city, request.nationId).process();
     }
 
-    public Result<SIRelation> setRelation(SetRelationJson request) {
+    // FIXME spring mvc test these
+    @PostMapping(value = SIRestPaths.SET_RELATION)
+    public Result<SIRelation> setRelation(@RequestBody SetRelationJson request) {
         return requestFactory.getSetRelationRequest(request.nationId, request.relationType)
                 .process();
     }
 
-    public Result<Integer> sendMessage(SIMessage simessage) {
+    @PostMapping(value = SIRestPaths.SEND_MESSAGE)
+    public Result<Integer> sendMessage(@RequestBody SIMessage simessage) {
         return requestFactory.getSendMessageRequest(simessage).process();
     }
 
@@ -200,8 +202,9 @@ public class StratInitController implements IStratInitServer {
         return requestFactory.getJoinGameRequest(null, request.gameId, request.noAlliances).process(request.gameId);
     }
 
-    public Result<SIUpdate> disbandUnits(List<SIUnit> siunits) {
-        return requestFactory.getDisbandUnitRequest(siunits).process();
+    @PostMapping(value = SIRestPaths.DISBAND_UNITS)
+    public Result<SIUpdate> disbandUnits(@RequestBody SIUnitListJson request) {
+        return requestFactory.getDisbandUnitRequest(request.siunits).process();
     }
 
     public Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
