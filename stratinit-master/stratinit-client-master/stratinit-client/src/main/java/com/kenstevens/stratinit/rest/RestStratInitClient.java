@@ -6,8 +6,8 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.remote.request.SetRelationJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
-import com.kenstevens.stratinit.type.RelationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,8 +100,8 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<SIRelation> setRelation(int nationId, RelationType relationType) {
-        return null;
+    public Result<SIRelation> setRelation(SetRelationJson request) {
+        return restClient.post(SIRestPaths.SET_RELATION, request, SIRelation.class);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.remote.request;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 
-public class UpdateCityJson implements RestRequestJson {
+public class UpdateCityJson implements IRestRequestJson {
     public SICity sicity;
     public UpdateCityField field;
 

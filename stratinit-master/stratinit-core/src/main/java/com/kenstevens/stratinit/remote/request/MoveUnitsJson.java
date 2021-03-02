@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.List;
 
-public class MoveUnitsJson implements RestRequestJson {
+public class MoveUnitsJson implements IRestRequestJson {
     public List<SIUnit> units;
     public SectorCoords target;
 

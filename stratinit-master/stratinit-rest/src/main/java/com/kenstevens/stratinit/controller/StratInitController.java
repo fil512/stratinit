@@ -10,13 +10,13 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.remote.request.SetRelationJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.rest.IStratInitServer;
 import com.kenstevens.stratinit.rest.SIRestPaths;
 import com.kenstevens.stratinit.server.rest.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -186,9 +186,8 @@ public class StratInitController implements IStratInitServer {
         return requestFactory.getCedeCityRequest(sicity, nationId).process();
     }
 
-    public Result<SIRelation> setRelation(int nationId,
-                                          RelationType relationType) {
-        return requestFactory.getSetRelationRequest(nationId, relationType)
+    public Result<SIRelation> setRelation(SetRelationJson request) {
+        return requestFactory.getSetRelationRequest(request.nationId, request.relationType)
                 .process();
     }
 

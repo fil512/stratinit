@@ -10,5 +10,5 @@ import com.fasterxml.jackson.annotation.JsonInclude;
         getterVisibility = JsonAutoDetect.Visibility.ANY,
         isGetterVisibility = JsonAutoDetect.Visibility.ANY,
         setterVisibility = JsonAutoDetect.Visibility.ANY)
-public interface RestRequestJson {
+public interface IRestRequestJson {
 }

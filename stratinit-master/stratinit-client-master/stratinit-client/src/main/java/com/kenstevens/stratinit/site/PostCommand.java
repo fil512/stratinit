@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.site;
 
-import com.kenstevens.stratinit.remote.request.RestRequestJson;
+import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 
-public abstract class PostCommand<T, R extends RestRequestJson> extends Command<T> {
+public abstract class PostCommand<T, R extends IRestRequestJson> extends Command<T> {
     private final R request;
 
     public PostCommand(R request) {

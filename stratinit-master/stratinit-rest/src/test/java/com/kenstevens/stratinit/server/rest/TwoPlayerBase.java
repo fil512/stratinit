@@ -1,9 +1,12 @@
 package com.kenstevens.stratinit.server.rest;
 
 
+import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.model.Relation;
+import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.SetRelationJson;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -59,4 +62,9 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
     final protected void allianceDeclared() {
         setTheirRelation(RelationType.ALLIED);
     }
+
+    final protected Result<SIRelation> setRelation(int nationThemId, RelationType relationType) {
+        return stratInitController.setRelation(new SetRelationJson(nationThemId, relationType));
+    }
+
 }

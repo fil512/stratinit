@@ -32,4 +32,5 @@ public class SIRestPaths {
     public static final String TEAM = "/team";
     public static final String UPDATE_CITY = "/update-city";
     public static final String MOVE_UNITS = "/move-units";
+    public static final String SET_RELATION = "/set-relation";
 }

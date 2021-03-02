@@ -131,7 +131,7 @@ public class LaunchTest extends TwoPlayerBase {
         List<SISector> sseen = stratInitController.getSectors().getValue();
         List<SICity> cseen = stratInitController.getSeenCities().getValue();
         List<SIUnit> useen = stratInitController.getSeenUnits().getValue();
-        Result<SIRelation> result = stratInitController.setRelation(nationThemId, RelationType.ALLIED);
+        Result<SIRelation> result = setRelation(nationThemId, RelationType.ALLIED);
         assertResult(result);
         List<SISector> sseen2 = stratInitController.getSectors().getValue();
         List<SICity> cseen2 = stratInitController.getSeenCities().getValue();
@@ -147,10 +147,10 @@ public class LaunchTest extends TwoPlayerBase {
         List<SICity> cseen = stratInitController.getSeenCities().getValue();
         List<SIUnit> useen = stratInitController.getSeenUnits().getValue();
         setAuthentication(PLAYER_THEM_NAME);
-        Result<SIRelation> result = stratInitController.setRelation(nationMeId, RelationType.ALLIED);
+        Result<SIRelation> result = setRelation(nationMeId, RelationType.ALLIED);
         assertResult(result);
         setAuthentication(PLAYER_ME_NAME);
-        result = stratInitController.setRelation(nationThemId, RelationType.ALLIED);
+        result = setRelation(nationThemId, RelationType.ALLIED);
         assertResult(result);
         List<SISector> sseen2 = stratInitController.getSectors().getValue();
         List<SICity> cseen2 = stratInitController.getSeenCities().getValue();
