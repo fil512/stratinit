@@ -4,24 +4,46 @@ import com.kenstevens.stratinit.model.CityPK;
 import com.kenstevens.stratinit.model.RelationPK;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitSeenPK;
+import com.kenstevens.stratinit.server.event.update.EventUpdateFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
-public interface StratInitUpdater {
+@Service
+public class StratInitUpdater {
+    @Autowired
+    private EventUpdateFactory eventUpdateFactory;
 
-    void updateTech(Integer gameId, Date date);
+    public void updateTech(Integer gameId, Date date) {
+        eventUpdateFactory.getTechEventUpdate(date).update(gameId);
+    }
 
-    void switchRelation(RelationPK relationPK);
+    public void buildUnit(CityPK cityPK, Date date) {
+        eventUpdateFactory.getBuildUnitEventUpdate(cityPK, date).update(cityPK.getGameId());
+    }
 
-    void updateUnit(Unit unit, Date date);
+    public void endGame(Integer gameId) {
+        eventUpdateFactory.getEndGameEventUpdate().update(gameId);
+    }
 
-    void buildUnit(CityPK cityPK, Date date);
+    public void startGame(Integer gameId) {
+        eventUpdateFactory.getStartGameEventUpdate().update(gameId);
+    }
 
-    void disable(UnitSeenPK unitSeenPK);
+    public void switchRelation(RelationPK relationPK) {
+        eventUpdateFactory.getSwitchRelationEventUpdate(relationPK).update(relationPK.getGameId());
+    }
 
-    void endGame(Integer gameId);
+    public void disable(UnitSeenPK unitSeenPK) {
+        eventUpdateFactory.getDisableUnitSeenEventUpdate(unitSeenPK).update(unitSeenPK.getGameId());
+    }
 
-    void startGame(Integer gameId);
+    public void updateUnit(Unit unit, Date date) {
+        eventUpdateFactory.getUpdateUnitEventUpdate(unit, date).update(unit.getGameId());
+    }
 
-    void mapGame(Integer gameId);
+    public void mapGame(Integer gameId) {
+        eventUpdateFactory.getMapGameEventUpdate().update(gameId);
+    }
 }

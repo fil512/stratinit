@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.wicket.base;
 
 import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.wicket.nav.NavProvider;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
