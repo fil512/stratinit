@@ -40,4 +40,6 @@ public class SIRestPaths {
     public static final String CANCEL_MOVE = "/cancel-move";
     public static final String BUILD_CITY = "/build-city";
     public static final String SWITCH_TERRAIN = "/switch-terrain";
+    public static final String CONCEDE = "/concede";
+    public static final String SUBMIT_ERROR = "/submit-error";
 }

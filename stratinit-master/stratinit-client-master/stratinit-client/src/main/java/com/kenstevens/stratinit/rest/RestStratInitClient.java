@@ -163,12 +163,12 @@ public class RestStratInitClient implements IStratInitServer {
 
     @Override
     public Result<SIUpdate> concede() {
-        return null;
+        return restClient.get(SIRestPaths.CONCEDE, SIUpdate.class);
     }
 
     @Override
-    public Result<Integer> submitError(String subject, String stackTrace) {
-        return null;
+    public Result<Integer> submitError(ErrorJson request) {
+        return restClient.post(SIRestPaths.SUBMIT_ERROR, request, Integer.class);
     }
 
     @Override

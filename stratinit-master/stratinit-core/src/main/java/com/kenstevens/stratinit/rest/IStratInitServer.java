@@ -71,7 +71,7 @@ public interface IStratInitServer {
 
 	Result<SIUpdate> concede();
 
-	Result<Integer> submitError(String subject, String stackTrace);
+	Result<Integer> submitError(ErrorJson request);
 
 	Result<SIUpdate> buildCity(SIUnitListJson request);
 

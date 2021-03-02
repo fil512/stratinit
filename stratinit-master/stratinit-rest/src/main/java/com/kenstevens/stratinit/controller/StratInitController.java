@@ -232,11 +232,13 @@ public class StratInitController implements IStratInitServer {
         return requestFactory.getGetTeamsRequest().process();
     }
 
+    @GetMapping(value = SIRestPaths.CONCEDE)
     public Result<SIUpdate> concede() {
         return requestFactory.getConcedeRequest().process();
     }
 
-    public Result<Integer> submitError(String subject, String stackTrace) {
-        return errorProcessor.processError(subject, stackTrace);
+    @PostMapping(value = SIRestPaths.SUBMIT_ERROR)
+    public Result<Integer> submitError(ErrorJson request) {
+        return errorProcessor.processError(request.subject, request.stackTrace);
     }
 }
