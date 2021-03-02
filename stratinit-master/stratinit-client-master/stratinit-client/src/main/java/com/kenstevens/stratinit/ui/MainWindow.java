@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.ui;
 
 import com.google.common.eventbus.Subscribe;
 import com.kenstevens.stratinit.audio.WavPlayer;
-import com.kenstevens.stratinit.control.CommandListControlImpl;
 import com.kenstevens.stratinit.control.TextControl;
 import com.kenstevens.stratinit.control.selection.MapCentre;
 import com.kenstevens.stratinit.event.CommandPointsArrivedEvent;
@@ -14,7 +13,6 @@ import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.shell.Message;
 import com.kenstevens.stratinit.shell.*;
-import com.kenstevens.stratinit.site.ProgressBarControlImpl;
 import com.kenstevens.stratinit.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
@@ -197,7 +195,7 @@ public class MainWindow implements MapControl, GameManager {
 		fdProgressBar.left = new FormAttachment(canvas, 5);
 		fdProgressBar.right = new FormAttachment(tabFolder, 0, SWT.RIGHT);
 		progressBar.setLayoutData(fdProgressBar);
-		ProgressBarControlImpl progressBarControl = new ProgressBarControlImpl(
+		ProgressBarControl progressBarControl = new ProgressBarControl(
 				progressBar);
 		widgetContainer.setProgressBarControl(progressBarControl);
 
@@ -255,7 +253,7 @@ public class MainWindow implements MapControl, GameManager {
 		fdLines.top = new FormAttachment(tabFolder, 6);
 		fdLines.left = new FormAttachment(commandList, 6);
 		lines.setLayoutData(fdLines);
-		CommandListControl commandListControl = new CommandListControlImpl(
+		CommandListControl commandListControl = new CommandListControl(
 				commandList, lines);
 		widgetContainer.setCommandListControl(commandListControl);
 

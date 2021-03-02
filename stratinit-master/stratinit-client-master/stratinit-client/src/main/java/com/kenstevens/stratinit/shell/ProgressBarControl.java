@@ -1,11 +1,58 @@
 package com.kenstevens.stratinit.shell;
 
-public interface ProgressBarControl {
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ProgressBar;
 
-	void setMaximum(final int value);
+public class ProgressBarControl {
+    private final ProgressBar progressBar;
 
-	void incrementSelection();
+    public ProgressBarControl(ProgressBar progressBAr) {
+        this.progressBar = progressBAr;
+    }
 
-	void reset();
+    public void setMaximum(final int value) {
+        Display display = Display.getDefault();
 
+        if (progressBar.isDisposed()) {
+            return;
+        }
+        display.asyncExec(new Runnable() {
+            public void run() {
+                if (progressBar.isDisposed())
+                    return;
+                progressBar.setMaximum(value);
+            }
+        });
+    }
+
+    public void incrementSelection() {
+        Display display = Display.getDefault();
+
+        if (progressBar.isDisposed()) {
+            return;
+        }
+        display.asyncExec(new Runnable() {
+            public void run() {
+                if (progressBar.isDisposed())
+                    return;
+                progressBar.setSelection(progressBar.getSelection() + 1);
+            }
+        });
+
+    }
+
+    public void reset() {
+        Display display = Display.getDefault();
+
+        if (progressBar.isDisposed()) {
+            return;
+        }
+        display.asyncExec(new Runnable() {
+            public void run() {
+                if (progressBar.isDisposed())
+                    return;
+                progressBar.setSelection(0);
+            }
+        });
+    }
 }

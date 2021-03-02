@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 
 @ExtendWith(SpringExtension.class)
@@ -30,25 +31,10 @@ public abstract class BaseStratInitClientTest {
 	@Autowired
 	protected WidgetContainer widgetContainer;
 
-	private final ProgressBarControl progressBarControlMock = new ProgressBarControl() {
-		@Override
-		public void incrementSelection() {
-		}
-
-		@Override
-		public void reset() {
-		}
-
-		@Override
-		public void setMaximum(int value) {
-		}
-	};
-
 	@BeforeEach
 	public void loadWidgets() {
-		widgetContainer.setProgressBarControl(progressBarControlMock);
+		widgetContainer.setProgressBarControl(mock(ProgressBarControl.class));
 	}
-
 
 	protected List<SIGame> makeSIGames() {
 		SIGame sigame = new SIGame();
