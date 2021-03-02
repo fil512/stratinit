@@ -73,11 +73,11 @@ public interface IStratInitServer {
 
 	Result<Integer> submitError(String subject, String stackTrace);
 
-	Result<SIUpdate> buildCity(List<SIUnit> siunits);
+	Result<SIUpdate> buildCity(SIUnitListJson request);
 
-	Result<SIUpdate> switchTerrain(List<SIUnit> siunits);
+	Result<SIUpdate> switchTerrain(SIUnitListJson request);
 
-	Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits);
+	Result<SIUpdate> cancelMove(SIUnitListJson request);
 
 	// TODO OPT Add timestamp to units and cities and only send back data that has changed.
 }

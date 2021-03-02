@@ -28,7 +28,7 @@ public class BuildCityTest extends TwoPlayerBase {
         List<City> cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());
         long cp = nationMe.getCommandPoints();
-        Result<SIUpdate> result = stratInitController.buildCity(makeUnitList(eng));
+        Result<SIUpdate> result = buildCity(eng);
         assertEquals(cp, nationMe.getCommandPoints());
         assertFalseResult(result);
         assertTrue(result.toString().contains("mobility"));
@@ -43,7 +43,7 @@ public class BuildCityTest extends TwoPlayerBase {
         tank.setMobility(9);
         List<City> cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());
-        Result<SIUpdate> result = stratInitController.buildCity(makeUnitList(tank));
+        Result<SIUpdate> result = buildCity(tank);
         assertFalseResult(result);
         cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());
@@ -61,7 +61,7 @@ public class BuildCityTest extends TwoPlayerBase {
         assertEquals(58, sectors.size());
         SectorSeen near = new SectorSeen(nationMe, NEAR);
         assertFalse(sectors.contains(near));
-        Result<SIUpdate> result = stratInitController.buildCity(makeUnitList(eng));
+        Result<SIUpdate> result = buildCity(eng);
         sectors = sectorDao.getSectorsSeen(nationMe);
         assertEquals(84, sectors.size());
         assertTrue(sectors.contains(near));
@@ -81,7 +81,7 @@ public class BuildCityTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
         List<City> cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());
-        Result<SIUpdate> result = stratInitController.buildCity(makeUnitList(eng));
+        Result<SIUpdate> result = buildCity(eng);
         assertFalseResult(result);
         cities = sectorDao.getCities(nationMe);
         assertEquals(2, cities.size());

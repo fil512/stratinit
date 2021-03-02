@@ -13,4 +13,8 @@ public class SIUnitListJson implements IRestRequestJson {
     public SIUnitListJson(List<SIUnit> units) {
         this.siunits = siunits;
     }
+
+    public SIUnitListJson(SIUnit siUnit) {
+        this.siunits = List.of(siUnit);
+    }
 }

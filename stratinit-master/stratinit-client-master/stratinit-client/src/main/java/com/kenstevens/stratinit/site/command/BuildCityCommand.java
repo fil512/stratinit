@@ -21,7 +21,7 @@ public class BuildCityCommand extends PostCommand<SIUpdate, SIUnitListJson> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-		return stratInitServer.buildCity(getRequest().siunits);
+		return stratInitServer.buildCity(getRequest());
 	}
 
 	@Override

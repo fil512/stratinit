@@ -207,16 +207,19 @@ public class StratInitController implements IStratInitServer {
         return requestFactory.getDisbandUnitRequest(request.siunits).process();
     }
 
-    public Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
-        return requestFactory.getCancelMoveOrderRequest(siunits).process();
+    @PostMapping(value = SIRestPaths.CANCEL_MOVE)
+    public Result<SIUpdate> cancelMove(@RequestBody SIUnitListJson request) {
+        return requestFactory.getCancelMoveOrderRequest(request.siunits).process();
     }
 
-    public Result<SIUpdate> buildCity(List<SIUnit> siunits) {
-        return requestFactory.getBuildCityRequest(siunits).process();
+    @PostMapping(value = SIRestPaths.BUILD_CITY)
+    public Result<SIUpdate> buildCity(@RequestBody SIUnitListJson request) {
+        return requestFactory.getBuildCityRequest(request.siunits).process();
     }
 
-    public Result<SIUpdate> switchTerrain(List<SIUnit> siunits) {
-        return requestFactory.getSwitchTerrainRequest(siunits).process();
+    @PostMapping(value = SIRestPaths.SWITCH_TERRAIN)
+    public Result<SIUpdate> switchTerrain(@RequestBody SIUnitListJson request) {
+        return requestFactory.getSwitchTerrainRequest(request.siunits).process();
     }
 
     @GetMapping(value = SIRestPaths.NEWS_LOG)

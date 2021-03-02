@@ -172,17 +172,18 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<SIUpdate> buildCity(List<SIUnit> siunits) {
-        return null;
+    public Result<SIUpdate> buildCity(SIUnitListJson request) {
+        return restClient.post(SIRestPaths.BUILD_CITY, request, SIUpdate.class);
+    }
+
+    // FIXME lots of patterns here to consolidate
+    @Override
+    public Result<SIUpdate> switchTerrain(SIUnitListJson request) {
+        return restClient.post(SIRestPaths.SWITCH_TERRAIN, request, SIUpdate.class);
     }
 
     @Override
-    public Result<SIUpdate> switchTerrain(List<SIUnit> siunits) {
-        return null;
-    }
-
-    @Override
-    public Result<SIUpdate> cancelMoveOrder(List<SIUnit> siunits) {
-        return null;
+    public Result<SIUpdate> cancelMove(SIUnitListJson request) {
+        return restClient.post(SIRestPaths.CANCEL_MOVE, request, SIUpdate.class);
     }
 }
