@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.event.CommandPointsArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.StratInitServer;
+import com.kenstevens.stratinit.rest.StratInitServer;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
 import com.kenstevens.stratinit.site.processor.ResultBattleLogProcessor;

@@ -8,7 +8,7 @@ import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.rest.RestClient;
-import com.kenstevens.stratinit.server.StratInitServer;
+import com.kenstevens.stratinit.rest.StratInitServer;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.httpclient.HttpStatus;
 import org.junit.jupiter.api.Disabled;

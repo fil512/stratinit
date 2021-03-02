@@ -3,7 +3,7 @@ package com.kenstevens.stratinit;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.StratInitServer;
+import com.kenstevens.stratinit.rest.StratInitServer;
 import com.kenstevens.stratinit.shell.ProgressBarControl;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import org.junit.jupiter.api.BeforeEach;

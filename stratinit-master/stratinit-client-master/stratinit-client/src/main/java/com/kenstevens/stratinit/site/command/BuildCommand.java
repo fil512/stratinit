@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.CityProcessor;
 import com.kenstevens.stratinit.type.UnitType;
@@ -25,10 +26,11 @@ public abstract class BuildCommand extends Command<SICity> {
 
 	@Override
 	public Result<SICity> execute() {
-        SICity sicity = new SICity(city);
-        setBuild(sicity);
-        return stratInitServer.updateCity(sicity, field);
-    }
+		SICity sicity = new SICity(city);
+		setBuild(sicity);
+		UpdateCityJson request = new UpdateCityJson(sicity, field);
+		return stratInitServer.updateCity(request);
+	}
 
 	protected abstract void setBuild(SICity sicity);
 

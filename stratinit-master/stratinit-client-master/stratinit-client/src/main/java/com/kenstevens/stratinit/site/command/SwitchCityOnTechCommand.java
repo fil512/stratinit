@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.CityProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,11 @@ public class SwitchCityOnTechCommand extends Command<SICity> {
 
 	@Override
 	public Result<SICity> execute() {
-        SICity sicity = new SICity(city);
-        sicity.switchOnTechChange = city.isSwitchOnTechChange();
-        return stratInitServer.updateCity(sicity, UpdateCityField.SWITCH_ON_TECH_CHANGE);
-    }
+		SICity sicity = new SICity(city);
+		sicity.switchOnTechChange = city.isSwitchOnTechChange();
+		UpdateCityJson request = new UpdateCityJson(sicity, UpdateCityField.SWITCH_ON_TECH_CHANGE);
+		return stratInitServer.updateCity(request);
+	}
 
 	@Override
 	public String getDescription() {

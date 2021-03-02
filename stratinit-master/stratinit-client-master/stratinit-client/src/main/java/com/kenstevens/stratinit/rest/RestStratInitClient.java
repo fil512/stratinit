@@ -2,12 +2,10 @@ package com.kenstevens.stratinit.rest;
 
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.server.StratInitServer;
+import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RestStratInitServer implements StratInitServer {
+public class RestStratInitClient implements StratInitServer {
     @Autowired
     RestClient restClient;
 
@@ -72,8 +70,8 @@ public class RestStratInitServer implements StratInitServer {
     }
 
     @Override
-    public Result<SICity> updateCity(SICity sicity, UpdateCityField field) {
-        return null;
+    public Result<SICity> updateCity(UpdateCityJson updateCityJson) {
+        return restClient.get(SIRestPaths.UPDATE_CITY, SICity.class);
     }
 
     @Override
@@ -154,11 +152,6 @@ public class RestStratInitServer implements StratInitServer {
     @Override
     public Result<SINation> getMyNation() {
         return restClient.get(SIRestPaths.NATION_ME, SINation.class);
-    }
-
-    @Override
-    public Result<SINation> joinGame(Player player, int gameId, boolean noAlliances) {
-        return null;
     }
 
     @Override

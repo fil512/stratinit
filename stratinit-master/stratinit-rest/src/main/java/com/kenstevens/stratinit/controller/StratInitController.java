@@ -8,9 +8,10 @@ import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.rest.SIRestPaths;
+import com.kenstevens.stratinit.rest.StratInitServer;
 import com.kenstevens.stratinit.server.rest.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.type.Constants;
@@ -26,7 +27,7 @@ import java.util.Properties;
 
 @RestController
 @RequestMapping("/stratinit")
-public class StratInitController {
+public class StratInitController implements StratInitServer {
     @Autowired
     private RequestFactory requestFactory;
     @Autowired
@@ -167,8 +168,9 @@ public class StratInitController {
      * Database update requests
      */
 
-    public Result<SICity> updateCity(SICity sicity, UpdateCityField field) {
-        return requestFactory.getUpdateCityRequest(sicity, field).process();
+    @PostMapping(value = SIRestPaths.UPDATE_CITY)
+    public Result<SICity> updateCity(@RequestBody UpdateCityJson updateCityJson) {
+        return requestFactory.getUpdateCityRequest(updateCityJson.sicity, updateCityJson.field).process();
     }
 
     public Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {

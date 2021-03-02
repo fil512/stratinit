@@ -30,4 +30,5 @@ public class SIRestPaths {
     public static final String NEWS_LOG = "/newslog";
     public static final String UNIT_BUILT = "/unitbuilt";
     public static final String TEAM = "/team";
+    public static final String UPDATE_CITY = "/update-city";
 }

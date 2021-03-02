@@ -1,15 +1,13 @@
-package com.kenstevens.stratinit.server;
+package com.kenstevens.stratinit.rest;
 
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
-import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -17,9 +15,9 @@ public interface StratInitServer {
 
 	Result<String> getVersion();
 
-	Result<None> setGame(@RequestBody SetGameJson request);
+	Result<None> setGame(SetGameJson request);
 
-	Result<SINation> joinGame(@RequestBody SetGameJson request);
+	Result<SINation> joinGame(SetGameJson request);
 
 	Result<List<SIGame>> getJoinedGames();
 
@@ -35,7 +33,7 @@ public interface StratInitServer {
 
 	Result<List<SIBattleLog>> getBattleLog();
 
-	Result<SICity> updateCity(SICity sicity, UpdateCityField field);
+	Result<SICity> updateCity(UpdateCityJson updateCityJson);
 
 	Result<SIUpdate> getUpdate();
 
@@ -69,8 +67,6 @@ public interface StratInitServer {
 	Result<List<SIUnitBuilt>> getUnitsBuilt();
 
 	Result<SINation> getMyNation();
-
-	Result<SINation> joinGame(Player player, int gameId, boolean noAlliances);
 
 	Result<SIUpdate> disbandUnits(List<SIUnit> siUnits);
 
