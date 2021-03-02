@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.server.rest.WithUnitsBase;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -58,7 +59,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void canMove() {
         List<SIUnit> units = makeUnitList(testInfantry);
         SectorCoords target = new SectorCoords(0, 2);
-        Result<SIUpdate> result = stratInitController.moveUnits(units, target);
+        Result<SIUpdate> result = stratInitController.moveUnits(new MoveUnitsJson(units, target));
         assertResult(result);
         assertCoords(result, testInfantryId, target);
         List<SISector> sisectors = result.getValue().sectors;
@@ -97,7 +98,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     @Test
     public void landEmptyTransport() {
         List<SIUnit> units = makeUnitList(testInfantry);
-        Result<SIUpdate> result = stratInitController.moveUnits(units, SEA1);
+        Result<SIUpdate> result = stratInitController.moveUnits(new MoveUnitsJson(units, SEA1));
         assertResult(result);
         assertCoords(result, testInfantryId, SEA1);
     }

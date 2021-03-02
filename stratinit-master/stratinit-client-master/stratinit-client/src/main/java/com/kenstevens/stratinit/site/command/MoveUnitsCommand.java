@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.model.UnitView;
 import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.site.Command;
 import com.kenstevens.stratinit.site.processor.UpdateProcessor;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -37,15 +38,15 @@ public class MoveUnitsCommand extends Command<SIUpdate> {
 
 	@Override
 	public Result<SIUpdate> execute() {
-        List<SIUnit> siunits = UnitsToSIUnits.transform(units);
+		List<SIUnit> siunits = UnitsToSIUnits.transform(units);
 
-        Result<SIUpdate> retval = stratInitServer.moveUnits(siunits,
-                targetCoords);
-        if (!retval.isMoveSuccess()) {
-            wavPlayer.playEmpty();
-        }
-        return retval;
-    }
+		MoveUnitsJson request = new MoveUnitsJson(siunits, targetCoords);
+		Result<SIUpdate> retval = stratInitServer.moveUnits(request);
+		if (!retval.isMoveSuccess()) {
+			wavPlayer.playEmpty();
+		}
+		return retval;
+	}
 
 	@Override
 	public String getDescription() {

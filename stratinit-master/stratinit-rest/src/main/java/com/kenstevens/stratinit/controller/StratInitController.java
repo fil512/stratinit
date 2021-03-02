@@ -8,15 +8,15 @@ import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.UnitBase;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
+import com.kenstevens.stratinit.rest.IStratInitServer;
 import com.kenstevens.stratinit.rest.SIRestPaths;
-import com.kenstevens.stratinit.rest.StratInitServer;
 import com.kenstevens.stratinit.server.rest.helper.ErrorProcessor;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import java.util.Properties;
 
 @RestController
 @RequestMapping("/stratinit")
-public class StratInitController implements StratInitServer {
+public class StratInitController implements IStratInitServer {
     @Autowired
     private RequestFactory requestFactory;
     @Autowired
@@ -173,8 +173,9 @@ public class StratInitController implements StratInitServer {
         return requestFactory.getUpdateCityRequest(updateCityJson.sicity, updateCityJson.field).process();
     }
 
-    public Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {
-        return requestFactory.getMoveUnitsRequest(units, target).process();
+    @PostMapping(value = SIRestPaths.MOVE_UNITS)
+    public Result<SIUpdate> moveUnits(@RequestBody MoveUnitsJson moveUnitsJson) {
+        return requestFactory.getMoveUnitsRequest(moveUnitsJson.units, moveUnitsJson.target).process();
     }
 
     public Result<SIUpdate> cedeUnits(List<SIUnit> siunits, int nationId) {

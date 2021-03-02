@@ -4,14 +4,14 @@ import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.List;
 
-public interface StratInitServer {
+public interface IStratInitServer {
 
 	Result<String> getVersion();
 
@@ -37,7 +37,7 @@ public interface StratInitServer {
 
 	Result<SIUpdate> getUpdate();
 
-	Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target);
+	Result<SIUpdate> moveUnits(MoveUnitsJson moveUnitsJson);
 
 	Result<List<SIUnit>> getSeenUnits();
 

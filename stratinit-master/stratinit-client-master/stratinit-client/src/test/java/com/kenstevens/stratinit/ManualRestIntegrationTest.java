@@ -7,8 +7,8 @@ import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.rest.IStratInitServer;
 import com.kenstevens.stratinit.rest.RestClient;
-import com.kenstevens.stratinit.rest.StratInitServer;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.httpclient.HttpStatus;
 import org.junit.jupiter.api.Disabled;
@@ -32,7 +32,7 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private StratInitServer stratInitServer;
+	private IStratInitServer stratInitServer;
 	@Autowired
 	private Account account;
 	@Autowired

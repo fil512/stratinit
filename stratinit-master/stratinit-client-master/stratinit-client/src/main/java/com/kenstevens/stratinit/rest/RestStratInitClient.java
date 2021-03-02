@@ -4,17 +4,17 @@ import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.type.RelationType;
-import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RestStratInitClient implements StratInitServer {
+public class RestStratInitClient implements IStratInitServer {
     @Autowired
     RestClient restClient;
 
@@ -80,8 +80,8 @@ public class RestStratInitClient implements StratInitServer {
     }
 
     @Override
-    public Result<SIUpdate> moveUnits(List<SIUnit> units, SectorCoords target) {
-        return null;
+    public Result<SIUpdate> moveUnits(MoveUnitsJson moveUnitsJson) {
+        return restClient.get(SIRestPaths.MOVE_UNITS, SIUpdate.class);
     }
 
     @Override

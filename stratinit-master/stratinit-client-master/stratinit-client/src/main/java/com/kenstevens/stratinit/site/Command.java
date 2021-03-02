@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.event.CommandPointsArrivedEvent;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.model.NationView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.rest.StratInitServer;
+import com.kenstevens.stratinit.rest.IStratInitServer;
 import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.site.processor.BattleLogProcessor;
 import com.kenstevens.stratinit.site.processor.ResultBattleLogProcessor;
@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class Command<T> {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
-	protected StratInitServer stratInitServer;
+	protected IStratInitServer stratInitServer;
 	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
