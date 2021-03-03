@@ -5,7 +5,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 @SpringBootApplication
 public class WicketApp {
-
+// FIXME ensure this doesn't start the timer thread (with an app config entry)
     public static void main(String[] args) {
         new SpringApplicationBuilder()
                 .sources(WicketApp.class)

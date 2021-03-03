@@ -15,7 +15,7 @@ public class SINation implements StratInitDTO {
     public double tech = UNKNOWN;
     public double dailyTechGain = UNKNOWN;
     public double dailyTechBleed = UNKNOWN;
-    public long hourlyCPGain = Constants.UNASSIGNED;
+    public int hourlyCPGain = Constants.UNASSIGNED;
     public int cities;
     public Date lastAction;
     public int wins;
@@ -24,7 +24,7 @@ public class SINation implements StratInitDTO {
     public boolean newMail;
     public boolean newBattle;
     public SectorCoords startCoords;
-    public long commandPoints;
+    public int commandPoints;
     public int gameId;
 
     public SINation() {

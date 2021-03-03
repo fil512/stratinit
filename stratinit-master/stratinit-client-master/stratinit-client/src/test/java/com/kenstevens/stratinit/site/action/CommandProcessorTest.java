@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.site.action;
 
-import com.kenstevens.stratinit.BaseStratInitClientTest;
+import com.kenstevens.stratinit.BaseMockStratInitClientTest;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.model.Data;
 import com.kenstevens.stratinit.remote.Result;
@@ -17,13 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CommandProcessorTest extends BaseStratInitClientTest {
-	@Autowired
-	private CommandProcessor commandProcessor;
-	@Autowired
-	private Data db;
-	@Autowired
-	private Spring spring;
+public class CommandProcessorTest extends BaseMockStratInitClientTest {
+    @Autowired
+    private CommandProcessor commandProcessor;
+    @Autowired
+    private Data db;
+    @Autowired
+    private Spring spring;
 
     @Test
     public void getGames() {

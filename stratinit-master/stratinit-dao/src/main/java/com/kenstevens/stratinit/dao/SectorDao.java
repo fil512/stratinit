@@ -75,8 +75,8 @@ public class SectorDao extends CacheDao {
         return getCities(nation).size();
     }
 
-    public long getNumberOfBases(Nation nation) {
-        return getCities(nation).stream().filter(City::isBase).count();
+    public int getNumberOfBases(Nation nation) {
+        return (int) getCities(nation).stream().filter(City::isBase).count();
     }
 
     // TODO REF use filter

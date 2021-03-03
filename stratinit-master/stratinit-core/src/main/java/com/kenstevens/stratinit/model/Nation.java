@@ -26,8 +26,8 @@ public class Nation implements Serializable {
 	protected SectorCoords startCoords = new SectorCoords(0, 0);
 	private boolean newMail = false;
 	private boolean newBattle = false;
-	private long hourlyCPGain = 0;
-	private long commandPoints = Constants.START_COMMAND_POINTS;
+	private int hourlyCPGain = 0;
+	private int commandPoints = Constants.START_COMMAND_POINTS;
 	private boolean noAlliances; // preference vote whether player prefers alliances or not
 
 	public Nation() {
@@ -160,11 +160,11 @@ public class Nation implements Serializable {
 		return startCoords;
 	}
 
-	public long getCommandPoints() {
+	public int getCommandPoints() {
 		return commandPoints;
 	}
 
-	public void setCommandPoints(long commandPoints) {
+	public void setCommandPoints(int commandPoints) {
 		this.commandPoints = commandPoints;
 		if (commandPoints > Constants.MAX_COMMAND_POINTS) {
 			this.commandPoints = Constants.MAX_COMMAND_POINTS;
@@ -178,15 +178,15 @@ public class Nation implements Serializable {
 		}
 	}
 
-	public void increaseCommandPoints(long cpGain) {
+	public void increaseCommandPoints(int cpGain) {
 		setCommandPoints(commandPoints + cpGain);
 	}
 
-	public long getHourlyCPGain() {
+	public int getHourlyCPGain() {
 		return hourlyCPGain;
 	}
 
-	public void setHourlyCPGain(long hourlyCPGain) {
+	public void setHourlyCPGain(int hourlyCPGain) {
 		this.hourlyCPGain = hourlyCPGain;
 	}
 

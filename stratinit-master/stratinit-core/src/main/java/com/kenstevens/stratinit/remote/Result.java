@@ -15,7 +15,7 @@ public class Result<T> implements Serializable {
 	private List<String> messages = new ArrayList<String>();
 	private List<SIBattleLog> silogs = new ArrayList<SIBattleLog>();
 	private boolean moveSuccess = true;
-	private long commandPoints = Constants.UNASSIGNED;
+	private int commandPoints = Constants.UNASSIGNED;
 
 	public Result() {
 	}
@@ -170,11 +170,11 @@ public class Result<T> implements Serializable {
 		this.moveSuccess = moveSuccess;
 	}
 
-	public long getCommandPoints() {
+	public int getCommandPoints() {
 		return commandPoints;
 	}
 
-	public void setCommandPoints(long commandPoints) {
+	public void setCommandPoints(int commandPoints) {
 		this.commandPoints = commandPoints;
 	}
 

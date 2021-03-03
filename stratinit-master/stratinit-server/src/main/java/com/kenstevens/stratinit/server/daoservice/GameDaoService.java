@@ -361,15 +361,15 @@ public class GameDaoService {
     private void updateCommandPoints(Game game) {
         List<Nation> nations = gameDao.getNations(game);
         for (Nation nation : nations) {
-            long cpGain = capitalPointsToCommandPoints(getCapitalPoints(nation));
+            int cpGain = capitalPointsToCommandPoints(getCapitalPoints(nation));
             nation.increaseCommandPoints(cpGain);
             nation.setHourlyCPGain(cpGain * 3600 / Constants.TECH_UPDATE_INTERVAL_SECONDS);
             gameDao.markCacheModified(nation);
         }
     }
 
-    private long capitalPointsToCommandPoints(long capitalPoints) {
-        long cpGain = capitalPoints / Constants.COMMAND_POINT_FACTOR;
+    private int capitalPointsToCommandPoints(int capitalPoints) {
+        int cpGain = capitalPoints / Constants.COMMAND_POINT_FACTOR;
         if (cpGain < Constants.MIN_COMMAND_POINTS_GAINED_PER_TICK) {
             cpGain = Constants.MIN_COMMAND_POINTS_GAINED_PER_TICK;
         }
@@ -380,10 +380,10 @@ public class GameDaoService {
     }
 
 
-    public long getCapitalPoints(Nation nation) {
+    public int getCapitalPoints(Nation nation) {
         int cities = sectorDao.getNumberOfCities(nation);
         int capitalShips = unitDao.getNumberOfCapitalShips(nation);
-        long bases = sectorDao.getNumberOfBases(nation);
+        int bases = sectorDao.getNumberOfBases(nation);
         return cities + capitalShips + bases * 2;
     }
 
