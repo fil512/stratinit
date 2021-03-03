@@ -48,7 +48,7 @@ public abstract class Command<T> {
 			} else {
 				reportError(getDescription());
 			}
-			statusReporter.reportResult(result);
+			statusReporter.reportResult(this, result);
 		} catch (RemoteConnectFailureException e) {
 			statusReporter.reportError("The server is down.  Try again later.");
 			logger.error(e.getMessage(), e);

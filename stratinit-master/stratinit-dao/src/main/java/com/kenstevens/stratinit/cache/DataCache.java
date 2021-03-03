@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.PlayerRepo;
@@ -32,7 +32,7 @@ public class DataCache extends Updatable {
 	@Autowired
 	private PlayerRepo playerRepo;
 	@Autowired
-	private ServerConfig serverConfig;
+	private IServerConfig serverConfig;
 
 	private final Map<Integer, GameCache> gameMap = new TreeMap<Integer, GameCache>();
 	private final Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();

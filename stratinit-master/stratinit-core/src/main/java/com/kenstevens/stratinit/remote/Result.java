@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.remote;
 
+import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +17,7 @@ public class Result<T> implements Serializable {
 	private List<SIBattleLog> silogs = new ArrayList<SIBattleLog>();
 	private boolean moveSuccess = true;
 	private int commandPoints = Constants.UNASSIGNED;
+	private RunModeEnum runMode;
 
 	public Result() {
 	}
@@ -177,5 +179,4 @@ public class Result<T> implements Serializable {
 	public void setCommandPoints(int commandPoints) {
 		this.commandPoints = commandPoints;
 	}
-
 }

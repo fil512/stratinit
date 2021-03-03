@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.server.event;
 
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.server.event.svc.StratInitUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class GameMapEvent extends Event {
     @Autowired
     private StratInitUpdater stratInitUpdater;
 
-    GameMapEvent(Game game, ServerConfig serverConfig) {
+    GameMapEvent(Game game, IServerConfig serverConfig) {
         super(game, game.getExpectedMapTime(serverConfig));
     }
 

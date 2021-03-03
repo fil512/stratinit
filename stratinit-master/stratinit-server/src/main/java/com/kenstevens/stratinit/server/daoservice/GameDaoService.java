@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
@@ -24,7 +24,7 @@ import java.util.*;
 
 @Service
 public class GameDaoService {
-    private final ServerConfig serverConfig;
+    private final IServerConfig serverConfig;
     @Autowired
     private GameDao gameDao;
     @Autowired
@@ -54,7 +54,7 @@ public class GameDaoService {
     private PlayerDao playerDao;
 
     @Autowired
-    public GameDaoService(ServerConfig serverConfig) {
+    public GameDaoService(IServerConfig serverConfig) {
         this.serverConfig = serverConfig;
     }
 

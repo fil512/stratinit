@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.config.ServerConfig;
 import org.flywaydb.core.Flyway;
@@ -22,7 +23,7 @@ public class TestConfig {
     }
 
     @Bean
-    ServerConfig serverConfig() {
+    IServerConfig serverConfig() {
         return new ServerConfig(RunModeEnum.PRODUCTION);
     }
 }

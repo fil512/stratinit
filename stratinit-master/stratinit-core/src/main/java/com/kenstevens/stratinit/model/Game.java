@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.model;
 
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -76,7 +76,7 @@ public class Game extends GameUpdatable implements Serializable {
 		} else return id.equals(other.id);
 	}
 
-	public Date getExpectedMapTime(ServerConfig serverConfig) {
+	public Date getExpectedMapTime(IServerConfig serverConfig) {
 		if (mapped != null) {
 			return mapped;
 		}
@@ -257,7 +257,7 @@ public class Game extends GameUpdatable implements Serializable {
 		return mapped != null;
 	}
 
-	public String getExpectedMapTimeString(ServerConfig serverConfig) {
+	public String getExpectedMapTimeString(IServerConfig serverConfig) {
 		Date expectedMapTime = getExpectedMapTime(serverConfig);
 		if (expectedMapTime == null) {
 			return "";
@@ -265,7 +265,7 @@ public class Game extends GameUpdatable implements Serializable {
 		return FORMAT.format(expectedMapTime);
 	}
 
-	public String getPlayersString(ServerConfig serverConfig) {
+	public String getPlayersString(IServerConfig serverConfig) {
 		String retval = "";
 		if (islands > 0) {
 			retval = "" + players + "/"

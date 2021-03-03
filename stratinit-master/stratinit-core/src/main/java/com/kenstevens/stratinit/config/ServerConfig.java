@@ -2,7 +2,8 @@ package com.kenstevens.stratinit.config;
 
 import org.apache.commons.lang3.time.DateUtils;
 
-public class ServerConfig {
+public class ServerConfig implements IServerConfig {
+
     private static final int MIN_PLAYERS_TO_SCHEDULE = 4; // hopefully this will increase over time
 
     private static final long SCHEDULED_TO_MAPPED_MILLIS = 16 * DateUtils.MILLIS_PER_HOUR;
@@ -10,7 +11,7 @@ public class ServerConfig {
 
     private static final long FLUSH_CACHE_MILLIS = 15 * DateUtils.MILLIS_PER_MINUTE;
 
-    // TEST values
+// TEST values
 
     private static final long SCHEDULED_TO_MAPPED_MILLIS_TEST = 10 * DateUtils.MILLIS_PER_SECOND;
     private static final long MAPPED_TO_STARTED_MILLIS_TEST = 10 * DateUtils.MILLIS_PER_SECOND;
@@ -24,14 +25,7 @@ public class ServerConfig {
         this.runModeEnum = runModeEnum;
     }
 
-    public long getScheduledToMappedMillis() {
-        if (runModeEnum == RunModeEnum.TEST) {
-            return SCHEDULED_TO_MAPPED_MILLIS_TEST;
-        } else {
-            return SCHEDULED_TO_MAPPED_MILLIS;
-        }
-    }
-
+    @Override
     public long getMappedToStartedMillis() {
         if (runModeEnum == RunModeEnum.TEST) {
             return MAPPED_TO_STARTED_MILLIS_TEST;
@@ -40,6 +34,7 @@ public class ServerConfig {
         }
     }
 
+    @Override
     public long getScheduledToStartedMillis() {
         if (runModeEnum == RunModeEnum.TEST) {
             return SCHEDULED_TO_MAPPED_MILLIS_TEST
@@ -50,6 +45,7 @@ public class ServerConfig {
         }
     }
 
+    @Override
     public long getFlushCacheMillis() {
         if (runModeEnum == RunModeEnum.TEST) {
             return FLUSH_CACHE_MILLIS_TEST;
@@ -58,11 +54,17 @@ public class ServerConfig {
         }
     }
 
+    @Override
     public int getMinPlayersToSchedule() {
         if (runModeEnum == RunModeEnum.TEST) {
             return 1;
         } else {
             return MIN_PLAYERS_TO_SCHEDULE;
         }
+    }
+
+    @Override
+    public RunModeEnum getRunMode() {
+        return runModeEnum;
     }
 }

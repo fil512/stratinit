@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.server.event;
 
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.model.*;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class EventFactory {
     }
 
     @Lookup
-    public GameMapEvent getGameMapEvent(Game game, ServerConfig serverConfig) {
+    public GameMapEvent getGameMapEvent(Game game, IServerConfig serverConfig) {
         return new GameMapEvent(game, serverConfig);
     }
 

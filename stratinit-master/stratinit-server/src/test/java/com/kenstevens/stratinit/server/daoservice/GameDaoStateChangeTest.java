@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
@@ -46,7 +47,7 @@ public class GameDaoStateChangeTest {
 
     private Game game;
 
-    private final ServerConfig serverConfig = new ServerConfig(RunModeEnum.TEST);
+    private final IServerConfig serverConfig = new ServerConfig(RunModeEnum.TEST);
 
     @InjectMocks
     private final GameDaoService gameDaoService = new GameDaoService(serverConfig);

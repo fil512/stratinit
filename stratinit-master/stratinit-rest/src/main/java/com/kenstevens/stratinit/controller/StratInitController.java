@@ -3,6 +3,8 @@ package com.kenstevens.stratinit.controller;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.config.IServerConfig;
+import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.UnitBase;
@@ -29,6 +31,8 @@ public class StratInitController implements IStratInitServer {
     private RequestFactory requestFactory;
     @Autowired
     private ErrorProcessor errorProcessor;
+    @Autowired
+    private IServerConfig serverConfig;
 
     /*
      * Non database requests
@@ -67,6 +71,7 @@ public class StratInitController implements IStratInitServer {
                 // won't happen
             }
         }
+        properties.setProperty(RunModeEnum.class.getSimpleName(), serverConfig.getRunMode().toString());
         return Result.make(properties);
     }
 

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.event.GameListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.GameList;
@@ -22,7 +22,7 @@ public class GameTableControl {
 	private StratinitEventBus eventBus;
 	// FIXME pull this from rest call to server config
 	@Autowired
-	private ServerConfig serverConfig;
+	private IServerConfig serverConfig;
 
 	private final GameTable gameTable;
 	private final GameList gameList;

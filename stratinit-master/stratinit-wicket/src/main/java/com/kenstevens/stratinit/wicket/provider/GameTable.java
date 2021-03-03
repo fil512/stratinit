@@ -5,28 +5,29 @@ import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.GameHistory;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class GameTable {
+public class GameTable implements Serializable {
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("d MMM, yyyy");
-	
-	Comparator<SITeam> teamsByScoreComparator = new Comparator<SITeam>() {
+
+	transient Comparator<SITeam> teamsByScoreComparator = new Comparator<SITeam>() {
 		@Override
 		public int compare(SITeam team1, SITeam team2) {
 			return Integer.valueOf(team2.score).compareTo(team1.score);
 		}
 	};
-	Comparator<SINation> nationsByPowerComparator = new Comparator<SINation>() {
+
+	transient Comparator<SINation> nationsByPowerComparator = new Comparator<SINation>() {
 		@Override
 		public int compare(SINation nation1, SINation nation2) {
 			return Integer.valueOf(nation2.cities).compareTo(nation1.cities);
 		}
 	};
-
 
 	private final GameHistory gameHistory;
 	private List<SITeam> teams;

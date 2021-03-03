@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.event.*;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
@@ -23,7 +23,7 @@ public class EventQueue {
     @Autowired
     private EventFactory eventFactory;
     @Autowired
-    private ServerConfig serverConfig;
+    private IServerConfig serverConfig;
 
     public void shutdown() {
         eventTimer.shutdown();

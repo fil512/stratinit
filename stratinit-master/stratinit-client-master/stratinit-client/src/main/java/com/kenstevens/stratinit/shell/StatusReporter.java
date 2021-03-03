@@ -2,10 +2,13 @@ package com.kenstevens.stratinit.shell;
 
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.site.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 public class StatusReporter {
@@ -42,15 +45,19 @@ public class StatusReporter {
         logger.error(e.getMessage(), e);
     }
 
-	public void reportLoginError() {
-		reportError("Not logged in.  Please login before performing any actions.");
-	}
+    public void reportLoginError() {
+        reportError("Not logged in.  Please login before performing any actions.");
+    }
 
-	public <T> void reportResult(Result<T> result) {
-		if (result.isSuccess() && result.isMoveSuccess()) {
-			reportAction(result.toString());
-		} else {
-			reportError(result.toString());
-		}
-	}
+    public <T> void reportResult(Command command, Result<T> result) {
+        String text = result.toString();
+        if (isBlank(text)) {
+            text = command.getDescription() + " result";
+        }
+        if (result.isSuccess() && result.isMoveSuccess()) {
+            reportAction(text);
+        } else {
+            reportError(text);
+        }
+    }
 }

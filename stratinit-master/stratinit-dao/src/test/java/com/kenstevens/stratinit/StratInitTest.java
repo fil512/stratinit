@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit;
 
-import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
@@ -45,7 +45,7 @@ public abstract class StratInitTest {
     @Autowired
     private ExpungeSvc expungeSvc;
     @Autowired
-    private ServerConfig serverConfig;
+    private IServerConfig serverConfig;
 
     protected Game testGame;
     protected Game testGame2;
