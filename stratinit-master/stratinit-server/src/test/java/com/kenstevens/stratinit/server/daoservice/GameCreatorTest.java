@@ -20,22 +20,28 @@ public class GameCreatorTest extends StratInitDaoBase {
     public void createGame() {
         List<Game> games;
         games = gameDao.getAllGames();
-        int size = games.size();
-        assertTrue(size > 0);
-        assertTrue(games.get(size - 1).isMapped());
+        assertEquals(2, games.size());
+        assertTrue(games.get(0).isMapped());
+        assertFalse(games.get(1).isMapped());
 
-        for (Game game : games) {
-            game.setMapped();
-        }
+        // Map the last game
+        games.get(1).setMapped();
+        gameCreator.createGameIfAllMapped();
 
+        // This should create a third unmapped game
+        games = gameDao.getAllGames();
+        assertEquals(3, games.size());
+        assertTrue(games.get(0).isMapped());
+        assertTrue(games.get(1).isMapped());
+        assertFalse(games.get(2).isMapped());
+
+        // Nothing should change if it's not mapped
         gameCreator.createGameIfAllMapped();
         games = gameDao.getAllGames();
-        assertEquals(size + 1, games.size());
-        assertFalse(games.get(size).isMapped());
-
-        gameCreator.createGameIfAllMapped();
-        games = gameDao.getAllGames();
-        assertEquals(size + 1, games.size());
+        assertEquals(3, games.size());
+        assertTrue(games.get(0).isMapped());
+        assertTrue(games.get(1).isMapped());
+        assertFalse(games.get(2).isMapped());
     }
 
 }
