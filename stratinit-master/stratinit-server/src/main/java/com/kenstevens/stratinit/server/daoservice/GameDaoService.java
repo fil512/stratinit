@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
@@ -23,8 +24,7 @@ import java.util.*;
 
 @Service
 public class GameDaoService {
-    @Autowired
-    private PlayerDao playerDao;
+    private final ServerConfig serverConfig;
     @Autowired
     private GameDao gameDao;
     @Autowired
@@ -49,6 +49,14 @@ public class GameDaoService {
     private WorldManager worldManager;
     @Autowired
     private GameCreator gameCreator;
+    // FIXME too many collaborators
+    @Autowired
+    private PlayerDao playerDao;
+
+    @Autowired
+    public GameDaoService(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
+    }
 
     public Game createGame(String name) {
         Game game = new Game(name);
@@ -61,7 +69,7 @@ public class GameDaoService {
         game.setBlitz(true);
         game.setIslands(islands);
         gameDao.save(game);
-        GameScheduleHelper.setStartTimeBasedOnNow(game);
+        GameScheduleHelper.setStartTimeBasedOnNow(game, serverConfig.getScheduledToStartedMillis());
         mapGame(game);
         return game;
     }
@@ -70,7 +78,7 @@ public class GameDaoService {
         if (game.getStartTime() != null) {
             return;
         }
-        GameScheduleHelper.setStartTimeBasedOnNow(game);
+        GameScheduleHelper.setStartTimeBasedOnNow(game, serverConfig.getScheduledToStartedMillis());
         gameDao.merge(game);
         gameDao.flush(); // So the timer can read the game
         eventQueue.schedule(game, false);
@@ -78,8 +86,7 @@ public class GameDaoService {
         if (started != null) {
             for (Nation nation : gameDao.getNations(game)) {
                 Player player = nation.getPlayer();
-                mailService.sendEmail(player, MailTemplateLibrary
-                        .getGameScheduled(player, game));
+                mailService.sendEmail(player, MailTemplateLibrary.getGameScheduled(player, game, serverConfig));
             }
         }
     }
@@ -123,15 +130,15 @@ public class GameDaoService {
     public Result<Nation> joinGame(Player player, int gameId, boolean noAlliances) {
         Game game = gameDao.findGame(gameId);
         if (game == null) {
-            return new Result<Nation>("no game with id [" + gameId + "].",
+            return new Result<>("no game with id [" + gameId + "].",
                     false);
         }
         Nation nation = gameDao.findNation(game, player);
         if (nation != null) {
-            return new Result<Nation>("already joined [" + gameId + "].", false);
+            return new Result<>("already joined [" + gameId + "].", false);
         }
         if (game.isFullyBooked()) {
-            return new Result<Nation>("game is full.", false);
+            return new Result<>("game is full.", false);
         }
         int nationId = game.addPlayer(noAlliances);
         nation = new Nation(game, player);
@@ -143,7 +150,7 @@ public class GameDaoService {
         setRelations(nation);
         if (game.isMapped()) {
             worldManager.addPlayerToMap(nationId, nation);
-        } else if (game.getPlayers() >= Constants.getMinPlayersToSchedule()) {
+        } else if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule()) {
             scheduleGame(game);
         }
         return new Result<>(nation);
@@ -182,15 +189,6 @@ public class GameDaoService {
         return gameDao.getUnjoinedGames(player);
     }
 
-    public List<Game> getJoinedGames(Player player) {
-        List<Nation> nations = gameDao.getNations(player);
-        List<Game> retval = new ArrayList<Game>();
-        for (Nation nation : nations) {
-            retval.add(nation.getGame());
-        }
-        return retval;
-    }
-
     public Game findGame(int gameId) {
         return gameDao.findGame(gameId);
     }
@@ -202,12 +200,12 @@ public class GameDaoService {
     public Result<Relation> setRelation(Nation nation, Nation target,
                                         RelationType newRelation, boolean override) {
         if (nation.equals(target)) {
-            return new Result<Relation>(
+            return new Result<>(
                     "You can't change relations with yourself", false);
         }
         Relation relation = gameDao.findRelation(nation, target);
         if (newRelation == relation.getType()) {
-            return new Result<Relation>("Nothing to change.", false, relation);
+            return new Result<>("Nothing to change.", false, relation);
         }
         Result<Relation> result = relationManager.changeRelation(relation,
                 newRelation, override);
@@ -405,7 +403,7 @@ public class GameDaoService {
 
     // TODO record more about the game
     public void score(Game game) {
-        Map<Nation, Integer> score = new HashMap<Nation, Integer>();
+        Map<Nation, Integer> score = new HashMap<>();
         int topScore = 0;
         List<Nation> nations = gameDao.getNations(game);
         for (Nation nation : nations) {
@@ -439,10 +437,6 @@ public class GameDaoService {
 
     public void merge(Nation nation) {
         gameDao.markCacheModified(nation);
-    }
-
-    public List<GameBuildAudit> getGameBuildAudit() {
-        return gameDao.getGameBuildAudit();
     }
 
     public void remove(Relation relation) {

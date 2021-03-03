@@ -1,26 +1,26 @@
 package com.kenstevens.stratinit.util;
 
-import java.util.Date;
-
 import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.type.Constants;
+
+import java.util.Date;
 
 public final class GameScheduleHelper {
 	private static final int DAY_MILLIS = 24 * 60 * 60 * 1000;
 
 
-	private GameScheduleHelper() {}
+	private GameScheduleHelper() {
+	}
 
-	public static void setStartTimeBasedOnNow(Game game) {
+	public static void setStartTimeBasedOnNow(Game game, long scheduledToStartedMillis) {
 		Date now = new Date();
 		Date startTime = now;
 		if (!game.isBlitz()) {
-			startTime = new Date(now.getTime() + Constants.getScheduledToStartedMillis());
+			startTime = new Date(now.getTime() + scheduledToStartedMillis);
 		}
-    	game.setStartTime(startTime);
-    	setEnds(game, startTime);
-    	game.setLastUpdated(startTime);
-    }
+		game.setStartTime(startTime);
+		setEnds(game, startTime);
+		game.setLastUpdated(startTime);
+	}
 
 
 	public static void setEnds(Game game, Date startTime) {

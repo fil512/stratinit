@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -116,8 +117,8 @@ public class City extends GameUpdatable {
 	}
 
 	@Override
-	public int getUpdatePeriodMilliseconds() {
-		return UnitBase.getUnitBase(getBuild()).getProductionTime() * 60 * 60 * 1000;
+	public long getUpdatePeriodMilliseconds() {
+		return UnitBase.getUnitBase(getBuild()).getProductionTime() * DateUtils.MILLIS_PER_HOUR;
 	}
 
 	public SectorCoords getCoords() {

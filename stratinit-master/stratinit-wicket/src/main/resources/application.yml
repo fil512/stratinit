@@ -7,3 +7,6 @@ stratinit:
   email:
     hostname: localhost
     enabled: false
+  scheduler:
+    enabled: false
+  mode: TEST

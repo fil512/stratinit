@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
@@ -27,14 +28,25 @@ import java.sql.SQLException;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
 public abstract class StratInitTest {
+    final Logger logger = LoggerFactory.getLogger(getClass());
+
     public static final String TEST_PLAYER1_USERNAME = "a";
     protected static Player testPlayer1;
     protected static Player testPlayer2;
-    final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Autowired
     protected GameDao gameDao;
     @Autowired
     protected UnitDao unitDao;
+    @Autowired
+    private PlayerDao playerDao;
+    @Autowired
+    private SectorDao sectorDao;
+    @Autowired
+    private ExpungeSvc expungeSvc;
+    @Autowired
+    private ServerConfig serverConfig;
+
     protected Game testGame;
     protected Game testGame2;
     protected Nation testNation1;
@@ -43,12 +55,7 @@ public abstract class StratInitTest {
     protected SectorCoords testCoords = new SectorCoords(0, 1);
     protected Sector testSector;
     protected Sector testSector2;
-    @Autowired
-    private PlayerDao playerDao;
-    @Autowired
-    private SectorDao sectorDao;
-    @Autowired
-    private ExpungeSvc expungeSvc;
+
 
     @BeforeEach
     public void stratInit() {
@@ -86,7 +93,7 @@ public abstract class StratInitTest {
     protected void createGame() {
         testGame = new Game("test", 10);
         testGame.setBlitz(true);
-        GameScheduleHelper.setStartTimeBasedOnNow(testGame);
+        GameScheduleHelper.setStartTimeBasedOnNow(testGame, serverConfig.getScheduledToStartedMillis());
         testGame.setBlitz(false);
         gameDao.save(testGame);
         testSector = new Sector(testGame, testCoords, SectorType.LAND);
@@ -98,7 +105,7 @@ public abstract class StratInitTest {
     protected void createGame2() {
         testGame2 = new Game("test", 11);
         testGame2.setBlitz(true);
-        GameScheduleHelper.setStartTimeBasedOnNow(testGame2);
+        GameScheduleHelper.setStartTimeBasedOnNow(testGame2, serverConfig.getScheduledToStartedMillis());
         testGame2.setBlitz(false);
         gameDao.save(testGame2);
         testSector2 = new Sector(testGame2, testCoords, SectorType.LAND);

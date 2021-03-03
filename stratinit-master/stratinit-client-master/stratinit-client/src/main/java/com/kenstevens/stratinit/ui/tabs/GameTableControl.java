@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.event.GameListArrivedEvent;
 import com.kenstevens.stratinit.event.StratinitEventBus;
 import com.kenstevens.stratinit.model.GameList;
@@ -19,7 +20,10 @@ import javax.annotation.PostConstruct;
 public class GameTableControl {
 	@Autowired
 	private StratinitEventBus eventBus;
-	
+	// FIXME pull this from rest call to server config
+	@Autowired
+	private ServerConfig serverConfig;
+
 	private final GameTable gameTable;
 	private final GameList gameList;
 
@@ -27,7 +31,7 @@ public class GameTableControl {
 		this.gameTable = gameTable;
 		this.gameList = gameList;
 	}
-	
+
 	@Subscribe
 	public void handleGameListArrivedEvent(GameListArrivedEvent event) {
 		updateTable();
@@ -48,9 +52,9 @@ public class GameTableControl {
 			for (GameView game : gameList) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setText(new String[]{"" + game.getId(), game.getGamename(),
-						"" + game.getGamesize(), game.getPlayersString(),
+						"" + game.getGamesize(), game.getPlayersString(serverConfig),
 						game.getCreatedString(),
-						game.getExpectedMapTimeString(),
+						game.getExpectedMapTimeString(serverConfig),
 						game.getStartTimeString(), game.getEndsString()});
 				item.setData(game);
 			}

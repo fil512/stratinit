@@ -8,12 +8,11 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.event.EventScheduler;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.RunMode;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.util.ExpungeSvc;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
+import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -39,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, TestConfig.class})
 public abstract class StratInitDaoBase {
+	private static final long SCHEDULED_TO_STARTED_MILLIS = DateUtils.MILLIS_PER_DAY;
 	final Logger logger = LoggerFactory.getLogger(getClass());
 	private final AtomicInteger playerIndex = new AtomicInteger();
 
@@ -131,7 +131,6 @@ public abstract class StratInitDaoBase {
 
 	@BeforeEach
 	public void init() {
-		Constants.setRunMode(RunMode.PRODUCTION);
 		// Note this creates a new game for every test
 		setupGame();
 		eventScheduler.updateGamesAndStartTimer();
@@ -140,7 +139,7 @@ public abstract class StratInitDaoBase {
 	public void setupGame() {
 		testGame = new Game(null, GAME_SIZE);
 		testGame.setBlitz(true);
-		GameScheduleHelper.setStartTimeBasedOnNow(testGame);
+		GameScheduleHelper.setStartTimeBasedOnNow(testGame, SCHEDULED_TO_STARTED_MILLIS);
 		testGame.setBlitz(false);
 		setIslands(NUM_ISLANDS);
 		testGame.setMapped();

@@ -7,10 +7,15 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.*;
 
 import java.util.List;
+import java.util.Properties;
 
 public interface IStratInitServer {
 
 	Result<String> getVersion();
+
+	Result<List<SIUnitBase>> getUnitBases();
+
+	Result<Properties> getServerConfig();
 
 	Result<None> setGame(SetGameJson request);
 

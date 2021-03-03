@@ -8,12 +8,11 @@ import com.kenstevens.stratinit.event.EventScheduler;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
-import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.RunMode;
 import com.kenstevens.stratinit.util.UpdateManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -54,12 +53,17 @@ public class EventSchedulerImpl implements EventScheduler {
     @Autowired
     private EventTimer eventTimer;
 
+    @Value("${stratinit.scheduler.enabled}")
+    private Boolean schedulerEnabled;
+
     private FileLock fileLock;
 
     @PostConstruct
     public void scheduleInitialEvents() {
-        // FIXME switch to Spring Profile
-        Constants.setRunMode(RunMode.TEST);
+        if (!schedulerEnabled) {
+            logger.info("Scheduler disabled.");
+            return;
+        }
 
         ServerLocker serverLocker = new ServerLocker();
         fileLock = serverLocker.getLock();
@@ -77,6 +81,7 @@ public class EventSchedulerImpl implements EventScheduler {
     @VisibleForTesting
     @Override
     public void updateGamesAndStartTimer() {
+
         if (eventTimer.isStarted()) {
             logger.info("EventScheduler already running.  Skipping startup.\n");
             return;

@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.server.event.*;
-import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,8 @@ public class EventQueue {
     private DataCache dataCache;
     @Autowired
     private EventFactory eventFactory;
+    @Autowired
+    private ServerConfig serverConfig;
 
     public void shutdown() {
         eventTimer.shutdown();
@@ -79,7 +81,7 @@ public class EventQueue {
             return;
         }
 
-        Date expectedMapTime = game.getExpectedMapTime();
+        Date expectedMapTime = game.getExpectedMapTime(serverConfig);
         if (expectedMapTime == null) {
             logger.error("Trying to schedule game " + game.getGamename()
                     + " which has no expected map time.");
@@ -92,11 +94,11 @@ public class EventQueue {
                     + expectedMapTime);
         } else if (game.getMapped() == null) {
             Date oldStartTime = game.getStartTime();
-            Date newStartTime = new Date(now.getTime() + Constants.getMappedToStartedMillis());
+            Date newStartTime = new Date(now.getTime() + serverConfig.getMappedToStartedMillis());
             logger.warn("Game " + game + " should have been mapped by now.  Mapping now and changing start time from " + oldStartTime + " to " + newStartTime);
             GameScheduleHelper.setStartTime(game, newStartTime);
         }
-        GameMapEvent gameMapEvent = eventFactory.getGameMapEvent(game);
+        GameMapEvent gameMapEvent = eventFactory.getGameMapEvent(game, serverConfig);
         eventTimer.schedule(gameMapEvent);
     }
 

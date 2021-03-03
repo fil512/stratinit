@@ -1,9 +1,8 @@
 package com.kenstevens.stratinit.model;
 
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class Updatable implements EventKeyed, Serializable {
@@ -12,9 +11,9 @@ public abstract class Updatable implements EventKeyed, Serializable {
 	// TODO this duplicates lots of code elsewhere that is calling setLastUpdated(new Date()) after construction.
 	private Date lastUpdated = new Date();
 
-	public abstract int getUpdatePeriodMilliseconds();
+	public abstract long getUpdatePeriodMilliseconds();
 
-	
+
 	public Date getLastUpdated() {
 		return lastUpdated;
 	}

@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.event;
 
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.server.event.svc.StratInitUpdater;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 @Component
 public class GameMapEvent extends Event {
-	@Autowired
-	private StratInitUpdater stratInitUpdater;
+    @Autowired
+    private StratInitUpdater stratInitUpdater;
 
-	GameMapEvent(Game game) {
-		super(game, game.getExpectedMapTime());
-	}
+    GameMapEvent(Game game, ServerConfig serverConfig) {
+        super(game, game.getExpectedMapTime(serverConfig));
+    }
 
-	@Override
-	protected void execute() {
-		Integer gameId = (Integer) getEventKey().getKey();
-		stratInitUpdater.mapGame(gameId);
-	}
+    @Override
+    protected void execute() {
+        Integer gameId = (Integer) getEventKey().getKey();
+        stratInitUpdater.mapGame(gameId);
+    }
 }

@@ -4,10 +4,10 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.PlayerRepo;
-import com.kenstevens.stratinit.type.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +31,18 @@ public class DataCache extends Updatable {
 	private GameRepo gameRepo;
 	@Autowired
 	private PlayerRepo playerRepo;
+	@Autowired
+	private ServerConfig serverConfig;
 
 	private final Map<Integer, GameCache> gameMap = new TreeMap<Integer, GameCache>();
 	private final Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
-	
+
 	@SuppressWarnings("unused")
 	@PostConstruct
 	private void load() {
-        loadPlayers();
-        loadGames();
-    }
+		loadPlayers();
+		loadGames();
+	}
 
 	private void loadGames() {
 		logger.info("Loading games into cache...");
@@ -171,8 +173,8 @@ public class DataCache extends Updatable {
 	}
 
 	@Override
-	public int getUpdatePeriodMilliseconds() {
-		return Constants.getFlushCacheMillis();
+	public long getUpdatePeriodMilliseconds() {
+		return serverConfig.getFlushCacheMillis();
 	}
 
 	@Override

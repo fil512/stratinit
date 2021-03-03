@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Properties;
 
 @Service
 public class RestStratInitClient implements IStratInitServer {
@@ -18,6 +19,17 @@ public class RestStratInitClient implements IStratInitServer {
     @Override
     public Result<String> getVersion() {
         return restClient.get(SIRestPaths.VERSION, String.class);
+    }
+
+    @Override
+    public Result<List<SIUnitBase>> getUnitBases() {
+        return restClient.getList(SIRestPaths.UNIT_BASE, SIUnitBase.class);
+    }
+
+    @Override
+    // FIXME build the client ServerConfig from this
+    public Result<Properties> getServerConfig() {
+        return restClient.get(SIRestPaths.SERVER_CONFIG, Properties.class);
     }
 
     @Override

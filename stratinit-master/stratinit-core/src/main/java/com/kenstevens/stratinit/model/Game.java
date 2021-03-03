@@ -1,6 +1,8 @@
 package com.kenstevens.stratinit.model;
 
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.type.Constants;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -74,7 +76,7 @@ public class Game extends GameUpdatable implements Serializable {
 		} else return id.equals(other.id);
 	}
 
-	public Date getExpectedMapTime() {
+	public Date getExpectedMapTime(ServerConfig serverConfig) {
 		if (mapped != null) {
 			return mapped;
 		}
@@ -84,8 +86,8 @@ public class Game extends GameUpdatable implements Serializable {
 		if (isBlitz()) {
 			return startTime;
 		}
-		return new Date(startTime.getTime() - Constants.getMappedToStartedMillis());
-    }
+		return new Date(startTime.getTime() - serverConfig.getMappedToStartedMillis());
+	}
 
 	public void setCreated() {
 		created = new Date();
@@ -169,8 +171,8 @@ public class Game extends GameUpdatable implements Serializable {
 
 
 	@Override
-	public int getUpdatePeriodMilliseconds() {
-		return Constants.TECH_UPDATE_INTERVAL_SECONDS * 1000;
+	public long getUpdatePeriodMilliseconds() {
+		return Constants.TECH_UPDATE_INTERVAL_SECONDS * DateUtils.MILLIS_PER_SECOND;
 	}
 
 	@Override
@@ -255,25 +257,25 @@ public class Game extends GameUpdatable implements Serializable {
 		return mapped != null;
 	}
 
-	public String getExpectedMapTimeString() {
-		Date expectedMapTime = getExpectedMapTime();
+	public String getExpectedMapTimeString(ServerConfig serverConfig) {
+		Date expectedMapTime = getExpectedMapTime(serverConfig);
 		if (expectedMapTime == null) {
 			return "";
 		}
 		return FORMAT.format(expectedMapTime);
 	}
 
-	public String getPlayersString() {
+	public String getPlayersString(ServerConfig serverConfig) {
 		String retval = "";
 		if (islands > 0) {
 			retval = "" + players + "/"
-				+ islands;
+					+ islands;
 		} else if (startTime == null) {
 			retval = "" + players + "/"
-			+ Constants.MIN_PLAYERS_TO_SCHEDULE;
+					+ serverConfig.getMinPlayersToSchedule();
 		} else {
 			retval = "" + players + "/"
-			+ Constants.MAX_PLAYERS_PER_GAME;
+					+ Constants.MAX_PLAYERS_PER_GAME;
 		}
 		retval += " ("+noAlliancesVote+")";
 		return retval;

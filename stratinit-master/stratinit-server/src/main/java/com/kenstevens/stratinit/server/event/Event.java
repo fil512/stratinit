@@ -37,7 +37,7 @@ public abstract class Event {
         this.periodMilliseconds = NO_PERIOD;
     }
 
-    public Event(boolean blitz, Date time, int periodMilliseconds, boolean keyUnique) {
+    public Event(boolean blitz, Date time, long periodMilliseconds, boolean keyUnique) {
         this(time, keyUnique);
         this.periodMilliseconds = UpdateCalculator.shrinkTime(blitz, periodMilliseconds);
     }

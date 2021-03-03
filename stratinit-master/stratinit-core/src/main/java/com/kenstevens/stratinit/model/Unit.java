@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import com.querydsl.core.annotations.QueryInit;
+import org.apache.commons.lang3.time.DateUtils;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -130,8 +131,8 @@ public class Unit extends GameUpdatable {
 	}
 
 	@Override
-	public int getUpdatePeriodMilliseconds() {
-		return Constants.HOURS_BETWEEN_UNIT_UPDATES * 60 * 60 * 1000;
+	public long getUpdatePeriodMilliseconds() {
+		return Constants.HOURS_BETWEEN_UNIT_UPDATES * DateUtils.MILLIS_PER_HOUR;
 	}
 
 	public void setMobility(int mobility) {

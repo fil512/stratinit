@@ -4,10 +4,6 @@ public final class Constants {
 	private Constants() {
 	}
 
-	// FIXME
-//    private static RunMode runMode = RunMode.PRODUCTION;
-	private static RunMode runMode = RunMode.TEST;
-
 	public static final String EMAIL_FROM_ADDRESS = "hq@strategicinitiative.org";
 	public static final String EMAIL_ADMIN_ADDRESS = "ken.stevens@sympatico.ca";
 
@@ -42,19 +38,6 @@ public final class Constants {
 	public static final int TECH_NEXT_BUILD = 2;
 	public static final int MIN_ATTACK = 2;
 	public static final int MAP_EXTRA_SLOTS = 2;
-    public static final int MIN_PLAYERS_TO_SCHEDULE = 4; // hopefully this will
-    // increase over
-    // time
-
-    private static final long SCHEDULED_TO_MAPPED_HOURS = 16;
-    private static final long MAPPED_TO_STARTED_HOURS = 8;
-
-    private static final long SCHEDULED_TO_MAPPED_MILLIS = 1000 * 60 * 60 * SCHEDULED_TO_MAPPED_HOURS;
-    private static final long MAPPED_TO_STARTED_MILLIS = 1000 * 60 * 60 * MAPPED_TO_STARTED_HOURS;
-
-    private static final long scheduledToMappedMillis = SCHEDULED_TO_MAPPED_MILLIS;
-    private static final long mappedToStartedMillis = MAPPED_TO_STARTED_MILLIS;
-    private static final int FLUSH_CACHE_MILLIS = 15 * 60 * 1000;
 
     public static final String DEFAULT_BATTLELOG_FILENAME = "battles.txt";
     public static final int AIRPORT_VIEW_RADIUS = 3;
@@ -92,60 +75,5 @@ public final class Constants {
 	public static final int SHIP_COUNTERFIRE_RANGE = 1;
 	public static final int ESCORT_RADIUS = 2;
 
-	// TEST values
-
-	private static final long SCHEDULED_TO_MAPPED_MILLIS_TEST = 10 * 1000;
-	private static final long MAPPED_TO_STARTED_MILLIS_TEST = 10 * 1000;
-	private static final int FLUSH_CACHE_MILLIS_TEST = 15 * 1000;
-
-	public static long getScheduledToMappedMillis() {
-		if (getRunMode() == RunMode.TEST) {
-			return SCHEDULED_TO_MAPPED_MILLIS_TEST;
-		} else {
-			return scheduledToMappedMillis;
-		}
-	}
-
-	public static long getMappedToStartedMillis() {
-		if (getRunMode() == RunMode.TEST) {
-			return MAPPED_TO_STARTED_MILLIS_TEST;
-		} else {
-			return mappedToStartedMillis;
-		}
-	}
-
-	public static long getScheduledToStartedMillis() {
-		if (getRunMode() == RunMode.TEST) {
-			return SCHEDULED_TO_MAPPED_MILLIS_TEST
-					+ MAPPED_TO_STARTED_MILLIS_TEST;
-		} else {
-			return Constants.scheduledToMappedMillis
-					+ Constants.mappedToStartedMillis;
-		}
-	}
-
-	public static int getFlushCacheMillis() {
-		if (getRunMode() == RunMode.TEST) {
-			return FLUSH_CACHE_MILLIS_TEST;
-		} else {
-			return FLUSH_CACHE_MILLIS;
-		}
-	}
-
-	public static int getMinPlayersToSchedule() {
-		if (getRunMode() == RunMode.TEST) {
-			return 1;
-		} else {
-			return MIN_PLAYERS_TO_SCHEDULE;
-		}
-	}
-
-	public static RunMode getRunMode() {
-		return runMode;
-	}
-
-	public static void setRunMode(RunMode runMode) {
-		Constants.runMode = runMode;
-	}
 
 }

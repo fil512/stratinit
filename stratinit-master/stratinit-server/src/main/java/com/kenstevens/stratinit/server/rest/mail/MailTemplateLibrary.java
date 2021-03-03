@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.rest.mail;
 
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
@@ -25,10 +26,10 @@ public final class MailTemplateLibrary {
                 "\nHydrogen\n");
     }
 
-    public static MailTemplate getGameScheduled(Player player, Game game) {
+    public static MailTemplate getGameScheduled(Player player, Game game, ServerConfig serverConfig) {
         return new MailTemplate(MailTemplateType.GAME_SCHEDULED, "StratInit Game " + game.getGamename() + " Starting Tomorrow", "Dear " + player.getUsername() + ",\n" +
                 "\n" +
-                "Game #" + game.getGamename() + " will be mapped at " + game.getExpectedMapTimeString() + ".  Log in any time after then to set up your country.\n\n" +
+                "Game #" + game.getGamename() + " will be mapped at " + game.getExpectedMapTimeString(serverConfig) + ".  Log in any time after then to set up your country.\n\n" +
                 "The game clock in Game #" + game.getGamename() + " will start ticking at " + game.getStartTimeString() + ".\n" +
                 "\nHydrogen\n");
     }

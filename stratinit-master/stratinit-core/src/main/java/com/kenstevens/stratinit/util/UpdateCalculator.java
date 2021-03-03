@@ -4,8 +4,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class UpdateCalculator {
-	private long periodMillis;
-	public UpdateCalculator(boolean blitz, int periodMillis) {
+	private final long periodMillis;
+
+	public UpdateCalculator(boolean blitz, long periodMillis) {
 		this.periodMillis = shrinkTime(blitz, periodMillis);
 	}
 
@@ -13,7 +14,7 @@ public class UpdateCalculator {
 		long shrunkTime = periodMillis;
 		if (blitz) {
 			// shrink 10 days down to 2 hours
-			int hoursInTenDays = 10*24;
+			int hoursInTenDays = 10 * 24;
 			shrunkTime *= 2;
 			shrunkTime /= hoursInTenDays;
 		}

@@ -1,5 +1,7 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import com.kenstevens.stratinit.config.RunModeEnum;
+import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.helper.GameHelper;
@@ -44,8 +46,10 @@ public class GameDaoStateChangeTest {
 
     private Game game;
 
+    private final ServerConfig serverConfig = new ServerConfig(RunModeEnum.TEST);
+
     @InjectMocks
-    private GameDaoService gameDaoService;
+    private final GameDaoService gameDaoService = new GameDaoService(serverConfig);
 
     @BeforeEach
     public void before() {
@@ -281,21 +285,21 @@ public class GameDaoStateChangeTest {
     @Test
     public void scheduleGameMinPlayersToMap() {
         assertNull(game.getStartTime());
-        prepJoinGame(Constants.MIN_PLAYERS_TO_SCHEDULE);
-        playersJoinGame(game, Constants.MIN_PLAYERS_TO_SCHEDULE);
+        prepJoinGame(serverConfig.getMinPlayersToSchedule());
+        playersJoinGame(game, serverConfig.getMinPlayersToSchedule());
 
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
-        assertEquals(Constants.MIN_PLAYERS_TO_SCHEDULE, game.getPlayers());
+        assertEquals(serverConfig.getMinPlayersToSchedule(), game.getPlayers());
         verify(eventQueue).schedule(game, false);
 
-        verify(mailService, times(Constants.MIN_PLAYERS_TO_SCHEDULE)).sendEmail(any(), any());
+        verify(mailService, times(serverConfig.getMinPlayersToSchedule())).sendEmail(any(), any());
     }
 
     @Test
     // FIXME not confident this is testing what we want to test here
     public void scheduleGameMinPlayersPlusOneToMap() {
-        final int numPlayers = Constants.MIN_PLAYERS_TO_SCHEDULE + 1;
+        final int numPlayers = serverConfig.getMinPlayersToSchedule() + 1;
 
         assertNull(game.getStartTime());
 
