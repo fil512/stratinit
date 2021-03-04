@@ -97,6 +97,7 @@ public class EventSchedulerImpl implements EventScheduler {
         logger.info("All events scheduled.  Server started.");
         serverStatus.setRunning();
         eventTimer.start();
+
     }
 
     private void updateGames() {

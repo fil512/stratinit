@@ -20,7 +20,7 @@ public class GameCreatorTest extends StratInitDaoBase {
     public void createGame() {
         List<Game> games;
         games = gameDao.getAllGames();
-        assertEquals(2, games.size());
+        assertEquals(2, games.size(), "Actual games: " + games);
         assertTrue(games.get(0).isMapped());
         assertFalse(games.get(1).isMapped());
 
