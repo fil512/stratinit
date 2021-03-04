@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.svc;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.model.Nation;
@@ -21,7 +21,7 @@ public class UnitSvc {
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired
-	private GameDao gameDao;
+	private RelationDao relationDao;
 	@Autowired
 	private UnitDaoService unitDaoService;
 
@@ -57,7 +57,7 @@ public class UnitSvc {
 	}
 
 	public List<SIUnit> getSeenUnits(Nation nation) {
-		Collection<Nation> allies = gameDao.getFriendsAndAllies(nation);
+		Collection<Nation> allies = relationDao.getFriendsAndAllies(nation);
 		Set<Unit> units = unitDaoService.getTeamSeenUnits(nation, allies);
 		units.addAll(unitDaoService.getAllyUnits(allies));
 		return unitsToSIUnits(nation, units);

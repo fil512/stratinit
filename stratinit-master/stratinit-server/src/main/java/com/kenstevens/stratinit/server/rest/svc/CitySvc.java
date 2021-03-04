@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.svc;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.model.City;
@@ -21,7 +21,7 @@ public class CitySvc {
 	@Autowired
 	private SectorDao sectorDao;
 	@Autowired
-	private GameDao gameDao;
+	private RelationDao relationDao;
 
 	public List<SICity> getCities(Nation nation) {
 		List<City> cities = sectorDao.getCities(nation);
@@ -46,7 +46,7 @@ public class CitySvc {
 		Set<City> cities = new HashSet<City>();
 		List<City> myCities = sectorDao.getSeenCities(nation);
 		cities.addAll(myCities);
-		Collection<Nation> allies = gameDao.getAllies(nation);
+		Collection<Nation> allies = relationDao.getAllies(nation);
 		for (Nation ally : allies) {
 			List<City> allycities = sectorDao.getSeenCities(ally);
 			cities.addAll(allycities);

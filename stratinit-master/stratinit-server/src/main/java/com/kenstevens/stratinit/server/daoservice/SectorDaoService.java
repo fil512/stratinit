@@ -46,6 +46,8 @@ public class SectorDaoService {
     @Autowired
     private CityBuilderService cityBuilderService;
     @Autowired
+    private RelationDaoService relationDaoService;
+    @Autowired
     private DataCache dataCache;
 
     public void survey(Nation nation) {
@@ -129,7 +131,7 @@ public class SectorDaoService {
         List<Sector> sectors = dataCache.getWorld(nation.getGameId())
                 .getSectorsWithin(coords, distance);
         return getWorldView(nation, sectors, unitDaoService.getTeamUnits(
-                nation, gameDao.getAllies(nation)));
+                nation, relationDaoService.getAllies(nation)));
     }
 
     public WorldView getInterdictionWorldView(Unit unit, Nation nation) {
@@ -148,15 +150,15 @@ public class SectorDaoService {
     public WorldView getSeenWorldView(Nation nation) {
         Collection<Sector> sectors = sectorDao
                 .getNationSectorsSeenSectors(nation);
-        Set<Unit> units = unitDaoService.getTeamUnits(nation, gameDao
+        Set<Unit> units = unitDaoService.getTeamUnits(nation, relationDaoService
                 .getAllies(nation));
         return getWorldView(nation, sectors, units);
     }
 
     private WorldView getWorldView(Nation nation, Collection<Sector> sectors,
                                    Collection<Unit> units) {
-        WorldView worldView = new WorldView(nation, gameDao
-                .getMyRelationsAsMap(nation), gameDao
+        WorldView worldView = new WorldView(nation, relationDaoService
+                .getMyRelationsAsMap(nation), relationDaoService
                 .getTheirRelationTypesAsMap(nation));
         setWorldSectorsFromCities(sectors, worldView);
         if (units != null) {
@@ -390,7 +392,7 @@ public class SectorDaoService {
             CityNukedBattleLog cityNukedBattleLog = new CityNukedBattleLog(
                     attackerUnit, city.getNation(), sector.getCoords());
             if (isInitialAttack) {
-                gameDaoService.setRelation(city.getNation(), attackerUnit
+                relationDaoService.setRelation(city.getNation(), attackerUnit
                         .getNation(), RelationType.WAR, true);
                 retval.add(city.getNation());
             }

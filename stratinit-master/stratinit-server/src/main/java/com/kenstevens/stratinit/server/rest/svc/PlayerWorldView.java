@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.model.Nation;
@@ -21,6 +22,8 @@ public class PlayerWorldView {
 	private SectorDaoService sectorDaoService;
 	@Autowired
 	private GameDao gameDao;
+	@Autowired
+	private RelationDao relationDao;
 
 	public List<SISector> getWorldViewSectors(Nation nation) {
 		WorldSeenMap worldSeenMap = getWorldSeenMap(nation);
@@ -31,7 +34,7 @@ public class PlayerWorldView {
 	public WorldSeenMap getWorldSeenMap(Nation nation) {
 		WorldSeenMap worldSeenMap = new WorldSeenMap(sectorDaoService.getSeenWorldView(nation));
 		worldSeenMap.merge(sectorDao.getSectorsSeen(nation));
-		Collection<Nation> allies = gameDao.getAllies(nation);
+		Collection<Nation> allies = relationDao.getAllies(nation);
 		for (Nation ally : allies) {
 			WorldView allyWorldView = sectorDaoService.getSeenWorldView(ally);
 			Collection<SectorSeen> allySectorsSeen = sectorDao

@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.server.event.svc;
 
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,28 +19,28 @@ public class RelationManager {
     @Autowired
     private EventQueue eventQueue;
     @Autowired
-    private GameDaoService gameDaoService;
+    private RelationDao relationDao;
     @Autowired
-    private GameDao gameDao;
+    private RelationDaoService relationDaoService;
 
     // TODO REF
     public Result<Relation> changeRelation(Relation relation,
                                            RelationType nextType, boolean override) {
-        Relation reverse = gameDao.findRelation(relation.getTo(), relation
+        Relation reverse = relationDao.findRelation(relation.getTo(), relation
                 .getFrom());
 
         if (override) {
             String message = setNextRelationTypeNow(relation, nextType);
-            return new Result<Relation>(message, true, relation);
+            return new Result<>(message, true, relation);
         }
 
         if (nextType == relation.getType()) {
             // No change, but cancel out any next type we might have
             setNextRelationTypeNow(relation, nextType);
-            return new Result<Relation>("Cancelling relation change.", false,
+            return new Result<>("Cancelling relation change.", false,
                     relation);
         } else if (nextType == relation.getNextType()) {
-            return new Result<Relation>("Nothing to change.", false, relation);
+            return new Result<>("Nothing to change.", false, relation);
             // Do nothing. Don't want to stop timer.
         } else {
             return switchRelation(relation, nextType, reverse);
@@ -62,12 +62,12 @@ public class RelationManager {
     private Result<Relation> improveRelations(Relation relation,
                                               RelationType nextType) {
         if (nextType == RelationType.ALLIED && !roomForAllies(relation)) {
-            return new Result<Relation>(roomForAlliesString(relation), false,
+            return new Result<>(roomForAlliesString(relation), false,
                     relation);
         } else {
             // Improving relations
             String message = setNextRelationTypeNow(relation, nextType);
-            return new Result<Relation>(message, true, relation);
+            return new Result<>(message, true, relation);
         }
     }
 
@@ -76,8 +76,8 @@ public class RelationManager {
     }
 
     private String roomForAlliesString(Relation relation) {
-        Collection<Nation> myAllies = gameDao.getMyRelations(relation.getFrom(), RelationType.ALLIED);
-        Collection<Nation> theirAllies = gameDao.getAllies(relation.getTo());
+        Collection<Nation> myAllies = relationDao.getMyRelations(relation.getFrom(), RelationType.ALLIED);
+        Collection<Nation> theirAllies = relationDao.getAllies(relation.getTo());
         if (myAllies.size() >= Constants.MAX_ALLIES) {
             return "You already have an ally";
         } else if (theirAllies.size() > Constants.MAX_ALLIES) {
@@ -97,20 +97,19 @@ public class RelationManager {
                 // Can downgrade from allied to friendly without notice
                 // Can downgrade to match without notice
                 String message = setNextRelationTypeNow(relation, nextType);
-                return new Result<Relation>(message, true, relation);
+                return new Result<>(message, true, relation);
             } else {
                 String message = setNextRelationTypeLater(relation, nextType,
                         Constants.ALLIED_FRIENDLY_CANCEL_TIME_HOURS);
-                return new Result<Relation>(message, true, relation);
+                return new Result<>(message, true, relation);
             }
         } else {
             String message = setNextRelationTypeNow(relation, nextType);
-            return new Result<Relation>(message, true, relation);
+            return new Result<>(message, true, relation);
         }
     }
 
-    private String setNextRelationTypeLater(Relation relation,
-                                            RelationType nextType, int hours) {
+    private String setNextRelationTypeLater(Relation relation, RelationType nextType, int hours) {
         if (relation.getFrom().getGame().isBlitz()) {
             return setNextRelationTypeNow(relation, nextType);
         }
@@ -121,8 +120,8 @@ public class RelationManager {
         eventQueue.schedule(relation);
         RelationChangeAudit relationChangeAudit = new RelationChangeAudit(
                 relation);
-        gameDao.save(relationChangeAudit);
-        gameDao.markCacheModified(relation);
+        relationDao.save(relationChangeAudit);
+        relationDao.markCacheModified(relation);
         return "scheduled relation change with " + relation.getTo() + " to "
                 + nextType + " " + hours + " hours from now.";
     }
@@ -133,7 +132,7 @@ public class RelationManager {
         // TODO REF not necessary to set switch time to null
         relation.setSwitchTime(null);
         eventQueue.cancel(relation);
-        gameDaoService.switchRelation(relation);
+        relationDaoService.switchRelation(relation);
         return "changed relation with " + relation.getTo() + " to " + nextType;
     }
 

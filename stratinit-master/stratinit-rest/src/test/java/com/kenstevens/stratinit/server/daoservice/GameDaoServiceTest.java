@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class GameDaoServiceTest extends BaseStratInitControllerTest {
     @Autowired
@@ -23,6 +24,13 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
     private PlayerDaoService playerDaoService;
 
     // TODO test Constants.MAX_PLAYERS_PER_GAME works
+
+    @Test
+    public void testSave() {
+        Game game = gameDaoService.createGame("testzxc");
+        assertNotNull(game.getCreated());
+        assertEquals("testzxc", game.getGamename());
+    }
 
     @Test
     public void testNoDup() {

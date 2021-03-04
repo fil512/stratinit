@@ -32,6 +32,8 @@ public class IntegrityCheckerService {
     @Autowired
     UnitDaoService unitDaoService;
     @Autowired
+    RelationDaoService relationDaoService;
+    @Autowired
     MessageDaoService messageDaoService;
     @Autowired
     GameDao gameDao;
@@ -73,7 +75,7 @@ public class IntegrityCheckerService {
         Nation firstNation = firstUnit.getNation();
         WorldSector worldSector = sectorDaoService.getAllWorldView(firstNation).getWorldSector(firstUnit);
         Nation worldSectorNation = worldSector.getNation();
-        Collection<Nation> allies = gameDao.getAllies(firstNation);
+        Collection<Nation> allies = relationDaoService.getAllies(firstNation);
         if (worldSectorNation != null && !firstNation.equals(worldSectorNation) && !allies.contains(worldSectorNation)) {
             String message = badSectorMessage(firstUnit, worldSector);
             logger.warn(message);

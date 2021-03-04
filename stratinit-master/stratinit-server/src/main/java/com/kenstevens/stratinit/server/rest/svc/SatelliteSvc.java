@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SILaunchedSatellite;
 import com.kenstevens.stratinit.model.LaunchedSatellite;
@@ -18,11 +18,11 @@ public class SatelliteSvc {
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private GameDao gameDao;
+    private RelationDao relationDao;
 
     public List<SILaunchedSatellite> getLaunchedSatellites(Nation nation) {
         Collection<LaunchedSatellite> sats = Lists.newArrayList(unitDao.getSatellites(nation));
-        for (Nation ally : gameDao.getAllies(nation)) {
+        for (Nation ally : relationDao.getAllies(nation)) {
             sats.addAll(unitDao.getSatellites(ally));
         }
         List<SILaunchedSatellite> retval = new ArrayList<SILaunchedSatellite>();

@@ -19,7 +19,7 @@ public class RelationManagerTest extends TwoPlayerBase {
     protected void changedTo(RelationType nextType) {
         Result<SIRelation> result = setRelation(nationThemId, nextType);
         assertResult(result);
-        Relation relation = gameDao.findRelation(nationMe, nationThem);
+        Relation relation = relationDao.findRelation(nationMe, nationThem);
         assertEquals(nextType, relation.getType(), result.toString());
         assertNull(relation.getNextType());
         assertNull(relation.getSwitchTime());
@@ -27,11 +27,11 @@ public class RelationManagerTest extends TwoPlayerBase {
     }
 
     protected void changedToDelayed(RelationType nextType) {
-        Relation relation = gameDao.findRelation(nationMe, nationThem);
+        Relation relation = relationDao.findRelation(nationMe, nationThem);
         RelationType pre = relation.getType();
         Result<SIRelation> result = setRelation(nationThemId, nextType);
         assertResult(result);
-        relation = gameDao.findRelation(nationMe, nationThem);
+        relation = relationDao.findRelation(nationMe, nationThem);
         assertEquals(pre, relation.getType(), result.toString());
         assertEquals(nextType, relation.getNextType(), result.toString());
         assertNotNull(relation.getSwitchTime());

@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
@@ -15,11 +15,11 @@ import java.util.Map;
 @Service
 public class RelationSvc {
     @Autowired
-    private GameDao gameDao;
+    private RelationDao relationDao;
 
     public List<SIRelation> getRelations(Nation nation) {
-        Collection<Relation> relations = gameDao.getMyRelations(nation);
-        Map<Nation, Relation> map = gameDao.getTheirRelationsAsMap(nation);
+        Collection<Relation> relations = relationDao.getMyRelations(nation);
+        Map<Nation, Relation> map = relationDao.getTheirRelationsAsMap(nation);
         List<SIRelation> retval = new ArrayList<SIRelation>();
         for (Relation relation : relations) {
             // TODO REF

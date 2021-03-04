@@ -44,6 +44,8 @@ public class GameDaoStateChangeTest {
     private GameDao gameDao;
     @Mock
     private GameCreator gameCreator;
+    @Mock
+    private RelationDaoService relationDaoService;
 
     private Game game;
 
@@ -62,8 +64,6 @@ public class GameDaoStateChangeTest {
         Game game = gameDaoService.createGame("test");
         assertNotNull(game);
         assertTrue(game.isEnabled());
-// FIXME ensure this is tested elsewhere
-        //        assertNotNull(game.getCreated());
         assertNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(0, game.getPlayers());

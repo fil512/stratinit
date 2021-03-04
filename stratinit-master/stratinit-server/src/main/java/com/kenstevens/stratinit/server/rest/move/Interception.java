@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest.move;
 
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.model.AttackType;
@@ -39,6 +40,8 @@ public class Interception {
 	@Autowired
 	private GameDao gameDao;
 	@Autowired
+	private RelationDao relationDao;
+	@Autowired
 	private SectorDao sectorDao;
 	@Autowired
 	private SectorDaoService sectorDaoService;
@@ -59,7 +62,7 @@ public class Interception {
 		Result<None> retval = Result.trueInstance();
 		Collection<Nation> nations = sectorDao
 				.getOtherNationsThatSeeThisSector(enemyNation, targetCoords);
-		Map<Nation, RelationType> theirRelations = gameDao
+		Map<Nation, RelationType> theirRelations = relationDao
 				.getTheirRelationTypesAsMap(enemyNation);
 		for (Nation nation : nations) {
 			if (!AttackHelper.canAttack(AttackType.INTERCEPTION,

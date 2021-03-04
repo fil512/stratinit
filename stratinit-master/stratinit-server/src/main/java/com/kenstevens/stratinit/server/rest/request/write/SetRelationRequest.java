@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 	private final RelationType relationType;
 	@Autowired
 	private GameDao gameDao;
+	@Autowired
+	private RelationDaoService relationDaoService;
 
 	public SetRelationRequest(int nationId, RelationType relationType) {
 		this.nationId = nationId;
@@ -47,12 +50,12 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 						"Alliances are not allowed in this game.", false);
 			}
 		}
-		Result<Relation> result = gameDaoService.setRelation(nation, target,
+		Result<Relation> result = relationDaoService.setRelation(nation, target,
 				relationType, false);
 		// TODO REF
-		Map<Nation, Relation> map = gameDao.getTheirRelationsAsMap(nation);
+		Map<Nation, Relation> map = relationDaoService.getTheirRelationsAsMap(nation);
 		Relation themToMe = map.get(target);
-		return new Result<SIRelation>(result.getMessages(), result.isSuccess(),
+		return new Result<>(result.getMessages(), result.isSuccess(),
 				new SIRelation(result.getValue(), themToMe));
 	}
 

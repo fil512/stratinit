@@ -11,6 +11,7 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
+import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
@@ -25,41 +26,43 @@ import java.util.List;
 @Component
 public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
 	@Autowired
-	private UnitDaoService unitDaoService;
-	@Autowired
-	private UnitDao unitDao;
-	@Autowired
-	private SectorDao sectorDao;
-	@Autowired
-	private SectorDaoService sectorDaoService;
-	@Autowired
-	private MessageDaoService messageDaoService;
-	@Autowired
-	private GameDao gameDao;
-	@Autowired
-	private PlayerWorldViewUpdate playerWorldViewUpdate;
+    private UnitDaoService unitDaoService;
+    @Autowired
+    private UnitDao unitDao;
+    @Autowired
+    private SectorDao sectorDao;
+    @Autowired
+    private SectorDaoService sectorDaoService;
+    @Autowired
+    private MessageDaoService messageDaoService;
+    @Autowired
+    private RelationDaoService relationDaoService;
+    @Autowired
+    private GameDao gameDao;
+    @Autowired
+    private PlayerWorldViewUpdate playerWorldViewUpdate;
 
-	public ConcedeRequest() {
-	}
+    public ConcedeRequest() {
+    }
 
-	@Override
-	protected Result<SIUpdate> executeWrite() {
-		Nation nation = getNation();
+    @Override
+    protected Result<SIUpdate> executeWrite() {
+        Nation nation = getNation();
 
-		List<City> cities = Lists.newArrayList(sectorDao.getCities(nation));
-		List<Unit> units = Lists.newArrayList(unitDao.getUnits(nation));
+        List<City> cities = Lists.newArrayList(sectorDao.getCities(nation));
+        List<Unit> units = Lists.newArrayList(unitDao.getUnits(nation));
 
-		Collection<Nation> allies = gameDao.getAllies(nation);
-		Nation ally = null;
-		int allyCityCount = 0;
-		if (allies.size() > 0) {
-			ally = allies.iterator().next();
-			allyCityCount = sectorDao.getNumberOfCities(ally);
-		}
+        Collection<Nation> allies = relationDaoService.getAllies(nation);
+        Nation ally = null;
+        int allyCityCount = 0;
+        if (allies.size() > 0) {
+            ally = allies.iterator().next();
+            allyCityCount = sectorDao.getNumberOfCities(ally);
+        }
 
-		Result<None> result = Result.trueInstance();
-		if (ally != null && allyCityCount > 0) {
-			for (Unit unit : units) {
+        Result<None> result = Result.trueInstance();
+        if (ally != null && allyCityCount > 0) {
+            for (Unit unit : units) {
 				result.or(unitDaoService.cedeUnit(unit, ally));
 			}
 			for (City city : cities) {

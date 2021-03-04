@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.event.svc;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.event.EventScheduler;
@@ -36,6 +37,8 @@ public class EventSchedulerImpl implements EventScheduler {
     private UnitDaoService unitDaoService;
     @Autowired
     private SectorDaoService sectorDaoService;
+    @Autowired
+    RelationDao relationDao;
     @Autowired
     private UnitDao unitDao;
     @Autowired
@@ -192,7 +195,7 @@ public class EventSchedulerImpl implements EventScheduler {
     }
 
     private void updateRelations(Game game) {
-        Collection<Relation> relations = gameDao.getAllChangingRelations(game);
+        Collection<Relation> relations = relationDao.getAllChangingRelations(game);
         logger.info("Updating " + relations.size() + " relations");
         for (Relation relation : relations) {
             eventQueue.schedule(relation);

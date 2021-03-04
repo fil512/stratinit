@@ -5,6 +5,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
@@ -28,12 +29,14 @@ public class NationSvc {
     @Autowired
     private GameDao gameDao;
     @Autowired
+    private RelationDao relationDao;
+    @Autowired
     private UnitDaoService unitDaoService;
 
     public List<SINation> getNations(final Nation me, final boolean includePower) {
         List<Nation> nations = dataCache.getGameCache(me.getGameId())
                 .getNations();
-        Collection<Nation> allies = gameDao.getAllies(me);
+        Collection<Nation> allies = relationDao.getAllies(me);
         return nationsToSINations(me, includePower, nations, allies);
     }
 

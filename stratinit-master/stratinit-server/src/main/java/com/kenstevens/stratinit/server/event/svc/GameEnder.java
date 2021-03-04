@@ -1,17 +1,14 @@
 package com.kenstevens.stratinit.server.event.svc;
 
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.model.City;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.daoservice.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +26,11 @@ public class GameEnder {
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
+    private RelationDaoService relationDaoService;
+    @Autowired
     private UnitDao unitDao;
     @Autowired
-    private GameDao gameDao;
+    private RelationDao relationDao;
 
     @Autowired
     private LogDaoService logDaoService;
@@ -63,8 +62,8 @@ public class GameEnder {
 
 
     private void removeRelations(Game game) {
-        for (Relation relation : Lists.newArrayList(gameDao.getRelations(game))) {
-            gameDaoService.remove(relation);
+        for (Relation relation : Lists.newArrayList(relationDao.getRelations(game))) {
+            relationDaoService.remove(relation);
         }
     }
 

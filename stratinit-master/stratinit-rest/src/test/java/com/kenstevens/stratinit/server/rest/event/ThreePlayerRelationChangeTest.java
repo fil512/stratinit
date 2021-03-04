@@ -41,7 +41,7 @@ public class ThreePlayerRelationChangeTest extends ThreeRelationManagerTest {
     public void noDoubleAlly() {
         declareAlliance();
         allianceDeclared();
-        Result<Relation> result = gameDaoService.setRelation(nationMe, nationThird, RelationType.ALLIED, false);
+        Result<Relation> result = relationDaoService.setRelation(nationMe, nationThird, RelationType.ALLIED, false);
         assertFalseResult(result);
         assertEquals("You already have an ally", result.toString());
     }
@@ -50,7 +50,7 @@ public class ThreePlayerRelationChangeTest extends ThreeRelationManagerTest {
     @Test
     public void noDoubleUnrequiredAlly() {
         declareAlliance();
-        Result<Relation> result = gameDaoService.setRelation(nationMe, nationThird, RelationType.ALLIED, false);
+        Result<Relation> result = relationDaoService.setRelation(nationMe, nationThird, RelationType.ALLIED, false);
         assertFalseResult(result);
         assertEquals("You already have an ally", result.toString());
     }

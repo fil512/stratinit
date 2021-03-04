@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.rest.move;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Nation;
@@ -30,6 +31,8 @@ public class Interdiction {
     @Autowired
     private GameDao gameDao;
     @Autowired
+    private RelationDao relationDao;
+    @Autowired
     private SectorDaoService sectorDaoService;
     @Autowired
     private UnitMoveFactory unitMoveFactory;
@@ -46,7 +49,7 @@ public class Interdiction {
         Result<None> retval = Result.trueInstance();
         Collection<Nation> nations = unitDao
                 .getOtherNationsThatSeeThisUnit(targetUnit);
-        Map<Nation, RelationType> theirRelations = gameDao
+        Map<Nation, RelationType> theirRelations = relationDao
                 .getTheirRelationTypesAsMap(targetUnit.getNation());
         nationsInterdict(retval, nations, theirRelations);
         return retval;

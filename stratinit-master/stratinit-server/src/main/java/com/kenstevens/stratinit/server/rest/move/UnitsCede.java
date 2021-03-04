@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest.move;
 
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Relation;
@@ -30,6 +31,8 @@ public class UnitsCede {
     private final WorldView worldView;
     @Autowired
     private GameDao gameDao;
+    @Autowired
+    private RelationDao relationDao;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
     @Autowired
@@ -101,8 +104,8 @@ public class UnitsCede {
     }
 
     private boolean checkAllied(Nation target) {
-        Relation relation = gameDao.findRelation(nation, target);
-        Relation reverse = gameDao.findRelation(target, nation);
+        Relation relation = relationDao.findRelation(nation, target);
+        Relation reverse = relationDao.findRelation(target, nation);
         return relation.getType() == RelationType.ALLIED && reverse.getType() == RelationType.ALLIED;
     }
 }

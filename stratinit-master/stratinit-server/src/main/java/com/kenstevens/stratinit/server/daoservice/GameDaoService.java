@@ -6,15 +6,15 @@ import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.*;
-import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
+import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.model.World;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
-import com.kenstevens.stratinit.server.event.svc.RelationManager;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.util.GameScheduleHelper;
 import com.kenstevens.stratinit.world.GameSizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +32,13 @@ public class GameDaoService {
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private RelationDaoService relationDaoService;
     @Autowired
     private SectorDaoService sectorDaoService;
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
     private EventQueue eventQueue;
-    @Autowired
-    private RelationManager relationManager;
     @Autowired
     private TeamCalculator teamCalculator;
     @Autowired
@@ -147,7 +145,7 @@ public class GameDaoService {
         gameDao.save(nation);
         calculateAllianceVote(game);
         gameDao.merge(game);
-        setRelations(nation);
+        relationDaoService.setRelations(nation);
         if (game.isMapped()) {
             worldManager.addPlayerToMap(nationId, nation);
         } else if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule()) {
@@ -166,20 +164,6 @@ public class GameDaoService {
         game.setNoAlliancesVote(noAlliancesVote);
     }
 
-    private void setRelations(Nation me) {
-        List<Nation> nations = gameDao.getNations(me.getGame());
-        for (Nation nation : nations) {
-            Relation relation = new Relation(me, nation);
-            if (nation.equals(me)) {
-                relation.setType(RelationType.ME);
-            }
-            gameDao.save(relation);
-            if (!nation.equals(me)) {
-                relation = new Relation(nation, me);
-                gameDao.save(relation);
-            }
-        }
-    }
 
     private World createWorld(Game game) {
         return worldManager.build(game);
@@ -197,114 +181,6 @@ public class GameDaoService {
         gameDao.removeGame(gameId);
     }
 
-    public Result<Relation> setRelation(Nation nation, Nation target,
-                                        RelationType newRelation, boolean override) {
-        if (nation.equals(target)) {
-            return new Result<>(
-                    "You can't change relations with yourself", false);
-        }
-        Relation relation = gameDao.findRelation(nation, target);
-        if (newRelation == relation.getType()) {
-            return new Result<>("Nothing to change.", false, relation);
-        }
-        Result<Relation> result = relationManager.changeRelation(relation,
-                newRelation, override);
-        if (result.isSuccess()) {
-            messageDaoService.notify(target, nation.toString()
-                    + " diplomatic update: " + newRelation, nation.toString()
-                    + " " + result);
-        }
-
-        return result;
-    }
-
-    public void switchRelation(RelationPK relationPK) {
-        Relation relation = gameDao.findRelation(relationPK);
-        switchRelation(relation);
-    }
-
-    public void switchRelation(Relation relationToSwitch) {
-        Relation relation = gameDao.findRelation(relationToSwitch
-                .getRelationPK());
-        Relation reverse = gameDao.getReverse(relation);
-        if (relation.getNextType() == null) {
-            // Race condition
-            return;
-        }
-        moveRelationForward(relation);
-        gameDao.markCacheModified(relation);
-        // If the reverse relation is better than me, then degrade it down to
-        // me.
-        RelationType type = relation.getType();
-        if (reverse.getType().compareTo(type) > 0) {
-            changeRelation(reverse, type);
-        }
-
-        if (type.compareTo(RelationType.NEUTRAL) < 0) {
-            degradeAllyRelations(relation);
-        } else if (type == RelationType.ALLIED) {
-            // thirdThemWarThirdMeFriendIAllyThemShouldSwitchThirdNeutralToMe
-            ifXatWarWithThemAndXFriendlyWithMeDropXToNeutralWithMe(relation);
-        }
-    }
-
-    private void ifXatWarWithThemAndXFriendlyWithMeDropXToNeutralWithMe(
-            Relation relation) {
-        Nation me = relation.getFrom();
-        Nation them = relation.getTo();
-        for (Nation x : gameDao.getNations(relation.getGame())) {
-            Relation xToThem = gameDao.findRelation(x, them);
-            if (xToThem.getType() != RelationType.WAR) {
-                continue;
-            }
-            // x is at war with them
-            Relation xToMe = gameDao.findRelation(x, me);
-            if (xToMe.getType().compareTo(RelationType.NEUTRAL) > 0) {
-                changeRelation(xToMe, RelationType.NEUTRAL);
-            }
-        }
-    }
-
-    private void changeRelation(Relation relation, RelationType type) {
-        relation.setNextType(type);
-        moveRelationForward(relation);
-        gameDao.markCacheModified(relation);
-        eventQueue.cancel(relation);
-    }
-
-    private void degradeAllyRelations(Relation relation) {
-        Nation me = relation.getFrom();
-        Nation targetNation = relation.getTo();
-        for (Nation ally : gameDao.getAllies(targetNation)) {
-            Relation allyRelation = gameDao.findRelation(me, ally);
-            if (allyRelation.getType().compareTo(RelationType.NEUTRAL) > 0) {
-                changeRelation(allyRelation, RelationType.NEUTRAL);
-            }
-            Relation allyReverse = gameDao.findRelation(ally, me);
-            if (allyReverse.getType().compareTo(RelationType.NEUTRAL) > 0) {
-                changeRelation(allyReverse, RelationType.NEUTRAL);
-            }
-        }
-    }
-
-    private void moveRelationForward(Relation relation) {
-        RelationChangeAudit relationChangeAudit = new RelationChangeAudit(
-                relation);
-        gameDao.save(relationChangeAudit);
-        relation.setType(relation.getNextType());
-        relation.setNextType(null);
-        relation.setSwitchTime(null);
-        if (relation.getType() == RelationType.ALLIED) {
-            Relation reverse = gameDao.getReverse(relation);
-            if (reverse.getType() == RelationType.ALLIED) {
-                messageDaoService.postBulletin(relation.getGame(), relation
-                        .getFrom()
-                        + " and "
-                        + relation.getTo()
-                        + " have formed an alliance", null);
-            }
-        }
-    }
 
     private void updateTech(Game game, Date lastUpdated) {
         List<Nation> nations = gameDao.getNations(game);
@@ -320,7 +196,7 @@ public class GameDaoService {
         if (techCentres >= Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length) {
             techCentres = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length - 1;
         }
-        double allyTech = getMaxTech(gameDao.getAllies(nation));
+        double allyTech = getMaxTech(relationDaoService.getAllies(nation));
         double nationTech = nation.getTech();
         double otherTechBleed = (maxTech - nationTech)
                 / Constants.OTHER_TECH_BLEED;
@@ -410,7 +286,7 @@ public class GameDaoService {
             if (score.get(nation) != null) {
                 continue;
             }
-            Collection<Nation> allies = gameDao.getAllies(nation);
+            Collection<Nation> allies = relationDaoService.getAllies(nation);
             int cities = 0;
             cities += sectorDao.getNumberOfCities(nation);
             for (Nation ally : allies) {
@@ -438,12 +314,6 @@ public class GameDaoService {
     public void merge(Nation nation) {
         gameDao.markCacheModified(nation);
     }
-
-    public void remove(Relation relation) {
-        eventQueue.cancel(relation);
-        gameDao.remove(relation);
-    }
-
 
     public void updateGame(Game game, Date lastUpdated) {
         updateCommandPoints(game);

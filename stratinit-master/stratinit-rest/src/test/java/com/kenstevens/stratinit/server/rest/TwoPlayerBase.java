@@ -32,15 +32,15 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
     }
 
     private void setMyRelation(RelationType relationType) {
-        Relation relation = gameDao.findRelation(nationMe, nationThem);
+        Relation relation = relationDao.findRelation(nationMe, nationThem);
         relation.setNextType(relationType);
-        gameDaoService.switchRelation(relation);
+        relationDaoService.switchRelation(relation);
     }
 
     private void setTheirRelation(RelationType relationType) {
-        Relation relation = gameDao.findRelation(nationThem, nationMe);
+        Relation relation = relationDao.findRelation(nationThem, nationMe);
         relation.setType(relationType);
-        gameDao.save(relation);
+        relationDao.save(relation);
     }
 
     final protected void declareWar() {

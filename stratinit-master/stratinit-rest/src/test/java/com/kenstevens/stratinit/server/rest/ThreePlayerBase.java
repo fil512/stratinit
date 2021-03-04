@@ -29,27 +29,27 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     }
 
     private void setMyRelationToThird(RelationType relationType) {
-        Relation relation = gameDao.findRelation(nationMe, nationThird);
+        Relation relation = relationDao.findRelation(nationMe, nationThird);
         relation.setNextType(relationType);
-        gameDaoService.switchRelation(relation);
+        relationDaoService.switchRelation(relation);
     }
 
     private void setThirdRelationToMe(RelationType relationType) {
-        Relation relation = gameDao.findRelation(nationThird, nationMe);
+        Relation relation = relationDao.findRelation(nationThird, nationMe);
         relation.setType(relationType);
-        gameDao.save(relation);
+        relationDao.save(relation);
     }
 
     private void setThemRelationToThird(RelationType relationType) {
-        Relation relation = gameDao.findRelation(nationThem, nationThird);
+        Relation relation = relationDao.findRelation(nationThem, nationThird);
         relation.setNextType(relationType);
-        gameDaoService.switchRelation(relation);
+        relationDaoService.switchRelation(relation);
     }
 
     private void setThirdRelationToThem(RelationType relationType) {
-        Relation relation = gameDao.findRelation(nationThird, nationThem);
+        Relation relation = relationDao.findRelation(nationThird, nationThem);
         relation.setType(relationType);
-        gameDao.save(relation);
+        relationDao.save(relation);
     }
 
     protected void declareWarOnThird() {
@@ -58,10 +58,6 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
 
     protected void declareFriendlyToThird() {
         setMyRelationToThird(RelationType.FRIENDLY);
-    }
-
-    protected void declareAllianceWithThird() {
-        setMyRelationToThird(RelationType.ALLIED);
     }
 
     protected void themThirdAlly() {
@@ -80,9 +76,5 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
 
     protected void friendlyDeclaredByThird() {
         setThirdRelationToMe(RelationType.FRIENDLY);
-    }
-
-    protected void allianceDeclaredByThird() {
-        setThirdRelationToMe(RelationType.ALLIED);
     }
 }

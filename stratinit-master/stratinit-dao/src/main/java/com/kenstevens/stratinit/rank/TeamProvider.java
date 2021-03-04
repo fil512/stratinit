@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.rank;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
@@ -23,11 +24,13 @@ public class TeamProvider implements ITeamProvider {
     @Autowired
     GameDao gameDao;
     @Autowired
+    RelationDao relationDao;
+    @Autowired
     SectorDao sectorDao;
 
     @Override
     public Collection<Nation> getAllies(Nation nation) {
-        return gameDao.getAllies(nation);
+        return relationDao.getAllies(nation);
     }
 
     @Override
