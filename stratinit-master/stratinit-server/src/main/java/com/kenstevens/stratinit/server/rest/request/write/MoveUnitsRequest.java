@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MoveService;
-import com.kenstevens.stratinit.server.rest.helper.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;

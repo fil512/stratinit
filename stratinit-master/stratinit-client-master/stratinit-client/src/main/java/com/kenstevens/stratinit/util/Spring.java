@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-// FIXME remove this class
+// FIXME remove this class (maybe)
 public class Spring {
 	@Autowired
 	private ApplicationContext context;

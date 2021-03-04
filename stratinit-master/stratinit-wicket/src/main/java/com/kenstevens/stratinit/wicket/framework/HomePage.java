@@ -7,7 +7,6 @@ import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
-// FIXME separate web app from rest endpoint.  those should be two independent boot apps on different ports.  then add swagger to the rest one
 @WicketHomePage
 public class HomePage extends AuthenticatedPage {
 	private static final long serialVersionUID = 1L;

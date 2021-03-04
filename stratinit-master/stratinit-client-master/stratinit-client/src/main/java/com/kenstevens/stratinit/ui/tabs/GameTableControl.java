@@ -20,7 +20,6 @@ import javax.annotation.PostConstruct;
 public class GameTableControl {
 	@Autowired
 	private StratinitEventBus eventBus;
-	// FIXME pull this from rest call to server config
 	@Autowired
 	private IServerConfig serverConfig;
 

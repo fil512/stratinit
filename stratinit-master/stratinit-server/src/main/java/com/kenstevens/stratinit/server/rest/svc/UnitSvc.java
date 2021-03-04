@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.rest.helper;
+package com.kenstevens.stratinit.server.rest.svc;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class PlayerUnitList {
+public class UnitSvc {
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired

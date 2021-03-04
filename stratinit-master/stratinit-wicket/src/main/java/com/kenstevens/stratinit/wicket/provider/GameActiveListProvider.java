@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.rest.helper.NationSvc;
+import com.kenstevens.stratinit.server.rest.svc.NationSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

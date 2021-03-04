@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.rest.request;
 
 import com.kenstevens.stratinit.dao.MessageDao;
 import com.kenstevens.stratinit.dto.SIMessage;
-import com.kenstevens.stratinit.server.rest.helper.PlayerMessageList;
+import com.kenstevens.stratinit.server.rest.svc.PlayerMessageList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

@@ -31,10 +31,4 @@ public abstract class GetAction<T extends Command<?>> extends Action<T> {
 	public boolean canRepeat() {
 		return false;
 	}
-
-	// FIXME remove
-	@Override
-	protected T buildCommand() {
-		throw new UnsupportedOperationException();
-	}
 }

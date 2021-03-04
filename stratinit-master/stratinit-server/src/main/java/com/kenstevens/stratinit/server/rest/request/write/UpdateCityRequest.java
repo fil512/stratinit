@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.request.write;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
-import com.kenstevens.stratinit.server.rest.helper.CityUpdater;
+import com.kenstevens.stratinit.server.rest.svc.CityUpdater;
 import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.helper.*;
 import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.server.rest.svc.NewsLogBuilder;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.UnitType;

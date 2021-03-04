@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
-// FIXME Post Commands should know their input and output types
 public class SetGameCommand extends PostCommand<None, SetGameJson> {
 	public SetGameCommand(SetGameJson request) {
 		super(request);

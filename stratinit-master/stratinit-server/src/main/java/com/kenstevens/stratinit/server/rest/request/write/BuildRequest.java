@@ -9,8 +9,8 @@ import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.rest.helper.PlayerUnitList;
-import com.kenstevens.stratinit.server.rest.helper.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.server.rest.svc.UnitSvc;
 import com.kenstevens.stratinit.type.UnitType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
     @Autowired
-    private PlayerUnitList playerUnitList;
+    private UnitSvc unitSvc;
 
     public BuildRequest(List<SIUnit> siunits) {
         this.siunits = siunits;
@@ -37,7 +37,7 @@ public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
         Nation nation = getNation();
         Result<None> result = Result.falseInstance();
         boolean tried = false;
-        List<Unit> units = playerUnitList.siunitToUnit(siunits);
+        List<Unit> units = unitSvc.siunitToUnit(siunits);
         for (Unit unit : units) {
             if (canBuild(unit)) {
                 tried = true;

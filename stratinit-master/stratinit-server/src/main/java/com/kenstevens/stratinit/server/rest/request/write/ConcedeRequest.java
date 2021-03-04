@@ -13,7 +13,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
-import com.kenstevens.stratinit.server.rest.helper.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

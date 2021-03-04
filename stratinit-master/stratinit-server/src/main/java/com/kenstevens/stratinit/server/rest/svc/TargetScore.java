@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.rest.helper;
+package com.kenstevens.stratinit.server.rest.svc;
 
 import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.model.Nation;

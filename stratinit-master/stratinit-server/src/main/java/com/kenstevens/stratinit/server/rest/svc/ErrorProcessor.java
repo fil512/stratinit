@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.rest.helper;
+package com.kenstevens.stratinit.server.rest.svc;
 
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;

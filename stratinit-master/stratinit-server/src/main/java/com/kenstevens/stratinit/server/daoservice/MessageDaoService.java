@@ -6,9 +6,9 @@ import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.model.Game;
 import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.server.rest.helper.NewsLogBuilder;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
+import com.kenstevens.stratinit.server.rest.svc.NewsLogBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

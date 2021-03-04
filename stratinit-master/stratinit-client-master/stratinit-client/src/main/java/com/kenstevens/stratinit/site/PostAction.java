@@ -32,7 +32,7 @@ public abstract class PostAction<T extends Command<?>> extends Action<T> {
         return true;
     }
 
-    // FIXME remove
+    // FIXME remove once all post actions have been converted to use this subclass
     @Override
     protected T buildCommand() {
         throw new UnsupportedOperationException();

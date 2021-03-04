@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.model.Nation;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.rest.helper.NationSvc;
+import com.kenstevens.stratinit.server.rest.svc.NationSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

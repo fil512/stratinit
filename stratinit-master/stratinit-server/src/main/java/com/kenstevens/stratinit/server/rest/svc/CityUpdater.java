@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.rest.helper;
+package com.kenstevens.stratinit.server.rest.svc;
 
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dto.SICity;
@@ -22,7 +22,7 @@ public class CityUpdater {
 	@Autowired
 	private SectorDaoService sectorDaoService;
 	@Autowired
-	private PlayerCityList playerCityList;
+	private CitySvc citySvc;
 	@Autowired
 	private DataCache dataCache;
 
@@ -44,7 +44,7 @@ public class CityUpdater {
 		Result<City> cityResult = updateCity(nation, field, sicity);
 
 		return new Result<SICity>(cityResult.getMessages(), true,
-				playerCityList.cityToSICity(nation, cityResult.getValue()));
+				citySvc.cityToSICity(nation, cityResult.getValue()));
 	}
 
 	private Result<SICity> checkBuild(Nation nation, SICity sicity, SectorCoords coords) {

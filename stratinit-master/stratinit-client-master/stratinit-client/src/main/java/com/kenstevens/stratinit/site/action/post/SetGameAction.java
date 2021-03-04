@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
-// FIXME parameterize by request type
 public class SetGameAction extends PostAction<SetGameCommand> {
 	public SetGameAction(SetGameJson request) {
 		super(new SetGameCommand(request));

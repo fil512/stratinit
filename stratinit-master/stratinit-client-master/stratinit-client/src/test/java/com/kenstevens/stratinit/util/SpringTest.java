@@ -19,7 +19,6 @@ public class SpringTest extends BaseStratInitClientTest {
         Mail mail = new Mail();
         SendMessageCommand sendMessageCommand = new SendMessageCommand(
                 mail);
-        // FIXME get rid of these reflection utils
         assertNull(ReflectionTestUtils.getField(sendMessageCommand,
                 "statusReporter"));
         spring.autowire(sendMessageCommand);
