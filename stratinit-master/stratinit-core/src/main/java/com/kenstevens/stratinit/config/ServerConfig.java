@@ -20,8 +20,6 @@ public class ServerConfig implements IServerConfig {
     private final RunModeEnum runModeEnum;
 
     public ServerConfig(RunModeEnum runModeEnum) {
-        // FIXME pull this back with server config
-        // FIXME in stratinit-core we added a bunch of long parameters.  Change those back to server config parameters.  Ideally move those out of those classes,
         this.runModeEnum = runModeEnum;
     }
 

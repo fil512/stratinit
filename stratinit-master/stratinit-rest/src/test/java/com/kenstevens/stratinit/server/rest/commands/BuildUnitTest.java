@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.server.rest.commands;
 
+import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
-import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;

@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     <description>The client for playing the online strategy game Strategic Initiative</description>
     <url>${jnlp.url}</url>
-    <!-- FIXME remove these properties -->
+    <!-- TODO RELEASE remove these properties -->
     <properties>
         <swt.artifactId>swt-win32-win32-x86_64</swt.artifactId>
         <jnlp.url>http://www.strategicinitiative.org/client</jnlp.url>
@@ -50,7 +50,7 @@
             <groupId>org.eclipse</groupId>
             <artifactId>${swt.artifactId}</artifactId>
             <version>${swt.version}</version>
-            <!-- FIXME restore
+            <!-- TODO RELEASE restore
             <scope>provided</scope>
             -->
         </dependency>

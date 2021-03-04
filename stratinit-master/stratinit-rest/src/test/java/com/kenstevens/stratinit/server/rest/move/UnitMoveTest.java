@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.server.rest.move;
 
+import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.model.MoveCost;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;

@@ -36,6 +36,7 @@ public class GameDao extends CacheDao {
         return gameCache.getGame();
     }
 
+    // FIXME pull nation methods out into its own dao
     public Nation findNation(Game game, Player player) {
         return findNation(game.getId(), player);
     }

@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.server.rest.move;
 
+import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.model.AttackType;
 import com.kenstevens.stratinit.model.Unit;
 import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;

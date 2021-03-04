@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.daoservice;
 
+import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.model.Player;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.rest.BaseStratInitControllerTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,8 @@
 package com.kenstevens.stratinit.rest;
 
 public class SIRestPaths {
+    public static final String BASE_PATH = "/stratinit";
+
     public static final String VERSION = "/version";
     public static final String SERVER_CONFIG = "/serverConfig";
     // FIXME collapse into one /game call with a parameter
