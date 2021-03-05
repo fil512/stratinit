@@ -35,7 +35,7 @@ public class GetGamesTest extends BaseStratInitControllerTest {
         List<SIGame> games = result.getValue();
         assertEquals(testGame.getId(), Integer.valueOf(testGameId));
         assertFalse(games.isEmpty());
-        assertEquals(testGame.getId(), Integer.valueOf(games.get(games.size() - 1).id));
+        assertEquals(testGame.getId(), Integer.valueOf(games.get(games.size() - 2).id));
     }
 
     @Test
