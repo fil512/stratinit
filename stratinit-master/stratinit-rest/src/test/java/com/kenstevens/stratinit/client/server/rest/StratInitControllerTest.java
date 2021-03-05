@@ -30,4 +30,5 @@ public class StratInitControllerTest extends StratInitDaoBase {
         Properties props = result.getValue();
         assertEquals("" + Constants.MAX_PLAYERS_PER_GAME, props.get("MAX_PLAYERS_PER_GAME"));
     }
+
 }

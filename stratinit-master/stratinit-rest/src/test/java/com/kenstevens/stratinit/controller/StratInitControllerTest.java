@@ -2,9 +2,14 @@ package com.kenstevens.stratinit.controller;
 
 import com.kenstevens.stratinit.client.model.PlayerRole;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
+import com.kenstevens.stratinit.client.server.rest.request.GetCitiesRequest;
+import com.kenstevens.stratinit.client.server.rest.request.GetSeenCitiesRequest;
+import com.kenstevens.stratinit.client.server.rest.request.PlayerRequest;
 import com.kenstevens.stratinit.client.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.client.server.rest.request.write.GetBattleLogRequest;
 import com.kenstevens.stratinit.client.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.config.IServerConfig;
+import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.type.Constants;
 import org.junit.jupiter.api.Test;
@@ -23,9 +28,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(StratInitController.class)
+@WebMvcTest
 class StratInitControllerTest {
     private static final String HAPPY_USER = "happy";
     private static final String HAPPY_USER_PASSWORD = "days";
@@ -60,11 +68,45 @@ class StratInitControllerTest {
 
     @Test
     @WithUserDetails(HAPPY_USER)
-    public void versionOk() throws Exception {
-        mockMvc.perform(get(SIRestPaths.BASE_PATH + SIRestPaths.VERSION).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
+    public void version() throws Exception {
+        performGet(SIRestPaths.VERSION)
                 .andExpect(jsonPath("value", is(Constants.SERVER_VERSION)));
+    }
+
+    @Test
+    @WithUserDetails(HAPPY_USER)
+    public void battleLog() throws Exception {
+        GetBattleLogRequest request = mockListResponse(GetBattleLogRequest.class);
+        when(requestFactory.getGetBattleLogRequest()).thenReturn(request);
+        performGet(SIRestPaths.BATTLE_LOG).andExpect(jsonPath("value", empty()));
+    }
+
+    @Test
+    @WithUserDetails(HAPPY_USER)
+    public void city() throws Exception {
+        GetCitiesRequest request = mockListResponse(GetCitiesRequest.class);
+        when(requestFactory.getGetCitiesRequest()).thenReturn(request);
+        performGet(SIRestPaths.CITY).andExpect(jsonPath("value", empty()));
+    }
+
+    @Test
+    @WithUserDetails(HAPPY_USER)
+    public void seenCity() throws Exception {
+        GetSeenCitiesRequest request = mockListResponse(GetSeenCitiesRequest.class);
+        when(requestFactory.getGetSeenCitiesRequest()).thenReturn(request);
+        performGet(SIRestPaths.CITY_SEEN).andExpect(jsonPath("value", empty()));
+    }
+
+    private <T extends PlayerRequest> T mockListResponse(Class<T> classToMock) {
+        T request = mock(classToMock);
+        when(request.process()).thenReturn(Result.make(new ArrayList<>()));
+        return request;
+    }
+
+    private ResultActions performGet(String path) throws Exception {
+        return mockMvc.perform(get(SIRestPaths.BASE_PATH + path).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Configuration
