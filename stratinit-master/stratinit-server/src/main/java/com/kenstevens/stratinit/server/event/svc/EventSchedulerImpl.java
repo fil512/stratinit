@@ -78,17 +78,18 @@ public class EventSchedulerImpl implements EventScheduler {
             }
             return;
         }
+
+        if (eventTimer.isStarted()) {
+            logger.info("EventScheduler already running.  Skipping startup.\n");
+            return;
+        }
+
         updateGamesAndStartTimer();
     }
 
     @VisibleForTesting
     @Override
     public void updateGamesAndStartTimer() {
-
-        if (eventTimer.isStarted()) {
-            logger.info("EventScheduler already running.  Skipping startup.\n");
-            return;
-        }
         logger.info("Server Lock File locked.\n");
         logger.info("Event Queue starting up.");
         updateGames();

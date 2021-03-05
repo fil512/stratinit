@@ -62,7 +62,7 @@ public class GameLoader {
             gameCache.setWorld(getWorld(game));
             loadGameCacheFromDatabase(gameCache);
         }
-        logger.info("Game #" + gameId + " loaded.");
+        logger.info("Game #{} loaded: {}", game.getId(), game.getGamename());
         return gameCache;
     }
 
