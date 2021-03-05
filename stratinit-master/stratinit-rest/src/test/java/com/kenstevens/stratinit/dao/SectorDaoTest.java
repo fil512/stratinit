@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.dao;
 
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.junit.jupiter.api.Test;
 

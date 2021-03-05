@@ -1,7 +1,7 @@
 To add an entity to the system:
 1) Add the class with javax.persistence annotations (see an existing model class).
 2) Set name="hibernate.hbm2ddl.auto" value="create" in persistence.xml in server
-2.5) Add a line like this for the new table: <class>com.kenstevens.stratinit.model.UnitMove</class>
+2.5) Add a line like this for the new table: <class>com.kenstevens.stratinit.client.model.UnitMove</class>
 3) Run the server.  The  will automatically create the table for you.
 4) Start up pgAdmin III, open up the table it created, and copy the "CREATE TABLE" statement to a new db migration.
 5) Run mvn db-migration:new
@@ -71,7 +71,7 @@ Run client as standalone jar...
 							</descriptorRefs>
 							<archive>
 								<manifest>
-									<mainClass>com.kenstevens.stratinit.main.Launcher</mainClass>
+									<mainClass>com.kenstevens.stratinit.client.main.Launcher</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

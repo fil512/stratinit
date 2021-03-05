@@ -31,7 +31,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
 	<aop:config>
 		<aop:pointcut id="serviceMethods"
-					  expression="execution(* com.kenstevens.stratinit.server.daoservice.*.*(..))"/>
+					  expression="execution(* com.kenstevens.stratinit.client.server.daoservice.*.*(..))"/>
 		<aop:advisor advice-ref="serviceTxAdvice" pointcut-ref="serviceMethods"/>
 	</aop:config>
 
@@ -44,7 +44,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 	</tx:advice>
 	<aop:config>
 		<aop:pointcut id="wsMethods"
-					  expression="execution(* com.kenstevens.stratinit.server.rest.*.*(..))"/>
+					  expression="execution(* com.kenstevens.stratinit.client.server.rest.*.*(..))"/>
 	</aop:config>
 
 	<aop:aspectj-autoproxy/>

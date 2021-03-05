@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.rank;
 
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.GameHistory;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.model.Nation;
 
 import java.util.Collection;
 import java.util.List;

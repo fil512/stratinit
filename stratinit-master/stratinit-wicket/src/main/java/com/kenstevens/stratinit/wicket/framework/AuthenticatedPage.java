@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.framework;
 
-import com.kenstevens.stratinit.model.PlayerRole;
+import com.kenstevens.stratinit.client.model.PlayerRole;
 import com.kenstevens.stratinit.wicket.base.BasePage;
 
 public abstract class AuthenticatedPage extends BasePage implements AuthenticatedComponent {

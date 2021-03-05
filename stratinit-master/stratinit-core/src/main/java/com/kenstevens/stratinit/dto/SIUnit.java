@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 

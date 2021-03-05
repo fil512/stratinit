@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.client.model.Player;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

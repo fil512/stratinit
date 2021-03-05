@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.move;
 
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.client.model.AttackType;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.WorldSector;
+import com.kenstevens.stratinit.client.util.AttackHelper;
+import com.kenstevens.stratinit.client.util.UnitHelper;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorType;
-import com.kenstevens.stratinit.util.AttackHelper;
-import com.kenstevens.stratinit.util.UnitHelper;
 
 public class Attack {
 	private final WorldSector worldSector;
@@ -74,11 +74,7 @@ public class Attack {
 		if (unitDistance > unit.getMobility()) {
 			return false;
 		}
-		if (unit.requiresFuel() && unitDistance > unit.getFuel() + 1) {
-			return false;
-		}
-
-		return true;
+		return !unit.requiresFuel() || unitDistance <= unit.getFuel() + 1;
 	}
 
 	private boolean canCounterAttack(Unit unit, SectorType type) {

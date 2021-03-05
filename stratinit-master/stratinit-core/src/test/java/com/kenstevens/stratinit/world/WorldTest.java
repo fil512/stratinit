@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.world;
 
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,19 +1,15 @@
 package com.kenstevens.stratinit.world;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import com.google.common.collect.Iterables;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.world.predicate.IsolatedCityPredicate;
 import com.kenstevens.stratinit.world.predicate.UnassignedAndIsolatedPredicate;
 import com.kenstevens.stratinit.world.predicate.UnassignedPredicate;
+
+import java.util.*;
 
 public abstract class Island {
 	protected final int islandId;

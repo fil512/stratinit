@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.cache;
 
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

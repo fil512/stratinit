@@ -1,14 +1,14 @@
 package com.kenstevens.stratinit.world;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.Iterables;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.world.predicate.IsolatedInlandCityPredicate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NeutralIsland extends Island {
 

@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.model;
 
-import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.wicket.provider.MessageListProvider;
 import org.apache.wicket.model.LoadableDetachableModel;
 

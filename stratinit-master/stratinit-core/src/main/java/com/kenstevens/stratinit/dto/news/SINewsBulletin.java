@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto.news;
 
-import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.client.model.Mail;
 
 public class SINewsBulletin extends SINewsLog {
 	private static final long serialVersionUID = 1L;

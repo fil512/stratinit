@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.repo;
 
-import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

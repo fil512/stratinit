@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.config;
 
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.repo.PlayerRoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;

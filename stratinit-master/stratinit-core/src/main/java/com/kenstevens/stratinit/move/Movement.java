@@ -1,17 +1,17 @@
 package com.kenstevens.stratinit.move;
 
 import com.google.common.collect.Sets;
+import com.kenstevens.stratinit.client.model.AttackType;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.WorldSector;
+import com.kenstevens.stratinit.client.util.UnitHelper;
 import com.kenstevens.stratinit.graph.Dijkstra;
 import com.kenstevens.stratinit.graph.Path;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.util.UnitHelper;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,9 +2,9 @@ package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.cache.GameLoader;
-import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.client.model.*;
+import com.kenstevens.stratinit.client.util.GameNameFile;
 import com.kenstevens.stratinit.repo.*;
-import com.kenstevens.stratinit.util.GameNameFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

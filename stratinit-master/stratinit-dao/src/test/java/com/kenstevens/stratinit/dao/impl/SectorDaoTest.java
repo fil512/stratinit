@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.dao.impl;
 
 import com.kenstevens.stratinit.StratInitTest;
+import com.kenstevens.stratinit.client.model.City;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.model.City;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
 import com.kenstevens.stratinit.repo.SectorSeenRepo;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;

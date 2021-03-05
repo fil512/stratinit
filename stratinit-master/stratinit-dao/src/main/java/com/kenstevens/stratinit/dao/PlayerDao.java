@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.PlayerRole;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.client.model.PlayerRole;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.repo.PlayerRoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.repo;
 
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.PlayerRole;
+import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.client.model.PlayerRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

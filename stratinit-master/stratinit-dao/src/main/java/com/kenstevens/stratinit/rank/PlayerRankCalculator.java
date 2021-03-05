@@ -1,14 +1,14 @@
 package com.kenstevens.stratinit.rank;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
+import com.kenstevens.stratinit.client.model.PlayerRank;
+import com.kenstevens.stratinit.dto.SITeam;
+import com.kenstevens.stratinit.dto.SITeamRank;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
-import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.dto.SITeamRank;
-import com.kenstevens.stratinit.model.PlayerRank;
 
 public class PlayerRankCalculator {
 

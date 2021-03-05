@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world;
 
-import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.type.Constants;
 
 import java.util.HashMap;

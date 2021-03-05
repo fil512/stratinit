@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.helper;
 
-import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.client.model.Game;
 
 public class GameHelper {
     private static final Integer GAME_ID = 2401;

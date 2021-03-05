@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.dao;
 
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Mail;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.QMail;
-import com.kenstevens.stratinit.model.audit.QRelationChangeAudit;
-import com.kenstevens.stratinit.model.audit.RelationChangeAudit;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Mail;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.QMail;
+import com.kenstevens.stratinit.client.model.audit.QRelationChangeAudit;
+import com.kenstevens.stratinit.client.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.repo.MailRepo;
 import com.kenstevens.stratinit.repo.RelationChangeAuditRepo;
 import com.querydsl.core.types.Predicate;

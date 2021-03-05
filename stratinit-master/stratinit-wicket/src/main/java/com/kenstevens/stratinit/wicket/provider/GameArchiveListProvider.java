@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.wicket.provider;
 
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.client.model.GameHistory;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.GameHistory;
 import com.kenstevens.stratinit.rank.TeamProvider;
 import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;

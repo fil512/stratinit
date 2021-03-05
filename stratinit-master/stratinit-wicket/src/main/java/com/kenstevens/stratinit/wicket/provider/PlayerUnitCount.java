@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.provider;
 
-import com.kenstevens.stratinit.model.UnitBase;
+import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class PlayerUnitCount extends UnitDay {

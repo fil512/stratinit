@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.world;
 
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.world.predicate.UnassignedAndIsolatedPredicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

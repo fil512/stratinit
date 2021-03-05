@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.Game;
+import com.kenstevens.stratinit.client.model.Game;
 
 import java.util.Date;
 

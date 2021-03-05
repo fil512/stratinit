@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.wicket.provider;
 
+import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

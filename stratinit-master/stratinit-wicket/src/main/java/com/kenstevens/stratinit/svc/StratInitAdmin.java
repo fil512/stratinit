@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.svc;
 
+import com.kenstevens.stratinit.client.server.rest.ServerManager;
+import com.kenstevens.stratinit.client.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.client.server.rest.state.ServerStatus;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.rest.ServerManager;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
-import com.kenstevens.stratinit.server.rest.state.ServerStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

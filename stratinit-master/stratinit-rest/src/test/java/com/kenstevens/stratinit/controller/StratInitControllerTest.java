@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.controller;
 
+import com.kenstevens.stratinit.client.model.PlayerRole;
+import com.kenstevens.stratinit.client.rest.SIRestPaths;
+import com.kenstevens.stratinit.client.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.client.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.config.IServerConfig;
-import com.kenstevens.stratinit.model.PlayerRole;
 import com.kenstevens.stratinit.repo.PlayerRepo;
-import com.kenstevens.stratinit.rest.SIRestPaths;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
-import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.type.Constants;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

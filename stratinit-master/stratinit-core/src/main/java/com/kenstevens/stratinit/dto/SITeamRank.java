@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.Rankable;
+import com.kenstevens.stratinit.client.model.Rankable;
 
 public class SITeamRank extends Rankable {
 	final SITeam team;

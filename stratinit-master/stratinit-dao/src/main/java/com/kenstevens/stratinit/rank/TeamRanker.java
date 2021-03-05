@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.rank;
 
-import java.util.List;
-
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.GameHistory;
+import com.kenstevens.stratinit.client.model.PlayerRank;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.model.PlayerRank;
+
+import java.util.List;
 
 public class TeamRanker {
 

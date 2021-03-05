@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 

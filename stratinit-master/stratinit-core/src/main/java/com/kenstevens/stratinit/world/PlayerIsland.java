@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.world;
 
-import java.util.List;
-
 import com.google.common.collect.Iterables;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.world.predicate.FriendlyPredicate;
+
+import java.util.List;
 
 public class PlayerIsland extends Island {
 	private final FriendlyPredicate friendlyPredicate;

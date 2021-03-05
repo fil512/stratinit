@@ -1,14 +1,14 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.client.model.Account;
+import com.kenstevens.stratinit.client.rest.IStratInitServer;
+import com.kenstevens.stratinit.client.rest.RestClient;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SISector;
-import com.kenstevens.stratinit.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.rest.IStratInitServer;
-import com.kenstevens.stratinit.rest.RestClient;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.httpclient.HttpStatus;
 import org.junit.jupiter.api.Disabled;

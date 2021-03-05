@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.helper;
 
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.client.model.Player;
 
 public class PlayerHelper {
     private static final String PLAYER_ME = "PLAYER_ME";

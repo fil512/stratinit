@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.wicket.provider;
 
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.dao.MessageDao;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Mail;
 import com.kenstevens.stratinit.repo.GameRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

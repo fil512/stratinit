@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.balance;
 
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitBase;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class AttackBalanceResult {

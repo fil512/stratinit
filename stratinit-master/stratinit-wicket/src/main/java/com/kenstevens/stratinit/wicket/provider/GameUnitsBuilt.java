@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.wicket.provider;
 
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.model.GameHistory;
+import com.kenstevens.stratinit.client.model.GameHistory;
 
 import java.util.Collection;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.kenstevens.stratinit.dao.impl;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
+import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.dao.MessageDao;
-import com.kenstevens.stratinit.model.Mail;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

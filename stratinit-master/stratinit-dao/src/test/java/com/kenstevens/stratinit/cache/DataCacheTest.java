@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.cache;
 
 import com.kenstevens.stratinit.StratInitTest;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.SectorRepo;
 import com.kenstevens.stratinit.type.SectorCoords;

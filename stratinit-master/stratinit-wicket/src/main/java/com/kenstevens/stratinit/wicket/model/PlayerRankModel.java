@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.model;
 
-import com.kenstevens.stratinit.model.PlayerRank;
+import com.kenstevens.stratinit.client.model.PlayerRank;
 import com.kenstevens.stratinit.rank.TeamRanker;
 import com.kenstevens.stratinit.wicket.provider.GameRankerProvider;
 import org.apache.wicket.model.LoadableDetachableModel;

@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.dao.impl;
 
 import com.kenstevens.stratinit.StratInitTest;
+import com.kenstevens.stratinit.client.model.PlayerRole;
 import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.model.PlayerRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

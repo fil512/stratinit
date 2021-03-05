@@ -1,20 +1,20 @@
 package com.kenstevens.stratinit.supply;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.type.SectorCoordVector;
 import com.kenstevens.stratinit.world.predicate.PortPredicate;
 import com.kenstevens.stratinit.world.predicate.TeamCityPredicate;
 import com.kenstevens.stratinit.world.predicate.TopUnitFunction;
 import com.kenstevens.stratinit.world.predicate.UnitSuppliesUnitPredicate;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class SupplyTree {
 

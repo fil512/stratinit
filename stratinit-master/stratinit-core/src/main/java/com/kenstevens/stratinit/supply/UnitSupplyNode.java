@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.supply;
 
 import com.google.common.collect.Iterables;
-import com.kenstevens.stratinit.model.Unit;
+import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 public class UnitSupplyNode extends SupplyNode {

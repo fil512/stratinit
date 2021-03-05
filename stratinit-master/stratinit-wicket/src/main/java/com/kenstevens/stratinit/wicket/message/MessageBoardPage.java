@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.message;
 
-import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.wicket.base.BasePage;
 import com.kenstevens.stratinit.wicket.provider.MessageListProvider;
 import org.apache.wicket.markup.html.basic.Label;

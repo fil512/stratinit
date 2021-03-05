@@ -3,8 +3,8 @@ package com.kenstevens.stratinit.wicket.provider;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.TreeMultiset;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.client.model.UnitBase;
+import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
 

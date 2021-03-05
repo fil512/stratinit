@@ -1,18 +1,18 @@
 package com.kenstevens.stratinit.rank;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.kenstevens.stratinit.client.model.PlayerRank;
+import com.kenstevens.stratinit.client.model.Rankable;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
-import com.kenstevens.stratinit.model.PlayerRank;
-import com.kenstevens.stratinit.model.Rankable;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class TeamRanks {
 

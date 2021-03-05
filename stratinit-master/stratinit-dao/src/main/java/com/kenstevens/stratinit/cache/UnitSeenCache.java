@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.cache;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.UnitSeen;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitSeen;
 
 public class UnitSeenCache extends Cacheable {
 	private final Map<Integer, UnitSeen> unitSeenMap = new HashMap<Integer, UnitSeen>();

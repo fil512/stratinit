@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.game;
 
-import com.kenstevens.stratinit.model.PlayerRank;
+import com.kenstevens.stratinit.client.model.PlayerRank;
 import com.kenstevens.stratinit.wicket.model.PlayerRankModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;

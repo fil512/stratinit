@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.wicket.framework;
 
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.client.server.daoservice.PlayerDaoService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 

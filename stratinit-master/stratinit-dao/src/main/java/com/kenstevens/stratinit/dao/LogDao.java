@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dao;
 
-import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

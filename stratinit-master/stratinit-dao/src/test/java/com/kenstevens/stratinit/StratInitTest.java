@@ -1,16 +1,16 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.client.model.*;
+import com.kenstevens.stratinit.client.util.ExpungeSvc;
+import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
-import com.kenstevens.stratinit.util.ExpungeSvc;
-import com.kenstevens.stratinit.util.GameScheduleHelper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

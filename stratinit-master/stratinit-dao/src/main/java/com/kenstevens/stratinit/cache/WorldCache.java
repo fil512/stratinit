@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.cache;
 
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
+
 import java.util.Collections;
 import java.util.List;
-
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
 
 public class WorldCache extends Cacheable {
 	private final World world;

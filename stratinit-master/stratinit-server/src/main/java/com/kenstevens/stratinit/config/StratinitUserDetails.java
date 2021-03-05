@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.config;
 
-import com.kenstevens.stratinit.model.Player;
-import com.kenstevens.stratinit.model.PlayerRole;
+import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.client.model.PlayerRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

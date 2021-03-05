@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.provider;
 
-import com.kenstevens.stratinit.model.GameHistory;
+import com.kenstevens.stratinit.client.model.GameHistory;
 import com.kenstevens.stratinit.rank.TeamHelper;
 import com.kenstevens.stratinit.rank.TeamProvider;
 import com.kenstevens.stratinit.rank.TeamRanker;

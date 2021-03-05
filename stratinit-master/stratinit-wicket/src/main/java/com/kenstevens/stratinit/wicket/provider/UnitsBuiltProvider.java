@@ -2,9 +2,9 @@ package com.kenstevens.stratinit.wicket.provider;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.kenstevens.stratinit.model.GameHistory;
-import com.kenstevens.stratinit.model.UnitBase;
-import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.client.model.GameHistory;
+import com.kenstevens.stratinit.client.model.UnitBase;
+import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import com.kenstevens.stratinit.repo.UnitBuildAuditRepo;
 import com.kenstevens.stratinit.type.UnitType;

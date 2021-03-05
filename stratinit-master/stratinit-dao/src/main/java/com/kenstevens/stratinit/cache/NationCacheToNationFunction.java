@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.cache;
 
 import com.google.common.base.Function;
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.client.model.Nation;
 
 public class NationCacheToNationFunction implements
 		Function<NationCache, Nation> {

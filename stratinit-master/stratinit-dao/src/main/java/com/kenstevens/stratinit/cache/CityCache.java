@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.cache;
 
+import com.kenstevens.stratinit.client.model.City;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.kenstevens.stratinit.model.City;
 
 public class CityCache extends Cacheable {
 	private final List<City> cities = new ArrayList<City>();

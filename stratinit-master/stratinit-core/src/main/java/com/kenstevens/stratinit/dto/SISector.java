@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.type.*;
 
 import java.util.Date;

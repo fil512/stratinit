@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.SectorCoords;
 

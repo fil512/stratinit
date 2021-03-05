@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.repo;
 
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.SectorSeenPK;
+import com.kenstevens.stratinit.client.model.SectorSeen;
+import com.kenstevens.stratinit.client.model.SectorSeenPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.game;
 
-import com.kenstevens.stratinit.model.Rankable;
+import com.kenstevens.stratinit.client.model.Rankable;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;

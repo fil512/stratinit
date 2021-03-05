@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.LaunchedSatellite;
+import com.kenstevens.stratinit.client.model.LaunchedSatellite;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 

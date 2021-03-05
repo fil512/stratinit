@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.Relation;
+import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.type.RelationType;
 
 import java.util.Date;

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.cache;
 
 import com.google.common.collect.Collections2;
-import com.kenstevens.stratinit.model.*;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;

@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.cache;
 
+import com.google.common.collect.Maps;
+import com.kenstevens.stratinit.client.model.CityMove;
+import com.kenstevens.stratinit.type.SectorCoords;
+
 import java.util.Collection;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
-import com.kenstevens.stratinit.model.CityMove;
-import com.kenstevens.stratinit.type.SectorCoords;
 
 public class CityMoveCache extends Cacheable {
 	private final Map<SectorCoords, CityMove> cityMoveMap = Maps.newHashMap();

@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.world;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnassignedAndIsolatedPredicate;
+
+import java.util.List;
+import java.util.Random;
 
 public class IslandSeeder {
 	protected static final Random RANDOM = new Random();

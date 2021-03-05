@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.event.StratinitEventBus;
-import com.kenstevens.stratinit.shell.StatusReportEvent;
+import com.kenstevens.stratinit.client.event.StratinitEventBus;
+import com.kenstevens.stratinit.client.shell.StatusReportEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

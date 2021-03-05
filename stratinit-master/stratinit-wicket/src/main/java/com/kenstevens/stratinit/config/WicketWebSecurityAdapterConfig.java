@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.config;
 
-import com.kenstevens.stratinit.model.PlayerRole;
+import com.kenstevens.stratinit.client.model.PlayerRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

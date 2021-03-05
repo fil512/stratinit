@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.UnitBase;
+import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
 

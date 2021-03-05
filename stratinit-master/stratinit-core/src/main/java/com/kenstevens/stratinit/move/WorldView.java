@@ -1,24 +1,19 @@
 package com.kenstevens.stratinit.move;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.SectorSuppliesUnitPredicate;
 import com.kenstevens.stratinit.world.predicate.SectorToWorldSectorFunction;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 public class WorldView implements CoordMeasure {
 	private final World world;
 	private final Nation nation;

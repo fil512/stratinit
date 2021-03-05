@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.cache;
 
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Relation;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Relation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;

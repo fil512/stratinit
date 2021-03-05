@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.supply;
 
-import com.kenstevens.stratinit.model.Sector;
+import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 public class SectorSupplyNode extends SupplyNode {

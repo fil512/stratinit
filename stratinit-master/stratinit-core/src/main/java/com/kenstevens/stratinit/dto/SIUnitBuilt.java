@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 

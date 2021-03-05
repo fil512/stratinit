@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto.news;
 
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.NewsCategory;
 
@@ -48,10 +48,7 @@ public class SINewsOpponents extends SINewsNation {
 			return false;
 		SINewsOpponents other = (SINewsOpponents) obj;
 		if (opponentName == null) {
-			if (other.opponentName != null)
-				return false;
-		} else if (!opponentName.equals(other.opponentName))
-			return false;
-		return true;
+			return other.opponentName == null;
+		} else return opponentName.equals(other.opponentName);
 	}
 }

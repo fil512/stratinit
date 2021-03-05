@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world;
 
-import com.kenstevens.stratinit.model.Sector;
+import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorType;
 

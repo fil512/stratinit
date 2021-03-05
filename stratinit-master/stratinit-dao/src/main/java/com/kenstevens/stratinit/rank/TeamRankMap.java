@@ -2,10 +2,10 @@ package com.kenstevens.stratinit.rank;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.kenstevens.stratinit.client.model.Rankable;
+import com.kenstevens.stratinit.client.server.rest.rank.ELOCalculator;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
-import com.kenstevens.stratinit.model.Rankable;
-import com.kenstevens.stratinit.server.rest.rank.ELOCalculator;
 
 import java.util.Collection;
 import java.util.Map;

@@ -145,7 +145,7 @@
 
                             <!-- used to automatically identify the jar containing the main class. -->
                             <!-- this is perhaps going to change -->
-                            <mainClass>com.kenstevens.stratinit.main.Launcher</mainClass>
+                            <mainClass>com.kenstevens.stratinit.client.main.Launcher</mainClass>
                         </jnlp>
 
 

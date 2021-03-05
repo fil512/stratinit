@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.helper;
 
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Player;
 
 // FIXME search for PLAYER_ME stuff and use these helpers
 public class NationHelper {

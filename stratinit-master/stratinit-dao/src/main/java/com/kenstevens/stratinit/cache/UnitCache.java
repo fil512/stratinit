@@ -1,12 +1,11 @@
 package com.kenstevens.stratinit.cache;
 
+import com.kenstevens.stratinit.client.model.Unit;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.kenstevens.stratinit.model.Unit;
-
-import javax.annotation.Nonnull;
 
 public class UnitCache extends Cacheable {
 	private final List<Unit> units = new ArrayList<Unit>();

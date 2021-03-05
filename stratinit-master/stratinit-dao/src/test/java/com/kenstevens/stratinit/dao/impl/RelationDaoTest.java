@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.dao.impl;
 
 import com.kenstevens.stratinit.StratInitTest;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.dao.RelationDao;
-import com.kenstevens.stratinit.model.Nation;
-import com.kenstevens.stratinit.model.Relation;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

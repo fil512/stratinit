@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.repo;
 
-import com.kenstevens.stratinit.model.UnitSeen;
-import com.kenstevens.stratinit.model.UnitSeenPK;
+import com.kenstevens.stratinit.client.model.UnitSeen;
+import com.kenstevens.stratinit.client.model.UnitSeenPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;

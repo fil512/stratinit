@@ -70,7 +70,7 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="com.kenstevens.stratinit.main.Launcher" vmParameters="-Djava.net.preferIPv4Stack=true" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
+      <java mainClass="com.kenstevens.stratinit.client.main.Launcher" vmParameters="-Djava.net.preferIPv4Stack=true" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true">
         <classPath>
           <scanDirectory location="." failOnError="false" />
         </classPath>

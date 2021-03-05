@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.model;
 
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.wicket.provider.PlayerListProvider;
 import org.apache.wicket.model.LoadableDetachableModel;
 

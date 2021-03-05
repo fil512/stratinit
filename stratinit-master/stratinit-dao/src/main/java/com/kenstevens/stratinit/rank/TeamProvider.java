@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.rank;
 
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.*;
 import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
 import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
 import org.springframework.beans.factory.annotation.Autowired;

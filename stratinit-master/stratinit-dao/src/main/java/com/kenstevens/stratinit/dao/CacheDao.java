@@ -3,8 +3,8 @@ package com.kenstevens.stratinit.dao;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.cache.NationCache;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Nation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class CacheDao {

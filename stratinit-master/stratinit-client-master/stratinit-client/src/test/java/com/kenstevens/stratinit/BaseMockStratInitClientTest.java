@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit;
 
-import com.kenstevens.stratinit.event.ArrivedDataEventAccumulator;
-import com.kenstevens.stratinit.rest.IStratInitServer;
+import com.kenstevens.stratinit.client.event.ArrivedDataEventAccumulator;
+import com.kenstevens.stratinit.client.rest.IStratInitServer;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 public abstract class BaseMockStratInitClientTest extends BaseStratInitClientTest {

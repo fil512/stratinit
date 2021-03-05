@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.wicket.provider;
 
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.GameHistory;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.GameHistory;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

@@ -2,13 +2,13 @@ package com.kenstevens.stratinit.world.predicate;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 
 public class IsolatedCityPredicate implements Predicate<Sector> {
 	private final World world;
 	private final int minDistanceEntreCities;
-	private CityPredicate cityPredicate;
+	private final CityPredicate cityPredicate;
 
 	public IsolatedCityPredicate(World world, int minDistanceEntreCities) {
 		this.world = world;

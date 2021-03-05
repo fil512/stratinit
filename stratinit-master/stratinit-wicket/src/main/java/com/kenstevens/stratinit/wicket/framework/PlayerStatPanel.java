@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.wicket.framework;
 
-import com.kenstevens.stratinit.model.Player;
+import com.kenstevens.stratinit.client.model.Player;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 

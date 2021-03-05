@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.move;
 
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;

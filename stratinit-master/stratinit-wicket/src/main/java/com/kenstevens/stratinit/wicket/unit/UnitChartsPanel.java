@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.wicket.unit;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
-import com.kenstevens.stratinit.model.UnitBase;
+import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.wicket.model.DayUnitsModel;

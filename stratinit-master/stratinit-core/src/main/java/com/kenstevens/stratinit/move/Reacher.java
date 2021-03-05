@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.move;
 
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.WorldSector;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.WorldSector;
 
 public class Reacher {
 
@@ -12,10 +12,10 @@ public class Reacher {
 	private final WorldView worldView;
 	private final WorldSector worldSector;
 	private final int movement;
-	private int fuelRemaining;
-	private Set<WorldSector> reachableSectors;
+	private final int fuelRemaining;
+	private final Set<WorldSector> reachableSectors;
 	private Set<WorldSector> lastAddedSectors;
-	private Set<WorldSector> airports;
+	private final Set<WorldSector> airports;
 	private int distance;
 
 	public Reacher(Unit unit, WorldView worldView) {

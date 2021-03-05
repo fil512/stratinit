@@ -2,11 +2,11 @@ package com.kenstevens.stratinit.dao.impl;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
+import com.kenstevens.stratinit.client.model.AttackType;
+import com.kenstevens.stratinit.client.model.CityCapturedBattleLog;
+import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.UnitAttackedBattleLog;
 import com.kenstevens.stratinit.dao.LogDao;
-import com.kenstevens.stratinit.model.AttackType;
-import com.kenstevens.stratinit.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.model.Unit;
-import com.kenstevens.stratinit.model.UnitAttackedBattleLog;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

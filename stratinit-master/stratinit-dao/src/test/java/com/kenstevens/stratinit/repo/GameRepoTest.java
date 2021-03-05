@@ -2,9 +2,9 @@ package com.kenstevens.stratinit.repo;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.QGame;
-import com.kenstevens.stratinit.model.QPlayer;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.QGame;
+import com.kenstevens.stratinit.client.model.QPlayer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

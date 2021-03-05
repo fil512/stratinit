@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.world;
 
-import java.io.PrintStream;
-
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.World;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorType;
+
+import java.io.PrintStream;
 
 public class WorldPrinter {
 	private final World world;

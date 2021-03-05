@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.cache;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
+import com.kenstevens.stratinit.client.model.Sector;
+import com.kenstevens.stratinit.client.model.SectorSeen;
+import com.kenstevens.stratinit.client.model.World;
+import com.kenstevens.stratinit.type.SectorCoords;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.kenstevens.stratinit.model.Sector;
-import com.kenstevens.stratinit.model.SectorSeen;
-import com.kenstevens.stratinit.model.World;
-import com.kenstevens.stratinit.type.SectorCoords;
 
 public class SectorSeenCache extends Cacheable {
 	private final Map<SectorCoords, SectorSeen> sectorSeenMap = new HashMap<SectorCoords, SectorSeen>();

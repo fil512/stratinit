@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.dto.news;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.type.NewsCategory;
 
 

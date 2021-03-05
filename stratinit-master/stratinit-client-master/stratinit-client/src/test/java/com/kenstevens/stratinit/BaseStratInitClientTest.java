@@ -1,9 +1,10 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.client.SpringConfig;
+import com.kenstevens.stratinit.client.shell.ProgressBarControl;
+import com.kenstevens.stratinit.client.shell.WidgetContainer;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.shell.ProgressBarControl;
-import com.kenstevens.stratinit.shell.WidgetContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

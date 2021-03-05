@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto;
 
-import com.kenstevens.stratinit.model.Mail;
+import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 import com.kenstevens.stratinit.type.Constants;
 

@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.wicket.provider;
 
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.model.Game;
-import com.kenstevens.stratinit.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.type.UnitBaseType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

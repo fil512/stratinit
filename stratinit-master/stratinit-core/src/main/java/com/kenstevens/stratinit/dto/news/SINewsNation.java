@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dto.news;
 
-import com.kenstevens.stratinit.model.Nation;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.NewsCategory;
 

@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.cache;
 
+import com.kenstevens.stratinit.client.model.LaunchedSatellite;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.kenstevens.stratinit.model.LaunchedSatellite;
 
 public class LaunchedSatelliteCache extends Cacheable {
 	private final List<LaunchedSatellite> satellites = new ArrayList<LaunchedSatellite>();
