@@ -85,6 +85,14 @@ class StratInitControllerTest {
 
     @Test
     @WithUserDetails(HAPPY_USER)
+    public void userCannotShutdown() throws Exception {
+        mockMvc.perform(get(SIRestPaths.BASE_PATH + SIRestPaths.).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithUserDetails(HAPPY_USER)
     public void version() throws Exception {
         performGet(SIRestPaths.VERSION)
                 .andExpect(jsonPath("value", is(Constants.SERVER_VERSION)));
@@ -176,6 +184,4 @@ class StratInitControllerTest {
             return new StratInitController();
         }
     }
-
-    // FIXME test that only admin can shut down
 }

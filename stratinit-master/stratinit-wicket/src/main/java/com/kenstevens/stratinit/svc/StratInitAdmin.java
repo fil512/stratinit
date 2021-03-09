@@ -30,5 +30,5 @@ public class StratInitAdmin {
         return requestFactory.getPostAnnouncementRequest(subject, body).processNoGame();
     }
 
-
+    // FIXME test that only admin can shut down
 }
