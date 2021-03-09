@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-// FIXME add the rest of the tests
 public class DijkstraTest {
     public static final String A = "A";
     public static final String B = "B";
