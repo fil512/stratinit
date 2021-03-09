@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.controller;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.UnitBase;
@@ -50,11 +49,7 @@ public class StratInitController implements IStratInitServer {
     public Result<List<SIUnitBase>> getUnitBases() {
         List<SIUnitBase> result = Lists.newArrayList(Collections2.transform(
                 Lists.newArrayList(UnitType.values()),
-                new Function<UnitType, SIUnitBase>() {
-                    public SIUnitBase apply(UnitType unitType) {
-                        return new SIUnitBase(UnitBase.getUnitBase(unitType));
-                    }
-                }));
+                unitType -> new SIUnitBase(UnitBase.getUnitBase(unitType))));
         return Result.make(result);
     }
 
