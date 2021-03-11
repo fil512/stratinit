@@ -16,8 +16,8 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     protected int nationThreeId;
 
     @Override
-    protected void setIslands(int numIslands) {
-        testGame.setIslands(3);
+    protected int getNumIslands() {
+        return 3;
     }
 
     @BeforeEach

@@ -1,6 +1,8 @@
 package com.kenstevens.stratinit.helper;
 
 import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.util.GameScheduleHelper;
+import org.apache.commons.lang3.time.DateUtils;
 
 public class GameHelper {
     private static final Integer GAME_ID = 2401;
@@ -17,5 +19,15 @@ public class GameHelper {
         game = new Game(GAME_NAME);
         game.setId(GAME_ID);
         return game;
+    }
+
+    public static Game newMappedGame(int gameSize, int numIslands) {
+        Game retval = new Game(GAME_NAME, gameSize);
+        retval.setBlitz(true);
+        GameScheduleHelper.setStartTimeBasedOnNow(retval, DateUtils.MILLIS_PER_DAY);
+        retval.setBlitz(false);
+        retval.setIslands(numIslands);
+        retval.setMapped();
+        return retval;
     }
 }

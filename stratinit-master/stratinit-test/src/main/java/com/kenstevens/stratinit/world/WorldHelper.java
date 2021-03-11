@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WorldHelper {
 
-	public void validateWorld(List<Sector> sectors) {
+	public static void validateWorld(List<Sector> sectors) {
 		int[] sectorCount = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		int[] cityCount = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		int[] startCityCount = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -30,9 +30,6 @@ public class WorldHelper {
 		}
 		for (int i = 0; i < 2; ++ i) {
 			assertTrue(sectorCount[i] > 10, "Sectors on island " + i + " > 10.  Was: " + sectorCount[i]);
-// TODO test adding players
-//			assertEquals("Cities on island "+i, 2, cityCount[i]);
-//			assertEquals("Start cities on island "+i, 2, startCityCount[i]);
 		}
 	}
 }

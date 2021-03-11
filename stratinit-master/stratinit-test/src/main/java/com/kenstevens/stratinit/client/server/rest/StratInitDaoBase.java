@@ -6,14 +6,13 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.event.EventScheduler;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.ExpungeSvc;
-import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.helper.GameHelper;
 import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
-import org.apache.commons.lang3.time.DateUtils;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -38,7 +37,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, TestConfig.class})
 public abstract class StratInitDaoBase {
-	private static final long SCHEDULED_TO_STARTED_MILLIS = DateUtils.MILLIS_PER_DAY;
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@PersistenceContext
@@ -66,7 +64,6 @@ public abstract class StratInitDaoBase {
 	protected World testWorld;
 	protected static final String PLAYER_ME_NAME = PlayerHelper.PLAYER_ME;
 	protected Player playerMe;
-	protected static final String PLAYER_NAME = "player";
 	protected int testGameId;
 	protected Nation nationMe;
 	protected int nationMeId;
@@ -140,12 +137,7 @@ public abstract class StratInitDaoBase {
 	}
 
 	public void setupGame() {
-		testGame = new Game(null, GAME_SIZE);
-		testGame.setBlitz(true);
-		GameScheduleHelper.setStartTimeBasedOnNow(testGame, SCHEDULED_TO_STARTED_MILLIS);
-		testGame.setBlitz(false);
-		setIslands(NUM_ISLANDS);
-		testGame.setMapped();
+		testGame = GameHelper.newMappedGame(GAME_SIZE, getNumIslands());
 		gameDao.save(testGame);
 		testGameId = testGame.getId();
 		World world = new World(testGame, true);
@@ -155,8 +147,8 @@ public abstract class StratInitDaoBase {
 		testWorld = dataCache.getGameCache(testGameId).getWorld();
 	}
 
-	protected void setIslands(int numIslands) {
-		testGame.setIslands(NUM_ISLANDS);
+	protected int getNumIslands() {
+		return 2;
 	}
 
 	protected Player createPlayer(String username) {
