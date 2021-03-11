@@ -1,11 +1,14 @@
 package com.kenstevens.stratinit.client.server.rest.move;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
+import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import com.kenstevens.stratinit.world.WorldHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -59,12 +62,9 @@ public class SupplyPathTest extends BaseStratInitControllerTest {
         joinGamePlayerMe();
     }
 
-    protected String[] getIslands() {
-        return myIslands;
-    }
-
-    protected String[] getTypes() {
-        return myTypes;
+    @Override
+    protected World getWorld(Game testGame) {
+        return WorldHelper.newWorld(testGame, myTypes, myIslands);
     }
 
     @Test

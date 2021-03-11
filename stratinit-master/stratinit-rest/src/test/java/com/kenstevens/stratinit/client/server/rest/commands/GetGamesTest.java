@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.client.server.rest.commands;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Game;
-import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.remote.Result;
@@ -19,8 +18,7 @@ public class GetGamesTest extends BaseStratInitControllerTest {
 
     @Test
     public void validateWorld() {
-        List<Sector> sectors = dataCache.getSectors(testGameId);
-        new WorldHelper().validateWorld(sectors);
+        WorldHelper.validateWorld(dataCache.getSectors(testGameId));
     }
 
     @Test

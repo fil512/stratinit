@@ -1,11 +1,14 @@
 package com.kenstevens.stratinit.client.server.rest.move;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
+import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import com.kenstevens.stratinit.world.WorldHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +19,6 @@ public class PortPathTest extends BaseStratInitControllerTest {
     public static final SectorCoords START2 = new SectorCoords(7, 4);
     public static final SectorCoords PORT = new SectorCoords(8, 4);
     public static final SectorCoords END = new SectorCoords(10, 5);
-
 
     private final String[] myTypes = {
             //             11111
@@ -61,13 +63,8 @@ public class PortPathTest extends BaseStratInitControllerTest {
     }
 
     @Override
-    protected String[] getIslands() {
-        return myIslands;
-    }
-
-    @Override
-    protected String[] getTypes() {
-        return myTypes;
+    protected World getWorld(Game testGame) {
+        return WorldHelper.newWorld(testGame, myTypes, myIslands);
     }
 
     @Test

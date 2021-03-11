@@ -17,7 +17,6 @@ public class WorldCreatorTest {
 		World world = worldCreator.build(game);
 		WorldPrinter worldPrinter = new WorldPrinter(world);
 		worldPrinter.print();
-		WorldHelper worldHelper = new WorldHelper();
-		worldHelper.validateWorld(world.getSectors());
+		WorldHelper.validateWorld(world.getSectors());
 	}
 }
