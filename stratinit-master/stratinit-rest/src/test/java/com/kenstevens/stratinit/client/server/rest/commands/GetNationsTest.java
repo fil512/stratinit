@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.client.server.rest.commands;
 
 import com.kenstevens.stratinit.client.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.dto.SINation;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class GetNationsTest extends TwoPlayerBase {
         SINation nationMe = nations.get(0);
 
         assertEquals(0, nationMe.nationId);
-        assertEquals(PLAYER_ME_NAME, nationMe.name);
+        assertEquals(PlayerHelper.PLAYER_ME, nationMe.name);
         assertEquals(0.0, nationMe.tech, 0.001);
 
         SINation nationThem = nations.get(1);

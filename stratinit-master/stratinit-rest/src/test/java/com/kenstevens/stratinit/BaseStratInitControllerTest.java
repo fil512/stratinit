@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;
 import com.kenstevens.stratinit.controller.StratInitController;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
@@ -35,8 +36,8 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 
     protected Result<SINation> joinGamePlayerMe() {
         Result<SINation> retval = joinGame(playerMe);
-        nationMe = gameDao.findNation(testGameId, playerMe);
-        setAuthentication(StratInitDaoBase.PLAYER_ME_NAME);
+		nationMe = gameDao.findNation(testGameId, playerMe);
+		setAuthentication(PlayerHelper.PLAYER_ME);
         return retval;
     }
 

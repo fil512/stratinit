@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.*;
 import org.junit.jupiter.api.Test;
@@ -149,7 +150,7 @@ public class LaunchTest extends TwoPlayerBase {
         setAuthentication(PLAYER_THEM_NAME);
         Result<SIRelation> result = setRelation(nationMeId, RelationType.ALLIED);
         assertResult(result);
-        setAuthentication(PLAYER_ME_NAME);
+        setAuthentication(PlayerHelper.PLAYER_ME);
         result = setRelation(nationThemId, RelationType.ALLIED);
         assertResult(result);
         List<SISector> sseen2 = stratInitController.getSectors().getValue();

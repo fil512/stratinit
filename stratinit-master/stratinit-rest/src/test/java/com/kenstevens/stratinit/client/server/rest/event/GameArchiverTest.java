@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.client.model.GameHistoryNation;
 import com.kenstevens.stratinit.client.model.GameHistoryTeam;
 import com.kenstevens.stratinit.client.server.event.svc.GameArchiver;
 import com.kenstevens.stratinit.client.server.rest.TwoPlayerBase;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
 import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
@@ -58,7 +59,7 @@ public class GameArchiverTest extends TwoPlayerBase {
             assertEquals(1, nations.size());
             GameHistoryNation nation = nations.get(0);
             if (i++ == 0) {
-                assertEquals(PLAYER_ME_NAME, nation.getGamename());
+                assertEquals(PlayerHelper.PLAYER_ME, nation.getGamename());
             } else {
                 assertEquals(PLAYER_THEM_NAME, nation.getGamename());
             }

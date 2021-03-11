@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import org.apache.commons.lang3.time.DateUtils;
 
 public class GameHelper {
+    public static final int GAME_SIZE = 15;
     private static final Integer GAME_ID = 2401;
     private static final String GAME_NAME = "GAME_NAME";
     public static Integer gameId = GAME_ID;
@@ -21,8 +22,8 @@ public class GameHelper {
         return game;
     }
 
-    public static Game newMappedGame(int gameSize, int numIslands) {
-        Game retval = new Game(GAME_NAME, gameSize);
+    public static Game newMappedGame(int numIslands) {
+        Game retval = new Game(GAME_NAME, GAME_SIZE);
         retval.setBlitz(true);
         GameScheduleHelper.setStartTimeBasedOnNow(retval, DateUtils.MILLIS_PER_DAY);
         retval.setBlitz(false);

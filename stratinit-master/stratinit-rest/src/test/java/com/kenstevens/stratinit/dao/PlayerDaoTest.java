@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,10 +21,10 @@ public class PlayerDaoTest extends BaseStratInitControllerTest {
             player2.setEmail("foo@foo.com");
             playerDao.save(player2);
             assertFalse(playerMe.equals(player2));
-            assertPlayer(PLAYER_ME_NAME);
+            assertPlayer(PlayerHelper.PLAYER_ME);
             assertPlayer(PLAYER2_NAME);
         } finally {
-            playerDao.deleteByUsername(PLAYER_ME_NAME);
+            playerDao.deleteByUsername(PlayerHelper.PLAYER_ME);
             playerDao.deleteByUsername(PLAYER2_NAME);
         }
     }

@@ -9,6 +9,7 @@ import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SIUnitListJson;
 import com.kenstevens.stratinit.remote.request.SetRelationJson;
@@ -23,13 +24,13 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
 
     @BeforeEach
     public void joinTwoPlayers() {
-        setAuthentication(PLAYER_ME_NAME);
+        setAuthentication(PlayerHelper.PLAYER_ME);
         joinGamePlayerMe();
         playerThem = createPlayer(PLAYER_THEM_NAME);
         joinGame(playerThem);
         nationThem = gameDao.findNation(testGameId, playerThem);
         nationThemId = nationThem.getNationId();
-        setAuthentication(PLAYER_ME_NAME);
+        setAuthentication(PlayerHelper.PLAYER_ME);
     }
 
     private void setMyRelation(RelationType relationType) {

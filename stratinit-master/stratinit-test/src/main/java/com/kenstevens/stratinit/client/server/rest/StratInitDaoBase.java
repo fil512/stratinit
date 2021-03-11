@@ -61,23 +61,16 @@ public abstract class StratInitDaoBase {
 	private EventScheduler eventScheduler;
 
 	protected Game testGame;
+	protected static final int CARRIER_CAPACITY = UnitBase.getUnitBase(UnitType.CARRIER).getCapacity();
 	protected World testWorld;
-	protected static final String PLAYER_ME_NAME = PlayerHelper.PLAYER_ME;
 	protected Player playerMe;
-	protected int testGameId;
 	protected Nation nationMe;
 	protected int nationMeId;
-	protected static final int GAME_SIZE = 15;
-	protected static final int CARRIER_CAPACITY = UnitBase.getUnitBase(
-			UnitType.CARRIER).getCapacity();
-	protected static final int TRANSPORT_CAPACITY = UnitBase.getUnitBase(
-			UnitType.TRANSPORT).getCapacity();
-	protected static final int HELICOPTER_CAPACITY = UnitBase.getUnitBase(
-			UnitType.HELICOPTER).getCapacity();
-	protected static final int ENGINEER_CAPACITY = UnitBase.getUnitBase(
-			UnitType.ENGINEER).getCapacity();
-	protected static final int SUB_CAPACITY = UnitBase.getUnitBase(
-			UnitType.SUBMARINE).getCapacity();
+	protected static final int TRANSPORT_CAPACITY = UnitBase.getUnitBase(UnitType.TRANSPORT).getCapacity();
+	protected static final int HELICOPTER_CAPACITY = UnitBase.getUnitBase(UnitType.HELICOPTER).getCapacity();
+	protected static final int ENGINEER_CAPACITY = UnitBase.getUnitBase(UnitType.ENGINEER).getCapacity();
+	protected static final int SUB_CAPACITY = UnitBase.getUnitBase(UnitType.SUBMARINE).getCapacity();
+	protected int testGameId;
 	protected static final int CARGO_CAPACITY = UnitBase.getUnitBase(UnitType.CARGO_PLANE).getCapacity();
 	private static final int TIME_TOLERANCE = 100;
 
@@ -98,12 +91,12 @@ public abstract class StratInitDaoBase {
 	}
 
 	public void setupGame() {
-		testGame = GameHelper.newMappedGame(GAME_SIZE, getNumIslands());
+		testGame = GameHelper.newMappedGame(getNumIslands());
 		gameDao.save(testGame);
 		testGameId = testGame.getId();
 		World world = getWorld(testGame);
 		sectorDao.save(world);
-		playerMe = createPlayer(PLAYER_ME_NAME);
+		playerMe = createPlayer(PlayerHelper.PLAYER_ME);
 		testWorld = dataCache.getGameCache(testGameId).getWorld();
 	}
 

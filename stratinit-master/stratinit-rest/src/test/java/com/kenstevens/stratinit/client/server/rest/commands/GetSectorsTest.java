@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.client.server.rest.commands;
 
 import com.kenstevens.stratinit.client.server.rest.WithUnitsBase;
 import com.kenstevens.stratinit.dto.SISector;
+import com.kenstevens.stratinit.helper.GameHelper;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class GetSectorsTest extends WithUnitsBase {
     }
 
     private void buildWorld(List<SISector> sectors) {
-        SISector[][] world = new SISector[GAME_SIZE][GAME_SIZE];
+        SISector[][] world = new SISector[GameHelper.GAME_SIZE][GameHelper.GAME_SIZE];
 
         for (SISector sector : sectors) {
             world[sector.coords.x][sector.coords.y] = sector;
