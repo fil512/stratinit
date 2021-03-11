@@ -9,6 +9,7 @@ import com.kenstevens.stratinit.client.util.ExpungeSvc;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SIUnit;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
@@ -30,7 +31,6 @@ import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,7 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public abstract class StratInitDaoBase {
 	private static final long SCHEDULED_TO_STARTED_MILLIS = DateUtils.MILLIS_PER_DAY;
 	final Logger logger = LoggerFactory.getLogger(getClass());
-	private final AtomicInteger playerIndex = new AtomicInteger();
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -65,7 +64,7 @@ public abstract class StratInitDaoBase {
 
 	protected Game testGame;
 	protected World testWorld;
-	protected static final String PLAYER_ME_NAME = "me";
+	protected static final String PLAYER_ME_NAME = PlayerHelper.PLAYER_ME;
 	protected Player playerMe;
 	protected static final String PLAYER_NAME = "player";
 	protected int testGameId;
@@ -229,13 +228,10 @@ public abstract class StratInitDaoBase {
 	}
 
     protected Player createPlayer() {
-        String name = PLAYER_NAME + playerIndex.incrementAndGet();
-        Player player = new Player(name);
-        logger.info("Creating player with name {}", name);
-        player.setEmail("foo@foo.com");
-        playerDao.save(player);
-        return player;
-    }
+		Player player = PlayerHelper.newPlayer();
+		playerDao.save(player);
+		return player;
+	}
 
     protected List<SIUnit> makeUnitList(Unit... units) {
         Nation nation = units[0].getNation();

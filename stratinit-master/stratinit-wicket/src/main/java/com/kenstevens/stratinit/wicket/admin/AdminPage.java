@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.wicket.base.BasePage;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
-// TODO TEST that I need to login as admin
+// FIXME TEST that I need to login as admin
 public class AdminPage extends BasePage {
 	private static final long serialVersionUID = 1L;
 

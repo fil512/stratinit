@@ -44,7 +44,6 @@ public final class StratInitClient {
 			if (wavPlayer != null) {
 				wavPlayer.shutdown();
 			}
-			System.exit(0);
 		}
 	}
 
