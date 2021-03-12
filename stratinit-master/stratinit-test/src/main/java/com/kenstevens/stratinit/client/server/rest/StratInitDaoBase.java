@@ -83,11 +83,9 @@ public abstract class StratInitDaoBase {
 
 	@BeforeEach
 	public void init() {
-		logger.info("--- @BeforeEach start ---");
 		// Note this creates a new game for every test
 		setupGame();
 		eventScheduler.updateGamesAndStartTimer();
-		logger.info("--- @BeforeEach end ---");
 	}
 
 	public void setupGame() {
@@ -121,10 +119,8 @@ public abstract class StratInitDaoBase {
 
 	@AfterEach
 	public void removeGame() {
-		logger.info("--- @AfterEach start ---");
 		expungeSvc.expungeAll();
 		dataCache.clear();
-		logger.info("--- @AfterEach end ---");
 	}
 
 	protected List<SIUnit> makeUnitList(Nation nation, Unit[] units) {

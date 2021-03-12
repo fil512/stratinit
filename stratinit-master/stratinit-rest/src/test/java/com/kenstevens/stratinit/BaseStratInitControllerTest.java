@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.model.*;
-import com.kenstevens.stratinit.client.server.daoservice.*;
 import com.kenstevens.stratinit.client.server.rest.AuthenticationHelper;
 import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;
 import com.kenstevens.stratinit.controller.StratInitController;
@@ -11,6 +10,7 @@ import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;

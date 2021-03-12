@@ -41,17 +41,17 @@ public class GameLoader {
     private UnitRepo unitRepo;
 
     public GameCache loadGame(int gameId) {
-        logger.info("Loading game #" + gameId + " into cache.");
+        logger.debug("Loading game #" + gameId + " into cache.");
 
         Optional<Game> oGame = gameRepo.findById(gameId);
         if (!oGame.isPresent()) {
             return null;
         }
         Game game = oGame.get();
-        logger.info("Getting Relations");
+        logger.debug("Getting Relations");
         Iterable<Relation> relations = relationRepo.findAll(QRelation.relation.relationPK.from.nationPK.game.eq(game));
         GameCache gameCache = cacheFactory.newGameCache(game, Lists.newArrayList(relations));
-        logger.info("Getting Nations");
+        logger.debug("Getting Nations");
         gameCache.addNations(nationRepo.findAll(QNation.nation.nationPK.game.eq(game)));
         if (game.isMapped()) {
             if (game.getGamesize() == 0) {
@@ -62,27 +62,27 @@ public class GameLoader {
             gameCache.setWorld(getWorld(game));
             loadGameCacheFromDatabase(gameCache);
         }
-        logger.info("Game #{} loaded: {}", game.getId(), game.getGamename());
+        logger.info("Game #{} {} loaded into cache", game.getId(), game.getGamename());
         return gameCache;
     }
 
     private void loadGameCacheFromDatabase(GameCache gameCache) {
-        logger.info("Getting Cities");
+        logger.debug("Getting Cities");
         setCities(gameCache);
-        logger.info("Getting Units");
+        logger.debug("Getting Units");
         setUnits(gameCache);
 
-        logger.info("Getting Sectors Seen");
+        logger.debug("Getting Sectors Seen");
         Game game = gameCache.getGame();
         gameCache.setSectorsSeen(sectorSeenRepo.findAll(QSectorSeen.sectorSeen.sectorSeenPK.nation.nationPK.game.eq(game)));
-        logger.info("Getting Units Seen");
+        logger.debug("Getting Units Seen");
         gameCache.setUnitsSeen(unitSeenRepo.findAll(QUnitSeen.unitSeen.unitSeenPK.nation.nationPK.game.eq(game)));
-        logger.info("Getting Launched Satellites");
+        logger.debug("Getting Launched Satellites");
         gameCache.setLaunchedSatellites(launchedSatelliteRepo.findAll(QLaunchedSatellite.launchedSatellite.nation.nationPK.game.eq(game)));
-        logger.info("Getting Units Move");
+        logger.debug("Getting Units Move");
         List<UnitMove> badUnitMoves = gameCache.setUnitsMove(unitMoveRepo.findAll(QUnitMove.unitMove.unit.nation.nationPK.game.eq(game)));
         clearBadUnitMoves(badUnitMoves);
-        logger.info("Getting City Moves");
+        logger.debug("Getting City Moves");
 
         List<CityMove> badCityMoves = gameCache.setCityMoves(cityMoveRepo.findAll(QCityMove.cityMove.city.nation.nationPK.game.eq(game)));
         clearBadCityMoves(badCityMoves);

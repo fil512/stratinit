@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.dao;
 
 import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.client.server.rest.TwoPlayerBase;
+import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.Test;
 

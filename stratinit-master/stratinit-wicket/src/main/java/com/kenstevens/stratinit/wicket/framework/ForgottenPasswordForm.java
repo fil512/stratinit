@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.wicket.framework;
 
-import com.kenstevens.stratinit.client.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
