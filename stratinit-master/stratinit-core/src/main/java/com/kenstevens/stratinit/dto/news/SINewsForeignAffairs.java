@@ -8,14 +8,17 @@ import java.util.Date;
 
 public class SINewsForeignAffairs extends SINewsOpponents {
     private static final long serialVersionUID = 1L;
-    public final RelationType oldRelation;
-    public final RelationType newRelation;
-    public final Date effective;
+    public RelationType oldRelation;
+    public RelationType newRelation;
+    public Date effective;
+
+    public SINewsForeignAffairs() {
+    }
 
     public SINewsForeignAffairs(RelationChangeAudit relationChangeAudit, Nation player, Nation opponent) {
         super(player, opponent, relationChangeAudit);
         oldRelation = relationChangeAudit.getType();
-		newRelation = relationChangeAudit.getNextType();
-		effective = relationChangeAudit.getEffective();
-	}
+        newRelation = relationChangeAudit.getNextType();
+        effective = relationChangeAudit.getEffective();
+    }
 }

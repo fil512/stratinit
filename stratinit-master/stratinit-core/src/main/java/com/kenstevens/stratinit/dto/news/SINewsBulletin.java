@@ -4,7 +4,10 @@ import com.kenstevens.stratinit.client.model.Mail;
 
 public class SINewsBulletin extends SINewsLog {
 	private static final long serialVersionUID = 1L;
-	public final String message;
+	public String message;
+
+	public SINewsBulletin() {
+	}
 
 	public SINewsBulletin(Mail bulletin) {
 		super(bulletin);

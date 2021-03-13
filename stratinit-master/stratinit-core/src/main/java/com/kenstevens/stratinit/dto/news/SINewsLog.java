@@ -7,7 +7,10 @@ import com.kenstevens.stratinit.type.NewsCategory;
 public abstract class SINewsLog implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
 
-	public final NewsCategory category;
+	public NewsCategory category;
+
+	public SINewsLog() {
+	}
 
 	public SINewsLog(NewsWorthy newsWorthy) {
 		this.category = newsWorthy.getNewsCategory();

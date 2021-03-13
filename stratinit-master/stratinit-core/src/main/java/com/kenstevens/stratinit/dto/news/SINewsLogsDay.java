@@ -50,7 +50,6 @@ public class SINewsLogsDay implements StratInitDTO {
 		add(neutralConquests, siNewsNeutralConquest);
 	}
 
-	// FIXME test
 	private <T extends SINewsCountable> void add(List<T> list, T item) {
 		int index = list.indexOf(item);
 		if (index == -1) {

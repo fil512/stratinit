@@ -9,7 +9,10 @@ import com.kenstevens.stratinit.type.UnitType;
 public class SINewsAirDefense extends SINewsOpponents implements SINewsCountable {
 	private static final long serialVersionUID = 1L;
 	public int count;
-	public final UnitType nationUnitType;
+	public UnitType nationUnitType;
+
+	public SINewsAirDefense() {
+	}
 
 	public SINewsAirDefense(Unit attackerUnit, Nation opponent, int count) {
 		super(attackerUnit.getNation(), opponent, NewsCategory.AIR_DEFENCE);

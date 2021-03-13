@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.dao;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.CityMoveRepo;
@@ -23,7 +22,6 @@ import java.util.Map;
 public class CityDao extends CacheDao {
     @Autowired
     private CityRepo cityRepo;
-    // FIXME move citymove stuff out
     @Autowired
     private CityMoveRepo cityMoveRepo;
     @Autowired
@@ -152,14 +150,6 @@ public class CityDao extends CacheDao {
         for (CityMove cityMove : cityMoves) {
             delete(cityMove);
         }
-    }
-
-    public List<CityMove> getCityMoves(Game game) {
-        List<CityMove> retval = Lists.newArrayList();
-        for (NationCache nationCache : getGameCache(game).getNationCaches()) {
-            retval.addAll(nationCache.getCityMoves());
-        }
-        return retval;
     }
 
     public void markCacheModified(CityMove cityMove) {

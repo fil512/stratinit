@@ -7,7 +7,10 @@ import com.kenstevens.stratinit.type.NewsCategory;
 
 public class SINewsOpponents extends SINewsNation {
 	private static final long serialVersionUID = 1L;
-	public final String opponentName;
+	public String opponentName;
+
+	public SINewsOpponents() {
+	}
 
 	public SINewsOpponents(Nation nation, Nation opponent, NewsWorthy newsWorthy) {
 		super(nation, newsWorthy);

@@ -47,7 +47,6 @@ public interface IStratInitServer {
 
 	Result<List<SIRelation>> getRelations();
 
-	// FIXME finish the rest of the puts
 	Result<SIRelation> setRelation(SetRelationJson request);
 
 	Result<SIUpdate> cedeUnits(CedeUnitsJson request);
