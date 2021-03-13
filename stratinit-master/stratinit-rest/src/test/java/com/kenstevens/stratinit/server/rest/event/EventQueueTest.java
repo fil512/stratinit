@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class EventQueueTest extends EventTimerMockedBase {
 	@Autowired
@@ -59,8 +59,10 @@ public class EventQueueTest extends EventTimerMockedBase {
 	public void scheduleCreatedGame() {
 		GameScheduleHelper.setStartTime(testGame, null);
 		testGame.setMapped(null);
+
+		reset(eventTimer);
 		eventQueue.schedule(testGame, false);
-		// FIXME add verifys
+		verifyNoInteractions(eventTimer);
 	}
 
 	@Test

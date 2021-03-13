@@ -383,6 +383,7 @@ public class NewsLogBuilderTest {
 		verifyBattleLogs();
 	}
 
+	// FIXME enable
 	@Disabled
 	// Simplified this when switching from spring-remote to REST
 	@Test
@@ -404,6 +405,7 @@ public class NewsLogBuilderTest {
 		verifyBattleLogs();
 	}
 
+	// FIXME enable
 	@Disabled
 	// Simplified this when switching from spring-remote to REST
 	@Test

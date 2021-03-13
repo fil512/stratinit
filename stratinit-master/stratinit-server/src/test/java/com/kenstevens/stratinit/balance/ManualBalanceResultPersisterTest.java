@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+// FIXME enable
 @Disabled
 public class ManualBalanceResultPersisterTest {
     @Test

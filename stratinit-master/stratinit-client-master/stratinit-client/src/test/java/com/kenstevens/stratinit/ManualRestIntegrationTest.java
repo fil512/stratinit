@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+// FIXME enable
 @Disabled
 public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());

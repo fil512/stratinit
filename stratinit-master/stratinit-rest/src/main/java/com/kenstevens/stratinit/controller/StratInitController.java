@@ -210,7 +210,6 @@ public class StratInitController implements IStratInitServer {
         return requestFactory.getCedeCityRequest(request.city, request.nationId).process();
     }
 
-    // FIXME spring mvc test these
     @PostMapping(path = SIRestPaths.SET_RELATION)
     @Override
     public Result<SIRelation> setRelation(@RequestBody SetRelationJson request) {

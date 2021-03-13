@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.io.FileNotFoundException;
 
 // TODO CI find a way to get this to run on a headless box 
+
 @Disabled
 public class ManualImageCreationRun {
 	@Test

@@ -52,5 +52,5 @@ public class SerDeserTest {
         assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsForeignAffairs.class)));
     }
 
-    // FIXME sleep do the rest
+    // TODO sleep do the rest
 }

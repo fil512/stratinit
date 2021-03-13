@@ -6,9 +6,9 @@ import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
+import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -62,7 +62,6 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
         assertEquals(unjoined - 1, games.size());
     }
 
-    // Don't rename this method!
     @Test
     public void testRemoveGame() {
         Player player = createPlayer();
@@ -73,8 +72,6 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
         assertEquals(unjoined - 1, games.size());
     }
 
-    // FIXME enable disabled tests
-    @Disabled
     @Test
     public void sevenPlayersMapped() throws InterruptedException {
         Game game = gameDaoService.createGame("test");
@@ -85,7 +82,7 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
         // TODO TEST why does this throw an exception with numPlayers >= 5?
         for (int i = 0; i < numPlayers; ++i) {
             System.out.println("Player " + i);
-            Result<Player> rresult = playerDaoService.register(new Player("testPlayer" + i));
+            Result<Player> rresult = playerDaoService.register(PlayerHelper.newPlayer(i));
             assertResult(rresult);
             Player player = rresult.getValue();
             players.add(player);
