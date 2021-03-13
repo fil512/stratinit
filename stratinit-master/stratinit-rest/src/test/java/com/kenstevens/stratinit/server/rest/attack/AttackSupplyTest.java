@@ -24,7 +24,7 @@ public class AttackSupplyTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         unitDaoService.buildUnit(nationThem, DEF_PORT,
                 UnitType.DESTROYER);
@@ -40,7 +40,7 @@ public class AttackSupplyTest extends TwoPlayerBase {
         declareWar();
         Unit bomber = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.NAVAL_BOMBER);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Unit supply = unitDaoService.buildUnit(nationThem, NEAR_PORT,
                 UnitType.SUPPLY);
@@ -57,7 +57,7 @@ public class AttackSupplyTest extends TwoPlayerBase {
         declareWar();
         Unit bomber = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.NAVAL_BOMBER);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.BASE);
         Unit supply = unitDaoService.buildUnit(nationThem, NEAR_PORT,
                 UnitType.SUPPLY);
@@ -101,7 +101,7 @@ public class AttackSupplyTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Unit def = unitDaoService.buildUnit(nationThem, DEF_PORT,
                 UnitType.DESTROYER);
@@ -134,7 +134,7 @@ public class AttackSupplyTest extends TwoPlayerBase {
         Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.ZEPPELIN);
         zep.decreaseAmmo();
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), PORT);

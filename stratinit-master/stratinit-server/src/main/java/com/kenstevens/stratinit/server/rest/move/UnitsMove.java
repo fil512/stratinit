@@ -8,9 +8,9 @@ import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,9 @@ public class UnitsMove {
     private SectorDao sectorDao;
     @Autowired
     private UnitMoveFactory unitMoveFactory;
+    @Autowired
+    protected FogService fogService;
+
     private boolean unknown;
     private MoveSeen moveSeen;
 
@@ -166,7 +169,7 @@ public class UnitsMove {
                 retval.addMessage("Units stopped short at " + coords);
                 break;
             }
-            sectorDaoService.updateSeen(worldView, unitsToMove.getUnits(),
+            fogService.updateSeen(worldView, unitsToMove.getUnits(),
                     moveSeen);
             moveSeen.persistSeen(); // Intermediate persist so enemies can see
             // me to interdict me

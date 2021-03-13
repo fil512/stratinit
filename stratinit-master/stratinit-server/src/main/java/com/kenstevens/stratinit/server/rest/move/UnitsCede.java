@@ -10,9 +10,9 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class UnitsCede {
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    protected FogService fogService;
 
     public UnitsCede(Nation nation, List<Unit> units, int nationId,
                      WorldView worldView) {
@@ -71,8 +71,8 @@ public class UnitsCede {
         }
 
         Result<None> result = cedeUnits(unitsToCede, target);
-        sectorDaoService.survey(nation);
-        sectorDaoService.survey(target);
+        fogService.survey(nation);
+        fogService.survey(target);
         SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
 
         return new Result<SIUpdate>(result.getMessages(), true, siupdate,

@@ -5,7 +5,6 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Lookup;

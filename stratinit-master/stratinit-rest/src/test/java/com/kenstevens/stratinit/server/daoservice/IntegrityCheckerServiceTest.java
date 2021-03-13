@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
+import com.kenstevens.stratinit.server.svc.IntegrityCheckerService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ public class IntegrityCheckerServiceTest extends TwoPlayerBase {
 
     @Test
     public void noEnemyUnitInMycity() {
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit dest = unitDaoService.buildUnit(nationThem, PORT,
                 UnitType.DESTROYER);
         assertTrue(dest.getCoords().equals(PORT));

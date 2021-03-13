@@ -20,7 +20,7 @@ public class SectorDaoServiceTest extends BaseStratInitControllerTest {
     @Test
     public void shipFlak() {
         joinGamePlayerMe();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Unit cruiser = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.CRUISER);
@@ -35,10 +35,10 @@ public class SectorDaoServiceTest extends BaseStratInitControllerTest {
     @Test
     public void worldFlak() {
         joinGamePlayerMe();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         City city = cityDao.getCity(testWorld.getSector(PORT));
         city.setBuild(UnitType.INFANTRY, new Date());
-        sectorDaoService.merge(city);
+        cityDaoService.merge(city);
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
         WorldSector worldSector = WORLD.getWorldSector(PORT);
         assertEquals(Constants.FORT_FLAK, worldSector.getFlak());

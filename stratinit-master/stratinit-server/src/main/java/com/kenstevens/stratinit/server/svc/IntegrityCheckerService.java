@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.svc;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
@@ -9,6 +9,10 @@ import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.move.WorldView;
+import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
+import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
+import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.ServerManager;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;

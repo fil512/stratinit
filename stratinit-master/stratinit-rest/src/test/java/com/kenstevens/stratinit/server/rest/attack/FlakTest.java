@@ -30,7 +30,7 @@ public class FlakTest extends TwoPlayerBase {
                 UnitType.FIGHTER);
         fighter.setHp(1);
         unitDao.merge(fighter);
-        sectorDaoServiceImpl.captureCity(nationThem, FORT);
+        cityDaoService.captureCity(nationThem, FORT);
         unitDaoService.buildUnit(nationThem, FORT,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(

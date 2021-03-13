@@ -3,12 +3,10 @@ package com.kenstevens.stratinit.server.rest.attack;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,8 +15,6 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
     private static final SectorCoords PORT = new SectorCoords(2, 2);
     private static final SectorCoords SEA = new SectorCoords(3, 0);
     private static final SectorCoords SEA2 = new SectorCoords(4, 0);
-    @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
 
     @Test
     public void infOnXportAtSeaSunk() {
@@ -68,7 +64,7 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
         Unit transport = unitDaoService.buildUnit(nationThem, PORT, UnitType.TRANSPORT);
         Unit inf = unitDaoService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
         Unit dest = unitDaoService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
 
         transport.setHp(1);
         unitDao.merge(transport);

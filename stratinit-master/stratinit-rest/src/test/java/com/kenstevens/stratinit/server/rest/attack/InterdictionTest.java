@@ -46,7 +46,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
         Unit idest = unitDaoService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -69,7 +69,7 @@ public class InterdictionTest extends TwoPlayerBase {
         Unit mpatrol = unitDaoService.buildUnit(nationMe, MOV, UnitType.PATROL);
         Unit ipatrol = unitDaoService.buildUnit(nationThem, INT,
                 UnitType.PATROL);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mpatrol),
                 BETWEEN);
@@ -91,7 +91,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
         Unit ipatrol = unitDaoService.buildUnit(nationThem, INT,
                 UnitType.PATROL);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -105,7 +105,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
         Unit ibb = unitDaoService.buildUnit(nationThem, INT2,
                 UnitType.BATTLESHIP);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -127,7 +127,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 UnitType.TRANSPORT);
         Unit ipatrol = unitDaoService.buildUnit(nationThem, INT2,
                 UnitType.PATROL);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mtransport),
                 BETWEEN);
@@ -149,7 +149,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
         Unit idest = unitDaoService.buildUnit(nationThem, INT2,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -171,7 +171,7 @@ public class InterdictionTest extends TwoPlayerBase {
         Unit msub = unitDaoService.buildUnit(nationMe, MOV, UnitType.SUBMARINE);
         Unit idest = unitDaoService.buildUnit(nationThem, INT2,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(msub),
                 BETWEEN);
@@ -194,7 +194,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 UnitType.DESTROYER);
         Unit idest2 = unitDaoService.buildUnit(nationThem, INT2,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -209,7 +209,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
         Unit idest = unitDaoService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 CLOSER);
@@ -228,7 +228,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV2, UnitType.INFANTRY);
         Unit idest = unitDaoService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mxport),
                 CLOSER);
@@ -250,7 +250,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV2, UnitType.INFANTRY);
         unitDaoService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mxport),
                 CLOSER);
@@ -266,7 +266,7 @@ public class InterdictionTest extends TwoPlayerBase {
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
         Unit idest = unitDaoService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
         assertResult(result);
@@ -315,7 +315,7 @@ public class InterdictionTest extends TwoPlayerBase {
         Unit mdest = unitDaoService.buildUnit(nationMe, BETWEEN,
                 UnitType.DESTROYER);
         Unit itank = unitDaoService.buildUnit(nationThem, PORT, UnitType.TANK);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BYPORT);
         assertFalseResult(result);

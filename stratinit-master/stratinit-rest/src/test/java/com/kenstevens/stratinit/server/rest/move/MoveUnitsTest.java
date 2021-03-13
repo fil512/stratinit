@@ -43,7 +43,7 @@ public class MoveUnitsTest extends WithUnitsBase {
         Unit fighter = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.FIGHTER);
         fighter.setFuel(1);
         fighter.setMobility(1);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(fighter), PORT);
         assertResult(result);
     }
@@ -177,7 +177,7 @@ public class MoveUnitsTest extends WithUnitsBase {
         for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
             inf[i] = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.TANK);
         }
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), PORT);
         assertResult(result);
@@ -191,7 +191,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void navyMyCity() {
         Unit dest = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.DESTROYER);
         List<SIUnit> units = makeUnitList(dest);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(units, PORT);
         assertResult(result);
         assertEquals(dest.getCoords(), PORT, result.toString());
@@ -200,9 +200,9 @@ public class MoveUnitsTest extends WithUnitsBase {
 
     @Test
     public void navyMyInlandCity() {
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit dest = unitDaoService.buildUnit(nationMe, PORT, UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationMe, BY_PORT);
+        cityDaoService.captureCity(nationMe, BY_PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), BY_PORT);
         assertFalseResult(result);
         assertEquals(dest.getCoords(), PORT, result.toString());

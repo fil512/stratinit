@@ -20,7 +20,7 @@ public class AttackCannonsTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
         assertFalseResult(result);
@@ -34,7 +34,7 @@ public class AttackCannonsTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
@@ -52,7 +52,7 @@ public class AttackCannonsTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.INFANTRY);
         Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
@@ -69,7 +69,7 @@ public class AttackCannonsTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
@@ -86,7 +86,7 @@ public class AttackCannonsTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(

@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.svc;
 
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -7,6 +7,9 @@ import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.client.util.BuildHelper;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.CityDaoService;
+import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
+import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -25,7 +28,7 @@ public class CityBuilderService {
 	@Autowired
 	private EventQueue eventQueue;
 	@Autowired
-	private SectorDaoService sectorDaoService;
+	private CityDaoService cityDaoService;
 	@Autowired
 	private UnitDaoService unitDaoService;
 	@Autowired
@@ -76,7 +79,7 @@ public class CityBuilderService {
 		}
 
 		if (city.getType() != origCityType) {
-			sectorDaoService.cityChanged(city);
+			cityDaoService.cityChanged(city);
 		}
 		return true;
 	}

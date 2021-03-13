@@ -11,9 +11,11 @@ import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
+import com.kenstevens.stratinit.server.rest.move.MoveSeen;
 import com.kenstevens.stratinit.server.rest.move.UnitCommandFactory;
 import com.kenstevens.stratinit.server.rest.move.UnitsMove;
 import com.kenstevens.stratinit.server.rest.move.UnitsToMove;
+import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -39,6 +41,8 @@ public class UnitDaoService {
     private DataCache dataCache;
     @Autowired
     private UnitCommandFactory unitCommandFactory;
+    @Autowired
+    private FogService fogService;
 
     public void updateUnit(Unit unit, Date buildTime) {
         Sector sector = dataCache.getWorld(unit.getGameId()).getSector(
@@ -109,7 +113,7 @@ public class UnitDaoService {
 
         eventQueue.schedule(unit);
         MoveSeen moveSeen = new MoveSeen(nation, sectorDaoService, this);
-        sectorDaoService.updateSeen(dataCache.getWorld(nation.getGameId()),
+        fogService.updateSeen(dataCache.getWorld(nation.getGameId()),
                 unit, moveSeen);
         moveSeen.persist();
         return unit;
@@ -211,7 +215,7 @@ public class UnitDaoService {
         if (unit.isAlive()) {
             MoveSeen moveSeen = new MoveSeen(unit.getNation(),
                     sectorDaoService, this);
-            sectorDaoService.unitSeen(dataCache.getWorld(unit.getGameId()),
+            fogService.unitSeen(dataCache.getWorld(unit.getGameId()),
                     unit, moveSeen, false);
             moveSeen.persistSeen();
         }
@@ -318,10 +322,6 @@ public class UnitDaoService {
     public Result<None> cancelMoveOrder(Unit unit) {
         clearUnitMove(unit);
         return new Result<>("Move order cancelled for " + unit + ".", true);
-    }
-
-    public Result<None> buildCity(Unit unit) {
-        return sectorDaoService.establishCity(unit);
     }
 
     public void updateCarrierRadar(Nation nation) {

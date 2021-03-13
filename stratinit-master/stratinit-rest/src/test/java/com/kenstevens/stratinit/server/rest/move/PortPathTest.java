@@ -70,7 +70,7 @@ public class PortPathTest extends BaseStratInitControllerTest {
     @Test
     public void shortestPath() {
         Unit supply = unitDaoService.buildUnit(nationMe, START, UnitType.SUPPLY);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(supply), END);
         assertResult(result);
         assertEquals(4, supply.getUnitBase().getMobility() - supply.getMobility(), result.toString());
@@ -79,7 +79,7 @@ public class PortPathTest extends BaseStratInitControllerTest {
     @Test
     public void shortestPath2() {
         Unit supply = unitDaoService.buildUnit(nationMe, START2, UnitType.SUPPLY);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(supply), END);
         assertResult(result);
         assertEquals(3, supply.getUnitBase().getMobility() - supply.getMobility(), result.toString());
@@ -88,7 +88,7 @@ public class PortPathTest extends BaseStratInitControllerTest {
     @Test
     public void shortestPathWithShipInPort() {
         Unit supply = unitDaoService.buildUnit(nationMe, START2, UnitType.SUPPLY);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         unitDaoService.buildUnit(nationMe, PORT, UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(makeUnitList(supply), END);
         assertResult(result);

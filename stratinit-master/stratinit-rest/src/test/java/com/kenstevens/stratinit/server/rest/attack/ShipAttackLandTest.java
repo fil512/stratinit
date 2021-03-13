@@ -58,7 +58,7 @@ public class ShipAttackLandTest extends TwoPlayerBase {
         declareWar();
         Unit inf = unitDaoService.buildUnit(nationThem, CITY, UnitType.INFANTRY);
         Unit dest = unitDaoService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), CITY);
         assertResult(result);

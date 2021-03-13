@@ -8,9 +8,8 @@ import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.CityDaoService;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.MoveSeen;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class UnitAttacksSector {
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private CityDaoService cityDaoService;
     @Autowired
     private LogDaoService logDaoService;
     @Autowired
@@ -91,7 +90,7 @@ public class UnitAttacksSector {
 
 
     private Result<None> takeCity(AttackReadiness attackReadiness) {
-        Nation oldOwner = sectorDaoService.captureCity(attackingUnit.getNation(),
+        Nation oldOwner = cityDaoService.captureCity(attackingUnit.getNation(),
                 targetSector);
         unitDaoService.damage(attackingUnit, Constants.CITY_CAPTURE_DAMAGE);
         CityCapturedBattleLog battleLog = new CityCapturedBattleLog(attackType, attackingUnit,

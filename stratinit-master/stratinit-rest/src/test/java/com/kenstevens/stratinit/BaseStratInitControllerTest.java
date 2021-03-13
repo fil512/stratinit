@@ -11,6 +11,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.server.daoservice.*;
+import com.kenstevens.stratinit.server.svc.MoveService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +22,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
-    @Autowired
-    protected GameDaoService gameDaoService;
-    @Autowired
-    protected RelationDaoService relationDaoService;
-    @Autowired
-    protected SectorDaoService sectorDaoService;
-    @Autowired
-    protected UnitDaoService unitDaoService;
-    @Autowired
-    protected StratInitController stratInitController;
-    @Autowired
-    private MoveService moveService;
+	@Autowired
+	protected GameDaoService gameDaoService;
+	@Autowired
+	protected RelationDaoService relationDaoService;
+	@Autowired
+	protected SectorDaoService sectorDaoService;
+	@Autowired
+	protected CityDaoService cityDaoService;
+	@Autowired
+	protected UnitDaoService unitDaoService;
+	@Autowired
+	protected StratInitController stratInitController;
+	@Autowired
+	private MoveService moveService;
 
-    protected Result<SINation> joinGamePlayerMe() {
+	protected Result<SINation> joinGamePlayerMe() {
 		Result<SINation> retval = joinGame(playerMe);
 		nationMe = nationDao.findNation(testGameId, playerMe);
 		setAuthentication(PlayerHelper.PLAYER_ME);
@@ -43,7 +46,7 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 
     protected void setBuild(SectorCoords coords, UnitType type) {
         City city = cityDao.getCity(testWorld.getSector(coords));
-        sectorDaoService.updateCity(city.getNation(), coords, UpdateCityField.BUILD, type, null, false, null);
+		cityDaoService.updateCity(city.getNation(), coords, UpdateCityField.BUILD, type, null, false, null);
     }
 
     protected void setAuthentication(String username) {

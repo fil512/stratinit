@@ -53,7 +53,7 @@ public class AttackRocketTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.ZEPPELIN);
         Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
@@ -69,7 +69,7 @@ public class AttackRocketTest extends TwoPlayerBase {
         declareWar();
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoServiceImpl.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.ZEPPELIN);
         Unit icbm = unitDaoService.buildUnit(nationThem, PORT, UnitType.ICBM_1);
         Result<MoveCost> result = moveUnits(

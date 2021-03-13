@@ -53,7 +53,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
 
     @Test
     public void cargoNoKillPassengersInAirport() {
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = attackHolder(UnitType.CARGO_PLANE, PORT);
         assertAllAlive(UnitType.CARGO_PLANE, units);
@@ -87,7 +87,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
 
     @Test
     public void heliNoKillPassengersInAirport() {
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = attackHolder(UnitType.HELICOPTER, PORT);
         assertAllAlive(UnitType.HELICOPTER, units);
@@ -101,7 +101,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
 
     @Test
     public void xportNoKillPassengersInPort() {
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = attackHolder(UnitType.TRANSPORT, PORT);
         assertAllAlive(UnitType.TRANSPORT, units);

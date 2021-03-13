@@ -55,7 +55,7 @@ public class SupplyTreeTest extends TwoPlayerBase {
                 UnitType.DESTROYER);
         unitDaoService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertResult(result);
@@ -72,7 +72,7 @@ public class SupplyTreeTest extends TwoPlayerBase {
                 UnitType.DESTROYER);
         unitDaoService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationMe, FAR_PORT);
+        cityDaoService.captureCity(nationMe, FAR_PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertResult(result);
@@ -110,7 +110,7 @@ public class SupplyTreeTest extends TwoPlayerBase {
                 UnitType.DESTROYER);
         unitDaoService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationMe, FAR_PORT);
+        cityDaoService.captureCity(nationMe, FAR_PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertResult(result);
@@ -129,7 +129,7 @@ public class SupplyTreeTest extends TwoPlayerBase {
                 UnitType.DESTROYER);
         unitDaoService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationMe, FAR_PORT);
+        cityDaoService.captureCity(nationMe, FAR_PORT);
         WorldView worldView = sectorDaoService.getAllWorldView(nationMe);
         SupplyTree supplyTree = new SupplyTree(worldView, dest);
         Iterator<SectorCoordVector> iterator = supplyTree.getSupplyChain();

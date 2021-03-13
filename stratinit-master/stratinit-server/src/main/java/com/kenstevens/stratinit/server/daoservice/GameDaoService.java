@@ -12,6 +12,10 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
+import com.kenstevens.stratinit.server.svc.FogService;
+import com.kenstevens.stratinit.server.svc.GameCreator;
+import com.kenstevens.stratinit.server.svc.TeamCalculator;
+import com.kenstevens.stratinit.server.svc.WorldManager;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.world.GameSizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +39,7 @@ public class GameDaoService {
     @Autowired
     private RelationDaoService relationDaoService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private CityDaoService cityDaoService;
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
@@ -51,6 +55,8 @@ public class GameDaoService {
     // FIXME too many collaborators
     @Autowired
     private PlayerDao playerDao;
+    @Autowired
+    private FogService fogService;
 
     @Autowired
     public GameDaoService(IServerConfig serverConfig) {
@@ -217,10 +223,10 @@ public class GameDaoService {
         double techAfter = nation.getTech();
         nationDao.markCacheModified(nation);
         if (crossedThreshold(nationTech, techAfter)) {
-            sectorDaoService
+            cityDaoService
                     .switchCityBuildsFromTechChange(nation, lastUpdated);
             unitDaoService.updateCarrierRadar(nation);
-            sectorDaoService.survey(nation);
+            fogService.survey(nation);
         }
     }
 

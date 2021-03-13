@@ -31,7 +31,7 @@ public class BuildCityRequest extends BuildRequest {
 
 	@Override
 	protected Result<None> buildIt(Unit unit) {
-		return unitDaoService.buildCity(unit);
+		return cityDaoService.establishCity(unit);
 	}
 
 }

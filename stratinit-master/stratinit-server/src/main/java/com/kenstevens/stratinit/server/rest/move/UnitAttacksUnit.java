@@ -7,9 +7,9 @@ import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -35,6 +35,8 @@ public class UnitAttacksUnit {
     private UnitDaoService unitDaoService;
     @Autowired
     private UnitCommandFactory unitCommandFactory;
+    @Autowired
+    protected FogService fogService;
 
     public UnitAttacksUnit(WorldView worldView, Nation actor,
                            AttackType attackType, Unit attacker, Unit defender,
@@ -84,7 +86,7 @@ public class UnitAttacksUnit {
     private void seeAttackingSub() {
         if (attackType != AttackType.COUNTER_ATTACK && attacker.isSubmarine()
                 && attacker.isAlive()) {
-            sectorDaoService.unitSeen(worldView, attacker, moveSeen, true);
+            fogService.unitSeen(worldView, attacker, moveSeen, true);
         }
     }
 

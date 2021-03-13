@@ -77,7 +77,7 @@ public class BuildCityTest extends TwoPlayerBase {
     public void buildCityBadLoc() {
         Unit eng = unitDaoService.buildUnit(nationMe, LAND,
                 UnitType.ENGINEER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         eng.setMobility(eng.getMaxMobility());
         List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());

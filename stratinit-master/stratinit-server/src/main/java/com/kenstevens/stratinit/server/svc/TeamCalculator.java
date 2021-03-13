@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.svc;
 
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.dto.SITeam;

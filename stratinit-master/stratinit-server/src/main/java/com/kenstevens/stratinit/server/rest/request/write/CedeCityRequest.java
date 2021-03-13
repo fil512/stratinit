@@ -12,7 +12,7 @@ import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.daoservice.CityDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.type.Constants;
@@ -30,7 +30,7 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
 	private final SICity sicity;
     private final int nationId;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private CityDaoService cityDaoService;
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
@@ -74,7 +74,7 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
         for (Unit unit : units) {
             result.or(unitDaoService.cedeUnit(unit, target));
         }
-        result.or(sectorDaoService.cedeCity(city, target));
+        result.or(cityDaoService.cedeCity(city, target));
 		SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
 		return new Result<SIUpdate>(result.getMessages(), true,
 				siupdate, result.getBattleLogs(), result.isSuccess());

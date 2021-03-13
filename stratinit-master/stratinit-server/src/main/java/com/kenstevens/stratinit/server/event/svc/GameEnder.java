@@ -34,7 +34,7 @@ public class GameEnder {
     @Autowired
     private LogDaoService logDaoService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private CityDaoService cityDaoService;
     @Autowired
     private GameArchiver gameArchiver;
 
@@ -51,14 +51,11 @@ public class GameEnder {
         gameDaoService.disable(game);
     }
 
-
     private void removeCities(Game game) {
         for (City city : Lists.newArrayList(cityDao.getCities(game))) {
-            sectorDaoService.remove(city);
+            cityDaoService.remove(city);
         }
-
     }
-
 
     private void removeRelations(Game game) {
         for (Relation relation : Lists.newArrayList(relationDao.getRelations(game))) {

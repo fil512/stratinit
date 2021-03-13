@@ -56,7 +56,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
         for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
             tank[i] = unitDaoService.buildUnit(nationMe, PORT, UnitType.TANK);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit carrier = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.CARRIER);
         Result<MoveCost> result = moveUnits(makeUnitList(carrier), SEA1);
@@ -76,7 +76,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             inf[i] = unitDaoService
                     .buildUnit(nationMe, PORT, UnitType.INFANTRY);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit transport = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(transport), SEA1);
@@ -96,7 +96,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             inf[i] = unitDaoService
                     .buildUnit(nationMe, PORT, UnitType.INFANTRY);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         Result<MoveCost> result = moveUnits(makeUnitList(heli), SEA1);
@@ -116,7 +116,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             inf[i] = unitDaoService
                     .buildUnit(nationMe, PORT, UnitType.INFANTRY);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli1 = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         Unit heli2 = unitDaoService.buildUnit(nationMe, PORT,
@@ -139,7 +139,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             inf[i] = unitDaoService
                     .buildUnit(nationMe, PORT, UnitType.INFANTRY);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli1 = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         heli1.setMobility(1);
@@ -163,7 +163,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
     @Test
     public void helicopterDragsInfFromCity() {
         Unit inf = unitDaoService.buildUnit(nationMe, PORT, UnitType.INFANTRY);
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         Result<MoveCost> result = moveUnits(makeUnitList(heli), SEA1);
@@ -177,7 +177,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
         Unit inf = unitDaoService.buildUnit(nationMe, PORT, UnitType.INFANTRY);
         inf.damage(4);
         unitDao.save(inf);
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         Result<MoveCost> result = moveUnits(makeUnitList(heli), SEA1);
@@ -192,7 +192,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
         Unit inf = unitDaoService.buildUnit(nationMe, PORT, UnitType.INFANTRY);
         inf.decreaseMobility(inf.getMobility());
         unitDao.save(inf);
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         Result<MoveCost> result = moveUnits(makeUnitList(heli), SEA1);
@@ -209,7 +209,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             fighter[i] = unitDaoService.buildUnit(nationMe, PORT,
                     UnitType.FIGHTER);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit heli = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.HELICOPTER);
         Result<MoveCost> result = moveUnits(makeUnitList(heli), SEA1);
@@ -229,7 +229,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             missile[i] = unitDaoService.buildUnit(nationMe, PORT,
                     UnitType.ICBM_1);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit eng = unitDaoService.buildUnit(nationMe, PORT, UnitType.ENGINEER);
         Result<MoveCost> result = moveUnits(makeUnitList(eng), BY_PORT);
         assertResult(result);
@@ -248,7 +248,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             missile[i] = unitDaoService.buildUnit(nationMe, PORT,
                     UnitType.ICBM_1);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Unit sub = unitDaoService.buildUnit(nationMe, PORT, UnitType.SUBMARINE);
         Result<MoveCost> result = moveUnits(makeUnitList(sub), SEA1);
         assertResult(result);
@@ -268,7 +268,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
             inf[i] = unitDaoService
                     .buildUnit(nationMe, PORT, UnitType.INFANTRY);
         }
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
         assertResult(result);
         assertEquals(cargo.getCoords(), TARGET, result.toString());
@@ -284,7 +284,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
         Unit cargo = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.CARGO_PLANE);
         Unit tank = unitDaoService.buildUnit(nationMe, PORT, UnitType.TANK);
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
         assertResult(result);
         assertEquals(cargo.getCoords(), TARGET, result.toString());
@@ -296,7 +296,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
         Unit cargo = unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.CARGO_PLANE);
         Unit eng = unitDaoService.buildUnit(nationMe, PORT, UnitType.ENGINEER);
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
         assertResult(result);
         assertEquals(cargo.getCoords(), TARGET, result.toString());
@@ -311,7 +311,7 @@ public class CarryUnitsTest extends BaseStratInitControllerTest {
                 UnitType.INFANTRY);
         Unit infMiddle = unitDaoService.buildUnit(nationMe, BETWEEN,
                 UnitType.INFANTRY);
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(cargo), TARGET);
         assertResult(result);
         assertEquals(TARGET, cargo.getCoords(), result.toString());

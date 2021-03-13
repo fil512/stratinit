@@ -9,11 +9,12 @@ import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.CityDaoService;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
 import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.server.svc.FogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,13 +32,15 @@ public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
     @Autowired
     private CityDao cityDao;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private CityDaoService cityDaoService;
     @Autowired
     private MessageDaoService messageDaoService;
     @Autowired
     private RelationDaoService relationDaoService;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
+    @Autowired
+    private FogService fogService;
 
     public ConcedeRequest() {
     }
@@ -63,27 +66,27 @@ public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
 				result.or(unitDaoService.cedeUnit(unit, ally));
 			}
 			for (City city : cities) {
-				result.or(sectorDaoService.cedeCity(city, ally));
-			}
-			messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units transferred to " + ally + ".", null);
-		} else {
-			for (Unit unit : units) {
-				result.or(unitDaoService.disbandUnit(unit));
-			}
-			for (City city : cities) {
-				result.or(sectorDaoService.destroyCity(city));
-			}
-			messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units destroyed.", null);
-		}
-		sectorDaoService.survey(nation);
-		if (ally != null) {
-			sectorDaoService.survey(ally);
-		}
-		SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
+                result.or(cityDaoService.cedeCity(city, ally));
+            }
+            messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units transferred to " + ally + ".", null);
+        } else {
+            for (Unit unit : units) {
+                result.or(unitDaoService.disbandUnit(unit));
+            }
+            for (City city : cities) {
+                result.or(cityDaoService.destroyCity(city));
+            }
+            messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units destroyed.", null);
+        }
+        fogService.survey(nation);
+        if (ally != null) {
+            fogService.survey(ally);
+        }
+        SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
 
-		return new Result<SIUpdate>(result.getMessages(), true, siupdate,
-				result.getBattleLogs(), result.isSuccess());
-	}
+        return new Result<SIUpdate>(result.getMessages(), true, siupdate,
+                result.getBattleLogs(), result.isSuccess());
+    }
 
 	@Override
 	protected int getCommandCost() {

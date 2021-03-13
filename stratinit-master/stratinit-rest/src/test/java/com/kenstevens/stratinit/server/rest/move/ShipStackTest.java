@@ -33,7 +33,7 @@ public class ShipStackTest extends BaseStratInitControllerTest {
         joinGamePlayerMe();
         Unit xport1 = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
         Unit xport2 = unitDaoService.buildUnit(nationMe, SHIP2, UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1), PORT);
         assertResult(result);
@@ -47,7 +47,7 @@ public class ShipStackTest extends BaseStratInitControllerTest {
         joinGamePlayerMe();
         Unit xport1 = unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
         Unit xport2 = unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1, xport2), BETWEEN);
         assertFalseResult(result);
         assertTrue(xport1.getCoords().equals(PORT), result.toString());

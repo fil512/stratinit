@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.CityDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.server.rest.svc.UnitSvc;
@@ -19,8 +20,11 @@ import java.util.List;
 
 public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
     private final List<SIUnit> siunits;
+    // FIXME remove?
     @Autowired
     protected UnitDaoService unitDaoService;
+    @Autowired
+    protected CityDaoService cityDaoService;
     @Autowired
     protected UnitDao unitDao;
     @Autowired

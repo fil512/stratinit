@@ -31,7 +31,7 @@ public class SectorDaoServiceTwoTest extends TwoPlayerBase {
                 UnitType.CARRIER);
         unitDaoService.buildUnit(nationThem, ELAND,
                 UnitType.INFANTRY);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
 
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);

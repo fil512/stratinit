@@ -26,7 +26,7 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
 
     @Test
     public void runUnitBalance() throws IOException {
-        sectorDaoService.captureCity(nationThem, DEF_CITY);
+        cityDaoService.captureCity(nationThem, DEF_CITY);
         BalanceResultList balanceResultList = new BalanceResultList();
         declareWar();
         for (UnitType attackerUnitType : UnitBase.orderedUnitTypes()) {

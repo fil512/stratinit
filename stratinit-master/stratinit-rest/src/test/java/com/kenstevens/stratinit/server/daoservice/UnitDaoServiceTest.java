@@ -29,7 +29,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void disableUnitSeen() {
         unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationThem, PORT);
+        cityDaoService.captureCity(nationThem, PORT);
         Unit inf = unitDaoService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationMe, inf);
         assertNotNull(unitSeen);
@@ -40,7 +40,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void updateUnit() {
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         dest.setMobility(0);
         dest.setHp(1);
         unitDaoService.updateUnit(dest, new Date());
@@ -68,7 +68,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void updateUnitWithMove() {
         Unit dest = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         dest.setMobility(0);
         unitDaoService.setUnitMove(dest, PORT);
         unitDaoService.updateUnit(dest, new Date());
@@ -82,7 +82,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
                 UnitType.TRANSPORT);
         Unit inf = unitDaoService.buildUnit(nationMe, SEA,
                 UnitType.INFANTRY);
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         xport.setMobility(0);
         unitDaoService.setUnitMove(xport, PORT);
         unitDaoService.updateUnit(xport, new Date());
@@ -105,7 +105,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void getCargoPassengersInAirportTest() {
         UnitType holderType = UnitType.CARGO_PLANE;
         SectorCoords coords = PORT;
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = Lists.newArrayList();
 
@@ -139,7 +139,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void getXportPassengersInPortTest() {
         UnitType holderType = UnitType.TRANSPORT;
         SectorCoords coords = PORT;
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         List<Unit> units = Lists.newArrayList();
 

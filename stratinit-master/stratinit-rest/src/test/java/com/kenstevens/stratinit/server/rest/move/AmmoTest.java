@@ -36,7 +36,7 @@ public class AmmoTest extends BaseStratInitControllerTest {
         dest.setMobility(UnitBase.getUnitBase(UnitType.DESTROYER).getMaxMobility());
         dest.decreaseAmmo();
         assertEquals(dest.getUnitBase().getAmmo() - 1, dest.getAmmo());
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), NEAR_PORT);
@@ -50,7 +50,7 @@ public class AmmoTest extends BaseStratInitControllerTest {
                 UnitType.DESTROYER);
         dest.decreaseAmmo();
         assertEquals(dest.getUnitBase().getAmmo() - 1, dest.getAmmo());
-        sectorDaoServiceImpl.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         assertEquals(dest.getUnitBase().getAmmo(), dest.getAmmo());
     }

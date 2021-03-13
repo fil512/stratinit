@@ -9,11 +9,11 @@ import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.MoveSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.svc.NukeTargetChooser;
 import com.kenstevens.stratinit.server.rest.svc.NukeTargetScore;
+import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -43,6 +43,8 @@ public class LaunchRocket {
     private MessageDaoService messageDaoService;
     @Autowired
     private DataCache dataCache;
+    @Autowired
+    protected FogService fogService;
 
     public LaunchRocket(CoordMeasure coordMeasure, Unit unit, SectorCoords targetCoords, MoveSeen moveSeen) {
         this.coordMeasure = coordMeasure;
@@ -100,7 +102,7 @@ public class LaunchRocket {
         LaunchedSatellite satellite = new LaunchedSatellite(unit.getNation(), targetCoords);
         unitDaoService.killUnit(unit);
         unitDaoService.persist(satellite);
-        sectorDaoService.satelliteSees(satellite, moveSeen);
+        fogService.satelliteSees(satellite, moveSeen);
     }
 
 }

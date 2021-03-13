@@ -33,7 +33,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
                 UnitType.INFANTRY);
         Unit trans = unitDaoService.buildUnit(nationMe, BESIDE,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         declareWar();
         Result<MoveCost> result = moveUnits(makeUnitList(inf), CITY);
         assertResult(result);
@@ -94,7 +94,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
                 UnitType.TRANSPORT);
         Unit einf = unitDaoService.buildUnit(nationThem, CITY,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         declareWar();
         Result<MoveCost> result = moveUnits(makeUnitList(inf), CITY);
         assertFalseResult(result);
@@ -113,7 +113,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
                 UnitType.FIGHTER);
         Unit zeppelin = unitDaoService.buildUnit(nationThem, CITY,
                 UnitType.ZEPPELIN);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         declareWar();
         Result<MoveCost> result = moveUnits(
                 makeUnitList(plane1, plane2, plane3), CITY);
@@ -128,7 +128,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
                 UnitType.INFANTRY);
         Unit trans = unitDaoService.buildUnit(nationMe, BESIDE,
                 UnitType.TRANSPORT);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf), LAND);
         assertResult(result);
@@ -156,7 +156,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
     public void takeCity() {
         Unit inf = unitDaoService.buildUnit(nationMe, ATTACK_FROM,
                 UnitType.INFANTRY);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         declareWar();
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf), CITY);
@@ -192,7 +192,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
                 UnitType.INFANTRY);
         Unit inf2 = unitDaoService.buildUnit(nationMe, ATTACK_FROM,
                 UnitType.INFANTRY);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         declareWar();
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf), CITY);
@@ -211,7 +211,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
                 UnitType.FIGHTER);
         Unit inf = unitDaoService.buildUnit(nationMe, ATTACK_FROM,
                 UnitType.INFANTRY);
-        sectorDaoService.captureCity(nationThem, CITY);
+        cityDaoService.captureCity(nationThem, CITY);
         declareWar();
         Result<MoveCost> result = moveUnits(
                 makeUnitList(plane, inf), CITY);

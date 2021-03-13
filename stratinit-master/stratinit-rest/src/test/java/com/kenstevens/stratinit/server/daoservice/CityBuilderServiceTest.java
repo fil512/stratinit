@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.helper.UnitHelper;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
+import com.kenstevens.stratinit.server.svc.CityBuilderService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;

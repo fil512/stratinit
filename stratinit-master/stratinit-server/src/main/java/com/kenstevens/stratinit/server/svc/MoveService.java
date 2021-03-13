@@ -1,10 +1,11 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.svc;
 
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.rest.move.UnitCommandFactory;
 import com.kenstevens.stratinit.server.rest.move.UnitsMove;
 import com.kenstevens.stratinit.type.SectorCoords;

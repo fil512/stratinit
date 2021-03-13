@@ -5,8 +5,14 @@ import com.kenstevens.stratinit.client.event.EventScheduler;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.UpdateManager;
 import com.kenstevens.stratinit.dao.*;
-import com.kenstevens.stratinit.server.daoservice.*;
+import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
+import com.kenstevens.stratinit.server.svc.CityBuilderService;
+import com.kenstevens.stratinit.server.svc.FogService;
+import com.kenstevens.stratinit.server.svc.GameCreator;
+import com.kenstevens.stratinit.server.svc.IntegrityCheckerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +47,7 @@ public class EventSchedulerImpl implements EventScheduler {
     @Autowired
     private GameDao gameDao;
     @Autowired
-    private NationDao nationDao;
+    protected FogService fogService;
     @Autowired
     private GameEnder gameEnder;
     @Autowired
@@ -54,6 +60,8 @@ public class EventSchedulerImpl implements EventScheduler {
     private IntegrityCheckerService integrityCheckerService;
     @Autowired
     private EventTimer eventTimer;
+    @Autowired
+    private NationDao nationDao;
 
     // FIXME too many collaborators
 
@@ -148,7 +156,7 @@ public class EventSchedulerImpl implements EventScheduler {
     private void survey(Game game) {
         List<Nation> nations = nationDao.getNations(game);
         for (Nation nation : nations) {
-            sectorDaoService.survey(nation);
+            fogService.survey(nation);
         }
     }
 

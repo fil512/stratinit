@@ -128,7 +128,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         worldView = sectorDaoService.getSupplyWorldView(dest);
         supply = new Supply(worldView);
@@ -142,7 +142,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         worldView = sectorDaoService.getSupplyWorldView(dest);
         supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
@@ -155,7 +155,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), CLOSE_ENOUGH_TO_PORT);
@@ -170,7 +170,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         Unit supply = unitDaoService.buildUnit(nationMe, FAR_PORT,
                 UnitType.SUPPLY);
         supply.decreaseAmmo();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(supply), CLOSE_ENOUGH_TO_PORT);
@@ -183,7 +183,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
                 UnitType.DESTROYER);
         dest.decreaseAmmo();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), CLOSE_ENOUGH_TO_PORT);
@@ -196,7 +196,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         Unit supply = unitDaoService.buildUnit(nationMe, FAR_PORT,
                 UnitType.SUPPLY);
         supply.decreaseAmmo();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(supply), CLOSE_ENOUGH_TO_PORT);
@@ -252,7 +252,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.ZEPPELIN);
         zep.decreaseAmmo();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), PORT);
@@ -266,7 +266,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
         Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.ZEPPELIN);
         zep.decreaseAmmo();
-        sectorDaoService.captureCity(nationMe, PORT);
+        cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), CLOSE_ENOUGH_TO_PORT);

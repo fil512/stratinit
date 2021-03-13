@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.svc;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
@@ -30,13 +31,13 @@ public class WorldManager {
     @Autowired
     private EventQueue eventQueue;
     @Autowired
-    private SectorDaoService sectorDaoService;
-    @Autowired
     private MailService mailService;
     @Autowired
     private GameDao gameDao;
     @Autowired
     private NationDao nationDao;
+    @Autowired
+    private FogService fogService;
 
     public World build(Game game) {
         return worldCreator.build(game);
@@ -75,7 +76,7 @@ public class WorldManager {
             eventQueue.schedule(city);
             firstCity = false;
         }
-        sectorDaoService.survey(nation);
+        fogService.survey(nation);
         // TODO REF Why does this need to be down here?
         gameDao.merge(game);
         Player player = nation.getPlayer();
