@@ -6,14 +6,11 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// FIXME enable
-@Disabled
-public class RelationManagerTest extends TwoPlayerBase {
+public abstract class RelationManagerTest extends TwoPlayerBase {
     @Autowired
     private EventQueue eventQueue;
 

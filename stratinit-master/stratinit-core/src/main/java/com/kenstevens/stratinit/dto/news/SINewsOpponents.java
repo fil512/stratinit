@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.NewsCategory;
 
 
-public class SINewsOpponents extends SINewsNation {
+public abstract class SINewsOpponents extends SINewsNation {
 	private static final long serialVersionUID = 1L;
 	public String opponentName;
 

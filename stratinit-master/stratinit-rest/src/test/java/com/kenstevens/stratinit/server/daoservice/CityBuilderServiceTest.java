@@ -37,7 +37,7 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     @BeforeEach
     public void init() {
         super.init();
-        when(unitDaoService.buildUnit(any(), any(), any())).thenReturn(UnitHelper.unit);
+        when(unitDaoService.buildUnit(any(), any(), any())).thenReturn(UnitHelper.meUnit);
 
         joinGamePlayerMe();
         city = cityDao.getCity(nationMe, INF_CITY);

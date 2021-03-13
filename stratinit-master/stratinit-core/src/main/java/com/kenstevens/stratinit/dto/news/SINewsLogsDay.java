@@ -52,10 +52,31 @@ public class SINewsLogsDay implements StratInitDTO {
 
 	private <T extends SINewsCountable> void add(List<T> list, T item) {
 		int index = list.indexOf(item);
-		if (index == -1) {
-			list.add(item);
-		} else {
+		if (index != -1) {
 			list.get(index).increment(item.getCount());
+		} else if (item instanceof SINewsOpponentConquest) {
+			addReverseIfMatches(list, item);
+		} else {
+			list.add(item);
+		}
+	}
+
+	private <T extends SINewsCountable> void addReverseIfMatches(List<T> list, T item) {
+		int index;
+		SINewsOpponentConquest oppItem = (SINewsOpponentConquest) item;
+		SINewsOpponentConquest reverseItem = oppItem.reverse();
+		index = list.indexOf(reverseItem);
+		if (index != -1) {
+			int count = list.get(index).getCount();
+			if (item.getCount() > count) {
+				list.remove(index);
+				item.decrement(count);
+				list.add(item);
+			} else {
+				list.get(index).decrement(item.getCount());
+			}
+		} else {
+			list.add(item);
 		}
 	}
 

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class NewsLogBuilderTest {
 	private final Game testGame = GameHelper.game;
-	private final Unit unit = UnitHelper.unit;
+	private final Unit unit = UnitHelper.meUnit;
 	@Mock
 	private MessageDao messageDao;
 	@Mock
@@ -384,7 +384,6 @@ public class NewsLogBuilderTest {
 	}
 
 	// FIXME enable
-	@Disabled
 	// Simplified this when switching from spring-remote to REST
 	@Test
 	public void getOpponentConquestCancel() {

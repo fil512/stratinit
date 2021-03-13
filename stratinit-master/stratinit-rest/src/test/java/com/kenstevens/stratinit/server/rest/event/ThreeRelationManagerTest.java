@@ -7,13 +7,10 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.ThreePlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
-import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// FIXME enable
-@Disabled
 public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     @Autowired
     private EventQueue eventQueue;
