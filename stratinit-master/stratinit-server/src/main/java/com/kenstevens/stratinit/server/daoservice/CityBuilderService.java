@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.client.util.BuildHelper;
-import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.type.CityType;
@@ -29,7 +29,7 @@ public class CityBuilderService {
 	@Autowired
 	private UnitDaoService unitDaoService;
 	@Autowired
-	private SectorDao sectorDao;
+	private CityDao cityDao;
 	@Autowired
 	private MessageDaoService messageDaoService;
 
@@ -99,7 +99,7 @@ public class CityBuilderService {
 	}
 
 	private Result<Boolean> powerLimitReached(Nation nation) {
-		int cityCount = sectorDao.getNumberOfCities(nation);
+		int cityCount = cityDao.getNumberOfCities(nation);
 		int power = unitDaoService.getPower(nation);
 		return BuildHelper.powerLimitReached(cityCount, power);
 	}
@@ -108,7 +108,7 @@ public class CityBuilderService {
 		UnitType unitType = city.getBuild();
 		if (UnitBase.isNotUnit(unitType)) {
 			city.setLastUpdated(buildTime);
-			sectorDao.markCacheModified(city);
+			cityDao.markCacheModified(city);
 			return;
 		}
 		Nation nation = city.getNation();
@@ -137,11 +137,10 @@ public class CityBuilderService {
 		}
 
 		if (switchCityProductionIfTechPermits(city, buildTime)) {
-			sectorDao.clearCityMove(city);
+			cityDao.clearCityMove(city);
 		}
 		city.setLastUpdated(buildTime);
-		sectorDao.markCacheModified(city);
-		return;
+		cityDao.markCacheModified(city);
 	}
 
 	public boolean switchCityProductionIfTechPermits(City city, Date buildTime) {

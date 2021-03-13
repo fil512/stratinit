@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.client.util.ContainerUnit;
-import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
@@ -28,7 +28,7 @@ public class UnitDaoService {
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private SectorDao sectorDao;
+    private CityDao cityDao;
     @Autowired
     private SectorDaoService sectorDaoService;
     @Autowired
@@ -57,7 +57,7 @@ public class UnitDaoService {
         UnitMove unitMove = unit.getUnitMove();
         if (unitMove == null) {
             // TODO REF add convenience method
-            City city = sectorDao.findCity(new CityPK(unit.getParentGame(), unit.getCoords()));
+            City city = cityDao.findCity(new CityPK(unit.getParentGame(), unit.getCoords()));
             if (city != null && unit.getNation().equals(city.getNation()) && city.getCityMove() != null) {
                 executeCityMove(unit, city);
             }

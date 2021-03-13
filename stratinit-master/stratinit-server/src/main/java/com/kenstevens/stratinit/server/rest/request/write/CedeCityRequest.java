@@ -4,9 +4,9 @@ import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
-import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIUpdate;
@@ -34,7 +34,7 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
-    private SectorDao sectorDao;
+    private CityDao cityDao;
     @Autowired
     private NationDao nationDao;
     @Autowired
@@ -52,8 +52,8 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
     @Override
 	protected Result<SIUpdate> executeWrite() {
 		Nation nation = getNation();
-		SectorCoords coords = sicity.coords;
-        City city = sectorDao.getCity(nation, coords);
+        SectorCoords coords = sicity.coords;
+        City city = cityDao.getCity(nation, coords);
         if (city == null) {
             return new Result<SIUpdate>("There is no city at " + coords, false);
         }

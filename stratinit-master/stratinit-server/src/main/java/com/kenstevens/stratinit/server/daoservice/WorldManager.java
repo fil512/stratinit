@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.daoservice;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
@@ -23,6 +24,8 @@ public class WorldManager {
     @Autowired
     private SectorDao sectorDao;
     @Autowired
+    private CityDao cityDao;
+    @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
     private EventQueue eventQueue;
@@ -41,7 +44,7 @@ public class WorldManager {
 
     public void addPlayerToMap(int island, Nation nation) {
         Game game = nation.getGame();
-        List<Sector> islandCities = Lists.newArrayList(sectorDao.getStartCitiesOnIsland(game,
+        List<Sector> islandCities = Lists.newArrayList(cityDao.getStartCitiesOnIsland(game,
                 island));
         if (islandCities.isEmpty()) {
             throw new IllegalStateException("Island " + island + " on game " + game.getGamename() + " has no start cities.  game.players = " + game.getPlayers() + ".  nation = " + nation + "." + "  nation.nationId=" + nation.getNationId());
@@ -68,7 +71,7 @@ public class WorldManager {
                     unit.addMobility();
                 }
             }
-            sectorDao.save(city);
+            cityDao.save(city);
             eventQueue.schedule(city);
             firstCity = false;
         }

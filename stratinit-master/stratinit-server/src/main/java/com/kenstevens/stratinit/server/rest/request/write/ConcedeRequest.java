@@ -4,8 +4,7 @@ import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
@@ -30,15 +29,13 @@ public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private SectorDao sectorDao;
+    private CityDao cityDao;
     @Autowired
     private SectorDaoService sectorDaoService;
     @Autowired
     private MessageDaoService messageDaoService;
     @Autowired
     private RelationDaoService relationDaoService;
-    @Autowired
-    private GameDao gameDao;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
 
@@ -49,7 +46,7 @@ public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
     protected Result<SIUpdate> executeWrite() {
         Nation nation = getNation();
 
-        List<City> cities = Lists.newArrayList(sectorDao.getCities(nation));
+        List<City> cities = Lists.newArrayList(cityDao.getCities(nation));
         List<Unit> units = Lists.newArrayList(unitDao.getUnits(nation));
 
         Collection<Nation> allies = relationDaoService.getAllies(nation);
@@ -57,7 +54,7 @@ public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
         int allyCityCount = 0;
         if (allies.size() > 0) {
             ally = allies.iterator().next();
-            allyCityCount = sectorDao.getNumberOfCities(ally);
+            allyCityCount = cityDao.getNumberOfCities(ally);
         }
 
         Result<None> result = Result.trueInstance();

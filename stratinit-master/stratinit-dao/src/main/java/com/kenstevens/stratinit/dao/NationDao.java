@@ -17,7 +17,6 @@ public class NationDao extends CacheDao {
     @Autowired
     private NationRepo nationRepo;
 
-    // FIXME pull nation methods out into its own dao
     public Nation findNation(Game game, Player player) {
         return findNation(game.getId(), player);
     }

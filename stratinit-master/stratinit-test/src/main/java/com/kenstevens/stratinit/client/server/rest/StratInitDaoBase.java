@@ -50,6 +50,8 @@ public abstract class StratInitDaoBase {
 	@Autowired
 	protected SectorDao sectorDao;
 	@Autowired
+	protected CityDao cityDao;
+	@Autowired
 	protected UnitDao unitDao;
 	@Autowired
 	protected LogDao logDao;

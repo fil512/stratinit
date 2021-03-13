@@ -87,7 +87,7 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
         String defSector;
         SectorType sectorType = testWorld.getSector(defCoords).getType();
         if (sectorType == SectorType.PLAYER_CITY) {
-            defSector = sectorDao.getCity(nationThem, defCoords).getType().toString();
+            defSector = cityDao.getCity(nationThem, defCoords).getType().toString();
         } else {
             defSector = sectorType.toString();
         }

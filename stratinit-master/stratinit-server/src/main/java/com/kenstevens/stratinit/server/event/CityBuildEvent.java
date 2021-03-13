@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.event;
 import com.google.common.annotations.VisibleForTesting;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.CityPK;
-import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.event.svc.StratInitUpdater;
 import com.kenstevens.stratinit.type.UnitType;
@@ -21,7 +21,7 @@ public class CityBuildEvent extends Event {
 	@Autowired
 	private StratInitUpdater stratInitUpdater;
 	@Autowired
-	private SectorDao sectorDao;
+	private CityDao cityDao;
 
 	public CityBuildEvent(City city) {
 		super(city);
@@ -30,9 +30,9 @@ public class CityBuildEvent extends Event {
 	@Override
 	protected void execute() {
 		CityPK cityPK = (CityPK) getEventKey().getKey();
-		UnitType oldBuild = sectorDao.findCity(cityPK).getBuild();
+		UnitType oldBuild = cityDao.findCity(cityPK).getBuild();
 		stratInitUpdater.buildUnit(cityPK, new Date());
-		City city = sectorDao.findCity(cityPK);
+		City city = cityDao.findCity(cityPK);
 		UnitType newBuild = city.getBuild();
 		if (!newBuild.equals(oldBuild)) {
 			this.cancel();

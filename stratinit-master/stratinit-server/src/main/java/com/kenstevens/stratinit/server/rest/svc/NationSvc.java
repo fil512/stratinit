@@ -7,9 +7,9 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
-import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
@@ -25,7 +25,7 @@ public class NationSvc {
     @Autowired
     private DataCache dataCache;
     @Autowired
-    private SectorDao sectorDao;
+    private CityDao cityDao;
     @Autowired
     private NationDao nationDao;
     @Autowired
@@ -54,7 +54,7 @@ public class NationSvc {
                                      boolean includePower, boolean isAlly) {
         SINation sination = new SINation(nation);
         if (includePower) {
-            sination.cities = sectorDao.getNumberOfCities(nation);
+            sination.cities = cityDao.getNumberOfCities(nation);
             sination.power = unitDaoService.getPower(nation);
         }
         if (me != null) {

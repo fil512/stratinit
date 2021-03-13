@@ -29,6 +29,8 @@ public class GameDaoService {
     @Autowired
     private SectorDao sectorDao;
     @Autowired
+    private CityDao cityDao;
+    @Autowired
     private UnitDao unitDao;
     @Autowired
     private RelationDaoService relationDaoService;
@@ -192,7 +194,7 @@ public class GameDaoService {
 
     // FIXME move this and others to NationDaoService
     private void updateTech(double maxTech, Nation nation, Date lastUpdated) {
-        int techCentres = (int) sectorDao.getNumberOfTechCentres(nation);
+        int techCentres = (int) cityDao.getNumberOfTechCentres(nation);
         if (techCentres >= Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length) {
             techCentres = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length - 1;
         }
@@ -255,9 +257,9 @@ public class GameDaoService {
 
 
     public int getCapitalPoints(Nation nation) {
-        int cities = sectorDao.getNumberOfCities(nation);
+        int cities = cityDao.getNumberOfCities(nation);
         int capitalShips = unitDao.getNumberOfCapitalShips(nation);
-        int bases = sectorDao.getNumberOfBases(nation);
+        int bases = cityDao.getNumberOfBases(nation);
         return cities + capitalShips + bases * 2;
     }
 
@@ -288,9 +290,9 @@ public class GameDaoService {
             }
             Collection<Nation> allies = relationDaoService.getAllies(nation);
             int cities = 0;
-            cities += sectorDao.getNumberOfCities(nation);
+            cities += cityDao.getNumberOfCities(nation);
             for (Nation ally : allies) {
-                cities += sectorDao.getNumberOfCities(ally);
+                cities += cityDao.getNumberOfCities(ally);
             }
             score.put(nation, cities);
             for (Nation ally : allies) {

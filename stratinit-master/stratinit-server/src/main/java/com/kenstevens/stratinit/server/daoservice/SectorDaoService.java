@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.move.WorldView;
@@ -28,9 +28,9 @@ public class SectorDaoService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private GameDao gameDao;
-    @Autowired
     private SectorDao sectorDao;
+    @Autowired
+    private CityDao cityDao;
     @Autowired
     private UnitDao unitDao;
     @Autowired
@@ -51,7 +51,7 @@ public class SectorDaoService {
     private DataCache dataCache;
 
     public void survey(Nation nation) {
-        List<City> cities = sectorDao.getCities(nation);
+        List<City> cities = cityDao.getCities(nation);
         List<Unit> units = unitDao.getUnits(nation);
         Set<Sector> seen = new HashSet<Sector>();
         seen.addAll(seeFromCities(cities));
@@ -102,7 +102,7 @@ public class SectorDaoService {
     }
 
     public void buildUnit(CityPK cityPK, Date buildTime) {
-        City city = sectorDao.findCity(cityPK);
+        City city = cityDao.findCity(cityPK);
         cityBuilderService.buildUnit(city, buildTime);
     }
 
@@ -170,7 +170,7 @@ public class SectorDaoService {
     private void setWorldSectorsFromCities(Collection<Sector> sectors,
                                            WorldView worldView) {
         List<WorldSector> friendlyCities = new ArrayList<WorldSector>();
-        Map<SectorCoords, City> cityMap = sectorDao.getCityMap(worldView
+        Map<SectorCoords, City> cityMap = cityDao.getCityMap(worldView
                 .getGame());
         for (Sector sector : sectors) {
             WorldSector worldSector = new WorldSector(sector);
@@ -276,21 +276,21 @@ public class SectorDaoService {
     }
 
     public void merge(City city) {
-        sectorDao.markCacheModified(city);
+        cityDao.markCacheModified(city);
     }
 
     // Returns old owner
     public Nation captureCity(Nation nation, Sector sector) {
         City city;
         Nation opponent = null;
-        city = sectorDao.getCity(sector);
+        city = cityDao.getCity(sector);
         if (city == null) {
             city = new City(sector, nation, UnitType.BASE);
-            sectorDao.save(city);
+            cityDao.save(city);
         } else {
             opponent = city.getNation();
             cityBuilderService.cityCapturedBuildChange(city);
-            sectorDao.transferCity(city, nation);
+            cityDao.transferCity(city, nation);
         }
         Sector citySector = dataCache.getWorld(nation.getGameId()).getSector(
                 sector.getCoords());
@@ -367,7 +367,7 @@ public class SectorDaoService {
 
     public WorldSector refreshWorldSector(Nation nation, WorldView worldView,
                                           WorldSector targetSector) {
-        List<Sector> sectors = new ArrayList<Sector>();
+        List<Sector> sectors = new ArrayList<>();
         sectors.add(dataCache.getWorld(nation.getGameId()).getSector(
                 targetSector.getCoords()));
         setWorldSectorsFromCities(sectors, worldView);
@@ -384,7 +384,7 @@ public class SectorDaoService {
     public Set<Nation> devastate(Unit attackerUnit, Sector sector, boolean isInitialAttack) {
         Set<Nation> retval = Sets.newHashSet();
         if (sector.getType() == SectorType.PLAYER_CITY) {
-            City city = sectorDao.getCity(sector);
+            City city = cityDao.getCity(sector);
             if (city == null) {
                 throw new IllegalStateException("Cannot find player city at "
                         + sector);
@@ -417,10 +417,10 @@ public class SectorDaoService {
                                    UpdateCityField field, UnitType build, UnitType nextBuild,
                                    boolean switchOnTechChange, SectorCoords nextCoords) {
 
-        City city = sectorDao.getCity(nation, coords);
+        City city = cityDao.getCity(nation, coords);
 
         if (city == null) {
-            return new Result<City>("You don't own city at " + coords, false);
+            return new Result<>("You don't own city at " + coords, false);
         }
 
         Result<City> retval;
@@ -429,12 +429,12 @@ public class SectorDaoService {
         } else if (field == UpdateCityField.NEXT_BUILD) {
             retval = cityBuilderService.updateNextBuild(city, nextBuild);
         } else if (field == UpdateCityField.SWITCH_ON_TECH_CHANGE) {
-            retval = new Result<City>(true);
+            retval = new Result<>(true);
             retval.addMessage("Setting switch on tech change in "
                     + city.getCoords() + " to " + switchOnTechChange);
             city.setSwitchOnTechChange(switchOnTechChange);
         } else if (field == UpdateCityField.NEXT_COORDS) {
-            retval = new Result<City>(true);
+            retval = new Result<>(true);
             if (nextCoords == null) {
                 retval.addMessage("Cancelling waypoint of city "
                         + city.getCoords());
@@ -455,11 +455,11 @@ public class SectorDaoService {
     }
 
     private void clearCityMove(City city) {
-        sectorDao.clearCityMove(city);
+        cityDao.clearCityMove(city);
     }
 
     private void surveyFromCity(City city) {
-        Set<Sector> cseen = new HashSet<Sector>();
+        Set<Sector> cseen = new HashSet<>();
         seeFromCity(cseen, city);
         MoveSeen moveSeen = new MoveSeen(city.getNation(), this, unitDaoService);
         addSectorsSeen(null, cseen, moveSeen);
@@ -476,7 +476,7 @@ public class SectorDaoService {
     }
 
     private List<Unit> makeUnitList(Unit unit) {
-        List<Unit> units = new ArrayList<Unit>();
+        List<Unit> units = new ArrayList<>();
         units.add(unit);
         return units;
     }
@@ -488,21 +488,22 @@ public class SectorDaoService {
 
     public Result<None> cedeCity(City city, Nation nation) {
         Nation oldOwner = city.getNation();
-        sectorDao.transferCity(city, nation);
+        cityDao.transferCity(city, nation);
         survey(nation);
         messageDaoService.notify(nation, oldOwner + " " + city.getCoords()
                 + " ceded", oldOwner + " gave you a city at "
                 + city.getCoords());
-        return new Result<None>("City ownership transferred from " + oldOwner
+        return new Result<>("City ownership transferred from " + oldOwner
                 + " to " + city.getNation(), true);
     }
 
+    // FIXME move city methods out
     public void switchCityBuildsFromTechChange(Nation nation, Date buildTime) {
-        List<City> cities = sectorDao.getCities(nation);
+        List<City> cities = cityDao.getCities(nation);
         for (City city : cities) {
             if (city.isSwitchOnTechChange()
                     && cityBuilderService.switchCityProductionIfTechPermits(city, buildTime)) {
-                sectorDao.markCacheModified(city);
+                cityDao.markCacheModified(city);
             }
         }
     }
@@ -512,10 +513,10 @@ public class SectorDaoService {
         SectorCoords coords = unit.getCoords();
         Sector sector = sectorDao.getWorld(nation.getGame()).getSector(coords);
         if (!canEstablishCity(nation, sector)) {
-            return new Result<None>("You may not establish a city at " + coords + ".  Cities can only be established on land or next to land and may not be adjacent to other player cities.", false);
+            return new Result<>("You may not establish a city at " + coords + ".  Cities can only be established on land or next to land and may not be adjacent to other player cities.", false);
         }
         City city = new City(sector, nation, UnitType.BASE);
-        sectorDao.save(city);
+        cityDao.save(city);
         cityChanged(city);
         sector.setType(SectorType.PLAYER_CITY);
         sectorDao.markCacheModified(sector);
@@ -524,11 +525,11 @@ public class SectorDaoService {
         logDaoService.save(battleLog);
         unit.decreaseMobility(Constants.MOB_COST_TO_CREATE_CITY);
         unitDao.merge(unit);
-        return new Result<None>("City established at " + coords + ".", true);
+        return new Result<>("City established at " + coords + ".", true);
     }
 
     private boolean canEstablishCity(Nation nation, Sector sector) {
-        return sectorDao.canEstablishCity(nation, sector);
+        return cityDao.canEstablishCity(nation, sector);
     }
 
     public Result<None> destroyCity(City city) {
@@ -539,13 +540,13 @@ public class SectorDaoService {
 
         remove(city);
 
-        return new Result<None>("City destroyed at " + sector.getCoords() + ".", true);
+        return new Result<>("City destroyed at " + sector.getCoords() + ".", true);
     }
 
     public void remove(City city) {
         eventQueue.cancel(city);
         clearCityMove(city);
-        sectorDao.delete(city);
+        cityDao.delete(city);
     }
 
     public void cityChanged(City city) {
@@ -557,18 +558,10 @@ public class SectorDaoService {
         sectorDao.markCacheModified(sector);
     }
 
-
-    public void removeCityMoves(Game game) {
-        for (CityMove cityMove : Lists.newArrayList(sectorDao.getCityMoves(game))) {
-            sectorDao.delete(cityMove);
-        }
-    }
-
     public void setCityMove(City city, SectorCoords targetCoords) {
         CityMove cityMove = new CityMove(city, targetCoords);
         city.setCityMove(cityMove);
-        sectorDao.save(cityMove);
+        cityDao.save(cityMove);
         merge(city);
     }
-
 }

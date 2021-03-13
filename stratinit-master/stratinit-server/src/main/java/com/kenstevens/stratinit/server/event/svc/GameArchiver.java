@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.client.model.*;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.server.daoservice.GameHistoryDaoService;
 import com.kenstevens.stratinit.server.daoservice.TeamCalculator;
@@ -26,7 +26,7 @@ public class GameArchiver {
     @Autowired
     private PlayerDao playerDao;
     @Autowired
-    private SectorDao sectorDao;
+    private CityDao cityDao;
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
@@ -63,7 +63,7 @@ public class GameArchiver {
             logger.error("Unable to find player " + player + " in game " + game + ".  Not archiving team.");
             return;
         }
-        int cities = sectorDao.getNumberOfCities(nation);
+        int cities = cityDao.getNumberOfCities(nation);
         int power = unitDaoService.getPower(nation);
         GameHistoryNation gameHistoryNation = new GameHistoryNation(gameHistoryTeam, nationName, cities, power);
         gameHistoryDaoService.save(gameHistoryNation);

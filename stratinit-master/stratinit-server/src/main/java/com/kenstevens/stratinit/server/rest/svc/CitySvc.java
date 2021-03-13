@@ -5,6 +5,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SICity;
@@ -21,10 +22,12 @@ public class CitySvc {
 	@Autowired
 	private SectorDao sectorDao;
 	@Autowired
+	private CityDao cityDao;
+	@Autowired
 	private RelationDao relationDao;
 
 	public List<SICity> getCities(Nation nation) {
-		List<City> cities = sectorDao.getCities(nation);
+		List<City> cities = cityDao.getCities(nation);
 		return citiesToSICities(nation, cities);
 	}
 
@@ -44,11 +47,11 @@ public class CitySvc {
 
 	public List<SICity> getSeenCities(Nation nation) {
 		Set<City> cities = new HashSet<City>();
-		List<City> myCities = sectorDao.getSeenCities(nation);
+		List<City> myCities = cityDao.getSeenCities(nation);
 		cities.addAll(myCities);
 		Collection<Nation> allies = relationDao.getAllies(nation);
 		for (Nation ally : allies) {
-			List<City> allycities = sectorDao.getSeenCities(ally);
+			List<City> allycities = cityDao.getSeenCities(ally);
 			cities.addAll(allycities);
 		}
 		return citiesToSICities(nation, cities);

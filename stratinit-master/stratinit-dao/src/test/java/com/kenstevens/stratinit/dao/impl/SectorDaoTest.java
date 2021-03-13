@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.SectorSeen;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.repo.SectorSeenRepo;
 import com.kenstevens.stratinit.type.UnitType;
@@ -13,19 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SectorDaoTest extends StratInitTest {
-	@Autowired
-	private SectorDao sectorDao;
-	@Autowired
-	private SectorSeenRepo sectorSeenRepo;
+    @Autowired
+    private SectorDao sectorDao;
+    @Autowired
+    private CityDao cityDao;
+    @Autowired
+    private SectorSeenRepo sectorSeenRepo;
 
-	@Test
-	public void testSectorPersistance() {
-		createGame();
-		Sector result = sectorDao.getWorld(testGame).getSector(testCoords);
-		assertEquals(testGame.getId(), result.getGame().getId());
-	}
+    @Test
+    public void testSectorPersistance() {
+        createGame();
+        Sector result = sectorDao.getWorld(testGame).getSector(testCoords);
+        assertEquals(testGame.getId(), result.getGame().getId());
+    }
 
-	@Test
+    @Test
 	public void testSectorSeenDoubleSaveIfNew() {
 		createNation1();
 		Sector sector = sectorDao.getWorld(testGame).getSector(testCoords);
@@ -69,16 +72,16 @@ public class SectorDaoTest extends StratInitTest {
 
 	@Test
 	public void testCityPersistance() {
-		try {
-			createNation1();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		City city = new City(testSector, testNation1, UnitType.INFANTRY);
-		sectorDao.save(city);
+        try {
+            createNation1();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        City city = new City(testSector, testNation1, UnitType.INFANTRY);
+        cityDao.save(city);
 
-		City result = sectorDao.getCity(testSector);
-		assertEquals(city, result);
-		assertEquals(city.getNation(), result.getNation());
-	}
+        City result = cityDao.getCity(testSector);
+        assertEquals(city, result);
+        assertEquals(city.getNation(), result.getNation());
+    }
 }

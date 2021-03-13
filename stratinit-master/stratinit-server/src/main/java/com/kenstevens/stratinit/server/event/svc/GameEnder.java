@@ -5,8 +5,8 @@ import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.client.model.Unit;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.RelationDao;
-import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.server.daoservice.*;
 import org.slf4j.Logger;
@@ -19,8 +19,7 @@ public class GameEnder {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SectorDao sectorDao;
-
+    private CityDao cityDao;
     @Autowired
     private GameDaoService gameDaoService;
     @Autowired
@@ -54,7 +53,7 @@ public class GameEnder {
 
 
     private void removeCities(Game game) {
-        for (City city : Lists.newArrayList(sectorDao.getCities(game))) {
+        for (City city : Lists.newArrayList(cityDao.getCities(game))) {
             sectorDaoService.remove(city);
         }
 

@@ -25,14 +25,14 @@ public class BuildCityTest extends TwoPlayerBase {
     public void buildCityNotEnoughMob() {
         Unit eng = unitDaoService.buildUnit(nationMe, LAND,
                 UnitType.ENGINEER);
-        List<City> cities = sectorDao.getCities(nationMe);
+        List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
         long cp = nationMe.getCommandPoints();
         Result<SIUpdate> result = buildCity(eng);
         assertEquals(cp, nationMe.getCommandPoints());
         assertFalseResult(result);
         assertTrue(result.toString().contains("mobility"));
-        cities = sectorDao.getCities(nationMe);
+        cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
     }
 
@@ -41,11 +41,11 @@ public class BuildCityTest extends TwoPlayerBase {
         Unit tank = unitDaoService.buildUnit(nationMe, LAND,
                 UnitType.TANK);
         tank.setMobility(9);
-        List<City> cities = sectorDao.getCities(nationMe);
+        List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
         Result<SIUpdate> result = buildCity(tank);
         assertFalseResult(result);
-        cities = sectorDao.getCities(nationMe);
+        cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
     }
 
@@ -54,7 +54,7 @@ public class BuildCityTest extends TwoPlayerBase {
         Unit eng = unitDaoService.buildUnit(nationMe, LAND,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
-        List<City> cities = sectorDao.getCities(nationMe);
+        List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
         long cp = nationMe.getCommandPoints();
         Collection<SectorSeen> sectors = sectorDao.getSectorsSeen(nationMe);
@@ -69,7 +69,7 @@ public class BuildCityTest extends TwoPlayerBase {
         assertResult(result);
         assertEquals(0, eng.getMobility());
         assertTrue(eng.isAlive());
-        cities = sectorDao.getCities(nationMe);
+        cities = cityDao.getCities(nationMe);
         assertEquals(3, cities.size());
     }
 
@@ -79,11 +79,11 @@ public class BuildCityTest extends TwoPlayerBase {
                 UnitType.ENGINEER);
         sectorDaoService.captureCity(nationThem, PORT);
         eng.setMobility(eng.getMaxMobility());
-        List<City> cities = sectorDao.getCities(nationMe);
+        List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
         Result<SIUpdate> result = buildCity(eng);
         assertFalseResult(result);
-        cities = sectorDao.getCities(nationMe);
+        cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
     }
 }

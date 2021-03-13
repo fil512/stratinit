@@ -140,7 +140,7 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
                 makeUnitList(myIcbm), BOTTOM_CITY);
         assertResult(result);
         assertTrue(icbmThem.isAlive());
-        assertEquals(2, sectorDao.getCities(nationMe).size());
+        assertEquals(2, cityDao.getCities(nationMe).size());
     }
 
     @Test
@@ -157,6 +157,6 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
         assertFalse(myIcbm.isAlive());
         assertTrue(myIcbm2.isAlive());
         assertTrue(icbmThem2.isAlive());
-        assertEquals(1, sectorDao.getCities(nationMe).size());
+        assertEquals(1, cityDao.getCities(nationMe).size());
     }
 }

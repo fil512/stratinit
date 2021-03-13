@@ -36,7 +36,7 @@ public class SectorDaoServiceTest extends BaseStratInitControllerTest {
     public void worldFlak() {
         joinGamePlayerMe();
         sectorDaoService.captureCity(nationMe, PORT);
-        City city = sectorDao.getCity(testWorld.getSector(PORT));
+        City city = cityDao.getCity(testWorld.getSector(PORT));
         city.setBuild(UnitType.INFANTRY, new Date());
         sectorDaoService.merge(city);
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);

@@ -27,7 +27,7 @@ public class EventSchedulerImpl implements EventScheduler {
     @Autowired
     private EventQueue eventQueue;
     @Autowired
-    private SectorDao sectorDao;
+    private CityDao cityDao;
     @Autowired
     private GameDaoService gameDaoService;
     @Autowired
@@ -153,7 +153,7 @@ public class EventSchedulerImpl implements EventScheduler {
     }
 
     private void updateCities(Game game, boolean fromEvent) {
-        Collection<City> cities = sectorDao.getCities(game);
+        Collection<City> cities = cityDao.getCities(game);
         if (cities.size() > 0) {
             logger.info("Updating " + cities.size() + " cities");
         }

@@ -94,6 +94,4 @@ public class GameDao extends CacheDao {
     public void remove(City city) {
         cityRepo.delete(city);
     }
-
-
 }

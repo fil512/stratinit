@@ -23,7 +23,7 @@ public class SectorDaoTest extends TwoPlayerBase {
 
     @Test
     public void countCities() {
-        int cities = sectorDao.getNumberOfCities(nationMe);
+        int cities = cityDao.getNumberOfCities(nationMe);
         assertEquals(2, cities);
     }
 
@@ -44,35 +44,35 @@ public class SectorDaoTest extends TwoPlayerBase {
 
     @Test
     public void canEstablishCityByCity() {
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(0, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 1))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(2, 2))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 2))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 3))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 4))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(0, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 1))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(2, 2))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 2))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 3))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 4))));
 
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 1))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 2))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 2))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 3))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 4))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 1))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 2))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 2))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 3))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 4))));
     }
 
     @Test
     public void canEstablishCityByWater() {
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(0, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(2, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(3, 0))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(4, 0))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(5, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(6, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(9, 0))));
-        assertTrue(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(10, 0))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(11, 0))));
-        assertFalse(sectorDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(12, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(0, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(1, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(2, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(3, 0))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(4, 0))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(5, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(6, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(7, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(8, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(9, 0))));
+        assertTrue(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(10, 0))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(11, 0))));
+        assertFalse(cityDao.canEstablishCity(nationMe, testWorld.getSector(new SectorCoords(12, 0))));
     }
 }

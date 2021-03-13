@@ -48,7 +48,7 @@ public class LaunchTest extends TwoPlayerBase {
     }
 
     private void assertNoDevastation() {
-        List<City> cities = sectorDao.getCities(nationThem);
+        List<City> cities = cityDao.getCities(nationThem);
         assertEquals(2, cities.size());
         List<Unit> units = unitDao.getUnits(nationThem);
         assertEquals(5, units.size());
@@ -57,7 +57,7 @@ public class LaunchTest extends TwoPlayerBase {
     private void assertDevastation() {
         List<City> cities;
         List<Unit> units;
-        cities = sectorDao.getCities(nationThem);
+        cities = cityDao.getCities(nationThem);
         assertEquals(0, cities.size());
         units = unitDao.getUnits(nationThem);
         assertEquals(0, units.size());

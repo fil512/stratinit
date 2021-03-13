@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.rank;
 
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
@@ -27,6 +28,8 @@ public class TeamProvider implements ITeamProvider {
     RelationDao relationDao;
     @Autowired
     SectorDao sectorDao;
+    @Autowired
+    CityDao cityDao;
 
     @Override
     public Collection<Nation> getAllies(Nation nation) {
@@ -40,7 +43,7 @@ public class TeamProvider implements ITeamProvider {
 
     @Override
     public int getNumberOfCities(Nation nation) {
-        return sectorDao.getNumberOfCities(nation);
+        return cityDao.getNumberOfCities(nation);
     }
 
     @Override
