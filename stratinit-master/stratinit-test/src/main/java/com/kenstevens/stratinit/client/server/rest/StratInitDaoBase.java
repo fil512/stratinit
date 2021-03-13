@@ -44,6 +44,8 @@ public abstract class StratInitDaoBase {
 	@Autowired
 	protected GameDao gameDao;
 	@Autowired
+	protected NationDao nationDao;
+	@Autowired
 	protected RelationDao relationDao;
 	@Autowired
 	protected SectorDao sectorDao;

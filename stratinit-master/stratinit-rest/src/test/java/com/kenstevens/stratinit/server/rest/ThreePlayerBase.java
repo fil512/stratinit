@@ -25,7 +25,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     public void joinThreePlayers() {
         playerThree = createPlayer(PLAYER_THREE_NAME);
         Result<SINation> retval = joinGame(playerThree);
-        nationThird = gameDao.findNation(testGameId, playerThree);
+        nationThird = nationDao.findNation(testGameId, playerThree);
         setAuthentication(PlayerHelper.PLAYER_ME);
     }
 

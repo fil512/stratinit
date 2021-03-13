@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.cache;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.repo.GameRepo;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DataCacheTest extends StratInitTest {
 	@Autowired
 	GameDao gameDao;
+	@Autowired
+	NationDao nationDao;
 	@Autowired
 	GameRepo gameRepo;
 	@Autowired
@@ -53,7 +56,7 @@ public class DataCacheTest extends StratInitTest {
 		createNation1(testGame2);
 
 		// score game 1
-		List<Nation> nations = gameDao.getNations(testGame);
+		List<Nation> nations = nationDao.getNations(testGame);
 		assertEquals(1, nations.size());
 		Player player1 = nations.get(0).getPlayer();
 		player1.setWins(5);
@@ -62,7 +65,7 @@ public class DataCacheTest extends StratInitTest {
 
 		// check game 1 nation 1
 
-		List<Nation> nations2 = gameDao.getNations(testGame2);
+		List<Nation> nations2 = nationDao.getNations(testGame2);
 		Player player2 = nations2.get(0).getPlayer();
 
 		assertEquals(5, player2.getWins());

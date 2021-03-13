@@ -4,14 +4,10 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.ExpungeSvc;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.config.IServerConfig;
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,8 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
-import java.sql.BatchUpdateException;
-import java.sql.SQLException;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {DaoConfig.class, TestConfig.class})
@@ -36,6 +30,8 @@ public abstract class StratInitTest {
 
     @Autowired
     protected GameDao gameDao;
+    @Autowired
+    protected NationDao nationDao;
     @Autowired
     protected UnitDao unitDao;
     @Autowired
@@ -74,22 +70,6 @@ public abstract class StratInitTest {
         expungeSvc.expungeAll();
     }
 
-    protected void handleException(Exception e) throws Exception {
-        int index = ExceptionUtils.indexOfThrowable(e, BatchUpdateException.class);
-        if (index != -1) {
-            BatchUpdateException bue = (BatchUpdateException) ExceptionUtils.getThrowables(e)[index];
-            SQLException sqlException = bue.getNextException();
-            if (sqlException != null) {
-                logger.error("SQL STACK TRACE: " + sqlException.getMessage(), sqlException);
-            } else {
-                logger.error("No SQLException found");
-            }
-        } else {
-            logger.error("No SQLException found");
-        }
-        throw e;
-    }
-
     protected void createGame() {
         testGame = new Game("test", 10);
         testGame.setBlitz(true);
@@ -123,14 +103,14 @@ public abstract class StratInitTest {
         Player player = playerDao.find(testPlayer1.getUsername());
         testNation1 = new Nation(game, player);
         testNation1.setStartCoords(new SectorCoords(0, 0));
-        gameDao.save(testNation1);
+        nationDao.save(testNation1);
     }
 
     protected void createNation2() {
         createNation1();
         testNation2 = new Nation(testGame, testPlayer2);
         testNation2.setStartCoords(new SectorCoords(4, 0));
-        gameDao.save(testNation2);
+        nationDao.save(testNation2);
     }
 
     protected void createUnit1() {

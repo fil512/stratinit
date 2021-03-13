@@ -19,9 +19,9 @@ public class PlayerDao {
 	@Autowired
 	private PlayerRepo playerRepo;
 	@Autowired
-	private PlayerRoleRepo playerRoleRepo;
-	@Autowired
-	private GameDao gameDao;
+    private PlayerRoleRepo playerRoleRepo;
+    @Autowired
+    private NationDao nationDao;
 
 	public List<Player> getAllPlayers() {
 		return dataCache.getAllPlayers();
@@ -57,14 +57,14 @@ public class PlayerDao {
 	}
 
 	public void saveAndUpdateNations(Player player) {
-		playerRepo.save(player);
-		// Note this behavior is different from other daos.  We don't mind doing a db save every time
-		// since player updates are rare.
-		List<Nation> nations = gameDao.getNations(player);
-		for (Nation nation : nations) {
-			nation.getPlayer().copyFrom(player);
-		}
-	}
+        playerRepo.save(player);
+        // Note this behavior is different from other daos.  We don't mind doing a db save every time
+        // since player updates are rare.
+        List<Nation> nations = nationDao.getNations(player);
+        for (Nation nation : nations) {
+            nation.getPlayer().copyFrom(player);
+        }
+    }
 
 	public List<PlayerRole> getRoles(Player player) {
 		return playerRoleRepo.findByPlayer(player);

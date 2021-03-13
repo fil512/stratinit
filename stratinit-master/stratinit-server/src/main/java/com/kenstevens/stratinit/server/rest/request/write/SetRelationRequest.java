@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.rest.request.write;
 
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
@@ -20,7 +20,7 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 	private final int nationId;
 	private final RelationType relationType;
 	@Autowired
-	private GameDao gameDao;
+	private NationDao nationDao;
 	@Autowired
 	private RelationDaoService relationDaoService;
 
@@ -32,7 +32,7 @@ public class SetRelationRequest extends PlayerWriteRequest<SIRelation> {
 	@Override
 	protected Result<SIRelation> executeWrite() {
 		Nation nation = getNation();
-		Nation target = gameDao.getNation(nation.getGameId(), nationId);
+		Nation target = nationDao.getNation(nation.getGameId(), nationId);
 		if (nation.equals(target)) {
 			return new Result<SIRelation>(
 					"You may not change relations with yourself", false);

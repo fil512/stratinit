@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.config.ServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.helper.GameHelper;
 import com.kenstevens.stratinit.helper.NationHelper;
@@ -46,6 +47,8 @@ public class GameDaoStateChangeTest {
     private SectorDao sectorDao;
     @Mock
     private GameDao gameDao;
+    @Mock
+    private NationDao nationDao;
     @Mock
     private GameCreator gameCreator;
     @Mock
@@ -143,7 +146,7 @@ public class GameDaoStateChangeTest {
         for (int i = 0; i < numPlayers; ++i) {
             nations.add(NationHelper.newNation(PlayerHelper.newPlayer(i)));
         }
-        when(gameDao.getNations(GameHelper.game)).thenReturn(nations);
+        when(nationDao.getNations(GameHelper.game)).thenReturn(nations);
     }
 
     @Test

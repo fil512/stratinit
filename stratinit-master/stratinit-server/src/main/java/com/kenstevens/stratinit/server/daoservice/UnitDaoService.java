@@ -228,9 +228,8 @@ public class UnitDaoService {
     }
 
     public Set<Unit> getTeamSeenUnits(Nation nation, Collection<Nation> allies) {
-        Set<Unit> units = new HashSet<Unit>();
         Collection<Unit> myUnits = unitDao.getSeenUnits(nation);
-        units.addAll(myUnits);
+        Set<Unit> units = new HashSet<>(myUnits);
         for (Nation ally : allies) {
             Collection<Unit> allySeenUnits = unitDao.getSeenUnits(ally);
             for (Unit unit : allySeenUnits) {
@@ -252,7 +251,7 @@ public class UnitDaoService {
     }
 
     public Set<Unit> getAllyUnits(Collection<Nation> allies) {
-        Set<Unit> units = new HashSet<Unit>();
+        Set<Unit> units = new HashSet<>();
         for (Nation ally : allies) {
             List<Unit> allyUnits = unitDao.getUnits(ally);
             units.addAll(allyUnits);
@@ -274,14 +273,10 @@ public class UnitDaoService {
 
     public Map<SectorCoords, List<Unit>> getUnitMap(Game game) {
         Collection<Unit> units = unitDao.getUnits(game);
-        Map<SectorCoords, List<Unit>> retval = new HashMap<SectorCoords, List<Unit>>();
+        Map<SectorCoords, List<Unit>> retval = new HashMap<>();
         for (Unit unit : units) {
             SectorCoords coords = unit.getCoords();
-            List<Unit> list = retval.get(coords);
-            if (list == null) {
-                list = new ArrayList<Unit>();
-                retval.put(coords, list);
-            }
+            List<Unit> list = retval.computeIfAbsent(coords, k -> new ArrayList<>());
             list.add(unit);
         }
         return retval;
@@ -300,16 +295,15 @@ public class UnitDaoService {
         }
         messageDaoService.notify(nation, oldOwner + " " + unit + " ceded",
                 oldOwner + " gave you a " + unit + " at " + unit.getCoords());
-        return new Result<None>(unit + " ownership transferred from "
+        return new Result<>(unit + " ownership transferred from "
                 + oldOwner + " to " + unit.getNation(), true);
     }
 
     public List<Unit> getPassengers(Unit holder, WorldSector fromSector, Collection<Unit> exclude) {
         Collection<Unit> units = unitDao.getUnits(holder.getParentGame(),
                 fromSector.getCoords());
-        List<Unit> passengers = new ContainerUnit(holder, units)
+        return new ContainerUnit(holder, units)
                 .getPassengers(fromSector, exclude);
-        return passengers;
     }
 
     public List<Unit> getPassengers(Unit holder, WorldSector fromSector) {
@@ -318,12 +312,12 @@ public class UnitDaoService {
 
     public Result<None> disbandUnit(Unit unit) {
         killUnit(unit);
-        return new Result<None>(unit + " destroyed.", true);
+        return new Result<>(unit + " destroyed.", true);
     }
 
     public Result<None> cancelMoveOrder(Unit unit) {
         clearUnitMove(unit);
-        return new Result<None>("Move order cancelled for " + unit + ".", true);
+        return new Result<>("Move order cancelled for " + unit + ".", true);
     }
 
     public Result<None> buildCity(Unit unit) {

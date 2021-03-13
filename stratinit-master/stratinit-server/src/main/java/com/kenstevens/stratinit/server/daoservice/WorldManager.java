@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.daoservice;
 import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
@@ -31,6 +32,8 @@ public class WorldManager {
     private MailService mailService;
     @Autowired
     private GameDao gameDao;
+    @Autowired
+    private NationDao nationDao;
 
     public World build(Game game) {
         return worldCreator.build(game);
@@ -44,7 +47,7 @@ public class WorldManager {
             throw new IllegalStateException("Island " + island + " on game " + game.getGamename() + " has no start cities.  game.players = " + game.getPlayers() + ".  nation = " + nation + "." + "  nation.nationId=" + nation.getNationId());
         }
         nation.setStartCoords(islandCities.get(0).getCoords());
-        gameDao.markCacheModified(nation);
+        nationDao.markCacheModified(nation);
         boolean firstCity = true;
         for (Sector sector : islandCities) {
             City city;

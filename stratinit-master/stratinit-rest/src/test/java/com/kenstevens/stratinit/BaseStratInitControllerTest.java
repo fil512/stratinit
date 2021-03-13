@@ -35,11 +35,11 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
     private MoveService moveService;
 
     protected Result<SINation> joinGamePlayerMe() {
-        Result<SINation> retval = joinGame(playerMe);
-		nationMe = gameDao.findNation(testGameId, playerMe);
+		Result<SINation> retval = joinGame(playerMe);
+		nationMe = nationDao.findNation(testGameId, playerMe);
 		setAuthentication(PlayerHelper.PLAYER_ME);
-        return retval;
-    }
+		return retval;
+	}
 
     protected void setBuild(SectorCoords coords, UnitType type) {
         City city = sectorDao.getCity(testWorld.getSector(coords));

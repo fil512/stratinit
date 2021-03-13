@@ -90,7 +90,7 @@ public class WorldManagerTest extends EventTimerMockedBase {
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.NEXT_BUILD, null, UnitType.SATELLITE, false, null);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.SWITCH_ON_TECH_CHANGE, null, null, true, null);
 		nation.setTech(15.0);
-		gameDao.markCacheModified(nation);
+		nationDao.markCacheModified(nation);
 		cityBuilderService.switchCityProductionIfTechPermits(city, now);
 		cityBuilderService.buildUnit(city, now);
 		units = unitDao.getUnits(nation);
@@ -117,7 +117,7 @@ public class WorldManagerTest extends EventTimerMockedBase {
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.SWITCH_ON_TECH_CHANGE, null, null, true, null);
 		cityBuilderService.buildUnit(city, now);
 		nation.setTech(15.0);
-		gameDao.markCacheModified(nation);
+		nationDao.markCacheModified(nation);
 		cityBuilderService.switchCityProductionIfTechPermits(city, now);
 		assertEquals(UnitType.SATELLITE, city.getBuild());
 		units = unitDao.getUnits(nation);
@@ -141,7 +141,7 @@ public class WorldManagerTest extends EventTimerMockedBase {
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.NEXT_BUILD, null, UnitType.INFANTRY, false, null);
 		sectorDaoService.updateCity(nation, city.getCoords(), UpdateCityField.SWITCH_ON_TECH_CHANGE, null, null, true, null);
 		nation.setTech(15.0);
-		gameDao.markCacheModified(nation);
+		nationDao.markCacheModified(nation);
 		cityBuilderService.switchCityProductionIfTechPermits(city, now);
 		cityBuilderService.buildUnit(city, now);
 		units = unitDao.getUnits(nation);

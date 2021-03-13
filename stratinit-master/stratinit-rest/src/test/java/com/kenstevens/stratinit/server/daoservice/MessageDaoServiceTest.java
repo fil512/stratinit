@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.client.model.Mail;
-import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.helper.NationHelper;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class MessageDaoServiceTest {
     @Mock
     private MessageDao messageDao;
     @Mock
-    private GameDao gameDao;
+    private NationDao nationDao;
     @Mock
     private MailService mailService;
 
@@ -40,7 +40,7 @@ public class MessageDaoServiceTest {
         assertEquals(NationHelper.nationMe, result.getFrom());
         assertEquals(NationHelper.nationThem, result.getTo());
         verify(messageDao).save(any());
-        verify(gameDao).markCacheModified(NationHelper.nationThem);
+        verify(nationDao).markCacheModified(NationHelper.nationThem);
         verify(mailService).sendEmail(any(), any());
     }
 
@@ -52,7 +52,7 @@ public class MessageDaoServiceTest {
         assertEquals(NationHelper.nationMe, result.getFrom());
         assertNull(result.getTo());
         verify(messageDao).save(any());
-        verifyNoInteractions(gameDao);
+        verifyNoInteractions(nationDao);
         verifyNoInteractions(mailService);
     }
 }

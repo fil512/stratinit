@@ -17,15 +17,11 @@ import java.util.*;
 
 @Service
 public class NewsLogBuilder {
-	private final Comparator<NewsWorthy> byDate = new Comparator<NewsWorthy>() {
-		public int compare(NewsWorthy e1, NewsWorthy e2) {
-			return e1.getDate().compareTo(e2.getDate());
-		}
-	};
+	private final Comparator<NewsWorthy> byDate = Comparator.comparing(NewsWorthy::getDate);
 	@Autowired
 	private MessageDao messageDao;
 	@Autowired
-	private GameDao gameDao;
+	private NationDao nationDao;
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired
@@ -45,7 +41,7 @@ public class NewsLogBuilder {
 
 	private void addBulletins(Game game, SINewsLogs newsLogs) {
 		Iterable<Mail> bulletins = messageDao.getBulletins(game);
-		NewsWorthySplitter<Mail> splitter = new NewsWorthySplitter<Mail>();
+		NewsWorthySplitter<Mail> splitter = new NewsWorthySplitter<>();
 		Map<Integer, List<Mail>> map = splitter.split(game, bulletins);
 		for (int day : map.keySet()) {
 			List<Mail> dayBulletins = map.get(day);
@@ -56,14 +52,14 @@ public class NewsLogBuilder {
 
 	private void addFirsts(Game game, SINewsLogs newsLogs) {
 		List<UnitBuildAudit> firsts = buildFirsts(game);
-		NewsWorthySplitter<UnitBuildAudit> splitter = new NewsWorthySplitter<UnitBuildAudit>();
+		NewsWorthySplitter<UnitBuildAudit> splitter = new NewsWorthySplitter<>();
 		Map<Integer, List<UnitBuildAudit>> map = splitter.split(game, firsts);
 
 		for (int day : map.keySet()) {
 			List<UnitBuildAudit> dayFirsts = map.get(day);
-			List<SINewsFirst> sifirsts = new ArrayList<SINewsFirst>();
+			List<SINewsFirst> sifirsts = new ArrayList<>();
 			for (UnitBuildAudit first : dayFirsts) {
-				Nation nation = gameDao.findNation(game, playerDao.find(first.getUsername()));
+				Nation nation = nationDao.findNation(game, playerDao.find(first.getUsername()));
 				SINewsFirst sifirst = new SINewsFirst(first, nation);
 				sifirsts.add(sifirst);
 			}
@@ -73,15 +69,15 @@ public class NewsLogBuilder {
 
 	private void addForeignAffairs(Game game, SINewsLogs newsLogs) {
 		Iterable<RelationChangeAudit> relationChanges = messageDao.getRelationChanges(game);
-		NewsWorthySplitter<RelationChangeAudit> splitter = new NewsWorthySplitter<RelationChangeAudit>();
+		NewsWorthySplitter<RelationChangeAudit> splitter = new NewsWorthySplitter<>();
 		Map<Integer, List<RelationChangeAudit>> map = splitter.split(game, relationChanges);
 		for (int day : map.keySet()) {
 			List<RelationChangeAudit> dayRelations = map.get(day);
-			List<SINewsForeignAffairs> siForeignAffairs = new ArrayList<SINewsForeignAffairs>();
+			List<SINewsForeignAffairs> siForeignAffairs = new ArrayList<>();
 
 			for (RelationChangeAudit relationChangeAudit : dayRelations) {
-				Nation from = gameDao.findNation(game, playerDao.find(relationChangeAudit.getFromUsername()));
-				Nation to = gameDao.findNation(game, playerDao.find(relationChangeAudit.getToUsername()));
+				Nation from = nationDao.findNation(game, playerDao.find(relationChangeAudit.getFromUsername()));
+				Nation to = nationDao.findNation(game, playerDao.find(relationChangeAudit.getToUsername()));
 				SINewsForeignAffairs sifor = new SINewsForeignAffairs(relationChangeAudit, from, to);
 				siForeignAffairs.add(sifor);
 			}
@@ -91,7 +87,7 @@ public class NewsLogBuilder {
 
 	private List<UnitBuildAudit> buildFirsts(Game game) {
 		List<UnitBuildAudit> unitBuildAudits = unitDao.getBuildAudits(game);
-		Map<UnitType, UnitBuildAudit> map = new HashMap<UnitType, UnitBuildAudit>();
+		Map<UnitType, UnitBuildAudit> map = new HashMap<>();
 		for (UnitBuildAudit unitBuildAudit : unitBuildAudits) {
 			UnitType key = unitBuildAudit.getType();
 			if (map.get(key) != null) {
@@ -99,8 +95,8 @@ public class NewsLogBuilder {
 			}
 			map.put(key, unitBuildAudit);
 		}
-		List<UnitBuildAudit> firsts = new ArrayList<UnitBuildAudit>(map.values());
-		Collections.sort(firsts, byDate);
+		List<UnitBuildAudit> firsts = new ArrayList<>(map.values());
+		firsts.sort(byDate);
 		return firsts;
 	}
 

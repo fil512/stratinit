@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Player;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SIGame;
@@ -27,7 +27,7 @@ public class NationSvc {
     @Autowired
     private SectorDao sectorDao;
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
     @Autowired
     private RelationDao relationDao;
     @Autowired
@@ -76,7 +76,7 @@ public class NationSvc {
     }
 
     public List<SIGame> getJoinedGames(Player player) {
-        List<Nation> nations = gameDao.getNations(player);
+        List<Nation> nations = nationDao.getNations(player);
         return nationsToSIGames(nations);
     }
 

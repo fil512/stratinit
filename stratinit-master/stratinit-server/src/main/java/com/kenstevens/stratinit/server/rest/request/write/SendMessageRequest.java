@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.rest.request.write;
 
 import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dto.SIMessage;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class SendMessageRequest extends PlayerWriteRequest<Integer> {
 	private final SIMessage simessage;
 	@Autowired
-	private GameDao gameDao;
+	private NationDao nationDao;
 	@Autowired
 	private MessageDaoService messageDaoService;
 
@@ -29,7 +29,7 @@ public class SendMessageRequest extends PlayerWriteRequest<Integer> {
 		Nation nation = getNation();
 		Nation to = null;
 		if (simessage.toNationId != Constants.UNASSIGNED) {
-			to = gameDao.getNation(nation.getGameId(), simessage.toNationId);
+			to = nationDao.getNation(nation.getGameId(), simessage.toNationId);
 		}
 
 		Mail mail = messageDaoService.sendMail(nation, to, simessage.subject,

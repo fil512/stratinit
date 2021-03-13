@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
@@ -36,7 +36,7 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
     @Autowired
     private SectorDao sectorDao;
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
     @Autowired
     private RelationDao relationDao;
     @Autowired
@@ -61,7 +61,7 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
             return new Result<SIUpdate>("You do not own the city at " + coords, false);
         }
         int gameId = nation.getGameId();
-        Nation target = gameDao.getNation(gameId, nationId);
+        Nation target = nationDao.getNation(gameId, nationId);
 
         Relation relation = relationDao.findRelation(nation, target);
         Relation reverse = relationDao.findRelation(target, nation);

@@ -4,10 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.kenstevens.stratinit.client.event.EventScheduler;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.UpdateManager;
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.RelationDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
 import org.slf4j.Logger;
@@ -44,6 +41,8 @@ public class EventSchedulerImpl implements EventScheduler {
     @Autowired
     private GameDao gameDao;
     @Autowired
+    private NationDao nationDao;
+    @Autowired
     private GameEnder gameEnder;
     @Autowired
     private ServerStatus serverStatus;
@@ -55,6 +54,8 @@ public class EventSchedulerImpl implements EventScheduler {
     private IntegrityCheckerService integrityCheckerService;
     @Autowired
     private EventTimer eventTimer;
+
+    // FIXME too many collaborators
 
     @Value("${stratinit.scheduler.enabled}")
     private Boolean schedulerEnabled;
@@ -145,7 +146,7 @@ public class EventSchedulerImpl implements EventScheduler {
     }
 
     private void survey(Game game) {
-        List<Nation> nations = gameDao.getNations(game);
+        List<Nation> nations = nationDao.getNations(game);
         for (Nation nation : nations) {
             sectorDaoService.survey(nation);
         }

@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.client.model.RelationPK;
 import com.kenstevens.stratinit.client.model.audit.RelationChangeAudit;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
@@ -20,7 +20,7 @@ import java.util.Map;
 @Service
 public class RelationDaoService {
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
     @Autowired
     private RelationDao relationDao;
     @Autowired
@@ -31,7 +31,7 @@ public class RelationDaoService {
     private EventQueue eventQueue;
 
     public void setRelations(Nation me) {
-        List<Nation> nations = gameDao.getNations(me.getGame());
+        List<Nation> nations = nationDao.getNations(me.getGame());
         for (Nation nation : nations) {
             Relation relation = new Relation(me, nation);
             if (nation.equals(me)) {
@@ -100,7 +100,7 @@ public class RelationDaoService {
             Relation relation) {
         Nation me = relation.getFrom();
         Nation them = relation.getTo();
-        for (Nation x : gameDao.getNations(relation.getGame())) {
+        for (Nation x : nationDao.getNations(relation.getGame())) {
             Relation xToThem = relationDao.findRelation(x, them);
             if (xToThem.getType() != RelationType.WAR) {
                 continue;

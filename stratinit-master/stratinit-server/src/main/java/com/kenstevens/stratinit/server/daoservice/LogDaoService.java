@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.daoservice;
 
 import com.kenstevens.stratinit.client.model.*;
-import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.LogDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +12,14 @@ public class LogDaoService {
     @Autowired
     private LogDao logDao;
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
 
     public void save(BattleLog battleLog) {
         logDao.save(battleLog);
         Nation defender = battleLog.getDefender();
         if (defender != null && battleLog.getAttackType() == AttackType.INITIAL_ATTACK) {
             defender.setNewBattle(true);
-            gameDao.markCacheModified(defender);
+            nationDao.markCacheModified(defender);
         }
     }
 

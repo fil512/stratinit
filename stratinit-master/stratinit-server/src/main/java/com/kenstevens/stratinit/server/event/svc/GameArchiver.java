@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.event.svc;
 
 import com.kenstevens.stratinit.client.model.*;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SITeam;
@@ -30,7 +30,7 @@ public class GameArchiver {
     @Autowired
     private UnitDaoService unitDaoService;
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
 
     public void archive(Game game) {
         GameHistory gameHistory = new GameHistory(game);
@@ -58,7 +58,7 @@ public class GameArchiver {
             logger.error("Unable to find player " + nationName + " for game " + game + ".  Not archiving team.");
             return;
         }
-        Nation nation = gameDao.findNation(game, player);
+        Nation nation = nationDao.findNation(game, player);
         if (nation == null) {
             logger.error("Unable to find player " + player + " in game " + game + ".  Not archiving team.");
             return;

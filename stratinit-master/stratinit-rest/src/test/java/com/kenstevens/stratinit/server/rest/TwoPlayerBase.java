@@ -28,7 +28,7 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
         joinGamePlayerMe();
         playerThem = createPlayer(PLAYER_THEM_NAME);
         joinGame(playerThem);
-        nationThem = gameDao.findNation(testGameId, playerThem);
+        nationThem = nationDao.findNation(testGameId, playerThem);
         nationThemId = nationThem.getNationId();
         setAuthentication(PlayerHelper.PLAYER_ME);
     }

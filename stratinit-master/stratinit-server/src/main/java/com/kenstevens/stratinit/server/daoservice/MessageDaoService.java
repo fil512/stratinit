@@ -3,8 +3,8 @@ package com.kenstevens.stratinit.server.daoservice;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.MessageDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
@@ -19,7 +19,7 @@ public class MessageDaoService {
     @Autowired
     private MessageDao messageDao;
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
     @Autowired
     private MailService mailService;
     @Autowired
@@ -40,7 +40,7 @@ public class MessageDaoService {
             return;
         }
         to.setNewMail(true);
-        gameDao.markCacheModified(to);
+        nationDao.markCacheModified(to);
     }
 
     public void notify(Nation to, String subject, String body) {

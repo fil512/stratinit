@@ -37,6 +37,8 @@ public class NewsLogBuilderTest {
 	@Mock
 	private GameDao gameDao;
 	@Mock
+	private NationDao nationDao;
+	@Mock
 	private PlayerDao playerDao;
 	@Mock
 	private LogDao logDao;
@@ -69,7 +71,7 @@ public class NewsLogBuilderTest {
 		unitBuilds.add(unitBuildaudit);
 
 		when(unitDao.getBuildAudits(testGame)).thenReturn(unitBuilds);
-		when(gameDao.findNation(testGame, null)).thenReturn(NationHelper.nationMe);
+		when(nationDao.findNation(testGame, null)).thenReturn(NationHelper.nationMe);
 
 		SINewsLogsDay newsLogs = newsLogBuilder.getNews(testGame).get(0);
 		List<SINewsFirst> firsts = newsLogs.getFirsts();
@@ -209,7 +211,7 @@ public class NewsLogBuilderTest {
 		relationChanges.add(relationChange);
 
 		when(messageDao.getRelationChanges(testGame)).thenReturn(relationChanges);
-		when(gameDao.findNation(any(), any())).thenReturn(NationHelper.nationMe, NationHelper.nationThem);
+		when(nationDao.findNation(any(), any())).thenReturn(NationHelper.nationMe, NationHelper.nationThem);
 
 		SINewsLogsDay newsLogs = newsLogBuilder.getNews(testGame).get(0);
 

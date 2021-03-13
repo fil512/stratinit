@@ -29,18 +29,18 @@ public class TechUpdateTest extends TwoPlayerBase {
     @Test
     public void techUpdate() {
         techUpdateEvent.execute();
-        Nation nation1 = gameDao.getNation(testGameId, nationMeId);
+        Nation nation1 = nationDao.getNation(testGameId, nationMeId);
         assertTrue(nation1.getTech() != 0.0);
         assertEquals(MY_TECH_GAIN, nation1.getTech(), 0.00000001);
     }
 
     @Test
     public void techWithLeak() {
-        Nation nation2 = gameDao.getNation(testGameId, nationThemId);
+        Nation nation2 = nationDao.getNation(testGameId, nationThemId);
         nation2.setTech(NATION2_TECH);
-        gameDao.save(nation2);
+        nationDao.save(nation2);
         techUpdateEvent.execute();
-        Nation nation1 = gameDao.getNation(testGameId, nationMeId);
+        Nation nation1 = nationDao.getNation(testGameId, nationMeId);
         double leak = FRACTION * NATION2_TECH / Constants.OTHER_TECH_BLEED;
         assertEquals(MY_TECH_GAIN + leak, nation1.getTech(), 0.00000001);
     }

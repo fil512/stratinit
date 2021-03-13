@@ -6,10 +6,7 @@ import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.config.IServerConfig;
-import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.PlayerDao;
-import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
@@ -27,6 +24,8 @@ public class GameDaoService {
     private final IServerConfig serverConfig;
     @Autowired
     private GameDao gameDao;
+    @Autowired
+    private NationDao nationDao;
     @Autowired
     private SectorDao sectorDao;
     @Autowired
@@ -82,7 +81,7 @@ public class GameDaoService {
         eventQueue.schedule(game, false);
         Date started = game.getStartTime();
         if (started != null) {
-            for (Nation nation : gameDao.getNations(game)) {
+            for (Nation nation : nationDao.getNations(game)) {
                 Player player = nation.getPlayer();
                 mailService.sendEmail(player, MailTemplateLibrary.getGameScheduled(player, game, serverConfig));
             }
@@ -114,7 +113,7 @@ public class GameDaoService {
         World world = createWorld(game);
         sectorDao.save(world);
         game.setMapped();
-        List<Nation> nations = gameDao.getNations(game);
+        List<Nation> nations = nationDao.getNations(game);
         int island = 0;
         for (Nation nation : nations) {
             worldManager.addPlayerToMap(island, nation);
@@ -131,7 +130,7 @@ public class GameDaoService {
             return new Result<>("no game with id [" + gameId + "].",
                     false);
         }
-        Nation nation = gameDao.findNation(game, player);
+        Nation nation = nationDao.findNation(game, player);
         if (nation != null) {
             return new Result<>("already joined [" + gameId + "].", false);
         }
@@ -142,7 +141,7 @@ public class GameDaoService {
         nation = new Nation(game, player);
         nation.setNoAlliances(noAlliances);
         nation.setNationId(nationId);
-        gameDao.save(nation);
+        nationDao.save(nation);
         calculateAllianceVote(game);
         gameDao.merge(game);
         relationDaoService.setRelations(nation);
@@ -156,7 +155,7 @@ public class GameDaoService {
 
     public void calculateAllianceVote(Game game) {
         int noAlliancesVote = 0;
-        for (Nation nation : gameDao.getNations(game)) {
+        for (Nation nation : nationDao.getNations(game)) {
             if (nation.isNoAlliances()) {
                 ++noAlliancesVote;
             }
@@ -183,7 +182,7 @@ public class GameDaoService {
 
 
     private void updateTech(Game game, Date lastUpdated) {
-        List<Nation> nations = gameDao.getNations(game);
+        List<Nation> nations = nationDao.getNations(game);
         double maxTech = getMaxTech(nations);
         for (Nation nation : nations) {
             updateTech(maxTech, nation, lastUpdated);
@@ -191,6 +190,7 @@ public class GameDaoService {
 
     }
 
+    // FIXME move this and others to NationDaoService
     private void updateTech(double maxTech, Nation nation, Date lastUpdated) {
         int techCentres = (int) sectorDao.getNumberOfTechCentres(nation);
         if (techCentres >= Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length) {
@@ -213,7 +213,7 @@ public class GameDaoService {
         double netTechGain = totalDailyTechGain / updatesPerDay;
         nation.increaseTech(netTechGain);
         double techAfter = nation.getTech();
-        gameDao.markCacheModified(nation);
+        nationDao.markCacheModified(nation);
         if (crossedThreshold(nationTech, techAfter)) {
             sectorDaoService
                     .switchCityBuildsFromTechChange(nation, lastUpdated);
@@ -233,12 +233,12 @@ public class GameDaoService {
     }
 
     private void updateCommandPoints(Game game) {
-        List<Nation> nations = gameDao.getNations(game);
+        List<Nation> nations = nationDao.getNations(game);
         for (Nation nation : nations) {
             int cpGain = capitalPointsToCommandPoints(getCapitalPoints(nation));
             nation.increaseCommandPoints(cpGain);
             nation.setHourlyCPGain(cpGain * 3600 / Constants.TECH_UPDATE_INTERVAL_SECONDS);
-            gameDao.markCacheModified(nation);
+            nationDao.markCacheModified(nation);
         }
     }
 
@@ -281,7 +281,7 @@ public class GameDaoService {
     public void score(Game game) {
         Map<Nation, Integer> score = new HashMap<>();
         int topScore = 0;
-        List<Nation> nations = gameDao.getNations(game);
+        List<Nation> nations = nationDao.getNations(game);
         for (Nation nation : nations) {
             if (score.get(nation) != null) {
                 continue;
@@ -312,7 +312,7 @@ public class GameDaoService {
     }
 
     public void merge(Nation nation) {
-        gameDao.markCacheModified(nation);
+        nationDao.markCacheModified(nation);
     }
 
     public void updateGame(Game game, Date lastUpdated) {

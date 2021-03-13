@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.WorldSector;
-import com.kenstevens.stratinit.dao.GameDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.move.WorldView;
@@ -30,7 +30,7 @@ public class UnitsCede {
     private final int nationId;
     private final WorldView worldView;
     @Autowired
-    private GameDao gameDao;
+    private NationDao nationDao;
     @Autowired
     private RelationDao relationDao;
     @Autowired
@@ -56,7 +56,7 @@ public class UnitsCede {
         int gameId = nation.getGameId();
 
         List<Unit> unitsToCede = new ArrayList<Unit>();
-        Nation target = gameDao.getNation(gameId, nationId);
+        Nation target = nationDao.getNation(gameId, nationId);
 
         if (!checkAllied(target)) {
             return new Result<SIUpdate>("You may only cede units to an ally.", false);
