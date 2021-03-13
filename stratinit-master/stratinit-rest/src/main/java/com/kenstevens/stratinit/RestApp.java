@@ -6,7 +6,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @SpringBootApplication
 public class RestApp {
 
-    // FIXME add a websocket connection
     public static void main(String[] args) {
         new SpringApplicationBuilder()
                 .sources(RestApp.class)

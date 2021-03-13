@@ -216,7 +216,7 @@ public class GameDaoStateChangeTest {
         assertIsMapped(game);
         assertEquals(1, game.getPlayers());
 
-        // FIXME extract similar sets of asserts
+        // TODO sleep extract similar sets of asserts
         verify(eventQueue).schedule(game, false);
         verify(worldManager).build(game);
         verify(worldManager).addPlayerToMap(0, result.getValue());

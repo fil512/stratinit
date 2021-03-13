@@ -10,7 +10,6 @@ import com.kenstevens.stratinit.server.rest.svc.NewsLogBuilder;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.UnitType;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -402,9 +401,6 @@ public class NewsLogBuilderTest {
 		verifyBattleLogs();
 	}
 
-	// FIXME enable
-	@Disabled
-	// Simplified this when switching from spring-remote to REST
 	@Test
 	public void getOpponentConquest1up2down() {
 		List<BattleLog> battleLogs = new ArrayList<>();
