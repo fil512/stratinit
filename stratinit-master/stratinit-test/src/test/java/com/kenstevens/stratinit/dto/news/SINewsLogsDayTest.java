@@ -56,6 +56,7 @@ class SINewsLogsDayTest {
         SINewsOpponentConquest conq2 = new SINewsOpponentConquest(NationHelper.nationMe, NationHelper.nationThem, 4); // 7
         SINewsOpponentConquest conq3 = new SINewsOpponentConquest(NationHelper.nationThem, NationHelper.nationMe, 5); // 2
         SINewsOpponentConquest conq4 = new SINewsOpponentConquest(NationHelper.nationThem, NationHelper.nationMe, 12); // 10 reversed
+        SINewsOpponentConquest conq5 = new SINewsOpponentConquest(NationHelper.nationMe, NationHelper.nationThem, 10); // empty
 
         List<SINewsOpponentConquest> list;
 
@@ -75,6 +76,9 @@ class SINewsLogsDayTest {
         list = siNewsLogsDay.getOpponentConquest();
         assertConquestList(list, NationHelper.nationThemName, NationHelper.nationMeName, 10);
 
+        siNewsLogsDay.addOpponentConquest(conq5);
+        list = siNewsLogsDay.getOpponentConquest();
+        assertThat(list, hasSize(0));
     }
 
     private void assertConquestList(List<SINewsOpponentConquest> list, String nationName, String opponentName, int count) {

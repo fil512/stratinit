@@ -13,10 +13,6 @@ public class SINewsOpponentsTest {
         SINewsOpponentConquest reverse = news.reverse();
         assertEquals(news.nationName, reverse.opponentName);
         assertEquals(news.opponentName, reverse.nationName);
-        assertEquals(news.count, -1 * reverse.count);
-//                SINewsForeignAffairs
-//                        SINewsNuclearDetonations
-//                        SINewsFromTheFront
-//                                SINewsAirDefense
+        assertEquals(news.count, reverse.count);
     }
 }

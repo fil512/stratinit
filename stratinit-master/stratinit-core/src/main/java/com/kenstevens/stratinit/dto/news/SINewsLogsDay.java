@@ -68,7 +68,9 @@ public class SINewsLogsDay implements StratInitDTO {
 		index = list.indexOf(reverseItem);
 		if (index != -1) {
 			int count = list.get(index).getCount();
-			if (item.getCount() > count) {
+			if (item.getCount() == count) {
+				list.remove(index);
+			} else if (item.getCount() > count) {
 				list.remove(index);
 				item.decrement(count);
 				list.add(item);

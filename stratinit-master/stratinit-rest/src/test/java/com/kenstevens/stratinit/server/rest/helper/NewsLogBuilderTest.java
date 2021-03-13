@@ -383,8 +383,6 @@ public class NewsLogBuilderTest {
 		verifyBattleLogs();
 	}
 
-	// FIXME enable
-	// Simplified this when switching from spring-remote to REST
 	@Test
 	public void getOpponentConquestCancel() {
 		List<BattleLog> battleLogs = new ArrayList<>();
