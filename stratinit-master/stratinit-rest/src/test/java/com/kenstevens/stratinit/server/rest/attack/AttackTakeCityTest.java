@@ -138,7 +138,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 
     private void assertTookCity(Result<MoveCost> result) {
         List<City> cities = cityDao.getCities(nationMe);
-        Sector citySector = testWorld.getSector(CITY);
+        Sector citySector = testWorld.getSectorOrNull(CITY);
         City city = cityDao.getCity(citySector);
         assertTrue(cities.contains(city), result.toString());
         assertEquals(MoveType.TAKE_CITY, result.getValue().getMoveType());
@@ -146,7 +146,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
 
     private void assertNoTookCity(Result<MoveCost> result) {
         List<City> cities = cityDao.getCities(nationMe);
-        Sector citySector = testWorld.getSector(CITY);
+        Sector citySector = testWorld.getSectorOrNull(CITY);
         City city = cityDao.getCity(citySector);
         assertFalse(cities.contains(city), result.toString());
         assertFalse(MoveType.TAKE_CITY.equals(result.getValue().getMoveType()));
@@ -163,7 +163,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
         assertResult(result);
         assertDamaged(result, inf);
         assertTookCity(result);
-        Sector citySector = testWorld.getSector(CITY);
+        Sector citySector = testWorld.getSectorOrNull(CITY);
         City city = cityDao.getCity(citySector);
         assertEquals(CityType.BASE, city.getType());
         assertEquals(UnitType.BASE, city.getBuild());
@@ -179,7 +179,7 @@ public class AttackTakeCityTest extends TwoPlayerBase {
         assertResult(result);
         assertDamaged(result, inf);
         assertTookCity(result);
-        Sector citySector = testWorld.getSector(CITY);
+        Sector citySector = testWorld.getSectorOrNull(CITY);
         City city = cityDao.getCity(citySector);
         assertEquals(CityType.BASE, city.getType());
         assertEquals(UnitType.BASE, city.getBuild());

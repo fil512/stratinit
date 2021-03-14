@@ -33,10 +33,10 @@ public class JoinGameTest extends BaseStratInitControllerTest {
 
     @Test
     public void getCities() {
-        List<SICity> cities = stratInitController.getCities().getValue();
+        List<SICityUpdate> cities = stratInitController.getCities().getValue();
         assertEquals(2, cities.size());
-        SICity fort;
-        SICity tech;
+        SICityUpdate fort;
+        SICityUpdate tech;
         if (cities.get(0).type == CityType.FORT) {
             fort = cities.get(0);
             tech = cities.get(1);

@@ -48,8 +48,8 @@ public class PlayerIsland extends Island {
 
 
 	private void placeStartCity() {
-		placeInlandCity(world.getSector(startCoord));
-	}
+        placeInlandCity(world.getSectorOrNull(startCoord));
+    }
 
 	private void placeInlandCity(Sector sector) {
 		if (sector == null) {

@@ -10,7 +10,7 @@ public class SIUpdate implements StratInitDTO {
     public List<SIUnit> units;
     public List<SIUnit> seenUnits;
     public List<SINation> nations;
-    public List<SICity> cities;
+    public List<SICityUpdate> cities;
     public List<SIBattleLog> log;
     public List<SIRelation> relations;
     public List<SILaunchedSatellite> launchedSatellites;

@@ -78,16 +78,16 @@ public class WorldCreator {
 		Sector sector = null;
 		boolean done = false;
 		do {
-			sector = world.getSector(x, y);
-			x += 1;
-			if (x == size) {
-				x = 0;
-				y = (y + 1) % size;
-			}
-			if (x == startx && y == starty) {
-				done = true;
-			}
-		} while (!unassignedAndIsolatedPredicate.apply(sector) && !done);
+            sector = world.getSectorOrNull(x, y);
+            x += 1;
+            if (x == size) {
+                x = 0;
+                y = (y + 1) % size;
+            }
+            if (x == startx && y == starty) {
+                done = true;
+            }
+        } while (!unassignedAndIsolatedPredicate.apply(sector) && !done);
 		if (x == startx && y == starty) {
 			return null;
 		}

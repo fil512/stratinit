@@ -124,13 +124,13 @@ public class StratInitController implements IStratInitServer {
 
     @GetMapping(path = SIRestPaths.CITY)
     @Override
-    public Result<List<SICity>> getCities() {
+    public Result<List<SICityUpdate>> getCities() {
         return requestFactory.getGetCitiesRequest().process();
     }
 
     @GetMapping(path = SIRestPaths.CITY_SEEN)
     @Override
-    public Result<List<SICity>> getSeenCities() {
+    public Result<List<SICityUpdate>> getSeenCities() {
         return requestFactory.getGetSeenCitiesRequest().process();
     }
 
@@ -188,8 +188,8 @@ public class StratInitController implements IStratInitServer {
 
     @PostMapping(path = SIRestPaths.UPDATE_CITY)
     @Override
-    public Result<SICity> updateCity(@RequestBody UpdateCityJson updateCityJson) {
-        return requestFactory.getUpdateCityRequest(updateCityJson.sicity, updateCityJson.field).process();
+    public Result<SICityUpdate> updateCity(@RequestBody UpdateCityJson updateCityJson) {
+        return requestFactory.getUpdateCityRequest(updateCityJson.sicity, updateCityJson.sicity.field).process();
     }
 
     @PostMapping(path = SIRestPaths.MOVE_UNITS)

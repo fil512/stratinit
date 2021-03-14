@@ -25,7 +25,7 @@ public class IslandSeeder {
 
 	List<Sector> seedIsland() {
 		List<Sector> startSectors = Lists.newArrayList();
-		startSectors.add(world.getSector(startCoord));
+		startSectors.add(world.getSectorOrNull(startCoord));
 		int extraVolcanos = RANDOM.nextInt(4);
 		for (int i = 0; i < extraVolcanos; ++i) {
 			Sector sector = findNearbyVolcano(startCoord);
@@ -44,7 +44,7 @@ public class IslandSeeder {
 			int dy = (int) (0.5 + distance * Math.sin(radians));
 			SectorCoords candidate = startCoord.shift(world.size(),
 					new SectorCoords(dx, dy));
-			Sector sector = world.getSector(candidate);
+			Sector sector = world.getSectorOrNull(candidate);
 			if (unassignedAndIsolatedPredicate.apply(sector)) {
 				return sector;
 			}

@@ -45,7 +45,7 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 	}
 
     protected void setBuild(SectorCoords coords, UnitType type) {
-        City city = cityDao.getCity(testWorld.getSector(coords));
+        City city = cityDao.getCity(testWorld.getSectorOrNull(coords));
 		cityDaoService.updateCity(city.getNation(), coords, CityFieldToUpdateEnum.BUILD, type, null, false, null);
     }
 

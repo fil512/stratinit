@@ -83,31 +83,31 @@ public class DataCacheTest extends StratInitTest {
 
 	@Test
 	public void sectorPersist() {
-		createGame();
+        createGame();
 
-		SectorType oldType = testSector.getType();
-		SectorType newType = SectorType.PLAYER_CITY;
-		assertFalse(oldType == newType);
+        SectorType oldType = testSector.getType();
+        SectorType newType = SectorType.PLAYER_CITY;
+        assertFalse(oldType == newType);
 
-		SectorCoords coords = testSector.getCoords();
+        SectorCoords coords = testSector.getCoords();
 
-		World world = dataCache.getGameCache(testGame).getWorld();
-		Sector newSector = world.getSector(coords);
-		newSector.setType(newType);
-		sectorDao.markCacheModified(newSector);
+        World world = dataCache.getGameCache(testGame).getWorld();
+        Sector newSector = world.getSectorOrNull(coords);
+        newSector.setType(newType);
+        sectorDao.markCacheModified(newSector);
 
-		Game dbGame = gameRepo.findById(testGame.getId()).get();
-		Sector dbSector = findByGameAndCoords(dbGame, coords);
-		assertEquals(oldType, dbSector.getType());
-		assertFalse(dataCache.getGameCache(testGame).isModified());
-		assertTrue(dataCache.getGameCache(testGame).isWorldModified());
-		dataCache.flush();
-		assertFalse(dataCache.getGameCache(testGame).isModified());
-		assertFalse(dataCache.getGameCache(testGame).isWorldModified());
+        Game dbGame = gameRepo.findById(testGame.getId()).get();
+        Sector dbSector = findByGameAndCoords(dbGame, coords);
+        assertEquals(oldType, dbSector.getType());
+        assertFalse(dataCache.getGameCache(testGame).isModified());
+        assertTrue(dataCache.getGameCache(testGame).isWorldModified());
+        dataCache.flush();
+        assertFalse(dataCache.getGameCache(testGame).isModified());
+        assertFalse(dataCache.getGameCache(testGame).isWorldModified());
 
-		dbSector = sectorDao.getWorld(testGame).getSector(coords);
-		assertEquals(newType, dbSector.getType());
-	}
+        dbSector = sectorDao.getWorld(testGame).getSectorOrNull(coords);
+        assertEquals(newType, dbSector.getType());
+    }
 
 	private Sector findByGameAndCoords(Game dbGame, SectorCoords coords) {
 		return sectorRepo.findOne(QSector.sector.sectorPK.game.eq(dbGame).and(QSector.sector.sectorPK.coords.eq(coords))).get();

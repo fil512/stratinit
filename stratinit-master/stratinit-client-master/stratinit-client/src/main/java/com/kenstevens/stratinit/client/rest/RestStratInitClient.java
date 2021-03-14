@@ -68,8 +68,8 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<List<SICity>> getCities() {
-        return restClient.getList(SIRestPaths.CITY, SICity.class);
+    public Result<List<SICityUpdate>> getCities() {
+        return restClient.getList(SIRestPaths.CITY, SICityUpdate.class);
     }
 
     @Override
@@ -78,8 +78,8 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<SICity> updateCity(UpdateCityJson updateCityJson) {
-        return restClient.get(SIRestPaths.UPDATE_CITY, SICity.class);
+    public Result<SICityUpdate> updateCity(UpdateCityJson updateCityJson) {
+        return restClient.post(SIRestPaths.UPDATE_CITY, updateCityJson, SICityUpdate.class);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class RestStratInitClient implements IStratInitServer {
 
     @Override
     public Result<SIUpdate> moveUnits(MoveUnitsJson moveUnitsJson) {
-        return restClient.get(SIRestPaths.MOVE_UNITS, SIUpdate.class);
+        return restClient.post(SIRestPaths.MOVE_UNITS, moveUnitsJson, SIUpdate.class);
     }
 
     @Override
@@ -98,8 +98,8 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    public Result<List<SICity>> getSeenCities() {
-        return restClient.getList(SIRestPaths.CITY_SEEN, SICity.class);
+    public Result<List<SICityUpdate>> getSeenCities() {
+        return restClient.getList(SIRestPaths.CITY_SEEN, SICityUpdate.class);
     }
 
     @Override

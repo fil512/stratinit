@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,18 +35,22 @@ public class World implements CoordMeasure {
 		world[x][y] = sector;
 	}
 
-	public Sector getSector(int x, int y) {
+	public Sector getSectorOrNull(int x, int y) {
 		if (x < 0 || x >= size) {
-			return null;
+			throw new IndexOutOfBoundsException("x value " + x + " is not between " + 0 + " and " + size);
 		}
 		if (y < 0 || y >= size) {
-			return null;
+			throw new IndexOutOfBoundsException("y value " + y + " is not between " + 0 + " and " + size);
 		}
-		return world[x][y];
+		Sector retval = world[x][y];
+		if (retval == null) {
+			return new UnknownSector(game, x, y);
+		}
+		return retval;
 	}
 
 	public void setType(int x, int y, SectorType type) {
-		getSector(x, y).setType(type);
+		getSectorOrNull(x, y).setType(type);
 	}
 
 	public int size() {
@@ -65,11 +70,11 @@ public class World implements CoordMeasure {
         List<Sector> retval = new ArrayList<Sector>();
         for (SectorCoords neighbour : coords.sectorsWithin(size, distance,
                 includeSelf)) {
-            Sector sector = getSector(neighbour.x, neighbour.y);
-            if (sector != null) {
-                retval.add(sector);
-            }
-        }
+			Sector sector = getSectorOrNull(neighbour.x, neighbour.y);
+			if (!sector.isUnknown()) {
+				retval.add(sector);
+			}
+		}
         return retval;
     }
 
@@ -92,16 +97,21 @@ public class World implements CoordMeasure {
 		return 100 * water / total;
 	}
 
-	public Sector getSector(SectorCoords coords) {
-		return getSector(coords.x, coords.y);
+	public @Nullable
+	Sector getSectorOrNull(SectorCoords coords) {
+		Sector retval = getSectorOrNull(coords.x, coords.y);
+		if (retval.isUnknown()) {
+			return null;
+		}
+		return retval;
 	}
 
 	public List<Sector> getSectors() {
 		List<Sector> retval = new ArrayList<Sector>();
 		for (int x = 0; x < size; ++x) {
 			for (int y = 0; y < size; ++y) {
-				Sector sector = getSector(x, y);
-				if (sector != null) {
+				Sector sector = getSectorOrNull(x, y);
+				if (!sector.isUnknown()) {
 					retval.add(sector);
 				}
 			}
@@ -122,8 +132,8 @@ public class World implements CoordMeasure {
 		return getNeighbours(sector.getCoords());
 	}
 
-	public Sector getSector(Unit unit) {
-		return getSector(unit.getCoords());
+	public Sector getSectorOrNull(Unit unit) {
+		return getSectorOrNull(unit.getCoords());
 	}
 
 	public Game getGame() {

@@ -3,8 +3,7 @@ package com.kenstevens.stratinit.client.site.command.post;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.site.PostCommand;
 import com.kenstevens.stratinit.client.site.processor.CityProcessor;
-import com.kenstevens.stratinit.dto.SICity;
-import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -14,21 +13,16 @@ import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
-public class SetCityMoveCommand extends PostCommand<SICity, UpdateCityJson> {
+public class SetCityMoveCommand extends PostCommand<SICityUpdate, UpdateCityJson> {
 	@Autowired
 	private CityProcessor cityProcessor;
-	
-	protected final City city;
-	private final SectorCoords coords;
 
-	public SetCityMoveCommand(City city, SectorCoords coords) {
-		super(new UpdateCityJson(new SICity(city), CityFieldToUpdateEnum.NEXT_COORDS), getDescription(city));
-		this.city = city;
-		this.coords = coords;
+	public SetCityMoveCommand(City city, SectorCoords nextCoords) {
+		super(new UpdateCityJson(new SICityUpdate(city, nextCoords)), getDescription(city));
 	}
 
 	@Override
-	public Result<SICity> executePost(UpdateCityJson request) {
+	public Result<SICityUpdate> executePost(UpdateCityJson request) {
 		return stratInitServer.updateCity(request);
 	}
 
@@ -37,7 +31,7 @@ public class SetCityMoveCommand extends PostCommand<SICity, UpdateCityJson> {
 	}
 
 	@Override
-	public void handleSuccess(SICity sicity) {
+	public void handleSuccess(SICityUpdate sicity) {
 		cityProcessor.process(sicity);
 	}
 }

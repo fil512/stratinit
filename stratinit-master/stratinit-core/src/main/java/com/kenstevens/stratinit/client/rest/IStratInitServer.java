@@ -31,11 +31,11 @@ public interface IStratInitServer {
 
 	Result<List<SINation>> getNations();
 
-	Result<List<SICity>> getCities();
+	Result<List<SICityUpdate>> getCities();
 
 	Result<List<SIBattleLog>> getBattleLog();
 
-	Result<SICity> updateCity(UpdateCityJson request);
+	Result<SICityUpdate> updateCity(UpdateCityJson request);
 
 	Result<SIUpdate> getUpdate();
 
@@ -43,7 +43,7 @@ public interface IStratInitServer {
 
 	Result<List<SIUnit>> getSeenUnits();
 
-	Result<List<SICity>> getSeenCities();
+	Result<List<SICityUpdate>> getSeenCities();
 
 	Result<List<SIRelation>> getRelations();
 

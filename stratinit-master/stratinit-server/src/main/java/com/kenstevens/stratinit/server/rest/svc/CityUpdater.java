@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.UnitBase;
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.CityDaoService;
@@ -27,54 +27,54 @@ public class CityUpdater {
 	private DataCache dataCache;
 
 
-	public Result<SICity> updateCity(Nation nation, SICity sicity, CityFieldToUpdateEnum field) {
+	public Result<SICityUpdate> updateCity(Nation nation, SICityUpdate sicity, CityFieldToUpdateEnum field) {
 		SectorCoords coords = sicity.coords;
 
 		if (field == CityFieldToUpdateEnum.BUILD) {
-			Result<SICity> retval = checkBuild(nation, sicity, coords);
+			Result<SICityUpdate> retval = checkBuild(nation, sicity, coords);
 			if (!retval.isSuccess()) {
 				return retval;
 			}
 		} else if (field == CityFieldToUpdateEnum.NEXT_BUILD) {
-			Result<SICity> retval = checkNextBuild(nation, sicity, coords);
+			Result<SICityUpdate> retval = checkNextBuild(nation, sicity, coords);
 			if (!retval.isSuccess()) {
 				return retval;
 			}
 		}
 		Result<City> cityResult = updateCity(nation, field, sicity);
 
-		return new Result<SICity>(cityResult.getMessages(), true,
-				citySvc.cityToSICity(nation, cityResult.getValue()));
+		return new Result<>(cityResult.getMessages(), true,
+				citySvc.cityToSICity(nation, cityResult.getValue(), field));
 	}
 
-	private Result<SICity> checkBuild(Nation nation, SICity sicity, SectorCoords coords) {
+	private Result<SICityUpdate> checkBuild(Nation nation, SICityUpdate sicity, SectorCoords coords) {
 		UnitType build = sicity.build;
 		if (!sufficientTech(nation, build, 0)) {
-			return new Result<SICity>("Insufficient tech to build " + build,
+			return new Result<SICityUpdate>("Insufficient tech to build " + build,
 					false);
 		}
 		if (isNaval(build) && !canDesignatePort(nation.getGameId(), coords)) {
-			return new Result<SICity>("There is no water adjacent to "
+			return new Result<SICityUpdate>("There is no water adjacent to "
 					+ coords + ".  You can not build ships there.", false);
 		}
-		return new Result<SICity>(sicity);
+		return new Result<SICityUpdate>(sicity);
 	}
 
-	private Result<SICity> checkNextBuild(Nation nation, SICity sicity, SectorCoords coords) {
+	private Result<SICityUpdate> checkNextBuild(Nation nation, SICityUpdate sicity, SectorCoords coords) {
 		UnitType nextBuild = sicity.nextBuild;
 		if (!sufficientTech(nation, nextBuild, Constants.TECH_NEXT_BUILD)) {
-			return new Result<SICity>(
+			return new Result<SICityUpdate>(
 					"Insufficient tech to build " + nextBuild, false);
 		}
 		if (isNaval(nextBuild) && !canDesignatePort(nation.getGameId(), coords)) {
-			return new Result<SICity>("There is no water adjacent to "
+			return new Result<SICityUpdate>("There is no water adjacent to "
 					+ coords + ".  You can not build ships there.", false);
 		}
-		return new Result<SICity>(sicity);
+		return new Result<SICityUpdate>(sicity);
 	}
 
 	private Result<City> updateCity(Nation nation, CityFieldToUpdateEnum field,
-									SICity sicity) {
+									SICityUpdate sicity) {
 		return cityDaoService.updateCity(nation, sicity.coords, field,
 				sicity.build, sicity.nextBuild, sicity.switchOnTechChange, sicity.nextCoords);
 	}

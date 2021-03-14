@@ -85,7 +85,7 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
 
     private BalanceResult aggregate(List<AttackBalanceResult> results, UnitType attackerUnitType, UnitType defenderUnitType, SectorCoords defCoords) {
         String defSector;
-        SectorType sectorType = testWorld.getSector(defCoords).getType();
+        SectorType sectorType = testWorld.getSectorOrNull(defCoords).getType();
         if (sectorType == SectorType.PLAYER_CITY) {
             defSector = cityDao.getCity(nationThem, defCoords).getType().toString();
         } else {

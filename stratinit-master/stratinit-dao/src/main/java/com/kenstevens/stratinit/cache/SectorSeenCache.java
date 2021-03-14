@@ -26,8 +26,8 @@ public class SectorSeenCache extends Cacheable {
 		return Collections2.transform(sectorSeenMap.values(), new Function<SectorSeen, Sector>() {
 			@Override
 			public Sector apply(SectorSeen sectorSeen) {
-				return world.getSector(sectorSeen.getCoords());
-			}
+                return world.getSectorOrNull(sectorSeen.getCoords());
+            }
 		});
 	}
 

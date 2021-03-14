@@ -3,7 +3,7 @@ package com.kenstevens.stratinit;
 import com.kenstevens.stratinit.client.model.Account;
 import com.kenstevens.stratinit.client.rest.IStratInitServer;
 import com.kenstevens.stratinit.client.rest.RestClient;
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SISector;
@@ -106,17 +106,19 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 
 	@Test
 	public void testGetSectors() throws IOException {
-		goodLogin();
-		List<SISector> sectors = stratInitServer.getSectors().getValue();
-		logger.info("GOT " + sectors.size() + " sectors!");
-	}
+        goodLogin();
+        Result<List<SISector>> result = stratInitServer.getSectors();
+        assertResult(result);
+        List<SISector> sectors = result.getValue();
+        logger.info("GOT " + sectors.size() + " sectors!");
+    }
 
 	@Test
 	public void testGetCities() throws IOException {
-		goodLogin();
-		List<SICity> cities = stratInitServer.getCities().getValue();
-		logger.info("cities: " + cities.size());
-	}
+        goodLogin();
+        List<SICityUpdate> cities = stratInitServer.getCities().getValue();
+        logger.info("cities: " + cities.size());
+    }
 
 	@Test
 	public void testBadLogin() {
@@ -130,5 +132,4 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 			assertThat(e.getMessage(), containsString("status code = " + HttpStatus.SC_UNAUTHORIZED));
 		}
 	}
-
 }

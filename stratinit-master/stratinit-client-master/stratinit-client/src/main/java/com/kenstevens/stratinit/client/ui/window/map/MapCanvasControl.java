@@ -266,17 +266,21 @@ public class MapCanvasControl implements MapController {
 
 	// TODO REF this method too complicated
 	private void selectSectorOrUnits(SectorCoords sectorCoords) {
-		WorldSector sector = db.getWorld().getWorldSector(sectorCoords);
-		if (sector == null) {
-			return;
-		}
-		boolean switchToSectorTab = true;
-		if (!sector.isMine()) {
-			if (sector.getNation() == null && account.getPreferences().isCanvasScroll()) {
-				selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT_OTHER);
-			} else {
-				selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT);
-			}
+        WorldView world = db.getWorld();
+        if (world == null) {
+            return;
+        }
+        WorldSector sector = world.getWorldSector(sectorCoords);
+        if (sector == null) {
+            return;
+        }
+        boolean switchToSectorTab = true;
+        if (!sector.isMine()) {
+            if (sector.getNation() == null && account.getPreferences().isCanvasScroll()) {
+                selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT_OTHER);
+            } else {
+                selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT);
+            }
 		} else {
 			if (db.getCity(sectorCoords) != null && tabManager.cityTabSelected()) {
 				selectEvent.selectSectorCoords(sectorCoords,
@@ -326,18 +330,18 @@ public class MapCanvasControl implements MapController {
 			MouseClick click = MouseClick.SELECT;
 
 			if (e.button == 1) {
-				if (account.getPreferences().isSwitchMouse()) {
-					click = MouseClick.SELECT;
-				} else {
-					click = MouseClick.MOVE;
-				}
+                if (account.getPreferences().isSwitchMouse()) {
+                    click = MouseClick.MOVE;
+                } else {
+                    click = MouseClick.SELECT;
+                }
 			} else if (e.button == 3) {
 				// Right-click
-				if (account.getPreferences().isSwitchMouse()) {
-					click = MouseClick.MOVE;
-				} else {
-					click = MouseClick.SELECT;
-				}
+                if (account.getPreferences().isSwitchMouse()) {
+                    click = MouseClick.SELECT;
+                } else {
+                    click = MouseClick.MOVE;
+                }
 			}
 			if (click == MouseClick.MOVE) {
 				if (selectedUnits.isEmpty()) {

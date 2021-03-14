@@ -112,7 +112,7 @@ public class CityDaoService {
             cityBuilderService.cityCapturedBuildChange(city);
             cityDao.transferCity(city, nation);
         }
-        Sector citySector = dataCache.getWorld(nation.getGameId()).getSector(
+        Sector citySector = dataCache.getWorld(nation.getGameId()).getSectorOrNull(
                 sector.getCoords());
         citySector.setType(SectorType.PLAYER_CITY);
         sectorDao.markCacheModified(citySector);
@@ -121,7 +121,7 @@ public class CityDaoService {
     }
 
     public Nation captureCity(Nation nation, SectorCoords city) {
-        Sector sector = dataCache.getWorld(nation.getGameId()).getSector(city);
+        Sector sector = dataCache.getWorld(nation.getGameId()).getSectorOrNull(city);
         return captureCity(nation, sector);
     }
 
@@ -150,7 +150,7 @@ public class CityDaoService {
     public Result<None> establishCity(Unit unit) {
         Nation nation = unit.getNation();
         SectorCoords coords = unit.getCoords();
-        Sector sector = sectorDao.getWorld(nation.getGame()).getSector(coords);
+        Sector sector = sectorDao.getWorld(nation.getGame()).getSectorOrNull(coords);
         if (!canEstablishCity(nation, sector)) {
             return new Result<>("You may not establish a city at " + coords + ".  Cities can only be established on land or next to land and may not be adjacent to other player cities.", false);
         }
@@ -173,7 +173,7 @@ public class CityDaoService {
 
     public Result<None> destroyCity(City city) {
 
-        Sector sector = sectorDao.getWorld(city.getParentGame()).getSector(city.getCoords());
+        Sector sector = sectorDao.getWorld(city.getParentGame()).getSectorOrNull(city.getCoords());
         sector.setType(SectorType.START_CITY);
         sectorDao.markCacheModified(sector);
 

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.CedeCityJson;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
@@ -19,11 +19,11 @@ public class CedeCityTest extends TwoPlayerBase {
     public void cedeCity() {
         allianceDeclared();
         declareAlliance();
-        List<SICity> cities = stratInitController.getCities().getValue();
+        List<SICityUpdate> cities = stratInitController.getCities().getValue();
         assertEquals(2, cities.size());
-        SICity sicity = cities.get(0);
+        SICityUpdate sicity = cities.get(0);
         assertEquals(sicity.nationId, nationMeId);
-        Sector sector = testWorld.getSector(sicity.coords);
+        Sector sector = testWorld.getSectorOrNull(sicity.coords);
         SectorSeen sectorSeen = sectorDao.findSectorSeen(nationThem, sector);
         assertNull(sectorSeen);
         List<Unit> units = Lists.newArrayList(unitDao.getUnits(sector));
@@ -34,7 +34,7 @@ public class CedeCityTest extends TwoPlayerBase {
 
         cities = stratInitController.getCities().getValue();
         assertEquals(1, cities.size());
-        SICity seenCity = findSeenCity(sicity);
+        SICityUpdate seenCity = findSeenCity(sicity);
         assertNotNull(seenCity);
         assertEquals(nationThemId, seenCity.nationId);
 
@@ -47,9 +47,9 @@ public class CedeCityTest extends TwoPlayerBase {
 
     }
 
-    private SICity findSeenCity(SICity sicity) {
-        Result<List<SICity>> seencities = stratInitController.getSeenCities();
-        for (SICity seenCity : seencities.getValue()) {
+    private SICityUpdate findSeenCity(SICityUpdate sicity) {
+        Result<List<SICityUpdate>> seencities = stratInitController.getSeenCities();
+        for (SICityUpdate seenCity : seencities.getValue()) {
             if (seenCity.coords.equals(sicity.coords)) {
                 return seenCity;
             }

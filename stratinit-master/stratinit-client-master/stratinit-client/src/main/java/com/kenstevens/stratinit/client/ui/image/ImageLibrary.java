@@ -149,13 +149,13 @@ public class ImageLibrary {
 
 	private void loadSectorImages() {
 		for (SectorType sectorType : SectorType.values()) {
-			if (sectorType == SectorType.PLAYER_CITY) {
-				continue;
-			}
-			String filename = sectorType.toString().toLowerCase() + ".gif";
-			Image image = loadImageFromFile("sector/" + filename);
-			sectorMap.put(sectorType, image);
-		}
+            if (sectorType == SectorType.PLAYER_CITY || sectorType == SectorType.UNKNOWN) {
+                continue;
+            }
+            String filename = sectorType.toString().toLowerCase() + ".gif";
+            Image image = loadImageFromFile("sector/" + filename);
+            sectorMap.put(sectorType, image);
+        }
 	}
 
 	private void loadCityImages() throws FileNotFoundException {

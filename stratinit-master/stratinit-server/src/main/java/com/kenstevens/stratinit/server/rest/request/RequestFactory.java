@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.rest.request;
 
 import com.kenstevens.stratinit.client.model.Player;
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.dto.SIMessage;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
@@ -111,7 +111,7 @@ public class RequestFactory {
     }
 
     @Lookup
-    public UpdateCityRequest getUpdateCityRequest(SICity sicity, CityFieldToUpdateEnum field) {
+    public UpdateCityRequest getUpdateCityRequest(SICityUpdate sicity, CityFieldToUpdateEnum field) {
         return new UpdateCityRequest(sicity, field);
     }
 
@@ -126,7 +126,7 @@ public class RequestFactory {
     }
 
     @Lookup
-    public CedeCityRequest getCedeCityRequest(SICity sicity, int nationId) {
+    public CedeCityRequest getCedeCityRequest(SICityUpdate sicity, int nationId) {
         return new CedeCityRequest(sicity, nationId);
     }
 

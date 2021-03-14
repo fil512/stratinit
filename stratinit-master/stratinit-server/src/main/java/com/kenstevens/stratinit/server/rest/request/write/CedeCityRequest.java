@@ -8,7 +8,7 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -27,7 +27,7 @@ import java.util.Collection;
 @Scope("prototype")
 @Component
 public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
-	private final SICity sicity;
+    private final SICityUpdate sicity;
     private final int nationId;
     @Autowired
     private CityDaoService cityDaoService;
@@ -44,7 +44,7 @@ public class CedeCityRequest extends PlayerWriteRequest<SIUpdate> {
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
 
-    public CedeCityRequest(SICity sicity, int nationId) {
+    public CedeCityRequest(SICityUpdate sicity, int nationId) {
         this.sicity = sicity;
         this.nationId = nationId;
     }

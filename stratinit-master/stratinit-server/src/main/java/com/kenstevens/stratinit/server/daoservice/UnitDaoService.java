@@ -44,7 +44,7 @@ public class UnitDaoService {
     private MoveSeenFactory moveSeenFactory;
 
     public void updateUnit(Unit unit, Date buildTime) {
-        Sector sector = dataCache.getWorld(unit.getGameId()).getSector(
+        Sector sector = dataCache.getWorld(unit.getGameId()).getSectorOrNull(
                 unit.getCoords());
         if (sector.isPlayerCity()) {
             unit.healPercent(Constants.CITY_HEAL_PERCENT);

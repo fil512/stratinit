@@ -67,7 +67,7 @@ public class WorldView implements CoordMeasure {
 		return getNeighbours(worldSector.getCoords());
 	}
 	public WorldSector getWorldSector(SectorCoords coords) {
-		return (WorldSector) world.getSector(coords);
+		return (WorldSector) world.getSectorOrNull(coords);
 	}
 
 	public RelationType getMyRelation(Nation nation) {

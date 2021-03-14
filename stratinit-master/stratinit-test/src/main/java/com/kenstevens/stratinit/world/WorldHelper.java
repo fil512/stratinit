@@ -93,7 +93,7 @@ public final class WorldHelper {
                     ++x;
                     continue;
                 }
-                Sector sector = world.getSector(x, y);
+                Sector sector = world.getSectorOrNull(x, y);
                 char islandChar = islands[y].charAt(x);
                 if (islandChar == '0') {
                     sector.setIsland(0);

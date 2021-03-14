@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.remote.request;
 
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 
 public class CedeCityJson implements IRestRequestJson {
-    public SICity city;
+    public SICityUpdate city;
     public int nationId;
 
     public CedeCityJson() {
     }
 
-    public CedeCityJson(SICity city, int nationId) {
+    public CedeCityJson(SICityUpdate city, int nationId) {
         this.city = city;
         this.nationId = nationId;
     }

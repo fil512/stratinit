@@ -1,16 +1,16 @@
 package com.kenstevens.stratinit.remote.request;
 
-import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class BuildUnitJson implements IRestRequestJson {
-    public SICity sicity;
+    public SICityUpdate sicity;
     public UnitType choice;
 
     public BuildUnitJson() {
     }
 
-    public BuildUnitJson(SICity sicity, UnitType choice) {
+    public BuildUnitJson(SICityUpdate sicity, UnitType choice) {
         this.sicity = sicity;
         this.choice = choice;
     }

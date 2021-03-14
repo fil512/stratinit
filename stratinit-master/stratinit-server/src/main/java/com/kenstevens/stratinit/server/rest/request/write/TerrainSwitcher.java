@@ -31,7 +31,7 @@ public class TerrainSwitcher {
 
     public Result<None> switchTerrain(Unit unit) {
         World world = sectorDao.getWorld(unit.getParentGame());
-        Sector sector = world.getSector(unit);
+        Sector sector = world.getSectorOrNull(unit);
         if (nonEngineerUnitsInSector(sector)) {
             return new Result<None>("Only Engineer units may be in a sector to change its terrain", false);
         }

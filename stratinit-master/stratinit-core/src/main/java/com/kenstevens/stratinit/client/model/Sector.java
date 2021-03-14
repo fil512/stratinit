@@ -99,6 +99,7 @@ public class Sector implements Serializable {
 	public int getX() {
 		return getCoords().x;
 	}
+
 	public int getY() {
 		return getCoords().y;
 	}
@@ -107,5 +108,7 @@ public class Sector implements Serializable {
 		return getGame().getId();
 	}
 
-
+	public boolean isUnknown() {
+		return type == SectorType.UNKNOWN;
+	}
 }

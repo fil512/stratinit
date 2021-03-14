@@ -224,7 +224,7 @@ public class SectorDaoService {
     public WorldSector refreshWorldSector(Nation nation, WorldView worldView,
                                           WorldSector targetSector) {
         List<Sector> sectors = new ArrayList<>();
-        sectors.add(dataCache.getWorld(nation.getGameId()).getSector(
+        sectors.add(dataCache.getWorld(nation.getGameId()).getSectorOrNull(
                 targetSector.getCoords()));
         setWorldSectorsFromCities(sectors, worldView);
         Collection<Unit> units = unitDao.getUnits(targetSector);
