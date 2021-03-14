@@ -27,7 +27,6 @@ public class RestStratInitClient implements IStratInitServer {
     }
 
     @Override
-    // FIXME build the client ServerConfig from this
     public Result<Properties> getServerConfig() {
         return restClient.get(SIRestPaths.SERVER_CONFIG, Properties.class);
     }
