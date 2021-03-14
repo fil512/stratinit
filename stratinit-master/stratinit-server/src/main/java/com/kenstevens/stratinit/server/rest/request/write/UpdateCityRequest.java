@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
 import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.rest.svc.CityUpdater;
 import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class UpdateCityRequest extends PlayerWriteRequest<SICity> {
 	private final SICity sicity;
-	private final UpdateCityField field;
+	private final CityFieldToUpdateEnum field;
 	@Autowired
 	private CityUpdater cityUpdater;
 
-	public UpdateCityRequest(SICity sicity, UpdateCityField field) {
+	public UpdateCityRequest(SICity sicity, CityFieldToUpdateEnum field) {
 		this.sicity = sicity;
 		this.field = field;
 	}

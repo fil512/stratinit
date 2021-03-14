@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.dto.SICity;
 import com.kenstevens.stratinit.dto.SIMessage;
 import com.kenstevens.stratinit.dto.SIUnit;
-import com.kenstevens.stratinit.remote.UpdateCityField;
+import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.server.rest.request.write.*;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -111,7 +111,7 @@ public class RequestFactory {
     }
 
     @Lookup
-    public UpdateCityRequest getUpdateCityRequest(SICity sicity, UpdateCityField field) {
+    public UpdateCityRequest getUpdateCityRequest(SICity sicity, CityFieldToUpdateEnum field) {
         return new UpdateCityRequest(sicity, field);
     }
 

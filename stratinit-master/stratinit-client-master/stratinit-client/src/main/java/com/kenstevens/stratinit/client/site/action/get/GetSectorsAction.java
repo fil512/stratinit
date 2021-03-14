@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.client.site.action.get;
 
 import com.kenstevens.stratinit.client.shell.StatusReporter;
 import com.kenstevens.stratinit.client.site.GetAction;
-import com.kenstevens.stratinit.client.site.command.GetSectorsCommand;
+import com.kenstevens.stratinit.client.site.command.get.GetSectorsCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

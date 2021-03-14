@@ -26,6 +26,7 @@ public class SICity implements StratInitDTO {
 		coords = city.getCoords();
 		type = city.getType();
 		nationId = city.getNation().getNationId();
+		switchOnTechChange = city.isSwitchOnTechChange();
 	}
 
 	public SICity(int x, int y, CityType type, int nationId) {

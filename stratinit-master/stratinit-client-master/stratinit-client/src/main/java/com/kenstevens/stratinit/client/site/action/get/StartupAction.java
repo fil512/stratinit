@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.model.UnitList;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.site.GetAction;
-import com.kenstevens.stratinit.client.site.command.DescriptionCommand;
+import com.kenstevens.stratinit.client.site.command.get.DescriptionCommand;
 import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

@@ -1,0 +1,50 @@
+package com.kenstevens.stratinit.client.site.command.post;
+
+import com.kenstevens.stratinit.client.model.UnitView;
+import com.kenstevens.stratinit.client.site.PostCommand;
+import com.kenstevens.stratinit.client.site.command.get.UnitsToSIUnits;
+import com.kenstevens.stratinit.client.site.processor.UpdateProcessor;
+import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.request.SIUnitListJson;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Scope("prototype")
+@Component
+public class DisbandCommand extends PostCommand<SIUpdate, SIUnitListJson> {
+	@Autowired
+	private UpdateProcessor updateProcessor;
+
+	public DisbandCommand(List<UnitView> units) {
+		super(new SIUnitListJson(UnitsToSIUnits.transform(units)), buildDescription(units));
+	}
+
+	@Override
+	public Result<SIUpdate> executePost(SIUnitListJson request) {
+		return stratInitServer.disbandUnits(request);
+	}
+
+	@Override
+	public void handleSuccess(SIUpdate siupdate) {
+		updateProcessor.process(siupdate, false);
+	}
+
+	public static String buildDescription(List<UnitView> units) {
+		if (units.size() == 0) {
+			return "Nothing disbanded";
+		} else if (units.size() == 1) {
+			UnitView unit = units.get(0);
+			if (unit.isLand()) {
+				return "Disband "+unit.toMyString()+" at "+unit.getCoords();
+			} else {
+				return "Scuttle "+unit.toMyString()+" at "+unit.getCoords();
+			}
+		} else {
+			return units.size() + " units disbanded at "+units.get(0).getCoords(); 
+		}
+	}
+}

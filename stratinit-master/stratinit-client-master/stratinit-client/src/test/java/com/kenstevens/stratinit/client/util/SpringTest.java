@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.client.util;
 
 import com.kenstevens.stratinit.BaseStratInitClientTest;
 import com.kenstevens.stratinit.client.model.Mail;
-import com.kenstevens.stratinit.client.site.command.SendMessageCommand;
+import com.kenstevens.stratinit.client.site.command.post.SendMessageCommand;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;

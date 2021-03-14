@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.client.site.action.get;
 
 import com.kenstevens.stratinit.client.site.GetAction;
-import com.kenstevens.stratinit.client.site.command.GetTeamsCommand;
+import com.kenstevens.stratinit.client.site.command.get.GetTeamsCommand;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

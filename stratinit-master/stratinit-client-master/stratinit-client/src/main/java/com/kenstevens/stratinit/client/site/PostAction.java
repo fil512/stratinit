@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 
-public abstract class PostAction<T extends Command<?>> extends Action<T> {
+public abstract class PostAction<T extends PostCommand<?, ?>> extends Action<T> {
     private final T command;
     @Autowired
     private Spring spring;
@@ -30,11 +30,5 @@ public abstract class PostAction<T extends Command<?>> extends Action<T> {
     @Override
     public boolean canRepeat() {
         return true;
-    }
-
-    // FIXME remove once all post actions have been converted to use this subclass
-    @Override
-    protected T buildCommand() {
-        throw new UnsupportedOperationException();
     }
 }

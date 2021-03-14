@@ -6,8 +6,8 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.dto.SICity;
+import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.daoservice.CityDaoService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -27,15 +27,15 @@ public class CityUpdater {
 	private DataCache dataCache;
 
 
-	public Result<SICity> updateCity(Nation nation, SICity sicity, UpdateCityField field) {
+	public Result<SICity> updateCity(Nation nation, SICity sicity, CityFieldToUpdateEnum field) {
 		SectorCoords coords = sicity.coords;
 
-		if (field == UpdateCityField.BUILD) {
+		if (field == CityFieldToUpdateEnum.BUILD) {
 			Result<SICity> retval = checkBuild(nation, sicity, coords);
 			if (!retval.isSuccess()) {
 				return retval;
 			}
-		} else if (field == UpdateCityField.NEXT_BUILD) {
+		} else if (field == CityFieldToUpdateEnum.NEXT_BUILD) {
 			Result<SICity> retval = checkNextBuild(nation, sicity, coords);
 			if (!retval.isSuccess()) {
 				return retval;
@@ -73,7 +73,7 @@ public class CityUpdater {
 		return new Result<SICity>(sicity);
 	}
 
-	private Result<City> updateCity(Nation nation, UpdateCityField field,
+	private Result<City> updateCity(Nation nation, CityFieldToUpdateEnum field,
 									SICity sicity) {
 		return cityDaoService.updateCity(nation, sicity.coords, field,
 				sicity.build, sicity.nextBuild, sicity.switchOnTechChange, sicity.nextCoords);

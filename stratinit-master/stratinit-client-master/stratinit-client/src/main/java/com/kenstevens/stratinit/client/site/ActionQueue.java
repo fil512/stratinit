@@ -1,8 +1,6 @@
 package com.kenstevens.stratinit.client.site;
 
 import com.kenstevens.stratinit.client.main.ClientConstants;
-import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.shell.StatusReporter;
 import com.kenstevens.stratinit.client.shell.WidgetContainer;
 import org.slf4j.Logger;
@@ -10,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -25,6 +22,7 @@ public class ActionQueue {
     private StatusReporter statusReporter;
     @Autowired
     private WidgetContainer widgetContainer;
+
     private boolean shuttingDown = false;
     private Thread poll;
 
@@ -64,16 +62,11 @@ public class ActionQueue {
         poll.start();
     }
 
-    private boolean queueContainsMoveFor(Unit unit) {
+    private boolean queueContainsMoveFor(Integer unitId) {
         for (Action action : queue) {
-            if (action instanceof UnitAwareAction) {
-                UnitAwareAction unitAwareAction = (UnitAwareAction) action;
-                List<UnitView> units = unitAwareAction.getUnits();
-                for (Unit moved : units) {
-                    if (unit.getId() == moved.getId()) {
-                        return true;
-                    }
-                }
+            if (action instanceof UnitListAction) {
+                UnitListAction unitListAction = (UnitListAction) action;
+               return unitListAction.containsUnitId(unitId);
             }
         }
         return false;
@@ -145,15 +138,16 @@ public class ActionQueue {
                 ((ErrorSubmitter) action).submitError(e);
             }
         } finally {
-            if (action instanceof UnitAwareAction) {
-                UnitAwareAction unitAwareAction = (UnitAwareAction) action;
-                List<UnitView> units = unitAwareAction.getUnits();
-                for (UnitView unit : units) {
-                    if (!queueContainsMoveFor(unit)) {
-                        unit.setInActionQueue(false);
-                    }
-                }
-            }
+            // FIXME find a better way to keep track if a unit is in the action queue
+//            if (action instanceof UnitListAction) {
+//                UnitListAction unitListAction = (UnitListAction) action;
+//                List<UnitView> units = unitListAction.getUnits();
+//                for (UnitView unit : units) {
+//                    if (!queueContainsMoveFor(unit.getId())) {
+//                        unit.setInActionQueue(false);
+//                    }
+//                }
+//            }
         }
     }
 }

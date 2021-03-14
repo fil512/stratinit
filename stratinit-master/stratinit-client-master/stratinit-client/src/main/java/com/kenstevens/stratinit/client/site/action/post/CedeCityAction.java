@@ -1,25 +1,16 @@
 package com.kenstevens.stratinit.client.site.action.post;
 
 import com.kenstevens.stratinit.client.model.City;
-import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.NationView;
-import com.kenstevens.stratinit.client.site.Action;
-import com.kenstevens.stratinit.client.site.command.CedeCityCommand;
+import com.kenstevens.stratinit.client.site.PostAction;
+import com.kenstevens.stratinit.client.site.command.post.CedeCityCommand;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Scope("prototype")
 @Component
-public class CedeCityAction extends Action<CedeCityCommand> {
-	private final City city;
-	private final Nation nation;
-
+public class CedeCityAction extends PostAction<CedeCityCommand> {
 	public CedeCityAction(City city, NationView nation) {
-		this.city = city;
-		this.nation = nation;
-	}
-
-	protected CedeCityCommand buildCommand() {
-		return new CedeCityCommand(city, nation);
+		super(new CedeCityCommand(city, nation));
 	}
 }

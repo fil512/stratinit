@@ -16,19 +16,8 @@ public abstract class Action<T extends Command<?>> {
 	protected ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 	@Autowired
 	private Spring spring;
-	// FIXME remove
-	protected T command;
 
-	// FIXME abstract
-	public T getCommand() {
-		if (command == null) {
-			command = spring.autowire(buildCommand());
-		}
-		return command;
-	}
-
-	// FIXME remove
-	protected abstract T buildCommand();
+	public abstract T getCommand();
 
 	public void preRequest() {
 	}

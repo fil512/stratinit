@@ -13,7 +13,6 @@ import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.ui.tabs.GameTable;
 import com.kenstevens.stratinit.client.ui.tabs.GameTableControl;
 import com.kenstevens.stratinit.client.util.Spring;
-import com.kenstevens.stratinit.remote.request.SetGameJson;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -188,8 +187,7 @@ public class ManageGamesWindowControl implements TopLevelController {
 			return;
 		}
 		int gameId = game.getId();
-		SetGameJson request = new SetGameJson(gameId, noAlliances);
-		actionFactory.joinGame(request);
+		actionFactory.joinGame(gameId, noAlliances);
 	}
 
 	public void setContents() {

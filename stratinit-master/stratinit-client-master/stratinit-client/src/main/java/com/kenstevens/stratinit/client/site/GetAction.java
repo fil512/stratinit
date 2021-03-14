@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 
 
-public abstract class GetAction<T extends Command<?>> extends Action<T> {
+public abstract class GetAction<T extends GetCommand<?>> extends Action<T> {
 	private final T command;
 	@Autowired
 	private Spring spring;
@@ -30,11 +30,5 @@ public abstract class GetAction<T extends Command<?>> extends Action<T> {
 	@Override
 	public boolean canRepeat() {
 		return false;
-	}
-
-	// FIXME remove once this is gone in superclass
-	@Override
-	protected T buildCommand() {
-		throw new UnsupportedOperationException();
 	}
 }

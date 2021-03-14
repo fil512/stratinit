@@ -5,9 +5,9 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.svc.CityBuilderService;
 import com.kenstevens.stratinit.server.svc.FogService;
@@ -54,7 +54,7 @@ public class CityDaoService {
 
 
     public Result<City> updateCity(Nation nation, SectorCoords coords,
-                                   UpdateCityField field, UnitType build, UnitType nextBuild,
+                                   CityFieldToUpdateEnum field, UnitType build, UnitType nextBuild,
                                    boolean switchOnTechChange, SectorCoords nextCoords) {
 
         City city = cityDao.getCity(nation, coords);
@@ -64,16 +64,16 @@ public class CityDaoService {
         }
 
         Result<City> retval;
-        if (field == UpdateCityField.BUILD) {
+        if (field == CityFieldToUpdateEnum.BUILD) {
             retval = cityBuilderService.updateBuild(nation, city, build);
-        } else if (field == UpdateCityField.NEXT_BUILD) {
+        } else if (field == CityFieldToUpdateEnum.NEXT_BUILD) {
             retval = cityBuilderService.updateNextBuild(city, nextBuild);
-        } else if (field == UpdateCityField.SWITCH_ON_TECH_CHANGE) {
+        } else if (field == CityFieldToUpdateEnum.SWITCH_ON_TECH_CHANGE) {
             retval = new Result<>(true);
             retval.addMessage("Setting switch on tech change in "
                     + city.getCoords() + " to " + switchOnTechChange);
             city.setSwitchOnTechChange(switchOnTechChange);
-        } else if (field == UpdateCityField.NEXT_COORDS) {
+        } else if (field == CityFieldToUpdateEnum.NEXT_COORDS) {
             retval = new Result<>(true);
             if (nextCoords == null) {
                 retval.addMessage("Cancelling waypoint of city "

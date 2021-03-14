@@ -4,8 +4,6 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.site.ActionQueue;
 import com.kenstevens.stratinit.client.site.action.get.*;
 import com.kenstevens.stratinit.client.util.Spring;
-import com.kenstevens.stratinit.remote.request.SIUnitListJson;
-import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -20,6 +18,10 @@ public class ActionFactory {
 	private Spring spring;
 	@Autowired
 	ActionQueue actionQueue;
+	@Autowired
+	Data db;
+	@Autowired
+	Account account;
 
 	public void getGames() {
 		GetGamesAction getGamesAction = spring.getBean(GetGamesAction.class);
@@ -75,8 +77,9 @@ public class ActionFactory {
 	}
 
 
-	public void moveUnits(List<UnitView> units, SectorCoords target) {
-		MoveUnitsAction moveUnitsAction = spring.autowire(new MoveUnitsAction(units, target));
+	public void moveUnits(List<UnitView> units, SectorCoords targetCoords) {
+		WorldSector targetSector = db.getWorld().getWorldSector(targetCoords);
+		MoveUnitsAction moveUnitsAction = spring.autowire(new MoveUnitsAction(units, targetSector));
 		actionQueue.put(moveUnitsAction);
 	}
 
@@ -123,8 +126,7 @@ public class ActionFactory {
 	}
 
 	public void setGame(int gameId, boolean noAlliances) {
-		SetGameJson request = new SetGameJson(gameId, noAlliances);
-		SetGameAction setGameAction = spring.autowire(new SetGameAction(request));
+		SetGameAction setGameAction = spring.autowire(new SetGameAction(gameId, noAlliances));
         actionQueue.put(setGameAction);
         getMyNation();
     }
@@ -160,8 +162,9 @@ public class ActionFactory {
         actionQueue.put(getUnjoinedGamesAction);
     }
 
-	public void joinGame(SetGameJson request) {
-		JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(request));
+
+	public void joinGame(int gameId, boolean noAlliances) {
+		JoinGameAction joinGameAction = spring.autowire(new JoinGameAction(gameId, noAlliances));
 		actionQueue.put(joinGameAction);
 		getUnjoinedGames();
 		getGames();
@@ -188,13 +191,12 @@ public class ActionFactory {
 	}
 
 	public void submitError(Exception e) {
-		SubmitErrorAction submitErrorAction = spring.autowire(new SubmitErrorAction(e));
+		SubmitErrorAction submitErrorAction = spring.autowire(new SubmitErrorAction(account.getUsername(), db.getSelectedGameId(), e));
 		actionQueue.put(submitErrorAction);
 	}
 
 	public void buildCity(List<UnitView> units) {
-		SIUnitListJson SIUnitListJson = new SIUnitListJson();
-		BuildCityAction buildCityAction = spring.autowire(new BuildCityAction(SIUnitListJson));
+		BuildCityAction buildCityAction = spring.autowire(new BuildCityAction(units));
 		actionQueue.put(buildCityAction);
 	}
 

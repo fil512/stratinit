@@ -187,7 +187,6 @@ public class RestStratInitClient implements IStratInitServer {
         return restClient.post(SIRestPaths.BUILD_CITY, request, SIUpdate.class);
     }
 
-    // FIXME lots of patterns here to consolidate
     @Override
     public Result<SIUpdate> switchTerrain(SIUnitListJson request) {
         return restClient.post(SIRestPaths.SWITCH_TERRAIN, request, SIUpdate.class);

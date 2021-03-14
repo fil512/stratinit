@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.client.site.action.get;
 
 import com.kenstevens.stratinit.client.site.GetAction;
-import com.kenstevens.stratinit.client.site.command.GetNewsCommand;
+import com.kenstevens.stratinit.client.site.command.get.GetNewsCommand;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 

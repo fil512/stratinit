@@ -7,8 +7,8 @@ import com.kenstevens.stratinit.controller.StratInitController;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.helper.PlayerHelper;
+import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.UpdateCityField;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.server.daoservice.*;
 import com.kenstevens.stratinit.server.svc.MoveService;
@@ -46,7 +46,7 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 
     protected void setBuild(SectorCoords coords, UnitType type) {
         City city = cityDao.getCity(testWorld.getSector(coords));
-		cityDaoService.updateCity(city.getNation(), coords, UpdateCityField.BUILD, type, null, false, null);
+		cityDaoService.updateCity(city.getNation(), coords, CityFieldToUpdateEnum.BUILD, type, null, false, null);
     }
 
     protected void setAuthentication(String username) {

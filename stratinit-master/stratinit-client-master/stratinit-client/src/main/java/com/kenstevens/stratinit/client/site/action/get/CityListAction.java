@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.event.CityListReplacementArrivedEvent;
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.shell.StatusReporter;
 import com.kenstevens.stratinit.client.site.GetAction;
-import com.kenstevens.stratinit.client.site.command.GetCitiesCommand;
+import com.kenstevens.stratinit.client.site.command.get.GetCitiesCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

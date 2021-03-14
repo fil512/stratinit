@@ -3,47 +3,33 @@ package com.kenstevens.stratinit.client.site.action.post;
 import com.kenstevens.stratinit.client.control.selection.SelectEvent;
 import com.kenstevens.stratinit.client.control.selection.Selection.Source;
 import com.kenstevens.stratinit.client.model.UnitView;
-import com.kenstevens.stratinit.client.site.Action;
+import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.client.site.ActionQueue;
-import com.kenstevens.stratinit.client.site.UnitAwareAction;
-import com.kenstevens.stratinit.client.site.command.MoveUnitsCommand;
-import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.client.site.PostAction;
+import com.kenstevens.stratinit.client.site.UnitListAction;
+import com.kenstevens.stratinit.client.site.command.post.MoveUnitsCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Scope("prototype")
 @Component
-public class MoveUnitsAction extends Action<MoveUnitsCommand> implements UnitAwareAction {
+public class MoveUnitsAction extends PostAction<MoveUnitsCommand> implements UnitListAction {
 	@Autowired
 	private SelectEvent selectEvent;
 	@Autowired
 	private ActionQueue actionQueue;
 
-	private final List<UnitView> units;
-	private final SectorCoords target;
 	private boolean launching = false;
 
-	public MoveUnitsAction(List<UnitView> units, SectorCoords target) {
-		this.units = units;
-		this.target = target;
+	public MoveUnitsAction(List<UnitView> units, WorldSector targetSector) {
+		super(new MoveUnitsCommand(units, targetSector));
 		if (units.size() == 1 && units.get(0).isLaunchable()) {
 			launching = true;
 		}
-	}
-
-	protected MoveUnitsCommand buildCommand() {
-		return new MoveUnitsCommand(units, target);
-	}
-
-	@PostConstruct
-	public void initUnitView() {
-		for (UnitView unit : units) {
-			unit.setInActionQueue(true);
-		}
+		units.forEach(u -> u.setInActionQueue(true));
 	}
 
 	@Override
@@ -51,14 +37,15 @@ public class MoveUnitsAction extends Action<MoveUnitsCommand> implements UnitAwa
 		super.postEvents();
 		if (actionQueue.isEmpty()) {
 			if (launching) {
-				selectEvent.selectSectorCoordsNoFire(target, Source.CANVAS_SELECT);
+				selectEvent.selectSectorCoordsNoFire(getCommand().getTarget(), Source.CANVAS_SELECT);
 			} else {
 				selectEvent.selectUnitsWithMobNoFire(Source.CANVAS_SELECT);
 			}
 		}
 	}
 
-	public List<UnitView> getUnits() {
-		return units;
+	@Override
+	public boolean containsUnitId(Integer unitId) {
+		return getCommand().containsUnitId(unitId);
 	}
 }
