@@ -7,33 +7,38 @@ import com.kenstevens.stratinit.client.model.UnitSeen;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.SectorCoords;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Component
+@Scope("prototype")
 public class MoveSeen {
-    private final Set<UnitSeen> seen = new HashSet<UnitSeen>();
-    private final Set<Unit> seeUnit = new HashSet<Unit>();
-    private final Set<Sector> seeSector = new HashSet<Sector>();
-    private final Set<Sector> subSeeSector = new HashSet<Sector>();
-    private final Set<UnitSeen> seenDone = new HashSet<UnitSeen>();
-    private final Nation nation;
-    private final SectorDaoService sectorDaoService;
-    private final UnitDaoService unitDaoService;
+	@Autowired
+	SectorDaoService sectorDaoService;
+	@Autowired
+	UnitDaoService unitDaoService;
 
-    // FIXME remove services and make factory
-    public MoveSeen(Nation nation, SectorDaoService sectorDaoService, UnitDaoService unitDaoService) {
-        this.nation = nation;
-        this.sectorDaoService = sectorDaoService;
-        this.unitDaoService = unitDaoService;
-    }
+	private final Set<UnitSeen> seen = new HashSet<UnitSeen>();
+	private final Set<Unit> seeUnit = new HashSet<Unit>();
+	private final Set<Sector> seeSector = new HashSet<Sector>();
+	private final Set<Sector> subSeeSector = new HashSet<Sector>();
+	private final Set<UnitSeen> seenDone = new HashSet<UnitSeen>();
+	private final Nation nation;
 
-    public void add(Unit unit, Sector sector) {
-        seeSector.add(sector);
-        if (unit != null && unit.isCanSeeSubs()) {
-            subSeeSector.add(sector);
+	public MoveSeen(Nation nation) {
+		this.nation = nation;
+	}
+
+	public void add(Unit unit, Sector sector) {
+		seeSector.add(sector);
+		if (unit != null && unit.isCanSeeSubs()) {
+			subSeeSector.add(sector);
 		}
 	}
 

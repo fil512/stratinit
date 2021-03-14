@@ -36,7 +36,9 @@ public class UnitsMove {
     @Autowired
     private UnitMoveFactory unitMoveFactory;
     @Autowired
-    protected FogService fogService;
+    private FogService fogService;
+    @Autowired
+    private MoveSeenFactory moveSeenFactory;
 
     private boolean unknown;
     private MoveSeen moveSeen;
@@ -58,8 +60,7 @@ public class UnitsMove {
     public void init() {
         // TODO REF I'd prefer to make these two final
         this.unknown = checkUnknown();
-        this.moveSeen = new MoveSeen(unitsToMove.getNation(), sectorDaoService,
-                unitDaoService);
+        this.moveSeen = moveSeenFactory.newMoveSeen(unitsToMove.getNation());
         this.passengers = unitMoveFactory.getPassengers(unitsToMove, worldView);
     }
 

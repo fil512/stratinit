@@ -20,7 +20,6 @@ import java.util.List;
 
 public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
     private final List<SIUnit> siunits;
-    // FIXME remove?
     @Autowired
     protected UnitDaoService unitDaoService;
     @Autowired

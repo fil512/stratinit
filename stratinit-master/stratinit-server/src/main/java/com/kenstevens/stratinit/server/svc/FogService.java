@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.rest.move.MoveSeen;
+import com.kenstevens.stratinit.server.rest.move.MoveSeenFactory;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ import java.util.*;
 public class FogService {
     @Autowired
     UnitDaoService unitDaoService;
-    // FIXME remove when add moveseen factory
     @Autowired
     SectorDaoService sectorDaoService;
     @Autowired
@@ -30,6 +30,8 @@ public class FogService {
     private UnitDao unitDao;
     @Autowired
     private DataCache dataCache;
+    @Autowired
+    MoveSeenFactory moveSeenFactory;
 
     public void survey(Nation nation) {
         List<City> cities = cityDao.getCities(nation);
@@ -37,7 +39,7 @@ public class FogService {
         Set<Sector> seen = new HashSet<Sector>();
         seen.addAll(seeFromCities(cities));
         seen.addAll(seeFromUnits(units));
-        MoveSeen moveSeen = new MoveSeen(nation, sectorDaoService, unitDaoService);
+        MoveSeen moveSeen = moveSeenFactory.newMoveSeen(nation);
         // first ignore subs
         addSectorsSeen(null, seen, moveSeen);
         // now see subs
@@ -152,8 +154,7 @@ public class FogService {
     public void surveyFromCity(City city) {
         Set<Sector> cseen = new HashSet<>();
         seeFromCity(cseen, city);
-        // FIXME factory
-        MoveSeen moveSeen = new MoveSeen(city.getNation(), sectorDaoService, unitDaoService);
+        MoveSeen moveSeen = moveSeenFactory.newMoveSeen(city.getNation());
         addSectorsSeen(null, cseen, moveSeen);
         moveSeen.persist();
     }
