@@ -52,5 +52,60 @@ public class SerDeserTest {
         assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsForeignAffairs.class)));
     }
 
-    // TODO sleep do the rest
+    @Test
+    public void newsFromTheFront() throws JsonProcessingException {
+        SINewsFromTheFront orig = new SINewsFromTheFront();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsFromTheFront.class)));
+    }
+
+
+    @Test
+    public void newsLogs() throws JsonProcessingException {
+        SINewsLogs orig = new SINewsLogs();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsLogs.class)));
+    }
+
+    @Test
+    public void newsLog() throws JsonProcessingException {
+        SINewsLog orig = new SINewsLog();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsLog.class)));
+    }
+
+    @Test
+    public void newsLogsDay() throws JsonProcessingException {
+        SINewsLogsDay orig = new SINewsLogsDay();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsLogsDay.class)));
+    }
+
+    @Test
+    public void newsNation() throws JsonProcessingException {
+        SINewsNation orig = new SINewsNation();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsNation.class)));
+    }
+
+    @Test
+    public void newsNeutralConquest() throws JsonProcessingException {
+        SINewsNeutralConquest orig = new SINewsNeutralConquest();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsNeutralConquest.class)));
+    }
+
+    @Test
+    public void newsNuclear() throws JsonProcessingException {
+        SINewsNuclearDetonations orig = new SINewsNuclearDetonations();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsNuclearDetonations.class)));
+    }
+
+    @Test
+    public void newsOpponentConquest() throws JsonProcessingException {
+        SINewsOpponentConquest orig = new SINewsOpponentConquest();
+        String json = mapper.writeValueAsString(orig);
+        assertEquals(json, mapper.writeValueAsString(mapper.readValue(json, SINewsOpponentConquest.class)));
+    }
 }

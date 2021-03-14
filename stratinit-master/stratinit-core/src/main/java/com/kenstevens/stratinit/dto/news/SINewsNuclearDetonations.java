@@ -8,7 +8,10 @@ import com.kenstevens.stratinit.type.UnitType;
 public class SINewsNuclearDetonations extends SINewsOpponents implements SINewsCountable {
 	private static final long serialVersionUID = 1L;
 	public int count;
-	public final UnitType launchableUnit;
+	public UnitType launchableUnit;
+
+	public SINewsNuclearDetonations() {
+	}
 
 	public SINewsNuclearDetonations(Unit nuke, Nation opponent, int count) {
 		super(nuke.getNation(), opponent, NewsCategory.NUCLEAR_DETONATIONS);

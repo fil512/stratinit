@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.NewsCategory;
 
-public abstract class SINewsNation extends SINewsLog {
+public class SINewsNation extends SINewsLog {
 	private static final long serialVersionUID = 1L;
 
 	public String nationName;

@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.dto.StratInitDTO;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.NewsCategory;
 
-public abstract class SINewsLog implements StratInitDTO {
+public class SINewsLog implements StratInitDTO {
 	private static final long serialVersionUID = 1L;
 
 	public NewsCategory category;

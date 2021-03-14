@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.dto.news;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.type.NewsCategory;
 
@@ -10,8 +8,10 @@ public class SINewsNeutralConquest extends SINewsNation implements SINewsCountab
 	private static final long serialVersionUID = 1L;
 	public int count;
 
-	@JsonCreator
-	public SINewsNeutralConquest(@JsonProperty("category") NewsCategory category, @JsonProperty("nationName") String nationName, @JsonProperty("count") int count) {
+	public SINewsNeutralConquest() {
+	}
+
+	public SINewsNeutralConquest(NewsCategory category, String nationName, int count) {
 		super(nationName, category);
 		this.count = count;
 	}
@@ -20,6 +20,7 @@ public class SINewsNeutralConquest extends SINewsNation implements SINewsCountab
 		super(nation, NewsCategory.CONQUEST);
 		this.count = count;
 	}
+
 
 	@Override
 	public void increment(int count) {

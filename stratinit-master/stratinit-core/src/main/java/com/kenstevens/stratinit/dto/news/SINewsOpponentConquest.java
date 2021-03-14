@@ -8,6 +8,9 @@ public class SINewsOpponentConquest extends SINewsOpponents implements SINewsCou
     private static final long serialVersionUID = 1L;
     public int count;
 
+    public SINewsOpponentConquest() {
+    }
+
     public SINewsOpponentConquest(Nation nation, Nation opponent, int count) {
         super(nation, opponent, NewsCategory.CONQUEST);
         this.count = count;

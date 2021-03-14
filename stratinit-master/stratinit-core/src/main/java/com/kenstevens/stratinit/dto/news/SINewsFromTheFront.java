@@ -7,9 +7,12 @@ import com.kenstevens.stratinit.type.UnitType;
 public class SINewsFromTheFront extends SINewsOpponents implements SINewsCountable {
 	private static final long serialVersionUID = 1L;
 	public int count;
-	public final boolean killed;
-	public final UnitType nationUnitType;
-	public final UnitType opponentUnitType;
+	public boolean killed;
+	public UnitType nationUnitType;
+	public UnitType opponentUnitType;
+
+	public SINewsFromTheFront() {
+	}
 
 	public SINewsFromTheFront(Unit nationUnit, Unit opponentUnit, boolean killed,
 							  int count) {
