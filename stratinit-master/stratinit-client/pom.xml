@@ -6,11 +6,14 @@
         <version>1.2.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+
     <artifactId>stratinit-client</artifactId>
-    <name>Strategic Initiative</name>
-    <packaging>jar</packaging>
-    <description>The client for playing the online strategy game Strategic Initiative</description>
-    <url>${jnlp.url}</url>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.kenstevens.stratinit</groupId>

@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+		xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-        <artifactId>stratinit-client-master</artifactId>
-        <groupId>com.kenstevens.stratinit</groupId>
-        <version>1.3</version>
-    </parent>
+		<artifactId>stratinit-client-master</artifactId>
+		<groupId>com.kenstevens.stratinit</groupId>
+		<version>1.3</version>
+	</parent>
 	<artifactId>stratinit-swt</artifactId>
 	<name>stratinit-swt</name>
-	<url>http://maven.apache.org</url>
+	<url>${jnlp.url}</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- TODO RELEASE remove these properties -->
