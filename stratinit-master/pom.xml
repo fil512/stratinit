@@ -114,7 +114,7 @@
             <dependency>
                 <groupId>com.kenstevens.stratinit</groupId>
                 <artifactId>stratinit-client</artifactId>
-                <version>${stratinit.client.version}</version>
+                <version>${stratinit.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.kenstevens.stratinit</groupId>
