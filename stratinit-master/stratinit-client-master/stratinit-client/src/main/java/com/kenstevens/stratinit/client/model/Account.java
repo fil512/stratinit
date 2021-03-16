@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.client.model;
 
-import org.eclipse.swt.graphics.Point;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -79,13 +78,13 @@ public class Account {
 		this.height = height;
 	}
 
-	public void setLocation(Point point) {
-		this.x = point.x;
-		this.y = point.y;
+	public void setLocation(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
-	public void setSize(Point point) {
-		this.width = point.x;
-		this.height = point.y;
+	public void setSize(int x, int y) {
+		this.width = x;
+		this.height = y;
 	}
 }

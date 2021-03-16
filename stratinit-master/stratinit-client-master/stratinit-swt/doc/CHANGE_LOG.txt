@@ -1,0 +1,901 @@
+Release 1.2.7
+  * Patrol boats and air units now highlight unit range into unknown.
+  * Added diagonal white lines to help guide exploring zeppelins and patrol boats (let me know if you don't like
+  this and I'll make it configurable)
+  * Changed version warning so it only warns if client is older than server.  There should not be a warning if client
+  is newer than server.  (Note this change prompted a new full download of the client.)
+  * Changed Splash Image
+
+Release 1.2.6
+  * Moved to install4j installation platform.
+  * If a user is in no games, start with the "Join Game" tab.
+
+Release 1.2.5
+  * Fixed a bug that permitted multiple alliances
+  * Added a splash screen
+
+Release 1.2.4
+  * BALANCE CHANGE: Helicopter cost reduced from 8 to 6
+  * BALANCE CHANGE: Helicopter range increased from 12 to 16
+  * BALANCE CHANGE: Helicopter attack increased from 3 to 5
+  * BALANCE CHANGE: Helicopter ammo increased from 1 to 2
+  * Fixed a bug that crashes the client when you clicked "forward" and no message was selected.
+  * Fixed a bug that crashes the client at startup due to a race condition
+  * Fixed a bug that crashes the client if you try to update a city you no longer own
+  * Spent a couple of hours trying to reproduce the double-alliance bug, but so far no dice.  Does anyone out there know the trick to create
+    a double-alliance?
+  * Replaced GWT libraries with Guava libraries.  this will require a new jnlp download.
+  * Added Java installation instructions to the "Play" web page.
+
+Release 1.2.3
+  * Modified Web Site "games" -> Past Games.  Now you can click on a player name and see charts of their unit build orders for that game.
+  * Modified Web Site "units built" added pie charts to indicate preferred units in each game.
+
+Release 1.2.2
+  * Passengers on aircraft are not considered to be on board if that aircraft is in
+  a sector that can refuel it.  So if an aircraft in an airport is destroyed, it won't kill any passengers.
+  * Players can now change their alliance vote between the time a game is mapped and before it starts.  This means that
+  alliances are now forbidden until a game starts.
+  * When switching the "Units" Tab, it is now automatically refreshed.  I hope this is an improvement, but I'm not sure yet.
+  * Added some youtube tutorial sites to the home page
+
+Release 1.2.1
+  * Added option for players to chose "no alliances" when joining a game
+  * Added forgotten password page to reset password
+  * Added account management page where players can change their password and e-mail settings
+  * Added last-login field to player, record browser version when player registers (to
+  get a better sense of the balance of windows / mac / linux players out there)
+
+Release 1.2.0
+  * Added Team ranking.  Teams are ranked using the ELO Rating system.  http://en.wikipedia.org/wiki/Elo_rating_system
+  * Changed Leader Board to rank players using a weighted average of their team rankings.  (Weighted by wins.)
+  * Replaced GWT 2.0.4 and Velocity 1.7 with Wicket 1.5.4.
+  * Upgraded Spring 2.5.6 to Spring 3.1
+  * Upgraded Hibernate 3.2.6 to Hibernate 4.0
+  * Upgraded postgres jdbc3 version 8.2 to jdbc4 version 9
+  * Upgraded swt 3.4.2 to swt 3.5.4
+  * Switched logging to commons-logging
+
+Release 1.1.52
+  * Fixed a bug that prevented game data from flushing to disc every 15 minutes.  This resulted
+    in a corrupt database if the server was shut down ungracefully (e.g. due to a power failure)
+
+Release 1.1.51
+  * Fixed a bug that caused a lot of game data to get corrupted when the server goes down (e.g. when there is a power
+    outage).  Now only the last 15 minutes of data will be lost.
+
+Release 1.1.50
+  * Fixed a bug that stranded passengers when the unit carrying them is intercepted / interdicted.
+  * Fixed a bug that prevented move orders from being set on units out of supply.
+  * Fixed a bug that crashed the client if the player closed the News window before news fully loaded.
+  * Improved error logging if there is a crash at startup.
+  * Improved complete client shutdown in case there was a crash.
+  * Added null-checking to prevent crashes on certain select events.
+
+Release 1.1.49
+  * BALANCE CHANGE New build option: RESEARCH.  Counts as 2 tech centres for tech production.
+  * BALANCE CHANGE A BASE no longer produces tech.
+  * BALANCE CHANGE CP Cost to build city increased from 64 to 128.
+  * BALANCE CHANGE Engineer cost increased from 12 to 16.
+  * BALANCE CHANGE Added CARGO_PLANE unit.  Similar stats to HEAVY_BOMBER.  Carries 4 infantry. 
+    Same rules as helicopter for picking up inf (i.e. won't pick up wounded or zero-mob units
+    from a player city.)
+  * BALANCE CHANGE Tank cost reduced from 12 to 10.
+  * Balance Change Tank hp increased from 8 to 9.
+  * BALANCE CHANGE Removed ANTI_TANK unit.  Existing ANTI_TANK units converted to infantry.
+  * BALANCE CHANGE Zeppelin cost reduced from 18 to 12.
+  * BALANCE CHANGE Zeppelin is now considered a bomber, inflicting 10% damage (minimum 1 hp) with each bomb.
+  * BALANCE CHANGE Zeppelin ammo increased from 0 to 4.  Resupplies in any allied city.
+  * BALANCE CHANGE Zeppelin now requires fuel.  However unlike other air units, it can hold enough fuel for 30 moves
+  before needing to refuel in an allied city.
+  * BALANCE CHANGE Zeppelin mobility increased from 4 to 5.
+  * Carrying units (transports, helicopters, cargo planes, carriers, engineer, sub) no longer accidentally
+    "scoop" up other units along their path.  Passengers need to be in the unit the carrier started in to get carried.
+  * Cleaned up icbm image
+
+Release 1.1.48 interim
+  * Setting move order on unit with 0 mob now draws black line
+  * Building new city now updates map
+  * Added supply unit list to Supply tab
+  * Show both my relation and their relation on player tab
+  * Allow next build for BASE (which makes sense when switch on tech gain is checked)
+  * Added configurable option (default on) that scrolls the map when you select a land or water square (thanks SuperNovaSS)
+  * Fixed a couple of minor NullPointer bugs that crashed the client every now and then
+
+Release 1.1.48
+  * Fixed error that occurred when building a city.
+  * Fixed missing black line when setting move order on unit.
+  * Improved error logging.  Now when there's an error, the user will be told an error number.  This
+    number will be logged in the database along with the details of the error so they can be cross-referenced
+    later.
+
+Release 1.1.47
+  * Fixed exploit that allowed players to build a new city with less than 64 CP.
+  * Fixed bug that wasn't listing units that gained mobility since last login in red
+  * Fixed bug that crashed client when unit ceded
+  * Widened tech table so all users can see tech decimal places (thanks Trabi and Junta!)
+  * Stats details tab automatically picks the opponent you've fought the most with.
+
+Release 1.1.46
+  * The Support tab now helps you manage support across the entire map--displaying overlapping support
+    and supply lines of your ports and supply ships.
+  * City Waypoint is now cleared when you capture a city and when the type of unit being built in the city changes.
+  * Ported to Linux with a tremendous amount of help from Barry Peddycord.  Thank you kind sir!!!
+  * Changed event model in client.  This should make the client faster and less glitchy, but
+    some stuff in the client might not update properly while I work out the kinks of the new event model.
+
+Release 1.1.45
+  * Fixed sound.  (You can disable it in prefs if you want.)
+  * Fixed bug to allow ships to enter water sectors that are completely surrounded by land.  (Thanks thegeneral!)
+  * When on the city tab, don't select a single unit in a city.  This will allow players to set waypoints for all cities.
+  * Removed horizontal scrollbars from sector, unit, city, and plan tabs.
+  * Fixed bug that didn't display ETA on city tab
+  * Moved prefs from tab to menu bar
+  * Added new "Supply" tab that will be used to review/manage supply in a future release.
+
+Release 1.1.44
+  * Cities now have waypoints.  To set a waypoint on a city, select the city and right click on the map where you
+    want the waypoint to be.  Any unit with sufficient mobility in that city will automatically move to that waypoint
+    when it is created or updated.
+  * Ally waypoints do not affect units.  Waypoints do not affect units that already have move orders.
+  * Report adjacent units that fire when you attack (they were attacking but not being reported in the command log)
+  * Don't reload city table when changing build orders for a city (yay!)
+  * Fixed a bug that prevented air units with 1 mob and 1 fuel from entering an adjacent city.
+  * Did some performance optimization to reduce round-trips to the server
+  * Fixed a bug that wasn't updating command points when engineers built stuff
+
+Release 1.1.43
+  * Bases now produce technology!
+  * Allow engineers to switch water to land beside cities
+  * When your ship is interdicted by enemy ships, your ship will no longer counter-attack.
+  * When a ship attacks, all adjacent enemy ships will counter-attack irrespective of whether they're in supply.
+  * Cruisers now do triple-damage against subs like destroyers
+  * Cruisers are no longer considered capital ships (so they can no longer refuel helicopters)
+  * Destroyers and cruisers are both considered to be escort ships
+  * If an escort ship is within 2 sectors of a capital ship, then it will not move to interdict enemy ships.
+  * The one exception to this is that a cruiser will move to interdict an enemy sub
+  * Added "-" to mob column of units to indicate unit has a move order.
+  * Made supply lines white again (were temporarily black by mistake)
+
+Release 1.1.42
+  * Fixed a bug that would cause the client to crash at startup sometimes.
+  * Fixed a bug that would revive old unit move commands that had been cancelled when the server is restarted.
+  * Converted some more buttons to icons.
+
+Release 1.1.41
+  * Engineer build cost reduced from 36 to 12.
+  * Command points are now only charged if the action was successful
+  * Command point cost to launch split: launch satellite costs 8, launch ICBM costs 32.
+  * Command point cost to build new city is 64
+  * Building city no longer consumes engineer, but now requires engineer to be at full mobility.  Mobility is reduced to zero when new city is built.
+  * Added new "switch terrain" action for engineers that allows them to switch water to land and vice-versa.  In order to build a new land
+  sector, there must already be land adjacent.  Similarly for water.
+  * Command point cost to switch terrain is 16
+  * Mobility cost to switch terrain is 6
+  * Added button to cancel move order on a unit
+  * Replaced text buttons with icon buttons
+
+Release 1.1.40
+  * Changed heal from 1/2 hp for supplied/city to 20% / 40% of max hp (rounded down).
+  * If, when you try to move a unit, that unit has insufficient mobility to move to the target sector, and that target sector
+  would be reachable once the unit gained enough mobility, then the unit will be assigned an order to move to that sector.
+  When the unit's mobility is updated and it has enough mobility to move to its target sector, it will move automatically
+  at no command cost.
+  * Allow players to disband multiple units at once
+  * If X is at war with A and X is friendly to me, then if I ally with A, X should go neutral to me
+  (because he can't trust me any more now that I've allied with his enemy)
+  * Display ally tech level in Technology window
+  * Fixed a bug that crashed client if you selected a game too quickly after starting up the client
+  * World map size increased:  Length of world-map edges increased by approximately 50%.
+  * World map percent water increased from 78% to 85%
+  * World map distance between islands increased from 3 to 4
+  * World map neutral island size increased from 20-150 to 30-200
+  * World map cities percentage increased from 4-6% to 5-7%
+  * World map player island size increased from 50 to 60
+
+Release 1.1.39
+  * Changed command cost from 2 for all commands to the following:
+  * Command cost 1 to move
+  * Command cost 2 to attack
+  * Command cost 4 to take a city
+  * Command cost 10 to launch an icbm or satellite
+  * Cities and units may now only be ceded to an ally.
+  * To fix a cede abuse, changed relation change logic as follows:
+When your relation with nation X changes (either instantly, or after a timer),
+  then if your new relation with X is worse than neutral (i.e. WAR) then for each ally A of X:
+  if A's relation to you is better than NEUTRAL it will be instantly reduced to NEUTRAL
+  if your relation to A is better than NEUTRAL it will be instantly reduced to NEUTRAL
+  
+
+Release 1.1.38
+  * BALANCE CHANGE: Number of tech centres that affect tech gain increased from 4 to 14.  Tech contribution of tech centres changed
+    from 1.0, 1.5, 1.75, 2.0 to 0.8, 1.2, 1.4, 1.5, 1.6, ... 2.5.
+  * BALANCE CHANGE: New Unit Type: ANTI_TANK.  Anti-tank does double damage against tanks.  But INFANTRY does double-damage
+    against ANTI_TANK.  Tech 5, cost 10, mob 2, att 3, hp 6
+  * BALANCE CHANGE: Engineer build time increased from 24 to 36
+  * BALANCE CHANGE: Zeppelin build time reduced from 24 to 18
+  * BALANCE CHANGE: Increased tech for ICBM_2 from 13 to 14.
+  * BALANCE CHANGE: Increased tech for ICBM_3 from 14 to 16.
+  * Added new "Unit Balance" web page that lists results of simulations I ran of units attacking one another (I used this to balance the new ANTI_TANK unit).
+  * Added unit icons to Technology window.
+  * Immediately update tech gain from tech centres in Technology window when a new tech centre is built.
+  * Fixed unit order on technology window and build dropdowns.
+  * Touched up some images: patrol boat, sub, sattelite, icbm.
+  * Changed "Concede" button to "Resign".
+  * Fixed a bug in player stats reporting.
+
+Release 1.1.37
+  * Engineers can now only establish cities in water next to land (no more floating cities--thanks Meadow)
+  * Fixed a bug that wasn't properly displaying player score at game end
+  * Archive game history so players can go back and see the final score of past games
+
+Release 1.1.36
+  * Warn players when command points <= 32 (thanks chuck)
+  * Random number of cities on neutral islands instead of always 4.  Now between 4% and 6% of island sectors will be cities.
+  * Do not permit odd number of players in a game (add 3 empty slots if there are an odd number of players at map time)
+  * Do not permit more than 10 players in a game
+  * Present web message board messages in reverse-chronological order (instead of random order as was the case)
+
+Release 1.1.35
+  * BALANCE CHANGE: When taking a city, a land unit now only looses 4 hp instead of dying!
+  * BALANCE CHANGE: Tank hp increased from 5 to 8.
+  * BALANCE CHANGE: Engineer, tank, and naval bomber weight reduced from 2 to 1.
+  * BALANCE CHANGE: Helicopter airlift capacity increased from 1 to 2. 
+  * BALANCE CHANGE: Helicopters only pick up infantry.
+  * BALANCE CHANGE: An engineer and a sub can both carry 1 ICBM.
+  * BALANCE CHANGE: Engineer mobility increased from 2 to 3.
+  * BALANCE CHANGE: Naval units can no longer enter or attack non-coastal cities.
+  * Transports in ports no longer block land units moving into the port.
+  * Count unit casualties taking cities in both preservation and domination stats calculations.
+  * Changed non-start island creation pattern--instead of growing from one volcano, grow from multiple nearby volcanos.
+    This results in more interesting shapes for the non-start islands.
+  * Cleaned up Message Board web page
+
+Release 1.1.34
+  * Include line of sight from ally units, cities and satellites.  (Note this means your allies satellites
+    now appear under "Orbit" on your unit tab.)
+  * Games are now named after historic WWII battles (list came from http://en.wikipedia.org/wiki/List_of_World_War_II_battles)
+  * Teams are now stored by score and nations by power on "Games" web page
+  * Improved appearance of "Games" web page
+
+Release 1.1.33
+  * Implemented MAD.  Mutually Assured Destruction.  That means if you nuke an enemy city, that opponent(s) will automatically 
+    counter-nuke their best enemy target.  There are no counter-counter nukes.
+    The computer chooses the target based on what your opponent(s) can currently see.
+    They will nuke the optimal target based on the following formula:
+    sector score = total cost of all units in sector
+    If the sector contains a player city, 48 is added to the score.
+    The sector value is them multiplied by a relation modifier: ally/me = -2, friendly -1, neutral = 0, war = 2.
+    The computer then chooses the target with the highest score.  (If the blast radius of the nuke > 0 then the score of all
+    devastated targets is added together).  If a target is found with score >= 96 (i.e. at least 1 enemy city or the equivalent 
+    of 48 hours worth of enemy units) then the counter-nuke is fired.  Note it is possible that a different enemy will be nuked
+    from the one who fired the initial nuke:  "All is fair in love and war."
+  * Fixed the Player tab so that the player list is visible on smaller resolutions.
+  * Changed the way the menu works in the hopes it fixes the Mac menu problem (need to test)
+
+Release 1.1.32
+  * Engineer units can now move onto water and build cities there!
+  * Properly update unit count on the Units tab (a.k.a. "Ghost Engineer" bug)
+  * Added unit integrity checker at game startup--If units are found where they are not allowed, they are moved or removed.
+  * Fixed "Games" and "Leader Board" web pages on www.strategicinitiative.org
+
+Release 1.1.31
+  * Added debugging info to skipping message in an attempt to understand what's going on.
+  * Added "games" link to home page of web site that lists games & message boards of games currently under way
+
+Release 1.1.30
+  * This is largely a bug-fix / stabilization release.  The most significant change for players is that I have fixed Issue #7,
+    the "Early Bird" unit production bug that incorrectly started to build units in cities before the game started.  That should
+    be fixed now.
+  * Before shutting down, force flush of all data to prevent game corruption when the server is restarted.
+  * Fixed Issue #2 TechEventUpdate SectorSeen update duplicate key value violates unique constraint "sectorseen_pkey"
+  * Fixed Issue #3 GameEnder.removeUnitSeen by removing all unitSeen records from within the same transaction
+  * Fixed issue #4 UnitSeenEvent DisableUnitSeenEventUpdate by checking that unit still exists before persisting
+  * Fixed MoveUnitsRequest.executeWrite duplicate key value violates unique constraint "sectorseen_pkey"
+  * Fixed GameCache.getWorld NullPointerException due to GWT interface trying to enter game not opened yet--error out switching to game that's not opened yet.
+  * Fixed UnitAttacksSector.getUnitWithHighestMultiplier by not throwing exception when no unit can be attacked
+  * Fixed Result.or NullPointerExeption.  Initialized list and added null check.
+  * Watching issue #1 WorldManagerImpl.addPlayerToMap added extra debugging info since can't reproduce (could have been a corrupt game)
+
+Release 1.1.29
+  * Increased Max command points from 512 to 1024
+  * Tried to fix the double-production bug again
+
+Release 1.1.28
+  * Added leader board to http://www.strategicinitiative.org/
+  * Added a reset password function for players who have lost their password.
+  * Spent many long hours trying to find double-production bug.  I wasn't able to reproduce it, but did make a change that might fix it.
+
+Release 1.1.27
+  * BALANCE CHANGE: Heavy Bomber cost increased from 12 to 18
+  * BALANCE CHANGE: Naval Bomber cost increased from 10 to 12
+  * Fixed double-produce bug (I hope!)
+  * Fixed Sent-items "To" column
+
+Release 1.1.26
+  * (Thanks Junta) Fixed bug that allowed abuse of "Switch on tech gain" checkbox to build high tech units earlier than should be possible.
+  * Fixed bug that prevented interception when intercepting fighters were scrambling from more than one sector.  (Only affected fighters intercepting multiple fighters).
+  * (Thanks Junta) Maximum command points gained per hour increased from 40 to 60
+  * Enemy interdicting naval bombers can now be halted by your fighters.  So your carrier loaded with fighters can protect your invading transports.
+  * When bombing multiple units, only report flak once.
+  * In web interface, centre map on player's home island.
+  * In web interface, improve error reporting
+
+Release 1.1.25
+  * Carrier interdiction changed to only interdict with a sight radius of 1.
+  * Fixed bug in News that used "null" for bulletins.
+  * Fixed Registration
+
+Release 1.1.24
+  * BALANCE CHANGE: Increased carrier radar range to nation radar range
+  * BALANCE CHANGE: Naval bombers now intercept ships!
+  * BALANCE CHANGE: Helicopter cost reduced from 10 to 8
+  * BALANCE CHANGE: Fighter cost reduced from 10 to 8
+  * BALANCE CHANGE: Heavy Bomber cost reduced from 24 to 12
+  * BALANCE CHANGE: Naval Bomber cost reduced from 14 to 10
+  * Added new "Concede" button to top menu to allow you to concede a game.  If you have an ally, all your stuff goes to your ally, otherwise it is destroyed.
+  * Reduced radar range from tech / 2 to tech / 3.
+  * Units (e.g. patrol boat) without ammo no longer interdict
+  * Fighters without ammo no longer intercept
+  * Display hourly command point gain in Technology window 
+  * Reduced minimum hourly command point gain from 16 to 8
+  * Hourly command point gain is now capped at 40 
+  * List recent message board posts at the top of the News window
+  * Added "Centre Unit" and "Centre Home" buttons to sector tab
+  * Allow players to set build on city tab
+  * Remember client location and dimensions if a player moves or resizes the window (useful when you have two monitors)
+  * Fixed a bug that didn't reset the click offset when switching between games, resulting in you clicking one place and a different place on the map being selected.
+
+Release 1.1.23
+  * Created a rudimentary web interface that allows you to move units and build units in a browser.
+
+Release 1.1.22
+  * Fixed a bug that caused the game to crash when switching between games.
+  * Don't draw a line to another city if a unit is supplied by the city it's standing in.
+  * Make supply line thinner and feinter if you're not connected through to a port.
+
+Release 1.1.21
+  * FRIENDLY relations now share seen units
+  * NAP relation removed.  If you were NAP you are now NEUTRAL.
+  * FRIENDLY cancel time reduced from 48 hours to 24 hours
+  * Fixed the range calculation for supply ships
+  * When a unit is selected, draw a path on the map to show its current line of supply.
+  * Report cannon defense as cannons instead of flak
+
+18 Sep 2010 Release 1.1.20
+  * New type of Land Unit: ENGINEER.  Built in tech centre, cost 24 hours, 4 hp, weighs 2 (can be carried on a transport)
+  * An ENGINEER unit carries 10 ammo and supplies nearby land units.
+  * An ENGINEER unit can create a NEW CITY on any land sector not adjacent to another player's city.  Do this by clicking on the "New City" button on the unit tab.
+  * The ENGINEER unit is disbanded when it creates a new city.
+  * Swapped location of team list and player list on "Player" tab to make the list of players beside the relation dropdowns.
+  * Made the team list on the player tab non-selectable.
+  * Moved the Cede, Disband, and "New City" button from the Unit tab to the Sector tab.  (Still available on Unit tab too...)
+  * Changed Cede to support ceding multiple units at once from the Sector tab.
+  * When your radar range increases due to tech increase, automatically survey from all radar stations.
+  * Increased minimum command points gained per hour from 4 to 16'
+  * Reduced command cost from 4 to 2
+  * When a player is out of command points, only block them from doing commands which require command points.
+
+16 Sep 2010 Release 1.1.19
+  * BALANCE CHANGE: Manned Ports, Forts and Bases now fire back at attacking ships with cannon strength 4, 2, and 1 respectively.  The mechanism is the same as flak.
+  * BALANCE CHANGE: Helicopter attack increased from 2 to 3
+  * BALANCE CHANGE: Helicopter sight increased from 1 to 2
+  * BALANCE CHANGE: Helicopter can see subs
+  * BALANCE CHANGE: Helicopter, satellite, icbm techs reduced from 10, 11, 13, 14, 15 to 9, 10, 12, 13, 14.
+  * Added a new table to the Player tab that lists teams and current team scores.
+  * Fixed a bug that showed "Played" and "Win %" as 0 for all players.  Now it shows the correct values.
+  * Tidied up spacing on news.
+  * Increased the command point cost for actions from 1 to 4
+  * Present list of games in descending order (to encourage new players to sign up for the most recent one).
+
+17 Jul 2010 Release 1.1.18
+  * BALANCE CHANGE: Land units no longer counter-attack against intercepting fighters
+  * BALANCE CHANGE: Transport hp reduced from 10 to 8
+  * BALANCE CHANGE: Increased dest sight/interception range to 2 except for subs.  Dests can still only see/intercept subs within a range of 1.
+  * BALANCE CHANGE: Patrol boats now have attack 1, ammo 1, but will only interdict patrol boats, supply ships, transports, and ships with only 1 hp.
+  * When client first starts up, double-click on game to select it.
+  * Admin function to post bulletins to all games
+
+16 Jul 2010 Release 1.1.17
+  * Re-organized news by conflicts.  E.g. All news about conflict between meadowwood and hydrogen will
+    now be grouped under the heading "meaddowwood vs. hydrogen".
+
+4 Jul 2010 Release 1.1.16
+  * Fixed a bug that crashed stats if there was flak.  (Thanks meadowwood.)
+  * Fixed a bug that prevented someone from allying if another player tried to ally with them
+
+30 Jun 2010 Release 1.1.15
+  * After ceding, have ceded unit/city look around so the recipient can see what was ceded to them (thanks Plundaria)
+  * Prevent ceding a unit if it would result in illegal stacking (e.g. enemy unit with your unit)
+  * When ceding a transport, automatically cede all passengers
+  * Fixed a bug that allowed tanks onto ships with 5 infantry (thanks  Plundaria)
+
+30 Jun 2010 Release 1.1.14
+  * Added "Disband" button on unit tab to kill one of your own units for when you hit power limit (thanks jensfiederer).
+  * Fixed a bug that caused the game to crash when players clicked on a city on the city tab after changing sort order
+  * On Sector tab, blank out enemy attributes that you can't know (instead of displaying "0" as it did before)
+  * Fixed a bug that wouldn't centre the map on your home nation unless a unit was selected
+  * Fixed a NullPointer bug when players set a relation before first selecting a player.
+  * Fixed a bug that says sunk infantry were "hit" instead of "killed" (thanks meadow)
+  * Changed world creation parameters (distance between islands from 2 to 3, min island size from 10 to 20, max island size from 120 to 150) (thanks meadow)
+  * Filter out games from the game list that have ended.
+
+21 Jun 2010 Release 1.1.13
+  * Added new checkbox to sector tab.  When checked, building of the next unit type will
+    begin immediately as soon as your nation has reached the required tech.
+  * When on the player tab, selecting a player makes all their units and cities on the map purple.
+  * Fixed a bug (need to verify it's fixed) where ceded units were showing up twice in unit lists (thanks chapper).
+  * Fixed a bug that crashed the server when more players joined than islands available.
+  * Fixed a bug (feature) that was removing next build when changing build.
+  * Specify number of players when admin creates a blitz game
+  * Fixed a bug that caused a game to end before it started if the game ran longer than 28 days.
+  * Removed game cache invalidation
+
+13 June 2010 Release 1.1.12
+  * Fixed a bug that showed start time in end time in startup window (thanks meadowwood).
+  * Changed map creation algorithm in 2 ways: (1) more variety in neutral island shape, (2) always try to make
+    at least one inland city on a neutral island if there is space for one.
+  * Fixed a bug (need to verify it's fixed) where ceded units were showing up twice in unit lists (thanks chapper).
+  * Close the cede window after the unit is ceded
+  * Prevent players from changing relations with themselves
+  * Prevent players from going to war with themselves by nuking their own cities
+
+5 June 2010 Release 1.1.11
+  * Fixed a bug that prevented message board posts
+
+5 June 2010 Release 1.1.10
+  * Fixed a bug that caused the server to crash when player #5 joined a game.  (oops)
+
+4 June 2010 Release 1.1.9
+  * Allow the game to run itself.  There will always be 1 game up waiting for players.  As soon as
+    at least 4 players have joined a game, a timer will kick off, allowing 16 hours for more players
+    to join the game.  Once those 16 hours have passed, the game will be mapped with 2 additional slots for late-joining players. The game clock will then start 8 hours later.
+  * Send players e-mail notifying them when a game has been mapped and when it will start.
+  * Give players the option to have in-game messages sent to them as e-mail.
+
+5 Apr 2010 Release 1.1.8
+  * Allow players to join games from the client (thanks Unified Germany)
+  * Send registration e-mail
+  * Allow players to change their password / e-mail address online.
+  * Add a "send game email" preference for players.
+
+12 Mar 2010 Release 1.1.7
+  * Fixed bug that caused nukes to fail (thanks chapper).
+  * On Unit tab, list number of units on board for transports and carriers.
+  * On city tab, add island id column (thanks Ice).
+  * Make city tab columns sortable, island id default sort (thanks Ice).
+  * Fixed bug that mis-reported damage to units in forts (thanks UnitedGermany).
+  * Send a notification message to recipient when something is ceded to them.
+  * Decreased land percentage from 25% to 22%, increased spikiness from 30% to 40% and reduced min/max cities per island from 4%/6% to 4%/5%
+
+6 Mar 2010 Release 1.1.6
+  * Added "cede" command to give units and cities to other players
+  * When a unit is selected on the map or the Sector tab, automatically select the unit on the Unit tab (to make it easier to cede it)
+  * Fixed the function that displays unit owner when you hover over the unit in the Sector tab.
+
+2 Mar 2010 Release 1.1.5
+  * Fixed unit movement so it now takes supply into account when calculating best path
+  * Increased max command points to 512 and decreased command point gain by a factor of 4
+
+25 Feb 2010 Release 1.1.4
+  * Fixed login page on web site (yay!)
+
+22 Feb 2010 Release 1.1.3
+  * Added Nuclear Wasteland sector when a city gets devastated by icbm.  May not be retaken.
+  * Mark units in unit tab that are in ports with a *
+  * Supply ships and Zeppelins at max mob are now collapsed into a tree called "hold".
+  * Update data on Technology window when it is opened.
+
+21 Feb 2010 Release 1.1.2
+  * Display extra 3 squares on edge of map.
+  * Added buttons to unit tab to centre map on unit or start island
+  * Don't print ERROR when units are intercepted
+
+20 Feb 2010 Release 1.1.1
+  * Fixed a bug that prevented infantry from getting supply from non-port empty cities.
+  * Fixed a bug that was pulling supply from non-supplying units in cities.
+  * Centre map on your start island
+  * Click on "Map" window to centre your map on that location.
+  * In a blitz, there are no delays for relation changes
+  * Fixed a bug that wasn't updating map when units got interdicted
+
+15 Feb 2010 Release 1.1.0
+  * The edges of the world now wrap around!  Sail off one side of the map and enter the other side.
+  * Introduced Command Points.  It costs 1 command point to perform an action.  Command
+    Points are displayed on the bottom right of the screen beside "CP:".
+  * Command points replenish at a rate of cities + capitalShips + bases * 2 every 15 minutes to a maximum of 200.
+  * Changed how supply works.  Supply ships and transports now carry ammo.  Their ammo is depleted when
+    they resupply units within range.  If there is an unbroken supply chain from an attacking unit all
+    the way back to a port, then the chain will remain fully supplied.  Once the chain is broken, supply
+    will drain from the supply unit in the chain farthest from the attack backwards towards the attack.
+    This preserves ammo near the front line where it is needed, but also where it will be vulnerable.
+  * You no longer see movement, ammo, or fuel for enemy units.
+  * Changed tech bleed from other delta / 2 to the max of ally delta / 2 and other delta / 4.
+  * Client draws a yellow line under units with ammo not at maximum (including supply ships and transports).
+  * Supply ship is no longer a capital ship.
+  * Removed Battle Group concept.  Units now interdict if they are in supply.
+  * Added Build Audit stats page to admin web page
+  * Changed tech level of many units for historical accuracy and to delay icbms.
+  * Nation tech now goes to 16
+  * Tech centre radar range now = tech / 2
+  * Increase patrol boat sight from 1 to 2
+  * Reduce destroyer, acc ammo from 3 to 2
+  * Reduce zeppelin speed from 5 to 4
+  * Reduce bb ammo from 6 to 4
+  * Reduce heli ammo from 3 to 1
+  * Reduce fighter range from 20 to 16
+  * Increase nb range from 16 to 20
+  * Reduce bb cost to 20
+  * Now save the date new players registered.
+  * Introduced database cache for a 10x speed improvement
+  * One player's network lag will no longer slow the other players down.
+
+24 Jan 2010 Release 1.0.39
+  * (Thistle) Ships can now attack satellites and icbms in ports
+  * (Snarrf) Added red flag beside Inbox and BattleLog indicating that you got mail or attacked
+  * Should hopefully scream now when flak kills your plane
+  * Removed duplicate war notifications when you get nuked
+  * Set recipient to Message Board when replying to post
+  * On unit list on Sector tab, only pop-up owner name if it's not me
+
+23 Jan 2010 Release 1.0.38
+  * Added Fog of War.  Shows // on sectors that you can't see.  Can be turned off from the "Prefs" tab.
+  * Removed Refresh button from Unit tab
+
+22 Jan 2010 Release 1.0.37
+  * IMPORTANT RULE CHANGE.  I have removed the unit type cap.  In it's place is a new power cap.  The maximum power you may build = 5 * your number of cities.  Per last release, zeppelins are not counted in power calculation.  See "Technology tab" for your stats.
+  * Fixed bug (again) that derived city ownership from units in city.
+  * Changed colours again.  Friendly = dark green, Allied = Gold.  (Sorry for the accidental pink there--it was supposed to be indigo...)
+  * When you click "Post" in Message Board window, it now automatically selects "Message Board" as recipient
+
+21 Jan 2010 Release 1.0.36
+  * BALANCE CHANGE Tanks now interdict ships
+  * BALANCE CHANGE Tanks on land attacking ships will only be counter-attacked if the ship is able to attack land.
+  * Tanks in cities can be counter-attacked by ships as before.
+  * Fixed a bug that was deriving city ownership from units in the city.  This resulted in incorrect city colours and could result in wierd unit co-existance in cities.
+  * Hover over a unit in Sector Tab to see its owner
+  * Changed colours of friendly and allied units to make them easier to distinguish from your units
+  * Changed colour of "hit by" records on Battle Lot from red to green
+  * Fixed > indentation bug in mail that was adding extra carriage returns (really annoying)
+  * (Snarrf) default message recipient is blank
+  * Exclude Zeppelins from power calculation (preparing for new unit cap)
+  * (Ice) Don't display next build dropdown if build is BASE
+
+20 Jan 2010 Release 1.0.35
+  * Migrated web interface from lib-ext to smartgwt (BIG and PAINFUL job!)
+  * Cleaned up web interface in the process.
+
+16 Jan 2010 Release 1.0.34 BALANCE PATCH
+  * Interceptors should now match up 1-to-1 against the planes they're intercepting
+  * If a player nukes one of your cities, you instantly declare war with them.  (Thanks Chapper)
+  * Submarines do not interdict (now destroyers stand half a chance against them)
+  * Submarines attack all air with an attack value of 2
+  * Helicopter hp reduced from 6 to 5
+  * Helicopters do double-damage against subs
+  * Naval Bomber hp increased from 6 to 7
+  * Naval Bomber attack (against ships) increased from 6 to 8
+  * Naval Bomber attack at sea against non-ships (i.e. attacking air unit at sea) reduced to 2
+  * Naval Bomber range increased from 16 to 20
+  * Cruiser cost reduced from 24 to 20
+  * Satellite cost reduced from 36 to 24
+  * Fighter sight reduced from 2 to 1
+  * Airport sight radius increased from 1 to 3 (for better interception)
+  * Patrol cost reduced from 10 to 8
+  * Zeppelin visibility increased from 2 to 3, speed increased from 4 to 5
+  * Fighters do double-damage against helicopters
+
+14 Jan 2010 Release 1.0.33
+  * If a unit has an attack value of 2, then damage will be random 1-2
+  * If fighters escort bombers, then when you are intercepted, your fighters will get intercepted first, before your bombers
+  * Aircraft carriers can now carry infantry if the infantry got on there by a helicopter.  (Thanks Junta)
+  * Transports/helis/carriers can no longer carry ally units
+  * Clear next build when capturing city
+  * Fixed colour of city capture and flak battle log entry when I am attacker
+  * Changed wording of battle log so it reads easier
+  * Moved zeppelin out of fighter count in news (Thanks Snarrf)
+  * Removed ghosts in a different way.  Feeling confident about this fix.
+  * Fixed a miscalculation in stats window
+
+10 Jan 2010 Release 1.0.32
+  * IMPORTANT BALANCE CHANGE: When a ship counter-attacks an air unit, it attacks as INFANTRY.
+  * IMPORTANT BALANCE CHANGE: When a non-sub-seeing ship counter-attacks a submarine, it attacks as INFANTRY.
+  * Added satellites to Unit tab so you can see where your launched satellites are
+  * Unit tab redraws much less frequently now so it will remember your collapsed nodes etc.  Note this means you will need to manually hit the "Refresh" button to see new units or move units into the "Moved" subitems.
+  * No longer see hurt/damage indicators in the Great Unknown (thanks Ice)
+  * If building a unit changes a city type, then resupply surrounding units (thanks Ice)
+  * Remove range highlighting after satellite launched (thanks Snarrf)
+  * Update nation data when opening Technology window so tech data is up to date
+  * Fixed Inbox server notification messages "From" field to "HQ" (was setting to the first player)
+  * Added a user preference to switch right and left mouse buttons (thanks Ice)
+
+9 Jan 2010 Release 1.0.31
+  * Fixed a bug that killed current unit production when a next unit was set (good catch Junta)
+  * Fixed a bug that prevented a helicopter from picking up an infantry if there was a tank in the sector
+
+8 Jan 2010 Release 1.0.30
+  * I was noticing players repeatedly redesignating newly captured cities, so I have added a new city type:
+    Forward Base.  See http://www.strategicinitiative.org/docs/rules.shtml for details.
+  * Fixed a bug that allowed nation tech to rise above 10.
+  * Lengthened build dropdown so you can see the full list at once
+
+7 Jan 2010 Release 1.0.29
+  * Added "Stats" window with detailed stats summarizing your battles against other players
+  * Cleaned up Battle Tab
+  * Added "Download" button to Battle Tab to download all the battle data (Thanks for the suggestion Ice)
+  * Moved unit type limit info from Unit tab to the Technology Window where it's easier to read.
+  * Moved "Inbox" up to top window in the hopes it will encourage players to read my messages to them :-)
+  * Fixed Help menu item
+
+6 Jan 2010 Release 1.0.28
+  * Fixed a bug that was crashing the server when an icbm took out a player city
+
+6 Jan 2010 Release 1.0.27
+  * Changed site url to http://www.strategicinitiative.org/
+  * Hopefully killed the ghosts for good
+  * Balance change: Swapped battleship and destroyer sight radius: dest 2 -> 1, bb 1 -> 2 (Note, this was supposed to be in 1.0.21).
+  * Validate version before starting up--don't allow an out-of-date client to startup.
+  * Upgraded GWT from 1.6.4 to 2.0.0
+
+5 Jan 2010 Release 1.0.26
+  * BALANCE CHANGE: Flak reduced.  Flak 2 now does random 1,2.  Flak 4 does random 1,2,3,4.
+  * BALANCE CHANGE: Bombers now return fire as fighters when counter-attacking.
+  * Show red/yellow dot over enemy units to visually indicate damage level of enemies
+  * Removed "Show damage" preference.  I think everyone wants to see this.
+  * Fixed a bug that occurred when 2 inf attacked a neutral city from a transport (Thanks Thistle.  Good find!)
+  * Fixed a bug that created ghosts (dead units on the map you see but can't interact with)
+
+4 Jan 2010 Release 1.0.25
+  * RULE CHANGE: Interception will no longer happen over sectors with flak (players were abusing this to kill enemy planes)
+  * You now need to be adjacent to an enemy city to determine whether it's empty (another abuse removed)
+  * Helicopters now can definitely refuel in all cities and all capital ships
+  * Fixed a bug that listed your units twice in your sector list when your ally could see them
+  * Fixed a bug that negated supply from supply ships your ally could see
+  * Fixed a bug that wasn't refueling units properly (esp. bombers & helicopters)
+  * Fixed a bug that reversed city captures in News
+  * Made Technology "Day" match "News" day
+  * Made sound of damaging more distinct from sound of killing enemy
+  * Fixed Unit Tab max units headers
+  * Fixed a bug that was crashing the server (to do with ghost units)
+  * Fixed a bug that crashed client if player had joined no games
+
+3 Jan 2010 Release 1.0.24 Bug fixes
+  * IMPORTANT RULE CHANGE: Helicopters can now refuel on any capital ship or any city type.
+  * IMPORTANT RULE CHANGE: Fighters now do double-damage against bombers.
+  * When selecting a supply ship, don't include it's supply in the supply display (thanks for the suggestion Snarrf)
+  * Don't show supply for patrol boats
+  * Bold my current tech level on the Technology window so I can see at a glance new units I can build.
+  * Indicate max units allowed for each type on the Unit tab in each broad header as /X.
+  * On City tab, indicate cities that will skip build due to unit cap in red.
+  * Make a clicking sound if a move fails (e.g. if an enemy city my ship is attacking is empty)
+  * Say "Launch icbm towards..." instead of "Move units to..." when launching.
+  * Removed "red alert" sound--it was not doing what it was intended to do.
+  * Removed "pause when enemy revealed" button.
+  * Removed pause/play stop buttons.
+  * Fixed a bug in supply display
+  * Fixed a bug that crashed the client if you selected (no change) for unit build (thanks chapper & Thistle)
+  * Fixed a bug that crashed the client when clicking in the fog of war (thanks Ice)
+  * Fixed a bug that crashed the client when attacking with multiple units (thanks Ice & Plund)
+  * Fixed a bug that was suggested non-airports could fuel planes (in the shaded sector display).  (Thanks Snarrf)
+  * Fixed a bug that allowed players under certain circumstances to take a city with a plane (thanks Snarrf)
+
+
+2 Jan 2010 Release 1.0.23 Optimization
+  * When displaying sectors I can move to, shade out-of-supply sectors in a darker colour
+  * IMPORTANT RULE CHANGE.  There is now a limit to the number of units you can build of each type.  That limit is 5 plus the number of cities you control (this was required to prevent the server from bogging down late game).
+  * If you have reached the unit type limit, the unit will appear as (lowercase) in your build menu.
+  * If your city tries to build a unit for which the limit has been reached, the build will be skipped and you will receive a message from the server
+  * Supply rules have changed.  A path to the supply is no longer required--you just need to be within 5 squares of the supply source as the crow flies.
+  * Removed surveillance button (keeping this up to date was slowing down the server)
+  * Show message recipient on sent items tab
+  * Made a number of performance enhancements on the server to make it go faster, most notably introducing a second level cache
+
+31 Dec 2009 Release 1.0.22
+  * fixed a bug that was preventing subs from attacking
+  * divided power by 10 (rounded).  (was revealing too much information at game start)
+  * helicopters will no longer pick up infantry in your city with 0 mob or <= 2 hp (useful for dropping off hurt inf)
+  * added scrollbar and command count to command list
+  * touched up infantry and tank images to make them easier to see
+
+30 Dec 2009 Release 1.0.21 BIG BALANCE PATCH
+  * all attacks except counter-attacks (including interdiction and interception) now receive a counter-attack if the moving unit is still alive
+  * units no longer interdict/intercept if they have <= 2hp
+  * fort bonus now only applies to land units
+  * land units in a fort will always receive at least 1 damage
+  * destroyer sight radius reduced to 1
+  * battleship sight radius increased to 2
+  * fixed backwards interdiction status messages
+  * added many useful sound queues (try turning on sound if you have it turned off)
+  * for first-time players, pop-up the windows they need to fill out automatically for them
+  * increased status window again and added scroll bars (much requested)
+  * Player tab: Indicate which players are logged in
+  * Unit tab: count as "Moved" if a unit has 0 or 1 mobility
+  * Unit tab: only rebuild the unit list when a unit dies.  This will allow players to collapse the sub-menus as they move units.
+  * Unit tab: grey out units that have movement queued
+  * Unit tab: remove dead units
+  * News: add a newline between different types of units
+
+29 Dec 2009 Release 1.0.20
+  * Improved performance (moving units should be about twice as fast now)
+  * Help new users by popping up the account settings window if they haven't set a username yet
+  * Automatically pop up the games window at the start
+  * In the web interface, there is a new "Players" tab that lists all the players
+  * Player tab now sorts by power
+  * Fixed colour coding of battle tab and added "*" to indicate when I'm attacked
+
+27 Dec 2009 Release 1.0.19
+  * scroll map to start island at login (to help newbies find themselves...)
+  * fixed news (it was off by 2 days)
+  * reduced land percentage from 30% to 25% for future games)
+  * don't share map until an alliance is mutual
+  * announce mutual alliance as a bulletin
+  * ensure a delayed start doesn't build any units until the game has started.  (Third attempt to fix this--it's hard to test).
+  * carried units that are sunk when their carrier is sunk now have their own battle log entries (for more accurate news reporting)
+  * yellow now means < 70% hp as it should (rather than any damage at all)
+  * fixed a bug in interdiction battle log message
+  * help now takes you to ui help
+  * added "support" menu item that takes you to discussion boards
+  * fix tooltip text for player "power" column
+
+24 Dec 2009 Release 1.0.18
+  * Fixed a bug that crashed the client when clicking "Games" if an invalid username / password was entered
+  * When clicking "Messages" enter the Message Board (instead of Inbox)
+  * Added "Game Starts" date to "Technology" window (now that we have delayed starts...)
+  * Do not schedule any events (unit builds etc) until the game has started
+  * Changed ally unit colour from dark blue to lavender.  Dark blue was too hard to see on the ocean.
+
+23 Dec 2009 Release 1.0.17
+  * Fixed a bug that prevented icbm1's from launching
+  * Replaced "Nation" tab with "Technology" tab that lists unit stats and highlights what you can build.
+
+22 Dec 2009 Release 1.0.16
+  * Fixed helicopter ammo (was 0 now 3)
+  * Fixed bug that allowed players to overload a transport and then move the transport to strand the infantry on a sea sector
+  * Fixed a bug that was draining intercepters of fuel and ammo
+  * Fixed a bug that was damaging the infantry and not the helicopter when a fighter intercepted a helicopter carrying an infantry
+  * Sub mobility increased from 5 to 10 and ammo increased from 6 to 8
+  * Planes now receive double damage if they are in a city when they are attacked
+  * Games now start 24 hours after they are created (unless they are blitz games), giving late joiners a fair shake
+  * In news, stopped reporting number of attacks--not interesting enough.
+
+22 Dec 2009 1.0.15 Client
+  * Show sector owners
+
+22 Dec 2009 1.0.13 Server
+  * Fixed a bug that was displaying dead units on the map and then confusing players when they passed through the ghosts
+  * Fixed a bug in news that was over-counting
+
+20 Dec 2009 1.0.14 Client
+  * News Window: Populate with useful and interesting information about what's been going on in the game
+  * Player Tab: Display each nation's power (sum of unit costs)
+  * Player Tab: Update relation box when relation changed
+  * Player Tab: Only calculate power and cities when tab is clicked
+  * Battle Tab: Only load data when tab is clicked
+
+20 Dec 2009 1.0.12 Server
+  * Fixed bug in relation change--was sending incorrect updated relation back
+  * Improved relation change messages back to the client
+  * Log relation changes for future news reporting
+  * Add support for news bulletins
+
+20 Dec 2009 1.0.13 Client
+  * Only messages that arrive after you login are bold now
+  * Display target sector coords on command list
+  * Show message subject in message view window
+  * Player tab: sort players in descending order
+  * Player tab: display both my next relations / switch times and their next relations / switch times
+
+20 Dec 2009 1.0.11 Server
+  * Turn cities into neutral cities when they're blasted
+  * Update map after icbm devastates cities
+  * Fort/airport flak reduced to 2/4 respectively
+
+20 Dec 2009 1.0.12 Client
+  * fixed battle log crash bug
+
+20 Dec 2009 1.0.10 Server
+  * interdiction no longer stacks ships
+  * Fixed a bug that was making units visible as soon as they moved regardless of whether any opponent unit was near them
+  * Satellites now see units under them
+  * Units now disappear in proper time (they were disappearing too quickly)
+
+20 Dec 2009 1.0.11 Client
+  * Combat message box increased to 2 lines (thanks meadowwood)
+  * Interdiction/Interception now updates map correctly
+  * reversed message list--newest messages at top
+  * fixed bold on message list
+
+19 Dec 2009 1.0.9 Server
+  * Fixed seen enemy units.  All enemy units were visible before this bug was fixed.  Now there is a fog of war per the rules.
+  * Fixed interdiction / interception messages
+  * Fixed ally unit / city colour (was showing up same colour as you)
+
+19 Dec 2009 1.0.10 Client
+  * Fixed scrollbars (yay!)
+  * For seen enemy units, display hp, ammo, etc. in sector tab
+
+18 Dec 2009 1.0.8 Server
+  * update map when interdicted / intercepted
+  * can always downgrade relations to match without notice
+
+18 Dec 2009 1.0.9 Client
+  * fixed red/yellow unit damage dot
+  * remove enemy location stuff from compose window (will replace with something more useful in future--maybe automatic for >= friendly relations)
+  * fixed future tab list
+  * compose window place cursor in subject
+
+17 Dec 2009 1.0.8 Client
+  * when moving ship, display the ship type
+  * update message board after posting
+
+17 Dec 2009 1.0.7 Server
+  * Units halt movement if they are interdicted/intercepted
+  * patrol no longer requires supply
+  * further performance optimizations
+
+16 Dec 2009 1.0.6 Server
+  * Performance tuning -- only persist new sectors / units seen after all the units have moved
+  * Only show messages on the message board for this game
+
+15 Dec 2009 1.0.7 Client
+  * show ammo
+  * show target sector
+  * show target unit and owner
+  * display unit battle log detailed message
+  * only play music once when client starts up
+  * display unit build accurately for blitz games
+  * Improve descriptive text on move command
+
+15 Dec 2009 1.0.5 Server
+  * when capturing a city, start building a zeppelin not infantry to immediately get the radar range view bonus on the map
+  * allow planes to land in empty player cities
+  * only ports supply/battle group ships
+  * optimized city capture code so it doesn't hang
+  * synchronize server access so only one player/timer command is executed at once (to prevent database deadlock)
+
+13 Dec 2009 1.0.6 Client
+  * Fixed display of enemy cities
+  * Fixed a couple of bugs in the battle log
+
+12 Dec 2009 1.0.5 Client
+  * Added a bunch of useful information like daily tech gain & bleed to Nation window
+  * unit range displayed on map now reflects supply
+  * changed supply brown dot to red line below unit (chapper suggestion)
+  * when on city tab, automatically show building units on map
+  * fixed reply message box
+  * removed duplicate RE: RE: and FW: FW: in messages
+  * darkened "unknown" sector image
+
+12 Dec 2009 1.0.4 Server
+  * Report current daily tech gain + bleed back to client
+  * Fixed null messages in battle log
+
+11 Dec 2009 1.0.3 Server
+  * Changing build in a city now updates city surveillance (for tech-based view range of tech centres)
+  * Allow city next build to be up to 2 higher than current tech
+
+11 Dec 2009 1.0.4 Client
+  * fixed sent items tab
+  * fixed message compose
+  * removed world map column from message windows
+  * removed wm->ally button
+  * fixed "repairing" category, stuff e.g. zepplins were accidentally getting put in there
+
+11 Dec 2009 1.0.2 Server
+  * Fixed a bug that transported units from a parallel universe
+  * Added indexes to optimize database
+
+11 Dec 2009 1.0.3 Client
+  * fixed tab order on compose message window
+  * fixed city tab (was hiding cities)
+  * fixed prefs tab:
+  * fixed surveillance
+  * fixed show building
+  * cleaned up images
+
+11 Dec 2009 1.0.2 Client
+  * got messages working
+  * fixed help button
+  * fixed title spelling (thanks chapper)
+
+
+

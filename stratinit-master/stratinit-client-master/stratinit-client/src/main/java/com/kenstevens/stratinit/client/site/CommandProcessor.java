@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.client.site;
 
+import com.kenstevens.stratinit.client.api.IProgressBar;
 import com.kenstevens.stratinit.client.event.ArrivedDataEventAccumulator;
-import com.kenstevens.stratinit.client.shell.StatusReporter;
-import com.kenstevens.stratinit.client.shell.WidgetContainer;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CommandProcessor {
 	@Autowired
-	private WidgetContainer widgetContainer;
+	private IProgressBar progressBar;
 	@Autowired
 	private StatusReporter statusReporter;
 	@Autowired
@@ -21,7 +21,7 @@ public class CommandProcessor {
 		Command<? extends Object> command = action.getCommand();
 		try {
 			statusReporter.reportAction(command.getDescription());
-			CommandExecutor commandExecutor = new CommandExecutor(widgetContainer.getProgressBarControl());
+			CommandExecutor commandExecutor = new CommandExecutor();
 			arrivedDataEventAccumulator.clear();
 			action.preRequest();
 			commandExecutor.execute(command);
@@ -30,7 +30,7 @@ public class CommandProcessor {
 			action.postEvents();
 			lastCommand = command;
 		} finally {
-			widgetContainer.getProgressBarControl().reset();
+			progressBar.reset();
 		}
 	}
 

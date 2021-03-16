@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.client.site.command.get;
 
 import com.kenstevens.stratinit.client.model.Data;
-import com.kenstevens.stratinit.client.shell.StatusReporter;
 import com.kenstevens.stratinit.client.site.GetCommand;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.springframework.beans.factory.annotation.Autowired;

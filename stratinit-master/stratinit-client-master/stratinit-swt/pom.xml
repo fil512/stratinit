@@ -13,8 +13,27 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- TODO RELEASE remove these properties -->
+		<swt.artifactId>swt-win32-win32-x86_64</swt.artifactId>
+		<jnlp.url>http://www.strategicinitiative.org/client</jnlp.url>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>com.kenstevens.stratinit</groupId>
+			<artifactId>stratinit-images</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.kenstevens.stratinit</groupId>
+			<artifactId>stratinit-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>${swt.artifactId}</artifactId>
+			<version>${swt.version}</version>
+			<!-- TODO RELEASE restore
+            <scope>provided</scope>
+            -->
+		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
 			<artifactId>swt-carbon-macosx</artifactId>
@@ -39,6 +58,12 @@
 			<groupId>org.eclipse</groupId>
 			<artifactId>swt-gtk-linux-x86_64</artifactId>
 			<version>${swt.version}</version>
+		</dependency>
+		<!-- test -->
+		<dependency>
+			<groupId>com.kenstevens.stratinit</groupId>
+			<artifactId>stratinit-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

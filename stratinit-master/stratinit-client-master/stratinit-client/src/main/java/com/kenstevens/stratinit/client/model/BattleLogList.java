@@ -25,9 +25,6 @@ public class BattleLogList  implements Iterable<BattleLogEntry> {
 	}
 
 	public void addAll(List<BattleLogEntry> entries) {
-		if (list == null) {
-			return;
-		}
 		for (BattleLogEntry entry : entries) {
 			add(entry);
 		}

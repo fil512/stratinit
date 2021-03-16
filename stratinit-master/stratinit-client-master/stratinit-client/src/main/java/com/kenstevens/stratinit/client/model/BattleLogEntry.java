@@ -4,7 +4,6 @@ import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.swt.SWT;
 
 import java.util.List;
 
@@ -17,10 +16,6 @@ public class BattleLogEntry extends DatedItem {
 
 	public SectorCoords getCoords() {
 		return coords;
-	}
-
-	public int getColor() {
-		return color;
 	}
 
 	protected final int id;
@@ -36,13 +31,7 @@ public class BattleLogEntry extends DatedItem {
 	private final boolean defenderDied;
 	protected final NewsCategory type;
 	protected final int flak;
-	protected int color;
-	protected String event;
 	private final boolean iAmAttacker;
-
-	public String getEvent() {
-		return event;
-	}
 
 	protected String opponent;
 
@@ -62,63 +51,8 @@ public class BattleLogEntry extends DatedItem {
 		type = silog.type;
 		flak = silog.flak;
 		iAmAttacker = silog.iAmAttacker;
-		setEvent();
-		setColour();
 	}
 
-	private void setColour() {
-		if (attackerDied) {
-			if (iAmAttacker) {
-				color = SWT.COLOR_RED;
-			} else {
-				color = SWT.COLOR_GREEN;
-			}
-		} else if (defenderDied) {
-			if (iAmAttacker) {
-				color = SWT.COLOR_GREEN;
-			} else {
-				color = SWT.COLOR_RED;
-			}
-		}
-	}
-
-	private void setEvent() {
-		if (type == NewsCategory.CONQUEST) {
-			if (iAmAttacker) {
-				color = SWT.COLOR_DARK_GREEN;
-				event = "lost";
-			} else {
-				event = "took";
-				color = SWT.COLOR_RED;
-			}
-		} else if (type == NewsCategory.AIR_DEFENCE) {
-			if (iAmAttacker) {
-				color = SWT.COLOR_DARK_RED;
-				event = "flak";
-			} else {
-				color = SWT.COLOR_DARK_GREEN;
-				event = "flak";
-			}
-		} else if (type == NewsCategory.NEWS_FROM_THE_FRONT) {
-			if (attackerDied || defenderDied) {
-				event = "killed";
-			} else {
-				event = "hit";
-			}
-			if (iAmAttacker) {
-				event = event + " by";
-				color = SWT.COLOR_DARK_GREEN;
-			} else {
-				color = SWT.COLOR_DARK_RED;
-			}
-		} else {
-			color = SWT.COLOR_BLACK;
-			event = "unknown";
-		}
-		if (!iAmAttacker) {
-			event = "* " + event;
-		}
-	}
 
 	public String getMessage() {
 		return StringUtils.join(messages, "\n");

@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.client.event;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +13,8 @@ public class ArrivedDataEventAccumulator {
 	private final Map<Class<? extends DataArrivedEvent>, DataArrivedEvent> eventMap = Maps.newHashMap();
 	@Autowired
 	StratinitEventBus eventBus;
+	@Autowired
+	IEventExecutor executor;
 
 	public void addEvent(DataArrivedEvent arrivedEvent) {
 		eventMap.put(arrivedEvent.getClass(), arrivedEvent);
@@ -29,11 +30,7 @@ public class ArrivedDataEventAccumulator {
 		}
 		// Thread-safe copy
 		final ArrayList<DataArrivedEvent> events = Lists.newArrayList(eventMap.values());
-		Display display = Display.getDefault();
-
-		if (display.isDisposed())
-			return;
-		display.asyncExec(() -> {
+		executor.asyncExec(() -> {
 			for (DataArrivedEvent event : events) {
 				eventBus.post(event);
 			}

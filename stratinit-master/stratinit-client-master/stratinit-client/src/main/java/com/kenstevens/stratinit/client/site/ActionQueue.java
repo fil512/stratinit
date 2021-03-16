@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.client.site;
 
+import com.kenstevens.stratinit.client.api.ICommandList;
 import com.kenstevens.stratinit.client.main.ClientConstants;
-import com.kenstevens.stratinit.client.shell.StatusReporter;
-import com.kenstevens.stratinit.client.shell.WidgetContainer;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class ActionQueue {
     @Autowired
     private StatusReporter statusReporter;
     @Autowired
-    private WidgetContainer widgetContainer;
+    private ICommandList commandList;
 
     private boolean shuttingDown = false;
     private Thread poll;
@@ -32,7 +32,7 @@ public class ActionQueue {
         if (!action.canRepeat() && queueContains(action.getClass())) {
             return;
         }
-        widgetContainer.getCommandListControl().addItem(action.getDescription());
+        commandList.addItem(action.getDescription());
         try {
             queue.put(action);
         } catch (InterruptedException e) {
@@ -75,16 +75,16 @@ public class ActionQueue {
     private Action take() throws InterruptedException {
         Action action;
         action = queue.take();
-        widgetContainer.getCommandListControl().removeLast();
+        commandList.removeLast();
         return action;
     }
 
     private synchronized void halt() {
         queue.clear();
-        if (widgetContainer == null || widgetContainer.getCommandListControl() == null) {
+        if (commandList == null) {
             return;
         }
-        widgetContainer.getCommandListControl().removeAll();
+        commandList.removeAll();
     }
 
     public void shutdown() {

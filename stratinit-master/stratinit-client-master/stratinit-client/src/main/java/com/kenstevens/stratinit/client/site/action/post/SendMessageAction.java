@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.client.site.action.post;
 
 import com.kenstevens.stratinit.client.model.Mail;
-import com.kenstevens.stratinit.client.shell.StatusReporter;
 import com.kenstevens.stratinit.client.site.PostAction;
 import com.kenstevens.stratinit.client.site.command.post.SendMessageCommand;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

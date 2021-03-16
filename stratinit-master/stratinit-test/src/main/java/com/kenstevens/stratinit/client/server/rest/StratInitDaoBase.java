@@ -39,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public abstract class StratInitDaoBase {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
+	// FIXME move this to an extension so we can share it with stratinit-it
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Autowired
