@@ -12,6 +12,7 @@ public class SpringConfig {
     public StratInitRestClient stratInitRestClient() {
         return new StratInitRestClient("http://localhost:8081/stratinit");
     }
+
 // FIXME move to swt
 //    @Bean
 //    public IServerConfig serverConfig() {

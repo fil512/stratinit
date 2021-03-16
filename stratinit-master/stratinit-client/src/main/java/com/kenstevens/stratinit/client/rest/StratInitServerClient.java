@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Service
-public class RestStratInitClient implements IStratInitServer {
+public class StratInitServerClient implements IStratInitServer {
     @Autowired
     StratInitRestClient stratInitRestClient;
 

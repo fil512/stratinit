@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.RestStratInitClient;
 import com.kenstevens.stratinit.client.rest.StratInitRestClient;
+import com.kenstevens.stratinit.client.rest.StratInitServerClient;
 import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
@@ -32,7 +32,7 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private RestStratInitClient stratInitServer;
+	private StratInitServerClient stratInitServer;
 	@Autowired
 	private Account account;
 	@Autowired

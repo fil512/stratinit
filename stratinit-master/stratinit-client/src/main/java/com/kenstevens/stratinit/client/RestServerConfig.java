@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.client;
 
-import com.kenstevens.stratinit.client.rest.RestStratInitClient;
+import com.kenstevens.stratinit.client.rest.StratInitServerClient;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.config.ServerConfig;
@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class RestServerConfig implements IServerConfig {
     @Autowired
-    RestStratInitClient stratInitServer;
+    StratInitServerClient stratInitServer;
     @Value("${server.port}")
     private int serverPort;
 

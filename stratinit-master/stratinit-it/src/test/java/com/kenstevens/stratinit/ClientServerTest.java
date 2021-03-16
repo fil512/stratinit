@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.RestStratInitClient;
 import com.kenstevens.stratinit.client.rest.StratInitRestClient;
+import com.kenstevens.stratinit.client.rest.StratInitServerClient;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.Constants;
@@ -22,7 +22,7 @@ public class ClientServerTest extends ClientServerBase {
 
     // FIXME these names are too similar
     @Autowired
-    private RestStratInitClient restStratInitClient;
+    private StratInitServerClient stratInitServerClient;
     @Autowired
     private StratInitRestClient stratInitRestClient;
     @Autowired
@@ -32,7 +32,7 @@ public class ClientServerTest extends ClientServerBase {
     public void testGoodLogin() throws IOException {
         goodLogin();
 
-        Result<String> result = restStratInitClient.getVersion();
+        Result<String> result = stratInitServerClient.getVersion();
         assertResult(result);
         String reply = result.getValue();
         assertEquals(Constants.SERVER_VERSION, reply);
@@ -53,7 +53,7 @@ public class ClientServerTest extends ClientServerBase {
     @Test
     public void testGetMyGames() throws IOException {
         goodLogin();
-        Result<List<SIGame>> result = restStratInitClient.getJoinedGames();
+        Result<List<SIGame>> result = stratInitServerClient.getJoinedGames();
         assertResult(result);
         List<SIGame> games = result.getValue();
 
