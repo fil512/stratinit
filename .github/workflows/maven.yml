@@ -22,6 +22,3 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: cd stratinit-master; mvn -B package --file pom.xml
-    - name: Build cient with Maven
-      run: cd stratinit-master/stratinit-client-master; mvn -Plinux64 -B package --file pom.xml
-      
