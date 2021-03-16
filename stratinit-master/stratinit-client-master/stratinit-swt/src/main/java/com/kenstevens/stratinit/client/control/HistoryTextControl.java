@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.client.control;
 
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.client.api.ShellMessage;
+import com.kenstevens.stratinit.client.api.ShellMessage.Type;
+import com.kenstevens.stratinit.client.api.StatusReportEvent;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
-import com.kenstevens.stratinit.shell.Message;
-import com.kenstevens.stratinit.shell.Message.Type;
-import com.kenstevens.stratinit.shell.StatusReportEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -28,8 +28,8 @@ public class HistoryTextControl implements Controller {
 
 	@Subscribe
 	public void handleStatusReportEvent(StatusReportEvent event) {
-		final Message message = event.getMessage();
-		if (message.getText() == null || message.getText().isEmpty()) {
+		final ShellMessage shellMessage = event.getMessage();
+		if (shellMessage.getText() == null || shellMessage.getText().isEmpty()) {
 			return;
 		}
 		final Display display = Display.getDefault();
@@ -38,7 +38,7 @@ public class HistoryTextControl implements Controller {
 			return;
 		display.asyncExec(new Runnable() {
 			public void run() {
-				updateStyledText(message, display);
+				updateStyledText(shellMessage, display);
 			}
 		});
 	}
@@ -50,11 +50,11 @@ public class HistoryTextControl implements Controller {
 
 	}
 
-	private void updateStyledText(final Message message, final Display display) {
+	private void updateStyledText(final ShellMessage shellMessage, final Display display) {
 		if (styledText.isDisposed())
 			return;
-		String text = message.getText() + "\n";
-		Type type = message.getType();
+		String text = shellMessage.getText() + "\n";
+		Type type = shellMessage.getType();
 		int start = styledText.getCharCount();
 		int length = text.length();
 		int startLine = styledText.getLineCount() - 1;
@@ -66,7 +66,7 @@ public class HistoryTextControl implements Controller {
 			style.fontStyle = SWT.BOLD;
 			styledText.setStyleRange(style);
 			styledText.setLineIndent(startLine, 1, 40);
-			if (message.isError()) {
+			if (shellMessage.isError()) {
 				style = new StyleRange();
 				style.start = start;
 				style.length = length;

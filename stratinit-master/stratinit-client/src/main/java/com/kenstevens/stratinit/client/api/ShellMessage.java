@@ -1,13 +1,12 @@
-package com.kenstevens.stratinit.shell;
+package com.kenstevens.stratinit.client.api;
 
-// FIXME rename.  confused with the other message
-public class Message {
+public class ShellMessage {
 	private final String text;
 	private final Type type;
 
 	public enum Type {ACTION, RESPONSE, ERROR, LOGIN_ERROR}
 
-	public Message(String text, Type type) {
+	public ShellMessage(String text, Type type) {
 		this.text = text;
 		this.type = type;
 	}

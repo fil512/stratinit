@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -15,18 +15,18 @@ final public class CentreHomeSelectionAdapter extends SelectionAdapter {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private final WidgetContainer widgetContainer;
-	private final SelectEvent selectEvent;
+	private final IEventSelector iEventSelector;
 
 	public CentreHomeSelectionAdapter(WidgetContainer widgetContainer,
-									  SelectEvent selectEvent) {
+									  IEventSelector eventSelector) {
 		this.widgetContainer = widgetContainer;
-		this.selectEvent = selectEvent;
+		this.iEventSelector = eventSelector;
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
 		try {
-			List<UnitView> units = selectEvent.getSelectedUnits();
+			List<UnitView> units = iEventSelector.getSelectedUnits();
 			if (units.isEmpty()) {
 				return;
 			}

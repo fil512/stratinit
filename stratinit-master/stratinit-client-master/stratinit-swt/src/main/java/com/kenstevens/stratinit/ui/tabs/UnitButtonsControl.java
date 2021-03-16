@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.control.selection.SelectSectorEvent;
 import com.kenstevens.stratinit.client.control.selection.SelectUnitsEvent;
 import com.kenstevens.stratinit.client.event.NationListArrivedEvent;
@@ -32,7 +32,7 @@ public class UnitButtonsControl {
 	@Autowired
 	private SelectedCoords selectedCoords;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector eventSelector;
 	@Autowired
 	private SelectedUnits selectedUnits;
 	@Autowired
@@ -117,23 +117,23 @@ public class UnitButtonsControl {
 
 	private void setButtonListeners() {
 		unitButtons.getCedeButton().addSelectionListener(
-				new CedeUnitsSelectionAdapter(selectEvent, spring,
+				new CedeUnitsSelectionAdapter(eventSelector, spring,
 						actionFactory, topShell, cedeWindow));
 		unitButtons.getDisbandButton().addSelectionListener(
-				new DisbandSelectionAdapter(selectEvent, spring, actionFactory,
+				new DisbandSelectionAdapter(eventSelector, spring, actionFactory,
 						topShell));
 		unitButtons.getCentreUnitButton().addSelectionListener(
-				new CentreHomeSelectionAdapter(widgetContainer, selectEvent));
+				new CentreHomeSelectionAdapter(widgetContainer, eventSelector));
 		unitButtons.getCentreHomeButton().addSelectionListener(
 				new HomeSelectionAdapter(widgetContainer, db));
 		unitButtons.getBuildCityButton().addSelectionListener(
-				new BuildCitySelectionAdapter(selectEvent, spring,
+				new BuildCitySelectionAdapter(eventSelector, spring,
 						actionFactory, topShell));
 		unitButtons.getSwitchTerrainButton().addSelectionListener(
-				new SwitchTerrainSelectionAdapter(selectEvent, spring,
+				new SwitchTerrainSelectionAdapter(eventSelector, spring,
 						actionFactory, topShell));
 		unitButtons.getCancelMoveButton().addSelectionListener(
-				new CancelMoveSelectionAdapter(selectEvent, spring,
+				new CancelMoveSelectionAdapter(eventSelector, spring,
 						actionFactory, topShell));
 		unitButtons.getUpdateButton().addSelectionListener(
 				new UpdateUnitsSelectionAdapter(actionFactory));

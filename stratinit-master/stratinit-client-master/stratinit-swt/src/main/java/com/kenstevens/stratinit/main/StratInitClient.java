@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.main;
 
 import com.kenstevens.stratinit.client.SpringConfig;
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.main.ClientConstants;
 import com.kenstevens.stratinit.client.site.ActionQueue;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
@@ -18,7 +18,7 @@ public final class StratInitClient {
 
 	public static void main(String[] args) {
 		ActionQueue actionQueue = null;
-		WavPlayer wavPlayer = null;
+		IAudioPlayer audioPlayer = null;
 		ActionFactory actionFactory = null;
 		try {
 			logger.info("Starting StratInitClient version {}", ClientConstants.CLIENT_VERSION);
@@ -28,7 +28,7 @@ public final class StratInitClient {
 			actionFactory = (ActionFactory) context.getBean("actionFactory");
 			MainShell mainShell = (MainShell) context.getBean("MainShell");
 			actionQueue = (ActionQueue) context.getBean("ActionQueue");
-			wavPlayer = (WavPlayer) context.getBean("WavPlayer");
+			audioPlayer = (IAudioPlayer) context.getBean("WavPlayer");
 
 			actionQueue.start();
 			mainShell.start();
@@ -42,8 +42,8 @@ public final class StratInitClient {
 			if (actionQueue != null) {
 				actionQueue.shutdown();
 			}
-			if (wavPlayer != null) {
-				wavPlayer.shutdown();
+			if (audioPlayer != null) {
+				audioPlayer.shutdown();
 			}
 		}
 	}

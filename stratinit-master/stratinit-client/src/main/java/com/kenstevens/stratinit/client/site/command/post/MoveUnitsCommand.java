@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.client.site.command.post;
 
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.client.site.PostCommand;
@@ -23,7 +23,7 @@ public class MoveUnitsCommand extends PostCommand<SIUpdate, MoveUnitsJson> {
 	@Autowired
 	private UpdateProcessor updateProcessor;
 	@Autowired
-	private WavPlayer wavPlayer;
+	private IAudioPlayer audioPlayer;
 
 	public MoveUnitsCommand(List<UnitView> units, WorldSector targetSector) {
 		super(new MoveUnitsJson(UnitsToSIUnits.transform(units), targetSector.getCoords()), buildDescription(units, targetSector));
@@ -33,7 +33,7 @@ public class MoveUnitsCommand extends PostCommand<SIUpdate, MoveUnitsJson> {
 	public Result<SIUpdate> executePost(MoveUnitsJson request) {
 		Result<SIUpdate> retval = stratInitServer.moveUnits(request);
 		if (!retval.isMoveSuccess()) {
-			wavPlayer.playEmpty();
+			audioPlayer.playEmpty();
 		}
 		return retval;
 	}

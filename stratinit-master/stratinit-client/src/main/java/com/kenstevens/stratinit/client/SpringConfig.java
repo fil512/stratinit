@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.client;
 
-import com.kenstevens.stratinit.client.rest.StratInitRestClient;
+import com.kenstevens.stratinit.client.rest.RestClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class SpringConfig {
     @Bean
-    public StratInitRestClient stratInitRestClient() {
-        return new StratInitRestClient("http://localhost:8081/stratinit");
+    public RestClient stratInitRestClient() {
+        return new RestClient("http://localhost:8081/stratinit");
     }
 
 // FIXME move to swt

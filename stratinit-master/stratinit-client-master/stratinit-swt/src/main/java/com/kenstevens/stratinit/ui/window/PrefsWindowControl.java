@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.ui.window;
 
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.event.WorldArrivedEvent;
 import com.kenstevens.stratinit.client.model.Account;
@@ -20,7 +20,7 @@ public class PrefsWindowControl {
 	@Autowired
 	private Account account;
 	@Autowired
-	private WavPlayer wavPlayer;
+	private IAudioPlayer audioPlayer;
 	@Autowired
 	protected StratinitEventBus eventBus;
 
@@ -69,7 +69,7 @@ public class PrefsWindowControl {
 				try {
 					boolean liberator = liberatorButton.getSelection();
 					account.getPreferences().setLiberator(liberator);
-					wavPlayer.playFanfare();
+					audioPlayer.playFanfare();
 				} catch (Exception e1) {
 					logger.error(e1.getMessage(), e1);
 				}

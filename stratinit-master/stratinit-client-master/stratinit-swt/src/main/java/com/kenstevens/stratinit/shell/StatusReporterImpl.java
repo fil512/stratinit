@@ -1,5 +1,8 @@
 package com.kenstevens.stratinit.shell;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
+import com.kenstevens.stratinit.client.api.ShellMessage;
+import com.kenstevens.stratinit.client.api.StatusReportEvent;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.site.Command;
 import com.kenstevens.stratinit.remote.Result;
@@ -11,8 +14,7 @@ import org.springframework.stereotype.Service;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
-// FIXME rename
-public class StatusReporterImpl implements StatusReporter {
+public class StatusReporterImpl implements IStatusReporter {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -20,23 +22,23 @@ public class StatusReporterImpl implements StatusReporter {
 
     @Override
     public void reportResult(String text) {
-        Message message = new Message(text, Message.Type.RESPONSE);
-        eventBus.post(new StatusReportEvent(message));
+        ShellMessage shellMessage = new ShellMessage(text, ShellMessage.Type.RESPONSE);
+        eventBus.post(new StatusReportEvent(shellMessage));
         logger.info("Response: {}", text);
     }
 
     @Override
     public void reportAction(String text) {
-        Message message = new Message(text, Message.Type.ACTION);
-        eventBus.post(new StatusReportEvent(message));
+        ShellMessage shellMessage = new ShellMessage(text, ShellMessage.Type.ACTION);
+        eventBus.post(new StatusReportEvent(shellMessage));
         logger.info("Action: {}", text);
     }
 
     @Override
     public void reportError(String text) {
         logger.error(text);
-        Message message = new Message(text, Message.Type.ERROR);
-        eventBus.post(new StatusReportEvent(message));
+        ShellMessage shellMessage = new ShellMessage(text, ShellMessage.Type.ERROR);
+        eventBus.post(new StatusReportEvent(shellMessage));
         logger.error("Error: {}", text);
     }
 

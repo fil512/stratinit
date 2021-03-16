@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.StratInitRestClient;
+import com.kenstevens.stratinit.client.rest.RestClient;
 import com.kenstevens.stratinit.client.rest.StratInitServerClient;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.remote.Result;
@@ -20,11 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ClientServerTest extends ClientServerBase {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    // FIXME these names are too similar
     @Autowired
     private StratInitServerClient stratInitServerClient;
     @Autowired
-    private StratInitRestClient stratInitRestClient;
+    private RestClient restClient;
     @Autowired
     private Account account;
 
@@ -45,7 +44,7 @@ public class ClientServerTest extends ClientServerBase {
     private void setPlayer(String username) {
         account.setUsername(username);
         account.setPassword("testy");
-        stratInitRestClient.setAccount();
+        restClient.setAccount();
     }
 
     // FIXME for some reason two transactions in a row fails.  Need to store a cookie in our rest client?

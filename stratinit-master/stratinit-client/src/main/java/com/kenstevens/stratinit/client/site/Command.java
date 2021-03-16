@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.client.site;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.event.ArrivedDataEventAccumulator;
 import com.kenstevens.stratinit.client.event.CommandPointsArrivedEvent;
 import com.kenstevens.stratinit.client.model.Data;
@@ -9,7 +10,6 @@ import com.kenstevens.stratinit.client.site.processor.BattleLogProcessor;
 import com.kenstevens.stratinit.client.site.processor.ResultBattleLogProcessor;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.type.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public abstract class Command<T> {
 	@Autowired
 	protected StratInitServerClient stratInitServer;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	protected ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 	@Autowired

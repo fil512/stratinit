@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.client.control;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection;
 import com.kenstevens.stratinit.client.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.event.TeamListArrivedEvent;
@@ -27,7 +27,7 @@ public class PlayerTableControl {
 	@Autowired
 	private Data db;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector eventSelector;
 	@Autowired
 	protected StratinitEventBus eventBus;
 	
@@ -62,7 +62,7 @@ public class PlayerTableControl {
 					return;
 				}
 				NationView player = (NationView) items[0].getData();
-				selectEvent.selectNation(player, Selection.Source.PLAYER_TAB);
+				eventSelector.selectNation(player, Selection.Source.PLAYER_TAB);
 			}
 		});
 	}

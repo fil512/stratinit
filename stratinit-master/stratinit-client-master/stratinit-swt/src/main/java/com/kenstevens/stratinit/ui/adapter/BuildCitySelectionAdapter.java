@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.Spring;
@@ -16,14 +16,14 @@ import java.util.List;
 public class BuildCitySelectionAdapter extends StratinitSelectionAdapter {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	public BuildCitySelectionAdapter(SelectEvent selectEvent, Spring spring,
+	public BuildCitySelectionAdapter(IEventSelector eventSelector, Spring spring,
 									 ActionFactory actionFactory, TopShell topShell) {
-		super(selectEvent, spring, actionFactory, topShell);
+		super(eventSelector, spring, actionFactory, topShell);
 	}
 
 	public void widgetSelected(final SelectionEvent e) {
 		try {
-			List<UnitView> units = selectEvent.getSelectedUnits();
+			List<UnitView> units = eventSelector.getSelectedUnits();
 			if (units.isEmpty()) {
 				return;
 			}

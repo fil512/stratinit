@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.ui.adapter;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.Spring;
@@ -16,15 +16,15 @@ public class CedeUnitsSelectionAdapter extends StratinitSelectionAdapter {
 	private final CedeWindow cedeWindow;
 
 
-	public CedeUnitsSelectionAdapter(SelectEvent selectEvent, Spring spring, ActionFactory actionFactory, TopShell topShell, CedeWindow cedeWindow) {
-		super(selectEvent, spring, actionFactory, topShell);
+	public CedeUnitsSelectionAdapter(IEventSelector eventSelector, Spring spring, ActionFactory actionFactory, TopShell topShell, CedeWindow cedeWindow) {
+		super(eventSelector, spring, actionFactory, topShell);
 		this.cedeWindow = cedeWindow;
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
 		try {
-			List<UnitView> units = selectEvent.getSelectedUnits();
+			List<UnitView> units = eventSelector.getSelectedUnits();
 			if (units.isEmpty()) {
 				return;
 			}

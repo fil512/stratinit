@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.client.audio;
 
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.model.Account;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,7 @@ import javax.sound.sampled.DataLine.Info;
 import java.io.IOException;
 
 @Component("WavPlayer")
-// FIXME rename
-class WavPlayerImpl implements WavPlayer {
+class AudioPlayerImpl implements IAudioPlayer {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired

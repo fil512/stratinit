@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.client.site.processor;
 
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.model.BattleLogEntry;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.NewsCategory;
@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class ResultBattleLogProcessor {
 	@Autowired
-	private WavPlayer wavPlayer;
+	private IAudioPlayer audioPlayer;
 
 	enum Event {
 		CONQUEST, I_DIED, THEY_DIED, I_HIT
@@ -47,13 +47,13 @@ public class ResultBattleLogProcessor {
 			return;
 		}
 		if (event == Event.CONQUEST) {
-			wavPlayer.playFanfare();
+			audioPlayer.playFanfare();
 		} else if (event == Event.I_DIED) {
-			wavPlayer.playIDied();
+			audioPlayer.playIDied();
 		} else if (event == Event.THEY_DIED) {
-			wavPlayer.playExplosion();
+			audioPlayer.playExplosion();
 		} else if (event == Event.I_HIT) {
-			wavPlayer.playHit();
+			audioPlayer.playHit();
 		}
 	}
 }

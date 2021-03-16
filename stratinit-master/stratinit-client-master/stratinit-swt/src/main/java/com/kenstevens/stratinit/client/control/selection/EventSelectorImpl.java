@@ -3,6 +3,8 @@ package com.kenstevens.stratinit.client.control.selection;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SelectEventImpl implements SelectEvent {
+public class EventSelectorImpl implements IEventSelector {
 	@Autowired
 	private SelectedUnits selectedUnits;
 	@Autowired

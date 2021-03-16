@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.client.site;
 
 import com.kenstevens.stratinit.client.api.IProgressBar;
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.event.ArrivedDataEventAccumulator;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ public class CommandProcessor {
 	@Autowired
 	private IProgressBar progressBar;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private ArrivedDataEventAccumulator arrivedDataEventAccumulator;
 

@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.client.site.command.post;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.site.PostCommand;
 import com.kenstevens.stratinit.client.util.StackTraceHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.ErrorJson;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 public class SubmitErrorCommand extends PostCommand<Integer, ErrorJson> {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
-	StatusReporter statusReporter;
+	IStatusReporter statusReporter;
 
 	private final Exception exception;
 

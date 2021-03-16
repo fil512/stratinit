@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.client.site.action.post;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection.Source;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection.Source;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.client.site.ActionQueue;
@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class MoveUnitsAction extends PostAction<MoveUnitsCommand> implements UnitListAction {
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector iEventSelector;
 	@Autowired
 	private ActionQueue actionQueue;
 
@@ -37,9 +37,9 @@ public class MoveUnitsAction extends PostAction<MoveUnitsCommand> implements Uni
 		super.postEvents();
 		if (actionQueue.isEmpty()) {
 			if (launching) {
-				selectEvent.selectSectorCoordsNoFire(getCommand().getTarget(), Source.CANVAS_SELECT);
+				iEventSelector.selectSectorCoordsNoFire(getCommand().getTarget(), Source.CANVAS_SELECT);
 			} else {
-				selectEvent.selectUnitsWithMobNoFire(Source.CANVAS_SELECT);
+				iEventSelector.selectUnitsWithMobNoFire(Source.CANVAS_SELECT);
 			}
 		}
 	}

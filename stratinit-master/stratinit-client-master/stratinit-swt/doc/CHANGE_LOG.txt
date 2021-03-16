@@ -19,7 +19,7 @@ Release 1.2.4
   * BALANCE CHANGE: Helicopter range increased from 12 to 16
   * BALANCE CHANGE: Helicopter attack increased from 3 to 5
   * BALANCE CHANGE: Helicopter ammo increased from 1 to 2
-  * Fixed a bug that crashes the client when you clicked "forward" and no message was selected.
+  * Fixed a bug that crashes the client when you clicked "forward" and no shellMessage was selected.
   * Fixed a bug that crashes the client at startup due to a race condition
   * Fixed a bug that crashes the client if you try to update a city you no longer own
   * Spent a couple of hours trying to reproduce the double-alliance bug, but so far no dice.  Does anyone out there know the trick to create
@@ -234,7 +234,7 @@ Release 1.1.36
   * Random number of cities on neutral islands instead of always 4.  Now between 4% and 6% of island sectors will be cities.
   * Do not permit odd number of players in a game (add 3 empty slots if there are an odd number of players at map time)
   * Do not permit more than 10 players in a game
-  * Present web message board messages in reverse-chronological order (instead of random order as was the case)
+  * Present web shellMessage board messages in reverse-chronological order (instead of random order as was the case)
 
 Release 1.1.35
   * BALANCE CHANGE: When taking a city, a land unit now only looses 4 hp instead of dying!
@@ -280,8 +280,8 @@ Release 1.1.32
   * Fixed "Games" and "Leader Board" web pages on www.strategicinitiative.org
 
 Release 1.1.31
-  * Added debugging info to skipping message in an attempt to understand what's going on.
-  * Added "games" link to home page of web site that lists games & message boards of games currently under way
+  * Added debugging info to skipping shellMessage in an attempt to understand what's going on.
+  * Added "games" link to home page of web site that lists games & shellMessage boards of games currently under way
 
 Release 1.1.30
   * This is largely a bug-fix / stabilization release.  The most significant change for players is that I have fixed Issue #7,
@@ -340,7 +340,7 @@ Release 1.1.24
   * Display hourly command point gain in Technology window 
   * Reduced minimum hourly command point gain from 16 to 8
   * Hourly command point gain is now capped at 40 
-  * List recent message board posts at the top of the News window
+  * List recent shellMessage board posts at the top of the News window
   * Added "Centre Unit" and "Centre Home" buttons to sector tab
   * Allow players to set build on city tab
   * Remember client location and dimensions if a player moves or resizes the window (useful when you have two monitors)
@@ -441,7 +441,7 @@ Release 1.1.21
   * Prevent players from going to war with themselves by nuking their own cities
 
 5 June 2010 Release 1.1.11
-  * Fixed a bug that prevented message board posts
+  * Fixed a bug that prevented shellMessage board posts
 
 5 June 2010 Release 1.1.10
   * Fixed a bug that caused the server to crash when player #5 joined a game.  (oops)
@@ -465,7 +465,7 @@ Release 1.1.21
   * On city tab, add island id column (thanks Ice).
   * Make city tab columns sortable, island id default sort (thanks Ice).
   * Fixed bug that mis-reported damage to units in forts (thanks UnitedGermany).
-  * Send a notification message to recipient when something is ceded to them.
+  * Send a notification shellMessage to recipient when something is ceded to them.
   * Decreased land percentage from 25% to 22%, increased spikiness from 30% to 40% and reduced min/max cities per island from 4%/6% to 4%/5%
 
 6 Mar 2010 Release 1.1.6
@@ -557,7 +557,7 @@ Release 1.1.21
   * Changed colours of friendly and allied units to make them easier to distinguish from your units
   * Changed colour of "hit by" records on Battle Lot from red to green
   * Fixed > indentation bug in mail that was adding extra carriage returns (really annoying)
-  * (Snarrf) default message recipient is blank
+  * (Snarrf) default shellMessage recipient is blank
   * Exclude Zeppelins from power calculation (preparing for new unit cap)
   * (Ice) Don't display next build dropdown if build is BASE
 
@@ -683,10 +683,10 @@ Release 1.1.21
   * When displaying sectors I can move to, shade out-of-supply sectors in a darker colour
   * IMPORTANT RULE CHANGE.  There is now a limit to the number of units you can build of each type.  That limit is 5 plus the number of cities you control (this was required to prevent the server from bogging down late game).
   * If you have reached the unit type limit, the unit will appear as (lowercase) in your build menu.
-  * If your city tries to build a unit for which the limit has been reached, the build will be skipped and you will receive a message from the server
+  * If your city tries to build a unit for which the limit has been reached, the build will be skipped and you will receive a shellMessage from the server
   * Supply rules have changed.  A path to the supply is no longer required--you just need to be within 5 squares of the supply source as the crow flies.
   * Removed surveillance button (keeping this up to date was slowing down the server)
-  * Show message recipient on sent items tab
+  * Show shellMessage recipient on sent items tab
   * Made a number of performance enhancements on the server to make it go faster, most notably introducing a second level cache
 
 31 Dec 2009 Release 1.0.22
@@ -731,7 +731,7 @@ Release 1.1.21
   * ensure a delayed start doesn't build any units until the game has started.  (Third attempt to fix this--it's hard to test).
   * carried units that are sunk when their carrier is sunk now have their own battle log entries (for more accurate news reporting)
   * yellow now means < 70% hp as it should (rather than any damage at all)
-  * fixed a bug in interdiction battle log message
+  * fixed a bug in interdiction battle log shellMessage
   * help now takes you to ui help
   * added "support" menu item that takes you to discussion boards
   * fix tooltip text for player "power" column
@@ -780,7 +780,7 @@ Release 1.1.21
 20 Dec 2009 1.0.13 Client
   * Only messages that arrive after you login are bold now
   * Display target sector coords on command list
-  * Show message subject in message view window
+  * Show shellMessage subject in shellMessage view window
   * Player tab: sort players in descending order
   * Player tab: display both my next relations / switch times and their next relations / switch times
 
@@ -799,10 +799,10 @@ Release 1.1.21
   * Units now disappear in proper time (they were disappearing too quickly)
 
 20 Dec 2009 1.0.11 Client
-  * Combat message box increased to 2 lines (thanks meadowwood)
+  * Combat shellMessage box increased to 2 lines (thanks meadowwood)
   * Interdiction/Interception now updates map correctly
-  * reversed message list--newest messages at top
-  * fixed bold on message list
+  * reversed shellMessage list--newest messages at top
+  * fixed bold on shellMessage list
 
 19 Dec 2009 1.0.9 Server
   * Fixed seen enemy units.  All enemy units were visible before this bug was fixed.  Now there is a fog of war per the rules.
@@ -825,7 +825,7 @@ Release 1.1.21
 
 17 Dec 2009 1.0.8 Client
   * when moving ship, display the ship type
-  * update message board after posting
+  * update shellMessage board after posting
 
 17 Dec 2009 1.0.7 Server
   * Units halt movement if they are interdicted/intercepted
@@ -834,13 +834,13 @@ Release 1.1.21
 
 16 Dec 2009 1.0.6 Server
   * Performance tuning -- only persist new sectors / units seen after all the units have moved
-  * Only show messages on the message board for this game
+  * Only show messages on the shellMessage board for this game
 
 15 Dec 2009 1.0.7 Client
   * show ammo
   * show target sector
   * show target unit and owner
-  * display unit battle log detailed message
+  * display unit battle log detailed shellMessage
   * only play music once when client starts up
   * display unit build accurately for blitz games
   * Improve descriptive text on move command
@@ -861,7 +861,7 @@ Release 1.1.21
   * unit range displayed on map now reflects supply
   * changed supply brown dot to red line below unit (chapper suggestion)
   * when on city tab, automatically show building units on map
-  * fixed reply message box
+  * fixed reply shellMessage box
   * removed duplicate RE: RE: and FW: FW: in messages
   * darkened "unknown" sector image
 
@@ -875,8 +875,8 @@ Release 1.1.21
 
 11 Dec 2009 1.0.4 Client
   * fixed sent items tab
-  * fixed message compose
-  * removed world map column from message windows
+  * fixed shellMessage compose
+  * removed world map column from shellMessage windows
   * removed wm->ally button
   * fixed "repairing" category, stuff e.g. zepplins were accidentally getting put in there
 
@@ -885,7 +885,7 @@ Release 1.1.21
   * Added indexes to optimize database
 
 11 Dec 2009 1.0.3 Client
-  * fixed tab order on compose message window
+  * fixed tab order on compose shellMessage window
   * fixed city tab (was hiding cities)
   * fixed prefs tab:
   * fixed surveillance

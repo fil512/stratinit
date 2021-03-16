@@ -17,10 +17,4 @@ public class NextBuildUnitCommand extends BuildCommand {
 		String nextBuildString = unitType == null ? "(no change)" : unitType.toString().toLowerCase();
 		return "Next build " + nextBuildString + " in " + city;
 	}
-
-	// FIXME need this?
-//	@Override
-//	public void setBuild(SICity sicity) {
-//		sicity.nextBuild = unitType;
-//	}
 }

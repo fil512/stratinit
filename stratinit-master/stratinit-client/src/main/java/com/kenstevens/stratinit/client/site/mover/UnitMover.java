@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.client.site.mover;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.model.SelectedUnits;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -9,7 +10,6 @@ import com.kenstevens.stratinit.client.util.UnitHelper;
 import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public class UnitMover {
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private SelectedUnits selectedUnits;
 

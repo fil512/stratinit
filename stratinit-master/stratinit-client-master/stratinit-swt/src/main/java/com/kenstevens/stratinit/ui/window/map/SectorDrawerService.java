@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.shell.WidgetContainer;
 import com.kenstevens.stratinit.type.*;
@@ -32,7 +32,7 @@ public class SectorDrawerService {
 	@Autowired
 	SelectedNation selectedNation;
 	@Autowired
-	SelectEvent selectEvent;
+	IEventSelector eventSelector;
 	
 	public void drawSectors(int boardSize, GC gc) {
 		for (int x = 0; x < boardSize; ++x) {

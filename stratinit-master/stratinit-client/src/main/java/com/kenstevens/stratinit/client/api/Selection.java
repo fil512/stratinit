@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.client.control.selection;
+package com.kenstevens.stratinit.client.api;
 
 public abstract class Selection {
     private final Source source;

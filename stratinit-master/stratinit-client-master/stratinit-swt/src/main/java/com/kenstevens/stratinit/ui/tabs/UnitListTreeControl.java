@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection.Source;
 import com.kenstevens.stratinit.client.control.Controller;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
 import com.kenstevens.stratinit.client.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection.Source;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.event.UnitListArrivedEvent;
 import com.kenstevens.stratinit.client.event.UnitListReplacementArrivedEvent;
@@ -40,10 +40,10 @@ public class UnitListTreeControl implements Controller {
 			}
 			if (data instanceof UnitView) {
 				UnitView unit = (UnitView) data;
-				selectEvent.selectUnit(unit, Source.UNIT_TAB);
+				iEventSelector.selectUnit(unit, Source.UNIT_TAB);
 			} else if (data instanceof LaunchedSatellite) {
 				LaunchedSatellite sat = (LaunchedSatellite) data;
-				selectEvent
+				iEventSelector
 						.selectSectorCoords(sat.getCoords(), Source.UNIT_TAB);
 			}
 		}
@@ -55,7 +55,7 @@ public class UnitListTreeControl implements Controller {
 	@Autowired
 	private Data db;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector iEventSelector;
 	@Autowired
 	protected StratinitEventBus eventBus;
 
@@ -78,7 +78,7 @@ public class UnitListTreeControl implements Controller {
 
 	@Subscribe
 	public void handleSelectUnitsEvent(SelectUnitsEvent event) {
-		List<UnitView> units = selectEvent.getSelectedUnits();
+		List<UnitView> units = iEventSelector.getSelectedUnits();
 		if (units.isEmpty()) {
 			return;
 		}

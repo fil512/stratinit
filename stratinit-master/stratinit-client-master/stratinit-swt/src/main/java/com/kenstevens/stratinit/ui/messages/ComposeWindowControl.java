@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.ui.messages;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.control.Controller;
 import com.kenstevens.stratinit.client.main.ClientConstants;
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
@@ -27,7 +27,7 @@ public class ComposeWindowControl implements Controller {
 	@Autowired
 	private Data db;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 
 	private final ComposeWindow composeWindow;
 

@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.client.impl;
 
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.api.INotifier;
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.Selection;
 import com.kenstevens.stratinit.client.control.selection.MapCentre;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection;
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.model.UnitList;
 import com.kenstevens.stratinit.client.model.UnitView;
@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotifierImpl implements INotifier {
     @Autowired
-    private WavPlayer wavPlayer;
+    private IAudioPlayer audioPlayer;
     @Autowired
     private MapCentre mapCentre;
     @Autowired
     private Data db;
     @Autowired
-    private SelectEvent selectEvent;
+    private IEventSelector eventSelector;
 
     @Override
     public void finishedStartingUp() {
         centreMapOnUnit();
-        wavPlayer.playFinishedLoading();
+        audioPlayer.playFinishedLoading();
     }
 
     private void centreMapOnUnit() {
@@ -44,6 +44,6 @@ public class NotifierImpl implements INotifier {
 
         if (display.isDisposed())
             return;
-        display.asyncExec(() -> selectEvent.selectUnit(unit, Selection.Source.UNIT_TAB));
+        display.asyncExec(() -> eventSelector.selectUnit(unit, Selection.Source.UNIT_TAB));
     }
 }

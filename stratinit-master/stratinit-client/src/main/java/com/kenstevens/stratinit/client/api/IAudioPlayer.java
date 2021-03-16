@@ -1,12 +1,10 @@
-package com.kenstevens.stratinit.client.audio;
+package com.kenstevens.stratinit.client.api;
 
-// FIXME rename and move to shell
-public interface WavPlayer {
+public interface IAudioPlayer {
     void playHit();
 
     void playExplosion();
 
-    // FIXME rename
     void playIntro();
 
     void playFinishedLoading();

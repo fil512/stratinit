@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.ui.adapter;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.model.NationView;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class CedeWindowSelectionAdapter extends SelectionAdapter {
 	@Autowired
 	private Data db;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private final City city;
 	private final List<UnitView> units;

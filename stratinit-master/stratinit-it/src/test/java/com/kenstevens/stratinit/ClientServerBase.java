@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit;
 
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.api.ICommandList;
 import com.kenstevens.stratinit.client.api.IProgressBar;
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.event.IEventExecutor;
 import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -16,9 +16,9 @@ public abstract class ClientServerBase extends StratInitDaoBase {
     @MockBean
     IProgressBar progressBar;
     @MockBean
-    StatusReporter statusReporter;
+    IStatusReporter statusReporter;
     @MockBean
     ICommandList commandList;
     @MockBean
-    WavPlayer wavPlayer;
+    IAudioPlayer audioPlayer;
 }

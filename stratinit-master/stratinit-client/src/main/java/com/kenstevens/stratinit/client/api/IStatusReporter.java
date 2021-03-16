@@ -1,9 +1,9 @@
-package com.kenstevens.stratinit.shell;
+package com.kenstevens.stratinit.client.api;
 
 import com.kenstevens.stratinit.client.site.Command;
 import com.kenstevens.stratinit.remote.Result;
 
-public interface StatusReporter {
+public interface IStatusReporter {
     void reportResult(String message);
 
     void reportError(String text);

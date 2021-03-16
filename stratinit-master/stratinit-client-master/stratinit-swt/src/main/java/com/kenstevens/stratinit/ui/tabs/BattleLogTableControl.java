@@ -1,9 +1,9 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection;
 import com.kenstevens.stratinit.client.control.Controller;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection;
 import com.kenstevens.stratinit.client.event.BattleLogListArrivedEvent;
 import com.kenstevens.stratinit.client.model.BattleLogEntry;
 import com.kenstevens.stratinit.client.model.BattleLogList;
@@ -24,7 +24,7 @@ public class BattleLogTableControl extends TableControl implements Controller {
 	@Autowired
 	private Data db;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector eventSelector;
 
 	private final BattleTabItem battleTabItem;
 
@@ -53,7 +53,7 @@ public class BattleLogTableControl extends TableControl implements Controller {
 					return;
 				}
 				BattleLogEntry battleLogEntry = (BattleLogEntry) item.getData();
-				selectEvent.selectSectorCoords(battleLogEntry.getCoords(),
+				eventSelector.selectSectorCoords(battleLogEntry.getCoords(),
 						Selection.Source.BATTLE_TAB);
 				battleTabItem.getMessageText().setText(
 						battleLogEntry.getMessage());

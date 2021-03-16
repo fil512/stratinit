@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.ui.window;
 
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.model.Account;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.Spring;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
 import org.eclipse.swt.widgets.Display;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class WindowDirector {
 	@Autowired
 	private Account account;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private NewsWindow newsWindow;
 	@Autowired

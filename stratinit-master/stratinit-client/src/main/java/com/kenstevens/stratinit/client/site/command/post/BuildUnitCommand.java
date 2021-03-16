@@ -19,10 +19,4 @@ public class BuildUnitCommand extends BuildCommand {
 
 		return "Build " + buildString + " in " + city;
 	}
-
-	// FIXME need this?
-//	@Override
-//	protected void setBuild(SICity sicity) {
-//		sicity.build = unitType;
-//	}
 }

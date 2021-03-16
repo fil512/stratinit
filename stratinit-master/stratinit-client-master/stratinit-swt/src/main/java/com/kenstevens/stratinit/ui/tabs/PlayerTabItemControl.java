@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui.tabs;
 
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.control.PlayerTableControl;
 import com.kenstevens.stratinit.client.control.TopLevelController;
 import com.kenstevens.stratinit.client.control.selection.SelectNationEvent;
@@ -13,7 +14,6 @@ import com.kenstevens.stratinit.client.model.NationView;
 import com.kenstevens.stratinit.client.model.SelectedNation;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.Spring;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.type.RelationType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,7 +42,7 @@ public class PlayerTabItemControl implements TopLevelController {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private SelectedNation selectedNation;
 	@Autowired

@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.ui;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.main.ClientConstants;
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.StratInitRestClient;
+import com.kenstevens.stratinit.client.rest.RestClient;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.AccountPersister;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.tabs.ControllerManager;
@@ -37,13 +37,13 @@ public class MainShell {
 	@Autowired
 	private ControllerManager controllerManager;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private ActionFactory actionFactory;
     @Autowired
     private NewbHelper newbHelper;
     @Autowired
-    private StratInitRestClient stratInitRestClient;
+    private RestClient restClient;
 
 	private Shell shell;
 
@@ -54,7 +54,7 @@ public class MainShell {
 		try {
             loadFiles();
 
-            stratInitRestClient.setAccount();
+            restClient.setAccount();
 
             display.asyncExec(new Runnable() {
                 public void run() {

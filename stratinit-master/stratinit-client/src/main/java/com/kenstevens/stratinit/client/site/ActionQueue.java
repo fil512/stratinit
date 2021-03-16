@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.client.site;
 
 import com.kenstevens.stratinit.client.api.ICommandList;
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.main.ClientConstants;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class ActionQueue {
     @Autowired
     private CommandProcessor commandProcessor;
     @Autowired
-    private StatusReporter statusReporter;
+    private IStatusReporter statusReporter;
     @Autowired
     private ICommandList commandList;
 

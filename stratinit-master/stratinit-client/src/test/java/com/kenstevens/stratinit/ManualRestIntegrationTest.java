@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.StratInitRestClient;
+import com.kenstevens.stratinit.client.rest.RestClient;
 import com.kenstevens.stratinit.client.rest.StratInitServerClient;
 import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.dto.SIGame;
@@ -36,7 +36,7 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	@Autowired
 	private Account account;
 	@Autowired
-	private StratInitRestClient stratInitRestClient;
+	private RestClient restClient;
 
 	@Test
 	public void testGoodLogin() throws IOException {
@@ -89,7 +89,7 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private void setPlayer(String test1) {
 		account.setUsername(test1);
 		account.setPassword("testy");
-		stratInitRestClient.setAccount();
+		restClient.setAccount();
 	}
 
 	@Test

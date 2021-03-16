@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.ui;
 
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.event.NationListArrivedEvent;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.main.ClientConstants;
@@ -9,7 +10,6 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.NationView;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.Spring;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import com.kenstevens.stratinit.shell.TopShell;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
 import com.kenstevens.stratinit.ui.messages.MessageWindow;
@@ -46,7 +46,7 @@ public class MainMenuControl {
 	@Autowired
 	private Spring spring;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private ActionFactory actionFactory;
 	@Autowired

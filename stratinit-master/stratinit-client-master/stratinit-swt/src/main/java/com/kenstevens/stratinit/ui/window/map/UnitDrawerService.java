@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.ui.window.map;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.site.mover.UnitMover;
 import com.kenstevens.stratinit.client.util.UnitHelper;
@@ -36,7 +36,7 @@ public class UnitDrawerService {
 	@Autowired
 	MapDrawerService mapDrawer;
 	@Autowired
-	SelectEvent selectEvent;
+	IEventSelector iEventSelector;
 	@Autowired
 	MapImageManager mapImageManager;
 	

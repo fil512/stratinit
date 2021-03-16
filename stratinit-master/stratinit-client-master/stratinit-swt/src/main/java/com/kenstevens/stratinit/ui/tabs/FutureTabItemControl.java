@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.ui.tabs;
 
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection.Source;
 import com.kenstevens.stratinit.client.control.TopLevelController;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection.Source;
 import com.kenstevens.stratinit.client.model.Data;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -25,7 +25,7 @@ public class FutureTabItemControl implements TopLevelController {
 	@Autowired
 	private Data db;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector eventSelector;
 	private NextUpEvents events;
 	private static final SimpleDateFormat FORMAT = new SimpleDateFormat("h:mm a");
 
@@ -131,7 +131,7 @@ public class FutureTabItemControl implements TopLevelController {
 			if (unitEvent == null) {
 				return;
 			}
-			selectEvent.selectSectorCoords(unitEvent.getCoords(),
+			eventSelector.selectSectorCoords(unitEvent.getCoords(),
 					Source.FUTURE_TAB);
 
 		});

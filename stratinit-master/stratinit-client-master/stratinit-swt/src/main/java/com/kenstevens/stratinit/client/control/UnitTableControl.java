@@ -4,10 +4,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection;
 import com.kenstevens.stratinit.client.control.selection.SelectSectorEvent;
 import com.kenstevens.stratinit.client.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.event.UnitListArrivedEvent;
 import com.kenstevens.stratinit.client.model.*;
@@ -34,7 +34,7 @@ import java.util.*;
 public class UnitTableControl implements Controller {
 	private final Table table;
 	@Autowired
-	private SelectEvent selection;
+	private IEventSelector selection;
 	@Autowired
 	private Data db;
 	@Autowired

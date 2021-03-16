@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.client.site.action.get;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.event.UnitListReplacementArrivedEvent;
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.site.GetAction;
 import com.kenstevens.stratinit.client.site.command.get.GetUnitsCommand;
-import com.kenstevens.stratinit.shell.StatusReporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class UnitListAction extends GetAction<GetUnitsCommand> {
 	@Autowired
 	private Data db;
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 
 	protected UnitListAction() {
 		super(new GetUnitsCommand());

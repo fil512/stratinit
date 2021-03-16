@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.client.site.action.post;
 
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection.Source;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection.Source;
 import com.kenstevens.stratinit.client.model.UnitView;
 import com.kenstevens.stratinit.client.site.ActionQueue;
 import com.kenstevens.stratinit.client.site.PostAction;
@@ -18,7 +18,7 @@ public class BuildCityAction extends PostAction<BuildCityCommand> {
 	@Autowired
 	private ActionQueue actionQueue;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector iEventSelector;
 
 	public BuildCityAction(List<UnitView> units) {
 		super(new BuildCityCommand(units));
@@ -28,7 +28,7 @@ public class BuildCityAction extends PostAction<BuildCityCommand> {
 	public void postEvents() {
 		super.postEvents();
 		if (actionQueue.isEmpty()) {
-			selectEvent.reSelectSectorCoords(Source.CANVAS_SELECT);
+			iEventSelector.reSelectSectorCoords(Source.CANVAS_SELECT);
 		}
 	}
 }

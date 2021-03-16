@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.client.control.selection;
+package com.kenstevens.stratinit.client.api;
 
 import com.kenstevens.stratinit.client.model.NationView;
 import com.kenstevens.stratinit.client.model.UnitView;
@@ -6,8 +6,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.List;
 
-// FIXME rename and move to api
-public interface SelectEvent {
+public interface IEventSelector {
     void reSelectSectorCoords(Selection.Source canvasSelect);
 
     void selectSectorCoords(SectorCoords sectorCoords,

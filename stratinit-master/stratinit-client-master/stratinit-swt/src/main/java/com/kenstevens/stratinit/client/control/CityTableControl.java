@@ -1,10 +1,10 @@
 package com.kenstevens.stratinit.client.control;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.client.control.selection.SelectEvent;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection;
 import com.kenstevens.stratinit.client.control.selection.SelectSectorEvent;
 import com.kenstevens.stratinit.client.control.selection.SelectUnitsEvent;
-import com.kenstevens.stratinit.client.control.selection.Selection;
 import com.kenstevens.stratinit.client.event.CityListArrivedEvent;
 import com.kenstevens.stratinit.client.event.CityListReplacementArrivedEvent;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
@@ -31,7 +31,7 @@ public class CityTableControl implements Controller {
 	@Autowired
 	private Data db;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector iEventSelector;
 	@Autowired
 	private SelectedCity selectedCity;
 	@Autowired
@@ -84,7 +84,7 @@ public class CityTableControl implements Controller {
 				if (city == null) {
 					return;
 				}
-				selectEvent.selectSectorCoords(city.getCoords(), Selection.Source.CITY_TAB);
+				iEventSelector.selectSectorCoords(city.getCoords(), Selection.Source.CITY_TAB);
 			}
 		});
 	}

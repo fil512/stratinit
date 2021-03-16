@@ -28,14 +28,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class StratInitRestClient {
+public class RestClient {
     private final ObjectMapper mapper = new ObjectMapper();
     private final String baseUrl;
     @Autowired
     private Account account;
     private HttpClientContext context;
 
-    public StratInitRestClient(String baseUrl) {
+    public RestClient(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 

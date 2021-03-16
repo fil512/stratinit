@@ -148,7 +148,7 @@ Ken
 
 
 -----
-No virus found in this message.
+No virus found in this shellMessage.
 Checked by AVG - www.avg.com
 Version: 10.0.1424 / Virus Database: 2411/4972 - Release Date: 
 05/01/12

@@ -2,9 +2,13 @@ package com.kenstevens.stratinit.ui.window.map;
 
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
+import com.kenstevens.stratinit.client.api.IEventSelector;
+import com.kenstevens.stratinit.client.api.Selection.Source;
 import com.kenstevens.stratinit.client.control.MapController;
-import com.kenstevens.stratinit.client.control.selection.*;
-import com.kenstevens.stratinit.client.control.selection.Selection.Source;
+import com.kenstevens.stratinit.client.control.selection.MapCentre;
+import com.kenstevens.stratinit.client.control.selection.SelectNationEvent;
+import com.kenstevens.stratinit.client.control.selection.SelectSectorEvent;
+import com.kenstevens.stratinit.client.control.selection.SelectUnitsEvent;
 import com.kenstevens.stratinit.client.event.GameChangedEvent;
 import com.kenstevens.stratinit.client.event.StratinitEventBus;
 import com.kenstevens.stratinit.client.event.WorldArrivedEvent;
@@ -40,7 +44,7 @@ public class MapCanvasControl implements MapController {
 	@Autowired
 	private MapImageManager mapImageManager;
 	@Autowired
-	private SelectEvent selectEvent;
+	private IEventSelector iEventSelector;
 	@Autowired
 	private UnitMover unitMover;
 	@Autowired
@@ -277,13 +281,13 @@ public class MapCanvasControl implements MapController {
         boolean switchToSectorTab = true;
         if (!sector.isMine()) {
             if (sector.getNation() == null && account.getPreferences().isCanvasScroll()) {
-                selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT_OTHER);
+                iEventSelector.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT_OTHER);
             } else {
-                selectEvent.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT);
+                iEventSelector.selectSectorCoords(sectorCoords, Source.CANVAS_SELECT);
             }
 		} else {
 			if (db.getCity(sectorCoords) != null && tabManager.cityTabSelected()) {
-				selectEvent.selectSectorCoords(sectorCoords,
+				iEventSelector.selectSectorCoords(sectorCoords,
 						Source.CANVAS_SELECT);
 				switchToSectorTab = false;
 			} else {
@@ -294,7 +298,7 @@ public class MapCanvasControl implements MapController {
 							sectorCoords));
 				}
 				if (unitsInSector.size() == 1) {
-					selectEvent
+					iEventSelector
 							.selectUnits(unitsInSector, Source.CANVAS_SELECT);
 					if (tabManager.supplyTabSelected() && unitsInSector.get(0).isSupply()) {
 						switchToSectorTab = false;
@@ -302,7 +306,7 @@ public class MapCanvasControl implements MapController {
 				} else if (sector.isHoldsShipAtSea()) {
 					selectShip(unitsInSector);
 				} else {
-					selectEvent.selectSectorCoords(sectorCoords,
+					iEventSelector.selectSectorCoords(sectorCoords,
 							Source.CANVAS_SELECT);
 				}
 			}
@@ -315,7 +319,7 @@ public class MapCanvasControl implements MapController {
 	private void selectShip(List<UnitView> unitsInSector) {
 		for (UnitView unit : unitsInSector) {
 			if (unit.isNavy()) {
-				selectEvent.selectUnit(unit, Source.CANVAS_SELECT);
+				iEventSelector.selectUnit(unit, Source.CANVAS_SELECT);
 				break;
 			}
 		}

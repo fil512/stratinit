@@ -1,7 +1,10 @@
 package com.kenstevens.stratinit.ui;
 
 import com.google.common.eventbus.Subscribe;
-import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.api.IAudioPlayer;
+import com.kenstevens.stratinit.client.api.IStatusReporter;
+import com.kenstevens.stratinit.client.api.ShellMessage;
+import com.kenstevens.stratinit.client.api.StatusReportEvent;
 import com.kenstevens.stratinit.client.control.TextControl;
 import com.kenstevens.stratinit.client.control.selection.MapCentre;
 import com.kenstevens.stratinit.client.event.CommandPointsArrivedEvent;
@@ -13,7 +16,6 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.Spring;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.shell.Message;
 import com.kenstevens.stratinit.shell.*;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.ui.image.ImageLibrary;
@@ -49,7 +51,7 @@ public class MainWindow implements MapControl, GameManager {
 	private Data db;
 
 	@Autowired
-	private StatusReporter statusReporter;
+	private IStatusReporter statusReporter;
 	@Autowired
 	private Spring spring;
 	@Autowired
@@ -57,7 +59,7 @@ public class MainWindow implements MapControl, GameManager {
 	@Autowired
 	private WidgetContainer widgetContainer;
 	@Autowired
-	private WavPlayer wavPlayer;
+	private IAudioPlayer audioPlayer;
 	@Autowired
 	private WindowDirector windowDirector;
 	@Autowired
@@ -134,14 +136,14 @@ public class MainWindow implements MapControl, GameManager {
 
 	@Subscribe
 	public void handleStatusReportEvent(StatusReportEvent event) {
-		Message message = event.getMessage();
-		if (message == null) {
+		ShellMessage shellMessage = event.getMessage();
+		if (shellMessage == null) {
 			statusControl.setMessage("");
 			return;
-		} else if (message.isError()) {
-			statusControl.setError(message.getText());
+		} else if (shellMessage.isError()) {
+			statusControl.setError(shellMessage.getText());
 		} else {
-			statusControl.setMessage(message.getText());
+			statusControl.setMessage(shellMessage.getText());
 		}
 	}
 
@@ -540,7 +542,7 @@ public class MainWindow implements MapControl, GameManager {
 		enableUpdateButton();
 		controllerManager.setTitle();
 		statusReporter.reportResult("Game " + gameId + " selected.");
-		wavPlayer.playIntro();
+		audioPlayer.playIntro();
 		actionFactory.getVersion();
 		actionFactory.setGame(gameId, noAlliances);
 		actionFactory.updateAll(true);
