@@ -1,18 +1,20 @@
 package com.kenstevens.stratinit.client;
 
-import com.kenstevens.stratinit.client.rest.IStratInitServer;
+import com.kenstevens.stratinit.client.rest.RestStratInitClient;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.remote.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Properties;
 
-@Component
 public class RestServerConfig implements IServerConfig {
     @Autowired
-    IStratInitServer stratInitServer;
+    RestStratInitClient stratInitServer;
+    @Value("${server.port}")
+    private int serverPort;
 
     IServerConfig serverConfig;
 
@@ -48,9 +50,13 @@ public class RestServerConfig implements IServerConfig {
 
     private void init() {
         if (serverConfig == null) {
-            Properties properties = stratInitServer.getServerConfig().getValue();
+            Result<Properties> result = stratInitServer.getServerConfig();
+            if (!result.isSuccess()) {
+                throw new RuntimeException("Failed to retrieve config from server:" + result.toString(), result.getException());
+            }
+            Properties properties = result.getValue();
             RunModeEnum runModeEnum = RunModeEnum.valueOf(properties.getProperty(RunModeEnum.class.getSimpleName()));
-            serverConfig = new ServerConfig(runModeEnum);
+            this.serverConfig = new ServerConfig(runModeEnum);
         }
     }
 }

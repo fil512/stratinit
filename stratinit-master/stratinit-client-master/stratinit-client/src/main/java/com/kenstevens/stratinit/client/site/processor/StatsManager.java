@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.client.site.processor;
 
 import com.kenstevens.stratinit.client.model.Data;
 import com.kenstevens.stratinit.client.model.stats.StatsHolder;
-import com.kenstevens.stratinit.client.rest.IStratInitServer;
+import com.kenstevens.stratinit.client.rest.RestStratInitClient;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.dto.SIUnitBuilt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class StatsManager {
 	@Autowired
 	private Data db;
 	@Autowired
-	private IStratInitServer stratInitServer;
+	private RestStratInitClient stratInitServer;
 	@Autowired
 	private BattleLogProcessor battleLogProcessor;
 	

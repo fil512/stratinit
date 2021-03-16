@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.ui;
 
 import com.kenstevens.stratinit.client.main.ClientConstants;
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.RestClient;
+import com.kenstevens.stratinit.client.rest.StratInitRestClient;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.util.AccountPersister;
 import com.kenstevens.stratinit.shell.StatusReporter;
@@ -40,10 +40,10 @@ public class MainShell {
 	private StatusReporter statusReporter;
 	@Autowired
 	private ActionFactory actionFactory;
-	@Autowired
-	private NewbHelper newbHelper;
-	@Autowired
-	private RestClient restClient;
+    @Autowired
+    private NewbHelper newbHelper;
+    @Autowired
+    private StratInitRestClient stratInitRestClient;
 
 	private Shell shell;
 
@@ -52,19 +52,19 @@ public class MainShell {
 		shell = new Shell();
 
 		try {
-			loadFiles();
+            loadFiles();
 
-			restClient.setAccount();
+            stratInitRestClient.setAccount();
 
-			display.asyncExec(new Runnable() {
-				public void run() {
-					initContents();
-					mainWindow.open(shell);
-					setShellSize();
-					shell.layout();
-					shell.open();
-					newbHelper.openNextWindow();
-				}
+            display.asyncExec(new Runnable() {
+                public void run() {
+                    initContents();
+                    mainWindow.open(shell);
+                    setShellSize();
+                    shell.layout();
+                    shell.open();
+                    newbHelper.openNextWindow();
+                }
 			});
 			while (!shell.isDisposed()) {
 				if (!display.readAndDispatch())

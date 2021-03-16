@@ -23,21 +23,19 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-@Service
-public class RestClient {
+public class StratInitRestClient {
     private final ObjectMapper mapper = new ObjectMapper();
     private final String baseUrl;
     @Autowired
     private Account account;
     private HttpClientContext context;
 
-    public RestClient(String baseUrl) {
+    public StratInitRestClient(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 
@@ -72,7 +70,7 @@ public class RestClient {
                 return mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
             }
         } catch (Exception e) {
-            return new Result<>(e.getMessage(), false);
+            return Result.falseInstance((Class<T>) resultClass, e);
         }
     }
 

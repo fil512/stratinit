@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.client;
 
-import com.kenstevens.stratinit.client.rest.RestClient;
-import com.kenstevens.stratinit.config.IServerConfig;
+import com.kenstevens.stratinit.client.rest.StratInitRestClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class SpringConfig {
     @Bean
-    public RestClient restClient() {
-        return new RestClient("http://localhost:8081/stratinit");
+    public StratInitRestClient stratInitRestClient() {
+        return new StratInitRestClient("http://localhost:8081/stratinit");
     }
-
-    @Bean
-    public IServerConfig serverConfig() {
-        return new RestServerConfig();
-    }
+// FIXME move to swt
+//    @Bean
+//    public IServerConfig serverConfig() {
+//        return new RestServerConfig();
+//    }
 }

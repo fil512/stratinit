@@ -1,9 +1,15 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.SpringConfig;
+import com.kenstevens.stratinit.client.api.ICommandList;
+import com.kenstevens.stratinit.client.api.IProgressBar;
+import com.kenstevens.stratinit.client.audio.WavPlayer;
+import com.kenstevens.stratinit.client.event.IEventExecutor;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.shell.StatusReporter;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -17,6 +23,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfig.class)
 public abstract class BaseStratInitClientTest {
+	@MockBean
+	IEventExecutor eventExecutor;
+	@MockBean
+	IProgressBar progressBar;
+	@MockBean
+	StatusReporter statusReporter;
+	@MockBean
+	ICommandList commandList;
+	@MockBean
+	WavPlayer wavPlayer;
 
 	protected List<SIGame> makeSIGames() {
 		SIGame sigame = new SIGame();

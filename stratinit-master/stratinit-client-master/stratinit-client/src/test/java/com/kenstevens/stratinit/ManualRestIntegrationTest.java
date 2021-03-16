@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.rest.IStratInitServer;
-import com.kenstevens.stratinit.client.rest.RestClient;
+import com.kenstevens.stratinit.client.rest.RestStratInitClient;
+import com.kenstevens.stratinit.client.rest.StratInitRestClient;
 import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
@@ -32,11 +32,11 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private IStratInitServer stratInitServer;
+	private RestStratInitClient stratInitServer;
 	@Autowired
 	private Account account;
 	@Autowired
-	private RestClient restClient;
+	private StratInitRestClient stratInitRestClient;
 
 	@Test
 	public void testGoodLogin() throws IOException {
@@ -89,7 +89,7 @@ public class ManualRestIntegrationTest extends BaseStratInitClientTest {
 	private void setPlayer(String test1) {
 		account.setUsername(test1);
 		account.setPassword("testy");
-		restClient.setAccount();
+		stratInitRestClient.setAccount();
 	}
 
 	@Test
