@@ -31,6 +31,7 @@
         <module>stratinit-server</module>
         <module>stratinit-wicket</module>
         <module>stratinit-rest</module>
+        <module>stratinit-client</module>
         <module>stratinit-it</module>
     </modules>
     <properties>
