@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, TestConfig.class})
+@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, DaoTestConfig.class})
 public abstract class ClientServerBase {
     @MockBean
     IEventExecutor eventExecutor;

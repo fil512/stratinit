@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 @Configuration
-public class TestConfig {
+public class DaoTestConfig {
     @Autowired
     DataSource dataSource;
 
