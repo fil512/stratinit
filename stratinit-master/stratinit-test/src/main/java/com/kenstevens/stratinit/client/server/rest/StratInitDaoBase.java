@@ -97,10 +97,14 @@ public abstract class StratInitDaoBase {
 		testGame = GameHelper.newMappedGame(getNumIslands());
 		gameDao.save(testGame);
 		testGameId = testGame.getId();
-		World world = WorldHelper.newWorld(testGame);
+		World world = getWorld(testGame);
 		sectorDao.save(world);
 		playerMe = createPlayer(PlayerHelper.PLAYER_ME);
 		testWorld = dataCache.getGameCache(testGameId).getWorld();
+	}
+
+	protected World getWorld(Game game) {
+		return WorldHelper.newWorld(game);
 	}
 
 	protected int getNumIslands() {
