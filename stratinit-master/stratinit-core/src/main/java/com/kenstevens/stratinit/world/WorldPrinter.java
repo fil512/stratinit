@@ -20,18 +20,23 @@ public class WorldPrinter {
 
 	public void print(PrintStream out) {
 		int size = world.size();
+		out.print("   ");
+		for (int x = 0; x < size; ++x) {
+			out.print(x % 10);
+		}
+		out.println();
 		for (int y = 0; y < size; ++y) {
-			out.printf("%2d", y);
+			out.printf("%2d ", y);
 			for (int x = 0; x < size; ++x) {
-                Sector sector = world.getSectorOrNull(x, y);
-                if (sector.getType().equals(SectorType.NEUTRAL_CITY)) {
-                    out.print('C');
-                } else if (sector.getType().equals(SectorType.START_CITY)) {
-                    out.print('_');
-                } else if (sector.getIsland() != Constants.UNASSIGNED && sector.getIsland() < world.getIslands()) {
-                    out.print(sector.getIsland());
-                } else if (sector.getType().equals(SectorType.LAND)) {
-                    out.print('#');
+				Sector sector = world.getSectorOrNull(x, y);
+				if (sector.getType().equals(SectorType.NEUTRAL_CITY)) {
+					out.print('C');
+				} else if (sector.getType().equals(SectorType.START_CITY)) {
+					out.print('_');
+				} else if (sector.getIsland() != Constants.UNASSIGNED && sector.getIsland() < world.getIslands()) {
+					out.print(sector.getIsland());
+				} else if (sector.getType().equals(SectorType.LAND)) {
+					out.print('#');
                 } else if (sector.getType().equals(SectorType.WATER)) {
                     out.print('.');
 				} else {
