@@ -1,20 +1,16 @@
 package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.event.EventScheduler;
-import com.kenstevens.stratinit.client.model.Account;
-import com.kenstevens.stratinit.client.model.Game;
-import com.kenstevens.stratinit.client.model.World;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.rest.RestClient;
 import com.kenstevens.stratinit.client.rest.StratInitServerClient;
+import com.kenstevens.stratinit.client.site.ActionQueue;
+import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
+import com.kenstevens.stratinit.client.site.processor.UpdateProcessor;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.helper.GameHelper;
-import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.world.WorldHelper;
 import com.kenstevens.stratinit.world.WorldPrinter;
@@ -29,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.util.List;
 
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,18 +40,33 @@ public class ClientServerTest extends ClientServerBase {
     private RestClient restClient;
     @Autowired
     private Account account;
+
     private static boolean initialized;
+    // FIXME move these into a static helper extension
     private static Game testGame;
+    private static Integer testGameId;
+    private static List<CityView> cities;
+    private static List<UnitView> units;
+
     @Autowired
     private EventScheduler eventScheduler;
     @Autowired
     GameDao gameDao;
     @Autowired
     SectorDao sectorDao;
+    @Autowired
+    Data db;
+    @Autowired
+    UpdateProcessor updateProcessor;
+    @Autowired
+    ActionFactory actionFactory;
+    @Autowired
+    ActionQueue actionQueue;
 
     @BeforeEach
     public void login() throws IOException {
         if (!initialized) {
+            actionQueue.start();
             setupGame();
             eventScheduler.updateGamesAndStartTimer();
             goodLogin();
@@ -66,6 +78,7 @@ public class ClientServerTest extends ClientServerBase {
     public void setupGame() {
         testGame = GameHelper.newMappedGame(2);
         gameDao.save(testGame);
+        testGameId = testGame.getId();
         World world = WorldHelper.newWorld(testGame);
         WorldPrinter worldPrinter = new WorldPrinter(world);
         worldPrinter.print();
@@ -74,7 +87,6 @@ public class ClientServerTest extends ClientServerBase {
 
     @Test
     public void test01GoodLogin() throws IOException {
-
         Result<String> result = stratInitServerClient.getVersion();
         assertResult(result);
         String reply = result.getValue();
@@ -102,58 +114,56 @@ public class ClientServerTest extends ClientServerBase {
     }
 
     @Test
-    public void test03GetMyGames() throws IOException {
-        Result<List<SIGame>> result = stratInitServerClient.getJoinedGames();
-        assertResult(result);
-        List<SIGame> games = result.getValue();
+    public void test03GetUnjoinedGames() {
+        actionFactory.getUnjoinedGames();
+        awaitResponses();
+        assertEquals(2, db.getUnjoinedGameList().size());
+    }
 
-        assertThat(games, hasSize(0));
-        for (SIGame game : games) {
-            logger.info("Game #" + game.id + ": " + game.name);
-        }
+    private void awaitResponses() {
+        await().until(() -> actionQueue.isEmpty());
     }
 
     @Test
-    public void test04JoinGame() {
-        {
-            SetGameJson request = new SetGameJson(testGame.getId(), true);
-            Result<SINation> result = stratInitServerClient.joinGame(request);
-            assertResult(result);
-        }
-
-        {
-            Result<List<SIGame>> result = stratInitServerClient.getJoinedGames();
-            assertResult(result);
-            List<SIGame> games = result.getValue();
-
-            assertThat(games, hasSize(1));
-            assertEquals(testGame.getId(), games.get(0).id);
-            assertNotNull(testGame.getMapped());
-        }
+    public void test04GetMyGames() throws IOException {
+        actionFactory.getGames();
+        awaitResponses();
+        assertEquals(0, db.getGameList().size());
     }
 
     @Test
-    public void test05GetUpdate() {
-        {
-            Result<SIUpdate> result = stratInitServerClient.getUpdate();
-            assertFalseResult(result, "Game not set.");
-        }
+    public void test05JoinGame() {
+        actionFactory.joinGame(testGameId, true);
+        awaitResponses();
+        assertEquals(1, db.getGameList().size());
 
-        {
-            Result<None> result = stratInitServerClient.setGame(new SetGameJson(testGame.getId(), true));
-            assertResult(result);
-        }
-        {
-            Result<SIUpdate> result = stratInitServerClient.getUpdate();
-            assertResult(result);
-        }
+        actionFactory.getUnjoinedGames();
+        awaitResponses();
+        assertEquals(2, db.getUnjoinedGameList().size());
 
+        actionFactory.getGames();
+        awaitResponses();
+        assertEquals(1, db.getGameList().size());
+        GameView gameView = db.getGameList().get(testGameId);
+        assertEquals(GameHelper.gameName, gameView.getGamename());
+        assertNotNull(gameView.getMapped());
     }
 
-    private void assertFalseResult(Result<SIUpdate> result, String message) {
-        assertFalse(result.isSuccess());
-        assertEquals(message, result.toString());
+    @Test
+    public void test06GetUpdate() {
+        db.setSelectedGameId(testGameId);
+        actionFactory.getVersion();
+        actionFactory.setGame(testGameId, true);
+        actionFactory.updateAll(true);
+        awaitResponses();
+
+        cities = db.getCityList().getCities();
+        assertThat(cities, hasSize(2));
+        units = db.getUnitList().getUnits();
+        assertThat(units, hasSize(5));
     }
+
+    // FIXME moar test
 
     protected void assertResult(Result<? extends Object> result) {
         assertTrue(result.isSuccess(), result.toString());

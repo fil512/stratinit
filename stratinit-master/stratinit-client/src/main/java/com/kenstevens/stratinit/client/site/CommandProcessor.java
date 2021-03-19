@@ -8,33 +8,35 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommandProcessor {
-	@Autowired
-	private IProgressBar progressBar;
-	@Autowired
-	private IStatusReporter statusReporter;
-	@Autowired
-	private ArrivedDataEventAccumulator arrivedDataEventAccumulator;
+    @Autowired
+    private IProgressBar progressBar;
+    @Autowired
+    private IStatusReporter statusReporter;
+    @Autowired
+    private ArrivedDataEventAccumulator arrivedDataEventAccumulator;
+    @Autowired
+    private CommandExecutorFactory commandExecutorFactory;
 
-	private Command<? extends Object> lastCommand = null;
+    private Command<? extends Object> lastCommand = null;
 
-	public void process(Action action) {
-		Command<? extends Object> command = action.getCommand();
-		try {
-			statusReporter.reportAction(command.getDescription());
-			CommandExecutor commandExecutor = new CommandExecutor();
-			arrivedDataEventAccumulator.clear();
-			action.preRequest();
-			commandExecutor.execute(command);
-			action.postRequest();
-			arrivedDataEventAccumulator.fireEvents();
-			action.postEvents();
-			lastCommand = command;
-		} finally {
-			progressBar.reset();
-		}
-	}
+    public void process(Action action) {
+        Command<? extends Object> command = action.getCommand();
+        try {
+            statusReporter.reportAction(command.getDescription());
+            CommandExecutor commandExecutor = commandExecutorFactory.newCommandExecutor();
+            arrivedDataEventAccumulator.clear();
+            action.preRequest();
+            commandExecutor.execute(command);
+            action.postRequest();
+            arrivedDataEventAccumulator.fireEvents();
+            action.postEvents();
+            lastCommand = command;
+        } finally {
+            progressBar.reset();
+        }
+    }
 
-	public Command<? extends Object> getLastCommand() {
-		return lastCommand;
-	}
+    public Command<? extends Object> getLastCommand() {
+        return lastCommand;
+    }
 }

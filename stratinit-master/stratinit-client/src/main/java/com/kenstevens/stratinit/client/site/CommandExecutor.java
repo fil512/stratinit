@@ -16,10 +16,6 @@ public class CommandExecutor {
 	private IProgressBar progressBar;
 	private boolean done;
 
-	public CommandExecutor() {
-		this.progressBar = progressBar;
-	}
-
 	public void execute(final Command<? extends Object> command) {
 
 		Runnable execution = () -> {

@@ -537,6 +537,7 @@ public class MainWindow implements MapControl, GameManager {
 	public void selectGame(Game game, boolean noAlliances) {
 		int gameId = game.getId();
 		selectedUnits.clear();
+		// FIXME group these and call grouped method in ClientServerTest
 		db.setSelectedGameId(gameId);
 		eventBus.post(new GameChangedEvent());
 		enableUpdateButton();
