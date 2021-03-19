@@ -43,15 +43,14 @@ public class ClientServerTest extends ClientServerBase {
     private RestClient restClient;
     @Autowired
     private Account account;
+    private static boolean initialized;
+    private static Game testGame;
+    @Autowired
+    private EventScheduler eventScheduler;
     @Autowired
     GameDao gameDao;
     @Autowired
     SectorDao sectorDao;
-    @Autowired
-    private EventScheduler eventScheduler;
-
-    private boolean initialized;
-    private Game testGame;
 
     @BeforeEach
     public void login() throws IOException {
@@ -59,6 +58,7 @@ public class ClientServerTest extends ClientServerBase {
             setupGame();
             eventScheduler.updateGamesAndStartTimer();
             goodLogin();
+            restClient.registerInterceptor(new LoggingInterceptor());
         }
         initialized = true;
     }

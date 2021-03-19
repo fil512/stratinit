@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.client.rest;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.kenstevens.stratinit.client.api.IClientInterceptor;
 import com.kenstevens.stratinit.client.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.IRestRequestJson;
@@ -25,15 +26,19 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 public class RestClient {
+    private final Set<IClientInterceptor> interceptors = new HashSet<>();
+
     private final ObjectMapper mapper = new ObjectMapper();
     private final String baseUrl;
+    private HttpClientContext context;
     @Autowired
     private Account account;
-    private HttpClientContext context;
 
     public RestClient(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -67,9 +72,12 @@ public class RestClient {
                 if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                     return failedResultFromStatusCode(response);
                 }
-                return mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
+                Result<T> result = mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
+                callGetInterceptors(path, result);
+                return result;
             }
         } catch (Exception e) {
+            callGetFailInterceptors(path, e);
             return Result.falseInstance((Class<T>) resultClass, e);
         }
     }
@@ -94,9 +102,12 @@ public class RestClient {
                 if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                     return failedResultFromStatusCode(response);
                 }
-                return mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
+                Result<T> result = mapper.readValue(response.getEntity().getContent(), typeFunction.apply(resultClass));
+                callPostInterceptors(path, request, result);
+                return result;
             }
         } catch (Exception e) {
+            callPostFailInterceptors(path, request, e);
             return new Result<>(e.getMessage(), false);
         }
     }
@@ -113,5 +124,25 @@ public class RestClient {
         context = HttpClientContext.create();
         context.setCredentialsProvider(credsProvider);
         context.setAuthCache(authCache);
+    }
+
+    public void registerInterceptor(IClientInterceptor interceptor) {
+        interceptors.add(interceptor);
+    }
+
+    private <T> void callGetInterceptors(String path, Result<T> result) {
+        interceptors.forEach(i -> i.get(path, result));
+    }
+
+    private <T> void callPostInterceptors(String path, IRestRequestJson request, Result<T> result) {
+        interceptors.forEach(i -> i.post(path, request, result));
+    }
+
+    private void callGetFailInterceptors(String path, Exception e) {
+        interceptors.forEach(i -> i.getFail(path, e));
+    }
+
+    private void callPostFailInterceptors(String path, IRestRequestJson request, Exception e) {
+        interceptors.forEach(i -> i.postFail(path, request, e));
     }
 }
