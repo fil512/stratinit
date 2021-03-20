@@ -2,6 +2,7 @@ package com.kenstevens.stratinit;
 
 import com.kenstevens.stratinit.client.api.IAudioPlayer;
 import com.kenstevens.stratinit.client.api.ICommandList;
+import com.kenstevens.stratinit.client.api.IEventSelector;
 import com.kenstevens.stratinit.client.api.IProgressBar;
 import com.kenstevens.stratinit.client.event.IEventExecutor;
 import com.kenstevens.stratinit.config.TestConfig;
@@ -21,4 +22,6 @@ public abstract class ClientServerBase {
     ICommandList commandList;
     @MockBean
     IAudioPlayer audioPlayer;
+    @MockBean
+    IEventSelector eventSelector;
 }

@@ -104,7 +104,7 @@ public abstract class StratInitDaoBase {
 	}
 
 	protected World getWorld(Game game) {
-		return WorldHelper.newWorld(game);
+		return WorldHelper.newTestWorld(game);
 	}
 
 	protected int getNumIslands() {

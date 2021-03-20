@@ -46,7 +46,7 @@ public class SectorDrawerService {
 	private void drawSector(GC gc, SectorCoords coords) {
 		int boardSize = db.getBoardSize();
 		SectorCoords worldCoords = new SectorCoords(boardSize, coords);
-		WorldSector sector = db.getWorld().getWorldSector(worldCoords);
+		WorldSector sector = db.getWorld().getWorldSectorOrNull(worldCoords);
 		Image image = getSectorImage(sector);
 		mapDrawer.drawSquare(gc, coords, image);
 
@@ -61,7 +61,7 @@ public class SectorDrawerService {
 			if (city != null
 					&& sector.isMine()
 					&& (account.getPreferences().isShowBuilding() || widgetContainer
-							.getTabControl().cityTabSelected())) {
+					.getTabControl().cityTabSelected())) {
 				mapDrawer.drawSquare(gc, sector.getCoords(), imageLibrary.getBlankCity());
 				UnitType unitType = city.getBuild();
 				if (UnitBase.isUnit(unitType)) {

@@ -49,7 +49,7 @@ public class SupplyDrawerService {
 		// TODO REF use guava
 		for (SectorCoords supplyCoords : ships) {
 			for (SectorCoords coords : expand(Sets.newHashSet(supplyCoords))) {
-				WorldSector worldSector = db.getWorld().getWorldSector(coords);
+				WorldSector worldSector = db.getWorld().getWorldSectorOrNull(coords);
 				if (worldSector != null && worldSector.isSuppliesNavy() && !supplyCoords.equals(coords)) {
 					mapDrawer.drawLine(gc, supplyCoords, coords, LineStyle.SUPPLY_ISOLATED);
 				}

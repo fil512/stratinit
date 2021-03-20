@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.client.site.action.post;
 
+import com.kenstevens.stratinit.client.api.IStatusReporter;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.site.ActionQueue;
 import com.kenstevens.stratinit.client.site.action.get.*;
@@ -22,6 +23,8 @@ public class ActionFactory {
 	Data db;
 	@Autowired
 	Account account;
+	@Autowired
+	IStatusReporter statusReporter;
 
 	public void getGames() {
 		GetGamesAction getGamesAction = spring.getBean(GetGamesAction.class);
@@ -78,7 +81,11 @@ public class ActionFactory {
 
 
 	public void moveUnits(List<UnitView> units, SectorCoords targetCoords) {
-		WorldSector targetSector = db.getWorld().getWorldSector(targetCoords);
+		WorldSector targetSector = db.getWorld().getWorldSectorOrNull(targetCoords);
+		if (targetSector == null) {
+			statusReporter.reportError("Moving into fog of war is not permitted.  Please explore first.");
+			return;
+		}
 		MoveUnitsAction moveUnitsAction = spring.autowire(new MoveUnitsAction(units, targetSector));
 		actionQueue.put(moveUnitsAction);
 	}

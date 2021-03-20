@@ -50,7 +50,7 @@ public class CityTableItemControl {
 
 	public String[] toStringArray(WorldView world, 
 			CityView city) {
-		WorldSector sector = world.getWorldSector(city.getCoords());
+		WorldSector sector = world.getWorldSectorOrNull(city.getCoords());
 		String islandId = "";
 		if (sector != null) {
 			islandId = "" + sector.getIsland();
@@ -63,9 +63,9 @@ public class CityTableItemControl {
 		}
 		ETAHelper etaHelper = new ETAHelper(db);
 
-		return new String[] { "" + city.getX() + "," + city.getY(), islandId,
+		return new String[]{"" + city.getX() + "," + city.getY(), islandId,
 				city.getBuildingString(), city.getNextString(),
-				etaHelper.getETA(city) };
+				etaHelper.getETA(city)};
 	}
 
 	public String[] deadCityStringArray() {

@@ -110,7 +110,7 @@ public class SectorTabItemControl implements TopLevelController {
 		if (coords == null) {
 			return;
 		}
-		WorldSector sector = db.getWorld().getWorldSector(
+		WorldSector sector = db.getWorld().getWorldSectorOrNull(
 				coords);
 		if (sector != null) {
 			setSelectedSector(sector);

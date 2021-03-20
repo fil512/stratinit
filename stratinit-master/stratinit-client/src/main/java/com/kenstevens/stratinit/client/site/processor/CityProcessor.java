@@ -17,7 +17,7 @@ public class CityProcessor extends Processor {
         db.getCityList().add(translator.translate(sicity));
         arrivedDataEventAccumulator.addEvent(new CityListArrivedEvent());
 
-        WorldSector worldSector = db.getWorld().getWorldSector(sicity.coords);
+        WorldSector worldSector = db.getWorld().getWorldSectorOrNull(sicity.coords);
         if (worldSector.getCityType() != sicity.type) {
             worldSector.setCityType(sicity.type);
             arrivedDataEventAccumulator.addEvent(new WorldArrivedEvent());

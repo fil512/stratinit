@@ -7,11 +7,14 @@ import com.kenstevens.stratinit.client.rest.StratInitServerClient;
 import com.kenstevens.stratinit.client.site.ActionQueue;
 import com.kenstevens.stratinit.client.site.action.post.ActionFactory;
 import com.kenstevens.stratinit.client.site.processor.UpdateProcessor;
+import com.kenstevens.stratinit.config.TestStatusReporter;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.helper.GameHelper;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.world.WorldHelper;
 import com.kenstevens.stratinit.world.WorldPrinter;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class ClientServerTest extends ClientServerBase {
+    public static final SectorCoords START_ZEP_COORDS = new SectorCoords(1, 6);
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -45,8 +49,6 @@ public class ClientServerTest extends ClientServerBase {
     // FIXME move these into a static helper extension
     private static Game testGame;
     private static Integer testGameId;
-    private static List<CityView> cities;
-    private static List<UnitView> units;
 
     @Autowired
     private EventScheduler eventScheduler;
@@ -62,6 +64,8 @@ public class ClientServerTest extends ClientServerBase {
     ActionFactory actionFactory;
     @Autowired
     ActionQueue actionQueue;
+    @Autowired
+    TestStatusReporter testStatusReporter;
 
     @BeforeEach
     public void login() throws IOException {
@@ -79,7 +83,7 @@ public class ClientServerTest extends ClientServerBase {
         testGame = GameHelper.newMappedGame(2);
         gameDao.save(testGame);
         testGameId = testGame.getId();
-        World world = WorldHelper.newWorld(testGame);
+        World world = WorldHelper.newTestWorld(testGame);
         WorldPrinter worldPrinter = new WorldPrinter(world);
         worldPrinter.print();
         sectorDao.save(world);
@@ -157,10 +161,46 @@ public class ClientServerTest extends ClientServerBase {
         actionFactory.updateAll(true);
         awaitResponses();
 
-        cities = db.getCityList().getCities();
-        assertThat(cities, hasSize(2));
-        units = db.getUnitList().getUnits();
-        assertThat(units, hasSize(5));
+        assertThat(db.getCityList().getCities(), hasSize(2));
+        assertThat(db.getUnitList().getUnits(), hasSize(5));
+    }
+
+    @Test
+    public void test07MoveUnit() {
+        assertEquals(49, db.getWorld().getSectors().size());
+        UnitView zeppelin = findZeppelin();
+        assertEquals(START_ZEP_COORDS, zeppelin.getCoords());
+
+        SectorCoords target = new SectorCoords(6, 11);
+        actionFactory.moveUnits(List.of(zeppelin), target);
+        awaitResponses();
+        assertEquals("Moving into fog of war is not permitted.  Please explore first.", testStatusReporter.getLastError());
+        zeppelin = findZeppelin();
+        int zepStartMobility = UnitBase.getUnitBase(UnitType.ZEPPELIN).getMaxMobility();
+        assertEquals(zepStartMobility, zeppelin.getMobility());
+        assertEquals(START_ZEP_COORDS, zeppelin.getCoords());
+        assertEquals(49, db.getWorld().getSectors().size());
+
+        target = new SectorCoords(3, 8);
+        actionFactory.moveUnits(List.of(zeppelin), target);
+        awaitResponses();
+        zeppelin = findZeppelin();
+        assertEquals(target, zeppelin.getCoords());
+        assertEquals(zepStartMobility - 2, zeppelin.getMobility());
+        assertEquals(75, db.getWorld().getSectors().size());
+
+        target = new SectorCoords(6, 11);
+        actionFactory.moveUnits(List.of(zeppelin), target);
+        awaitResponses();
+        zeppelin = findZeppelin();
+        assertEquals(target, zeppelin.getCoords());
+        assertEquals(zepStartMobility - 5, zeppelin.getMobility());
+        assertEquals(114, db.getWorld().getSectors().size());
+
+    }
+
+    private UnitView findZeppelin() {
+        return db.getUnitList().getUnits().stream().filter(Unit::isZeppelin).findFirst().get();
     }
 
     // FIXME moar test

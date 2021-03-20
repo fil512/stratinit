@@ -65,7 +65,7 @@ public class MapDrawerManager {
 			supplyDrawerService.drawSupplyBG(gc, unit, supply);
 		}
 		for (Unit unit : db.getSeenUnitList()) {
-			if (db.getWorld().getWorldSector(unit.getCoords()) == null) {
+			if (db.getWorld().getWorldSectorOrNull(unit.getCoords()) == null) {
 				continue;
 			}
 			unitDrawerService.drawUnitDamage(gc, unit);

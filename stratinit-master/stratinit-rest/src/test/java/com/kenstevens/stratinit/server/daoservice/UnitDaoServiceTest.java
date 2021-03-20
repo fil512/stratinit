@@ -158,7 +158,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
             units.add(inf);
         }
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
-        WorldSector worldSector = WORLD.getWorldSector(coords);
+        WorldSector worldSector = WORLD.getWorldSectorOrNull(coords);
 
         List<Unit> passengers = unitDaoService.getPassengers(holder, worldSector);
         return passengers;

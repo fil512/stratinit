@@ -50,7 +50,7 @@ public class TreeItemListControl {
 			List<UnitView> boardingUnits = new ArrayList<UnitView>();
 			for (UnitView unit : treeUnitsByType.get(type)) {
 				// TODO REF check earlier whether world is loaded
-				if (db.getWorld().getWorldSector(unit) == null) {
+				if (db.getWorld().getWorldSectorOrNull(unit) == null) {
 					break;
 				}
 				Movement movement = new Movement(unit, db.getWorld());
@@ -159,7 +159,7 @@ public class TreeItemListControl {
 	public String[] toStringArray(WorldView worldView, Unit unit) {
 		List<String> list = new ArrayList<String>();
 		String type = "";
-		WorldSector worldSector = worldView.getWorldSector(unit);
+		WorldSector worldSector = worldView.getWorldSectorOrNull(unit);
 		if (worldSector != null) {
 			if (worldView.isVulnerable(worldSector)) {
 				type = "*";

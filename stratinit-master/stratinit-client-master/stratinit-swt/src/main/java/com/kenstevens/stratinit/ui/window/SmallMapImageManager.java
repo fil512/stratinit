@@ -55,7 +55,7 @@ public class SmallMapImageManager {
 	}
 
 	private void drawSmallSector(GC gc, SectorCoords coords) {
-		WorldSector sector = db.getWorld().getWorldSector(coords);
+		WorldSector sector = db.getWorld().getWorldSectorOrNull(coords);
 		Image image = getSmallSectorImage(sector);
 		drawSmallSquare(gc, coords, image);
 		Image unitImage = getSmallUnitImage(sector);

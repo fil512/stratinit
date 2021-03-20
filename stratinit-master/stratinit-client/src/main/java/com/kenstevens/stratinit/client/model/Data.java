@@ -190,7 +190,7 @@ public class Data {
 		if (world == null) {
 			return null;
 		}
-		return getCity(world.getWorldSector(sectorCoords));
+		return getCity(world.getWorldSectorOrNull(sectorCoords));
 	}
 
 	public void setLoggedIn(boolean loggedIn) {

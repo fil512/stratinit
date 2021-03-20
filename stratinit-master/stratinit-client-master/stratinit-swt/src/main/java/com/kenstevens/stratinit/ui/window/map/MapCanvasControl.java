@@ -274,7 +274,7 @@ public class MapCanvasControl implements MapController {
         if (world == null) {
             return;
         }
-        WorldSector sector = world.getWorldSector(sectorCoords);
+        WorldSector sector = world.getWorldSectorOrNull(sectorCoords);
         if (sector == null) {
             return;
         }

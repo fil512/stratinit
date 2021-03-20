@@ -28,7 +28,7 @@ public class WorldPrinter {
 		for (int y = 0; y < size; ++y) {
 			out.printf("%2d ", y);
 			for (int x = 0; x < size; ++x) {
-				Sector sector = world.getSectorOrNull(x, y);
+				Sector sector = world.getSector(x, y);
 				if (sector.getType().equals(SectorType.NEUTRAL_CITY)) {
 					out.print('C');
 				} else if (sector.getType().equals(SectorType.START_CITY)) {
@@ -37,8 +37,8 @@ public class WorldPrinter {
 					out.print(sector.getIsland());
 				} else if (sector.getType().equals(SectorType.LAND)) {
 					out.print('#');
-                } else if (sector.getType().equals(SectorType.WATER)) {
-                    out.print('.');
+				} else if (sector.getType().equals(SectorType.WATER)) {
+					out.print('.');
 				} else {
 					out.print('?');
 				}

@@ -307,7 +307,7 @@ public class UnitTableControl implements Controller {
 
 	private boolean isVulnerable(Unit unit) {
 		WorldView worldView = db.getWorld();
-		WorldSector worldSector = worldView.getWorldSector(unit);
+		WorldSector worldSector = worldView.getWorldSectorOrNull(unit);
 		return worldView.isVulnerable(worldSector);
 	}
 

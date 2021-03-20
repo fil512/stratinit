@@ -47,7 +47,7 @@ public class UnitsInterceptor {
     }
 
     public void unitsIntercept(Result<None> retval) {
-        WorldSector targetSector = worldView.getWorldSector(targetUnit);
+        WorldSector targetSector = worldView.getWorldSectorOrNull(targetUnit);
         Interceptors interceptors = new Interceptors();
         for (Unit unit : units) {
             targetSector = sectorDaoService.refreshWorldSector(nation,
@@ -61,14 +61,14 @@ public class UnitsInterceptor {
             }
 
             UnitsToMove unitsToIntercept = getUnitsToMove(interceptors, unit);
-            WorldSector oldSector = worldView.getWorldSector(unit);
+            WorldSector oldSector = worldView.getWorldSectorOrNull(unit);
             UnitsMove unitsMove = unitCommandFactory.getUnitsMove(
                     unitsToIntercept, worldView);
             Result<None> interdictResult = new Result<None>(unitsMove.move());
             worldView.setWorldSector(sectorDaoService.refreshWorldSector(
                     nation, worldView, oldSector));
             worldView.setWorldSector(sectorDaoService.refreshWorldSector(
-                    nation, worldView, worldView.getWorldSector(unit)));
+                    nation, worldView, worldView.getWorldSectorOrNull(unit)));
             interdictResult.setSuccess(!interdictResult.isSuccess());
             retval.and(interdictResult);
             interceptors.flyBack(unitDaoService, worldView);

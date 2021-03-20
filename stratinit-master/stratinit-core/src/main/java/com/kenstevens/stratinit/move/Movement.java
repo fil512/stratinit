@@ -30,7 +30,7 @@ public class Movement {
 		this.unit = unit;
 		this.worldView = worldView;
 		this.graph = new SectorGraph(unit, worldView);
-		this.worldSector = worldView.getWorldSector(unit);
+		this.worldSector = worldView.getWorldSectorOrNull(unit);
 		this.reacher = new Reacher(unit, worldView);
 		this.movementSupply = new MovementSupply(unit, worldView);
 	}
@@ -56,7 +56,7 @@ public class Movement {
 				if (xdel == 0 && ydel == 0) {
 					continue;
 				}
-				WorldSector sector = worldView.getWorldSector(unit.getCoords().x
+				WorldSector sector = worldView.getWorldSectorOrNull(unit.getCoords().x
 						+ xdel, unit.getCoords().y + ydel);
 				if (sector == null) {
 					continue;
@@ -76,7 +76,7 @@ public class Movement {
 		SectorCoords source = unit.getCoords();
 		List<SectorCoords> path = new ArrayList<SectorCoords>();
 		SectorCoords target = targetDestination;
-		WorldSector targetSector = worldView.getWorldSector(target);
+		WorldSector targetSector = worldView.getWorldSectorOrNull(target);
 
 		// Don't want to reveal details of target enemy city
 		Attack attack = new Attack(targetSector);
@@ -89,7 +89,7 @@ public class Movement {
 			}
 			getDij();
 			// Target is an enemy, need to move next to it
-			WorldSector sourceSector = worldView.getWorldSector(source);
+			WorldSector sourceSector = worldView.getWorldSectorOrNull(source);
 			List<WorldSector> neighbours = worldView.getNeighbours(targetSector);
 			Sector bestNeighour = null;
 			double maxWeight = Double.MAX_VALUE;
@@ -120,8 +120,8 @@ public class Movement {
 
 	private List<SectorCoords> calculateBestPath(SectorCoords a, SectorCoords b) {
 		getDij();
-		Path<WorldSector> path = dij.getShortestPath(worldView.getWorldSector(a),
-				worldView.getWorldSector(b));
+		Path<WorldSector> path = dij.getShortestPath(worldView.getWorldSectorOrNull(a),
+				worldView.getWorldSectorOrNull(b));
 		List<SectorCoords> retval = new ArrayList<SectorCoords>();
 		for (int i = 1; i <= path.getLength(); ++i) {
 			retval.add(path.get(i).getCoords());
@@ -189,7 +189,7 @@ public class Movement {
 			int range, int distance) {
 		if (range < distance) {
 
-			WorldSector targetSector = worldView.getWorldSector(targetCoords);
+			WorldSector targetSector = worldView.getWorldSectorOrNull(targetCoords);
 			if (!planeLandingWithNoFuel(unit, distance, targetSector)) {
 				if (unit.requiresFuel() && range >= unit.getFuel() - 1) {
 					return new Result<None>("Insufficient fuel.  Need "
@@ -285,7 +285,7 @@ public class Movement {
 		for (int x = unit.getX() - range; x <= unit.getX() + range; ++x) {
 			for (int y = unit.getY() - range; y <= unit.getY() + range; ++y) {
 				SectorCoords coords = new SectorCoords(worldView.size(), x, y);
-				if (worldView.getWorldSector(coords) == null) {
+				if (worldView.getWorldSectorOrNull(coords) == null) {
 					retval.add(coords);
 				}
 			}
