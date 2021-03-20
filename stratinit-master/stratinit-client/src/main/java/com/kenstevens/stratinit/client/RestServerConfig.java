@@ -13,10 +13,14 @@ import java.util.Properties;
 public class RestServerConfig implements IServerConfig {
     @Autowired
     StratInitServerClient stratInitServer;
-    @Value("${server.port}")
-    private int serverPort;
+
+    private final int serverPort;
 
     IServerConfig serverConfig;
+
+    public RestServerConfig(@Value("${server.port}") int serverPort) {
+        this.serverPort = serverPort;
+    }
 
     @Override
     public long getMappedToStartedMillis() {

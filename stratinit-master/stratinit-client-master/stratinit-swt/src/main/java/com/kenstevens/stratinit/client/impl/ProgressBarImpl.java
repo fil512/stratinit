@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.client.impl;
 
 import com.kenstevens.stratinit.client.api.IProgressBar;
-import com.kenstevens.stratinit.shell.WidgetContainer;
+import com.kenstevens.stratinit.client.shell.WidgetContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
