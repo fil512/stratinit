@@ -27,6 +27,7 @@ public class ActionQueue {
     private Thread poll;
 
     private boolean paused;
+    private boolean processing;
 
     public synchronized void put(Action action) {
         if (!action.canRepeat() && queueContains(action.getClass())) {
@@ -127,6 +128,7 @@ public class ActionQueue {
         Action action = null;
         try {
             action = take();
+            processing = true;
             commandProcessor.process(action);
         } catch (InterruptedException e) {
             halt();
@@ -138,6 +140,7 @@ public class ActionQueue {
                 ((ErrorSubmitter) action).submitError(e);
             }
         } finally {
+            processing = false;
             // FIXME find a better way to keep track if a unit is in the action queue
 //            if (action instanceof UnitListAction) {
 //                UnitListAction unitListAction = (UnitListAction) action;
@@ -149,5 +152,9 @@ public class ActionQueue {
 //                }
 //            }
         }
+    }
+
+    public boolean isProcessing() {
+        return processing;
     }
 }

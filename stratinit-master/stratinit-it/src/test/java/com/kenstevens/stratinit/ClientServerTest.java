@@ -125,7 +125,7 @@ public class ClientServerTest extends ClientServerBase {
     }
 
     private void awaitResponses() {
-        await().until(() -> actionQueue.isEmpty());
+        await().until(() -> actionQueue.isEmpty() && !actionQueue.isProcessing());
     }
 
     @Test
