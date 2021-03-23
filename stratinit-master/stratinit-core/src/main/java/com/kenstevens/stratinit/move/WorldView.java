@@ -10,6 +10,8 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.SectorSuppliesUnitPredicate;
 import com.kenstevens.stratinit.world.predicate.SectorToWorldSectorFunction;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class WorldView implements CoordMeasure {
 	}
 
 	public List<WorldSector> getWorldSectorsWithin(SectorCoords coords, int distance,
-			boolean includeSelf) {
+												   boolean includeSelf) {
 		return Lists.transform(world.getSectorsWithin(coords, distance,
 				includeSelf), new SectorToWorldSectorFunction());
 	}
@@ -47,16 +49,16 @@ public class WorldView implements CoordMeasure {
 				new SectorToWorldSectorFunction());
 	}
 
-	public WorldSector getWorldSector(Sector sector) {
-		return getWorldSector(sector.getCoords());
+	public WorldSector getWorldSectorOrNull(Sector sector) {
+		return getWorldSectorOrNull(sector.getCoords());
 	}
 
-	public WorldSector getWorldSector(Unit unit) {
-		return getWorldSector(unit.getCoords());
+	public WorldSector getWorldSectorOrNull(Unit unit) {
+		return getWorldSectorOrNull(unit.getCoords());
 	}
 
-	public WorldSector getWorldSector(int x, int y) {
-		return getWorldSector(new SectorCoords(x, y));
+	public WorldSector getWorldSectorOrNull(int x, int y) {
+		return getWorldSectorOrNull(new SectorCoords(x, y));
 	}
 
 	public List<WorldSector> getNeighbours(SectorCoords coords) {
@@ -66,7 +68,14 @@ public class WorldView implements CoordMeasure {
 	public List<WorldSector> getNeighbours(WorldSector worldSector) {
 		return getNeighbours(worldSector.getCoords());
 	}
+
+	@Nonnull
 	public WorldSector getWorldSector(SectorCoords coords) {
+		return (WorldSector) world.getSector(coords);
+	}
+
+	@Nullable
+	public WorldSector getWorldSectorOrNull(SectorCoords coords) {
 		return (WorldSector) world.getSectorOrNull(coords);
 	}
 
@@ -79,7 +88,7 @@ public class WorldView implements CoordMeasure {
 	}
 
 	public boolean fueling(Unit unit) {
-		WorldSector worldSector = getWorldSector(unit);
+		WorldSector worldSector = getWorldSectorOrNull(unit);
 		return worldSector.canRefuel(unit);
 	}
 

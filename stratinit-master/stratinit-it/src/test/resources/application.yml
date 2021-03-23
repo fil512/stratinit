@@ -1,0 +1,14 @@
+logging:
+  level:
+    org:
+      springframework:
+        security: INFO
+server:
+  port: 8081
+stratinit:
+  email:
+    hostname: localhost
+    enabled: false
+  scheduler:
+    enabled: false
+  mode: PRODUCTION

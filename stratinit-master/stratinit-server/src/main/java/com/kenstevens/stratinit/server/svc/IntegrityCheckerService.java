@@ -77,7 +77,7 @@ public class IntegrityCheckerService {
         }
         Unit firstUnit = units.iterator().next();
         Nation firstNation = firstUnit.getNation();
-        WorldSector worldSector = sectorDaoService.getAllWorldView(firstNation).getWorldSector(firstUnit);
+        WorldSector worldSector = sectorDaoService.getAllWorldView(firstNation).getWorldSectorOrNull(firstUnit);
         Nation worldSectorNation = worldSector.getNation();
         Collection<Nation> allies = relationDaoService.getAllies(firstNation);
         if (worldSectorNation != null && !firstNation.equals(worldSectorNation) && !allies.contains(worldSectorNation)) {

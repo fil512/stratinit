@@ -246,13 +246,13 @@ public class GameCache extends Cacheable {
 
 	public void flush(GameRepo gameRepo, RelationRepo relationRepo, SectorRepo sectorRepo) {
 		if (isModified()) {
-			logger.debug("Flushing game #" + getGameId());
+			logger.trace("Flushing game #" + getGameId());
 			gameRepo.save(game);
 			getRelations().forEach(relationRepo::save);
 			setModified(false);
 		}
 		if (worldCache != null && worldCache.isModified()) {
-			logger.debug("Flushing world for game #" + getGameId());
+			logger.trace("Flushing world for game #" + getGameId());
 			sectorRepo.saveAll(getSectors());
 			setWorldModified(false);
 		}

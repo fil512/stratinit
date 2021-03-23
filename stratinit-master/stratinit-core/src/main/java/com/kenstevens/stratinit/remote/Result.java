@@ -4,6 +4,8 @@ import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class Result<T> implements Serializable {
 	private boolean moveSuccess = true;
 	private int commandPoints = Constants.UNASSIGNED;
 	private RunModeEnum runMode;
+	transient private Exception exception;
 
 	public Result() {
 	}
@@ -27,7 +30,7 @@ public class Result<T> implements Serializable {
 	}
 
 	public static final Result<None> falseInstance() {
-		return new Result<None>(false);
+		return new Result<>(false);
 	}
 
 	public Result(String message, boolean success, T value) {
@@ -90,14 +93,30 @@ public class Result<T> implements Serializable {
 	}
 
 	public Result(List<String> messages, boolean success, T value,
-			List<SIBattleLog> battleLogs, boolean moveSuccess) {
+				  List<SIBattleLog> battleLogs, boolean moveSuccess) {
 		this(messages, success, value, battleLogs);
 		this.moveSuccess = moveSuccess;
 	}
 
+	public static <T> Result<T> falseInstance(Class<T> resultClass, Exception e) {
+		Result<T> retval = new Result<>(false);
+		retval.setMessage(e.getMessage());
+		retval.setException(e);
+		return retval;
+	}
+
 	@Override
 	public String toString() {
-		return getMessage();
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("success", success)
+				.append("value", value)
+				.append("messages", messages)
+				.append("silogs", silogs)
+				.append("moveSuccess", moveSuccess)
+				.append("commandPoints", commandPoints)
+				.append("runMode", runMode)
+				.append("exception", exception)
+				.toString();
 	}
 
 	private String getMessage() {
@@ -178,5 +197,13 @@ public class Result<T> implements Serializable {
 
 	public void setCommandPoints(int commandPoints) {
 		this.commandPoints = commandPoints;
+	}
+
+	public Exception getException() {
+		return exception;
+	}
+
+	public void setException(Exception exception) {
+		this.exception = exception;
 	}
 }

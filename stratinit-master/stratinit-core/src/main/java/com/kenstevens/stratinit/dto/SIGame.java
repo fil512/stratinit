@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.dto;
 
 import com.kenstevens.stratinit.client.model.Game;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
 
@@ -37,5 +38,13 @@ public class SIGame implements StratInitDTO {
 		ends = game.getEnds();
 		blitz = game.isBlitz();
 		this.myNoAlliances = myNoAlliances;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("id", id)
+				.append("name", name)
+				.toString();
 	}
 }

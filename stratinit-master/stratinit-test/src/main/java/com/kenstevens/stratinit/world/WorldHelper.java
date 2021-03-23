@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class WorldHelper {
     private static final String[] types = {
-            //             11111
+            //           11111
             // 012345678901234
             "###....###.....", // 0
             "###....###.....", // 1
@@ -74,11 +74,11 @@ public final class WorldHelper {
         }
     }
 
-    public static World newWorld(Game testGame) {
-        return newWorld(testGame, types, islands);
+    public static World newTestWorld(Game testGame) {
+        return newTestWorld(testGame, types, islands);
     }
 
-    public static World newWorld(Game testGame, String[] types, String[] islands) {
+    public static World newTestWorld(Game testGame, String[] types, String[] islands) {
         World world = new World(testGame, true);
         populate(world, types, islands);
         return world;
@@ -93,7 +93,7 @@ public final class WorldHelper {
                     ++x;
                     continue;
                 }
-                Sector sector = world.getSectorOrNull(x, y);
+                Sector sector = world.getSector(x, y);
                 char islandChar = islands[y].charAt(x);
                 if (islandChar == '0') {
                     sector.setIsland(0);

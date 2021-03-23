@@ -71,7 +71,7 @@ Run client as standalone jar...
 							</descriptorRefs>
 							<archive>
 								<manifest>
-									<mainClass>com.kenstevens.stratinit.client.main.Launcher</mainClass>
+									<mainClass>com.kenstevens.stratinit.main.Launcher</mainClass>
 								</manifest>
 							</archive>
 						</configuration>

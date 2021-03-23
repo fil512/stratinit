@@ -88,7 +88,7 @@ public class UnitsCede {
     }
 
     private void removeDistantUnits(List<Unit> unitsToCede, SectorCoords coords) {
-        WorldSector worldSector = worldView.getWorldSector(coords);
+        WorldSector worldSector = worldView.getWorldSectorOrNull(coords);
         for (Unit unit : units) {
             // Exclude units not in the same sector as the first unit
             if (!unit.getCoords().equals(coords)) {

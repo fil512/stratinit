@@ -27,7 +27,7 @@ public class SectorDaoServiceTest extends BaseStratInitControllerTest {
         unitDaoService.buildUnit(nationMe, PORT,
                 UnitType.CRUISER);
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
-        WorldSector worldSector = WORLD.getWorldSector(PORT);
+        WorldSector worldSector = WORLD.getWorldSectorOrNull(PORT);
         int flak = cruiser.getFlak();
         assertEquals(flak * 2, worldSector.getFlak());
     }
@@ -40,7 +40,7 @@ public class SectorDaoServiceTest extends BaseStratInitControllerTest {
         city.setBuild(UnitType.INFANTRY, new Date());
         cityDaoService.merge(city);
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
-        WorldSector worldSector = WORLD.getWorldSector(PORT);
+        WorldSector worldSector = WORLD.getWorldSectorOrNull(PORT);
         assertEquals(Constants.FORT_FLAK, worldSector.getFlak());
     }
 }

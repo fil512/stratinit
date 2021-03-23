@@ -84,7 +84,7 @@ public class AttackReadiness {
 
     private boolean landAtSea(Unit unit) {
         if (unit.isLand()) {
-            WorldSector unitSector = worldView.getWorldSector(unit);
+            WorldSector unitSector = worldView.getWorldSectorOrNull(unit);
             return unitSector.isHoldsShipAtSea();
         }
         return false;

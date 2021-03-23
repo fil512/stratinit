@@ -46,8 +46,8 @@ public final class ImageUtils {
 		return retval;
 	}
 
-	protected static Image createSmallSquare(RGB rgb, int size) {
-		PaletteData paletteData = new PaletteData(new RGB[] { new RGB(0,0,0), rgb });
+	public static Image createSmallSquare(RGB rgb, int size) {
+		PaletteData paletteData = new PaletteData(new RGB[]{new RGB(0, 0, 0), rgb});
 		ImageData imageData = new ImageData(size, size, 1, paletteData);
 		for (int x = 0; x < size; x++) {
 			for (int y = 0; y < size; y++) {

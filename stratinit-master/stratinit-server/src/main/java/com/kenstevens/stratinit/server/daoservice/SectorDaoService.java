@@ -57,7 +57,7 @@ public class SectorDaoService {
     }
 
     public WorldSector getSectorView(Unit unit) {
-        return getRadiusWorldView(unit, 1).getWorldSector(unit);
+        return getRadiusWorldView(unit, 1).getWorldSectorOrNull(unit);
     }
 
     private WorldView getRadiusWorldView(Unit unit, int distance) {
@@ -138,7 +138,7 @@ public class SectorDaoService {
     private void setWorldSectorsFromUnits(Nation nation, WorldView worldView,
                                           Collection<Unit> units) {
         for (Unit unit : units) {
-            WorldSector worldSector = worldView.getWorldSector(unit.getCoords());
+            WorldSector worldSector = worldView.getWorldSectorOrNull(unit.getCoords());
             if (worldSector == null) {
                 continue;
             }
@@ -229,7 +229,7 @@ public class SectorDaoService {
         setWorldSectorsFromCities(sectors, worldView);
         Collection<Unit> units = unitDao.getUnits(targetSector);
         setWorldSectorsFromUnits(nation, worldView, units);
-        return worldView.getWorldSector(targetSector);
+        return worldView.getWorldSectorOrNull(targetSector);
     }
 
     public Set<Nation> devastate(Unit attackerUnit, Sector sector, boolean isInitialAttack) {

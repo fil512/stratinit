@@ -20,7 +20,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "com.kenstevens.stratinit.repo")
-@PropertySource("persistence.properties")
+@PropertySource("classpath:persistence.properties")
 @EnableTransactionManagement
 @ComponentScan
 public class DaoConfig {

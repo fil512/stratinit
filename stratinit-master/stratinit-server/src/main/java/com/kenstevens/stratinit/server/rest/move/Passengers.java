@@ -49,7 +49,7 @@ public class Passengers implements Iterable<Unit> {
 		if (startCoords == null) {
 			worldSector = null;
 		} else {
-			worldSector = worldView.getWorldSector(startCoords);
+			worldSector = worldView.getWorldSectorOrNull(startCoords);
 		}
 		if (worldSector == null) {
 			return;

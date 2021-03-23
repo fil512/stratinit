@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,13 @@ public class World implements CoordMeasure {
 		world[x][y] = sector;
 	}
 
-	public Sector getSectorOrNull(int x, int y) {
+	@Nonnull
+	public Sector getSector(SectorCoords coords) {
+		return getSector(coords.x, coords.y);
+	}
+
+	@Nonnull
+	public Sector getSector(int x, int y) {
 		if (x < 0 || x >= size) {
 			throw new IndexOutOfBoundsException("x value " + x + " is not between " + 0 + " and " + size);
 		}
@@ -50,7 +57,7 @@ public class World implements CoordMeasure {
 	}
 
 	public void setType(int x, int y, SectorType type) {
-		getSectorOrNull(x, y).setType(type);
+		getSector(x, y).setType(type);
 	}
 
 	public int size() {
@@ -70,7 +77,7 @@ public class World implements CoordMeasure {
         List<Sector> retval = new ArrayList<Sector>();
         for (SectorCoords neighbour : coords.sectorsWithin(size, distance,
                 includeSelf)) {
-			Sector sector = getSectorOrNull(neighbour.x, neighbour.y);
+			Sector sector = getSector(neighbour.x, neighbour.y);
 			if (!sector.isUnknown()) {
 				retval.add(sector);
 			}
@@ -99,7 +106,7 @@ public class World implements CoordMeasure {
 
 	public @Nullable
 	Sector getSectorOrNull(SectorCoords coords) {
-		Sector retval = getSectorOrNull(coords.x, coords.y);
+		Sector retval = getSector(coords.x, coords.y);
 		if (retval.isUnknown()) {
 			return null;
 		}
@@ -110,7 +117,7 @@ public class World implements CoordMeasure {
 		List<Sector> retval = new ArrayList<Sector>();
 		for (int x = 0; x < size; ++x) {
 			for (int y = 0; y < size; ++y) {
-				Sector sector = getSectorOrNull(x, y);
+				Sector sector = getSector(x, y);
 				if (!sector.isUnknown()) {
 					retval.add(sector);
 				}
@@ -132,6 +139,7 @@ public class World implements CoordMeasure {
 		return getNeighbours(sector.getCoords());
 	}
 
+	@Nullable
 	public Sector getSectorOrNull(Unit unit) {
 		return getSectorOrNull(unit.getCoords());
 	}

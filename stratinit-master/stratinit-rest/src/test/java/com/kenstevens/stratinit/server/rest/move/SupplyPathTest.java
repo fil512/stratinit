@@ -64,7 +64,7 @@ public class SupplyPathTest extends BaseStratInitControllerTest {
 
     @Override
     protected World getWorld(Game testGame) {
-        return WorldHelper.newWorld(testGame, myTypes, myIslands);
+        return WorldHelper.newTestWorld(testGame, myTypes, myIslands);
     }
 
     @Test

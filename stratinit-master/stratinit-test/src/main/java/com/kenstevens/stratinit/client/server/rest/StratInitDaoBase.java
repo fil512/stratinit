@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.client.server.rest;
 
 import com.kenstevens.stratinit.DaoConfig;
-import com.kenstevens.stratinit.TestConfig;
+import com.kenstevens.stratinit.DaoTestConfig;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.event.EventScheduler;
 import com.kenstevens.stratinit.client.model.*;
@@ -35,10 +35,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, TestConfig.class})
+@ContextConfiguration(initializers = ConfigFileApplicationContextInitializer.class, classes = {DaoConfig.class, DaoTestConfig.class})
 public abstract class StratInitDaoBase {
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
+	// FIXME move this to an extension so we can share it with stratinit-it
 	@PersistenceContext
 	private EntityManager entityManager;
 	@Autowired
@@ -102,8 +103,8 @@ public abstract class StratInitDaoBase {
 		testWorld = dataCache.getGameCache(testGameId).getWorld();
 	}
 
-	protected World getWorld(Game testGame) {
-		return WorldHelper.newWorld(testGame);
+	protected World getWorld(Game game) {
+		return WorldHelper.newTestWorld(game);
 	}
 
 	protected int getNumIslands() {

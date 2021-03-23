@@ -51,7 +51,7 @@ public class UnitsMove {
     public UnitsMove(UnitsToMove unitsToMove, WorldView worldView) {
         this.unitsToMove = unitsToMove;
         this.worldView = worldView;
-        this.targetSector = worldView.getWorldSector(unitsToMove
+        this.targetSector = worldView.getWorldSectorOrNull(unitsToMove
                 .getTargetCoords());
         this.attack = new Attack(targetSector);
     }
@@ -277,7 +277,7 @@ public class UnitsMove {
             return Result.trueInstance();
         }
         // Only ships are interdicted
-        WorldSector worldSector = worldView.getWorldSector(coords);
+        WorldSector worldSector = worldView.getWorldSectorOrNull(coords);
         // No interdiction into cannons
         if (worldSector.getCannons() > 0) {
             return Result.trueInstance();
@@ -295,7 +295,7 @@ public class UnitsMove {
         if (unitsToMove.nothingToIntercept()) {
             return Result.trueInstance();
         }
-        WorldSector worldSector = worldView.getWorldSector(coords);
+        WorldSector worldSector = worldView.getWorldSectorOrNull(coords);
         // No interception over flak
         if (worldSector.getFlak() > 0) {
             return Result.trueInstance();
@@ -312,7 +312,7 @@ public class UnitsMove {
         Result<None> retval = Result.falseInstance();
         List<Unit> stoppedUnits = new ArrayList<Unit>();
 
-        WorldSector worldSector = worldView.getWorldSector(coords);
+        WorldSector worldSector = worldView.getWorldSectorOrNull(coords);
         for (Unit unit : unitsToMove) {
             // Refresh this sector view in case the target sector is a transport
             // filling up

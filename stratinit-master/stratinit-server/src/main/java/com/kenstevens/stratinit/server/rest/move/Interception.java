@@ -73,7 +73,7 @@ public class Interception {
 					targetCoords, nation);
 			Collection<Unit> units = unitDao.getUnitsWithin(worldView, nation,
 					targetCoords, Constants.INTERCEPTION_RADIUS);
-			WorldSector targetSector = worldView.getWorldSector(targetCoords);
+			WorldSector targetSector = worldView.getWorldSectorOrNull(targetCoords);
 			Interceptors interceptors = new Interceptors();
 			for (Unit unit : units) {
 				Attack attack = new Attack(targetSector);

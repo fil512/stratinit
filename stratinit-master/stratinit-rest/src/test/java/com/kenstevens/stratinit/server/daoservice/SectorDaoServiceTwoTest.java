@@ -36,13 +36,13 @@ public class SectorDaoServiceTwoTest extends TwoPlayerBase {
 
         WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
 
-        WorldSector city = WORLD.getWorldSector(CITY);
-        WorldSector port = WORLD.getWorldSector(PORT);
-        WorldSector sea = WORLD.getWorldSector(SEA);
-        WorldSector esea = WORLD.getWorldSector(ESEA);
-        WorldSector ecity = WORLD.getWorldSector(ECITY);
-        WorldSector land = WORLD.getWorldSector(LAND);
-        WorldSector eland = WORLD.getWorldSector(ELAND);
+        WorldSector city = WORLD.getWorldSectorOrNull(CITY);
+        WorldSector port = WORLD.getWorldSectorOrNull(PORT);
+        WorldSector sea = WORLD.getWorldSectorOrNull(SEA);
+        WorldSector esea = WORLD.getWorldSectorOrNull(ESEA);
+        WorldSector ecity = WORLD.getWorldSectorOrNull(ECITY);
+        WorldSector land = WORLD.getWorldSectorOrNull(LAND);
+        WorldSector eland = WORLD.getWorldSectorOrNull(ELAND);
 
         assertTrue(ecity.airCanAttack());
         assertTrue(eland.airCanAttack());
