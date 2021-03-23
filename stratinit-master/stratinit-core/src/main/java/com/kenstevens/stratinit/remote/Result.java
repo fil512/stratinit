@@ -4,6 +4,8 @@ import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.Constants;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -105,7 +107,16 @@ public class Result<T> implements Serializable {
 
 	@Override
 	public String toString() {
-		return getMessage();
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("success", success)
+				.append("value", value)
+				.append("messages", messages)
+				.append("silogs", silogs)
+				.append("moveSuccess", moveSuccess)
+				.append("commandPoints", commandPoints)
+				.append("runMode", runMode)
+				.append("exception", exception)
+				.toString();
 	}
 
 	private String getMessage() {

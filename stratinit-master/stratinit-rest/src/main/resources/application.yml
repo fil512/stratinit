@@ -3,6 +3,8 @@ logging:
     org:
       springframework:
         security: INFO
+    com:
+      kenstevens: DEBUG
 server:
   port: 8081
 stratinit:
