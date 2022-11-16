@@ -47,7 +47,7 @@
         <swt.version>3.5.2</swt.version>
         <!-- flyway 7.5.3 doesn't work with boot 2.3.8 -->
         <flyway.version>6.5.7</flyway.version>
-        <jackson.version>2.12.1</jackson.version>
+        <jackson.version>2.12.7.1</jackson.version>
     </properties>
     <build>
         <pluginManagement>
