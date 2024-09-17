@@ -44,7 +44,7 @@ public class WorldSeenMap implements CoordMeasure {
 
 	private SISector sectorSeenToSISector(SectorSeen sectorSeen,
 										  WorldView sectorWorldView) {
-		WorldSector worldSector = sectorWorldView.getWorldSector(sectorSeen
+		WorldSector worldSector = sectorWorldView.getWorldSectorOrNull(sectorSeen
 				.getCoords());
 		SISector sisector = new SISector(worldSector);
 		sisector.lastSeen = sectorSeen.getLastSeen();
@@ -68,7 +68,7 @@ public class WorldSeenMap implements CoordMeasure {
 
 	public WorldSector getWorldSector(SectorCoords coords) {
 		WorldView sectorWorldView = worldViewMap.get(coords);
-		return sectorWorldView.getWorldSector(coords);
+		return sectorWorldView.getWorldSectorOrNull(coords);
 	}
 
 	@Override

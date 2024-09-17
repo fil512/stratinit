@@ -29,7 +29,7 @@ public class SupplyTree {
 	}
 
 	private boolean huntForCitySupply(WorldView worldView, Unit rootUnit) {
-		WorldSector worldSector = worldView.getWorldSector(rootUnit);
+		WorldSector worldSector = worldView.getWorldSectorOrNull(rootUnit);
 		if (worldSector.supplies(rootUnit)) {
 			addChild(rootNode, worldSector);
 			return true;

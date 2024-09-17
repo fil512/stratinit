@@ -21,7 +21,7 @@ public class Reacher {
 	public Reacher(Unit unit, WorldView worldView) {
 		this.unit = unit;
 		this.worldView = worldView;
-		this.worldSector = worldView.getWorldSector(unit);
+		this.worldSector = worldView.getWorldSectorOrNull(unit);
 		this.movement = unit.getMobility();
 		if (unit.requiresFuel()) {
 			fuelRemaining = unit.getFuel();

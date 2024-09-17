@@ -3,7 +3,7 @@
   (:use [clojure.test]))
 
 (deftest can-parse
-  (let [xml (parse-file "../stratinit-client/target/install4j/updates.xml")]
+  (let [xml (parse-file "../stratinit-swt/target/install4j/updates.xml")]
     (is (= (:tag xml) :updateDescriptor))))
 
 (deftest iscore
@@ -13,19 +13,19 @@
   (not (is-core "foo_borebar")))
 
 (deftest first-is-not-core
-  (let [xml (parse-file "../stratinit-client/target/install4j/updates.xml")]
+  (let [xml (parse-file "../stratinit-swt/target/install4j/updates.xml")]
     (is (is-not-core-entry (-> xml :content first)))))
 
 (deftest second-is-not-core
-  (let [xml (parse-file "../stratinit-client/target/install4j/updates.xml")]
+  (let [xml (parse-file "../stratinit-swt/target/install4j/updates.xml")]
     (is (is-not-core-entry (-> xml :content second)))))
 
 (deftest third-is-core
-  (let [xml (parse-file "../stratinit-client/target/install4j/updates.xml")]
+  (let [xml (parse-file "../stratinit-swt/target/install4j/updates.xml")]
     (not (is-not-core-entry (nth (:content xml) 2 )))))
 
 (deftest filter-entries
-  (let [xml (parse-file "../stratinit-client/target/install4j/updates.xml")]
+  (let [xml (parse-file "../stratinit-swt/target/install4j/updates.xml")]
     (is (= (count (:content xml)) 9))
     (is (= (count (:content (filter-core-out xml))) 5))
     ))

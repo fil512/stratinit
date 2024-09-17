@@ -30,8 +30,8 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
     public void getWorldView() {
         declareWar();
         worldView = sectorDaoService.getAllWorldView(nationMe);
-        landSector = worldView.getWorldSector(DEF_LAND);
-        waterSector = worldView.getWorldSector(DEF_WATER);
+        landSector = worldView.getWorldSectorOrNull(DEF_LAND);
+        waterSector = worldView.getWorldSectorOrNull(DEF_WATER);
     }
 
     @Test

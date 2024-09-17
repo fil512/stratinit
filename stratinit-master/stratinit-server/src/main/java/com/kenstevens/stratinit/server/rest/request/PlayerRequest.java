@@ -34,7 +34,7 @@ public abstract class PlayerRequest<T> {
     public Result<T> process() {
         Result<T> retval;
         try {
-            // logger.info("Processing request: "+this.getClass());
+            logger.debug("Req> {}", this.getClass().getSimpleName());
             if (!serverStatus.isRunning()) {
                 return new Result<T>("The server is not running.  Server is " + serverStatus.getState(), false);
             }
@@ -44,6 +44,7 @@ public abstract class PlayerRequest<T> {
             resultValue = execute();
             retval = getResult();
             addCommandPoints(retval);
+            logger.debug("Resp> {}", retval);
         } catch (Exception e) {
 
             String message = e.getMessage();

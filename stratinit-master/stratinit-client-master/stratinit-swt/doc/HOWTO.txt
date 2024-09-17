@@ -1,0 +1,158 @@
+Hi Ken,
+
+If I create two sets of media files for the same platform, it calls one 
+Windows and one Windows (2) and throws an error when I try to build.
+
+That's because the media file name is the same for both media files. For the partial installer media files, go to 
+
+Customize project default-Media file name
+
+in the media wizard to change the name to 
+
+${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}_partial
+
+How do I get both sets of media files to install when I run the installer?
+
+That's not how it works, each media file is a separate installer. The partial installer will be downloaded for an update. On your web site, you only offer the full installer.
+ 
+Kind regards,
+
+Ingo Kegel
+ej-technologies GmbH
+
+05/08/2012 03:58 - Ken Stevens wrote:
+
+Thank you, this is very helpful.
+
+I have followed your instructions, however, there's a part that's not clear.
+
+The frequently changing jars are platform independent.  Yet to create 
+a "New
+media file" it forces me to pick a platform.  If I create two sets of media files for the same platform, it calls one Windows and one Windows (2) and throws an error when I try to build.  How do I get both sets of media files to install when I run the installer?
+
+Thanks again for your help!
+Ken
+
+-----Original Message-----
+From: ej-technologies Support [mailto:support@ej-technologies.com]
+Sent: Wednesday, May 02, 2012 5:22 AM
+To: ken.stevens@sympatico.ca
+Subject: Re: [Ticket#1078918] Support request by 
+ken.stevens@sympatico.ca
+
+Hi Ken,
+
+Thanks for your email. 
+
+4) **
+HARD PART **-this only downloads and installs the jars that 
+changed
+
+I would do this with file sets. Put all the frequently changing JAR 
+files into a
+particular file set.
+
+Then, create two sets of media files, one with all files and one with 
+only the
+frequently changing files. This can be done by using the "Customize project
+defaults-Exclude files" step of the media wizard.
+
+Finally, you have to adjust the auto-update detection. You can modify 
+the
+updates.xml and replace file file names of the full installers with the partial installers. 
+
+A more permanent way to do this is to define a custom attribute like "targetId"
+on the "Customize project defaults-Auto update options" of the media wizard of a full installer and set its value to the media file ID of the corresponding partial installer.
+
+
+On Insstaller-Screens & Actions, select the Updater application and 
+look for
+the "Update descriptor entry" action. Change its script to 
+
+UpdateDescriptor updateDescriptor =
+((UpdateDescriptor)context.getVariable("updateDescriptor"));
+UpdateDescriptorEntry defaultEntry = 
+updateDescriptor.getPossibleUpdateEntry();
+if (defaultEntry != null) {
+    String targetId = defaultEntry.getAdditionalAttribute("targetId", null);
+    if (targetId != null) {
+        for (UpdateDescriptorEntry entry : updateDescriptor.getEntries()) {
+            if (entry.getTargetMediaFileId().equals(targetId)) {
+                return entry;
+            }
+        }
+    }
+}
+
+return defaultEntry;
+
+You see that the selection of the downloaded installer can be 
+customized in an
+arbitrary way.
+
+If you experience any problems, please let me know. 
+ 
+Kind regards,
+
+Ingo Kegel
+ej-technologies GmbH
+
+05/02/2012 01:32 - ken.stevens@sympatico.ca wrote:
+
+Support request received via web form:
+
+*1 Product: install4j
+*2 Version: 5.0.11
+*3 Platform: Windows
+*4 Type: General help
+*5 Name: Ken Stevens
+*6 E-mail: ken.stevens@sympatico.ca
+*7 Serial: 
+L-M5-STRATEGIC_INITIATIVE#50023770010001-y29q3dwbxie8d#2bb
+*8 Description:
+My open-source project is a multi-player online game that updates frequently.  
+I currently use jnlp but want to switch to install4j.  I want to 
+replicate the jnlp feature of only downloading the jars that changed 
+with the
+update.
+
+I
+know which jars change frequently (the ones we write) and the ones 
+that rarely change (third-party jars) so I could split the project 
+into 2 parts with different upgrade options.
+
+I have the auto-upgrade working, and I have also gotten installation 
+components working--I made 2 components--jars that change often and 
+jars that rarely change.  I haven't tried "merged projects" yet.
+What I am trying to understand is how to get the following behaviour:
+
+1)
+user launches program
+2) launcher detects that one component needs to be updated
+3) launcher prompts user to download and install the update
+4) **
+HARD PART **-this only downloads and installs the jars that 
+changed
+5)
+Happy :-)
+
+It looks like the structure of updates.xml is designed to support 
+this scenario, but I don't see an obvious way to do it.
+
+Thanks for your
+help!
+
+Ken
+
+
+
+
+-----
+No virus found in this shellMessage.
+Checked by AVG - www.avg.com
+Version: 10.0.1424 / Virus Database: 2411/4972 - Release Date: 
+05/01/12
+
+
+
+

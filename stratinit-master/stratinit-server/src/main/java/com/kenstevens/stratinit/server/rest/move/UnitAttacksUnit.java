@@ -135,7 +135,7 @@ public class UnitAttacksUnit {
                                UnitAttackedBattleLog unitAttackedBattleLog) {
         WorldView enemyWorldView = sectorDaoService
                 .getSupplyWorldView(enemyUnit);
-        WorldSector attackerSector = enemyWorldView.getWorldSector(unit);
+        WorldSector attackerSector = enemyWorldView.getWorldSectorOrNull(unit);
         UnitAttacksUnit unitsAttackUnit = unitCommandFactory
                 .getUnitAttacksUnit(worldView, actor,
                         AttackType.COUNTER_ATTACK, enemyUnit, unit,

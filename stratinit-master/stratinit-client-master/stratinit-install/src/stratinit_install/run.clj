@@ -2,7 +2,7 @@
   (:use [stratinit-install.core])
   (:require [clojure.string :as str]))
 
-(def xml (parse-file "../stratinit-client/target/install4j/updates.xml"))
+(def xml (parse-file "../stratinit-swt/target/install4j/updates.xml"))
 
 (def filtered-xml (filter-core-out xml))
 
@@ -28,5 +28,5 @@
   (println "<?xml version='1.0' encoding='UTF-8'?>")
   (emit-element x))
 
-(with-open [w (clojure.java.io/writer  "../stratinit-client/target/updates.xml")]
+(with-open [w (clojure.java.io/writer  "../stratinit-swt/target/updates.xml")]
   (.write w (with-out-str (emit final-xml))))
