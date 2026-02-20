@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.client.model;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 

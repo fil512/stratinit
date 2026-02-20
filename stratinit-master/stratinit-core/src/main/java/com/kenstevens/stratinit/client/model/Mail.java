@@ -2,9 +2,9 @@ package com.kenstevens.stratinit.client.model;
 
 import com.kenstevens.stratinit.type.NewsCategory;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import java.util.Date;
 
 @Entity

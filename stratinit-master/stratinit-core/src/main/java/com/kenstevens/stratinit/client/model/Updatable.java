@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.client.model;
 
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.Date;
 

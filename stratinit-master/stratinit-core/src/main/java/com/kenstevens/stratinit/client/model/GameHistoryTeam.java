@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.client.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity

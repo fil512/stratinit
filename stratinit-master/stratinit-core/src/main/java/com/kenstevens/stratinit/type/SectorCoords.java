@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.type;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

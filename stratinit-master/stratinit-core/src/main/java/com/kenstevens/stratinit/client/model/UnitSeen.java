@@ -3,8 +3,8 @@ package com.kenstevens.stratinit.client.model;
 import com.kenstevens.stratinit.type.Constants;
 import com.querydsl.core.annotations.QueryInit;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
 import java.io.Serializable;
 import java.util.Date;
 

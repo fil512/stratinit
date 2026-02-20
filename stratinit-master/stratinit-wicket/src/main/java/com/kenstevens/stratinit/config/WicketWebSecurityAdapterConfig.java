@@ -7,20 +7,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
+class WicketWebSecurityAdapterConfig {
     final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Override
     @Bean(name = "authenticationManager")
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -42,26 +41,20 @@ class WicketWebSecurityAdapterConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider());
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()
-                .antMatchers("/images/**").permitAll()
-                .antMatchers("/static/**").permitAll()
-                .antMatchers("/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .formLogin().permitAll()
-                .and()
-                .logout().permitAll()
-                .and()
-                .csrf().disable();
+                .authenticationProvider(authenticationProvider())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/static/**").permitAll()
+                        .requestMatchers("/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(httpBasic -> {})
+                .formLogin(formLogin -> formLogin.permitAll())
+                .logout(logout -> logout.permitAll())
+                .csrf(csrf -> csrf.disable());
+        return http.build();
     }
 }

@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.querydsl.core.annotations.QueryInit;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 

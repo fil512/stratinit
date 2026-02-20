@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import com.querydsl.core.annotations.QueryInit;
 import org.apache.commons.lang3.time.DateUtils;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity

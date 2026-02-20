@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.client.model;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.querydsl.core.annotations.QueryInit;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class CityMove {

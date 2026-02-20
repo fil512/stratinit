@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.server.rest.svc.DataWriter;
 import com.kenstevens.stratinit.server.rest.svc.SynchronizedDataAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 public abstract class EventUpdate implements DataWriter {
     @Autowired

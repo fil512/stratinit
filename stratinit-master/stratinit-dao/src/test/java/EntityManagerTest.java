@@ -2,8 +2,8 @@ import com.kenstevens.stratinit.StratInitTest;
 import org.hibernate.internal.SessionImpl;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

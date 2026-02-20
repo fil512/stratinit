@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.Constants;
 import com.querydsl.core.annotations.QueryInit;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
