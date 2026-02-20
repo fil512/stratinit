@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.AttackType;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.WorldSector;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +38,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
     public void infVsInf() {
         Unit att = unitDaoService.buildUnit(nationMe, ATT_LAND, UnitType.INFANTRY);
         Unit def = unitDaoService.buildUnit(nationThem, DEF_LAND, UnitType.INFANTRY);
-        List<Unit> units = Lists.newArrayList(def);
+        List<Unit> units = new ArrayList<>(List.of(def));
         Assertions.assertEquals(def,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INITIAL_ATTACK, att, units, landSector, worldView));
 
@@ -48,7 +48,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
     public void fighterInterceptFighter() {
         Unit att = unitDaoService.buildUnit(nationMe, ATT_LAND, UnitType.FIGHTER);
         Unit def = unitDaoService.buildUnit(nationThem, DEF_LAND, UnitType.FIGHTER);
-        List<Unit> units = Lists.newArrayList(def);
+        List<Unit> units = new ArrayList<>(List.of(def));
         assertEquals(def,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INTERCEPTION, att, units, landSector, worldView));
     }
@@ -58,7 +58,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
         Unit att = unitDaoService.buildUnit(nationMe, ATT_LAND, UnitType.FIGHTER);
         Unit def = unitDaoService.buildUnit(nationThem, DEF_LAND, UnitType.FIGHTER);
         def.setIntercepted(true);
-        List<Unit> units = Lists.newArrayList(def);
+        List<Unit> units = new ArrayList<>(List.of(def));
         assertNull(
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INTERCEPTION, att, units, landSector, worldView));
     }
@@ -69,7 +69,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
         Unit def = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.TRANSPORT);
         Unit other = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.INFANTRY);
         // This test only has meaning when other is first on the list
-        List<Unit> units = Lists.newArrayList(other, def);
+        List<Unit> units = new ArrayList<>(List.of(other, def));
         assertEquals(def,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INITIAL_ATTACK, att, units, waterSector, worldView));
 
@@ -81,7 +81,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
         Unit def = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.FIGHTER);
         Unit other = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.CARGO_PLANE);
         // This test only has meaning when other is first on the list
-        List<Unit> units = Lists.newArrayList(other, def);
+        List<Unit> units = new ArrayList<>(List.of(other, def));
         assertEquals(other,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INITIAL_ATTACK, att, units, waterSector, worldView));
 
@@ -94,7 +94,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
         Unit def = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.FIGHTER);
         Unit other = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.CARGO_PLANE);
         // This test only has meaning when other is first on the list
-        List<Unit> units = Lists.newArrayList(other, def);
+        List<Unit> units = new ArrayList<>(List.of(other, def));
         assertEquals(def,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INTERCEPTION, att, units, waterSector, worldView));
 
@@ -107,7 +107,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
         Unit def = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.HELICOPTER);
         Unit other = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.INFANTRY);
         // This test only has meaning when other is first on the list
-        List<Unit> units = Lists.newArrayList(other, def);
+        List<Unit> units = new ArrayList<>(List.of(other, def));
         assertEquals(def,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INITIAL_ATTACK, att, units, waterSector, worldView));
 
@@ -120,7 +120,7 @@ public class AttackUnitFinderHelperTest extends TwoPlayerBase {
         Unit def = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.HELICOPTER);
         Unit other = unitDaoService.buildUnit(nationThem, DEF_WATER, UnitType.INFANTRY);
         // This test only has meaning when other is first on the list
-        List<Unit> units = Lists.newArrayList(other, def);
+        List<Unit> units = new ArrayList<>(List.of(other, def));
         assertEquals(def,
                 AttackingUnitFinderHelper.findUnitToAttack(AttackType.INTERCEPTION, att, units, waterSector, worldView));
 

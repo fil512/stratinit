@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.cache;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.client.model.World;
@@ -10,6 +8,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SectorSeenCache extends Cacheable {
 	private final Map<SectorCoords, SectorSeen> sectorSeenMap = new HashMap<SectorCoords, SectorSeen>();
@@ -23,12 +22,9 @@ public class SectorSeenCache extends Cacheable {
 	}
 
 	public Collection<Sector> getSectorsSeenSectors(final World world) {
-		return Collections2.transform(sectorSeenMap.values(), new Function<SectorSeen, Sector>() {
-			@Override
-			public Sector apply(SectorSeen sectorSeen) {
-                return world.getSectorOrNull(sectorSeen.getCoords());
-            }
-		});
+		return sectorSeenMap.values().stream()
+				.map(sectorSeen -> world.getSectorOrNull(sectorSeen.getCoords()))
+				.collect(Collectors.toList());
 	}
 
 	public Collection<SectorSeen> getSectorsSeen() {

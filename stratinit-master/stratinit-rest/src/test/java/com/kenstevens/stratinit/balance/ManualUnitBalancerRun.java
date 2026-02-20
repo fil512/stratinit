@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.balance;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitBase;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Disabled
@@ -71,7 +71,7 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
                 || UnitBase.isNotUnit(defenderUnitType)) {
             return;
         }
-        List<AttackBalanceResult> results = Lists.newArrayList();
+        List<AttackBalanceResult> results = new ArrayList<>();
         for (int i = 0; i < NUM_ATTACKS; ++i) {
             measureOneAttack(results,
                     attackerUnitType, defenderUnitType, defCoords);

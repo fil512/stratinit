@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.dao;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class SectorDaoTest extends TwoPlayerBase {
 
     @Test
     public void testOtherNations2() {
-        List<Nation> nations = Lists.newArrayList(sectorDao.getOtherNationsThatSeeThisSector(nationThem, I_SEE));
+        List<Nation> nations = new ArrayList<>(sectorDao.getOtherNationsThatSeeThisSector(nationThem, I_SEE));
         assertEquals(1, nations.size());
         assertEquals(nationMe, nations.get(0));
     }

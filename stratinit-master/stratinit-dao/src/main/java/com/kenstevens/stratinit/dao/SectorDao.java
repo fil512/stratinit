@@ -1,8 +1,6 @@
 package com.kenstevens.stratinit.dao;
 
-import com.google.common.collect.Collections2;
 import com.kenstevens.stratinit.cache.NationCache;
-import com.kenstevens.stratinit.cache.NationCacheToNationFunction;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.predicates.OtherNationPredicate;
 import com.kenstevens.stratinit.dao.predicates.SeesSectorPredicate;
@@ -15,8 +13,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
-
-import static com.google.common.base.Predicates.and;
+import java.util.stream.Collectors;
 
 @Service
 public class SectorDao extends CacheDao {
@@ -40,12 +37,12 @@ public class SectorDao extends CacheDao {
 
     public Collection<Nation> getOtherNationsThatSeeThisSector(Nation nation,
                                                                SectorCoords coords) {
-
-        List<NationCache> nationCaches = getGameCache(nation).getNationCaches();
-        return Collections2.transform(Collections2.filter(
-                nationCaches,
-                and(new OtherNationPredicate(nation), new SeesSectorPredicate(
-                        coords))), new NationCacheToNationFunction());
+        OtherNationPredicate otherNation = new OtherNationPredicate(nation);
+        SeesSectorPredicate seesSector = new SeesSectorPredicate(coords);
+        return getGameCache(nation).getNationCaches().stream()
+                .filter(nc -> otherNation.test(nc) && seesSector.test(nc))
+                .map(NationCache::getNation)
+                .collect(Collectors.toList());
     }
 
     public Collection<SectorSeen> getSectorsSeen(Nation nation) {

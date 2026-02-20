@@ -1,8 +1,9 @@
 package com.kenstevens.stratinit.supply;
 
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
+
+import java.util.stream.StreamSupport;
 
 public class UnitSupplyNode extends SupplyNode {
 	private final Unit unit;
@@ -17,8 +18,8 @@ public class UnitSupplyNode extends SupplyNode {
 	}
 
 	public void pullSupply() {
-		HasAmmoPredicate hasAmmoPredicate = new HasAmmoPredicate();
-		while(!unit.atMaxAmmo() && Iterables.any(this, hasAmmoPredicate)) {
+		while(!unit.atMaxAmmo() && StreamSupport.stream(this.spliterator(), false)
+				.anyMatch(node -> ((UnitSupplyNode) node).hasAmmo())) {
 			for (SupplyNode childNode : this) {
 				UnitSupplyNode unitNode = (UnitSupplyNode)childNode;
 				if (unitNode.hasAmmo()) {

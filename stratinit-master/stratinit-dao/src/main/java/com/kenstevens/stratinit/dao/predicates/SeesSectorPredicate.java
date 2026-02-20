@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dao.predicates;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.type.SectorCoords;
 
@@ -12,7 +12,7 @@ public class SeesSectorPredicate implements Predicate<NationCache> {
 	}
 
 	@Override
-	public boolean apply(NationCache nationCache) {
+	public boolean test(NationCache nationCache) {
 		return nationCache.getSectorSeen(coords) != null;
 	}
 

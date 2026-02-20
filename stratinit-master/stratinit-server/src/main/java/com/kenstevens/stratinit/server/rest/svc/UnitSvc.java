@@ -1,8 +1,5 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dao.RelationDao;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UnitSvc {
@@ -31,19 +29,15 @@ public class UnitSvc {
 	}
 
 	private List<SIUnit> unitsToSIUnits(final Nation nation, Collection<Unit> units) {
-		return Lists.newArrayList(Collections2.transform(units, new Function<Unit, SIUnit>() {
-			public SIUnit apply(Unit unit) {
-				return unitToSIUnit(nation, unit);
-			}
-		}));
+		return units.stream()
+				.map(unit -> unitToSIUnit(nation, unit))
+				.collect(Collectors.toList());
 	}
 
 	public List<Unit> siunitToUnit(Collection<SIUnit> units) {
-		return Lists.newArrayList(Collections2.transform(units, new Function<SIUnit, Unit>() {
-			public Unit apply(SIUnit siunit) {
-				return siunitToUnit(siunit);
-			}
-		}));
+		return units.stream()
+				.map(this::siunitToUnit)
+				.collect(Collectors.toList());
 	}
 
 	private Unit siunitToUnit(SIUnit siunit) {

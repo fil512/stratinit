@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.cache;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.*;
 import org.slf4j.Logger;
@@ -8,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +50,9 @@ public class GameLoader {
         Game game = oGame.get();
         logger.debug("Getting Relations");
         Iterable<Relation> relations = relationRepo.findAll(QRelation.relation.relationPK.from.nationPK.game.eq(game));
-        GameCache gameCache = cacheFactory.newGameCache(game, Lists.newArrayList(relations));
+        List<Relation> relationList = new ArrayList<>();
+        relations.forEach(relationList::add);
+        GameCache gameCache = cacheFactory.newGameCache(game, relationList);
         logger.debug("Getting Nations");
         gameCache.addNations(nationRepo.findAll(QNation.nation.nationPK.game.eq(game)));
         if (game.isMapped()) {

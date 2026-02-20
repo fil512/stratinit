@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.client.model.AttackType;
 import com.kenstevens.stratinit.client.model.CityCapturedBattleLog;
@@ -11,6 +10,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +25,8 @@ public class LogDaoTest extends StratInitTest {
 		CityCapturedBattleLog log = new CityCapturedBattleLog(
 				AttackType.INITIAL_ATTACK, testUnit1, testNation1, testCoords);
 		logDao.save(log);
-		List<CityCapturedBattleLog> logs = Lists.newArrayList(logDao.getCityCapturedBattleLogs(testGame));
+		List<CityCapturedBattleLog> logs = new ArrayList<>();
+		logDao.getCityCapturedBattleLogs(testGame).forEach(logs::add);
 		assertEquals(1, logs.size());
 		assertEquals(log.getId(), logs.get(0).getId());
 	}
@@ -37,7 +38,8 @@ public class LogDaoTest extends StratInitTest {
 				AttackType.INITIAL_ATTACK, testUnit1, testNation1, testCoords);
 		logDao.save(log);
 		logDao.delete(log);
-		List<CityCapturedBattleLog> logs = Lists.newArrayList(logDao.getCityCapturedBattleLogs(testGame));
+		List<CityCapturedBattleLog> logs = new ArrayList<>();
+		logDao.getCityCapturedBattleLogs(testGame).forEach(logs::add);
 		assertEquals(0, logs.size());
 	}
 
@@ -55,8 +57,9 @@ public class LogDaoTest extends StratInitTest {
 	}
 
 	private List<UnitAttackedBattleLog> getUnitAttackedBattleLogs() {
-		return Lists.newArrayList(logDao
-				.getUnitAttackedBattleLogs(testGame));
+		List<UnitAttackedBattleLog> result = new ArrayList<>();
+		logDao.getUnitAttackedBattleLogs(testGame).forEach(result::add);
+		return result;
 	}
 
 	@Test

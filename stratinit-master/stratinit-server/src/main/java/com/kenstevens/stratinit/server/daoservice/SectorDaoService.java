@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
@@ -233,7 +231,7 @@ public class SectorDaoService {
     }
 
     public Set<Nation> devastate(Unit attackerUnit, Sector sector, boolean isInitialAttack) {
-        Set<Nation> retval = Sets.newHashSet();
+        Set<Nation> retval = new HashSet<>();
         if (sector.getType() == SectorType.PLAYER_CITY) {
             City city = cityDao.getCity(sector);
             if (city == null) {
@@ -252,7 +250,7 @@ public class SectorDaoService {
             sector.setType(SectorType.WASTELAND);
             sectorDao.markCacheModified(sector);
         }
-        List<Unit> units = Lists.newArrayList(unitDao.getUnits(sector));
+        List<Unit> units = new ArrayList<>(unitDao.getUnits(sector));
         for (Unit unit : units) {
             unitDaoService.killUnit(unit);
             UnitAttackedBattleLog unitAttackedBattleLog = new UnitAttackedBattleLog(

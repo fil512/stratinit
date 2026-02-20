@@ -1,8 +1,5 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NationSvc {
@@ -42,12 +40,9 @@ public class NationSvc {
 
     private List<SINation> nationsToSINations(final Nation me,
                                               final boolean includePower, List<Nation> nations, final Collection<Nation> allies) {
-        return Lists.newArrayList(Collections2.transform(nations,
-                new Function<Nation, SINation>() {
-                    public SINation apply(Nation nation) {
-                        return nationToSINation(me, nation, includePower, allies.contains(nation));
-                    }
-                }));
+        return nations.stream()
+                .map(nation -> nationToSINation(me, nation, includePower, allies.contains(nation)))
+                .collect(Collectors.toList());
     }
 
     public SINation nationToSINation(Nation me, Nation nation,
@@ -67,12 +62,9 @@ public class NationSvc {
     }
 
     private List<SIGame> nationsToSIGames(List<Nation> nations) {
-        return Lists.newArrayList(Collections2.transform(nations,
-                new Function<Nation, SIGame>() {
-                    public SIGame apply(Nation nation) {
-                        return new SIGame(nation.getGame(), nation.isNoAlliances());
-                    }
-                }));
+        return nations.stream()
+                .map(nation -> new SIGame(nation.getGame(), nation.isNoAlliances()))
+                .collect(Collectors.toList());
     }
 
     public List<SIGame> getJoinedGames(Player player) {

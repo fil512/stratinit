@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.dao;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RelationDao extends CacheDao {
@@ -48,23 +47,18 @@ public class RelationDao extends CacheDao {
 
     public Collection<Relation> getAllChangingRelations(final Game game) {
         List<Relation> relations = getGameCache(game).getRelations();
-        return Collections2.filter(relations, new Predicate<Relation>() {
-            public boolean apply(Relation input) {
-                return input.getGame().equals(game)
-                        && input.getSwitchTime() != null;
-            }
-        });
+        return relations.stream()
+                .filter(r -> r.getGame().equals(game) && r.getSwitchTime() != null)
+                .collect(Collectors.toList());
     }
 
-    private Collection<Nation> getMutualRelations(Nation nation, final Set<RelationType> relations) {
-        Collection<Relation> myAllies = Collections2.filter(getMyRelations(nation), new Predicate<Relation>() {
-            public boolean apply(Relation input) {
-                return relations.contains(input.getType());
-            }
-        });
+    private Collection<Nation> getMutualRelations(Nation nation, final Set<RelationType> relationTypes) {
         final Map<Nation, RelationType> theirRelationTypes = getTheirRelationTypesAsMap(nation);
-        Collection<Relation> mutualAllies = Collections2.filter(myAllies, input -> relations.contains(theirRelationTypes.get(input.getTo())));
-        return Collections2.transform(mutualAllies, Relation::getTo);
+        return getMyRelations(nation).stream()
+                .filter(r -> relationTypes.contains(r.getType()))
+                .filter(r -> relationTypes.contains(theirRelationTypes.get(r.getTo())))
+                .map(Relation::getTo)
+                .collect(Collectors.toList());
     }
 
     // TODO REF pull predicates and functions out into classes
@@ -75,13 +69,17 @@ public class RelationDao extends CacheDao {
 
     public Collection<Relation> getMyRelations(final Nation nation) {
         List<Relation> relations = getGameCache(nation.getGameId()).getRelations();
-        return Collections2.filter(relations, input -> input.getFrom().equals(nation));
+        return relations.stream()
+                .filter(input -> input.getFrom().equals(nation))
+                .collect(Collectors.toList());
     }
 
     public Collection<Nation> getMyRelations(final Nation nation, final RelationType relationType) {
         List<Relation> relations = getGameCache(nation.getGameId()).getRelations();
-        Collection<Relation> myAllies = Collections2.filter(relations, relation -> relation.getFrom().equals(nation) && relation.getType().equals(relationType));
-        return Collections2.transform(myAllies, Relation::getTo);
+        return relations.stream()
+                .filter(r -> r.getFrom().equals(nation) && r.getType().equals(relationType))
+                .map(Relation::getTo)
+                .collect(Collectors.toList());
     }
 
     public Map<Nation, RelationType> getMyRelationsAsMap(Nation nation) {
@@ -105,7 +103,9 @@ public class RelationDao extends CacheDao {
 
     public Collection<Relation> getTheirRelations(final Nation nation) {
         List<Relation> relations = getGameCache(nation.getGameId()).getRelations();
-        return Collections2.filter(relations, input -> input.getTo().equals(nation));
+        return relations.stream()
+                .filter(input -> input.getTo().equals(nation))
+                .collect(Collectors.toList());
     }
 
     public Map<Nation, RelationType> getTheirRelationTypesAsMap(Nation nation) {

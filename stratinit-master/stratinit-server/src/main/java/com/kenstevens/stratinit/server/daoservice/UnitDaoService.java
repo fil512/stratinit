@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
@@ -85,7 +84,7 @@ public class UnitDaoService {
 
     private void moveUnitFromOrder(Unit unit, SectorCoords target,
                                    Nation nation, WorldView worldView) {
-        List<Unit> units = Lists.newArrayList(unit);
+        List<Unit> units = new ArrayList<>(List.of(unit));
         UnitsToMove unitsToMove = new UnitsToMove(nation,
                 AttackType.INITIAL_ATTACK, nation, units,
                 target);
@@ -333,13 +332,13 @@ public class UnitDaoService {
     }
 
     public void removeUnitsSeen(Game game) {
-        for (UnitSeen unitSeen : Lists.newArrayList(unitDao.getUnitsSeen(game))) {
+        for (UnitSeen unitSeen : new ArrayList<>(unitDao.getUnitsSeen(game))) {
             remove(unitSeen);
         }
     }
 
     public void removeUnitMoves(Game game) {
-        for (UnitMove unitMove : Lists.newArrayList(unitDao.getUnitMoves(game))) {
+        for (UnitMove unitMove : new ArrayList<>(unitDao.getUnitMoves(game))) {
             unitDao.delete(unitMove);
         }
     }

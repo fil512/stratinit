@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.world;
 
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -60,7 +59,7 @@ public class PlayerIsland extends Island {
 		sector.setIsland(islandId);
 		addSectorToIsland(sector);
 		for (Sector neighbour : world.getNeighbours(sector)) {
-			if (!friendlyPredicate.apply(neighbour)) {
+			if (!friendlyPredicate.test(neighbour)) {
 				throw new IllegalStateException(
 						"Not enough room to grow start island.");
 			}
@@ -71,14 +70,15 @@ public class PlayerIsland extends Island {
 	private void addPorts() {
 		List<Sector> coastalSectors = coastalSectors();
 		for (int i = 0; i < worldConfig.getPortsPerPlayerIsland(); ++i) {
-			if (!Iterables.any(randomize(coastalSectors),
-					isolatedCityPredicate)) {
+			Sector nextCity = randomize(coastalSectors).stream()
+					.filter(isolatedCityPredicate::test)
+					.findFirst()
+					.orElse(null);
+			if (nextCity == null) {
 				new WorldPrinter(world).print();
 				throw new IllegalStateException("No room to add port #"
 						+ (i + 1) + " to island #" + islandId);
 			}
-			Sector nextCity = Iterables.find(randomize(coastalSectors),
-					isolatedCityPredicate);
 			nextCity.setType(SectorType.NEUTRAL_CITY);
 		}
 

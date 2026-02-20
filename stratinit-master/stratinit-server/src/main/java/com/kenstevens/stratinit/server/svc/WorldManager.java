@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.svc;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
@@ -17,6 +16,7 @@ import com.kenstevens.stratinit.world.WorldCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,7 +45,7 @@ public class WorldManager {
 
     public void addPlayerToMap(int island, Nation nation) {
         Game game = nation.getGame();
-        List<Sector> islandCities = Lists.newArrayList(cityDao.getStartCitiesOnIsland(game,
+        List<Sector> islandCities = new ArrayList<>(cityDao.getStartCitiesOnIsland(game,
                 island));
         if (islandCities.isEmpty()) {
             throw new IllegalStateException("Island " + island + " on game " + game.getGamename() + " has no start cities.  game.players = " + game.getPlayers() + ".  nation = " + nation + "." + "  nation.nationId=" + nation.getNationId());

@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitSeen;
 import com.kenstevens.stratinit.client.model.WorldSector;
@@ -12,6 +11,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +95,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void getCargoPassengersTest() {
         UnitType holderType = UnitType.CARGO_PLANE;
         SectorCoords coords = SEA;
-        List<Unit> units = Lists.newArrayList();
+        List<Unit> units = new ArrayList<>();
 
         List<Unit> passengers = getPassengers(holderType, coords, units);
         assertAllButOnePassengers(holderType, units, passengers);
@@ -107,7 +107,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
         SectorCoords coords = PORT;
         cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.FIGHTER);
-        List<Unit> units = Lists.newArrayList();
+        List<Unit> units = new ArrayList<>();
 
         List<Unit> passengers = getPassengers(holderType, coords, units);
         assertAllButOnePassengers(holderType, units, passengers);
@@ -129,7 +129,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void getXportPassengersTest() {
         UnitType holderType = UnitType.TRANSPORT;
         SectorCoords coords = SEA;
-        List<Unit> units = Lists.newArrayList();
+        List<Unit> units = new ArrayList<>();
 
         List<Unit> passengers = getPassengers(holderType, coords, units);
         assertAllButOnePassengers(holderType, units, passengers);
@@ -141,7 +141,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
         SectorCoords coords = PORT;
         cityDaoService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
-        List<Unit> units = Lists.newArrayList();
+        List<Unit> units = new ArrayList<>();
 
         List<Unit> passengers = getPassengers(holderType, coords, units);
         assertAllButOnePassengers(holderType, units, passengers);

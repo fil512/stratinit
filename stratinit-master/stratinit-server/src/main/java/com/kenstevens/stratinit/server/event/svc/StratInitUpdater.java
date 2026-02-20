@@ -5,6 +5,7 @@ import com.kenstevens.stratinit.client.model.RelationPK;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitSeenPK;
 import com.kenstevens.stratinit.server.event.update.EventUpdateFactory;
+import com.kenstevens.stratinit.server.rest.svc.GameNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +15,17 @@ import java.util.Date;
 public class StratInitUpdater {
     @Autowired
     private EventUpdateFactory eventUpdateFactory;
+    @Autowired
+    private GameNotificationService gameNotificationService;
 
     public void updateTech(Integer gameId, Date date) {
         eventUpdateFactory.getTechEventUpdate(date).update(gameId);
+        gameNotificationService.notifyGameUpdate(gameId, -1);
     }
 
     public void buildUnit(CityPK cityPK, Date date) {
         eventUpdateFactory.getBuildUnitEventUpdate(cityPK, date).update(cityPK.getGameId());
+        gameNotificationService.notifyGameUpdate(cityPK.getGameId(), -1);
     }
 
     public void endGame(Integer gameId) {

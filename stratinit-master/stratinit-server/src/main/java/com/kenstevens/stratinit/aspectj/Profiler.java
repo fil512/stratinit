@@ -7,16 +7,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class Profiler {
     private final static Logger logger = LoggerFactory.getLogger(Profiler.class);
 
     private static final String PROFILE_FILENAME = "profile.txt";
 
-    private static final Map<ProfilerID, TimerClass> TIMERS = Collections.synchronizedMap(new HashMap<ProfilerID, TimerClass>());
+    private static final Map<ProfilerID, TimerClass> TIMERS = new ConcurrentHashMap<>();
 
     private static final File proFile = new File(PROFILE_FILENAME);
     private static FileOutputStream outStream;

@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.attack;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.FlakBattleLog;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -12,6 +11,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,7 +42,9 @@ public class FlakTest extends TwoPlayerBase {
     }
 
     private List<FlakBattleLog> getFlakBattleLogs() {
-        return Lists.newArrayList(logDao.getFlakBattleLogs(nationMe));
+        List<FlakBattleLog> list = new ArrayList<>();
+        logDao.getFlakBattleLogs(nationMe).forEach(list::add);
+        return list;
     }
 
     @Test

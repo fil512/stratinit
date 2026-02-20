@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
 
@@ -12,7 +12,7 @@ public class InSectorPredicate implements Predicate<Unit> {
 	}
 
 	@Override
-	public boolean apply(Unit unit) {
+	public boolean test(Unit unit) {
 		return unit.getCoords().equals(coords);
 	}
 }

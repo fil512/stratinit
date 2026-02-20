@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -11,6 +10,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -28,7 +28,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
         int capacity = getCapacity(holderType);
         Unit holder = unitDaoService.buildUnit(nationThem, defCoords,
                 holderType);
-        List<Unit> units = Lists.newArrayList();
+        List<Unit> units = new ArrayList<>();
 
         for (int i = 0; i < capacity + 1; ++i) {
             Unit inf = unitDaoService.buildUnit(nationThem, defCoords,

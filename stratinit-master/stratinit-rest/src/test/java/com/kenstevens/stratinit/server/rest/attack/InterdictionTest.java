@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.attack;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
@@ -182,8 +181,9 @@ public class InterdictionTest extends TwoPlayerBase {
     }
 
     private ArrayList<UnitAttackedBattleLog> getUnitAttackedLogs() {
-        return Lists.newArrayList(logDao
-                .getUnitAttackedBattleLogs(nationMe));
+        ArrayList<UnitAttackedBattleLog> list = new ArrayList<>();
+        logDao.getUnitAttackedBattleLogs(nationMe).forEach(list::add);
+        return list;
     }
 
     @Test

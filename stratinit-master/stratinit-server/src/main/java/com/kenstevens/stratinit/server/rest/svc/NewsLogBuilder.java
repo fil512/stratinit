@@ -1,19 +1,18 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.news.*;
-import com.kenstevens.stratinit.dto.news.translator.BulletinToSINewsBulletin;
 import com.kenstevens.stratinit.news.NewsWorthy;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsLogBuilder {
@@ -45,7 +44,9 @@ public class NewsLogBuilder {
 		Map<Integer, List<Mail>> map = splitter.split(game, bulletins);
 		for (int day : map.keySet()) {
 			List<Mail> dayBulletins = map.get(day);
-			List<SINewsBulletin> siBulletins = Lists.transform(dayBulletins, new BulletinToSINewsBulletin());
+			List<SINewsBulletin> siBulletins = dayBulletins.stream()
+					.map(SINewsBulletin::new)
+					.collect(Collectors.toList());
 			newsLogs.get(day).addBulletins(siBulletins);
 		}
 	}

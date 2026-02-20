@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.rank;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.GameHistory;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -8,6 +7,7 @@ import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SITeam;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,26 +42,26 @@ public class TestTeamProvider implements ITeamProvider {
 	@Override
 	public Collection<Nation> getAllies(Nation nation) {
 		if (nation.equals(nation1a)) {
-			return Lists.newArrayList(nation1b);
+			return new ArrayList<>(List.of(nation1b));
 		}
 		if (nation.equals(nation1c)) {
-			return Lists.newArrayList(nation1d);
+			return new ArrayList<>(List.of(nation1d));
 		}
 		if (nation.equals(nation2a)) {
-			return Lists.newArrayList(nation2b);
+			return new ArrayList<>(List.of(nation2b));
 		}
 		if (nation.equals(nation2c)) {
-			return Lists.newArrayList();
+			return new ArrayList<>();
 		}
 		if (nation.equals(nation2e)) {
-			return Lists.newArrayList(nation2f);
+			return new ArrayList<>(List.of(nation2f));
 		}
-		return Lists.newArrayList();
+		return new ArrayList<>();
 	}
 
 	@Override
 	public List<Nation> getNations(Game game) {
-		List<Nation> nations = Lists.newArrayList();
+		List<Nation> nations = new ArrayList<>();
 		if (game.equals(game1)) {
 			nations.add(nation1a);
 			nations.add(nation1b);

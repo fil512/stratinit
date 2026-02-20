@@ -1,11 +1,7 @@
 package com.kenstevens.stratinit.dao;
 
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.cache.NationCache;
-import com.kenstevens.stratinit.cache.NationCacheToNationFunction;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.dao.predicates.*;
@@ -24,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.google.common.base.Predicates.and;
 
 @Service
 public class UnitDao extends CacheDao {
@@ -68,29 +62,32 @@ public class UnitDao extends CacheDao {
 
     public Collection<Nation> getOtherNationsThatCanSeeThisSub(CoordMeasure coordMeasure, Unit sub) {
         Nation nation = sub.getNation();
-        List<NationCache> nationCaches = getGameCache(nation).getNationCaches();
-        return Collections2.transform(
-                Collections2.filter(nationCaches,
-                        and(new OtherNationPredicate(nation), new CanSeeSubPredicate(coordMeasure, sub))),
-                new NationCacheToNationFunction());
+        OtherNationPredicate otherNation = new OtherNationPredicate(nation);
+        CanSeeSubPredicate canSeeSub = new CanSeeSubPredicate(coordMeasure, sub);
+        return getGameCache(nation).getNationCaches().stream()
+                .filter(nc -> otherNation.test(nc) && canSeeSub.test(nc))
+                .map(NationCache::getNation)
+                .collect(Collectors.toList());
     }
 
     public Collection<Nation> getOtherNationsThatCanSeeThisUnit(CoordMeasure coordMeasure, Unit targetUnit) {
         Nation nation = targetUnit.getNation();
-        List<NationCache> nationCaches = getGameCache(nation).getNationCaches();
-        return Collections2.transform(
-                Collections2.filter(nationCaches,
-                        and(new OtherNationPredicate(nation), new CanSeeUnitPredicate(coordMeasure, targetUnit))),
-                new NationCacheToNationFunction());
+        OtherNationPredicate otherNation = new OtherNationPredicate(nation);
+        CanSeeUnitPredicate canSeeUnit = new CanSeeUnitPredicate(coordMeasure, targetUnit);
+        return getGameCache(nation).getNationCaches().stream()
+                .filter(nc -> otherNation.test(nc) && canSeeUnit.test(nc))
+                .map(NationCache::getNation)
+                .collect(Collectors.toList());
     }
 
     public Collection<Nation> getOtherNationsThatSeeThisUnit(Unit unit) {
         Nation nation = unit.getNation();
-        List<NationCache> nationCaches = getGameCache(nation).getNationCaches();
-        return Collections2.transform(
-                Collections2.filter(nationCaches,
-                        and(new OtherNationPredicate(nation), new SeesUnitPredicate(unit))),
-                new NationCacheToNationFunction());
+        OtherNationPredicate otherNation = new OtherNationPredicate(nation);
+        SeesUnitPredicate seesUnit = new SeesUnitPredicate(unit);
+        return getGameCache(nation).getNationCaches().stream()
+                .filter(nc -> otherNation.test(nc) && seesUnit.test(nc))
+                .map(NationCache::getNation)
+                .collect(Collectors.toList());
     }
 
     public Collection<LaunchedSatellite> getSatellites(Nation nation) {
@@ -102,8 +99,10 @@ public class UnitDao extends CacheDao {
     }
 
     public Collection<Unit> getUnits(Game game, SectorCoords coords) {
-        Collection<Unit> units = getUnits(game);
-        return Collections2.filter(units, new InSectorPredicate(coords));
+        InSectorPredicate inSector = new InSectorPredicate(coords);
+        return getUnits(game).stream()
+                .filter(inSector::test)
+                .collect(Collectors.toList());
     }
 
     public Collection<Unit> getUnits(Game game) {
@@ -119,7 +118,7 @@ public class UnitDao extends CacheDao {
     }
 
     public List<UnitSeen> getUnitsSeen(Game game) {
-        List<UnitSeen> retval = Lists.newArrayList();
+        List<UnitSeen> retval = new ArrayList<>();
         for (NationCache nationCache : getGameCache(game).getNationCaches()) {
             retval.addAll(nationCache.getUnitsSeen());
         }
@@ -127,7 +126,7 @@ public class UnitDao extends CacheDao {
     }
 
     public List<UnitMove> getUnitMoves(Game game) {
-        List<UnitMove> retval = Lists.newArrayList();
+        List<UnitMove> retval = new ArrayList<>();
         for (NationCache nationCache : getGameCache(game).getNationCaches()) {
             retval.addAll(nationCache.getUnitsMove());
         }
@@ -135,16 +134,23 @@ public class UnitDao extends CacheDao {
     }
 
     public Collection<Unit> getUnitsThatCanInterdictThisUnit(CoordMeasure coordMeasure, Nation nation, Unit targetUnit) {
-        return Collections2.filter(getNationUnits(nation), new UnitCanInterdictUnitPredicate(coordMeasure, targetUnit));
+        UnitCanInterdictUnitPredicate predicate = new UnitCanInterdictUnitPredicate(coordMeasure, targetUnit);
+        return getNationUnits(nation).stream()
+                .filter(predicate::test)
+                .collect(Collectors.toList());
     }
 
     public boolean isAnEscort(CoordMeasure coordMeasure, Unit unit) {
-        return Iterables.any(
-                getUnitsWithin(coordMeasure, unit.getNation(), unit.getCoords(), Constants.ESCORT_RADIUS), new UnitIsCapitalShip());
+        UnitIsCapitalShip capitalShip = new UnitIsCapitalShip();
+        return getUnitsWithin(coordMeasure, unit.getNation(), unit.getCoords(), Constants.ESCORT_RADIUS)
+                .stream().anyMatch(capitalShip::test);
     }
 
     public Collection<Unit> getUnitsThatCanCounterFireThisUnit(CoordMeasure coordMeasure, Nation nation, Unit targetUnit, SectorCoords excludeCoords) {
-        return Collections2.filter(getNationUnits(nation), new UnitCanCounterFireUnitPredicate(coordMeasure, targetUnit, excludeCoords));
+        UnitCanCounterFireUnitPredicate predicate = new UnitCanCounterFireUnitPredicate(coordMeasure, targetUnit, excludeCoords);
+        return getNationUnits(nation).stream()
+                .filter(predicate::test)
+                .collect(Collectors.toList());
     }
 
     private List<Unit> getNationUnits(Nation nation) {
@@ -248,7 +254,8 @@ public class UnitDao extends CacheDao {
     }
 
     public int getNumberOfCapitalShips(Nation nation) {
-        return Collections2.filter(getUnits(nation), new UnitIsCapitalShip()).size();
+        UnitIsCapitalShip capitalShip = new UnitIsCapitalShip();
+        return (int) getUnits(nation).stream().filter(capitalShip::test).count();
     }
 
     public void transferUnit(Unit unit, Nation nation) {
@@ -271,12 +278,16 @@ public class UnitDao extends CacheDao {
     }
 
     public Collection<Unit> getUnitsOfType(Nation nation, UnitType unitType) {
-        Collection<Unit> units = getUnits(nation);
-        return Collections2.filter(units, new UnitTypePredicate(unitType));
+        UnitTypePredicate predicate = new UnitTypePredicate(unitType);
+        return getUnits(nation).stream()
+                .filter(predicate::test)
+                .collect(Collectors.toList());
     }
 
     public Collection<Unit> getMissiles(Nation nation) {
-        Collection<Unit> units = getUnits(nation);
-        return Collections2.filter(units, new UnitDevistatesPredicate());
+        UnitDevistatesPredicate predicate = new UnitDevistatesPredicate();
+        return getUnits(nation).stream()
+                .filter(predicate::test)
+                .collect(Collectors.toList());
     }
 }

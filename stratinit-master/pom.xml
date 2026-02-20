@@ -31,6 +31,7 @@
         <module>stratinit-server</module>
         <module>stratinit-wicket</module>
         <module>stratinit-rest</module>
+        <module>stratinit-ui</module>
     </modules>
     <properties>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -42,6 +43,7 @@
         <querydsl.version>5.1.0</querydsl.version>
         <swt.version>3.5.2</swt.version>
         <flyway.version>11.20.3</flyway.version>
+        <jjwt.version>0.12.6</jjwt.version>
     </properties>
     <build>
         <pluginManagement>
@@ -213,6 +215,30 @@
                 <groupId>com.querydsl</groupId>
                 <artifactId>querydsl-core</artifactId>
                 <version>${querydsl.version}</version>
+            </dependency>
+            <!-- JWT -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <!-- stratinit-ui -->
+            <dependency>
+                <groupId>com.kenstevens.stratinit</groupId>
+                <artifactId>stratinit-ui</artifactId>
+                <version>${stratinit.version}</version>
             </dependency>
             <!-- Springdoc OpenAPI (replaces SpringFox) -->
             <dependency>

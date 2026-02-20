@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.dao.MessageDao;
@@ -58,7 +57,8 @@ public class MessageDaoTest extends StratInitTest {
 	}
 
 	private void assertMessage(Mail mail, Iterable<Mail> messages) {
-		ArrayList<Mail> msgs = Lists.newArrayList(messages);
+		ArrayList<Mail> msgs = new ArrayList<>();
+		messages.forEach(msgs::add);
 		assertEquals(1, msgs.size());
 		Mail message = msgs.get(0);
 		assertEquals(mail.getMessageId(), message.getMessageId());

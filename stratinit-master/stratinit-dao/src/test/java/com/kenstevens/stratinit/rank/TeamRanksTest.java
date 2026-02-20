@@ -1,12 +1,12 @@
 package com.kenstevens.stratinit.rank;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.PlayerRank;
 import com.kenstevens.stratinit.client.server.rest.rank.ELOCalculator;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +15,7 @@ public class TeamRanksTest {
 
 	@Test
 	public void testRankTeamsTieLost() {
-		List<SITeam> teams = Lists.newArrayList();
+		List<SITeam> teams = new ArrayList<>();
 		teams.add(new SITeam("a", "b", 11));
 		teams.add(new SITeam("c", "d", 10));
 		teams.add(new SITeam("e", "f", 10));
@@ -58,7 +58,7 @@ public class TeamRanksTest {
 
 	@Test
 	public void testRankTeamsTieWon() {
-		List<SITeam> teams = Lists.newArrayList();
+		List<SITeam> teams = new ArrayList<>();
 		teams.add(new SITeam("a", "b", 11));
 		teams.add(new SITeam("c", "d", 11));
 		teams.add(new SITeam("e", "f", 10));

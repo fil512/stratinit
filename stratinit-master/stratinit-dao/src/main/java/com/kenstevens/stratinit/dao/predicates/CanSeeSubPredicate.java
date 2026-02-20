@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dao.predicates;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.CoordMeasure;
@@ -17,7 +17,7 @@ public class CanSeeSubPredicate implements Predicate<NationCache> {
 	}
 
 	@Override
-	public boolean apply(NationCache nationCache) {
+	public boolean test(NationCache nationCache) {
 		UnitSeesSubsPredicate unitSeesSubsPredicate = new UnitSeesSubsPredicate();
 		UnitCanSeeUnitPredicate unitCanSeeUnitPredicate = new UnitCanSeeUnitPredicate(coordMeasure, sub);
 		java.util.function.Predicate<Unit> canSeeThisSub = unitSeesSubsPredicate.and(unitCanSeeUnitPredicate);

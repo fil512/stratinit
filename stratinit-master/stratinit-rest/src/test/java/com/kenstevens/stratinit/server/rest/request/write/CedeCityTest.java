@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -10,6 +9,7 @@ import com.kenstevens.stratinit.remote.request.CedeCityJson;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +26,7 @@ public class CedeCityTest extends TwoPlayerBase {
         Sector sector = testWorld.getSectorOrNull(sicity.coords);
         SectorSeen sectorSeen = sectorDao.findSectorSeen(nationThem, sector);
         assertNull(sectorSeen);
-        List<Unit> units = Lists.newArrayList(unitDao.getUnits(sector));
+        List<Unit> units = new ArrayList<>(unitDao.getUnits(sector));
         assertEquals(4, units.size());
         assertEquals(nationMe, units.get(0).getNation());
 
@@ -38,7 +38,7 @@ public class CedeCityTest extends TwoPlayerBase {
         assertNotNull(seenCity);
         assertEquals(nationThemId, seenCity.nationId);
 
-        units = Lists.newArrayList(unitDao.getUnits(sector));
+        units = new ArrayList<>(unitDao.getUnits(sector));
         assertEquals(4, units.size());
         assertEquals(nationThem, units.get(0).getNation());
 

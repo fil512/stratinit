@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dao.UnitDao;
@@ -16,6 +15,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
@@ -51,7 +51,7 @@ public abstract class BuildRequest extends PlayerWriteRequest<SIUpdate> {
             }
         }
         if (!tried) {
-            List<String> unitsSelected = Lists.newArrayList();
+            List<String> unitsSelected = new ArrayList<>();
             for (Unit unit : units) {
                 unitsSelected.add(unit.getType() + " " + unit.getMobility() + " mob");
             }

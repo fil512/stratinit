@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.WorldSector;
 
@@ -12,7 +12,7 @@ public class SectorSuppliesUnitPredicate implements Predicate<WorldSector> {
 	}
 
 	@Override
-	public boolean apply(WorldSector sector) {
+	public boolean test(WorldSector sector) {
 		return sector.supplies(targetUnit);
 	}
 

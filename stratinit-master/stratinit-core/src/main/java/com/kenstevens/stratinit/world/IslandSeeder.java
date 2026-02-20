@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.world;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.UnassignedAndIsolatedPredicate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +24,7 @@ public class IslandSeeder {
 	}
 
 	List<Sector> seedIsland() {
-		List<Sector> startSectors = Lists.newArrayList();
+		List<Sector> startSectors = new ArrayList<>();
 		startSectors.add(world.getSectorOrNull(startCoord));
 		int extraVolcanos = RANDOM.nextInt(4);
 		for (int i = 0; i < extraVolcanos; ++i) {
@@ -45,7 +45,7 @@ public class IslandSeeder {
 			SectorCoords candidate = startCoord.shift(world.size(),
 					new SectorCoords(dx, dy));
 			Sector sector = world.getSectorOrNull(candidate);
-			if (unassignedAndIsolatedPredicate.apply(sector)) {
+			if (unassignedAndIsolatedPredicate.test(sector)) {
 				return sector;
 			}
 		}

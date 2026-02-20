@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.dao.predicates;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.client.model.Nation;
 
@@ -12,7 +12,7 @@ public class OtherNationPredicate implements Predicate<NationCache> {
 	}
 
 	@Override
-	public boolean apply(NationCache otherNation) {
+	public boolean test(NationCache otherNation) {
 		return !otherNation.getNation().equals(nation);
 	}
 

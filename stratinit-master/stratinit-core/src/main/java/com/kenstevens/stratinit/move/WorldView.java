@@ -1,19 +1,14 @@
 package com.kenstevens.stratinit.move;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.world.predicate.SectorSuppliesUnitPredicate;
-import com.kenstevens.stratinit.world.predicate.SectorToWorldSectorFunction;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 public class WorldView implements CoordMeasure {
 	private final World world;
 	private final Nation nation;
@@ -38,13 +33,15 @@ public class WorldView implements CoordMeasure {
 
 	public List<WorldSector> getWorldSectorsWithin(SectorCoords coords, int distance,
 			boolean includeSelf) {
-		return Lists.transform(world.getSectorsWithin(coords, distance,
-				includeSelf), new SectorToWorldSectorFunction());
+		return world.getSectorsWithin(coords, distance, includeSelf).stream()
+				.map(s -> (WorldSector) s)
+				.collect(Collectors.toList());
 	}
 
 	public List<WorldSector> getWorldSectors() {
-		return Lists.transform(world.getSectors(),
-				new SectorToWorldSectorFunction());
+		return world.getSectors().stream()
+				.map(s -> (WorldSector) s)
+				.collect(Collectors.toList());
 	}
 
 	public WorldSector getWorldSector(Sector sector) {
@@ -144,10 +141,13 @@ public class WorldView implements CoordMeasure {
 		return world.distance(source, target);
 	}
 
-	public Iterable<WorldSector> getSupplyingSectors(Unit unit) {
+	public List<WorldSector> getSupplyingSectors(Unit unit) {
 		List<WorldSector> sectors = getWorldSectorsWithin(unit.getCoords(),
 				Constants.SUPPLY_RADIUS, true);
-		return Iterables.filter(sectors, new SectorSuppliesUnitPredicate(unit));
+		SectorSuppliesUnitPredicate predicate = new SectorSuppliesUnitPredicate(unit);
+		return sectors.stream()
+				.filter(predicate::test)
+				.collect(Collectors.toList());
 	}
 
 

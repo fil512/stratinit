@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.repo;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.QGame;
@@ -8,6 +7,7 @@ import com.kenstevens.stratinit.client.model.QPlayer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +30,8 @@ class GameRepoTest extends StratInitTest {
 
         // Test with QueryDSL
         QPlayer player = QPlayer.player;
-        List<Game> foundGames = Lists.newArrayList(gameRepo.findAll(QGame.game.gamename.eq("zunk")));
+        List<Game> foundGames = new ArrayList<>();
+        gameRepo.findAll(QGame.game.gamename.eq("zunk")).forEach(foundGames::add);
         assertThat(foundGames, hasSize(1));
         assertEquals(foundGames.get(0).getGamename(), "zunk");
     }

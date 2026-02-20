@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class ConcedeRequest extends PlayerWriteRequest<SIUpdate> {
     protected Result<SIUpdate> executeWrite() {
         Nation nation = getNation();
 
-        List<City> cities = Lists.newArrayList(cityDao.getCities(nation));
-        List<Unit> units = Lists.newArrayList(unitDao.getUnits(nation));
+        List<City> cities = new ArrayList<>(cityDao.getCities(nation));
+        List<Unit> units = new ArrayList<>(unitDao.getUnits(nation));
 
         Collection<Nation> allies = relationDaoService.getAllies(nation);
         Nation ally = null;

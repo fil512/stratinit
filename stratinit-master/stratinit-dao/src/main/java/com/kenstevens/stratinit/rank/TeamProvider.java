@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.rank;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
@@ -13,6 +12,7 @@ import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -83,8 +83,8 @@ public class TeamProvider implements ITeamProvider {
 
     @Override
     public List<SITeam> findTeams(GameHistory gameHistory) {
-        List<SITeam> teams = Lists.newArrayList();
-        List<SINation> nations = Lists.newArrayList();
+        List<SITeam> teams = new ArrayList<>();
+        List<SINation> nations = new ArrayList<>();
 
         getTeamsAndNations(gameHistory, teams, nations);
         return teams;

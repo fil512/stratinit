@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.AttackType;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -66,11 +66,11 @@ public class Interdiction {
                     targetUnit, nation);
             Collection<Unit> units;
             if (excludeCoords != null) {
-                units = Lists.newArrayList(unitDao
+                units = new ArrayList<>(unitDao
                         .getUnitsThatCanCounterFireThisUnit(worldView, nation,
                                 targetUnit, excludeCoords));
             } else {
-                units = Lists.newArrayList(unitDao
+                units = new ArrayList<>(unitDao
                         .getUnitsThatCanInterdictThisUnit(worldView, nation,
                                 targetUnit));
             }

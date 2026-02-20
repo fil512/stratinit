@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.event.svc;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Relation;
@@ -13,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class GameEnder {
@@ -52,13 +53,13 @@ public class GameEnder {
     }
 
     private void removeCities(Game game) {
-        for (City city : Lists.newArrayList(cityDao.getCities(game))) {
+        for (City city : new ArrayList<>(cityDao.getCities(game))) {
             cityDaoService.remove(city);
         }
     }
 
     private void removeRelations(Game game) {
-        for (Relation relation : Lists.newArrayList(relationDao.getRelations(game))) {
+        for (Relation relation : new ArrayList<>(relationDao.getRelations(game))) {
             relationDaoService.remove(relation);
         }
     }
@@ -74,7 +75,7 @@ public class GameEnder {
 
 
     private void removeUnits(Game game) {
-        for (Unit unit : Lists.newArrayList(unitDao.getUnits(game))) {
+        for (Unit unit : new ArrayList<>(unitDao.getUnits(game))) {
             unitDaoService.remove(unit);
         }
     }

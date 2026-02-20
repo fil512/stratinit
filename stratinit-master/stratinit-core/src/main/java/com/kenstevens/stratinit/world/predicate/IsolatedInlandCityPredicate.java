@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 
@@ -15,7 +14,8 @@ public class IsolatedInlandCityPredicate implements Predicate<Sector> {
 	}
 
 	@Override
-	public boolean apply(Sector sector) {
-		return isolatedCityPredicate.apply(sector) && !Iterables.any(world.getNeighbours(sector, 1), new WaterPredicate());
+	public boolean test(Sector sector) {
+		WaterPredicate waterPredicate = new WaterPredicate();
+		return isolatedCityPredicate.test(sector) && world.getNeighbours(sector, 1).stream().noneMatch(waterPredicate::test);
 	}
 }

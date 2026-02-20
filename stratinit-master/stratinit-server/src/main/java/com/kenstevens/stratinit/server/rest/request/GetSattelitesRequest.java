@@ -1,8 +1,5 @@
 package com.kenstevens.stratinit.server.rest.request;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.LaunchedSatellite;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.dao.UnitDao;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Scope("prototype")
 @Component
@@ -25,10 +23,8 @@ public class GetSattelitesRequest extends PlayerRequest<List<SISatellite>> {
 		Nation nation = getNation();
 		Collection<LaunchedSatellite> satellites = unitDao
 				.getSatellites(nation);
-		return Lists.newArrayList(Collections2.transform(satellites, new Function<LaunchedSatellite, SISatellite>() {
-			public SISatellite apply(LaunchedSatellite satellite) {
-				return new SISatellite(satellite);
-			}
-		}));
+		return satellites.stream()
+				.map(SISatellite::new)
+				.collect(Collectors.toList());
 	}
 }

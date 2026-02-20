@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.CityCapturedBattleLog;
 import com.kenstevens.stratinit.client.model.FlakBattleLog;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -33,13 +32,14 @@ public class GetBattleLogRequest extends PlayerWriteRequest<List<SIBattleLog>> {
             SIBattleLog silog = new SIBattleLog(nation, log);
             retval.add(silog);
         }
-        List<UnitAttackedBattleLog> uabattleLogs = Lists.newArrayList(logDao
-                .getUnitAttackedBattleLogs(nation));
+        List<UnitAttackedBattleLog> uabattleLogs = new ArrayList<>();
+        logDao.getUnitAttackedBattleLogs(nation).forEach(uabattleLogs::add);
         for (UnitAttackedBattleLog log : uabattleLogs) {
             SIBattleLog silog = new SIBattleLog(nation, log);
             retval.add(silog);
         }
-        List<FlakBattleLog> fbattleLogs = Lists.newArrayList(logDao.getFlakBattleLogs(nation));
+        List<FlakBattleLog> fbattleLogs = new ArrayList<>();
+        logDao.getFlakBattleLogs(nation).forEach(fbattleLogs::add);
         for (FlakBattleLog log : fbattleLogs) {
             SIBattleLog silog = new SIBattleLog(nation, log);
             retval.add(silog);

@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.type.Constants;
@@ -17,7 +17,7 @@ public class UnitCanInterdictUnitPredicate implements Predicate<Unit> {
 	}
 
 	@Override
-	public boolean apply(Unit unit) {
+	public boolean test(Unit unit) {
 		int sight = unit.getSight();
 		if (targetUnit.isSubmarine()) {
 			sight = unit.getSubSight();

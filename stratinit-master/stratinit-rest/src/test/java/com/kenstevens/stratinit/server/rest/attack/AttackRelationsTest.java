@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.attack;
 
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
@@ -11,6 +10,8 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -55,7 +56,7 @@ public class AttackRelationsTest extends TwoPlayerBase {
     }
 
     private int unitAttackLogCount() {
-        return Iterables.size(logDao.getUnitAttackedBattleLogs(nationMe));
+        return (int) StreamSupport.stream(logDao.getUnitAttackedBattleLogs(nationMe).spliterator(), false).count();
     }
 
     @Test

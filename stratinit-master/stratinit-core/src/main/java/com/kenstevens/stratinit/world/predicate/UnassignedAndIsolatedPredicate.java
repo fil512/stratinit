@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 
@@ -18,8 +18,8 @@ public class UnassignedAndIsolatedPredicate implements Predicate<Sector> {
 	}
 
 	@Override
-	public boolean apply(Sector element) {
-		return UNASSIGNED_PREDICATE.apply(element) && isolatedPredicate.apply(element);
+	public boolean test(Sector element) {
+		return UNASSIGNED_PREDICATE.test(element) && isolatedPredicate.test(element);
 	}
 
 }

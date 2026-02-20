@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.dao.impl;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.StratInitTest;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -28,7 +27,7 @@ public class UnitDaoTest extends StratInitTest {
 	@Test
 	public void testUnitPersistance() {
 		createUnit1();
-		List<Unit> result = Lists.newArrayList(unitDao.getUnits(testGame,
+		List<Unit> result = new java.util.ArrayList<>(unitDao.getUnits(testGame,
 				testCoords));
 		assertEquals(1, result.size());
 		assertEquals(testCoords, result.get(0).getCoords());

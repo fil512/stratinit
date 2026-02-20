@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.CoordMeasure;
@@ -18,7 +18,7 @@ public class UnitCanCounterFireUnitPredicate implements Predicate<Unit> {
 	}
 
 	@Override
-	public boolean apply(Unit unit) {
+	public boolean test(Unit unit) {
 		if (unit.getCoords().equals(excludeCoords)) {
 			return false;
 		}

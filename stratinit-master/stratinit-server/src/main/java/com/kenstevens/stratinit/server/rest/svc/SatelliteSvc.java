@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.LaunchedSatellite;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.dao.RelationDao;
@@ -21,7 +20,7 @@ public class SatelliteSvc {
     private RelationDao relationDao;
 
     public List<SILaunchedSatellite> getLaunchedSatellites(Nation nation) {
-        Collection<LaunchedSatellite> sats = Lists.newArrayList(unitDao.getSatellites(nation));
+        Collection<LaunchedSatellite> sats = new ArrayList<>(unitDao.getSatellites(nation));
         for (Nation ally : relationDao.getAllies(nation)) {
             sats.addAll(unitDao.getSatellites(ally));
         }

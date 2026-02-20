@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.dao.predicates;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.CoordMeasure;
@@ -18,17 +17,17 @@ public class CanSeeUnitPredicate implements Predicate<NationCache> {
 	}
 
 	@Override
-	public boolean apply(NationCache nationCache) {
+	public boolean test(NationCache nationCache) {
 		return targetSeenBySatellite(nationCache) || targetSeenByUnit(nationCache);
 	}
 
 	private boolean targetSeenBySatellite(NationCache nationCache) {
-		LaunchedSatelliteCanSeeUnitPredicate launchedSatelliteCanSeeUnitPredicate = new LaunchedSatelliteCanSeeUnitPredicate(coordMeasure, targetUnit);
-		return Iterables.any(nationCache.getLaunchedSatellites(), launchedSatelliteCanSeeUnitPredicate);
+		LaunchedSatelliteCanSeeUnitPredicate predicate = new LaunchedSatelliteCanSeeUnitPredicate(coordMeasure, targetUnit);
+		return nationCache.getLaunchedSatellites().stream().anyMatch(predicate::test);
 	}
 
 	private boolean targetSeenByUnit(NationCache nationCache) {
-		UnitCanSeeUnitPredicate unitCanSeeUnitPredicate = new UnitCanSeeUnitPredicate(coordMeasure, targetUnit);
-		return Iterables.any(nationCache.getUnits(), unitCanSeeUnitPredicate);
+		UnitCanSeeUnitPredicate predicate = new UnitCanSeeUnitPredicate(coordMeasure, targetUnit);
+		return nationCache.getUnits().stream().anyMatch(predicate::test);
 	}
 }

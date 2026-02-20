@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.move.Attack;
@@ -241,7 +240,7 @@ public class UnitsMove {
     }
 
     private List<Unit> addMoveOrder(List<Unit> unitsOutOfRange) {
-        List<Unit> unitsOrdered = Lists.newArrayList();
+        List<Unit> unitsOrdered = new ArrayList<>();
         SectorCoords targetCoords = unitsToMove.getTargetCoords();
         for (Unit unit : unitsOutOfRange) {
             if (couldMoveTo(unit)) {
@@ -339,7 +338,10 @@ public class UnitsMove {
         if (unitsToRemove.isEmpty()) {
             return;
         }
-        List<Unit> newUnits = Lists.newArrayList(unitsToMove);
+        List<Unit> newUnits = new ArrayList<>();
+        for (Unit unit : unitsToMove) {
+            newUnits.add(unit);
+        }
         for (Unit unit : unitsToRemove) {
             newUnits.remove(unit);
         }

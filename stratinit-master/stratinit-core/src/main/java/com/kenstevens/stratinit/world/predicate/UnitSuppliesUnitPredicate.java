@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Unit;
 
 public class UnitSuppliesUnitPredicate implements Predicate<Unit> {
@@ -11,7 +11,7 @@ public class UnitSuppliesUnitPredicate implements Predicate<Unit> {
 	}
 
 	@Override
-	public boolean apply(Unit unit) {
+	public boolean test(Unit unit) {
 		return unit != null && unit.supplies(targetUnit);
 	}
 

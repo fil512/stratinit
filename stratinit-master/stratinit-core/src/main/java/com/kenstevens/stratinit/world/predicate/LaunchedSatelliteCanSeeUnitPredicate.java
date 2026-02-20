@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.LaunchedSatellite;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.Constants;
@@ -16,7 +16,7 @@ public class LaunchedSatelliteCanSeeUnitPredicate implements Predicate<LaunchedS
 	}
 
 	@Override
-	public boolean apply(LaunchedSatellite launchedSatellite) {
+	public boolean test(LaunchedSatellite launchedSatellite) {
 		return launchedSatellite.getCoords().distanceTo(coordMeasure, targetUnit.getCoords()) <= Constants.SATELLITE_SIGHT;
 	}
 }

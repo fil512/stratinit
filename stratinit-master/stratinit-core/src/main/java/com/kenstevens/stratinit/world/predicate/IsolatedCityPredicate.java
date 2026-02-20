@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 
@@ -17,12 +16,13 @@ public class IsolatedCityPredicate implements Predicate<Sector> {
 	}
 
 	@Override
-	public boolean apply(Sector sector) {
+	public boolean test(Sector sector) {
 		// if I am a city
-		if (cityPredicate.apply(sector)) {
+		if (cityPredicate.test(sector)) {
 			return false;
 		}
 		// There are no cities near me
-		return !Iterables.any(world.getNeighbours(sector, minDistanceEntreCities - 1), new CityPredicate());
+		CityPredicate nearbyCity = new CityPredicate();
+		return world.getNeighbours(sector, minDistanceEntreCities - 1).stream().noneMatch(nearbyCity::test);
 	}
 }

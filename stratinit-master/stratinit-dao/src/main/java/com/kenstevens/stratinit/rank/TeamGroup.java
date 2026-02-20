@@ -1,15 +1,15 @@
 package com.kenstevens.stratinit.rank;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.dto.SITeam;
 
 public class TeamGroup {
 
 	private final List<SITeam> teams;
-	private final List<SITeam> winners = Lists.newArrayList();
-	private final List<SITeam> losers = Lists.newArrayList();
+	private final List<SITeam> winners = new ArrayList<>();
+	private final List<SITeam> losers = new ArrayList<>();
 
 	public TeamGroup(List<SITeam> teams) {
 		this.teams = teams;

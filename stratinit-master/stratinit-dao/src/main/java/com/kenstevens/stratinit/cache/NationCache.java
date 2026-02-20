@@ -1,10 +1,8 @@
 package com.kenstevens.stratinit.cache;
 
-import com.google.common.collect.Collections2;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.*;
 import com.kenstevens.stratinit.type.SectorCoords;
-import com.kenstevens.stratinit.world.predicate.UnitSeenToUnitFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Component;
 import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Scope("prototype")
@@ -130,7 +129,9 @@ public class NationCache extends Cacheable {
 	}
 
 	public Collection<Unit> getSeenUnits() {
-		return Collections2.transform(unitSeenCache.getUnitsSeen(), new UnitSeenToUnitFunction());
+		return unitSeenCache.getUnitsSeen().stream()
+				.map(UnitSeen::getUnit)
+				.collect(Collectors.toList());
 	}
 
 	public Collection<UnitSeen> getUnitsSeen() {

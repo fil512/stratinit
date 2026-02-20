@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.dto.news;
 
-import com.google.common.collect.Lists;
-
 import java.util.*;
 
 public class SINewsLogs implements Iterable<SINewsLogsDay> {
@@ -17,7 +15,7 @@ public class SINewsLogs implements Iterable<SINewsLogsDay> {
 	}
 
 	public List<SINewsLogsDay> getDays() {
-		ArrayList<SINewsLogsDay> retval = Lists.newArrayList(newsMap.values());
+		ArrayList<SINewsLogsDay> retval = new ArrayList<>(newsMap.values());
 		Collections.reverse(retval);
 		return retval;
 	}

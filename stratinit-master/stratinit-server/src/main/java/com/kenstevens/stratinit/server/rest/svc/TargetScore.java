@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -10,10 +9,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TargetScore {
     public static final int CITY_VALUE = 24 * 2;
@@ -21,7 +17,7 @@ public class TargetScore {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final WorldSeenMap worldSeenMap;
     private final Collection<Unit> unitsSeen;
-    private final Map<SectorCoords, Integer> sectorScore = Maps.newHashMap();
+    private final Map<SectorCoords, Integer> sectorScore = new HashMap<>();
 
     public TargetScore(WorldSeenMap worldSeenMap, Collection<Unit> unitsSeen) {
         this.worldSeenMap = worldSeenMap;

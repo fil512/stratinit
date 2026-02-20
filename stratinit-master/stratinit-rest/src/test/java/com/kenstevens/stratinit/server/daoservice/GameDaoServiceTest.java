@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.daoservice;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -12,6 +11,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,8 +76,8 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
     public void sevenPlayersMapped() throws InterruptedException {
         Game game = gameDaoService.createGame("test");
         int gameId = game.getId();
-        List<Player> players = Lists.newArrayList();
-        List<Nation> nations = Lists.newArrayList();
+        List<Player> players = new ArrayList<>();
+        List<Nation> nations = new ArrayList<>();
         int numPlayers = 5;
         // TODO TEST why does this throw an exception with numPlayers >= 5?
         for (int i = 0; i < numPlayers; ++i) {

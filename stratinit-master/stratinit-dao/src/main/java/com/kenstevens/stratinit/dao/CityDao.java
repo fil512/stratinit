@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.dao;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.kenstevens.stratinit.cache.NationCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.CityMoveRepo;
@@ -17,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CityDao extends CacheDao {
@@ -83,13 +82,10 @@ public class CityDao extends CacheDao {
 
     public Collection<Sector> getStartCitiesOnIsland(Game game, final int island) {
         List<Sector> sectors = getGameCache(game).getSectors();
-        return Collections2.filter(sectors, new Predicate<Sector>() {
-            @Override
-            public boolean apply(Sector sector) {
-                return sector.getType() == SectorType.START_CITY
-                        && sector.getIsland() == island;
-            }
-        });
+        return sectors.stream()
+                .filter(sector -> sector.getType() == SectorType.START_CITY
+                        && sector.getIsland() == island)
+                .collect(Collectors.toList());
     }
 
     public City getCity(Nation nation, SectorCoords coords) {

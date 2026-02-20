@@ -1,13 +1,13 @@
 package com.kenstevens.stratinit.cache;
 
-import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.client.model.UnitMove;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class UnitMoveCache extends Cacheable {
-	private final Map<Integer, UnitMove> unitMoveMap = Maps.newHashMap();
+	private final Map<Integer, UnitMove> unitMoveMap = new HashMap<>();
 
 	public void add(UnitMove unitMove) {
 		unitMoveMap.put(unitMove.getUnit().getId(), unitMove);

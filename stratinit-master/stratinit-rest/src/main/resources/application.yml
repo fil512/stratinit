@@ -12,3 +12,8 @@ stratinit:
   scheduler:
     enabled: true
   mode: TEST
+  jwt:
+    secret: dGhpcyBpcyBhIDI1NiBiaXQgc2VjcmV0IGtleSBmb3Igand0IHNpZ25pbmc=
+    expiration-ms: 86400000
+  cors:
+    allowed-origins: http://localhost:5173

@@ -1,9 +1,5 @@
 package com.kenstevens.stratinit.cache;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.repo.GameRepo;
@@ -17,7 +13,8 @@ import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Repository
 public class DataCache extends Updatable {
@@ -34,8 +31,8 @@ public class DataCache extends Updatable {
 	@Autowired
 	private IServerConfig serverConfig;
 
-	private final Map<Integer, GameCache> gameMap = new TreeMap<Integer, GameCache>();
-	private final Map<Integer, Player> playerMap = new TreeMap<Integer, Player>();
+	private final Map<Integer, GameCache> gameMap = new ConcurrentHashMap<>();
+	private final Map<Integer, Player> playerMap = new ConcurrentHashMap<>();
 
 	@SuppressWarnings("unused")
 	@PostConstruct
@@ -70,41 +67,33 @@ public class DataCache extends Updatable {
 		playerMap.put(player.getId(), player);
 	}
 
-	public synchronized GameCache getGameCache(int gameId) {
+	public GameCache getGameCache(int gameId) {
 		GameCache gameCache = gameMap.get(gameId);
 		if (gameCache == null) {
 			gameCache = gameLoader.loadGame(gameId);
 			if (gameCache == null) {
 				return null;
 			}
-			gameMap.put(gameId, gameCache);
+			gameMap.putIfAbsent(gameId, gameCache);
+			gameCache = gameMap.get(gameId);
 		}
 		return gameCache;
 	}
 
 	public List<GameCache> getGameCaches() {
-		return Lists.newArrayList(Iterables.filter(gameMap.values(),
-				new Predicate<GameCache>() {
-					@Override
-					public boolean apply(GameCache gameCache) {
-						return gameCache.getGame().isEnabled();
-					}
-
-				}));
+		return gameMap.values().stream()
+				.filter(gameCache -> gameCache.getGame().isEnabled())
+				.collect(Collectors.toList());
 	}
 
 	public List<Game> getAllGames() {
-		return Lists.transform(getGameCaches(),
-				new Function<GameCache, Game>() {
-					@Override
-					public Game apply(GameCache gameCache) {
-						return gameCache.getGame();
-					}
-				});
+		return getGameCaches().stream()
+				.map(GameCache::getGame)
+				.collect(Collectors.toList());
 	}
-	
+
 	public List<Player> getAllPlayers() {
-		return Lists.newArrayList(playerMap.values());
+		return new ArrayList<>(playerMap.values());
 	}
 
 	public List<Nation> getAllNations() {
@@ -119,7 +108,7 @@ public class DataCache extends Updatable {
 		gameMap.remove(game.getId());
 	}
 
-	public synchronized void flush() {
+	public void flush() {
 		logger.debug("Flushing games to database...");
 		for (GameCache gameCache : getGameCaches()) {
 			gameLoader.flush(gameCache);

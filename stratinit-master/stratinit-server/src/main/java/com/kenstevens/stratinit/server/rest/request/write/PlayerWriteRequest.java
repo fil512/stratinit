@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
 import com.kenstevens.stratinit.server.rest.request.PlayerRequest;
 import com.kenstevens.stratinit.server.rest.svc.DataWriter;
+import com.kenstevens.stratinit.server.rest.svc.GameNotificationService;
 import com.kenstevens.stratinit.server.rest.svc.SynchronizedDataAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -25,6 +26,8 @@ public abstract class PlayerWriteRequest<T> extends PlayerRequest<T> implements
     protected PlayerDaoService playerDaoService;
     @Autowired
     private DataCache dataCache;
+    @Autowired
+    private GameNotificationService gameNotificationService;
     private Result<T> result;
     private SynchronizedDataAccess synchronizedDataAccess;
 
@@ -58,6 +61,10 @@ public abstract class PlayerWriteRequest<T> extends PlayerRequest<T> implements
         result = executeWrite();
         if (result.isSuccess() && nation != null) {
             nation.decreaseCommandPoints(getCommandCost());
+            if (getGame() != null) {
+                gameNotificationService.notifyGameUpdate(
+                        getGame().getId(), nation.getNationId());
+            }
         }
     }
 

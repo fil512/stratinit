@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.AttackHelper;
 import com.kenstevens.stratinit.dao.UnitDao;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Scope("prototype")
@@ -64,7 +64,7 @@ public class UnitAttacksSector {
                 return new Result<None>(new SIBattleLog(actor, flakBattleLog), false);
             }
         }
-        Collection<Unit> defUnits = Lists.newArrayList(unitDao.getUnits(targetSector));
+        Collection<Unit> defUnits = new ArrayList<>(unitDao.getUnits(targetSector));
         if (!targetSector.isWater() && attackingUnit.isBomber()) {
             return bombTarget(defUnits, attackReadiness, flakDamage);
         }

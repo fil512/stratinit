@@ -12,3 +12,6 @@ stratinit:
   scheduler:
     enabled: false
   mode: PRODUCTION
+  jwt:
+    secret: dGhpcyBpcyBhIDI1NiBiaXQgc2VjcmV0IGtleSBmb3Igand0IHNpZ25pbmc=
+    expiration-ms: 86400000

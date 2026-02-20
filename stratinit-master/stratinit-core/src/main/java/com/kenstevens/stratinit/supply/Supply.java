@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.supply;
 
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 
@@ -19,7 +18,7 @@ public class Supply {
 			return worldView.fueling(unit);
 		}
 
-		return !Iterables.isEmpty(worldView.getSupplyingSectors(unit));
+		return !worldView.getSupplyingSectors(unit).isEmpty();
 	}
 
 	public void resupply(Unit unit) {

@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.rank;
 
-import com.google.common.collect.Iterables;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,7 +8,7 @@ public class TestTeamProviderTest {
 
 	@Test
 	public void testGetAllies() {
-		assertEquals(TestTeamProvider.nation1b, Iterables.getOnlyElement(tp.getAllies(TestTeamProvider.nation1a)));
+		assertEquals(TestTeamProvider.nation1b, tp.getAllies(TestTeamProvider.nation1a).iterator().next());
 	}
 
 	@Test

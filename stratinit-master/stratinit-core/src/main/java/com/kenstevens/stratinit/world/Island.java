@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.world;
 
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -71,7 +70,7 @@ public abstract class Island {
 			// if this island sector has at least one unassigned i.e. water
 			// neighbour
 			List<Sector> neighbours = world.getNeighbours(sector);
-			if (Iterables.any(neighbours, unassignedPredicate)) {
+			if (neighbours.stream().anyMatch(unassignedPredicate::test)) {
 				coastalSectors.add(sector);
 			}
 		}
@@ -116,12 +115,10 @@ public abstract class Island {
 	protected Sector growFrom(Sector coastalSector) {
 		List<Sector> coastalSectors = randomize(world
 				.getNeighbours(coastalSector));
-		if (Iterables.any(coastalSectors, unassignedAndIsolatedPredicate)) {
-			return Iterables.find(coastalSectors,
-					unassignedAndIsolatedPredicate);
-		} else {
-			return null;
-		}
+		return coastalSectors.stream()
+				.filter(unassignedAndIsolatedPredicate::test)
+				.findFirst()
+				.orElse(null);
 	}
 
 	private boolean doSpike() {

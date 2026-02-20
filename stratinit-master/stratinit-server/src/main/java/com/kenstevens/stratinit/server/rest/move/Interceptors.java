@@ -1,20 +1,15 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.type.SectorCoords;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Interceptors {
-	Map<Unit, SectorCoords> startCoords = Maps.newHashMap();
-	Map<SectorCoords, List<Unit>> groups = Maps.newHashMap();
+	Map<Unit, SectorCoords> startCoords = new HashMap<>();
+	Map<SectorCoords, List<Unit>> groups = new HashMap<>();
 	List<Unit> units = new ArrayList<Unit>();
 
 	public void add(Unit unit) {
@@ -23,7 +18,7 @@ public class Interceptors {
 		startCoords.put(unit, coords);
 		List<Unit> group = groups.get(coords);
 		if (group == null) {
-			group = Lists.newArrayList();
+			group = new ArrayList<>();
 			groups.put(coords, group);
 		}
 		group.add(unit);

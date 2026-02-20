@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.controller;
 
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.client.rest.IStratInitServer;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
@@ -20,8 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = SIRestPaths.BASE_PATH)
@@ -47,9 +47,9 @@ public class StratInitController implements IStratInitServer {
     @GetMapping(path = SIRestPaths.UNIT_BASE)
     @Override
     public Result<List<SIUnitBase>> getUnitBases() {
-        List<SIUnitBase> result = Lists.newArrayList(Collections2.transform(
-                Lists.newArrayList(UnitType.values()),
-                unitType -> new SIUnitBase(UnitBase.getUnitBase(unitType))));
+        List<SIUnitBase> result = Arrays.stream(UnitType.values())
+                .map(unitType -> new SIUnitBase(UnitBase.getUnitBase(unitType)))
+                .collect(Collectors.toList());
         return Result.make(result);
     }
 

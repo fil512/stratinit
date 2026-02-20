@@ -1,11 +1,10 @@
 package com.kenstevens.stratinit.balance;
 
-import com.google.common.collect.Lists;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class BalanceResultList {
-    List<BalanceResult> results = Lists.newArrayList();
+    List<BalanceResult> results = new ArrayList<>();
 
     public BalanceResultList() {
     }

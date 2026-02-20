@@ -1,18 +1,17 @@
 package com.kenstevens.stratinit.rank;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kenstevens.stratinit.client.model.PlayerRank;
 import com.kenstevens.stratinit.client.model.Rankable;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TeamRanks {
 
@@ -51,7 +50,7 @@ public class TeamRanks {
 
 
 	public List<SITeamRank> getTeamRanks() {
-		List<SITeamRank> teamRankList = Lists.newArrayList(teamRankMap.getTeamRanks());
+		List<SITeamRank> teamRankList = new ArrayList<>(teamRankMap.getTeamRanks());
 		Collections.sort(teamRankList, BY_RANK);
 		return teamRankList;
 	}
@@ -77,14 +76,9 @@ public class TeamRanks {
 		if (playerName == null) {
 			return sITeamRanks;
 		}
-		return Lists.newArrayList(Collections2.filter(sITeamRanks, new Predicate<SITeamRank>() {
-
-			@Override
-			public boolean apply(SITeamRank sITeamRank) {
-				return sITeamRank.contains(playerName);
-			}
-			
-		}));
+		return sITeamRanks.stream()
+				.filter(r -> r.contains(playerName))
+				.collect(Collectors.toList());
 	}
 
 }

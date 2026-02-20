@@ -1,7 +1,6 @@
 package com.kenstevens.stratinit.world.predicate;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
+import java.util.function.Predicate;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 
@@ -22,7 +21,7 @@ public class IsolatedPredicate implements Predicate<Sector> {
 	}
 
 	@Override
-	public boolean apply(Sector element) {
-		return !Iterables.any(world.getNeighbours(element, distance), unfriendlyPredicate);
+	public boolean test(Sector element) {
+		return world.getNeighbours(element, distance).stream().noneMatch(unfriendlyPredicate::test);
 	}
 }

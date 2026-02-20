@@ -1,20 +1,14 @@
 package com.kenstevens.stratinit.supply;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.type.SectorCoordVector;
-import com.kenstevens.stratinit.world.predicate.PortPredicate;
-import com.kenstevens.stratinit.world.predicate.TeamCityPredicate;
-import com.kenstevens.stratinit.world.predicate.TopUnitFunction;
 import com.kenstevens.stratinit.world.predicate.UnitSuppliesUnitPredicate;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class SupplyTree {
 
@@ -47,19 +41,30 @@ public class SupplyTree {
 
 	private final boolean huntForCitySupply(WorldView worldView, UnitSupplyNode supplyNode) {
 		Unit targetUnit = supplyNode.getUnit();
-		Iterable<WorldSector> supplyingSectors = worldView
+		List<WorldSector> supplyingSectors = worldView
 				.getSupplyingSectors(targetUnit);
-		if (targetUnit.isNavy() && Iterables.any(supplyingSectors, new PortPredicate())) {
-			WorldSector sector = Iterables.find(supplyingSectors, new PortPredicate());
-			addChild(supplyNode, sector);
-			return true;
-		} else if (targetUnit.isLand() && Iterables.any(supplyingSectors, new TeamCityPredicate())) {
-			WorldSector sector = Iterables.find(supplyingSectors, new TeamCityPredicate());
-			addChild(supplyNode, sector);
-			return true;
+		if (targetUnit.isNavy()) {
+			Optional<WorldSector> port = supplyingSectors.stream()
+					.filter(WorldSector::isPort)
+					.findFirst();
+			if (port.isPresent()) {
+				addChild(supplyNode, port.get());
+				return true;
+			}
+		} else if (targetUnit.isLand()) {
+			Optional<WorldSector> city = supplyingSectors.stream()
+					.filter(s -> s.isPlayerCity() && s.onMyTeam())
+					.findFirst();
+			if (city.isPresent()) {
+				addChild(supplyNode, city.get());
+				return true;
+			}
 		}
-		Iterable<Unit> children = Iterables.filter(Iterables.transform(supplyingSectors,
-				new TopUnitFunction()), new UnitSuppliesUnitPredicate(targetUnit));
+		UnitSuppliesUnitPredicate suppliesPredicate = new UnitSuppliesUnitPredicate(targetUnit);
+		List<Unit> children = supplyingSectors.stream()
+				.map(WorldSector::getTopUnit)
+				.filter(u -> suppliesPredicate.test(u))
+				.collect(Collectors.toList());
 		for (Unit child : children) {
 			if (allValues.contains(child)) {
 				continue;
@@ -88,7 +93,7 @@ public class SupplyTree {
 	}
 
 	public Iterator<SectorCoordVector> getSupplyChain() {
-		List<SectorCoordVector> vectors = Lists.newArrayList();
+		List<SectorCoordVector> vectors = new ArrayList<>();
 		addChildren(vectors, rootNode);
 		return vectors.iterator();
 	}

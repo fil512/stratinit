@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.LaunchedSatellite;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -21,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -90,7 +90,7 @@ public class LaunchRocket {
 
     private Set<Nation> launchICBM(boolean initialAttack) {
         List<Sector> devastated = dataCache.getWorld(unit.getGameId()).getSectorsWithin(targetCoords, unit.getBlastRadius(), true);
-        Set<Nation> hitCities = Sets.newHashSet();
+        Set<Nation> hitCities = new HashSet<>();
         for (Sector sector : devastated) {
             hitCities.addAll(sectorDaoService.devastate(unit, sector, initialAttack));
         }

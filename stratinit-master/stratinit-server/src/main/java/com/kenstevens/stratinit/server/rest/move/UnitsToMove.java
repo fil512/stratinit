@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.server.rest.move;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.AttackType;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -14,6 +12,8 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class UnitsToMove implements Iterable<Unit> {
     private final Nation nation;
     private final AttackType attackType;
     private final Nation actor;
-    private final ImmutableList<Unit> units;
+    private final List<Unit> units;
     private final SectorCoords targetCoords;
 
     public UnitsToMove(Nation actor, AttackType attackType, Nation nation,
@@ -30,7 +30,7 @@ public class UnitsToMove implements Iterable<Unit> {
         this.actor = actor;
         this.nation = nation;
         this.attackType = attackType;
-        this.units = ImmutableList.copyOf(units);
+        this.units = Collections.unmodifiableList(new ArrayList<>(units));
         this.targetCoords = targetCoords;
     }
 
@@ -68,7 +68,7 @@ public class UnitsToMove implements Iterable<Unit> {
         return units.get(0).getCoords();
     }
 
-    public ImmutableList<Unit> getUnits() {
+    public List<Unit> getUnits() {
         return units;
     }
 
@@ -154,7 +154,7 @@ public class UnitsToMove implements Iterable<Unit> {
                                                  WorldSector targetSector, boolean unknown) {
 
         Result<None> allFailures = Result.trueInstance();
-        List<Unit> unitsOutOfRange = Lists.newArrayList();
+        List<Unit> unitsOutOfRange = new ArrayList<>();
         Supply supply = new Supply(worldView);
         for (Unit unit : units) {
             Movement movement = new Movement(unit, worldView);

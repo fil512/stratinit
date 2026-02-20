@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.rest.supply;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
@@ -12,6 +11,7 @@ import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -133,7 +133,8 @@ public class SupplyTreeTest extends TwoPlayerBase {
         WorldView worldView = sectorDaoService.getAllWorldView(nationMe);
         SupplyTree supplyTree = new SupplyTree(worldView, dest);
         Iterator<SectorCoordVector> iterator = supplyTree.getSupplyChain();
-        List<SectorCoordVector> list = Lists.newArrayList(iterator);
+        List<SectorCoordVector> list = new ArrayList<>();
+        iterator.forEachRemaining(list::add);
         assertEquals(3, list.size());
         assertEquals(new SectorCoordVector(DEST, SUPPLY), list.get(0));
         assertEquals(new SectorCoordVector(SUPPLY, SUPPLY2), list.get(1));

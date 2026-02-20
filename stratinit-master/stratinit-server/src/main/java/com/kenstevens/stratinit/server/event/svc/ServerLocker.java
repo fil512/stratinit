@@ -14,12 +14,13 @@ public class ServerLocker {
     private static final String LOCK_FILENAME = "StratInit.lock";
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private RandomAccessFile lockFile;
+
     public FileLock getLock() {
-        RandomAccessFile file = null;
         FileLock retval = null;
         try {
-            file = new RandomAccessFile(LOCK_FILENAME, "rw");
-            FileChannel fileChannel = file.getChannel();
+            lockFile = new RandomAccessFile(LOCK_FILENAME, "rw");
+            FileChannel fileChannel = lockFile.getChannel();
             retval = fileChannel.tryLock();
         } catch (FileNotFoundException e) {
             logger.error("Unable to create lockfile " + LOCK_FILENAME, e);
@@ -36,6 +37,14 @@ public class ServerLocker {
             fileLock.release();
         } catch (IOException e) {
             logger.error("Unable to release lock on lockfile " + LOCK_FILENAME, e);
+        }
+        if (lockFile != null) {
+            try {
+                lockFile.close();
+            } catch (IOException e) {
+                logger.error("Unable to close lockfile " + LOCK_FILENAME, e);
+            }
+            lockFile = null;
         }
     }
 }

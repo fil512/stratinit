@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.rank;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.kenstevens.stratinit.client.model.PlayerRank;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.dto.SITeamRank;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +20,7 @@ public class PlayerRankCalculator {
 
 	public List<PlayerRank> calcPlayerRanks(
 			Multimap<String, SITeam> teamsByPlayer) {
-		List<PlayerRank> playerRanks = Lists.newArrayList();
+		List<PlayerRank> playerRanks = new ArrayList<>();
 		for (String nation: teamsByPlayer.keySet()) {
 			playerRanks.add(getPlayerRank(nation, teamsByPlayer.get(nation)));
 		}

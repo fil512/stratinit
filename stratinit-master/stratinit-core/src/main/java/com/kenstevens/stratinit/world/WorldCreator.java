@@ -87,7 +87,7 @@ public class WorldCreator {
             if (x == startx && y == starty) {
                 done = true;
             }
-        } while (!unassignedAndIsolatedPredicate.apply(sector) && !done);
+        } while (!unassignedAndIsolatedPredicate.test(sector) && !done);
 		if (x == startx && y == starty) {
 			return null;
 		}

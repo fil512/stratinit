@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.world;
 
-import com.google.common.collect.Iterables;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -47,7 +46,7 @@ public class NeutralIsland extends Island {
 		}
 
 		for (int i = 0; i < numCities; ++i) {
-			if (!Iterables.any(randomize(sectors()), isolatedCityPredicate)) {
+			if (randomize(sectors()).stream().noneMatch(isolatedCityPredicate::test)) {
 				return;
 			}
 			// First city should prefer inland
@@ -57,17 +56,19 @@ public class NeutralIsland extends Island {
 	}
 
 	private Sector pickSectorToPlaceCity(boolean preferInland) {
-		Sector retval = null;
-		if (preferInland
-				&& Iterables.any(randomize(sectors()),
-						isolatedInlandCityPredicate)) {
-			retval = Iterables.find(randomize(sectors()),
-					isolatedInlandCityPredicate);
-		} else {
-			retval = Iterables
-					.find(randomize(sectors()), isolatedCityPredicate);
+		if (preferInland) {
+			Sector inland = randomize(sectors()).stream()
+					.filter(isolatedInlandCityPredicate::test)
+					.findFirst()
+					.orElse(null);
+			if (inland != null) {
+				return inland;
+			}
 		}
-		return retval;
+		return randomize(sectors()).stream()
+				.filter(isolatedCityPredicate::test)
+				.findFirst()
+				.orElseThrow();
 	}
 
 	private List<Sector> sectors() {

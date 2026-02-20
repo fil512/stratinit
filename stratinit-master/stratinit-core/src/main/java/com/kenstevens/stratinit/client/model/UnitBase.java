@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.client.model;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitBaseType;
@@ -43,8 +42,7 @@ public abstract class UnitBase {
 	private boolean devastates = false;
 	private boolean base = false;
 	private final UnitBaseType unitBaseType;
-	private static final List<UnitType> ORDERED_UNIT_TYPES = Lists
-			.newArrayList();
+	private static final List<UnitType> ORDERED_UNIT_TYPES = new ArrayList<>();
 
 	private static final Map<UnitType, UnitBase> UNIT_BASE_MAP = new HashMap<UnitType, UnitBase>();
 	// DOC heavy and naval bombers have ammo
@@ -594,7 +592,7 @@ public abstract class UnitBase {
 	}
 
 	public static List<UnitType> orderedUnitTypes(UnitBaseType unitBaseType) {
-		List<UnitType> retval = Lists.newArrayList();
+		List<UnitType> retval = new ArrayList<>();
 		for (UnitType unitType : ORDERED_UNIT_TYPES) {
 			if (unitBaseType != UnitBase.getUnitBase(unitType)
 					.getUnitBaseType()) {

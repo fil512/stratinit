@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.move;
 
-import com.google.common.collect.Sets;
 import com.kenstevens.stratinit.client.model.AttackType;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -14,6 +13,7 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -280,7 +280,7 @@ public class Movement {
 	}
 
 	public Set<SectorCoords> canReachUnknown(Unit unit) {
-		Set<SectorCoords> retval = Sets.newHashSet();
+		Set<SectorCoords> retval = new HashSet<>();
 		int range = UnitHelper.range(unit);
 		for (int x = unit.getX() - range; x <= unit.getX() + range; ++x) {
 			for (int y = unit.getY() - range; y <= unit.getY() + range; ++y) {

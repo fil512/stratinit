@@ -1,7 +1,5 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.dao.CityDao;
@@ -15,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CitySvc {
@@ -29,7 +28,9 @@ public class CitySvc {
 	}
 
 	private List<SICityUpdate> citiesToSICities(final Nation nation, Collection<City> cities) {
-		return Lists.newArrayList(Collections2.transform(cities, city -> cityToSICity(nation, city, null)));
+		return cities.stream()
+				.map(city -> cityToSICity(nation, city, null))
+				.collect(Collectors.toList());
 	}
 
 	public SICityUpdate cityToSICity(Nation nation, City city, CityFieldToUpdateEnum field) {

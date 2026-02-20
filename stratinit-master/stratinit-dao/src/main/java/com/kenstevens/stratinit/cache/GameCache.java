@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.cache;
 
-import com.google.common.collect.Lists;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.repo.GameRepo;
 import com.kenstevens.stratinit.repo.RelationRepo;
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Scope("prototype")
@@ -91,7 +91,9 @@ public class GameCache extends Cacheable {
     }
 
     public List<Nation> getNations() {
-		return Lists.transform(nationCaches, new NationCacheToNationFunction());
+		return nationCaches.stream()
+				.map(NationCache::getNation)
+				.collect(Collectors.toList());
 	}
 
 	public Game getGame() {
@@ -175,7 +177,7 @@ public class GameCache extends Cacheable {
 	}
 
 	public List<UnitMove> setUnitsMove(Iterable<UnitMove> unitsMove) {
-		List<UnitMove> badUnitMoves = Lists.newArrayList();
+		List<UnitMove> badUnitMoves = new ArrayList<>();
 		for (UnitMove unitMove : unitsMove) {
 			Unit unitMoveUnit = unitMove.getUnit();
 			if (unitMoveUnit == null) {
@@ -202,7 +204,7 @@ public class GameCache extends Cacheable {
     }
 
     public List<CityMove> setCityMoves(Iterable<CityMove> cityMoves) {
-        List<CityMove> badCityMoves = Lists.newArrayList();
+        List<CityMove> badCityMoves = new ArrayList<>();
         for (CityMove cityMove : cityMoves) {
             City cityMoveCity = cityMove.getCity();
             if (cityMoveCity == null) {
