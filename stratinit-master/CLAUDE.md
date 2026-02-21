@@ -63,13 +63,13 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 ## Key Architecture Patterns
 
-**Request processing flow:** Domain controllers (`GameController`, `UnitController`, `CityController`, `NationController`, `MessageController`) handle reads via `RequestProcessor` (calls service methods directly, wraps in `Result<T>`) and writes via `WriteProcessor` (synchronizes on `GameCache`, checks command points, sets lastAction, sends WebSocket notifications). Business logic lives in service classes (`UnitSvc`, `CitySvc`, `NationSvc`, `RelationSvc`); controllers are thin lambdas.
+**Request processing flow:** Domain controllers (`GameController`, `UnitController`, `CityController`, `NationController`, `MessageController`) handle reads via `RequestProcessor` (calls service methods directly, wraps in `Result<T>`) and writes via `WriteProcessor` (synchronizes on `GameCache`, checks command points, sets lastAction, sends WebSocket notifications). Controllers are thin lambdas delegating to REST service classes (`UnitSvc`, `CitySvc`, `NationSvc`, `RelationSvc`) for request-level orchestration. Deeper business logic lives in domain service classes (`UnitService`, `CityService`, `RelationService`, `SectorService`, etc.) in `stratinit-server/.../server/service/`.
 
 **Authentication:** JWT tokens via `POST /stratinit/auth/login`. `JwtAuthenticationFilter` validates Bearer tokens. HTTP Basic still supported for backward compatibility. Stateless sessions.
 
 **WebSocket:** STOMP over SockJS at `/ws`. `GameNotificationService` pushes updates to `/topic/game/{gameId}` after write operations and scheduled events.
 
-**Data access:** Spring Data JPA repositories (`stratinit-dao/.../repo/`) wrapped by DAO classes (`stratinit-dao/.../dao/`) which also manage `DataCache`. Domain service classes (e.g., `UnitService`, `CityService`, `BattleLogService`) live in `stratinit-server/.../server/service/` and contain business logic on top of DAOs.
+**Data access:** Spring Data JPA repositories (`stratinit-dao/.../repo/`) wrapped by DAO classes (`stratinit-dao/.../dao/`) which also manage `DataCache`. ~30 classes inject DAOs directly for data operations.
 
 **Caching:** `DataCache` holds in-memory game state using `ConcurrentHashMap` (`GameCache`, `NationCache`, `UnitCache`, `CityCache`). Games are loaded via `GameLoaderService`.
 

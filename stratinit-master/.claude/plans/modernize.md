@@ -357,3 +357,9 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-client-master/.../util/AccountPersister.java` | Edit: migrated Jasypt to javax.crypto AES | 8 |
 | `stratinit-client-master/stratinit-client/pom.xml` | Edit: removed commons-httpclient + jasypt deps | 8 |
 | `pom.xml` (parent) | Edit: removed commons-httpclient + jasypt; added javax.annotation-api + httpcomponents version mgmt | 5, 8 |
+| `stratinit-server/.../daoservice/GameHistoryDaoService.java` | Deleted (pure pass-through) | 4 |
+| `stratinit-server/.../event/svc/GameArchiver.java` | Edit: inject repos directly instead of GameHistoryDaoService | 4 |
+| `stratinit-dao/.../dao/CityDao.java` | Edit: removed canEstablishCity/isBesideCity business logic, removed SectorDao dep | 4 |
+| `stratinit-server/.../service/CityService.java` | Edit: inlined canEstablishCity logic (was CityDaoService) | 4 |
+| `stratinit-server/.../service/*.java` | Renamed: `*DaoService` → `*Service`, package `daoservice` → `service` (~140 files) | 4 |
+| `stratinit-server/.../service/BattleLogService.java` | Renamed from `LogDaoService` | 4 |

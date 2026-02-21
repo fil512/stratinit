@@ -50,6 +50,20 @@ stratinit-ui        → React SPA frontend (Vite, TypeScript, React 18)
 stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server)
 ```
 
+## Backend Architecture
+
+```
+Controllers (GameController, UnitController, CityController, NationController, MessageController)
+  ↓ thin lambdas via RequestProcessor (reads) / WriteProcessor (writes)
+REST Services (UnitSvc, CitySvc, NationSvc, RelationSvc)
+  ↓ request-level orchestration
+Domain Services (UnitService, CityService, RelationService, SectorService, ...)
+  ↓ business logic (diplomacy, movement, combat, tech, fog of war)
+DAOs (UnitDao, CityDao, SectorDao, ...)
+  ↓ cache + DB persistence via DataCache
+Spring Data JPA Repositories
+```
+
 ## Tech Stack
 
 - **Backend:** Java 21, Spring Boot 3.5, Spring Security, Spring Data JPA, WebSocket (STOMP)
