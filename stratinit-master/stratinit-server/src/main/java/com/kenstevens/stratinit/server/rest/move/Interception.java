@@ -13,8 +13,8 @@ import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -36,7 +36,7 @@ public class Interception {
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired
-	private UnitDaoService unitDaoService;
+	private UnitService unitService;
 	@Autowired
 	private GameDao gameDao;
 	@Autowired
@@ -44,7 +44,7 @@ public class Interception {
 	@Autowired
 	private SectorDao sectorDao;
 	@Autowired
-	private SectorDaoService sectorDaoService;
+	private SectorService sectorService;
 	@Autowired
 	private UnitCommandFactory unitCommandFactory;
 
@@ -69,7 +69,7 @@ public class Interception {
 					theirRelations.get(nation))) {
 				continue;
 			}
-			WorldView worldView = sectorDaoService.getInterceptionWorldView(
+			WorldView worldView = sectorService.getInterceptionWorldView(
 					targetCoords, nation);
 			Collection<Unit> units = unitDao.getUnitsWithin(worldView, nation,
 					targetCoords, Constants.INTERCEPTION_RADIUS);
@@ -104,7 +104,7 @@ public class Interception {
 				retval.and(interceptResult);
 			}
 			// success for my enemy is failure for me
-			interceptors.flyBack(unitDaoService, worldView);
+			interceptors.flyBack(unitService, worldView);
 		}
 		return retval;
 	}

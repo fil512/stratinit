@@ -4,7 +4,7 @@ import com.kenstevens.stratinit.client.model.FlakBattleLog;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -21,17 +21,17 @@ public class FlakTest extends TwoPlayerBase {
     private static final SectorCoords FORT = new SectorCoords(1, 4);
     private static final SectorCoords SEA = new SectorCoords(3, 0);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @Test
     public void flakKillsPlane() {
         declareWar();
-        Unit fighter = unitDaoService.buildUnit(nationMe, ATT,
+        Unit fighter = unitService.buildUnit(nationMe, ATT,
                 UnitType.FIGHTER);
         fighter.setHp(1);
         unitDao.merge(fighter);
-        cityDaoService.captureCity(nationThem, FORT);
-        unitDaoService.buildUnit(nationThem, FORT,
+        cityService.captureCity(nationThem, FORT);
+        unitService.buildUnit(nationThem, FORT,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), FORT);
@@ -50,10 +50,10 @@ public class FlakTest extends TwoPlayerBase {
     @Test
     public void shipHasFlak() {
         declareWar();
-        Unit fighter = unitDaoService.buildUnit(nationMe, ATT,
+        Unit fighter = unitService.buildUnit(nationMe, ATT,
                 UnitType.FIGHTER);
         fighter.setHp(1);
-        unitDaoService.buildUnit(nationThem, SEA,
+        unitService.buildUnit(nationThem, SEA,
                 UnitType.CARRIER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), SEA);

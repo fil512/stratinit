@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.move;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -21,11 +21,11 @@ public class FuelTest extends TwoPlayerBase {
     private static final SectorCoords NEXT_TO_CITY = new SectorCoords(1, 5);
     private static final SectorCoords ALLY_CITY = new SectorCoords(8, 4);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @Test
     public void moveCostsFuel() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), FIGHTER_SEA);
@@ -35,9 +35,9 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void myCarrierRefuels() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationMe, CARRIER,
+        unitService.buildUnit(nationMe, CARRIER,
                 UnitType.CARRIER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), CARRIER);
@@ -47,9 +47,9 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void mySupplyNoRefuels() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationMe, CARRIER,
+        unitService.buildUnit(nationMe, CARRIER,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), CARRIER);
@@ -59,9 +59,9 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void myCarrierRefuelsHeli() {
-        Unit heli = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit heli = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.HELICOPTER);
-        unitDaoService.buildUnit(nationMe, CARRIER,
+        unitService.buildUnit(nationMe, CARRIER,
                 UnitType.CARRIER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(heli), CARRIER);
@@ -71,9 +71,9 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void myBBRefuelsHeli() {
-        Unit heli = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit heli = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.HELICOPTER);
-        unitDaoService.buildUnit(nationMe, CARRIER,
+        unitService.buildUnit(nationMe, CARRIER,
                 UnitType.BATTLESHIP);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(heli), CARRIER);
@@ -83,7 +83,7 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void myAirportRefuels() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
         setBuild(CITY, UnitType.FIGHTER);
         Result<MoveCost> result = moveUnits(
@@ -98,7 +98,7 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void myPortNoRefuels() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
         setBuild(CITY, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
@@ -109,7 +109,7 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void myPortRefuelsHeli() {
-        Unit heli = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit heli = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.HELICOPTER);
         setBuild(CITY, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
@@ -125,10 +125,10 @@ public class FuelTest extends TwoPlayerBase {
     @Test
     public void attackFromCityRefuelsAndReAmmo() {
         declareWar();
-        Unit fighter = unitDaoService.buildUnit(nationMe, CITY,
+        Unit fighter = unitService.buildUnit(nationMe, CITY,
                 UnitType.FIGHTER);
         setBuild(CITY, UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationThem, NEXT_TO_CITY,
+        unitService.buildUnit(nationThem, NEXT_TO_CITY,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), NEXT_TO_CITY);
@@ -141,9 +141,9 @@ public class FuelTest extends TwoPlayerBase {
     public void allyCarrierRefuels() {
         declareAlliance();
         allianceDeclared();
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationThem, CARRIER,
+        unitService.buildUnit(nationThem, CARRIER,
                 UnitType.CARRIER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fighter), CARRIER);
@@ -155,7 +155,7 @@ public class FuelTest extends TwoPlayerBase {
     public void allyCityRefuels() {
         declareAlliance();
         allianceDeclared();
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
         setBuild(ALLY_CITY, UnitType.FIGHTER);
         Result<MoveCost> result = moveUnits(
@@ -166,9 +166,9 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void carrierMoveRefuelsMe() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationMe, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        Unit carrier = unitDaoService.buildUnit(nationMe, CARRIER,
+        Unit carrier = unitService.buildUnit(nationMe, CARRIER,
                 UnitType.CARRIER);
 
         Result<MoveCost> result = moveUnits(
@@ -185,9 +185,9 @@ public class FuelTest extends TwoPlayerBase {
         declareAlliance();
         allianceDeclared();
 
-        Unit fighter = unitDaoService.buildUnit(nationThem, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationThem, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        Unit carrier = unitDaoService.buildUnit(nationMe, CARRIER,
+        Unit carrier = unitService.buildUnit(nationMe, CARRIER,
                 UnitType.CARRIER);
         Result<MoveCost> result = moveUnits(nationThem,
                 makeUnitList(fighter), FIGHTER_SEA);
@@ -200,9 +200,9 @@ public class FuelTest extends TwoPlayerBase {
 
     @Test
     public void neutralCarrierCannotEnter() {
-        Unit fighter = unitDaoService.buildUnit(nationThem, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationThem, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        Unit carrier = unitDaoService.buildUnit(nationMe, CARRIER,
+        Unit carrier = unitService.buildUnit(nationMe, CARRIER,
                 UnitType.CARRIER);
 
         Result<MoveCost> result = moveUnits(nationThem,
@@ -218,9 +218,9 @@ public class FuelTest extends TwoPlayerBase {
     @Test
     public void warCarrierCannotEnter() {
         declareWar();
-        Unit fighter = unitDaoService.buildUnit(nationThem, FIGHTER_LAND,
+        Unit fighter = unitService.buildUnit(nationThem, FIGHTER_LAND,
                 UnitType.FIGHTER);
-        Unit carrier = unitDaoService.buildUnit(nationMe, CARRIER,
+        Unit carrier = unitService.buildUnit(nationMe, CARRIER,
                 UnitType.CARRIER);
 
         Result<MoveCost> result = moveUnits(nationThem,

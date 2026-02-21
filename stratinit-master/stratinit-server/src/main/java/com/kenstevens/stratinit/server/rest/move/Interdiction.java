@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class Interdiction {
     @Autowired
     private RelationDao relationDao;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
     private UnitMoveFactory unitMoveFactory;
 
@@ -62,7 +62,7 @@ public class Interdiction {
                     theirRelations.get(nation))) {
                 continue;
             }
-            WorldView worldView = sectorDaoService.getInterdictionWorldView(
+            WorldView worldView = sectorService.getInterdictionWorldView(
                     targetUnit, nation);
             Collection<Unit> units;
             if (excludeCoords != null) {

@@ -8,7 +8,7 @@ import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
 import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.svc.TeamCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class GameArchiver {
     @Autowired
     private CityDao cityDao;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private NationDao nationDao;
 
@@ -70,7 +70,7 @@ public class GameArchiver {
             return;
         }
         int cities = cityDao.getNumberOfCities(nation);
-        int power = unitDaoService.getPower(nation);
+        int power = unitService.getPower(nation);
         GameHistoryNation gameHistoryNation = new GameHistoryNation(gameHistoryTeam, nationName, cities, power);
         gameHistoryNationRepo.save(gameHistoryNation);
     }

@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.move;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -21,22 +21,22 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
     protected static final SectorCoords SEA1 = new SectorCoords(4, 0);
     protected static final SectorCoords SEA2 = new SectorCoords(4, 1);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     private List<Unit> attackHolder(UnitType holderType,
                                     SectorCoords defCoords) {
         int capacity = getCapacity(holderType);
-        Unit holder = unitDaoService.buildUnit(nationThem, defCoords,
+        Unit holder = unitService.buildUnit(nationThem, defCoords,
                 holderType);
         List<Unit> units = new ArrayList<>();
 
         for (int i = 0; i < capacity + 1; ++i) {
-            Unit inf = unitDaoService.buildUnit(nationThem, defCoords,
+            Unit inf = unitService.buildUnit(nationThem, defCoords,
                     UnitType.INFANTRY);
             units.add(inf);
         }
         holder.setHp(1);
-        Unit fighter = unitDaoService.buildUnit(nationMe, SEA2,
+        Unit fighter = unitService.buildUnit(nationMe, SEA2,
                 UnitType.FIGHTER);
         fighter.setHp(20); // flak no kill me
         declareWar();
@@ -53,7 +53,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
 
     @Test
     public void cargoNoKillPassengersInAirport() {
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = attackHolder(UnitType.CARGO_PLANE, PORT);
         assertAllAlive(UnitType.CARGO_PLANE, units);
@@ -87,7 +87,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
 
     @Test
     public void heliNoKillPassengersInAirport() {
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = attackHolder(UnitType.HELICOPTER, PORT);
         assertAllAlive(UnitType.HELICOPTER, units);
@@ -101,7 +101,7 @@ public class TwoPlayerCarryUnitsTest extends TwoPlayerBase {
 
     @Test
     public void xportNoKillPassengersInPort() {
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = attackHolder(UnitType.TRANSPORT, PORT);
         assertAllAlive(UnitType.TRANSPORT, units);

@@ -40,10 +40,10 @@ public class MoveUnitsTest extends WithUnitsBase {
 
     @Test
     public void unitOneFuel() {
-        Unit fighter = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.FIGHTER);
+        Unit fighter = unitService.buildUnit(nationMe, BY_PORT, UnitType.FIGHTER);
         fighter.setFuel(1);
         fighter.setMobility(1);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(fighter), PORT);
         assertResult(result);
     }
@@ -76,7 +76,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void profileTest() {
         List<Unit> units = new ArrayList<Unit>();
         for (int i = 0; i < 50; ++i) {
-            Unit unit = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
+            Unit unit = unitServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
             units.add(unit);
         }
 
@@ -125,7 +125,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void landFullTransport2() {
         List<Unit> UNITS = new ArrayList<Unit>();
         for (int i = 0; i < 7; ++i) {
-            Unit unit = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
+            Unit unit = unitServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
             unit.addMobility();
             unit.addMobility();
             UNITS.add(unit);
@@ -143,7 +143,7 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void landTransportSixInfAddTank() {
         List<Unit> UNITS = new ArrayList<Unit>();
         for (int i = 0; i < 6; ++i) {
-            Unit unit = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
+            Unit unit = unitServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.INFANTRY);
             unit.addMobility();
             unit.addMobility();
             UNITS.add(unit);
@@ -154,7 +154,7 @@ public class MoveUnitsTest extends WithUnitsBase {
         Unit last = unitDao.findUnit(UNITS.get(4).getId());
         assertEquals(SEA1, first.getCoords());
         assertEquals(SEA1, last.getCoords());
-        Unit tank = unitDaoServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.TANK);
+        Unit tank = unitServiceImpl.buildUnit(nationMe, START_COORDS, UnitType.TANK);
         tank.addMobility();
         tank.addMobility();
         result = moveUnits(makeUnitList(tank), SEA1);
@@ -175,10 +175,10 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void transportNoBlocksInf() {
         Unit[] inf = new Unit[TRANSPORT_CAPACITY + 1];
         for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
-            inf[i] = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.TANK);
+            inf[i] = unitService.buildUnit(nationMe, BY_PORT, UnitType.TANK);
         }
-        cityDaoService.captureCity(nationMe, PORT);
-        unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
+        cityService.captureCity(nationMe, PORT);
+        unitService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), PORT);
         assertResult(result);
         for (int i = 0; i < TRANSPORT_CAPACITY + 1; ++i) {
@@ -189,9 +189,9 @@ public class MoveUnitsTest extends WithUnitsBase {
 
     @Test
     public void navyMyCity() {
-        Unit dest = unitDaoService.buildUnit(nationMe, BY_PORT, UnitType.DESTROYER);
+        Unit dest = unitService.buildUnit(nationMe, BY_PORT, UnitType.DESTROYER);
         List<SIUnit> units = makeUnitList(dest);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(units, PORT);
         assertResult(result);
         assertEquals(dest.getCoords(), PORT, result.toString());
@@ -200,9 +200,9 @@ public class MoveUnitsTest extends WithUnitsBase {
 
     @Test
     public void navyMyInlandCity() {
-        cityDaoService.captureCity(nationMe, PORT);
-        Unit dest = unitDaoService.buildUnit(nationMe, PORT, UnitType.DESTROYER);
-        cityDaoService.captureCity(nationMe, BY_PORT);
+        cityService.captureCity(nationMe, PORT);
+        Unit dest = unitService.buildUnit(nationMe, PORT, UnitType.DESTROYER);
+        cityService.captureCity(nationMe, BY_PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), BY_PORT);
         assertFalseResult(result);
         assertEquals(dest.getCoords(), PORT, result.toString());

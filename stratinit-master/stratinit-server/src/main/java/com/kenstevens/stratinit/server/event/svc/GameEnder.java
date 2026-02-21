@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.server.daoservice.*;
+import com.kenstevens.stratinit.server.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,66 +22,66 @@ public class GameEnder {
     @Autowired
     private CityDao cityDao;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
     @Autowired
     private UnitDao unitDao;
     @Autowired
     private RelationDao relationDao;
 
     @Autowired
-    private LogDaoService logDaoService;
+    private BattleLogService battleLogService;
     @Autowired
-    private CityDaoService cityDaoService;
+    private CityService cityService;
     @Autowired
     private GameArchiver gameArchiver;
 
     public void endGame(Game game) {
         logger.info("Ending game " + game);
         gameArchiver.archive(game);
-        gameDaoService.score(game);
+        gameService.score(game);
         removeUnitsSeen(game);
         removeUnitMoves(game);
         removeRelations(game);
         removeLogs(game);
         removeUnits(game);
         removeCities(game);
-        gameDaoService.disable(game);
+        gameService.disable(game);
     }
 
     private void removeCities(Game game) {
         for (City city : new ArrayList<>(cityDao.getCities(game))) {
-            cityDaoService.remove(city);
+            cityService.remove(city);
         }
     }
 
     private void removeRelations(Game game) {
         for (Relation relation : new ArrayList<>(relationDao.getRelations(game))) {
-            relationDaoService.remove(relation);
+            relationService.remove(relation);
         }
     }
 
 
     private void removeUnitsSeen(Game game) {
-        unitDaoService.removeUnitsSeen(game);
+        unitService.removeUnitsSeen(game);
     }
 
     private void removeUnitMoves(Game game) {
-        unitDaoService.removeUnitMoves(game);
+        unitService.removeUnitMoves(game);
     }
 
 
     private void removeUnits(Game game) {
         for (Unit unit : new ArrayList<>(unitDao.getUnits(game))) {
-            unitDaoService.remove(unit);
+            unitService.remove(unit);
         }
     }
 
     // TODO REF Push remove lists down to dao like this method
     private void removeLogs(Game game) {
-        logDaoService.removeLogs(game);
+        battleLogService.removeLogs(game);
     }
 }

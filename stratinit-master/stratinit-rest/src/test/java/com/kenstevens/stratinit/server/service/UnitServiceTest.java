@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitSeen;
@@ -17,48 +17,48 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UnitDaoServiceTest extends TwoPlayerBase {
+public class UnitServiceTest extends TwoPlayerBase {
     private static final SectorCoords PORT = new SectorCoords(2, 2);
     private static final SectorCoords SEA = new SectorCoords(3, 2);
     private static final SectorCoords TOP = new SectorCoords(0, 0);
     private static final SectorCoords BOTTOM = new SectorCoords(0, 3);
     @Autowired
-    protected SectorDaoService sectorDaoService;
+    protected SectorService sectorService;
 
     @Test
     public void disableUnitSeen() {
-        unitDaoService.buildUnit(nationMe, SEA,
+        unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
-        Unit inf = unitDaoService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
+        cityService.captureCity(nationThem, PORT);
+        Unit inf = unitService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationMe, inf);
         assertNotNull(unitSeen);
-        unitDaoService.disable(unitSeen.getUnitSeenPK());
+        unitService.disable(unitSeen.getUnitSeenPK());
     }
 
     @Test
     public void updateUnit() {
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         dest.setMobility(0);
         dest.setHp(1);
-        unitDaoService.updateUnit(dest, new Date());
+        unitService.updateUnit(dest, new Date());
         assertEquals(dest.getUnitBase().getMobility(), dest.getMobility());
         assertEquals(1 + dest.getUnitBase().getHp() * Constants.SUPPLY_HEAL_PERCENT / 100, dest.getHp());
     }
 
     @Test
     public void updateUnitTwiceFirstTimeCantMoveSecondTimeCanMove() {
-        Unit inf = unitDaoService.buildUnit(nationMe, TOP,
+        Unit inf = unitService.buildUnit(nationMe, TOP,
                 UnitType.INFANTRY);
         inf.setMobility(0);
-        unitDaoService.setUnitMove(inf, BOTTOM);
-        unitDaoService.updateUnit(inf, new Date());
+        unitService.setUnitMove(inf, BOTTOM);
+        unitService.updateUnit(inf, new Date());
         assertEquals(inf.getUnitBase().getMobility(), inf.getMobility());
         assertEquals(TOP, inf.getCoords());
         assertEquals(BOTTOM, inf.getUnitMove().getCoords());
-        unitDaoService.updateUnit(inf, new Date());
+        unitService.updateUnit(inf, new Date());
         assertEquals(inf.getUnitBase().getMobility() * 2 - TOP.distanceTo(testWorld, BOTTOM), inf.getMobility());
         assertEquals(BOTTOM, inf.getCoords());
         assertNull(inf.getUnitMove());
@@ -66,26 +66,26 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
 
     @Test
     public void updateUnitWithMove() {
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         dest.setMobility(0);
-        unitDaoService.setUnitMove(dest, PORT);
-        unitDaoService.updateUnit(dest, new Date());
+        unitService.setUnitMove(dest, PORT);
+        unitService.updateUnit(dest, new Date());
         assertEquals(dest.getUnitBase().getMobility() - 1, dest.getMobility());
         assertEquals(PORT, dest.getCoords());
     }
 
     @Test
     public void updateXportWithMove() {
-        Unit xport = unitDaoService.buildUnit(nationMe, SEA,
+        Unit xport = unitService.buildUnit(nationMe, SEA,
                 UnitType.TRANSPORT);
-        Unit inf = unitDaoService.buildUnit(nationMe, SEA,
+        Unit inf = unitService.buildUnit(nationMe, SEA,
                 UnitType.INFANTRY);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         xport.setMobility(0);
-        unitDaoService.setUnitMove(xport, PORT);
-        unitDaoService.updateUnit(xport, new Date());
+        unitService.setUnitMove(xport, PORT);
+        unitService.updateUnit(xport, new Date());
         assertEquals(xport.getUnitBase().getMobility() - 1, xport.getMobility());
         assertEquals(PORT, xport.getCoords());
         assertEquals(PORT, inf.getCoords());
@@ -105,7 +105,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void getCargoPassengersInAirportTest() {
         UnitType holderType = UnitType.CARGO_PLANE;
         SectorCoords coords = PORT;
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.FIGHTER);
         List<Unit> units = new ArrayList<>();
 
@@ -139,7 +139,7 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     public void getXportPassengersInPortTest() {
         UnitType holderType = UnitType.TRANSPORT;
         SectorCoords coords = PORT;
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         List<Unit> units = new ArrayList<>();
 
@@ -150,17 +150,17 @@ public class UnitDaoServiceTest extends TwoPlayerBase {
     private List<Unit> getPassengers(UnitType holderType,
                                      SectorCoords coords, List<Unit> units) {
         int capacity = getCapacity(holderType);
-        Unit holder = unitDaoService.buildUnit(nationThem, coords,
+        Unit holder = unitService.buildUnit(nationThem, coords,
                 holderType);
         for (int i = 0; i < capacity + 1; ++i) {
-            Unit inf = unitDaoService.buildUnit(nationThem, coords,
+            Unit inf = unitService.buildUnit(nationThem, coords,
                     UnitType.INFANTRY);
             units.add(inf);
         }
-        WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
+        WorldView WORLD = sectorService.getAllWorldView(nationMe);
         WorldSector worldSector = WORLD.getWorldSector(coords);
 
-        List<Unit> passengers = unitDaoService.getPassengers(holder, worldSector);
+        List<Unit> passengers = unitService.getPassengers(holder, worldSector);
         return passengers;
     }
 }

@@ -18,8 +18,8 @@ import java.sql.SQLException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class AJAXExceptionHandler {
 
-	@Around("com.kenstevens.stratinit.aspectj.SystemArchitecture.inDaoServiceLayer()")
-	// Special handling for Dao service methods to extract the root SQL exception from the BatchUpdateException
+	@Around("com.kenstevens.stratinit.aspectj.SystemArchitecture.inServiceLayer()")
+	// Special handling for service methods to extract the root SQL exception from the BatchUpdateException
 	public Object logExceptions(ProceedingJoinPoint pjp) throws Throwable {
 		Logger logger = LoggerFactory.getLogger(pjp.getTarget().getClass());
 

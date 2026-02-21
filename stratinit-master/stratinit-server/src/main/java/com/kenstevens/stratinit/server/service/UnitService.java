@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
@@ -22,15 +22,15 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class UnitDaoService {
+public class UnitService {
     @Autowired
     private UnitDao unitDao;
     @Autowired
     private CityDao cityDao;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
     private EventQueue eventQueue;
     @Autowired
@@ -48,7 +48,7 @@ public class UnitDaoService {
         if (sector.isPlayerCity()) {
             unit.healPercent(Constants.CITY_HEAL_PERCENT);
         } else {
-            WorldView worldView = sectorDaoService.getSupplyWorldView(unit);
+            WorldView worldView = sectorService.getSupplyWorldView(unit);
             Supply supply = new Supply(worldView);
             if (supply.inSupply(unit)) {
                 unit.healPercent(Constants.SUPPLY_HEAL_PERCENT);
@@ -75,7 +75,7 @@ public class UnitDaoService {
 
     private void executeMoveOrder(Unit unit, SectorCoords target) {
         Nation nation = unit.getNation();
-        WorldView worldView = sectorDaoService.getAllWorldView(nation);
+        WorldView worldView = sectorService.getAllWorldView(nation);
         if (unit.getMobility() < worldView.distance(unit.getCoords(), target)) {
             return;
         }
@@ -294,7 +294,7 @@ public class UnitDaoService {
         if (unitSeen != null) {
             unitDao.transferUnitSeen(unitSeen, oldOwner);
         }
-        messageDaoService.notify(nation, oldOwner + " " + unit + " ceded",
+        messageService.notify(nation, oldOwner + " " + unit + " ceded",
                 oldOwner + " gave you a " + unit + " at " + unit.getCoords());
         return new Result<>(unit + " ownership transferred from "
                 + oldOwner + " to " + unit.getNation(), true);

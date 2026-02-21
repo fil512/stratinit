@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.rest.move;
 
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.*;
@@ -32,13 +32,13 @@ public class Interceptors {
 		return units.isEmpty();
 	}
 
-	public void flyBack(UnitDaoService unitDaoService, WorldView worldView) {
+	public void flyBack(UnitService unitService, WorldView worldView) {
 		for (Unit unit : units) {
-			flyBack(unitDaoService, worldView, startCoords, unit);
+			flyBack(unitService, worldView, startCoords, unit);
 		}
 	}
 
-	public void flyBack(UnitDaoService unitDaoService, WorldView worldView,
+	public void flyBack(UnitService unitService, WorldView worldView,
 						Map<Unit, SectorCoords> startCoords, Unit unit) {
 		if (unit.isAlive()) {
 			// Fly back for free
@@ -47,7 +47,7 @@ public class Interceptors {
 			if (worldView.fueling(unit)) {
 				unit.resupply();
 			}
-			unitDaoService.merge(unit);
+			unitService.merge(unit);
 		}
 	}
 

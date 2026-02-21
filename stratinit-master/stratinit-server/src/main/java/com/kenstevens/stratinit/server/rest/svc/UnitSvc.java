@@ -10,9 +10,9 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.CityDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.rest.move.UnitCommandFactory;
 import com.kenstevens.stratinit.server.rest.move.UnitsCede;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
@@ -37,17 +37,17 @@ public class UnitSvc {
 	@Autowired
 	private RelationDao relationDao;
 	@Autowired
-	private UnitDaoService unitDaoService;
+	private UnitService unitService;
 	@Autowired
 	private PlayerWorldViewUpdate playerWorldViewUpdate;
 	@Autowired
 	private UnitCommandFactory unitCommandFactory;
 	@Autowired
-	private SectorDaoService sectorDaoService;
+	private SectorService sectorService;
 	@Autowired
 	private MoveService moveService;
 	@Autowired
-	private CityDaoService cityDaoService;
+	private CityService cityService;
 	@Autowired
 	private TerrainSwitcher terrainSwitcher;
 
@@ -80,8 +80,8 @@ public class UnitSvc {
 
 	public List<SIUnit> getSeenUnits(Nation nation) {
 		Collection<Nation> allies = relationDao.getFriendsAndAllies(nation);
-		Set<Unit> units = unitDaoService.getTeamSeenUnits(nation, allies);
-		units.addAll(unitDaoService.getAllyUnits(allies));
+		Set<Unit> units = unitService.getTeamSeenUnits(nation, allies);
+		units.addAll(unitService.getAllyUnits(allies));
 		return unitsToSIUnits(nation, units);
 	}
 
@@ -95,7 +95,7 @@ public class UnitSvc {
 			} else if (!unit.getNation().equals(nation)) {
 				result.or(new Result<>("You do not own unit #" + unitId, false));
 			} else {
-				result.or(unitDaoService.disbandUnit(unit));
+				result.or(unitService.disbandUnit(unit));
 			}
 		}
 		SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
@@ -114,7 +114,7 @@ public class UnitSvc {
 			} else if (unit.getUnitMove() == null) {
 				result.or(new Result<>("Unit #" + unitId + " does not have a move order.", false));
 			} else {
-				result.or(unitDaoService.cancelMoveOrder(unit));
+				result.or(unitService.cancelMoveOrder(unit));
 			}
 		}
 		SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
@@ -122,7 +122,7 @@ public class UnitSvc {
 	}
 
 	public Result<SIUpdate> cedeUnits(Nation nation, List<SIUnit> siunits, int nationId) {
-		WorldView worldView = sectorDaoService.getAllWorldView(nation);
+		WorldView worldView = sectorService.getAllWorldView(nation);
 		UnitsCede unitCeder = unitCommandFactory.getSIUnitsCede(nation, siunits, nationId, worldView);
 		return unitCeder.cede();
 	}
@@ -130,7 +130,7 @@ public class UnitSvc {
 	public Result<SIUpdate> buildCity(Nation nation, List<SIUnit> siunits) {
 		return executeBuild(nation, siunits,
 				com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY,
-				unit -> cityDaoService.establishCity(unit));
+				unit -> cityService.establishCity(unit));
 	}
 
 	public Result<SIUpdate> switchTerrain(Nation nation, List<SIUnit> siunits) {

@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.wicket.framework;
 
 import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.server.service.PlayerService;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -20,7 +20,7 @@ public class RegistrationForm extends Form<Player> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	PlayerDaoService playerDaoService;
+	PlayerService playerService;
 	@SpringBean
 	BCryptPasswordEncoder passwordEncoder;
 
@@ -56,9 +56,9 @@ public class RegistrationForm extends Form<Player> {
 		player.setUserAgent(this.getWebRequest().getHeader("User-Agent"));
 		Result<Player> result;
 		if (getAuth().isSignedIn()) {
-			result = playerDaoService.updatePlayer(player);
+			result = playerService.updatePlayer(player);
 		} else {
-			result = playerDaoService.register(player);
+			result = playerService.register(player);
 		}
 		new InfoResult<Player>(this).info(result);
 	}

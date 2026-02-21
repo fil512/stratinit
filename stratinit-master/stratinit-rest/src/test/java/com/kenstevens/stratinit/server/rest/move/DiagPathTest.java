@@ -69,7 +69,7 @@ public class DiagPathTest extends BaseStratInitControllerTest {
 
     @Test
     public void shortestPath() {
-        Unit supply = unitDaoService.buildUnit(nationMe, START, UnitType.SUPPLY);
+        Unit supply = unitService.buildUnit(nationMe, START, UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(makeUnitList(supply), END);
         assertResult(result);
         assertEquals(4, supply.getUnitBase().getMobility() - supply.getMobility(), result.toString());
@@ -77,7 +77,7 @@ public class DiagPathTest extends BaseStratInitControllerTest {
 
     @Test
     public void shortestPath2() {
-        Unit supply = unitDaoService.buildUnit(nationMe, START2, UnitType.SUPPLY);
+        Unit supply = unitService.buildUnit(nationMe, START2, UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(makeUnitList(supply), END);
         assertResult(result);
         assertEquals(3, supply.getUnitBase().getMobility() - supply.getMobility(), result.toString());

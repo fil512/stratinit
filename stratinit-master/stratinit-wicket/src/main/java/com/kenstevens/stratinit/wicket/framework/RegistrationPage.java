@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.wicket.framework;
 
 import com.kenstevens.stratinit.client.model.Player;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.server.service.PlayerService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -10,7 +10,7 @@ public class RegistrationPage extends AuthenticatedPage {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	PlayerDaoService playerDaoService;
+	PlayerService playerService;
 
 	public RegistrationPage() {
 		if (isSignedIn()) {
@@ -19,7 +19,7 @@ public class RegistrationPage extends AuthenticatedPage {
 			add(new Label("title", "Strategic Initiative Registration"));
 		}
 		if (isSignedIn()) {
-			Player player = playerDaoService.findPlayer(getUsername());
+			Player player = playerService.findPlayer(getUsername());
 			if (player != null) {
 				add(new PlayerStatPanel("playerStatPanel", player));
 			} else {
@@ -41,7 +41,7 @@ public class RegistrationPage extends AuthenticatedPage {
 	final void init() {
 		Player player = null;
 		if (isSignedIn()) {
-			player = playerDaoService.findPlayer(getUsername());
+			player = playerService.findPlayer(getUsername());
 		}
 		if (player == null) {
 			player = new Player();

@@ -28,8 +28,8 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void moveCanSee() {
-        Unit xport1 = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
-        Unit xport2 = unitDaoService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
+        Unit xport1 = unitService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
+        Unit xport2 = unitService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationMe, xport2);
         assertNull(unitSeen);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1), NEXT);
@@ -41,8 +41,8 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void moveIsSeen() {
-        Unit xport1 = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
-        unitDaoService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
+        Unit xport1 = unitService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
+        unitService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, xport1);
         assertNull(unitSeen);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1), NEXT);
@@ -53,8 +53,8 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void subMoveNoCanSee() {
-        Unit xport1 = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
-        Unit sub = unitDaoService.buildUnit(nationThem, SHIP2, UnitType.SUBMARINE);
+        Unit xport1 = unitService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
+        Unit sub = unitService.buildUnit(nationThem, SHIP2, UnitType.SUBMARINE);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationMe, sub);
         assertNull(unitSeen);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1), NEXT);
@@ -65,8 +65,8 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void subMoveIsNotSeen() {
-        Unit sub = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.SUBMARINE);
-        unitDaoService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
+        Unit sub = unitService.buildUnit(nationMe, SHIP1, UnitType.SUBMARINE);
+        unitService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, sub);
         assertNull(unitSeen);
         Result<MoveCost> result = moveUnits(makeUnitList(sub), NEXT);
@@ -78,8 +78,8 @@ public class UnitSeenTest extends TwoPlayerBase {
     @Test
     public void subAttackIsSeen() {
         declareWar();
-        unitDaoService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
-        Unit sub = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.SUBMARINE);
+        unitService.buildUnit(nationThem, SHIP2, UnitType.TRANSPORT);
+        Unit sub = unitService.buildUnit(nationMe, SHIP1, UnitType.SUBMARINE);
         sub.addMobility();
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, sub);
         assertNull(unitSeen);
@@ -91,8 +91,8 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void subMoveCanSeeByDest() {
-        Unit dest = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.DESTROYER);
-        Unit sub = unitDaoService.buildUnit(nationThem, SHIP2, UnitType.SUBMARINE);
+        Unit dest = unitService.buildUnit(nationMe, SHIP1, UnitType.DESTROYER);
+        Unit sub = unitService.buildUnit(nationThem, SHIP2, UnitType.SUBMARINE);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationMe, sub);
         assertNull(unitSeen);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), NEXT);
@@ -103,8 +103,8 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void subMoveIsSeenByDest() {
-        Unit sub = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.SUBMARINE);
-        unitDaoService.buildUnit(nationThem, SHIP2, UnitType.DESTROYER);
+        Unit sub = unitService.buildUnit(nationMe, SHIP1, UnitType.SUBMARINE);
+        unitService.buildUnit(nationThem, SHIP2, UnitType.DESTROYER);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, sub);
         assertNull(unitSeen);
         Result<MoveCost> result = moveUnits(makeUnitList(sub), NEXT);
@@ -115,7 +115,7 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void planeIntoFOWDisappears() {
-        Unit plane = unitDaoService.buildUnit(nationThem, PLANE, UnitType.FIGHTER);
+        Unit plane = unitService.buildUnit(nationThem, PLANE, UnitType.FIGHTER);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationMe, plane);
         assertNotNull(unitSeen);
         Result<MoveCost> result = moveUnits(nationThem, makeUnitList(plane), AWAY);
@@ -126,21 +126,21 @@ public class UnitSeenTest extends TwoPlayerBase {
 
     @Test
     public void buildCanBeSeen() {
-        unitDaoService.buildUnit(nationThem, PLANE, UnitType.FIGHTER);
-        Unit inf = unitDaoService.buildUnit(nationMe, CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, PLANE, UnitType.FIGHTER);
+        Unit inf = unitService.buildUnit(nationMe, CITY, UnitType.INFANTRY);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, inf);
         assertNotNull(unitSeen);
     }
 
     @Test
     public void buildCanSee() {
-        Unit inf = unitDaoService.buildUnit(nationMe, NEAR_THEM_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, NEAR_THEM_CITY, UnitType.INFANTRY);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, inf);
         assertNull(unitSeen);
-        unitDaoService.buildUnit(nationThem, THEM_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, THEM_CITY, UnitType.INFANTRY);
         unitSeen = unitDao.findUnitSeen(nationThem, inf);
         assertNull(unitSeen);
-        unitDaoService.buildUnit(nationThem, THEM_CITY, UnitType.ZEPPELIN);
+        unitService.buildUnit(nationThem, THEM_CITY, UnitType.ZEPPELIN);
         unitSeen = unitDao.findUnitSeen(nationThem, inf);
         assertNotNull(unitSeen);
     }

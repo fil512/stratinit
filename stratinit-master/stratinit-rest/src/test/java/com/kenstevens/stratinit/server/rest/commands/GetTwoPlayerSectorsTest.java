@@ -14,13 +14,13 @@ public class GetTwoPlayerSectorsTest extends TwoPlayerBase {
 
     @Test
     public void cityOwner() {
-        WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
+        WorldView WORLD = sectorService.getAllWorldView(nationMe);
         WorldSector city = WORLD.getWorldSector(CITY);
         assertEquals(nationMe, city.getNation());
         declareAlliance();
         allianceDeclared();
-        unitDaoService.buildUnit(nationThem, CITY, UnitType.INFANTRY);
-        city = sectorDaoService.refreshWorldSector(nationMe, WORLD, city);
+        unitService.buildUnit(nationThem, CITY, UnitType.INFANTRY);
+        city = sectorService.refreshWorldSector(nationMe, WORLD, city);
         assertEquals(nationMe, city.getNation());
     }
 }

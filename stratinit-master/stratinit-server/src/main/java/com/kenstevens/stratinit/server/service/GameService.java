@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class GameDaoService {
+public class GameService {
     private final IServerConfig serverConfig;
     @Autowired
     private GameDao gameDao;
@@ -37,11 +37,11 @@ public class GameDaoService {
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
     @Autowired
-    private CityDaoService cityDaoService;
+    private CityService cityService;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private EventQueue eventQueue;
     @Autowired
@@ -59,7 +59,7 @@ public class GameDaoService {
     private FogService fogService;
 
     @Autowired
-    public GameDaoService(IServerConfig serverConfig) {
+    public GameService(IServerConfig serverConfig) {
         this.serverConfig = serverConfig;
     }
 
@@ -152,7 +152,7 @@ public class GameDaoService {
         nationDao.save(nation);
         calculateAllianceVote(game);
         gameDao.merge(game);
-        relationDaoService.setRelations(nation);
+        relationService.setRelations(nation);
         if (game.isMapped()) {
             worldManager.addPlayerToMap(nationId, nation);
         } else if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule()) {
@@ -198,13 +198,13 @@ public class GameDaoService {
 
     }
 
-    // FIXME move this and others to NationDaoService
+    // FIXME move this and others to a NationService
     private void updateTech(double maxTech, Nation nation, Date lastUpdated) {
         int techCentres = (int) cityDao.getNumberOfTechCentres(nation);
         if (techCentres >= Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length) {
             techCentres = Constants.TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES.length - 1;
         }
-        double allyTech = getMaxTech(relationDaoService.getAllies(nation));
+        double allyTech = getMaxTech(relationService.getAllies(nation));
         double nationTech = nation.getTech();
         double otherTechBleed = (maxTech - nationTech)
                 / Constants.OTHER_TECH_BLEED;
@@ -223,9 +223,9 @@ public class GameDaoService {
         double techAfter = nation.getTech();
         nationDao.markCacheModified(nation);
         if (crossedThreshold(nationTech, techAfter)) {
-            cityDaoService
+            cityService
                     .switchCityBuildsFromTechChange(nation, lastUpdated);
-            unitDaoService.updateCarrierRadar(nation);
+            unitService.updateCarrierRadar(nation);
             fogService.survey(nation);
         }
     }
@@ -294,7 +294,7 @@ public class GameDaoService {
             if (score.get(nation) != null) {
                 continue;
             }
-            Collection<Nation> allies = relationDaoService.getAllies(nation);
+            Collection<Nation> allies = relationService.getAllies(nation);
             int cities = 0;
             cities += cityDao.getNumberOfCities(nation);
             for (Nation ally : allies) {

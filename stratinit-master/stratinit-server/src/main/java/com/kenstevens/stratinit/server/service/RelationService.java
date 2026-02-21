@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
@@ -18,13 +18,13 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RelationDaoService {
+public class RelationService {
     @Autowired
     private NationDao nationDao;
     @Autowired
     private RelationDao relationDao;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
     private RelationManager relationManager;
     @Autowired
@@ -58,7 +58,7 @@ public class RelationDaoService {
         Result<Relation> result = relationManager.changeRelation(relation,
                 newRelation, override);
         if (result.isSuccess()) {
-            messageDaoService.notify(target, nation.toString()
+            messageService.notify(target, nation.toString()
                     + " diplomatic update: " + newRelation, nation.toString()
                     + " " + result);
         }
@@ -145,7 +145,7 @@ public class RelationDaoService {
         if (relation.getType() == RelationType.ALLIED) {
             Relation reverse = relationDao.getReverse(relation);
             if (reverse.getType() == RelationType.ALLIED) {
-                messageDaoService.postBulletin(relation.getGame(), relation
+                messageService.postBulletin(relation.getGame(), relation
                         .getFrom()
                         + " and "
                         + relation.getTo()

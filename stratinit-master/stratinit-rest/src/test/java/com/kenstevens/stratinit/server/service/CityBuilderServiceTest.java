@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.City;
@@ -29,7 +29,7 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     @MockBean
     private EventQueue eventQueue;
     @MockBean
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
 
     @Autowired
     private CityBuilderService cityBuilderService;
@@ -38,7 +38,7 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     @BeforeEach
     public void init() {
         super.init();
-        when(unitDaoService.buildUnit(any(), any(), any())).thenReturn(UnitHelper.meUnit);
+        when(unitService.buildUnit(any(), any(), any())).thenReturn(UnitHelper.meUnit);
 
         joinGamePlayerMe();
         city = cityDao.getCity(nationMe, INF_CITY);
@@ -61,7 +61,7 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     public void cityNewBuild() {
         cityBuilderService.updateBuild(nationMe, city, UnitType.ZEPPELIN);
         assertFalse(city.getLastUpdated().equals(started));
-        verify(unitDaoService).getPower(nationMe);
+        verify(unitService).getPower(nationMe);
         verify(eventQueue).cancel(city);
         verify(eventQueue).schedule(city);
     }
@@ -90,16 +90,16 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     @Test
     public void cityBuildUnit() {
         cityBuilderService.buildUnit(city, now);
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
     }
 
     @Test
     public void cityBuildNextBase() {
         city.setNextBuild(UnitType.BASE);
         cityBuilderService.buildUnit(city, now);
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
         verify(eventQueue).cancel(city);
     }
 
@@ -107,8 +107,8 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     public void cityBuildNextResearch() {
         city.setNextBuild(UnitType.RESEARCH);
         cityBuilderService.buildUnit(city, now);
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
         verify(eventQueue).cancel(city);
     }
 
@@ -116,8 +116,8 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
     public void cityBuildNextZep() {
         city.setNextBuild(UnitType.ZEPPELIN);
         cityBuilderService.buildUnit(city, now);
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
         verify(eventQueue).cancel(city);
         verify(eventQueue).schedule(city);
     }
@@ -128,8 +128,8 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
         city.setSwitchOnTechChange(true);
         cityBuilderService.buildUnit(city, now);
         assertTrue(city.isSwitchOnTechChange());
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
     }
 
     @Test
@@ -138,8 +138,8 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
         city.setNextBuild(UnitType.BASE);
         cityBuilderService.buildUnit(city, now);
         assertFalse(city.isSwitchOnTechChange());
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
         verify(eventQueue).cancel(city);
     }
 
@@ -149,8 +149,8 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
         city.setNextBuild(UnitType.RESEARCH);
         cityBuilderService.buildUnit(city, now);
         assertFalse(city.isSwitchOnTechChange());
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
         verify(eventQueue).cancel(city);
     }
 
@@ -160,8 +160,8 @@ public class CityBuilderServiceTest extends BaseStratInitControllerTest {
         city.setNextBuild(UnitType.ZEPPELIN);
         cityBuilderService.buildUnit(city, now);
         assertFalse(city.isSwitchOnTechChange());
-        verify(unitDaoService).getPower(nationMe);
-        verify(unitDaoService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
+        verify(unitService).getPower(nationMe);
+        verify(unitService).buildUnit(nationMe, city.getCoords(), UnitType.INFANTRY, now);
         verify(eventQueue).cancel(city);
         verify(eventQueue).schedule(city);
     }

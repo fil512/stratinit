@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Game;
@@ -17,17 +17,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class GameDaoServiceTest extends BaseStratInitControllerTest {
+public class GameServiceTest extends BaseStratInitControllerTest {
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
-    private PlayerDaoService playerDaoService;
+    private PlayerService playerService;
 
     // TODO test Constants.MAX_PLAYERS_PER_GAME works
 
     @Test
     public void testSave() {
-        Game game = gameDaoService.createGame("testzxc");
+        Game game = gameService.createGame("testzxc");
         assertNotNull(game.getCreated());
         assertEquals("testzxc", game.getGamename());
     }
@@ -36,7 +36,7 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
     public void testNoDup() {
         Player player = createPlayer();
         joinGame(player);
-        Result<Nation> result = gameDaoService.joinGame(player, testGameId, false);
+        Result<Nation> result = gameService.joinGame(player, testGameId, false);
         assertFalseResult(result);
     }
 
@@ -55,26 +55,26 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
     @Test
     public void testUnjoinedGames() {
         Player player = createPlayer();
-        List<Game> games = gameDaoService.getUnjoinedGames(player);
+        List<Game> games = gameService.getUnjoinedGames(player);
         int unjoined = games.size();
         joinGame(player);
-        games = gameDaoService.getUnjoinedGames(player);
+        games = gameService.getUnjoinedGames(player);
         assertEquals(unjoined - 1, games.size());
     }
 
     @Test
     public void testRemoveGame() {
         Player player = createPlayer();
-        List<Game> games = gameDaoService.getUnjoinedGames(player);
+        List<Game> games = gameService.getUnjoinedGames(player);
         int unjoined = games.size();
-        gameDaoService.removeGame(testGameId);
-        games = gameDaoService.getUnjoinedGames(player);
+        gameService.removeGame(testGameId);
+        games = gameService.getUnjoinedGames(player);
         assertEquals(unjoined - 1, games.size());
     }
 
     @Test
     public void sevenPlayersMapped() throws InterruptedException {
-        Game game = gameDaoService.createGame("test");
+        Game game = gameService.createGame("test");
         int gameId = game.getId();
         List<Player> players = new ArrayList<>();
         List<Nation> nations = new ArrayList<>();
@@ -82,18 +82,18 @@ public class GameDaoServiceTest extends BaseStratInitControllerTest {
         // TODO TEST why does this throw an exception with numPlayers >= 5?
         for (int i = 0; i < numPlayers; ++i) {
             System.out.println("Player " + i);
-            Result<Player> rresult = playerDaoService.register(PlayerHelper.newPlayer(i));
+            Result<Player> rresult = playerService.register(PlayerHelper.newPlayer(i));
             assertResult(rresult);
             Player player = rresult.getValue();
             players.add(player);
-            Result<Nation> jresult = gameDaoService.joinGame(player, gameId, false);
+            Result<Nation> jresult = gameService.joinGame(player, gameId, false);
             // TODO what's causing the fail is that the 4th player to join the game is triggering the game start
             assertResult(jresult);
             Nation nation = jresult.getValue();
             nations.add(nation);
         }
-        gameDaoService.scheduleGame(game);
+        gameService.scheduleGame(game);
         // TODO reproduce mapGame error in logs
-        gameDaoService.mapGame(game);
+        gameService.mapGame(game);
     }
 }

@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.event.update;
 
 import com.kenstevens.stratinit.client.model.Game;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.Date;
 public class TechEventUpdate extends EventUpdate {
     private final Date date;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
 
     public TechEventUpdate(Date date) {
         this.date = date;
@@ -22,6 +22,6 @@ public class TechEventUpdate extends EventUpdate {
     @Override
     protected void executeWrite() {
         Game game = getGame();
-        gameDaoService.updateGame(game, date);
+        gameService.updateGame(game, date);
     }
 }

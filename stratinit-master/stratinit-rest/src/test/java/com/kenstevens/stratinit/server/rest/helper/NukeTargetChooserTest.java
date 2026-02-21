@@ -41,15 +41,15 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
 
     @Test
     public void findNoSeeTarget() {
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertNull(target);
     }
 
     @Test
     public void findSeeTargetNotAtWar() {
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        unitDaoService.buildUnit(nationMe, NEAR_TOP_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        unitService.buildUnit(nationMe, NEAR_TOP_CITY, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertNull(target);
     }
@@ -57,9 +57,9 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     @Test
     public void findSeeTargetAtWarOutOfRange() {
         declareWar();
-        Unit icbm = unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        Unit icbm = unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
         icbm.setMobility(5);
-        unitDaoService.buildUnit(nationMe, NEAR_TOP_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, NEAR_TOP_CITY, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertNull(target);
     }
@@ -67,8 +67,8 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     @Test
     public void findEnemySeeTargetTop() {
         declareWar();
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        unitDaoService.buildUnit(nationMe, NEAR_TOP_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        unitService.buildUnit(nationMe, NEAR_TOP_CITY, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertEquals(TOP_CITY, target.getCoords());
         assertEquals(TOP_CITY_SCORE * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
@@ -77,8 +77,8 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     @Test
     public void findEnemySeeTargetBetween() {
         declareWar();
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        unitDaoService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertEquals(TOP_CITY, target.getCoords());
         assertEquals(TOP_CITY_SCORE * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
@@ -87,8 +87,8 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     @Test
     public void findEnemySeeTargetBetween2() {
         declareWar();
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
-        unitDaoService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
+        unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertEquals((TOP_CITY_SCORE + BOTTOM_CITY_SCORE) * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
         assertEquals(BETWEEN_CITIES, target.getCoords());
@@ -97,9 +97,9 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     @Test
     public void findEnemySeeTargetBetween12() {
         declareWar();
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        Unit icbm2 = unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
-        unitDaoService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        Unit icbm2 = unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
+        unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertEquals((TOP_CITY_SCORE + BOTTOM_CITY_SCORE) * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
         assertEquals(BETWEEN_CITIES, target.getCoords());
@@ -110,9 +110,9 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     public void findEnemySeeTargetBetween2Zep() {
         declareWar();
         // MY_PORT = 1,4
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
         // BETWEEN_CITIES = 7,5
-        unitDaoService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.ZEPPELIN);
+        unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.ZEPPELIN);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertEquals((TOP_CITY_SCORE + BOTTOM_CITY_SCORE) * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
         // BETWEEN_CITIES_FAR = 9,5
@@ -124,8 +124,8 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
     @Test
     public void findEnemySeeTargetBottom() {
         declareWar();
-        unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        unitDaoService.buildUnit(nationMe, NEAR_BOTTOM_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        unitService.buildUnit(nationMe, NEAR_BOTTOM_CITY, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
         assertEquals(BOTTOM_CITY, target.getCoords());
         assertEquals(BOTTOM_CITY_SCORE * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
@@ -133,9 +133,9 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
 
     @Test
     public void noCounterStrikeBlind() {
-        Unit myIcbm = unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        Unit icbmThem = unitDaoService.buildUnit(nationThem, SAFE, UnitType.ICBM_1);
-        unitDaoService.buildUnit(nationMe, NEAR_BOTTOM_CITY, UnitType.INFANTRY);
+        Unit myIcbm = unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        Unit icbmThem = unitService.buildUnit(nationThem, SAFE, UnitType.ICBM_1);
+        unitService.buildUnit(nationMe, NEAR_BOTTOM_CITY, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(myIcbm), BOTTOM_CITY);
         assertResult(result);
@@ -145,11 +145,11 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
 
     @Test
     public void counterStrikeNoCounterCounter() {
-        Unit myIcbm = unitDaoService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
-        Unit icbmThem = unitDaoService.buildUnit(nationThem, SAFE, UnitType.ICBM_1);
-        Unit myIcbm2 = unitDaoService.buildUnit(nationMe, MY_SAFE, UnitType.ICBM_1);
-        Unit icbmThem2 = unitDaoService.buildUnit(nationThem, SAFE, UnitType.ICBM_1);
-        unitDaoService.buildUnit(nationThem, NEAR_MY_PORT, UnitType.INFANTRY);
+        Unit myIcbm = unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_1);
+        Unit icbmThem = unitService.buildUnit(nationThem, SAFE, UnitType.ICBM_1);
+        Unit myIcbm2 = unitService.buildUnit(nationMe, MY_SAFE, UnitType.ICBM_1);
+        Unit icbmThem2 = unitService.buildUnit(nationThem, SAFE, UnitType.ICBM_1);
+        unitService.buildUnit(nationThem, NEAR_MY_PORT, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(myIcbm), BOTTOM_CITY);
         assertResult(result);

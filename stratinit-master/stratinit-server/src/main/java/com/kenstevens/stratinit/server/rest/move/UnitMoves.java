@@ -8,8 +8,8 @@ import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -26,9 +26,9 @@ public class UnitMoves {
     private final WorldView worldView;
     private final UnitsToMove unitsToMove;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
 
     public UnitMoves(UnitsToMove unitsToMove, Unit unit, WorldSector targetSector, WorldView worldView) {
         this.unitsToMove = unitsToMove;
@@ -63,14 +63,14 @@ public class UnitMoves {
 
         unit.decreaseMobility(cost);
         unit.setCoords(targetCoords);
-        unitDaoService.merge(unit);
+        unitService.merge(unit);
         postMoveActions(unit);
         return Result.trueInstance();
     }
 
     private boolean landUnitMovingOntoFullTransport() {
         if (unit.isLand() && targetSector.isHoldsMyTransport()) {
-            int landUnitWeight = sectorDaoService.getLandUnitWeight(targetSector);
+            int landUnitWeight = sectorService.getLandUnitWeight(targetSector);
             return unit.getWeight() + landUnitWeight > UnitBase.getUnitBase(
                     UnitType.TRANSPORT).getCapacity();
         }
@@ -85,11 +85,11 @@ public class UnitMoves {
         }
         // If I am a supply ship, provide supply to units around me
         if (unit.isSuppliesLand() || unit.isSuppliesNavy()) {
-            sectorDaoService.explodeSupply(unit.getNation(), unit.getCoords());
+            sectorService.explodeSupply(unit.getNation(), unit.getCoords());
         }
         // If I am a carrier, fuel ships over me
         if (unit.getType() == UnitType.CARRIER) {
-            unitDaoService.resupplyAir(unit);
+            unitService.resupplyAir(unit);
         }
 
     }

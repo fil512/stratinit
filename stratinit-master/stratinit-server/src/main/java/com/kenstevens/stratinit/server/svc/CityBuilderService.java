@@ -7,9 +7,9 @@ import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.client.util.BuildHelper;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.CityDaoService;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.MessageService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -28,13 +28,13 @@ public class CityBuilderService {
 	@Autowired
 	private EventQueue eventQueue;
 	@Autowired
-	private CityDaoService cityDaoService;
+	private CityService cityService;
 	@Autowired
-	private UnitDaoService unitDaoService;
+	private UnitService unitService;
 	@Autowired
 	private CityDao cityDao;
 	@Autowired
-	private MessageDaoService messageDaoService;
+	private MessageService messageService;
 
 	public void cityCapturedBuildChange(City city) {
 		eventQueue.cancel(city);
@@ -79,7 +79,7 @@ public class CityBuilderService {
 		}
 
 		if (city.getType() != origCityType) {
-			cityDaoService.cityChanged(city);
+			cityService.cityChanged(city);
 		}
 		return true;
 	}
@@ -103,7 +103,7 @@ public class CityBuilderService {
 
 	private Result<Boolean> powerLimitReached(Nation nation) {
 		int cityCount = cityDao.getNumberOfCities(nation);
-		int power = unitDaoService.getPower(nation);
+		int power = unitService.getPower(nation);
 		return BuildHelper.powerLimitReached(cityCount, power);
 	}
 
@@ -125,7 +125,7 @@ public class CityBuilderService {
 				+ powerLimitReached.toString();
 		if (powerLimitReached.getValue()) {
 			logger.debug("Skipping build unit " + message);
-			messageDaoService
+			messageService
 					.notify(
 							nation,
 							"skipping " + unitType,
@@ -133,9 +133,9 @@ public class CityBuilderService {
 					);
 		} else {
 			logger.debug("Building unit " + message);
-			Unit unit = unitDaoService.buildUnit(nation, coords, unitType, buildTime);
+			Unit unit = unitService.buildUnit(nation, coords, unitType, buildTime);
 			if (city.getCityMove() != null) {
-				unitDaoService.executeCityMove(unit, city);
+				unitService.executeCityMove(unit, city);
 			}
 		}
 

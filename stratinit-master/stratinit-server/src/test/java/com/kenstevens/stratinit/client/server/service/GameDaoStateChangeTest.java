@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.client.server.daoservice;
+package com.kenstevens.stratinit.client.server.service;
 
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
@@ -14,8 +14,8 @@ import com.kenstevens.stratinit.helper.GameHelper;
 import com.kenstevens.stratinit.helper.NationHelper;
 import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
+import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.svc.GameCreator;
@@ -52,14 +52,14 @@ public class GameDaoStateChangeTest {
     @Mock
     private GameCreator gameCreator;
     @Mock
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
 
     private Game game;
 
     private final IServerConfig serverConfig = new ServerConfig(RunModeEnum.TEST);
 
     @InjectMocks
-    private final GameDaoService gameDaoService = new GameDaoService(serverConfig);
+    private final GameService gameService = new GameService(serverConfig);
 
     @BeforeEach
     public void before() {
@@ -68,7 +68,7 @@ public class GameDaoStateChangeTest {
 
     @Test
     public void createGame() {
-        Game game = gameDaoService.createGame("test");
+        Game game = gameService.createGame("test");
         assertNotNull(game);
         assertTrue(game.isEnabled());
         assertNull(game.getStartTime());
@@ -81,7 +81,7 @@ public class GameDaoStateChangeTest {
     public void createBlitzGame() {
         World world = prepWorld();
 
-        Game game = gameDaoService.createBlitzGame("test", 2);
+        Game game = gameService.createBlitzGame("test", 2);
         assertNotNull(game.getStartTime());
         assertIsMapped(game);
         assertEquals(0, game.getPlayers());
@@ -107,7 +107,7 @@ public class GameDaoStateChangeTest {
     @Test
     public void scheduleGameNoPlayers() {
 
-        gameDaoService.scheduleGame(game);
+        gameService.scheduleGame(game);
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(0, game.getPlayers());
@@ -117,8 +117,8 @@ public class GameDaoStateChangeTest {
     @Test
     public void scheduleGameTwice() {
 
-        gameDaoService.scheduleGame(game);
-        gameDaoService.scheduleGame(game);
+        gameService.scheduleGame(game);
+        gameService.scheduleGame(game);
         verify(eventQueue).schedule(game, false);
     }
 
@@ -129,9 +129,9 @@ public class GameDaoStateChangeTest {
 
         prepJoinGame(1);
 
-        gameDaoService.joinGame(player, game.getId(), false);
+        gameService.joinGame(player, game.getId(), false);
 
-        gameDaoService.scheduleGame(game);
+        gameService.scheduleGame(game);
         assertNotNull(game.getStartTime());
         assertNotMapped(game);
         assertEquals(1, game.getPlayers());
@@ -153,7 +153,7 @@ public class GameDaoStateChangeTest {
     public void mapGameNotStarted() {
 
         try {
-            gameDaoService.mapGame(game);
+            gameService.mapGame(game);
             fail();
         } catch (IllegalStateException e) {
             assertEquals("Game " + GameHelper.gameName + " can not be mapped.  It has not been started yet.", e.getMessage());
@@ -169,11 +169,11 @@ public class GameDaoStateChangeTest {
 
         prepJoinGame(1);
 
-        final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
-        gameDaoService.scheduleGame(game);
-        gameDaoService.mapGame(game);
+        final Result<Nation> result = gameService.joinGame(player, game.getId(), false);
+        gameService.scheduleGame(game);
+        gameService.mapGame(game);
         try {
-            gameDaoService.mapGame(game);
+            gameService.mapGame(game);
             fail();
         } catch (IllegalStateException e) {
             assertEquals("Game " + GameHelper.gameName + " is already mapped.  It cannot be mapped again.", e.getMessage());
@@ -188,9 +188,9 @@ public class GameDaoStateChangeTest {
     @Test
     public void mapGameNoPlayers() {
 
-        gameDaoService.scheduleGame(game);
+        gameService.scheduleGame(game);
         try {
-            gameDaoService.mapGame(game);
+            gameService.mapGame(game);
             fail();
         } catch (IllegalStateException e) {
             assertEquals("Game " + GameHelper.gameName + " may not be mapped.  It has no players.", e.getMessage());
@@ -207,11 +207,11 @@ public class GameDaoStateChangeTest {
 
         prepJoinGame(1);
 
-        final Result<Nation> result = gameDaoService.joinGame(player, game
+        final Result<Nation> result = gameService.joinGame(player, game
                 .getId(), false);
 
-        gameDaoService.scheduleGame(game);
-        gameDaoService.mapGame(game);
+        gameService.scheduleGame(game);
+        gameService.mapGame(game);
         assertNotNull(game.getStartTime());
         assertIsMapped(game);
         assertEquals(1, game.getPlayers());
@@ -236,7 +236,7 @@ public class GameDaoStateChangeTest {
         World world = setupTwoPlayers(game);
         Player player = PlayerHelper.me;
 
-        final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
+        final Result<Nation> result = gameService.joinGame(player, game.getId(), false);
 
         assertResult(result);
         assertNotNull(game.getStartTime());
@@ -252,10 +252,10 @@ public class GameDaoStateChangeTest {
     private World setupTwoPlayers(Game game) {
         World world = prepWorld();
 
-        gameDaoService.scheduleGame(game);
+        gameService.scheduleGame(game);
         prepJoinGame(2);
         playersJoinGame(game, 2);
-        gameDaoService.mapGame(game);
+        gameService.mapGame(game);
         return world;
     }
 
@@ -268,7 +268,7 @@ public class GameDaoStateChangeTest {
         playersJoinGame(game, Constants.MAP_EXTRA_SLOTS);
 
         final Player player = PlayerHelper.me;
-        final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
+        final Result<Nation> result = gameService.joinGame(player, game.getId(), false);
         assertFalseResult(result);
 
         assertNotNull(game.getStartTime());
@@ -285,7 +285,7 @@ public class GameDaoStateChangeTest {
     private void playersJoinGame(final Game game, int numPlayers) {
         for (int i = 0; i < numPlayers; ++i) {
             final Player player = PlayerHelper.newPlayer(i);
-            final Result<Nation> result = gameDaoService.joinGame(player, game.getId(), false);
+            final Result<Nation> result = gameService.joinGame(player, game.getId(), false);
             assertResult(result);
         }
     }

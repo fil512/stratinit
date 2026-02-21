@@ -10,8 +10,8 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.CityDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +31,9 @@ public class CitySvc {
 	@Autowired
 	private UnitDao unitDao;
 	@Autowired
-	private CityDaoService cityDaoService;
+	private CityService cityService;
 	@Autowired
-	private UnitDaoService unitDaoService;
+	private UnitService unitService;
 	@Autowired
 	private PlayerWorldViewUpdate playerWorldViewUpdate;
 
@@ -87,9 +87,9 @@ public class CitySvc {
 		Result<None> result = Result.trueInstance();
 		Collection<Unit> units = unitDao.getUnits(game, coords);
 		for (Unit unit : units) {
-			result.or(unitDaoService.cedeUnit(unit, target));
+			result.or(unitService.cedeUnit(unit, target));
 		}
-		result.or(cityDaoService.cedeCity(city, target));
+		result.or(cityService.cedeCity(city, target));
 		SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
 		return new Result<>(result.getMessages(), true, siupdate, result.getBattleLogs(), result.isSuccess());
 	}

@@ -7,7 +7,7 @@ import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class PlayerWorldView {
 	@Autowired
 	private SectorDao sectorDao;
 	@Autowired
-	private SectorDaoService sectorDaoService;
+	private SectorService sectorService;
 	@Autowired
 	private GameDao gameDao;
 	@Autowired
@@ -32,11 +32,11 @@ public class PlayerWorldView {
 	}
 
 	public WorldSeenMap getWorldSeenMap(Nation nation) {
-		WorldSeenMap worldSeenMap = new WorldSeenMap(sectorDaoService.getSeenWorldView(nation));
+		WorldSeenMap worldSeenMap = new WorldSeenMap(sectorService.getSeenWorldView(nation));
 		worldSeenMap.merge(sectorDao.getSectorsSeen(nation));
 		Collection<Nation> allies = relationDao.getAllies(nation);
 		for (Nation ally : allies) {
-			WorldView allyWorldView = sectorDaoService.getSeenWorldView(ally);
+			WorldView allyWorldView = sectorService.getSeenWorldView(ally);
 			Collection<SectorSeen> allySectorsSeen = sectorDao
 					.getSectorsSeen(ally);
 			worldSeenMap.merge(allySectorsSeen, allyWorldView);

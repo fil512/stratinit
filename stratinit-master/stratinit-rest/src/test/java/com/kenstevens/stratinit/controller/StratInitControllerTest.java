@@ -91,9 +91,9 @@ class StratInitControllerTest {
     @MockBean
     private com.kenstevens.stratinit.server.rest.svc.CityUpdater cityUpdater;
     @MockBean
-    private com.kenstevens.stratinit.server.daoservice.GameDaoService gameDaoService;
+    private com.kenstevens.stratinit.server.service.GameService gameService;
     @MockBean
-    private com.kenstevens.stratinit.server.daoservice.MessageDaoService messageDaoService;
+    private com.kenstevens.stratinit.server.service.MessageService messageService;
     @MockBean
     private com.kenstevens.stratinit.dao.MessageDao messageDao;
     @MockBean

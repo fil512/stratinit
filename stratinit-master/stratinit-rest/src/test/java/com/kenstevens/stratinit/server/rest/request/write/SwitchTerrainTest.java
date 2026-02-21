@@ -20,7 +20,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainNotEnoughMob() {
-        Unit eng = unitDaoService.buildUnit(nationMe, COASTLAND,
+        Unit eng = unitService.buildUnit(nationMe, COASTLAND,
                 UnitType.ENGINEER);
 
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
@@ -31,7 +31,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainNotEng() {
-        Unit tank = unitDaoService.buildUnit(nationMe, COASTLAND,
+        Unit tank = unitService.buildUnit(nationMe, COASTLAND,
                 UnitType.TANK);
         tank.setMobility(tank.getMaxMobility());
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
@@ -42,10 +42,10 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainGotCompany() {
-        Unit eng = unitDaoService.buildUnit(nationMe, COASTLAND,
+        Unit eng = unitService.buildUnit(nationMe, COASTLAND,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
-        unitDaoService.buildUnit(nationMe, COASTLAND,
+        unitService.buildUnit(nationMe, COASTLAND,
                 UnitType.INFANTRY);
 
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
@@ -56,7 +56,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainInland() {
-        Unit eng = unitDaoService.buildUnit(nationMe, INLAND,
+        Unit eng = unitService.buildUnit(nationMe, INLAND,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
 
@@ -68,7 +68,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainCoastland() {
-        Unit eng = unitDaoService.buildUnit(nationMe, COASTLAND,
+        Unit eng = unitService.buildUnit(nationMe, COASTLAND,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
 
@@ -80,7 +80,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainBeachwater() {
-        Unit eng = unitDaoService.buildUnit(nationMe, BEACHWATER,
+        Unit eng = unitService.buildUnit(nationMe, BEACHWATER,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
 
@@ -92,7 +92,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainDeepSea() {
-        Unit eng = unitDaoService.buildUnit(nationMe, DEEPSEA,
+        Unit eng = unitService.buildUnit(nationMe, DEEPSEA,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
 
@@ -104,7 +104,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
 
     @Test
     public void switchTerrainCity() {
-        Unit eng = unitDaoService.buildUnit(nationMe, CITY,
+        Unit eng = unitService.buildUnit(nationMe, CITY,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
 

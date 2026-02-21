@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.event.update;
 
 import com.kenstevens.stratinit.client.model.RelationPK;
-import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
+import com.kenstevens.stratinit.server.service.RelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class SwitchRelationEventUpdate extends EventUpdate {
     private final RelationPK relationPK;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
 
     public SwitchRelationEventUpdate(RelationPK relationPK) {
         this.relationPK = relationPK;
@@ -19,6 +19,6 @@ public class SwitchRelationEventUpdate extends EventUpdate {
 
     @Override
     protected void executeWrite() {
-        relationDaoService.switchRelation(relationPK);
+        relationService.switchRelation(relationPK);
     }
 }

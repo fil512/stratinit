@@ -13,7 +13,7 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.ErrorJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.session.StratInitSessionManager;
@@ -45,7 +45,7 @@ public class GameController {
     @Autowired
     private NationSvc nationSvc;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
     @Autowired
@@ -105,9 +105,9 @@ public class GameController {
             }
             if (!game.hasStarted()) {
                 nation.setNoAlliances(request.noAlliances);
-                gameDaoService.merge(nation);
-                gameDaoService.calculateAllianceVote(game);
-                gameDaoService.merge(game);
+                gameService.merge(nation);
+                gameService.calculateAllianceVote(game);
+                gameService.merge(game);
             }
             return Result.trueInstance();
         });
@@ -116,7 +116,7 @@ public class GameController {
     @PostMapping(path = SIRestPaths.JOIN_GAME)
     public Result<SINation> joinGame(@RequestBody SetGameJson request) {
         return writeProcessor.processForGame(request.gameId, session -> {
-            Result<Nation> result = gameDaoService.joinGame(session.getPlayer(), request.gameId, request.noAlliances);
+            Result<Nation> result = gameService.joinGame(session.getPlayer(), request.gameId, request.noAlliances);
             Nation nation = result.getValue();
             SINation siNation = nationSvc.nationToSINation(nation, nation, false, false);
             return new Result<>(result, siNation);
@@ -131,7 +131,7 @@ public class GameController {
     @GetMapping(path = SIRestPaths.GAME_UNJOINED)
     public Result<List<SIGame>> getUnjoinedGames() {
         return requestProcessor.processNoGame(player ->
-                gameDaoService.getUnjoinedGames(player).stream()
+                gameService.getUnjoinedGames(player).stream()
                         .map(game -> new SIGame(game, false))
                         .collect(Collectors.toList()));
     }

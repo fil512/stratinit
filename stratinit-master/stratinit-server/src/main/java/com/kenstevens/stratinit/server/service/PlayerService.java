@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.client.model.PlayerRole;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-public class PlayerDaoService {
+public class PlayerService {
     private static final Random RANDOM = new Random();
 
     private static final int RANDOM_PASSWORD_LENGTH = 8;

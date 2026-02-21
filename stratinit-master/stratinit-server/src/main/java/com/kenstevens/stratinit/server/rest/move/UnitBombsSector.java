@@ -4,8 +4,8 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.BattleLogService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,9 @@ public class UnitBombsSector {
 	private final AttackReadiness attackReadiness;
 	private final Nation actor;
 	@Autowired
-	private LogDaoService logDaoService;
+	private BattleLogService battleLogService;
 	@Autowired
-	private UnitDaoService unitDaoService;
+	private UnitService unitService;
 
 	public UnitBombsSector(Nation actor, Unit bomber, WorldSector targetSector, Collection<Unit> units, AttackReadiness attackReadiness) {
 		this.actor = actor;
@@ -51,14 +51,14 @@ public class UnitBombsSector {
 
 	private Result<None> bombUnit(double percent, Unit target, int flakDamage) {
 		int damage = (int) Math.ceil(percent * target.getHp());
-		unitDaoService.damage(target, damage);
+		unitService.damage(target, damage);
 		UnitAttackedBattleLog unitAttackedBattleLog = new UnitAttackedBattleLog(
 				AttackType.BOMB, bomber, target, targetSector.getCoords(), flakDamage);
 		unitAttackedBattleLog.setDamage(damage);
 		if (!target.isAlive()) {
 			unitAttackedBattleLog.setDefenderDied(true);
 		}
-		logDaoService.save(unitAttackedBattleLog);
+		battleLogService.save(unitAttackedBattleLog);
 		return new Result<None>(new SIBattleLog(actor, unitAttackedBattleLog));
 	}
 }

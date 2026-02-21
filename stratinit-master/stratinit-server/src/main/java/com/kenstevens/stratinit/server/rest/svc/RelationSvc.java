@@ -6,7 +6,7 @@ import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
+import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.type.RelationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class RelationSvc {
     @Autowired
     private NationDao nationDao;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
 
     public List<SIRelation> getRelations(Nation nation) {
         Collection<Relation> relations = relationDao.getMyRelations(nation);
@@ -52,8 +52,8 @@ public class RelationSvc {
                 return new Result<>("Alliances are not allowed in this game.", false);
             }
         }
-        Result<Relation> result = relationDaoService.setRelation(nation, target, relationType, false);
-        Map<Nation, Relation> map = relationDaoService.getTheirRelationsAsMap(nation);
+        Result<Relation> result = relationService.setRelation(nation, target, relationType, false);
+        Map<Nation, Relation> map = relationService.getTheirRelationsAsMap(nation);
         Relation themToMe = map.get(target);
         return new Result<>(result.getMessages(), result.isSuccess(),
                 new SIRelation(result.getValue(), themToMe));

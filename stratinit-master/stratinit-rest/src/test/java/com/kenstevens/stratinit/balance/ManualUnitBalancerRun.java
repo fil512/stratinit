@@ -26,7 +26,7 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
 
     @Test
     public void runUnitBalance() throws IOException {
-        cityDaoService.captureCity(nationThem, DEF_CITY);
+        cityService.captureCity(nationThem, DEF_CITY);
         BalanceResultList balanceResultList = new BalanceResultList();
         declareWar();
         for (UnitType attackerUnitType : UnitBase.orderedUnitTypes()) {
@@ -130,13 +130,13 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
         UnitBase attBase = UnitBase.getUnitBase(attackerUnitType);
         Unit att;
         if (attBase.isNavy()) {
-            att = unitDaoService.buildUnit(nationMe, SEA_ATT_COORDS,
+            att = unitService.buildUnit(nationMe, SEA_ATT_COORDS,
                     attackerUnitType);
         } else {
-            att = unitDaoService.buildUnit(nationMe, LAND_ATT_COORDS,
+            att = unitService.buildUnit(nationMe, LAND_ATT_COORDS,
                     attackerUnitType);
         }
-        Unit def = unitDaoService.buildUnit(nationThem, defCoords,
+        Unit def = unitService.buildUnit(nationThem, defCoords,
                 defenderUnitType);
         AttackBalanceResult balanceResult = new AttackBalanceResult(att, def);
         do {
@@ -153,7 +153,7 @@ public class ManualUnitBalancerRun extends TwoPlayerBase {
         if (balanceResult.hasDamage()) {
             results.add(balanceResult);
         }
-        unitDaoService.killUnit(att);
-        unitDaoService.killUnit(def);
+        unitService.killUnit(att);
+        unitService.killUnit(def);
     }
 }

@@ -33,11 +33,11 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supplyDepleted() {
         declareWar();
-        Unit supply = unitDaoService.buildUnit(nationMe, SUPPLY,
+        Unit supply = unitService.buildUnit(nationMe, SUPPLY,
                 UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, DEST,
+        Unit dest = unitService.buildUnit(nationMe, DEST,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
@@ -49,13 +49,13 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supplyWithPortNotDepleted() {
         declareWar();
-        Unit supply = unitDaoService.buildUnit(nationMe, SUPPLY,
+        Unit supply = unitService.buildUnit(nationMe, SUPPLY,
                 UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, DEST,
+        Unit dest = unitService.buildUnit(nationMe, DEST,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertResult(result);
@@ -66,13 +66,13 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supplyWithFarPortDepleted() {
         declareWar();
-        Unit supply = unitDaoService.buildUnit(nationMe, SUPPLY,
+        Unit supply = unitService.buildUnit(nationMe, SUPPLY,
                 UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, DEST,
+        Unit dest = unitService.buildUnit(nationMe, DEST,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        cityDaoService.captureCity(nationMe, FAR_PORT);
+        cityService.captureCity(nationMe, FAR_PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertResult(result);
@@ -83,13 +83,13 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supply2Depleted() {
         declareWar();
-        Unit supply = unitDaoService.buildUnit(nationMe, SUPPLY,
+        Unit supply = unitService.buildUnit(nationMe, SUPPLY,
                 UnitType.SUPPLY);
-        Unit supply2 = unitDaoService.buildUnit(nationMe, SUPPLY2,
+        Unit supply2 = unitService.buildUnit(nationMe, SUPPLY2,
                 UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, DEST,
+        Unit dest = unitService.buildUnit(nationMe, DEST,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
@@ -102,15 +102,15 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supply2WithFarPortNotDepleted() {
         declareWar();
-        Unit supply = unitDaoService.buildUnit(nationMe, SUPPLY,
+        Unit supply = unitService.buildUnit(nationMe, SUPPLY,
                 UnitType.SUPPLY);
-        Unit supply2 = unitDaoService.buildUnit(nationMe, SUPPLY2,
+        Unit supply2 = unitService.buildUnit(nationMe, SUPPLY2,
                 UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, DEST,
+        Unit dest = unitService.buildUnit(nationMe, DEST,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        cityDaoService.captureCity(nationMe, FAR_PORT);
+        cityService.captureCity(nationMe, FAR_PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertResult(result);
@@ -121,16 +121,16 @@ public class SupplyTreeTest extends TwoPlayerBase {
 
     @Test
     public void supplyChain() {
-        unitDaoService.buildUnit(nationMe, SUPPLY,
+        unitService.buildUnit(nationMe, SUPPLY,
                 UnitType.SUPPLY);
-        unitDaoService.buildUnit(nationMe, SUPPLY2,
+        unitService.buildUnit(nationMe, SUPPLY2,
                 UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, DEST,
+        Unit dest = unitService.buildUnit(nationMe, DEST,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.TRANSPORT);
-        cityDaoService.captureCity(nationMe, FAR_PORT);
-        WorldView worldView = sectorDaoService.getAllWorldView(nationMe);
+        cityService.captureCity(nationMe, FAR_PORT);
+        WorldView worldView = sectorService.getAllWorldView(nationMe);
         SupplyTree supplyTree = new SupplyTree(worldView, dest);
         Iterator<SectorCoordVector> iterator = supplyTree.getSupplyChain();
         List<SectorCoordVector> list = new ArrayList<>();
@@ -145,9 +145,9 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supplyInf() {
         declareWar();
-        Unit inf = unitDaoService.buildUnit(nationMe, ATTINF,
+        Unit inf = unitService.buildUnit(nationMe, ATTINF,
                 UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationThem, DEFINF,
+        unitService.buildUnit(nationThem, DEFINF,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf), DEFINF);
@@ -158,7 +158,7 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void noSupplyFarInf() {
         declareWar();
-        Unit inf = unitDaoService.buildUnit(nationMe, FARATTINF,
+        Unit inf = unitService.buildUnit(nationMe, FARATTINF,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf), FARCITY);
@@ -169,9 +169,9 @@ public class SupplyTreeTest extends TwoPlayerBase {
     @Test
     public void supplyFarInf() {
         declareWar();
-        Unit inf = unitDaoService.buildUnit(nationMe, FARATTINF,
+        Unit inf = unitService.buildUnit(nationMe, FARATTINF,
                 UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationMe, FARXPORT,
+        unitService.buildUnit(nationMe, FARXPORT,
                 UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf), FARCITY);

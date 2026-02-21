@@ -19,9 +19,9 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
     @Test
     public void infOnXportAtSeaSunk() {
         declareWar();
-        Unit inf = unitDaoService.buildUnit(nationThem, SEA, UnitType.INFANTRY);
-        Unit transport = unitDaoService.buildUnit(nationThem, SEA, UnitType.TRANSPORT);
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA2, UnitType.DESTROYER);
+        Unit inf = unitService.buildUnit(nationThem, SEA, UnitType.INFANTRY);
+        Unit transport = unitService.buildUnit(nationThem, SEA, UnitType.TRANSPORT);
+        Unit dest = unitService.buildUnit(nationMe, SEA2, UnitType.DESTROYER);
 
         transport.setHp(1);
         unitDao.merge(transport);
@@ -40,10 +40,10 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
         declareWar();
         Unit[] fighters = new Unit[CARRIER_CAPACITY + 1];
         for (int i = 0; i < CARRIER_CAPACITY + 1; ++i) {
-            fighters[i] = unitDaoService.buildUnit(nationThem, SEA, UnitType.FIGHTER);
+            fighters[i] = unitService.buildUnit(nationThem, SEA, UnitType.FIGHTER);
         }
-        Unit carrier = unitDaoService.buildUnit(nationThem, SEA, UnitType.CARRIER);
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA2, UnitType.DESTROYER);
+        Unit carrier = unitService.buildUnit(nationThem, SEA, UnitType.CARRIER);
+        Unit dest = unitService.buildUnit(nationMe, SEA2, UnitType.DESTROYER);
 
         carrier.setHp(1);
         unitDao.merge(carrier);
@@ -61,10 +61,10 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
     @Test
     public void infOnXportInPortNotSunk() {
         declareWar();
-        Unit transport = unitDaoService.buildUnit(nationThem, PORT, UnitType.TRANSPORT);
-        Unit inf = unitDaoService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        Unit transport = unitService.buildUnit(nationThem, PORT, UnitType.TRANSPORT);
+        Unit inf = unitService.buildUnit(nationThem, PORT, UnitType.INFANTRY);
+        Unit dest = unitService.buildUnit(nationMe, SEA, UnitType.DESTROYER);
+        cityService.captureCity(nationThem, PORT);
 
         transport.setHp(1);
         unitDao.merge(transport);
@@ -81,9 +81,9 @@ public class UnitsOnShipsSunkTest extends TwoPlayerBase {
     @Test
     public void infOnXportAtSeaNotHit() {
         declareWar();
-        Unit transport = unitDaoService.buildUnit(nationThem, SEA, UnitType.TRANSPORT);
-        Unit inf = unitDaoService.buildUnit(nationThem, SEA, UnitType.INFANTRY);
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA2, UnitType.DESTROYER);
+        Unit transport = unitService.buildUnit(nationThem, SEA, UnitType.TRANSPORT);
+        Unit inf = unitService.buildUnit(nationThem, SEA, UnitType.INFANTRY);
+        Unit dest = unitService.buildUnit(nationMe, SEA2, UnitType.DESTROYER);
 
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), SEA);

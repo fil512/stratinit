@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-// TODO OPT pull stuff out of daoservices that only hit cache
+// TODO OPT pull stuff out of services that only hit cache
 @Service
-public class SectorDaoService {
+public class SectorService {
     @SuppressWarnings("unused")
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -29,22 +29,22 @@ public class SectorDaoService {
     private UnitDao unitDao;
 
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
-    private CityDaoService cityDaoService;
+    private CityService cityService;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
-    private LogDaoService logDaoService;
+    private BattleLogService battleLogService;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
 
     @Autowired
     private DataCache dataCache;
 
     // TODO DEPL persistence.xml read-only on getters
     public WorldView getAllWorldView(Nation nation) {
-        Game game = gameDaoService.findGame(nation.getGame().getId());
+        Game game = gameService.findGame(nation.getGame().getId());
         List<Sector> sectors;
         sectors = dataCache.getSectors(nation.getGameId());
         return getWorldView(nation, sectors, unitDao.getUnits(game));
@@ -66,8 +66,8 @@ public class SectorDaoService {
                                          int distance) {
         List<Sector> sectors = dataCache.getWorld(nation.getGameId())
                 .getSectorsWithin(coords, distance);
-        return getWorldView(nation, sectors, unitDaoService.getTeamUnits(
-                nation, relationDaoService.getAllies(nation)));
+        return getWorldView(nation, sectors, unitService.getTeamUnits(
+                nation, relationService.getAllies(nation)));
     }
 
     public WorldView getInterdictionWorldView(Unit unit, Nation nation) {
@@ -86,15 +86,15 @@ public class SectorDaoService {
     public WorldView getSeenWorldView(Nation nation) {
         Collection<Sector> sectors = sectorDao
                 .getNationSectorsSeenSectors(nation);
-        Set<Unit> units = unitDaoService.getTeamUnits(nation, relationDaoService
+        Set<Unit> units = unitService.getTeamUnits(nation, relationService
                 .getAllies(nation));
         return getWorldView(nation, sectors, units);
     }
 
     private WorldView getWorldView(Nation nation, Collection<Sector> sectors,
                                    Collection<Unit> units) {
-        WorldView worldView = new WorldView(nation, relationDaoService
-                .getMyRelationsAsMap(nation), relationDaoService
+        WorldView worldView = new WorldView(nation, relationService
+                .getMyRelationsAsMap(nation), relationService
                 .getTheirRelationTypesAsMap(nation));
         setWorldSectorsFromCities(sectors, worldView);
         if (units != null) {
@@ -241,22 +241,22 @@ public class SectorDaoService {
             CityNukedBattleLog cityNukedBattleLog = new CityNukedBattleLog(
                     attackerUnit, city.getNation(), sector.getCoords());
             if (isInitialAttack) {
-                relationDaoService.setRelation(city.getNation(), attackerUnit
+                relationService.setRelation(city.getNation(), attackerUnit
                         .getNation(), RelationType.WAR, true);
                 retval.add(city.getNation());
             }
-            logDaoService.save(cityNukedBattleLog);
-            cityDaoService.remove(city);
+            battleLogService.save(cityNukedBattleLog);
+            cityService.remove(city);
             sector.setType(SectorType.WASTELAND);
             sectorDao.markCacheModified(sector);
         }
         List<Unit> units = new ArrayList<>(unitDao.getUnits(sector));
         for (Unit unit : units) {
-            unitDaoService.killUnit(unit);
+            unitService.killUnit(unit);
             UnitAttackedBattleLog unitAttackedBattleLog = new UnitAttackedBattleLog(
                     AttackType.NUKE, attackerUnit, unit, sector.getCoords());
             unitAttackedBattleLog.setDefenderDied(true);
-            logDaoService.save(unitAttackedBattleLog);
+            battleLogService.save(unitAttackedBattleLog);
         }
         return retval;
     }

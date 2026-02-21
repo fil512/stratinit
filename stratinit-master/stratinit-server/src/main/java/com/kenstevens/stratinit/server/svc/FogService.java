@@ -5,8 +5,8 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.rest.move.MoveSeen;
 import com.kenstevens.stratinit.server.rest.move.MoveSeenFactory;
 import com.kenstevens.stratinit.type.Constants;
@@ -19,9 +19,9 @@ import java.util.*;
 @Service
 public class FogService {
     @Autowired
-    UnitDaoService unitDaoService;
+    UnitService unitService;
     @Autowired
-    SectorDaoService sectorDaoService;
+    SectorService sectorService;
     @Autowired
     private SectorDao sectorDao;
     @Autowired
@@ -92,7 +92,7 @@ public class FogService {
             // TODO OPT move this elsewhere
             nations = unitDao.getOtherNationsThatSeeThisUnit(topUnit);
             for (Nation nation : nations) {
-                unitDaoService.disable(nation, units);
+                unitService.disable(nation, units);
             }
         } else {
             if (!attacking) { // might have sunk enemy

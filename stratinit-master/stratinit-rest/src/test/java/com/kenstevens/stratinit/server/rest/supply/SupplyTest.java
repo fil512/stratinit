@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -31,7 +31,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
     private static final SectorCoords FARXPORT1 = new SectorCoords(11, 13);
     private static final SectorCoords FARLAND = new SectorCoords(9, 13);
     @Autowired
-    protected SectorDaoService sectorDaoService;
+    protected SectorService sectorService;
 
     @BeforeEach
     public void doJoinGame() {
@@ -40,62 +40,62 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void unitInSupply() {
-        Unit inf = unitDaoService.buildUnit(nationMe, IN_SUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, IN_SUPPLY,
                 UnitType.INFANTRY);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertTrue(supply.inSupply(inf));
     }
 
     @Test
     public void unitOutSupply() {
-        Unit inf = unitDaoService.buildUnit(nationMe, OUT_SUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, OUT_SUPPLY,
                 UnitType.INFANTRY);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
     }
 
     @Test
     public void engineerSupplies() {
-        Unit inf = unitDaoService.buildUnit(nationMe, OUT_SUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, OUT_SUPPLY,
                 UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationMe, ENGINEER,
+        unitService.buildUnit(nationMe, ENGINEER,
                 UnitType.ENGINEER);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertTrue(supply.inSupply(inf));
     }
 
     @Test
     public void unitInTSupply() {
-        unitDaoService.buildUnit(nationMe, SEA_IN_REACH, UnitType.TRANSPORT);
+        unitService.buildUnit(nationMe, SEA_IN_REACH, UnitType.TRANSPORT);
 
-        Unit inf = unitDaoService.buildUnit(nationMe, IN_TSUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, IN_TSUPPLY,
                 UnitType.INFANTRY);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertTrue(supply.inSupply(inf));
     }
 
     @Test
     public void unitOutTSupply() {
-        unitDaoService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
+        unitService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
 
-        Unit inf = unitDaoService.buildUnit(nationMe, OUT_TSUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, OUT_TSUPPLY,
                 UnitType.INFANTRY);
         unitDao.save(inf);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
     }
 
     @Test
     public void unitInSSupply() {
-        unitDaoService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
-        Unit inf = unitDaoService.buildUnit(nationMe, IN_TSUPPLY,
+        unitService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
+        Unit inf = unitService.buildUnit(nationMe, IN_TSUPPLY,
                 UnitType.INFANTRY);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertTrue(supply.inSupply(inf));
 
@@ -103,74 +103,74 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void unitOutSSupply() {
-        unitDaoService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
-        Unit inf = unitDaoService.buildUnit(nationMe, OUT_TSUPPLY,
+        unitService.buildUnit(nationMe, SEA_IN_REACH, UnitType.SUPPLY);
+        Unit inf = unitService.buildUnit(nationMe, OUT_TSUPPLY,
                 UnitType.INFANTRY);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
     }
 
     @Test
     public void unitOnTransportInSupply() {
-        Unit inf = unitDaoService.buildUnit(nationMe, SEA_OUT_OF_REACH,
+        Unit inf = unitService.buildUnit(nationMe, SEA_OUT_OF_REACH,
                 UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationMe, SEA_OUT_OF_REACH, UnitType.TRANSPORT);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        unitService.buildUnit(nationMe, SEA_OUT_OF_REACH, UnitType.TRANSPORT);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertTrue(supply.inSupply(inf));
     }
 
     @Test
     public void shipNearPortSupply() {
-        Unit dest = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.DESTROYER);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
+        WorldView worldView = sectorService.getSupplyWorldView(dest);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
-        worldView = sectorDaoService.getSupplyWorldView(dest);
+        worldView = sectorService.getSupplyWorldView(dest);
         supply = new Supply(worldView);
         assertTrue(supply.inSupply(dest));
     }
 
     @Test
     public void shipFarPortSupply() {
-        Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.DESTROYER);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
+        WorldView worldView = sectorService.getSupplyWorldView(dest);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
-        cityDaoService.captureCity(nationMe, PORT);
-        worldView = sectorDaoService.getSupplyWorldView(dest);
+        cityService.captureCity(nationMe, PORT);
+        worldView = sectorService.getSupplyWorldView(dest);
         supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
     }
 
     @Test
     public void destMoveIntoSupply() {
-        Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.DESTROYER);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(dest);
+        WorldView worldView = sectorService.getSupplyWorldView(dest);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(dest));
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), CLOSE_ENOUGH_TO_PORT);
         assertResult(result);
-        worldView = sectorDaoService.getSupplyWorldView(dest);
+        worldView = sectorService.getSupplyWorldView(dest);
         supply = new Supply(worldView);
         assertTrue(supply.inSupply(dest));
     }
 
     @Test
     public void supplyMoveIntoSupply() {
-        Unit supply = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit supply = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.SUPPLY);
         supply.decreaseAmmo();
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(supply), CLOSE_ENOUGH_TO_PORT);
@@ -180,10 +180,10 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void destMoveIntoSupplyRefillsAmmo() {
-        Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.DESTROYER);
         dest.decreaseAmmo();
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), CLOSE_ENOUGH_TO_PORT);
@@ -193,10 +193,10 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void supplyMoveIntoSupplyRefillsAmmo() {
-        Unit supply = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit supply = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.SUPPLY);
         supply.decreaseAmmo();
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(supply), CLOSE_ENOUGH_TO_PORT);
@@ -206,13 +206,13 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void supplyFarInfMove() {
-        Unit inf = unitDaoService.buildUnit(nationMe, FARXPORT,
+        Unit inf = unitService.buildUnit(nationMe, FARXPORT,
                 UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, FARXPORT,
+        Unit inf2 = unitService.buildUnit(nationMe, FARXPORT,
                 UnitType.INFANTRY);
-        Unit xport = unitDaoService.buildUnit(nationMe, FARXPORT,
+        Unit xport = unitService.buildUnit(nationMe, FARXPORT,
                 UnitType.TRANSPORT);
-        Supply supply = new Supply(sectorDaoService.getSupplyWorldView(xport));
+        Supply supply = new Supply(sectorService.getSupplyWorldView(xport));
         assertFalse(supply.inSupply(xport));
         assertTrue(supply.inSupply(inf));
         assertTrue(supply.inSupply(inf2));
@@ -224,9 +224,9 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void supplyFarSupMove() {
-        Unit sup = unitDaoService.buildUnit(nationMe, FARXPORT,
+        Unit sup = unitService.buildUnit(nationMe, FARXPORT,
                 UnitType.SUPPLY);
-        Supply supply = new Supply(sectorDaoService.getSupplyWorldView(sup));
+        Supply supply = new Supply(sectorService.getSupplyWorldView(sup));
         assertTrue(supply.inSupply(sup));
         Result<MoveCost> result = moveUnits(
                 makeUnitList(sup), FARXPORT1);
@@ -236,10 +236,10 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void supplyFarEmptySupMove() {
-        Unit sup = unitDaoService.buildUnit(nationMe, FARXPORT,
+        Unit sup = unitService.buildUnit(nationMe, FARXPORT,
                 UnitType.SUPPLY);
         sup.setAmmo(0);
-        Supply supply = new Supply(sectorDaoService.getSupplyWorldView(sup));
+        Supply supply = new Supply(sectorService.getSupplyWorldView(sup));
         assertTrue(supply.inSupply(sup));
         Result<MoveCost> result = moveUnits(
                 makeUnitList(sup), FARXPORT1);
@@ -249,10 +249,10 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void zepMoveIntoMyCityRefillsAmmo() {
-        Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        Unit zep = unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.ZEPPELIN);
         zep.decreaseAmmo();
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), PORT);
@@ -263,10 +263,10 @@ public class SupplyTest extends BaseStratInitControllerTest {
 
     @Test
     public void zepMoveNoRefillsAmmo() {
-        Unit zep = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        Unit zep = unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.ZEPPELIN);
         zep.decreaseAmmo();
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), CLOSE_ENOUGH_TO_PORT);

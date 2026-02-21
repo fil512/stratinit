@@ -69,8 +69,8 @@ public class SupplyPathTest extends BaseStratInitControllerTest {
 
     @Test
     public void shortestPath() {
-        unitDaoService.buildUnit(nationMe, SUPPLY, UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, START, UnitType.DESTROYER);
+        unitService.buildUnit(nationMe, SUPPLY, UnitType.SUPPLY);
+        Unit dest = unitService.buildUnit(nationMe, START, UnitType.DESTROYER);
         dest.setMobility(12);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), END);
         assertResult(result);
@@ -80,8 +80,8 @@ public class SupplyPathTest extends BaseStratInitControllerTest {
 
     @Test
     public void wentNorth() {
-        unitDaoService.buildUnit(nationMe, SUPPLY, UnitType.SUPPLY);
-        Unit dest = unitDaoService.buildUnit(nationMe, START, UnitType.DESTROYER);
+        unitService.buildUnit(nationMe, SUPPLY, UnitType.SUPPLY);
+        Unit dest = unitService.buildUnit(nationMe, START, UnitType.DESTROYER);
         dest.setMobility(11);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), END);
         assertResult(result);

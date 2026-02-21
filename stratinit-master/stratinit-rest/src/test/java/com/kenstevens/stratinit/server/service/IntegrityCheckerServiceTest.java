@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
@@ -20,14 +20,14 @@ public class IntegrityCheckerServiceTest extends TwoPlayerBase {
     private static final SectorCoords NEAR_PORTW = new SectorCoords(5, 8);
     private static final SectorCoords NEAR_PORTSW = new SectorCoords(5, 9);
     @Autowired
-    protected SectorDaoService sectorDaoService;
+    protected SectorService sectorService;
     @Autowired
     protected IntegrityCheckerService integrityCheckerService;
 
     @Test
     public void noEnemyUnitInMycity() {
-        cityDaoService.captureCity(nationMe, PORT);
-        Unit dest = unitDaoService.buildUnit(nationThem, PORT,
+        cityService.captureCity(nationMe, PORT);
+        Unit dest = unitService.buildUnit(nationThem, PORT,
                 UnitType.DESTROYER);
         assertTrue(dest.getCoords().equals(PORT));
         integrityCheckerService.checkAndFix(testGame);
@@ -36,9 +36,9 @@ public class IntegrityCheckerServiceTest extends TwoPlayerBase {
 
     @Test
     public void noEnemyUnitInSameSectorAsMyUnit() {
-        Unit dest = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, NEAR_PORT,
+        unitService.buildUnit(nationThem, NEAR_PORT,
                 UnitType.DESTROYER);
         assertTrue(dest.getCoords().equals(NEAR_PORT));
         integrityCheckerService.checkAndFix(testGame);
@@ -48,19 +48,19 @@ public class IntegrityCheckerServiceTest extends TwoPlayerBase {
 
     @Test
     public void noEnemyUnitInSameSectorAsMyUnitNowhereToMove() {
-        Unit dest = unitDaoService.buildUnit(nationThem, NEAR_PORT,
+        Unit dest = unitService.buildUnit(nationThem, NEAR_PORT,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationMe, NEAR_PORTN,
+        unitService.buildUnit(nationMe, NEAR_PORTN,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationMe, NEAR_PORTS,
+        unitService.buildUnit(nationMe, NEAR_PORTS,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationMe, NEAR_PORTNW,
+        unitService.buildUnit(nationMe, NEAR_PORTNW,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationMe, NEAR_PORTW,
+        unitService.buildUnit(nationMe, NEAR_PORTW,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationMe, NEAR_PORTSW,
+        unitService.buildUnit(nationMe, NEAR_PORTSW,
                 UnitType.DESTROYER);
         assertTrue(dest.getCoords().equals(NEAR_PORT));
         integrityCheckerService.checkAndFix(testGame);

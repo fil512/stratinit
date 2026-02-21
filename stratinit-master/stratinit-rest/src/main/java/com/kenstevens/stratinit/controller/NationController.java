@@ -9,7 +9,7 @@ import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetRelationJson;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.NationSvc;
@@ -36,7 +36,7 @@ public class NationController {
     @Autowired
     private RelationSvc relationSvc;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
     private LogDao logDao;
 
@@ -71,7 +71,7 @@ public class NationController {
     public Result<List<SIBattleLog>> getBattleLog() {
         return writeProcessor.process(nation -> {
             nation.setNewBattle(false);
-            gameDaoService.merge(nation);
+            gameService.merge(nation);
             List<SIBattleLog> retval = new ArrayList<>();
             for (CityCapturedBattleLog log : logDao.getCityCapturedBattleLogs(nation)) {
                 retval.add(new SIBattleLog(nation, log));
@@ -92,6 +92,6 @@ public class NationController {
 
     @GetMapping(path = SIRestPaths.TEAM)
     public Result<List<SITeam>> getTeams() {
-        return requestProcessor.processWithGame(game -> gameDaoService.getTeams(game));
+        return requestProcessor.processWithGame(game -> gameService.getTeams(game));
     }
 }

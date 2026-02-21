@@ -18,9 +18,9 @@ public class AttackCannonsTest extends TwoPlayerBase {
     @Test
     public void destAttacksEMpty() {
         declareWar();
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
         assertFalseResult(result);
@@ -32,10 +32,10 @@ public class AttackCannonsTest extends TwoPlayerBase {
     @Test
     public void destAttacksBase() {
         declareWar();
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
-        Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
+        cityService.captureCity(nationThem, PORT);
+        Unit sat = unitService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
         assertResult(result);
@@ -50,11 +50,11 @@ public class AttackCannonsTest extends TwoPlayerBase {
     @Test
     public void destAttacksFort() {
         declareWar();
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.INFANTRY);
-        Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
+        Unit sat = unitService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
         assertResult(result);
@@ -67,11 +67,11 @@ public class AttackCannonsTest extends TwoPlayerBase {
     @Test
     public void destAttacksAirport() {
         declareWar();
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.FIGHTER);
-        Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
+        Unit sat = unitService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
         assertResult(result);
@@ -84,11 +84,11 @@ public class AttackCannonsTest extends TwoPlayerBase {
     @Test
     public void destAttacksPort() {
         declareWar();
-        Unit dest = unitDaoService.buildUnit(nationMe, SEA,
+        Unit dest = unitService.buildUnit(nationMe, SEA,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
-        Unit sat = unitDaoService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
+        Unit sat = unitService.buildUnit(nationThem, PORT, UnitType.SATELLITE);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), PORT);
         assertResult(result);

@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.server.rest.attack;
 
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -25,13 +25,13 @@ public class InterdictionTest extends TwoPlayerBase {
     private static final SectorCoords PORT = new SectorCoords(2, 2);
     private static final SectorCoords BYPORT = new SectorCoords(3, 2);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @Test
     public void destNoSupplyNoInterdictsDest() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT,
+        Unit idest = unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -41,11 +41,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void destInSupplyInterdictsDest() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT,
+        Unit idest = unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -65,10 +65,10 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void patrolInSupplyInterdictsPatrol() {
-        Unit mpatrol = unitDaoService.buildUnit(nationMe, MOV, UnitType.PATROL);
-        Unit ipatrol = unitDaoService.buildUnit(nationThem, INT,
+        Unit mpatrol = unitService.buildUnit(nationMe, MOV, UnitType.PATROL);
+        Unit ipatrol = unitService.buildUnit(nationThem, INT,
                 UnitType.PATROL);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mpatrol),
                 BETWEEN);
@@ -86,11 +86,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void patrolInSupplyNoInterdictsDest() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit ipatrol = unitDaoService.buildUnit(nationThem, INT,
+        Unit ipatrol = unitService.buildUnit(nationThem, INT,
                 UnitType.PATROL);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -100,11 +100,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void bbInSupplyInterdictsDest2Away() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit ibb = unitDaoService.buildUnit(nationThem, INT2,
+        Unit ibb = unitService.buildUnit(nationThem, INT2,
                 UnitType.BATTLESHIP);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -122,11 +122,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void patrolInSupplyInterdictsTransport2Away() {
-        Unit mtransport = unitDaoService.buildUnit(nationMe, MOV,
+        Unit mtransport = unitService.buildUnit(nationMe, MOV,
                 UnitType.TRANSPORT);
-        Unit ipatrol = unitDaoService.buildUnit(nationThem, INT2,
+        Unit ipatrol = unitService.buildUnit(nationThem, INT2,
                 UnitType.PATROL);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mtransport),
                 BETWEEN);
@@ -144,11 +144,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void destInSupplyInterdictsDest2Away() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT2,
+        Unit idest = unitService.buildUnit(nationThem, INT2,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -167,10 +167,10 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void destInSupplyNoInterdictsSub2Away() {
-        Unit msub = unitDaoService.buildUnit(nationMe, MOV, UnitType.SUBMARINE);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT2,
+        Unit msub = unitService.buildUnit(nationMe, MOV, UnitType.SUBMARINE);
+        Unit idest = unitService.buildUnit(nationThem, INT2,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(msub),
                 BETWEEN);
@@ -188,13 +188,13 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void twoDestInSupplyInterdictsDestNoStack() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT,
+        Unit idest = unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        Unit idest2 = unitDaoService.buildUnit(nationThem, INT2,
+        Unit idest2 = unitService.buildUnit(nationThem, INT2,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -205,11 +205,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void interdictionStopsMovement() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT,
+        Unit idest = unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 CLOSER);
@@ -220,15 +220,15 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void interdictionMovesXportInf() {
-        Unit mxport = unitDaoService
+        Unit mxport = unitService
                 .buildUnit(nationMe, MOV2, UnitType.TRANSPORT);
         mxport.setMobility(UnitBase.getUnitBase(UnitType.TRANSPORT).getMaxMobility());
 
-        Unit minf = unitDaoService
+        Unit minf = unitService
                 .buildUnit(nationMe, MOV2, UnitType.INFANTRY);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT,
+        Unit idest = unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mxport),
                 CLOSER);
@@ -242,15 +242,15 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void interdictionMovesDeadXportKillsInf() {
-        Unit mxport = unitDaoService
+        Unit mxport = unitService
                 .buildUnit(nationMe, MOV2, UnitType.TRANSPORT);
         mxport.setMobility(UnitBase.getUnitBase(UnitType.TRANSPORT).getMaxMobility());
         mxport.setHp(1);
-        Unit minf = unitDaoService
+        Unit minf = unitService
                 .buildUnit(nationMe, MOV2, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationThem, INT,
+        unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mxport),
                 CLOSER);
@@ -262,11 +262,11 @@ public class InterdictionTest extends TwoPlayerBase {
     @Test
     public void friendlyDestInSupplyNoInterdictsDest() {
         friendlyDeclared();
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit idest = unitDaoService.buildUnit(nationThem, INT,
+        Unit idest = unitService.buildUnit(nationThem, INT,
                 UnitType.DESTROYER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
         assertResult(result);
@@ -275,9 +275,9 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void tankOnLandInterdictsDestroyerNoCounterAttack() {
-        Unit mdest = unitDaoService.buildUnit(nationMe, BETWEEN,
+        Unit mdest = unitService.buildUnit(nationMe, BETWEEN,
                 UnitType.DESTROYER);
-        Unit itank = unitDaoService.buildUnit(nationThem, TANK, UnitType.TANK);
+        Unit itank = unitService.buildUnit(nationThem, TANK, UnitType.TANK);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest), MOV);
         assertFalseResult(result);
         assertInterdiction(mdest, itank, result);
@@ -288,9 +288,9 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void tankOnLandInterdictsBBNoCounterAttack() {
-        Unit mbb = unitDaoService.buildUnit(nationMe, BETWEEN,
+        Unit mbb = unitService.buildUnit(nationMe, BETWEEN,
                 UnitType.BATTLESHIP);
-        Unit itank = unitDaoService.buildUnit(nationThem, TANK, UnitType.TANK);
+        Unit itank = unitService.buildUnit(nationThem, TANK, UnitType.TANK);
         Result<MoveCost> result = moveUnits(makeUnitList(mbb), MOV);
         assertFalseResult(result);
         assertInterdiction(mbb, itank, result);
@@ -301,9 +301,9 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void infOnLandNoInterdictsDestroyer() {
-        Unit mdest = unitDaoService.buildUnit(nationMe, BETWEEN,
+        Unit mdest = unitService.buildUnit(nationMe, BETWEEN,
                 UnitType.DESTROYER);
-        Unit iinf = unitDaoService.buildUnit(nationThem, TANK,
+        Unit iinf = unitService.buildUnit(nationThem, TANK,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest), MOV);
         assertResult(result);
@@ -312,10 +312,10 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void tankInCityInterdictsDestroyerNoCounterAttack() {
-        Unit mdest = unitDaoService.buildUnit(nationMe, BETWEEN,
+        Unit mdest = unitService.buildUnit(nationMe, BETWEEN,
                 UnitType.DESTROYER);
-        Unit itank = unitDaoService.buildUnit(nationThem, PORT, UnitType.TANK);
-        cityDaoService.captureCity(nationThem, PORT);
+        Unit itank = unitService.buildUnit(nationThem, PORT, UnitType.TANK);
+        cityService.captureCity(nationThem, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BYPORT);
         assertFalseResult(result);
@@ -326,9 +326,9 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void nbInterdictsAttack() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit inb = unitDaoService.buildUnit(nationThem, INT,
+        Unit inb = unitService.buildUnit(nationThem, INT,
                 UnitType.NAVAL_BOMBER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -338,13 +338,13 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInterceptsInterdictingNb() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit fighter = unitDaoService
+        Unit fighter = unitService
                 .buildUnit(nationMe, TANK, UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationThem, INT,
+        unitService.buildUnit(nationThem, INT,
                 UnitType.SUPPLY);
-        Unit inb = unitDaoService.buildUnit(nationThem, INT2,
+        Unit inb = unitService.buildUnit(nationThem, INT2,
                 UnitType.NAVAL_BOMBER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -356,11 +356,11 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void nb2InterdictsAttack() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, INT,
+        unitService.buildUnit(nationThem, INT,
                 UnitType.SUPPLY);
-        Unit inb = unitDaoService.buildUnit(nationThem, INT2,
+        Unit inb = unitService.buildUnit(nationThem, INT2,
                 UnitType.NAVAL_BOMBER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -372,12 +372,12 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void nb2OnCarrierResuppliesInterdictsAttack() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
 
-        unitDaoService
+        unitService
                 .buildUnit(nationThem, INT2, UnitType.CARRIER);
-        Unit inb = unitDaoService.buildUnit(nationThem, INT2,
+        Unit inb = unitService.buildUnit(nationThem, INT2,
                 UnitType.NAVAL_BOMBER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -389,9 +389,9 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void nbNoSeeNoInterdictsAttack() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit inb = unitDaoService.buildUnit(nationThem, INT2,
+        Unit inb = unitService.buildUnit(nationThem, INT2,
                 UnitType.NAVAL_BOMBER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);
@@ -401,9 +401,9 @@ public class InterdictionTest extends TwoPlayerBase {
 
     @Test
     public void fighterNoInterdictsAttack() {
-        Unit mdest = unitDaoService
+        Unit mdest = unitService
                 .buildUnit(nationMe, MOV, UnitType.DESTROYER);
-        Unit inb = unitDaoService.buildUnit(nationThem, INT,
+        Unit inb = unitService.buildUnit(nationThem, INT,
                 UnitType.FIGHTER);
         Result<MoveCost> result = moveUnits(makeUnitList(mdest),
                 BETWEEN);

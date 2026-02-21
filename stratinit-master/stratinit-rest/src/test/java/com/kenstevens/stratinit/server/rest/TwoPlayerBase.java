@@ -36,7 +36,7 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
     private void setMyRelation(RelationType relationType) {
         Relation relation = relationDao.findRelation(nationMe, nationThem);
         relation.setNextType(relationType);
-        relationDaoService.switchRelation(relation);
+        relationService.switchRelation(relation);
     }
 
     private void setTheirRelation(RelationType relationType) {

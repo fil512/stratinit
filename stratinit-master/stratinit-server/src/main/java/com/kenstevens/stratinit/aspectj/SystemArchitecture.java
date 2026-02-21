@@ -5,8 +5,8 @@ import org.aspectj.lang.annotation.Pointcut;
 
 @Aspect
 public class SystemArchitecture {
-    @Pointcut("within(com.kenstevens.stratinit.client.server.daoservice.*)")
-    public void inDaoServiceLayer() {
+    @Pointcut("within(com.kenstevens.stratinit.server.service.*)")
+    public void inServiceLayer() {
     }
 
     @Pointcut("within(com.kenstevens.stratinit.dao.*)")
@@ -21,7 +21,7 @@ public class SystemArchitecture {
     public void remoteMoveOperation() {
     }
 
-    @Pointcut("inDaoServiceLayer() || remoteOperation() || remoteMoveOperation() || inDaoLayer()")
+    @Pointcut("inServiceLayer() || remoteOperation() || remoteMoveOperation() || inDaoLayer()")
     public void stratInitOperation() {
     }
 

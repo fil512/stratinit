@@ -7,8 +7,8 @@ import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -21,9 +21,9 @@ import java.util.Collection;
 @Service
 public class TerrainSwitcher {
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
     private SectorDao sectorDao;
     @Autowired
@@ -53,9 +53,9 @@ public class TerrainSwitcher {
 
         sector.setType(toType);
 
-        sectorDaoService.merge(sector);
+        sectorService.merge(sector);
         unit.decreaseMobility(Constants.MOB_COST_TO_SWITCH_TERRAIN);
-        unitDaoService.merge(unit);
+        unitService.merge(unit);
         return new Result<None>("Terrain switched from " + fromType + " to " + toType, true);
     }
 

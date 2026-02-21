@@ -4,8 +4,8 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitSeen;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -20,9 +20,9 @@ import java.util.Set;
 @Scope("prototype")
 public class MoveSeen {
 	@Autowired
-	SectorDaoService sectorDaoService;
+	SectorService sectorService;
 	@Autowired
-	UnitDaoService unitDaoService;
+	UnitService unitService;
 
 	private final Set<UnitSeen> seen = new HashSet<UnitSeen>();
 	private final Set<Unit> seeUnit = new HashSet<Unit>();
@@ -51,16 +51,16 @@ public class MoveSeen {
 			if (seenDone.contains(unitSeen)) {
 				continue;
 			}
-			unitDaoService.saveOrUpdate(unitSeen);
+			unitService.saveOrUpdate(unitSeen);
 			seenDone.add(unitSeen);
 		}
 	}
 
 	public void persist() {
 		persistSeen();
-		Map<SectorCoords, List<Unit>> unitMap = unitDaoService.getUnitMap(nation.getGame());
+		Map<SectorCoords, List<Unit>> unitMap = unitService.getUnitMap(nation.getGame());
 		for (Sector sector : seeSector) {
-			sectorDaoService.saveIfNew(nation, sector);
+			sectorService.saveIfNew(nation, sector);
 			List<Unit> units = unitMap.get(sector.getCoords());
 			if (units == null) {
 				continue;
@@ -69,7 +69,7 @@ public class MoveSeen {
 		}
 
 		for (Unit unit : seeUnit) {
-			unitDaoService.saveOrUpdate(nation, unit);
+			unitService.saveOrUpdate(nation, unit);
 		}
 	}
 

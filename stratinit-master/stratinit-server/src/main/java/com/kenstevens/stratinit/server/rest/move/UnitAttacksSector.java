@@ -7,9 +7,9 @@ import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.CityDaoService;
-import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.BattleLogService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,13 +28,13 @@ public class UnitAttacksSector {
     private final MoveSeen moveSeen;
     private final Nation actor;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private CityDaoService cityDaoService;
+    private CityService cityService;
     @Autowired
-    private LogDaoService logDaoService;
+    private BattleLogService battleLogService;
     @Autowired
     private UnitCommandFactory unitCommandFactory;
 
@@ -56,11 +56,11 @@ public class UnitAttacksSector {
         int flakDamage = BattleLog.NO_DAMAGE;
         if (targetSector.getCityDefense(attackingUnit) > 0) {
             flakDamage = AttackHelper.randomFlakDamage(targetSector.getCityDefense(attackingUnit));
-            unitDaoService.damage(attackingUnit, flakDamage);
+            unitService.damage(attackingUnit, flakDamage);
             if (!attackingUnit.isAlive()) {
                 FlakBattleLog flakBattleLog = new FlakBattleLog(AttackType.FLAK,
                         attackingUnit, targetSector.getNation(), targetSector.getCoords(), flakDamage);
-                logDaoService.save(flakBattleLog);
+                battleLogService.save(flakBattleLog);
                 return new Result<None>(new SIBattleLog(actor, flakBattleLog), false);
             }
         }
@@ -90,20 +90,20 @@ public class UnitAttacksSector {
 
 
     private Result<None> takeCity(AttackReadiness attackReadiness) {
-        Nation oldOwner = cityDaoService.captureCity(attackingUnit.getNation(),
+        Nation oldOwner = cityService.captureCity(attackingUnit.getNation(),
                 targetSector);
-        unitDaoService.damage(attackingUnit, Constants.CITY_CAPTURE_DAMAGE);
+        unitService.damage(attackingUnit, Constants.CITY_CAPTURE_DAMAGE);
         CityCapturedBattleLog battleLog = new CityCapturedBattleLog(attackType, attackingUnit,
                 oldOwner, targetSector.getCoords());
 
         if (attackingUnit.isAlive()) {
             attackingUnit.setCoords(targetSector.getCoords());
             attackingUnit.decreaseMobility(attackReadiness.costToAttack());
-            unitDaoService.merge(attackingUnit);
+            unitService.merge(attackingUnit);
         } else {
             battleLog.setAttackerDied(true);
         }
-        logDaoService.save(battleLog);
+        battleLogService.save(battleLog);
         return new Result<None>(new SIBattleLog(actor, battleLog));
     }
 }

@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
@@ -27,7 +27,7 @@ public class WorldManager {
     @Autowired
     private CityDao cityDao;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private EventQueue eventQueue;
     @Autowired
@@ -60,14 +60,14 @@ public class WorldManager {
             if (firstCity) {
                 city = new City(sector, nation, UnitType.INFANTRY);
                 for (int i = 0; i < Constants.START_INFANTRY; ++i) {
-                    Unit unit = unitDaoService.buildUnit(nation, sector.getCoords(), UnitType.INFANTRY);
+                    Unit unit = unitService.buildUnit(nation, sector.getCoords(), UnitType.INFANTRY);
                     unit.addMobility();
                     unit.addMobility();
                 }
             } else {
                 city = new City(sector, nation, UnitType.ZEPPELIN);
                 for (int i = 0; i < Constants.START_ZEPPELINS; ++i) {
-                    Unit unit = unitDaoService.buildUnit(nation, sector.getCoords(), UnitType.ZEPPELIN);
+                    Unit unit = unitService.buildUnit(nation, sector.getCoords(), UnitType.ZEPPELIN);
                     unit.addMobility();
                     unit.addMobility();
                 }

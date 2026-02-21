@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.event.EventScheduler;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.util.UpdateManager;
 import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
 import com.kenstevens.stratinit.server.svc.GameCreator;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class EventSchedulerImpl implements EventScheduler {
     @Autowired
     private GameDao gameDao;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
     private GameEnder gameEnder;
     @Autowired
@@ -107,7 +107,7 @@ public class EventSchedulerImpl implements EventScheduler {
             while (updateManager.missedUpdates() > 0) {
                 Date nextMissedBuildTime = updateManager
                         .getNextMissedBuildTime();
-                gameDaoService.updateGame(game, nextMissedBuildTime);
+                gameService.updateGame(game, nextMissedBuildTime);
             }
             gameStartupService.startGame(game, false);
         }

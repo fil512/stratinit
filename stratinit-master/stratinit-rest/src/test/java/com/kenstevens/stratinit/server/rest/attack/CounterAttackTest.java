@@ -27,9 +27,9 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void destCounterAttacks() {
         declareWar();
-        Unit dest3 = unitDaoService.buildUnit(nationMe, SEA32,
+        Unit dest3 = unitService.buildUnit(nationMe, SEA32,
                 UnitType.DESTROYER);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest3), SEA42);
@@ -43,11 +43,11 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void dest3OutCounterAttacks() {
         declareWar();
-        Unit dest3 = unitDaoService.buildUnit(nationMe, SEA32,
+        Unit dest3 = unitService.buildUnit(nationMe, SEA32,
                 UnitType.DESTROYER);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit dest5 = unitDaoService.buildUnit(nationThem, SEA52,
+        Unit dest5 = unitService.buildUnit(nationThem, SEA52,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest3), SEA42);
@@ -63,11 +63,11 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void allAdjCounterAttacks() {
         declareWar();
-        Unit dest3 = unitDaoService.buildUnit(nationMe, SEA32,
+        Unit dest3 = unitService.buildUnit(nationMe, SEA32,
                 UnitType.DESTROYER);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit dest31 = unitDaoService.buildUnit(nationThem, SEA31,
+        Unit dest31 = unitService.buildUnit(nationThem, SEA31,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest3), SEA42);
@@ -85,11 +85,11 @@ public class CounterAttackTest extends ThreePlayerBase {
     public void allEnemyAdjCounterAttacks() {
         declareWar();
         warDeclaredByThird();
-        Unit dest3 = unitDaoService.buildUnit(nationMe, SEA32,
+        Unit dest3 = unitService.buildUnit(nationMe, SEA32,
                 UnitType.DESTROYER);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit dest31 = unitDaoService.buildUnit(nationThird, SEA31,
+        Unit dest31 = unitService.buildUnit(nationThird, SEA31,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest3), SEA42);
@@ -105,11 +105,11 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void moveThenAttOnlyCounterFireOnceNoSupply() {
         declareWar();
-        Unit dest3 = unitDaoService.buildUnit(nationMe, SEA32,
+        Unit dest3 = unitService.buildUnit(nationMe, SEA32,
                 UnitType.DESTROYER);
-        Unit dest5 = unitDaoService.buildUnit(nationThem, SEA52,
+        Unit dest5 = unitService.buildUnit(nationThem, SEA52,
                 UnitType.DESTROYER);
-        Unit dest31 = unitDaoService.buildUnit(nationThem, SEA31,
+        Unit dest31 = unitService.buildUnit(nationThem, SEA31,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest3), SEA52);
@@ -127,13 +127,13 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void moveThenAttOnlyCounterFireOnceSupply() {
         declareWar();
-        Unit dest3 = unitDaoService.buildUnit(nationMe, SEA32,
+        Unit dest3 = unitService.buildUnit(nationMe, SEA32,
                 UnitType.DESTROYER);
-        Unit dest5 = unitDaoService.buildUnit(nationThem, SEA52,
+        Unit dest5 = unitService.buildUnit(nationThem, SEA52,
                 UnitType.DESTROYER);
-        Unit dest31 = unitDaoService.buildUnit(nationThem, SEA31,
+        Unit dest31 = unitService.buildUnit(nationThem, SEA31,
                 UnitType.DESTROYER);
-        Unit supply = unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit supply = unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest3), SEA52);
@@ -150,10 +150,10 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void nonEscortMovesToInterdict() {
         declareWar();
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit mdest = unitDaoService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit mdest = unitService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(mdest), SEA61);
@@ -167,12 +167,12 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void escortDoesntMoveToInterdict() {
         declareWar();
-        Unit bb3 = unitDaoService.buildUnit(nationThem, SEA34,
+        Unit bb3 = unitService.buildUnit(nationThem, SEA34,
                 UnitType.BATTLESHIP);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit mdest = unitDaoService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit mdest = unitService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(mdest), SEA61);
@@ -187,12 +187,12 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void escortCruiserDoesMoveToInterdictSub() {
         declareWar();
-        Unit bb3 = unitDaoService.buildUnit(nationThem, SEA34,
+        Unit bb3 = unitService.buildUnit(nationThem, SEA34,
                 UnitType.BATTLESHIP);
-        Unit cru4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit cru4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.CRUISER);
-        Unit msub = unitDaoService.buildUnit(nationMe, SEA62, UnitType.SUBMARINE);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit msub = unitService.buildUnit(nationMe, SEA62, UnitType.SUBMARINE);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(msub), SEA61);
@@ -207,12 +207,12 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void nonEscortBBDoesMoveToInterdictDest() {
         declareWar();
-        Unit bb3 = unitDaoService.buildUnit(nationThem, SEA34,
+        Unit bb3 = unitService.buildUnit(nationThem, SEA34,
                 UnitType.BATTLESHIP);
-        Unit bb4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit bb4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.BATTLESHIP);
-        Unit mdest = unitDaoService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit mdest = unitService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(mdest), SEA61);
@@ -227,12 +227,12 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void escortDestDoesntMoveToInterdictSub() {
         declareWar();
-        Unit bb3 = unitDaoService.buildUnit(nationThem, SEA34,
+        Unit bb3 = unitService.buildUnit(nationThem, SEA34,
                 UnitType.BATTLESHIP);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit msub = unitDaoService.buildUnit(nationMe, SEA62, UnitType.SUBMARINE);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit msub = unitService.buildUnit(nationMe, SEA62, UnitType.SUBMARINE);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(msub), SEA61);
@@ -246,12 +246,12 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void escortInterdictsIfAdjacent() {
         declareWar();
-        Unit bb3 = unitDaoService.buildUnit(nationThem, SEA34,
+        Unit bb3 = unitService.buildUnit(nationThem, SEA34,
                 UnitType.BATTLESHIP);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit mdest = unitDaoService.buildUnit(nationMe, SEA52, UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit mdest = unitService.buildUnit(nationMe, SEA52, UnitType.DESTROYER);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(mdest), SEA51);
@@ -267,12 +267,12 @@ public class CounterAttackTest extends ThreePlayerBase {
     public void noEscortAllies() {
         declareWar();
         themThirdAlly();
-        Unit bb3 = unitDaoService.buildUnit(nationThird, SEA34,
+        Unit bb3 = unitService.buildUnit(nationThird, SEA34,
                 UnitType.BATTLESHIP);
-        Unit dest4 = unitDaoService.buildUnit(nationThem, SEA42,
+        Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
-        Unit mdest = unitDaoService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, SUPPLY,
+        Unit mdest = unitService.buildUnit(nationMe, SEA62, UnitType.DESTROYER);
+        unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(mdest), SEA61);
@@ -286,9 +286,9 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void infNoCounterAttackZep() {
         declareWar();
-        Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+        Unit zep = unitService.buildUnit(nationMe, ATT,
                 UnitType.ZEPPELIN);
-        Unit inf = unitDaoService.buildUnit(nationThem, DEF,
+        Unit inf = unitService.buildUnit(nationThem, DEF,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), DEF);
@@ -303,9 +303,9 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void tankNoCounterAttackZep() {
         declareWar();
-        Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+        Unit zep = unitService.buildUnit(nationMe, ATT,
                 UnitType.ZEPPELIN);
-        Unit tank = unitDaoService.buildUnit(nationThem, DEF,
+        Unit tank = unitService.buildUnit(nationThem, DEF,
                 UnitType.TANK);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), DEF);
@@ -319,9 +319,9 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void patrolNoCounterAttackZep() {
         declareWar();
-        Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+        Unit zep = unitService.buildUnit(nationMe, ATT,
                 UnitType.ZEPPELIN);
-        Unit patrol = unitDaoService.buildUnit(nationThem, DEF,
+        Unit patrol = unitService.buildUnit(nationThem, DEF,
                 UnitType.PATROL);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), DEF);
@@ -335,9 +335,9 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void destNoCounterAttackZep() {
         declareWar();
-        Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+        Unit zep = unitService.buildUnit(nationMe, ATT,
                 UnitType.ZEPPELIN);
-        Unit dest = unitDaoService.buildUnit(nationThem, DEF,
+        Unit dest = unitService.buildUnit(nationThem, DEF,
                 UnitType.DESTROYER);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), DEF);
@@ -351,9 +351,9 @@ public class CounterAttackTest extends ThreePlayerBase {
     @Test
     public void flakHitsZep() {
         declareWar();
-        Unit zep = unitDaoService.buildUnit(nationMe, ATT,
+        Unit zep = unitService.buildUnit(nationMe, ATT,
                 UnitType.ZEPPELIN);
-        Unit bat = unitDaoService.buildUnit(nationThem, DEF,
+        Unit bat = unitService.buildUnit(nationThem, DEF,
                 UnitType.BATTLESHIP);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(zep), DEF);

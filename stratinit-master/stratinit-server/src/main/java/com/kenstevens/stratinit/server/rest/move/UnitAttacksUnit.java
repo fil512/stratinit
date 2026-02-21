@@ -6,9 +6,9 @@ import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.LogDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.BattleLogService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +28,11 @@ public class UnitAttacksUnit {
     private final Nation actor;
     private final WorldView worldView;
     @Autowired
-    private LogDaoService logDaoService;
+    private BattleLogService battleLogService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private UnitCommandFactory unitCommandFactory;
     @Autowired
@@ -70,9 +70,9 @@ public class UnitAttacksUnit {
         if (attackType == AttackType.INTERCEPTION) {
             defender.setIntercepted(true);
         }
-        logDaoService.save(unitAttackedBattleLog);
+        battleLogService.save(unitAttackedBattleLog);
         // TODO REF need this?
-        // unitDaoService.merge(enemyUnit);
+        // unitService.merge(enemyUnit);
         return new Result<None>(new SIBattleLog(actor, unitAttackedBattleLog));
     }
 
@@ -133,7 +133,7 @@ public class UnitAttacksUnit {
 
     private void counterAttack(Unit unit, Unit enemyUnit,
                                UnitAttackedBattleLog unitAttackedBattleLog) {
-        WorldView enemyWorldView = sectorDaoService
+        WorldView enemyWorldView = sectorService
                 .getSupplyWorldView(enemyUnit);
         WorldSector attackerSector = enemyWorldView.getWorldSector(unit);
         UnitAttacksUnit unitsAttackUnit = unitCommandFactory
@@ -162,14 +162,14 @@ public class UnitAttacksUnit {
         }
 
         if (holder.isAir()
-                && sectorDaoService.getSectorView(holder).canRefuel(holder)) {
+                && sectorService.getSectorView(holder).canRefuel(holder)) {
             return;
         }
 
-        List<Unit> passengers = unitDaoService.getPassengers(holder,
+        List<Unit> passengers = unitService.getPassengers(holder,
                 targetSector);
         for (Unit passenger : passengers) {
-            unitDaoService.killUnit(passenger);
+            unitService.killUnit(passenger);
             passengerBattleLog(unitAttackedBattleLog, passenger);
         }
         int count = passengers.size();
@@ -188,7 +188,7 @@ public class UnitAttacksUnit {
                 parentLog.getAttackType(), parentLog.getAttackerUnit(),
                 passenger, passenger.getCoords());
         childLog.setDefenderDied(true);
-        logDaoService.save(childLog);
+        battleLogService.save(childLog);
     }
 
     private int damage(Unit attacker, Unit defender) {
@@ -196,7 +196,7 @@ public class UnitAttacksUnit {
         int damage = AttackHelper.randomDamage(attack);
         damage = multiplyDamage(attacker, defender, damage);
         damage = reduceDamageForFortifiedUnits(defender, damage);
-        unitDaoService.damage(defender, damage);
+        unitService.damage(defender, damage);
         return damage;
     }
 

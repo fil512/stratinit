@@ -6,8 +6,8 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.svc.CityBuilderService;
 import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.server.svc.IntegrityCheckerService;
@@ -35,9 +35,9 @@ public class GameStartupService {
     @Autowired
     private RelationDao relationDao;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private FogService fogService;
     @Autowired
@@ -53,7 +53,7 @@ public class GameStartupService {
         updateRelations(game);
         updateUnitSeen(game);
         survey(game);
-        gameDaoService.setNoAlliances(game);
+        gameService.setNoAlliances(game);
         eventQueue.schedule(game, true);
     }
 
@@ -100,7 +100,7 @@ public class GameStartupService {
         for (UnitSeen unitSeen : unitsSeen) {
             if (badUnitSeen(unitSeen)) {
                 ++disabledCount;
-                unitDaoService.disable(unitSeen);
+                unitService.disable(unitSeen);
                 continue;
             }
             eventQueue.schedule(unitSeen);
@@ -145,7 +145,7 @@ public class GameStartupService {
             while (updateManager.missedUpdates() > 0) {
                 Date nextMissedBuildTime = updateManager
                         .getNextMissedBuildTime();
-                unitDaoService.updateUnit(unit, nextMissedBuildTime);
+                unitService.updateUnit(unit, nextMissedBuildTime);
             }
             eventQueue.schedule(unit);
         }

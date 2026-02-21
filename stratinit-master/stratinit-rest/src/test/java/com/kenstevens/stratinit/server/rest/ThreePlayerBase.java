@@ -32,7 +32,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     private void setMyRelationToThird(RelationType relationType) {
         Relation relation = relationDao.findRelation(nationMe, nationThird);
         relation.setNextType(relationType);
-        relationDaoService.switchRelation(relation);
+        relationService.switchRelation(relation);
     }
 
     private void setThirdRelationToMe(RelationType relationType) {
@@ -44,7 +44,7 @@ public abstract class ThreePlayerBase extends TwoPlayerBase {
     private void setThemRelationToThird(RelationType relationType) {
         Relation relation = relationDao.findRelation(nationThem, nationThird);
         relation.setNextType(relationType);
-        relationDaoService.switchRelation(relation);
+        relationService.switchRelation(relation);
     }
 
     private void setThirdRelationToThem(RelationType relationType) {

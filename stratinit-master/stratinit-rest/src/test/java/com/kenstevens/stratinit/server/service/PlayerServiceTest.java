@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Player;
@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PlayerDaoServiceTest extends BaseStratInitControllerTest {
+public class PlayerServiceTest extends BaseStratInitControllerTest {
     private final String UNAME = "uname";
     private final Player testPlayer = new Player(UNAME);
     @Autowired
-    private PlayerDaoService playerDaoServiceImpl;
+    private PlayerService playerServiceImpl;
 
     @BeforeEach
     public void setPlayerFields() {
@@ -22,22 +22,22 @@ public class PlayerDaoServiceTest extends BaseStratInitControllerTest {
 
     @Test
     public void testRegister() {
-        Result<Player> result = playerDaoServiceImpl.register(testPlayer);
+        Result<Player> result = playerServiceImpl.register(testPlayer);
         assertResult(result);
         assertNotNull(playerDao.find(UNAME));
     }
 
     @Test
     public void testRegisterUserExists() {
-        Result<Player> result = playerDaoServiceImpl.register(testPlayer);
-        result = playerDaoServiceImpl.register(testPlayer);
+        Result<Player> result = playerServiceImpl.register(testPlayer);
+        result = playerServiceImpl.register(testPlayer);
         assertFalseResult(result);
     }
 
     @Test
     public void testRegisterBadEmail() {
         testPlayer.setEmail("foo");
-        Result<Player> result = playerDaoServiceImpl.register(testPlayer);
+        Result<Player> result = playerServiceImpl.register(testPlayer);
         assertFalseResult(result);
     }
 }

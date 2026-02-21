@@ -9,10 +9,10 @@ import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.MessageService;
+import com.kenstevens.stratinit.server.service.RelationService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.rest.ServerManager;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;
@@ -32,13 +32,13 @@ public class IntegrityCheckerService {
     @Autowired
     UnitDao unitDao;
     @Autowired
-    SectorDaoService sectorDaoService;
+    SectorService sectorService;
     @Autowired
-    UnitDaoService unitDaoService;
+    UnitService unitService;
     @Autowired
-    RelationDaoService relationDaoService;
+    RelationService relationService;
     @Autowired
-    MessageDaoService messageDaoService;
+    MessageService messageService;
     @Autowired
     GameDao gameDao;
     @Autowired
@@ -77,9 +77,9 @@ public class IntegrityCheckerService {
         }
         Unit firstUnit = units.iterator().next();
         Nation firstNation = firstUnit.getNation();
-        WorldSector worldSector = sectorDaoService.getAllWorldView(firstNation).getWorldSector(firstUnit);
+        WorldSector worldSector = sectorService.getAllWorldView(firstNation).getWorldSector(firstUnit);
         Nation worldSectorNation = worldSector.getNation();
-        Collection<Nation> allies = relationDaoService.getAllies(firstNation);
+        Collection<Nation> allies = relationService.getAllies(firstNation);
         if (worldSectorNation != null && !firstNation.equals(worldSectorNation) && !allies.contains(worldSectorNation)) {
             String message = badSectorMessage(firstUnit, worldSector);
             logger.warn(message);
@@ -113,20 +113,20 @@ public class IntegrityCheckerService {
 
     private void moveOrRemoveUnit(String message, Unit unit) {
         Nation nation = unit.getNation();
-        WorldView worldView = sectorDaoService.getAllWorldView(nation);
+        WorldView worldView = sectorService.getAllWorldView(nation);
         List<WorldSector> neighbours = worldView.getNeighbours(unit.getCoords());
         for (WorldSector neighbour : neighbours) {
             if (neighbour.canEnter(unit)) {
                 logger.warn("Moving " + unit.toEnemyString() + " to " + neighbour.getCoords());
-                messageDaoService.notify(nation, unit + " moved", message + "\n" + unit + " in " + unit.getCoords() + " moved to " + neighbour.getCoords());
+                messageService.notify(nation, unit + " moved", message + "\n" + unit + " in " + unit.getCoords() + " moved to " + neighbour.getCoords());
                 unit.setCoords(neighbour.getCoords());
-                unitDaoService.merge(unit);
+                unitService.merge(unit);
                 return;
             }
         }
         logger.warn("Removing " + unit.toEnemyString());
-        messageDaoService.notify(nation, unit + " removed", message + "\n" + unit + " in " + unit.getCoords() + " Removing " + unit + " in " + unit.getCoords() + ".");
-        unitDaoService.killUnit(unit);
+        messageService.notify(nation, unit + " removed", message + "\n" + unit + " in " + unit.getCoords() + " Removing " + unit + " in " + unit.getCoords() + ".");
+        unitService.killUnit(unit);
     }
 
 }

@@ -8,8 +8,8 @@ import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dto.SIMessage;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
+import com.kenstevens.stratinit.server.service.MessageService;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.PlayerMessageList;
@@ -33,9 +33,9 @@ public class MessageController {
     @Autowired
     private PlayerMessageList playerMessageList;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
 
     @PostMapping(path = SIRestPaths.SEND_MESSAGE)
     public Result<Integer> sendMessage(@RequestBody SIMessage simessage) {
@@ -44,7 +44,7 @@ public class MessageController {
             if (simessage.toNationId != Constants.UNASSIGNED) {
                 to = nationDao.getNation(nation.getGameId(), simessage.toNationId);
             }
-            Mail mail = messageDaoService.sendMail(nation, to, simessage.subject, simessage.body);
+            Mail mail = messageService.sendMail(nation, to, simessage.subject, simessage.body);
             return Result.make(Integer.valueOf(mail.getMessageId()));
         }, 0);
     }
@@ -53,7 +53,7 @@ public class MessageController {
     public Result<List<SIMessage>> getMail() {
         return writeProcessor.process(nation -> {
             nation.setNewMail(false);
-            gameDaoService.merge(nation);
+            gameService.merge(nation);
             Iterable<Mail> messages = messageDao.getMail(nation);
             return Result.make(playerMessageList.messagesToSIMessages(messages));
         }, 0);
@@ -79,6 +79,6 @@ public class MessageController {
 
     @GetMapping(path = SIRestPaths.NEWS_LOG)
     public Result<List<SINewsLogsDay>> getNewsLogs() {
-        return requestProcessor.processWithGame(game -> messageDaoService.getNewsLogs(game));
+        return requestProcessor.processWithGame(game -> messageService.getNewsLogs(game));
     }
 }

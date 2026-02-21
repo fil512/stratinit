@@ -7,9 +7,9 @@ import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.MessageService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.rest.svc.NukeTargetChooser;
 import com.kenstevens.stratinit.server.rest.svc.NukeTargetScore;
 import com.kenstevens.stratinit.server.svc.FogService;
@@ -36,11 +36,11 @@ public class LaunchRocket {
     @Autowired
     UnitCommandFactory unitCommandFactory;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
     private DataCache dataCache;
     @Autowired
@@ -59,10 +59,10 @@ public class LaunchRocket {
             return new Result<None>(unit + " can not reach " + targetCoords, false);
         }
         if (unit.getType() == UnitType.SATELLITE) {
-            messageDaoService.postBulletin(unit.getParentGame(), unit.getNation() + " launched a " + unit.toString(), null);
+            messageService.postBulletin(unit.getParentGame(), unit.getNation() + " launched a " + unit.toString(), null);
             launchSatellite();
         } else if (unit.devastates()) {
-            messageDaoService.postBulletin(unit.getParentGame(), unit.getNation() + " launched an " + unit.toString(), null);
+            messageService.postBulletin(unit.getParentGame(), unit.getNation() + " launched an " + unit.toString(), null);
             Set<Nation> hitCities = launchICBM(initialAttack);
             if (initialAttack) {
                 counterLaunch(hitCities);
@@ -92,16 +92,16 @@ public class LaunchRocket {
         List<Sector> devastated = dataCache.getWorld(unit.getGameId()).getSectorsWithin(targetCoords, unit.getBlastRadius(), true);
         Set<Nation> hitCities = new HashSet<>();
         for (Sector sector : devastated) {
-            hitCities.addAll(sectorDaoService.devastate(unit, sector, initialAttack));
+            hitCities.addAll(sectorService.devastate(unit, sector, initialAttack));
         }
-        unitDaoService.killUnit(unit);
+        unitService.killUnit(unit);
         return hitCities;
     }
 
     private void launchSatellite() {
         LaunchedSatellite satellite = new LaunchedSatellite(unit.getNation(), targetCoords);
-        unitDaoService.killUnit(unit);
-        unitDaoService.persist(satellite);
+        unitService.killUnit(unit);
+        unitService.persist(satellite);
         fogService.satelliteSees(satellite, moveSeen);
     }
 

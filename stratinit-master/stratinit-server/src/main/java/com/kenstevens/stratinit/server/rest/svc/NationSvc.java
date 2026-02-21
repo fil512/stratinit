@@ -11,10 +11,10 @@ import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.CityDaoService;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.MessageService;
+import com.kenstevens.stratinit.server.service.RelationService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.svc.FogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,15 +35,15 @@ public class NationSvc {
     @Autowired
     private RelationDao relationDao;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private UnitDao unitDao;
     @Autowired
-    private CityDaoService cityDaoService;
+    private CityService cityService;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
     @Autowired
     private FogService fogService;
     @Autowired
@@ -68,7 +68,7 @@ public class NationSvc {
         SINation sination = new SINation(nation);
         if (includePower) {
             sination.cities = cityDao.getNumberOfCities(nation);
-            sination.power = unitDaoService.getPower(nation);
+            sination.power = unitService.getPower(nation);
         }
         if (me != null) {
             sination.addPrivateData(me, nation);
@@ -104,7 +104,7 @@ public class NationSvc {
         List<City> cities = new ArrayList<>(cityDao.getCities(nation));
         List<Unit> units = new ArrayList<>(unitDao.getUnits(nation));
 
-        Collection<Nation> allies = relationDaoService.getAllies(nation);
+        Collection<Nation> allies = relationService.getAllies(nation);
         Nation ally = null;
         int allyCityCount = 0;
         if (!allies.isEmpty()) {
@@ -115,20 +115,20 @@ public class NationSvc {
         Result<None> result = Result.trueInstance();
         if (ally != null && allyCityCount > 0) {
             for (Unit unit : units) {
-                result.or(unitDaoService.cedeUnit(unit, ally));
+                result.or(unitService.cedeUnit(unit, ally));
             }
             for (City city : cities) {
-                result.or(cityDaoService.cedeCity(city, ally));
+                result.or(cityService.cedeCity(city, ally));
             }
-            messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units transferred to " + ally + ".", null);
+            messageService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units transferred to " + ally + ".", null);
         } else {
             for (Unit unit : units) {
-                result.or(unitDaoService.disbandUnit(unit));
+                result.or(unitService.disbandUnit(unit));
             }
             for (City city : cities) {
-                result.or(cityDaoService.destroyCity(city));
+                result.or(cityService.destroyCity(city));
             }
-            messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units destroyed.", null);
+            messageService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units destroyed.", null);
         }
         fogService.survey(nation);
         if (ally != null) {

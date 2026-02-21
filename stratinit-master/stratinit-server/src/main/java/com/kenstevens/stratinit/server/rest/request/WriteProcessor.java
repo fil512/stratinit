@@ -6,8 +6,8 @@ import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.util.StackTraceHelper;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
+import com.kenstevens.stratinit.server.service.PlayerService;
 import com.kenstevens.stratinit.server.rest.mail.SMTPService;
 import com.kenstevens.stratinit.server.rest.session.PlayerSession;
 import com.kenstevens.stratinit.server.rest.session.PlayerSessionFactory;
@@ -34,9 +34,9 @@ public class WriteProcessor {
     @Autowired
     private DataCache dataCache;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
-    private PlayerDaoService playerDaoService;
+    private PlayerService playerService;
     @Autowired
     private GameNotificationService gameNotificationService;
 
@@ -155,8 +155,8 @@ public class WriteProcessor {
         }
         Date now = new Date();
         nation.setLastAction(now);
-        gameDaoService.merge(nation);
-        playerDaoService.setLastLogin(nation.getPlayer(), now);
+        gameService.merge(nation);
+        playerService.setLastLogin(nation.getPlayer(), now);
     }
 
     private <T> Result<T> handleException(Exception e) {

@@ -26,7 +26,7 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void icbm3KillsCitiesAndUnits() {
-        Unit icbm = unitDaoService.buildUnit(nationMe, CITY,
+        Unit icbm = unitService.buildUnit(nationMe, CITY,
                 UnitType.ICBM_3);
 
         assertNoDevastation();
@@ -38,7 +38,7 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void icbm2KillsCitiesAndUnits() {
-        Unit icbm = unitDaoService.buildUnit(nationMe, CITY,
+        Unit icbm = unitService.buildUnit(nationMe, CITY,
                 UnitType.ICBM_2);
 
         assertNoDevastation();
@@ -67,7 +67,7 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void satSeesSectors() {
-        Unit sat = unitDaoService.buildUnit(nationMe, CITY,
+        Unit sat = unitService.buildUnit(nationMe, CITY,
                 UnitType.SATELLITE);
         List<SISector> sseen = nationController.getSectors().getValue();
         List<SICityUpdate> cseen = cityController.getSeenCities().getValue();
@@ -85,7 +85,7 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void satSeesUnits() {
-        Unit sat = unitDaoService.buildUnit(nationMe, CITY,
+        Unit sat = unitService.buildUnit(nationMe, CITY,
                 UnitType.SATELLITE);
         List<SIUnit> unitsSeen = unitController.getSeenUnits().getValue();
         assertEquals(0, unitsSeen.size());
@@ -97,9 +97,9 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void satSeesMovedUnits() {
-        Unit sat = unitDaoService.buildUnit(nationMe, CITY,
+        Unit sat = unitService.buildUnit(nationMe, CITY,
                 UnitType.SATELLITE);
-        Unit inf = unitDaoService.buildUnit(nationThem, ECITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationThem, ECITY, UnitType.INFANTRY);
         List<SIUnit> unitsSeen = unitController.getSeenUnits().getValue();
         assertEquals(0, unitsSeen.size());
         Result<MoveCost> result = moveUnits(makeUnitList(sat), OUTCITY);

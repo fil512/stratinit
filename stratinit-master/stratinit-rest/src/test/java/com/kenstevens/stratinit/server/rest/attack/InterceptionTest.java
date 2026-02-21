@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.attack;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -20,18 +20,18 @@ public class InterceptionTest extends TwoPlayerBase {
     private static final SectorCoords CITY = new SectorCoords(8, 4);
     private static final SectorCoords BYCITY = new SectorCoords(7, 4);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @Test
     public void neutralIntercepts() {
         Unit[] fighters = new Unit[5];
         for (int i = 0; i < 5; ++i) {
-            fighters[i] = unitDaoService.buildUnit(nationThem, CITY,
+            fighters[i] = unitService.buildUnit(nationThem, CITY,
                     UnitType.FIGHTER);
         }
-        Unit bomber = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber = unitService.buildUnit(nationMe, ATT,
                 UnitType.HEAVY_BOMBER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(bomber),
                 BETWEEN);
@@ -46,10 +46,10 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInterceptFighterDamages() {
-        Unit fighter = unitDaoService.buildUnit(nationThem, CITY,
+        Unit fighter = unitService.buildUnit(nationThem, CITY,
                 UnitType.FIGHTER);
-        Unit myFighter = unitDaoService.buildUnit(nationMe, ATT, UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        Unit myFighter = unitService.buildUnit(nationMe, ATT, UnitType.FIGHTER);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(myFighter),
                 BETWEEN);
@@ -63,11 +63,11 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInterceptNavalBomberDamages() {
-        Unit fighter = unitDaoService.buildUnit(nationThem, CITY,
+        Unit fighter = unitService.buildUnit(nationThem, CITY,
                 UnitType.FIGHTER);
-        Unit bomber = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber = unitService.buildUnit(nationMe, ATT,
                 UnitType.NAVAL_BOMBER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(bomber),
                 BETWEEN);
@@ -80,10 +80,10 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInterceptsLandUndamaged() {
-        Unit fighter = unitDaoService.buildUnit(nationThem, CITY,
+        Unit fighter = unitService.buildUnit(nationThem, CITY,
                 UnitType.FIGHTER);
-        Unit inf = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(inf),
                 BETWEEN);
@@ -94,13 +94,13 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void twoFighterInterceptsLandUndamaged() {
-        Unit fighter = unitDaoService.buildUnit(nationThem, CITY,
+        Unit fighter = unitService.buildUnit(nationThem, CITY,
                 UnitType.FIGHTER);
-        Unit fighter2 = unitDaoService.buildUnit(nationThem, BYCITY,
+        Unit fighter2 = unitService.buildUnit(nationThem, BYCITY,
                 UnitType.FIGHTER);
-        Unit inf = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+        Unit inf2 = unitService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(inf, inf2),
                 BETWEEN);
@@ -114,9 +114,9 @@ public class InterceptionTest extends TwoPlayerBase {
     @Test
     public void landAttackFighterCounterAttack() {
         declareWar();
-        Unit fighter = unitDaoService.buildUnit(nationThem, BETWEEN,
+        Unit fighter = unitService.buildUnit(nationThem, BETWEEN,
                 UnitType.FIGHTER);
-        Unit inf = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(inf),
                 BETWEEN);
@@ -130,9 +130,9 @@ public class InterceptionTest extends TwoPlayerBase {
     @Test
     public void fighterAttackLandCounterAttack() {
         declareWar();
-        Unit inf = unitDaoService.buildUnit(nationThem, BETWEEN,
+        Unit inf = unitService.buildUnit(nationThem, BETWEEN,
                 UnitType.INFANTRY);
-        Unit fighter = unitDaoService.buildUnit(nationMe, ATT, UnitType.FIGHTER);
+        Unit fighter = unitService.buildUnit(nationMe, ATT, UnitType.FIGHTER);
 
         Result<MoveCost> result = moveUnits(makeUnitList(fighter),
                 BETWEEN);
@@ -145,11 +145,11 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInCityLosesAmmoAndFuel() {
-        Unit fighter = unitDaoService.buildUnit(nationThem, CITY,
+        Unit fighter = unitService.buildUnit(nationThem, CITY,
                 UnitType.FIGHTER);
-        Unit bomber = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber = unitService.buildUnit(nationMe, ATT,
                 UnitType.HEAVY_BOMBER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(bomber),
                 BETWEEN);
@@ -161,11 +161,11 @@ public class InterceptionTest extends TwoPlayerBase {
     @Test
     public void fighterInAirportResuppliesAmmoAndFuel() {
         setBuild(CITY, UnitType.FIGHTER);
-        Unit fighter = unitDaoService.buildUnit(nationThem, CITY,
+        Unit fighter = unitService.buildUnit(nationThem, CITY,
                 UnitType.FIGHTER);
-        Unit bomber = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber = unitService.buildUnit(nationMe, ATT,
                 UnitType.HEAVY_BOMBER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(bomber),
                 BETWEEN);
@@ -177,11 +177,11 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInterceptsHeliNotInf() {
-        unitDaoService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
-        Unit heli = unitDaoService
+        unitService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
+        Unit heli = unitService
                 .buildUnit(nationMe, ATT, UnitType.HELICOPTER);
-        Unit inf = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(heli),
                 BETWEEN);
@@ -192,12 +192,12 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterInterceptsHeliKillsBoth() {
-        unitDaoService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
-        Unit heli = unitDaoService
+        unitService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
+        Unit heli = unitService
                 .buildUnit(nationMe, ATT, UnitType.HELICOPTER);
         heli.setHp(1);
-        Unit inf = unitDaoService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, ATT, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(heli),
                 BETWEEN);
@@ -209,18 +209,18 @@ public class InterceptionTest extends TwoPlayerBase {
 
     @Test
     public void fighterIntercepts2HeliKillsOne() {
-        unitDaoService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
-        Unit heli1 = unitDaoService
+        unitService.buildUnit(nationThem, CITY, UnitType.FIGHTER);
+        Unit heli1 = unitService
                 .buildUnit(nationMe, ATT2, UnitType.HELICOPTER);
-        Unit heli2 = unitDaoService
+        Unit heli2 = unitService
                 .buildUnit(nationMe, ATT2, UnitType.HELICOPTER);
         heli1.setHp(1);
         Unit[] inf = new Unit[2 * HELICOPTER_CAPACITY + 1];
         for (int i = 0; i < 2 * HELICOPTER_CAPACITY + 1; ++i) {
-            inf[i] = unitDaoService
+            inf[i] = unitService
                     .buildUnit(nationMe, ATT2, UnitType.INFANTRY);
         }
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
 
         Result<MoveCost> result = moveUnits(makeUnitList(heli1, heli2),
                 BETWEEN);
@@ -245,12 +245,12 @@ public class InterceptionTest extends TwoPlayerBase {
         declareWar();
         Unit[] fighters = new Unit[5];
         for (int i = 0; i < 5; ++i) {
-            fighters[i] = unitDaoService.buildUnit(nationThem, CITY,
+            fighters[i] = unitService.buildUnit(nationThem, CITY,
                     UnitType.FIGHTER);
         }
-        Unit bomber = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber = unitService.buildUnit(nationMe, ATT,
                 UnitType.HEAVY_BOMBER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(makeUnitList(bomber), DEF);
         assertFalseResult(result);
         Unit fighter1 = fighters[0];
@@ -264,14 +264,14 @@ public class InterceptionTest extends TwoPlayerBase {
         declareWar();
         Unit[] fighters = new Unit[5];
         for (int i = 0; i < 5; ++i) {
-            fighters[i] = unitDaoService.buildUnit(nationThem, CITY,
+            fighters[i] = unitService.buildUnit(nationThem, CITY,
                     UnitType.FIGHTER);
         }
-        Unit bomber1 = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber1 = unitService.buildUnit(nationMe, ATT,
                 UnitType.HEAVY_BOMBER);
-        Unit bomber2 = unitDaoService.buildUnit(nationMe, ATT,
+        Unit bomber2 = unitService.buildUnit(nationMe, ATT,
                 UnitType.HEAVY_BOMBER);
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(makeUnitList(bomber1, bomber2), DEF);
         assertFalseResult(result);
         Unit fighter1 = fighters[0];

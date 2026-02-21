@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.event.update;
 
 import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class UpdateUnitEventUpdate extends EventUpdate {
     private final Unit unit;
     private final Date date;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
 
     public UpdateUnitEventUpdate(Unit unit, Date date) {
         this.unit = unit;
@@ -23,6 +23,6 @@ public class UpdateUnitEventUpdate extends EventUpdate {
 
     @Override
     protected void executeWrite() {
-        unitDaoService.updateUnit(unit, date);
+        unitService.updateUnit(unit, date);
     }
 }

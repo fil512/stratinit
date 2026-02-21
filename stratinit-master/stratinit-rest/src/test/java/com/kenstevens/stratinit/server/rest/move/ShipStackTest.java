@@ -20,8 +20,8 @@ public class ShipStackTest extends BaseStratInitControllerTest {
     @Test
     public void oneShipPerSector() {
         joinGamePlayerMe();
-        Unit xport1 = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
-        unitDaoService.buildUnit(nationMe, SHIP2, UnitType.TRANSPORT);
+        Unit xport1 = unitService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
+        unitService.buildUnit(nationMe, SHIP2, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1), BETWEEN);
         assertResult(result);
         result = moveUnits(makeUnitList(xport1), SHIP2);
@@ -31,9 +31,9 @@ public class ShipStackTest extends BaseStratInitControllerTest {
     @Test
     public void twoShipsPerPort() {
         joinGamePlayerMe();
-        Unit xport1 = unitDaoService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
-        Unit xport2 = unitDaoService.buildUnit(nationMe, SHIP2, UnitType.TRANSPORT);
-        cityDaoService.captureCity(nationMe, PORT);
+        Unit xport1 = unitService.buildUnit(nationMe, SHIP1, UnitType.TRANSPORT);
+        Unit xport2 = unitService.buildUnit(nationMe, SHIP2, UnitType.TRANSPORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1), PORT);
         assertResult(result);
@@ -45,9 +45,9 @@ public class ShipStackTest extends BaseStratInitControllerTest {
     @Test
     public void twoShipsCannotMoveAtOnce() {
         joinGamePlayerMe();
-        Unit xport1 = unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
-        Unit xport2 = unitDaoService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
-        cityDaoService.captureCity(nationMe, PORT);
+        Unit xport1 = unitService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
+        Unit xport2 = unitService.buildUnit(nationMe, PORT, UnitType.TRANSPORT);
+        cityService.captureCity(nationMe, PORT);
         Result<MoveCost> result = moveUnits(makeUnitList(xport1, xport2), BETWEEN);
         assertFalseResult(result);
         assertTrue(xport1.getCoords().equals(PORT), result.toString());

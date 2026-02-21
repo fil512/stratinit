@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.wicket.provider;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.server.daoservice.GameDaoService;
+import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.rest.svc.NationSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class GameActiveListProvider implements GameListProvider {
 	@Autowired
 	private GameDao gameDao;
     @Autowired
-    private GameDaoService gameDaoService;
+    private GameService gameService;
     @Autowired
     private NationSvc nationSvc;
 	
@@ -27,7 +27,7 @@ public class GameActiveListProvider implements GameListProvider {
 		for (Game game : games) {
 			if (game.hasStarted()) {
                 GameTable gameTable = new GameTable(game);
-                gameTable.setTeams(gameDaoService.getTeams(game));
+                gameTable.setTeams(gameService.getTeams(game));
                 gameTable.setNations(nationSvc.getNations(game));
                 retval.add(gameTable);
             }

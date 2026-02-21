@@ -7,8 +7,8 @@ import com.kenstevens.stratinit.move.Movement;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.MoveType;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -27,9 +27,9 @@ public class UnitsMove {
     @Autowired
     private UnitCommandFactory unitCommandFactory;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     private SectorDao sectorDao;
     @Autowired
@@ -205,7 +205,7 @@ public class UnitsMove {
     private void movePassengers(SectorCoords coords) {
         for (Unit passenger : passengers) {
             passenger.setCoords(coords);
-            unitDaoService.merge(passenger);
+            unitService.merge(passenger);
         }
     }
 
@@ -235,7 +235,7 @@ public class UnitsMove {
 
     private void clearMoveOrder() {
         for (Unit unit : unitsToMove) {
-            unitDaoService.clearUnitMove(unit);
+            unitService.clearUnitMove(unit);
         }
     }
 
@@ -263,7 +263,7 @@ public class UnitsMove {
     }
 
     private void setUnitMove(Unit unit, SectorCoords targetCoords) {
-        unitDaoService.setUnitMove(unit, targetCoords);
+        unitService.setUnitMove(unit, targetCoords);
     }
 
     /**
@@ -315,7 +315,7 @@ public class UnitsMove {
         for (Unit unit : unitsToMove) {
             // Refresh this sector view in case the target sector is a transport
             // filling up
-            worldSector = sectorDaoService.refreshWorldSector(unit.getNation(),
+            worldSector = sectorService.refreshWorldSector(unit.getNation(),
                     worldView, worldSector);
             UnitMoves unitMoves = unitCommandFactory.getUnitMoves(unitsToMove,
                     unit, worldSector, worldView);
@@ -354,7 +354,7 @@ public class UnitsMove {
         MoveType moveType = MoveType.MOVE;
         for (Unit unit : unitsToMove) {
             // Refresh this sector view in case any target units were killed
-            targetSector = sectorDaoService.refreshWorldSector(
+            targetSector = sectorService.refreshWorldSector(
                     unitsToMove.getNation(), worldView, targetSector);
             attack = new Attack(targetSector);
             if (!attack.isAttackable(unitsToMove.getAttackType())) {
@@ -381,7 +381,7 @@ public class UnitsMove {
     private boolean tookCity() {
         Nation nation = unitsToMove.getNation();
         // Refresh this sector view in case the ownership changed
-        targetSector = sectorDaoService.refreshWorldSector(nation, worldView,
+        targetSector = sectorService.refreshWorldSector(nation, worldView,
                 targetSector);
         return nation.equals(targetSector.getNation());
     }

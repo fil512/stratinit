@@ -28,8 +28,8 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void cededCanSee() {
         declareAlliance();
         allianceDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf2 = unitService.buildUnit(nationMe, MY_CITY, UnitType.INFANTRY);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, inf2);
         assertNull(unitSeen);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
@@ -42,8 +42,8 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void cedeTwoUnits() {
         declareAlliance();
         allianceDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf2 = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         List<Unit> units = new ArrayList<Unit>();
         units.add(inf);
         units.add(inf2);
@@ -60,15 +60,15 @@ public class CedeUnitTest extends TwoPlayerBase {
     // TODO TEST this needs to be tested with 3 players
     @Test
     public void cannotCedeWithNeutralOthers() {
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
 
     @Test
     public void cannotCedeIfNeutral() {
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
@@ -77,7 +77,7 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void cannotCedeIfFriendly() {
         declareFriendly();
         friendlyDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
@@ -86,7 +86,7 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void cannotCedeIfWar() {
         declareWar();
         warDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
@@ -95,7 +95,7 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void canCedeIfAllied() {
         declareAlliance();
         allianceDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertResult(result);
     }
@@ -104,8 +104,8 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void canCedeWithAllyOthers() {
         declareAlliance();
         allianceDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        Unit inf = unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
+        unitService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertResult(result);
     }
@@ -114,8 +114,8 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void canCedeWithOthersAtSea() {
         declareAlliance();
         allianceDeclared();
-        Unit inf = unitDaoService.buildUnit(nationMe, AT_SEA, UnitType.INFANTRY);
-        Unit trans = unitDaoService.buildUnit(nationMe, AT_SEA, UnitType.TRANSPORT);
+        Unit inf = unitService.buildUnit(nationMe, AT_SEA, UnitType.INFANTRY);
+        Unit trans = unitService.buildUnit(nationMe, AT_SEA, UnitType.TRANSPORT);
         Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(trans), nationThemId);
         assertResult(result);
         inf = unitDao.findUnit(inf.getId());

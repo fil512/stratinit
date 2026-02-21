@@ -3,8 +3,8 @@ package com.kenstevens.stratinit.server.rest.attack;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -17,20 +17,20 @@ public class CanAttackTest extends TwoPlayerBase {
     private static final SectorCoords DEF = new SectorCoords(5, 8);
     private static final SectorCoords ATT = new SectorCoords(6, 8);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
 
     @Test
     public void attackNoAmmo() {
         declareWar();
-        Unit dest = unitDaoService.buildUnit(nationMe, ATT,
+        Unit dest = unitService.buildUnit(nationMe, ATT,
                 UnitType.DESTROYER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.DESTROYER);
         dest.decreaseAmmo();
         dest.decreaseAmmo();
-        unitDaoService.merge(dest);
+        unitService.merge(dest);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), DEF);
         assertFalseResult(result);
@@ -41,14 +41,14 @@ public class CanAttackTest extends TwoPlayerBase {
     @Test
     public void attackNoFuel() {
         declareWar();
-        Unit fight = unitDaoService.buildUnit(nationMe, ATT,
+        Unit fight = unitService.buildUnit(nationMe, ATT,
                 UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.FIGHTER);
         for (int i = 0; i < fight.getUnitBase().getMobility(); ++i) {
             fight.decreaseFuel();
         }
-        unitDaoService.merge(fight);
+        unitService.merge(fight);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fight), DEF);
         assertResult(result);
@@ -60,12 +60,12 @@ public class CanAttackTest extends TwoPlayerBase {
     @Test
     public void attackNoMob() {
         declareWar();
-        Unit fight = unitDaoService.buildUnit(nationMe, ATT,
+        Unit fight = unitService.buildUnit(nationMe, ATT,
                 UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationThem, DEF,
+        unitService.buildUnit(nationThem, DEF,
                 UnitType.FIGHTER);
         fight.setMobility(0);
-        unitDaoService.merge(fight);
+        unitService.merge(fight);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(fight), DEF);
         assertFalseResult(result);

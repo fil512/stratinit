@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.helper.PlayerHelper;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
-import com.kenstevens.stratinit.server.daoservice.*;
+import com.kenstevens.stratinit.server.service.*;
 import com.kenstevens.stratinit.server.svc.MoveService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -23,15 +23,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 	@Autowired
-	protected GameDaoService gameDaoService;
+	protected GameService gameService;
 	@Autowired
-	protected RelationDaoService relationDaoService;
+	protected RelationService relationService;
 	@Autowired
-	protected SectorDaoService sectorDaoService;
+	protected SectorService sectorService;
 	@Autowired
-	protected CityDaoService cityDaoService;
+	protected CityService cityService;
 	@Autowired
-	protected UnitDaoService unitDaoService;
+	protected UnitService unitService;
 	@Autowired
 	protected GameController gameController;
 	@Autowired
@@ -54,7 +54,7 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 
     protected void setBuild(SectorCoords coords, UnitType type) {
         City city = cityDao.getCity(testWorld.getSectorOrNull(coords));
-		cityDaoService.updateCity(city.getNation(), coords, CityFieldToUpdateEnum.BUILD, type, null, false, null);
+		cityService.updateCity(city.getNation(), coords, CityFieldToUpdateEnum.BUILD, type, null, false, null);
     }
 
     protected void setAuthentication(String username) {

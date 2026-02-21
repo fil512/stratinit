@@ -5,8 +5,8 @@ import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.server.service.MessageService;
+import com.kenstevens.stratinit.server.service.PlayerService;
 import com.kenstevens.stratinit.server.rest.ServerManager;
 import com.kenstevens.stratinit.server.rest.session.PlayerSessionFactory;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
@@ -22,9 +22,9 @@ public class StratInitAdmin {
     @Autowired
     private GameDao gameDao;
     @Autowired
-    private PlayerDaoService playerDaoService;
+    private PlayerService playerService;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
     private PlayerSessionFactory playerSessionFactory;
 
@@ -39,12 +39,12 @@ public class StratInitAdmin {
 
     public Result<Integer> postAnnouncement(String subject, String body) {
         Player player = playerSessionFactory.getPlayerSession().getPlayer();
-        if (!playerDaoService.isAdmin(player)) {
+        if (!playerService.isAdmin(player)) {
             return new Result<>("Only administrators may post bulletins.", false);
         }
         int count = 0;
         for (Game game : gameDao.getAllGames()) {
-            messageDaoService.postBulletin(game, subject, body);
+            messageService.postBulletin(game, subject, body);
             ++count;
         }
         return new Result<>("Bulletin posted to " + count + " games.", true, Integer.valueOf(count));

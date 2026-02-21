@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.client.model.audit.RelationChangeAudit;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
+import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.RelationType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class RelationManager {
     @Autowired
     private RelationDao relationDao;
     @Autowired
-    private RelationDaoService relationDaoService;
+    private RelationService relationService;
 
     // TODO REF
     public Result<Relation> changeRelation(Relation relation,
@@ -132,7 +132,7 @@ public class RelationManager {
         // TODO REF not necessary to set switch time to null
         relation.setSwitchTime(null);
         eventQueue.cancel(relation);
-        relationDaoService.switchRelation(relation);
+        relationService.switchRelation(relation);
         return "changed relation with " + relation.getTo() + " to " + nextType;
     }
 

@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.AttackType;
 import com.kenstevens.stratinit.client.model.Unit;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SectorDaoServiceTwoTest extends TwoPlayerBase {
+public class SectorServiceTwoTest extends TwoPlayerBase {
     private static final SectorCoords CITY = new SectorCoords(1, 4);
     private static final SectorCoords PORT = new SectorCoords(2, 2);
     private static final SectorCoords SEA = new SectorCoords(3, 2);
@@ -23,18 +23,18 @@ public class SectorDaoServiceTwoTest extends TwoPlayerBase {
     @Test
     public void world() {
         declareWar();
-        Unit fight = unitDaoService.buildUnit(nationMe, CITY,
+        Unit fight = unitService.buildUnit(nationMe, CITY,
                 UnitType.FIGHTER);
-        unitDaoService.buildUnit(nationMe, SEA,
+        unitService.buildUnit(nationMe, SEA,
                 UnitType.CARRIER);
-        unitDaoService.buildUnit(nationThem, ESEA,
+        unitService.buildUnit(nationThem, ESEA,
                 UnitType.CARRIER);
-        unitDaoService.buildUnit(nationThem, ELAND,
+        unitService.buildUnit(nationThem, ELAND,
                 UnitType.INFANTRY);
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
 
-        WorldView WORLD = sectorDaoService.getAllWorldView(nationMe);
+        WorldView WORLD = sectorService.getAllWorldView(nationMe);
 
         WorldSector city = WORLD.getWorldSector(CITY);
         WorldSector port = WORLD.getWorldSector(PORT);

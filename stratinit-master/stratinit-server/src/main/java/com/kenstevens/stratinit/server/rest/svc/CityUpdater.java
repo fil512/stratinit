@@ -8,7 +8,7 @@ import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.CityDaoService;
+import com.kenstevens.stratinit.server.service.CityService;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class CityUpdater {
 	@Autowired
-	private CityDaoService cityDaoService;
+	private CityService cityService;
 	@Autowired
 	private CitySvc citySvc;
 	@Autowired
@@ -75,7 +75,7 @@ public class CityUpdater {
 
 	private Result<City> updateCity(Nation nation, CityFieldToUpdateEnum field,
 									SICityUpdate sicity) {
-		return cityDaoService.updateCity(nation, sicity.coords, field,
+		return cityService.updateCity(nation, sicity.coords, field,
 				sicity.build, sicity.nextBuild, sicity.switchOnTechChange, sicity.nextCoords);
 	}
 

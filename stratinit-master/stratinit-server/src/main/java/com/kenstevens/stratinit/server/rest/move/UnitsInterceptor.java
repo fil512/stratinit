@@ -9,8 +9,8 @@ import com.kenstevens.stratinit.move.Attack;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +32,9 @@ public class UnitsInterceptor {
     @Autowired
     private UnitCommandFactory unitCommandFactory;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
     private UnitDao unitDao;
 
@@ -50,7 +50,7 @@ public class UnitsInterceptor {
         WorldSector targetSector = worldView.getWorldSector(targetUnit);
         Interceptors interceptors = new Interceptors();
         for (Unit unit : units) {
-            targetSector = sectorDaoService.refreshWorldSector(nation,
+            targetSector = sectorService.refreshWorldSector(nation,
                     worldView, targetSector);
             Attack attack = new Attack(targetSector);
             if (!attack.isAttackable(AttackType.INTERDICTION)) {
@@ -65,13 +65,13 @@ public class UnitsInterceptor {
             UnitsMove unitsMove = unitCommandFactory.getUnitsMove(
                     unitsToIntercept, worldView);
             Result<None> interdictResult = new Result<None>(unitsMove.move());
-            worldView.setWorldSector(sectorDaoService.refreshWorldSector(
+            worldView.setWorldSector(sectorService.refreshWorldSector(
                     nation, worldView, oldSector));
-            worldView.setWorldSector(sectorDaoService.refreshWorldSector(
+            worldView.setWorldSector(sectorService.refreshWorldSector(
                     nation, worldView, worldView.getWorldSector(unit)));
             interdictResult.setSuccess(!interdictResult.isSuccess());
             retval.and(interdictResult);
-            interceptors.flyBack(unitDaoService, worldView);
+            interceptors.flyBack(unitService, worldView);
         }
     }
 

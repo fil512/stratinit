@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.move.WorldView;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.type.RelationType;
@@ -36,7 +36,7 @@ public class UnitsCede {
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
     @Autowired
-    private UnitDaoService unitDaoService;
+    private UnitService unitService;
     @Autowired
     protected FogService fogService;
 
@@ -82,7 +82,7 @@ public class UnitsCede {
     private Result<None> cedeUnits(List<Unit> unitsToCede, Nation target) {
         Result<None> result = Result.trueInstance();
         for (Unit unitToCede : unitsToCede) {
-            result.or(unitDaoService.cedeUnit(unitToCede, target));
+            result.or(unitService.cedeUnit(unitToCede, target));
         }
         return result;
     }
@@ -96,7 +96,7 @@ public class UnitsCede {
             }
             unitsToCede.add(unit);
             if (unit.carriesUnits()) {
-                unitsToCede.addAll(unitDaoService.getPassengers(unit,
+                unitsToCede.addAll(unitService.getPassengers(unit,
                         worldSector));
 
             }

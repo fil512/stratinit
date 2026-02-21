@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ public class AmmoTest extends BaseStratInitControllerTest {
     private static final SectorCoords PORT = new SectorCoords(7, 8);
 
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @BeforeEach
     public void doJoinGame() {
@@ -31,12 +31,12 @@ public class AmmoTest extends BaseStratInitControllerTest {
 
     @Test
     public void shipMoveIntoSupplyToGetAmmo() {
-        Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.DESTROYER);
         dest.setMobility(UnitBase.getUnitBase(UnitType.DESTROYER).getMaxMobility());
         dest.decreaseAmmo();
         assertEquals(dest.getUnitBase().getAmmo() - 1, dest.getAmmo());
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(dest), NEAR_PORT);
@@ -46,21 +46,21 @@ public class AmmoTest extends BaseStratInitControllerTest {
 
     @Test
     public void captureCityToGetAmmo() {
-        Unit dest = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.DESTROYER);
         dest.decreaseAmmo();
         assertEquals(dest.getUnitBase().getAmmo() - 1, dest.getAmmo());
-        cityDaoService.captureCity(nationMe, PORT);
+        cityService.captureCity(nationMe, PORT);
         setBuild(PORT, UnitType.TRANSPORT);
         assertEquals(dest.getUnitBase().getAmmo(), dest.getAmmo());
     }
 
     @Test
     public void moveSupplyToGetAmmo() {
-        Unit dest = unitDaoService.buildUnit(nationMe, FAR_PORT,
+        Unit dest = unitService.buildUnit(nationMe, FAR_PORT,
                 UnitType.DESTROYER);
         dest.decreaseAmmo();
-        Unit supply = unitDaoService.buildUnit(nationMe, NEAR_PORT,
+        Unit supply = unitService.buildUnit(nationMe, NEAR_PORT,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(supply), CLOSE_PORT);

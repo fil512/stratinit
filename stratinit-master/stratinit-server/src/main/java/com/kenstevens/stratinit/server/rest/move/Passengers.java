@@ -5,7 +5,7 @@ import com.google.common.collect.Multimap;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.move.WorldView;
-import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.service.UnitService;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +23,7 @@ public class Passengers implements Iterable<Unit> {
 	private final Multimap<Unit, Unit> passengerMap = HashMultimap.create();
 	private final WorldView worldView;
 	@Autowired
-	UnitDaoService unitDaoService;
+	UnitService unitService;
 
 	public Passengers(UnitsToMove unitsToMove, WorldView worldView) {
 		this.unitsToMove = unitsToMove;
@@ -62,7 +62,7 @@ public class Passengers implements Iterable<Unit> {
 	}
 
 	private void addPassengers(Unit holder, WorldSector worldSector) {
-		List<Unit> passengers = unitDaoService.getPassengers(holder,
+		List<Unit> passengers = unitService.getPassengers(holder,
 				worldSector, passengerMap.values());
 		passengerMap.putAll(holder, passengers);
 	}

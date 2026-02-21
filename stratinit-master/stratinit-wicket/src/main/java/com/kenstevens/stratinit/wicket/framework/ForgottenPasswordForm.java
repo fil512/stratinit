@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.wicket.framework;
 
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.PlayerDaoService;
+import com.kenstevens.stratinit.server.service.PlayerService;
 import com.kenstevens.stratinit.wicket.util.InfoResult;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -14,7 +14,7 @@ public class ForgottenPasswordForm extends Form<ValueMap> {
 	private static final long serialVersionUID = 1L;
 
 	@SpringBean
-	PlayerDaoService playerDaoService;
+	PlayerService playerService;
 
 	public ForgottenPasswordForm(String id) {
 		super(id, new CompoundPropertyModel<ValueMap>(new ValueMap()));
@@ -30,7 +30,7 @@ public class ForgottenPasswordForm extends Form<ValueMap> {
 
 		String username = (String) values.get("username");
 		String email = (String) values.get("email");
-		Result<None> result = playerDaoService.forgottenPassword(username, email);
+		Result<None> result = playerService.forgottenPassword(username, email);
 		new InfoResult<None>(this).info(result);
 	}
 }

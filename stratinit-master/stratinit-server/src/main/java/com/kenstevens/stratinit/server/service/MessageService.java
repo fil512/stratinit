@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Mail;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MessageDaoService {
+public class MessageService {
     @Autowired
     private MessageDao messageDao;
     @Autowired

@@ -23,7 +23,7 @@ public class BuildCityTest extends TwoPlayerBase {
 
     @Test
     public void buildCityNotEnoughMob() {
-        Unit eng = unitDaoService.buildUnit(nationMe, LAND,
+        Unit eng = unitService.buildUnit(nationMe, LAND,
                 UnitType.ENGINEER);
         List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
@@ -38,7 +38,7 @@ public class BuildCityTest extends TwoPlayerBase {
 
     @Test
     public void buildCityNotEng() {
-        Unit tank = unitDaoService.buildUnit(nationMe, LAND,
+        Unit tank = unitService.buildUnit(nationMe, LAND,
                 UnitType.TANK);
         tank.setMobility(9);
         List<City> cities = cityDao.getCities(nationMe);
@@ -51,7 +51,7 @@ public class BuildCityTest extends TwoPlayerBase {
 
     @Test
     public void buildCity() {
-        Unit eng = unitDaoService.buildUnit(nationMe, LAND,
+        Unit eng = unitService.buildUnit(nationMe, LAND,
                 UnitType.ENGINEER);
         eng.setMobility(eng.getMaxMobility());
         List<City> cities = cityDao.getCities(nationMe);
@@ -75,9 +75,9 @@ public class BuildCityTest extends TwoPlayerBase {
 
     @Test
     public void buildCityBadLoc() {
-        Unit eng = unitDaoService.buildUnit(nationMe, LAND,
+        Unit eng = unitService.buildUnit(nationMe, LAND,
                 UnitType.ENGINEER);
-        cityDaoService.captureCity(nationThem, PORT);
+        cityService.captureCity(nationThem, PORT);
         eng.setMobility(eng.getMaxMobility());
         List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());

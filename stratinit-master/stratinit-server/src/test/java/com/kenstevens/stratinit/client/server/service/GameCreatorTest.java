@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.client.server.daoservice;
+package com.kenstevens.stratinit.client.server.service;
 
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;

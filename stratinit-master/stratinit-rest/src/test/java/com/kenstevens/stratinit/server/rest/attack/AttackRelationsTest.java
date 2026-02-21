@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.attack;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -20,11 +20,11 @@ public class AttackRelationsTest extends TwoPlayerBase {
     private static final SectorCoords CITY = new SectorCoords(8, 4);
     private static Unit testInf;
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @BeforeEach
     public void player2Inf() {
-        testInf = unitDaoService.buildUnit(nationMe, ATTACK_FROM,
+        testInf = unitService.buildUnit(nationMe, ATTACK_FROM,
                 UnitType.INFANTRY);
     }
 

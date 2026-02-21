@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class CityDaoService {
+public class CityService {
     @Autowired
     private DataCache dataCache;
 
@@ -34,11 +34,11 @@ public class CityDaoService {
     private UnitDao unitDao;
 
     @Autowired
-    private SectorDaoService sectorDaoService;
+    private SectorService sectorService;
     @Autowired
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
     @Autowired
-    private LogDaoService logDaoService;
+    private BattleLogService battleLogService;
 
     @Autowired
     private CityBuilderService cityBuilderService;
@@ -130,7 +130,7 @@ public class CityDaoService {
         Nation oldOwner = city.getNation();
         cityDao.transferCity(city, nation);
         fogService.survey(nation);
-        messageDaoService.notify(nation, oldOwner + " " + city.getCoords()
+        messageService.notify(nation, oldOwner + " " + city.getCoords()
                 + " ceded", oldOwner + " gave you a city at "
                 + city.getCoords());
         return new Result<>("City ownership transferred from " + oldOwner
@@ -161,7 +161,7 @@ public class CityDaoService {
         sectorDao.markCacheModified(sector);
         CityCapturedBattleLog battleLog = new CityCapturedBattleLog(AttackType.INITIAL_ATTACK, unit,
                 null, unit.getCoords());
-        logDaoService.save(battleLog);
+        battleLogService.save(battleLog);
         unit.decreaseMobility(Constants.MOB_COST_TO_CREATE_CITY);
         unitDao.merge(unit);
         return new Result<>("City established at " + coords + ".", true);
@@ -212,7 +212,7 @@ public class CityDaoService {
 
     public void cityChanged(City city) {
         fogService.surveyFromCity(city);
-        sectorDaoService.explodeSupply(city.getNation(), city.getCoords());
+        sectorService.explodeSupply(city.getNation(), city.getCoords());
     }
 
     public void setCityMove(City city, SectorCoords targetCoords) {

@@ -27,7 +27,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
 
     @Test
     public void sufMob() {
-        Unit inf = unitDaoService.buildUnit(nationMe, S00,
+        Unit inf = unitService.buildUnit(nationMe, S00,
                 UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), S01);
         assertResult(result);
@@ -37,7 +37,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
 
     @Test
     public void noMob() {
-        Unit inf = unitDaoService.buildUnit(nationMe, S00,
+        Unit inf = unitService.buildUnit(nationMe, S00,
                 UnitType.INFANTRY);
         inf.setMobility(0);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), S01);
@@ -48,10 +48,10 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
 
     @Test
     public void noMobNoSupply() {
-        Unit inf = unitDaoService.buildUnit(nationMe, NO_SUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, NO_SUPPLY,
                 UnitType.INFANTRY);
         inf.setMobility(0);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
         Result<MoveCost> result = moveUnits(makeUnitList(inf), NO_SUPPLY_DEST);
@@ -62,10 +62,10 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
 
     @Test
     public void noMobNoSupplyOneMob() {
-        Unit inf = unitDaoService.buildUnit(nationMe, NO_SUPPLY,
+        Unit inf = unitService.buildUnit(nationMe, NO_SUPPLY,
                 UnitType.INFANTRY);
         inf.setMobility(1);
-        WorldView worldView = sectorDaoService.getSupplyWorldView(inf);
+        WorldView worldView = sectorService.getSupplyWorldView(inf);
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
         Result<MoveCost> result = moveUnits(makeUnitList(inf), NO_SUPPLY_DEST);
@@ -76,7 +76,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
 
     @Test
     public void noMob2() {
-        Unit inf = unitDaoService.buildUnit(nationMe, S00,
+        Unit inf = unitService.buildUnit(nationMe, S00,
                 UnitType.INFANTRY);
         inf.setMobility(0);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), S02);

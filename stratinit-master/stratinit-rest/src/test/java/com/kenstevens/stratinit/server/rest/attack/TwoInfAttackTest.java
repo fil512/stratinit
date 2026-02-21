@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.attack;
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.Result;
-import com.kenstevens.stratinit.server.daoservice.SectorDaoService;
+import com.kenstevens.stratinit.server.service.SectorService;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
@@ -17,20 +17,20 @@ public class TwoInfAttackTest extends TwoPlayerBase {
     private static final SectorCoords ATT = new SectorCoords(8, 1);
     private static final SectorCoords ATT_FAR = new SectorCoords(9, 3);
     @Autowired
-    protected SectorDaoService sectorDaoServiceImpl;
+    protected SectorService sectorServiceImpl;
 
     @Test
     public void doubleAttackBothAttack() {
         declareWar();
-        Unit inf1 = unitDaoService.buildUnit(nationMe, ATT,
+        Unit inf1 = unitService.buildUnit(nationMe, ATT,
                 UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, ATT,
+        Unit inf2 = unitService.buildUnit(nationMe, ATT,
                 UnitType.INFANTRY);
         inf1.addMobility();
         inf1.addMobility();
         inf2.addMobility();
         inf2.addMobility();
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf1, inf2), DEF);
         assertResult(result);
@@ -42,15 +42,15 @@ public class TwoInfAttackTest extends TwoPlayerBase {
     @Test
     public void doubleAttackOneAttacks() {
         declareWar();
-        Unit inf1 = unitDaoService.buildUnit(nationMe, ATT,
+        Unit inf1 = unitService.buildUnit(nationMe, ATT,
                 UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, ATT,
+        Unit inf2 = unitService.buildUnit(nationMe, ATT,
                 UnitType.INFANTRY);
         inf1.addMobility();
         inf1.addMobility();
         inf2.addMobility();
         inf2.addMobility();
-        Unit def = unitDaoService.buildUnit(nationThem, DEF,
+        Unit def = unitService.buildUnit(nationThem, DEF,
                 UnitType.INFANTRY);
         def.setHp(1);
         unitDao.merge(def);
@@ -65,13 +65,13 @@ public class TwoInfAttackTest extends TwoPlayerBase {
     @Test
     public void doubleAttackOnlyOneHasMob() {
         declareWar();
-        Unit inf1 = unitDaoService.buildUnit(nationMe, ATT_FAR,
+        Unit inf1 = unitService.buildUnit(nationMe, ATT_FAR,
                 UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, ATT_FAR,
+        Unit inf2 = unitService.buildUnit(nationMe, ATT_FAR,
                 UnitType.INFANTRY);
         inf1.addMobility();
         inf1.addMobility();
-        unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf1, inf2), DEF);
         assertResult(result);
@@ -86,11 +86,11 @@ public class TwoInfAttackTest extends TwoPlayerBase {
     @Test
     public void doubleAttackNeitherHasMob() {
         declareWar();
-        Unit inf1 = unitDaoService.buildUnit(nationMe, ATT_FAR,
+        Unit inf1 = unitService.buildUnit(nationMe, ATT_FAR,
                 UnitType.INFANTRY);
-        Unit inf2 = unitDaoService.buildUnit(nationMe, ATT_FAR,
+        Unit inf2 = unitService.buildUnit(nationMe, ATT_FAR,
                 UnitType.INFANTRY);
-        Unit def = unitDaoService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
+        Unit def = unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf1, inf2), DEF);
         assertFalseResult(result);

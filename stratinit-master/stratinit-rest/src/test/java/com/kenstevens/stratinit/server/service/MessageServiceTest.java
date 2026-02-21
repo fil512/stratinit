@@ -1,4 +1,4 @@
-package com.kenstevens.stratinit.server.daoservice;
+package com.kenstevens.stratinit.server.service;
 
 import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.dao.MessageDao;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
-public class MessageDaoServiceTest {
+public class MessageServiceTest {
 
     static final NationHelper nationHelper = new NationHelper();
 
@@ -30,11 +30,11 @@ public class MessageDaoServiceTest {
     private MailService mailService;
 
     @InjectMocks
-    private MessageDaoService messageDaoService;
+    private MessageService messageService;
 
     @Test
     public void sendMessage() {
-        Mail result = messageDaoService.sendMail(NationHelper.nationMe, NationHelper.nationThem, "test subject", "test body");
+        Mail result = messageService.sendMail(NationHelper.nationMe, NationHelper.nationThem, "test subject", "test body");
         assertEquals("test body", result.getBody());
         assertEquals("test subject", result.getSubject());
         assertEquals(NationHelper.nationMe, result.getFrom());
@@ -46,7 +46,7 @@ public class MessageDaoServiceTest {
 
     @Test
     public void sendMessageBoard() {
-        Mail result = messageDaoService.sendMail(NationHelper.nationMe, null, "test subject", "test body");
+        Mail result = messageService.sendMail(NationHelper.nationMe, null, "test subject", "test body");
         assertEquals("test body", result.getBody());
         assertEquals("test subject", result.getSubject());
         assertEquals(NationHelper.nationMe, result.getFrom());
