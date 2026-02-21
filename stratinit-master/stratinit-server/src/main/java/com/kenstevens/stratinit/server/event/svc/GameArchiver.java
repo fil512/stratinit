@@ -5,7 +5,9 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.PlayerDao;
 import com.kenstevens.stratinit.dto.SITeam;
-import com.kenstevens.stratinit.server.daoservice.GameHistoryDaoService;
+import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
+import com.kenstevens.stratinit.repo.GameHistoryRepo;
+import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
 import com.kenstevens.stratinit.server.svc.TeamCalculator;
 import org.slf4j.Logger;
@@ -20,7 +22,11 @@ public class GameArchiver {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private GameHistoryDaoService gameHistoryDaoService;
+    private GameHistoryRepo gameHistoryRepo;
+    @Autowired
+    private GameHistoryTeamRepo gameHistoryTeamRepo;
+    @Autowired
+    private GameHistoryNationRepo gameHistoryNationRepo;
     @Autowired
     private TeamCalculator teamCalculator;
     @Autowired
@@ -34,11 +40,11 @@ public class GameArchiver {
 
     public void archive(Game game) {
         GameHistory gameHistory = new GameHistory(game);
-        gameHistoryDaoService.save(gameHistory);
+        gameHistoryRepo.save(gameHistory);
         List<SITeam> teams = teamCalculator.getTeams(game);
         for (SITeam team : teams) {
             GameHistoryTeam gameHistoryTeam = new GameHistoryTeam(gameHistory);
-            gameHistoryDaoService.save(gameHistoryTeam);
+            gameHistoryTeamRepo.save(gameHistoryTeam);
             archiveTeam(gameHistoryTeam, game, team);
         }
     }
@@ -66,6 +72,6 @@ public class GameArchiver {
         int cities = cityDao.getNumberOfCities(nation);
         int power = unitDaoService.getPower(nation);
         GameHistoryNation gameHistoryNation = new GameHistoryNation(gameHistoryTeam, nationName, cities, power);
-        gameHistoryDaoService.save(gameHistoryNation);
+        gameHistoryNationRepo.save(gameHistoryNation);
     }
 }
