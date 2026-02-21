@@ -161,7 +161,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 **Key files:**
 - `stratinit-core/.../remote/Result.java` (618-line god object)
 - `stratinit-server/.../rest/request/RequestFactory.java` (37 `@Lookup` methods)
-- `stratinit-rest/.../controller/StratInitController.java` (36 endpoints, all returning `Result<T>`)
+- `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java` (all returning `Result<T>`)
 
 ---
 
@@ -237,17 +237,16 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 **Status: NOT STARTED**
 
-**Current state:** Single monolithic `StratInitController` with 36 endpoints, no OpenAPI/Swagger annotations, no API versioning, and a flat namespace under `/stratinit/`. Endpoint paths are defined in `SIRestPaths` as string constants.
+**Current state:** 36 endpoints split across 5 domain controllers (see #6), no OpenAPI/Swagger annotations, no API versioning, and a flat namespace under `/stratinit/`. Endpoint paths are defined in `SIRestPaths` as string constants.
 
 **Recommendation:**
-- Split into domain controllers (see recommendation #6)
 - Add `springdoc-openapi-starter-webmvc-ui` for automatic OpenAPI 3.0 docs (already in POM)
 - Version the API: `/api/v1/games`, `/api/v1/units`, etc.
 - Add `@Operation`, `@ApiResponse`, `@Schema` annotations to document request/response contracts
 - Add request validation with `@Valid` and Bean Validation annotations on DTOs
 
 **Key files:**
-- `stratinit-rest/.../controller/StratInitController.java` (all 36 endpoints)
+- `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java`
 - `stratinit-core/.../remote/SIRestPaths.java` (path constants)
 
 ---
