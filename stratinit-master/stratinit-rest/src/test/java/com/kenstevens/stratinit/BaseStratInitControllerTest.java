@@ -3,7 +3,7 @@ package com.kenstevens.stratinit;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.server.rest.AuthenticationHelper;
 import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;
-import com.kenstevens.stratinit.controller.StratInitController;
+import com.kenstevens.stratinit.controller.*;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.helper.PlayerHelper;
@@ -33,7 +33,15 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 	@Autowired
 	protected UnitDaoService unitDaoService;
 	@Autowired
-	protected StratInitController stratInitController;
+	protected GameController gameController;
+	@Autowired
+	protected UnitController unitController;
+	@Autowired
+	protected CityController cityController;
+	@Autowired
+	protected NationController nationController;
+	@Autowired
+	protected MessageController messageController;
 	@Autowired
 	private MoveService moveService;
 
@@ -51,12 +59,12 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 
     protected void setAuthentication(String username) {
 		new AuthenticationHelper().setAuthentication(username);
-		stratInitController.setGame(new SetGameJson(testGameId, false));
+		gameController.setGame(new SetGameJson(testGameId, false));
     }
 
     protected Result<SINation> joinGame(Player player) {
 		setAuthentication(player.getUsername());
-		Result<SINation> result = stratInitController.joinGame(new SetGameJson(testGameId, false));
+		Result<SINation> result = gameController.joinGame(new SetGameJson(testGameId, false));
 		assertResult(result);
 		return result;
 	}

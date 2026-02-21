@@ -167,17 +167,27 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 6. Break Up God Classes
 
-**Status: NOT STARTED**
+**Status: PARTIALLY DONE — StratInitController split complete**
 
-**Current state:**
-- `EventSchedulerImpl` (`stratinit-server/.../event/svc/EventSchedulerImpl.java`, 258 lines) has **16 `@Autowired` dependencies** and a `// FIXME too many collaborators` comment at line 66
-- `UnitBase` (`stratinit-core/.../model/UnitBase.java`, 618 lines) contains all unit type definitions in a static initializer block, with a TODO to split it
-- `StratInitController` (`stratinit-rest/.../controller/StratInitController.java`, 279 lines) handles **36 endpoints** spanning games, units, cities, messages, relations, and admin
+**What's done:**
+- `StratInitController` (279 lines, 36 endpoints) split into 5 domain controllers:
+  - `GameController` — version, serverConfig, unitBases, setGame, joinGame, joinedGames, unjoinedGames, update, concede, submitError
+  - `UnitController` — moveUnits, getUnits, getSeenUnits, disbandUnits, cancelMove, buildCity, switchTerrain, cedeUnits, unitsBuilt
+  - `CityController` — updateCity, getCities, getSeenCities, cedeCity
+  - `NationController` — getNations, getMyNation, getSectors, getRelations, setRelation, getBattleLog, getTeams
+  - `MessageController` — sendMessage, getMail, getSentMail, getMessages, getAnnouncements, getNewsLogs
+- All 426 tests updated and passing
 
-**Recommendation:**
+**What remains:**
 - Split `EventSchedulerImpl` by event domain: `UnitEventScheduler`, `CityEventScheduler`, `GameEventScheduler`
-- Extract `UnitBase` definitions into a YAML/JSON config file or database table, loaded at startup. This enables balancing without recompilation
-- Split `StratInitController` into domain-specific controllers: `GameController`, `UnitController`, `CityController`, `MessageController`, `RelationController`, `AdminController`
+- Extract `UnitBase` definitions into a YAML/JSON config file or database table, loaded at startup
+
+**Key files:**
+- `stratinit-rest/.../controller/GameController.java`
+- `stratinit-rest/.../controller/UnitController.java`
+- `stratinit-rest/.../controller/CityController.java`
+- `stratinit-rest/.../controller/NationController.java`
+- `stratinit-rest/.../controller/MessageController.java`
 
 ---
 
@@ -277,7 +287,7 @@ Phase 1: Foundation (no user-facing changes)
 
 Phase 2: Backend modernization
   ├── #3  JWT authentication                         ✅ DONE
-  ├── #6  Split god classes
+  ├── #6  Split god classes                          🔧 IN PROGRESS (controller split done)
   ├── #5  Replace Result/Request pattern
   └── #4  Simplify DAO tiers + Spring Cache
 

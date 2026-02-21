@@ -21,21 +21,21 @@ public class BuildUnitTest extends BaseStratInitControllerTest {
     @BeforeEach
     public void doJoinGame() throws InterruptedException {
         joinGamePlayerMe();
-        List<SICityUpdate> cities = stratInitController.getCities().getValue();
+        List<SICityUpdate> cities = cityController.getCities().getValue();
         sicity = cities.get(0);
     }
 
     @Test
     public void airport() {
         sicity.build = UnitType.FIGHTER;
-        Result<SICityUpdate> result = stratInitController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
         assertFalseResult(result);
     }
 
     @Test
     public void tech() {
         sicity.build = UnitType.ZEPPELIN;
-        Result<SICityUpdate> result = stratInitController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
         assertTrue(result.isSuccess());
         assertEquals(UnitType.ZEPPELIN, result.getValue().build);
         assertEquals(CityType.TECH, result.getValue().type);
@@ -44,27 +44,27 @@ public class BuildUnitTest extends BaseStratInitControllerTest {
     @Test
     public void noWater() {
         sicity.build = UnitType.PATROL;
-        Result<SICityUpdate> result = stratInitController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
         assertFalseResult(result);
     }
 
     @Test
     public void insufficientTech() {
         sicity.build = UnitType.TANK;
-        Result<SICityUpdate> result = stratInitController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
         assertFalseResult(result);
     }
 
     @Test
     public void fort() {
         sicity.build = UnitType.ZEPPELIN;
-        Result<SICityUpdate> result = stratInitController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
         assertTrue(result.isSuccess());
         assertEquals(UnitType.ZEPPELIN, result.getValue().build);
         assertEquals(CityType.TECH, result.getValue().type);
 
         sicity.build = UnitType.INFANTRY;
-        result = stratInitController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
         assertTrue(result.isSuccess());
         assertEquals(UnitType.INFANTRY, result.getValue().build);
         assertEquals(CityType.FORT, result.getValue().type);

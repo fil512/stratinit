@@ -19,7 +19,7 @@ public class CedeCityTest extends TwoPlayerBase {
     public void cedeCity() {
         allianceDeclared();
         declareAlliance();
-        List<SICityUpdate> cities = stratInitController.getCities().getValue();
+        List<SICityUpdate> cities = cityController.getCities().getValue();
         assertEquals(2, cities.size());
         SICityUpdate sicity = cities.get(0);
         assertEquals(sicity.nationId, nationMeId);
@@ -30,9 +30,9 @@ public class CedeCityTest extends TwoPlayerBase {
         assertEquals(4, units.size());
         assertEquals(nationMe, units.get(0).getNation());
 
-        stratInitController.cedeCity(new CedeCityJson(sicity, nationThemId));
+        cityController.cedeCity(new CedeCityJson(sicity, nationThemId));
 
-        cities = stratInitController.getCities().getValue();
+        cities = cityController.getCities().getValue();
         assertEquals(1, cities.size());
         SICityUpdate seenCity = findSeenCity(sicity);
         assertNotNull(seenCity);
@@ -48,7 +48,7 @@ public class CedeCityTest extends TwoPlayerBase {
     }
 
     private SICityUpdate findSeenCity(SICityUpdate sicity) {
-        Result<List<SICityUpdate>> seencities = stratInitController.getSeenCities();
+        Result<List<SICityUpdate>> seencities = cityController.getSeenCities();
         for (SICityUpdate seenCity : seencities.getValue()) {
             if (seenCity.coords.equals(sicity.coords)) {
                 return seenCity;

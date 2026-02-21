@@ -70,16 +70,16 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
     }
 
     final protected Result<SIRelation> setRelation(int nationThemId, RelationType relationType) {
-        return stratInitController.setRelation(new SetRelationJson(nationThemId, relationType));
+        return nationController.setRelation(new SetRelationJson(nationThemId, relationType));
     }
 
     final protected Result<SIUpdate> buildCity(Unit unit) {
         SIUnitListJson request = new SIUnitListJson(new SIUnit(unit));
-        return stratInitController.buildCity(request);
+        return unitController.buildCity(request);
     }
 
     final protected Result<SIUpdate> switchTerrain(Unit unit) {
         SIUnitListJson request = new SIUnitListJson(new SIUnit(unit));
-        return stratInitController.switchTerrain(request);
+        return unitController.switchTerrain(request);
     }
 }

@@ -23,12 +23,12 @@ public class GetGamesTest extends BaseStratInitControllerTest {
 
     @Test
     public void getBean() {
-        assertNotNull(stratInitController);
+        assertNotNull(gameController);
     }
 
     @Test
     public void getUnjoinedGames() {
-        Result<List<SIGame>> result = stratInitController.getUnjoinedGames();
+        Result<List<SIGame>> result = gameController.getUnjoinedGames();
         assertResult(result);
         List<SIGame> games = result.getValue();
         assertEquals(testGame.getId(), Integer.valueOf(testGameId));
@@ -44,18 +44,18 @@ public class GetGamesTest extends BaseStratInitControllerTest {
 
     @Test
     public void joinGameGetPlayerGames() {
-        List<SIGame> games = stratInitController.getJoinedGames().getValue();
+        List<SIGame> games = gameController.getJoinedGames().getValue();
         assertTrue(games.isEmpty());
         Result<SINation> result = joinGamePlayerMe();
         assertTrue(result.isSuccess());
         assertEquals(nationMe.getPlayer().getUsername(), result.getValue().getName());
-        games = stratInitController.getJoinedGames().getValue();
+        games = gameController.getJoinedGames().getValue();
         assertEquals(1, games.size());
     }
 
     @Test
     public void getConfig() {
-        Properties properties = stratInitController.getServerConfig().getValue();
+        Properties properties = gameController.getServerConfig().getValue();
         assertEquals(Constants.SERVER_VERSION, properties.get("SERVER_VERSION"));
     }
 

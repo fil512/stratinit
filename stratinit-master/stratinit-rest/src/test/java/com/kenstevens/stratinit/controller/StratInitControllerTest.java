@@ -172,8 +172,28 @@ class StratInitControllerTest {
         }
 
         @Bean
-        StratInitController stratInitController() {
-            return new StratInitController();
+        GameController gameController() {
+            return new GameController();
+        }
+
+        @Bean
+        UnitController unitController() {
+            return new UnitController();
+        }
+
+        @Bean
+        CityController cityController() {
+            return new CityController();
+        }
+
+        @Bean
+        NationController nationController() {
+            return new NationController();
+        }
+
+        @Bean
+        MessageController messageController() {
+            return new MessageController();
         }
     }
 }
