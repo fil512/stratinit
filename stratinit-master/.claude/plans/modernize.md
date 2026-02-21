@@ -125,7 +125,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 4. Simplify the Data Access Layer
 
-**Status: PARTIALLY DONE — Guava→Streams complete, DAO tier consolidation not started**
+**Status: DONE — Guava→Streams complete, DAO layer pragmatically cleaned up**
 
 **What's done:**
 - All Guava `Collections2.filter()`, `Collections2.transform()`, `Iterables.filter/transform/any/find`, `Lists.transform()`, `Predicates.and()` replaced with Java streams across all server-side modules (stratinit-core, stratinit-dao, stratinit-server, stratinit-rest)
@@ -133,15 +133,19 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - All predicate/function classes converted from `com.google.common.base.Predicate/Function` to `java.util.function.Predicate/Function` (`apply()` → `test()`)
 - Deleted unused Guava function/predicate classes: `SectorToWorldSectorFunction`, `TopUnitFunction`, `HasAmmoPredicate`, `PortPredicate`, `TeamCityPredicate`, `NationCacheToNationFunction`, `UnitSeenToUnitFunction`, `BulletinToSINewsBulletin`
 - Zero remaining Guava functional imports in server-side modules (Guava remains for `Strings`, `Preconditions`, etc.)
+- Deleted `GameHistoryDaoService` (pure pass-through to 3 repos) — `GameArchiver` now injects repos directly
+- Moved `canEstablishCity`/`isBesideCity` business logic from `CityDao` to `CityService` (was marked TODO)
+- Renamed `*DaoService` → `*Service` and package `daoservice` → `service` (these are domain services, not DAO wrappers)
+- `LogDaoService` → `BattleLogService` (more descriptive name)
 
-**What remains:**
-- Replace `DataCache` manual caching with Spring Cache abstraction (`@Cacheable`, `@CacheEvict`) backed by Caffeine
-- Merge DAO and DaoService tiers — use repositories directly with `@Cacheable` annotations
+**NOT RECOMMENDED — Spring Cache / DAO-merge:**
+- **Spring Cache won't work:** `DataCache` is NOT a traditional read cache — it's mutable in-memory game state. `GameCache` is the `synchronized()` monitor object for concurrency. It uses lazy-flush (modified flags + periodic DB write) and supports atomic multi-key operations within synchronized blocks. Spring Cache (`@Cacheable`/`@CacheEvict`) is designed for immutable read-through caching and cannot replace any of this.
+- **DAO/DaoService merge won't work:** DAOs live in `stratinit-dao` (lower module), DaoServices live in `stratinit-server` (higher module). DAOs manage cache + DB persistence. DaoServices contain substantial business logic (diplomacy state machines, unit movement, city capture, tech calculations, fog of war). These are genuinely different responsibilities at different architectural levels. ~30 classes inject DAOs directly — DaoServices were never intended as the sole gateway.
 
 **Key files:**
-- `stratinit-dao/.../cache/DataCache.java` (now uses ConcurrentHashMap and streams)
-- `stratinit-dao/.../dao/UnitDao.java` (now uses streams; wraps `UnitRepo`)
-- `stratinit-server/.../daoservice/UnitDaoService.java` (wraps `UnitDao`)
+- `stratinit-dao/.../cache/DataCache.java` (mutable in-memory game state, ConcurrentHashMap)
+- `stratinit-dao/.../dao/UnitDao.java` (cache + DB persistence layer)
+- `stratinit-server/.../service/UnitService.java` (domain service with business logic, renamed from UnitDaoService)
 
 ---
 
@@ -295,7 +299,7 @@ Phase 2: Backend modernization
   ├── #3  JWT authentication                         ✅ DONE
   ├── #6  Split god classes                          ✅ DONE
   ├── #5  Replace Result/Request pattern             ✅ DONE
-  └── #4  Simplify DAO tiers + Spring Cache
+  └── #4  Simplify DAO layer (pragmatic cleanup) ✅ DONE
 
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs

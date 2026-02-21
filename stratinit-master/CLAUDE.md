@@ -69,7 +69,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 **WebSocket:** STOMP over SockJS at `/ws`. `GameNotificationService` pushes updates to `/topic/game/{gameId}` after write operations and scheduled events.
 
-**Data access:** Spring Data JPA repositories (`stratinit-dao/.../repo/`) wrapped by DAO classes (`stratinit-dao/.../dao/`) which also manage `DataCache`. Service layer DAO wrappers (e.g., `UnitDaoService`, `CityDaoService`) live in `stratinit-server`.
+**Data access:** Spring Data JPA repositories (`stratinit-dao/.../repo/`) wrapped by DAO classes (`stratinit-dao/.../dao/`) which also manage `DataCache`. Domain service classes (e.g., `UnitService`, `CityService`, `BattleLogService`) live in `stratinit-server/.../server/service/` and contain business logic on top of DAOs.
 
 **Caching:** `DataCache` holds in-memory game state using `ConcurrentHashMap` (`GameCache`, `NationCache`, `UnitCache`, `CityCache`). Games are loaded via `GameLoaderService`.
 
