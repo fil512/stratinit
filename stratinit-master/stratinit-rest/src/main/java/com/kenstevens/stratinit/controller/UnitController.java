@@ -1,24 +1,36 @@
 package com.kenstevens.stratinit.controller;
 
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUnitBuilt;
 import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.CedeUnitsJson;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SIUnitListJson;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.svc.UnitSvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = SIRestPaths.BASE_PATH)
 public class UnitController {
     @Autowired
     private RequestFactory requestFactory;
+    @Autowired
+    private RequestProcessor requestProcessor;
+    @Autowired
+    private UnitSvc unitSvc;
+    @Autowired
+    private UnitDao unitDao;
 
     @PostMapping(path = SIRestPaths.MOVE_UNITS)
     public Result<SIUpdate> moveUnits(@RequestBody MoveUnitsJson moveUnitsJson) {
@@ -27,12 +39,12 @@ public class UnitController {
 
     @GetMapping(path = SIRestPaths.UNIT)
     public Result<List<SIUnit>> getUnits() {
-        return requestFactory.getGetUnitsRequest().process();
+        return requestProcessor.process(nation -> unitSvc.getUnits(nation));
     }
 
     @GetMapping(path = SIRestPaths.UNIT_SEEN)
     public Result<List<SIUnit>> getSeenUnits() {
-        return requestFactory.getGetSeenUnitsRequest().process();
+        return requestProcessor.process(nation -> unitSvc.getSeenUnits(nation));
     }
 
     @PostMapping(path = SIRestPaths.DISBAND_UNITS)
@@ -62,6 +74,11 @@ public class UnitController {
 
     @GetMapping(path = SIRestPaths.UNIT_BUILT)
     public Result<List<SIUnitBuilt>> getUnitsBuilt() {
-        return requestFactory.getGetUnitsBuiltRequest().process();
+        return requestProcessor.process(nation -> {
+            List<UnitBuildAudit> builds = unitDao.getBuildAudits(nation.getGameId(), nation.toString());
+            return builds.stream()
+                    .map(SIUnitBuilt::new)
+                    .collect(Collectors.toList());
+        });
     }
 }

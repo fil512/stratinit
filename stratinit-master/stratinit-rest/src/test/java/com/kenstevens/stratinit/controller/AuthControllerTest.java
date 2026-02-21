@@ -55,6 +55,8 @@ class AuthControllerTest {
     @MockBean
     private RequestFactory requestFactory;
     @MockBean
+    private com.kenstevens.stratinit.server.rest.request.RequestProcessor requestProcessor;
+    @MockBean
     private ErrorProcessor errorProcessor;
     @MockBean
     private IServerConfig serverConfig;
@@ -62,6 +64,29 @@ class AuthControllerTest {
     private PlayerRepo playerRepo;
     @MockBean
     private PlayerRoleRepo playerRoleRepo;
+    // Service dependencies injected directly into controllers
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.NationSvc nationSvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.PlayerWorldView playerWorldView;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate playerWorldViewUpdate;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.RelationSvc relationSvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.CitySvc citySvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.UnitSvc unitSvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.PlayerMessageList playerMessageList;
+    @MockBean
+    private com.kenstevens.stratinit.server.daoservice.GameDaoService gameDaoService;
+    @MockBean
+    private com.kenstevens.stratinit.server.daoservice.MessageDaoService messageDaoService;
+    @MockBean
+    private com.kenstevens.stratinit.dao.MessageDao messageDao;
+    @MockBean
+    private com.kenstevens.stratinit.dao.UnitDao unitDao;
 
     private final ObjectMapper mapper = new ObjectMapper();
 

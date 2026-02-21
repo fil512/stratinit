@@ -15,99 +15,12 @@ import java.util.List;
 
 @Service
 public class RequestFactory {
+
+    // Write requests
+
     @Lookup
     public SetGameRequest getSetGameRequest(int gameId, boolean noAlliances) {
         return new SetGameRequest(gameId, noAlliances);
-    }
-
-    @Lookup
-    public GetJoinedGamesRequest getGetJoinedGamesRequest() {
-        return new GetJoinedGamesRequest();
-    }
-
-    @Lookup
-    public GetUnjoinedGamesRequest getGetUnjoinedGamesRequest() {
-        return new GetUnjoinedGamesRequest();
-    }
-
-    @Lookup
-    public GetNationsRequest getGetNationsRequest() {
-        return new GetNationsRequest();
-    }
-
-    @Lookup
-    public GetSectorsRequest getGetSectorsRequest() {
-        return new GetSectorsRequest();
-    }
-
-    @Lookup
-    public GetUnitsRequest getGetUnitsRequest() {
-        return new GetUnitsRequest();
-    }
-
-    @Lookup
-    public GetSeenUnitsRequest getGetSeenUnitsRequest() {
-        return new GetSeenUnitsRequest();
-    }
-
-    @Lookup
-    public GetMyNationRequest getGetMyNationRequest() {
-        return new GetMyNationRequest();
-    }
-
-    @Lookup
-    public GetCitiesRequest getGetCitiesRequest() {
-        return new GetCitiesRequest();
-    }
-
-    @Lookup
-    public GetSeenCitiesRequest getGetSeenCitiesRequest() {
-        return new GetSeenCitiesRequest();
-    }
-
-    @Lookup
-    public GetUpdateRequest getGetUpdateRequest() {
-        return new GetUpdateRequest();
-    }
-
-    @Lookup
-    public GetBattleLogRequest getGetBattleLogRequest() {
-        return new GetBattleLogRequest();
-    }
-
-    @Lookup
-    public GetMailRequest getGetMailRequest() {
-        return new GetMailRequest();
-    }
-
-    @Lookup
-    public GetRelationsRequest getGetRelationsRequest() {
-        return new GetRelationsRequest();
-    }
-
-    @Lookup
-    public GetMessagesRequest getGetMessagesRequest() {
-        return new GetMessagesRequest();
-    }
-
-    @Lookup
-    public GetSentMailRequest getGetSentMailRequest() {
-        return new GetSentMailRequest();
-    }
-
-    @Lookup
-    public GetAnnouncementsRequest getGetAnnouncementsRequest() {
-        return new GetAnnouncementsRequest();
-    }
-
-    @Lookup
-    public GetSattelitesRequest getGetSattelitesRequest() {
-        return new GetSattelitesRequest();
-    }
-
-    @Lookup
-    public GetUnitsBuiltRequest getGetUnitsBuiltRequest() {
-        return new GetUnitsBuiltRequest();
     }
 
     @Lookup
@@ -166,22 +79,24 @@ public class RequestFactory {
     }
 
     @Lookup
-    public GetLogsRequest getGetLogsRequest() {
-        return new GetLogsRequest();
-    }
-
-    @Lookup
     public PostAnnouncementRequest getPostAnnouncementRequest(String subject, String body) {
         return new PostAnnouncementRequest(subject, body);
     }
 
     @Lookup
-    public GetTeamsRequest getGetTeamsRequest() {
-        return new GetTeamsRequest();
+    public ConcedeRequest getConcedeRequest() {
+        return new ConcedeRequest();
+    }
+
+    // GET-as-write requests (have side effects: clear notification flags)
+
+    @Lookup
+    public GetBattleLogRequest getGetBattleLogRequest() {
+        return new GetBattleLogRequest();
     }
 
     @Lookup
-    public ConcedeRequest getConcedeRequest() {
-        return new ConcedeRequest();
+    public GetMailRequest getGetMailRequest() {
+        return new GetMailRequest();
     }
 }

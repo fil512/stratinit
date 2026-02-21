@@ -147,21 +147,27 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 5. Replace Result/Request Pattern with Spring Idioms
 
-**Status: NOT STARTED**
+**Status: PARTIALLY DONE — GET requests inlined, write requests remain**
 
-**Current state:** `Result<T>` (`stratinit-core/.../remote/Result.java`, 618 lines) is a god object carrying `success`, `value`, `messages`, `silogs` (battle logs), `moveSuccess`, `commandPoints`, and `runMode`. All 36 REST endpoints return `Result<T>`. 37 `Request` subclasses are instantiated via `RequestFactory` using Spring `@Lookup` methods for prototype-scoped beans.
+**What's done:**
+- Created `RequestProcessor` service replacing `PlayerRequest` boilerplate for GET endpoints with `process(Function<Nation, T>)`, `processNoGame(Function<Player, T>)`, and `processWithGame(Function<Game, T>)` methods
+- Inlined 18 GET request classes directly into controllers — controllers now call domain services (NationSvc, CitySvc, UnitSvc, etc.) via `RequestProcessor`
+- Deleted 18 GET request class files
+- Trimmed `RequestFactory` from 32 to 16 `@Lookup` methods (write requests + 2 GET-as-write requests that clear notification flags)
+- All 426 tests passing
 
-**Recommendation:**
-- Return domain DTOs directly from controller methods; use `ResponseEntity<T>` for status codes
+**What remains:**
+- Replace `PlayerWriteRequest` subclasses with a `WriteProcessor` or inline write logic into service methods (requires handling synchronization, command points, WebSocket notifications)
+- Return domain DTOs directly from controller methods instead of `Result<T>` (requires coordinated frontend changes)
 - Move error handling to `@ControllerAdvice` with `@ExceptionHandler` methods
-- Deliver battle logs and game events via WebSocket (now available) instead of piggybacking on REST responses
-- Replace `Request` classes with service method calls — the `execute()` logic moves to service methods
-- Remove `RequestFactory` entirely
+- Deliver battle logs and game events via WebSocket instead of piggybacking on REST responses
+- Remove `RequestFactory` entirely once all write requests are converted
 
 **Key files:**
-- `stratinit-core/.../remote/Result.java` (618-line god object)
-- `stratinit-server/.../rest/request/RequestFactory.java` (37 `@Lookup` methods)
-- `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java` (all returning `Result<T>`)
+- `stratinit-server/.../rest/request/RequestProcessor.java` (new — replaces PlayerRequest for reads)
+- `stratinit-server/.../rest/request/RequestFactory.java` (16 `@Lookup` methods remaining)
+- `stratinit-core/.../remote/Result.java` (618-line god object — still used)
+- `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java`
 
 ---
 

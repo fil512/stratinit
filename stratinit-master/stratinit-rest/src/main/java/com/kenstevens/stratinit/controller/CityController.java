@@ -7,6 +7,8 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.CedeCityJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.svc.CitySvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,10 @@ import java.util.List;
 public class CityController {
     @Autowired
     private RequestFactory requestFactory;
+    @Autowired
+    private RequestProcessor requestProcessor;
+    @Autowired
+    private CitySvc citySvc;
 
     @PostMapping(path = SIRestPaths.UPDATE_CITY)
     public Result<SICityUpdate> updateCity(@RequestBody UpdateCityJson updateCityJson) {
@@ -25,12 +31,12 @@ public class CityController {
 
     @GetMapping(path = SIRestPaths.CITY)
     public Result<List<SICityUpdate>> getCities() {
-        return requestFactory.getGetCitiesRequest().process();
+        return requestProcessor.process(nation -> citySvc.getCities(nation));
     }
 
     @GetMapping(path = SIRestPaths.CITY_SEEN)
     public Result<List<SICityUpdate>> getSeenCities() {
-        return requestFactory.getGetSeenCitiesRequest().process();
+        return requestProcessor.process(nation -> citySvc.getSeenCities(nation));
     }
 
     @PostMapping(path = SIRestPaths.CEDE_CITY)

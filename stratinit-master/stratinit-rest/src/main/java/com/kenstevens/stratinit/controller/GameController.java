@@ -12,8 +12,12 @@ import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.ErrorJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
+import com.kenstevens.stratinit.server.rest.svc.NationSvc;
+import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +35,17 @@ public class GameController {
     @Autowired
     private RequestFactory requestFactory;
     @Autowired
+    private RequestProcessor requestProcessor;
+    @Autowired
     private ErrorProcessor errorProcessor;
     @Autowired
     private IServerConfig serverConfig;
+    @Autowired
+    private NationSvc nationSvc;
+    @Autowired
+    private GameDaoService gameDaoService;
+    @Autowired
+    private PlayerWorldViewUpdate playerWorldViewUpdate;
 
     @GetMapping(path = SIRestPaths.VERSION)
     public Result<String> getVersion() {
@@ -76,17 +88,20 @@ public class GameController {
 
     @GetMapping(path = SIRestPaths.GAME_JOINED)
     public Result<List<SIGame>> getJoinedGames() {
-        return requestFactory.getGetJoinedGamesRequest().processNoGame();
+        return requestProcessor.processNoGame(player -> nationSvc.getJoinedGames(player));
     }
 
     @GetMapping(path = SIRestPaths.GAME_UNJOINED)
     public Result<List<SIGame>> getUnjoinedGames() {
-        return requestFactory.getGetUnjoinedGamesRequest().processNoGame();
+        return requestProcessor.processNoGame(player ->
+                gameDaoService.getUnjoinedGames(player).stream()
+                        .map(game -> new SIGame(game, false))
+                        .collect(Collectors.toList()));
     }
 
     @GetMapping(path = SIRestPaths.UPDATE)
     public Result<SIUpdate> getUpdate() {
-        return requestFactory.getGetUpdateRequest().process();
+        return requestProcessor.process(nation -> playerWorldViewUpdate.getWorldViewUpdate(nation));
     }
 
     @GetMapping(path = SIRestPaths.CONCEDE)

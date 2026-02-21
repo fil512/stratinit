@@ -13,10 +13,9 @@ import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.repo.PlayerRoleRepo;
-import com.kenstevens.stratinit.server.rest.request.GetCitiesRequest;
-import com.kenstevens.stratinit.server.rest.request.GetSeenCitiesRequest;
 import com.kenstevens.stratinit.server.rest.request.PlayerRequest;
 import com.kenstevens.stratinit.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.write.GetBattleLogRequest;
 import com.kenstevens.stratinit.server.rest.request.write.MoveUnitsRequest;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
@@ -44,6 +43,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -67,14 +67,39 @@ class StratInitControllerTest {
     @MockBean
     private RequestFactory requestFactory;
     @MockBean
+    private RequestProcessor requestProcessor;
+    @MockBean
     private ErrorProcessor errorProcessor;
     @MockBean
     private IServerConfig serverConfig;
     @MockBean
     private PlayerRepo playerRepo;
-    private final ObjectMapper mapper = new ObjectMapper();
     @MockBean
     private PlayerRoleRepo playerRoleRepo;
+    // Service dependencies injected directly into controllers
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.NationSvc nationSvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.PlayerWorldView playerWorldView;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate playerWorldViewUpdate;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.RelationSvc relationSvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.CitySvc citySvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.UnitSvc unitSvc;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.PlayerMessageList playerMessageList;
+    @MockBean
+    private com.kenstevens.stratinit.server.daoservice.GameDaoService gameDaoService;
+    @MockBean
+    private com.kenstevens.stratinit.server.daoservice.MessageDaoService messageDaoService;
+    @MockBean
+    private com.kenstevens.stratinit.dao.MessageDao messageDao;
+    @MockBean
+    private com.kenstevens.stratinit.dao.UnitDao unitDao;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
     public void versionUnauthorized() throws Exception {
@@ -98,19 +123,19 @@ class StratInitControllerTest {
         performGet(SIRestPaths.BATTLE_LOG).andExpect(jsonPath("value", empty()));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void city() throws Exception {
-        GetCitiesRequest mockRequest = mockListResponse(GetCitiesRequest.class);
-        when(requestFactory.getGetCitiesRequest()).thenReturn(mockRequest);
+        when(requestProcessor.process(any(Function.class))).thenReturn(Result.make(new ArrayList<>()));
         performGet(SIRestPaths.CITY).andExpect(jsonPath("value", empty()));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void seenCity() throws Exception {
-        GetSeenCitiesRequest mockRequest = mockListResponse(GetSeenCitiesRequest.class);
-        when(requestFactory.getGetSeenCitiesRequest()).thenReturn(mockRequest);
+        when(requestProcessor.process(any(Function.class))).thenReturn(Result.make(new ArrayList<>()));
         performGet(SIRestPaths.CITY_SEEN).andExpect(jsonPath("value", empty()));
     }
 

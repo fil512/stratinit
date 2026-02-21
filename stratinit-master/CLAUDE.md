@@ -63,7 +63,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 ## Key Architecture Patterns
 
-**Request processing flow:** Domain controllers (`GameController`, `UnitController`, `CityController`, `NationController`, `MessageController`) → `RequestFactory` (uses `@Lookup` for prototype-scoped beans) → `PlayerRequest.process()` → abstract `execute()` → returns `Result<T>`
+**Request processing flow:** Domain controllers (`GameController`, `UnitController`, `CityController`, `NationController`, `MessageController`) handle reads via `RequestProcessor` (calls service methods directly, wraps in `Result<T>`) and writes via `RequestFactory` (uses `@Lookup` for prototype-scoped `PlayerWriteRequest` beans with synchronization, command points, and WebSocket notifications).
 
 **Authentication:** JWT tokens via `POST /stratinit/auth/login`. `JwtAuthenticationFilter` validates Bearer tokens. HTTP Basic still supported for backward compatibility. Stateless sessions.
 
