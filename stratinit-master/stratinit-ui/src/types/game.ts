@@ -1,0 +1,187 @@
+// Enum types matching Java enums
+export type SectorType = 'WATER' | 'LAND' | 'PLAYER_CITY' | 'NEUTRAL_CITY' | 'START_CITY' | 'WASTELAND' | 'UNKNOWN'
+
+export type CityType = 'FORT' | 'PORT' | 'AIRPORT' | 'TECH' | 'BASE'
+
+export type UnitType =
+  | 'INFANTRY' | 'TANK' | 'PATROL' | 'TRANSPORT' | 'DESTROYER'
+  | 'SUPPLY' | 'BATTLESHIP' | 'SUBMARINE' | 'CARRIER' | 'CRUISER'
+  | 'FIGHTER' | 'NAVAL_BOMBER' | 'HELICOPTER' | 'HEAVY_BOMBER'
+  | 'ZEPPELIN' | 'SATELLITE' | 'ICBM_1' | 'ICBM_2' | 'ICBM_3'
+  | 'BASE' | 'ENGINEER' | 'CARGO_PLANE' | 'RESEARCH'
+
+export type RelationType = 'WAR' | 'NEUTRAL' | 'FRIENDLY' | 'ALLIED' | 'ME'
+
+export type CityFieldToUpdate = 'BUILD' | 'NEXT_BUILD' | 'SWITCH_ON_TECH_CHANGE' | 'NEXT_COORDS'
+
+export type NewsCategory =
+  | 'BULLETINS' | 'FOREIGN_AFFAIRS' | 'NUCLEAR_DETONATIONS'
+  | 'CONQUEST' | 'NEWS_FROM_THE_FRONT' | 'AIR_DEFENCE' | 'FIRSTS'
+
+// Core types
+export interface SectorCoords {
+  x: number
+  y: number
+}
+
+export interface SISector {
+  coords: SectorCoords
+  type: SectorType
+  cityType: CityType | null
+  nationId: number
+  lastSeen: string | null
+  myRelation: RelationType | null
+  theirRelation: RelationType | null
+  holdsFriendlyCarrier: boolean
+  holdsMyTransport: boolean
+  suppliesLand: boolean
+  suppliesNavy: boolean
+  holdsMyCapital: boolean
+  topUnitType: UnitType | null
+  topUnitId: number
+  flak: number
+  cannons: number
+  islandId: number
+}
+
+export interface SIUnit {
+  id: number
+  coords: SectorCoords
+  nextCoords: SectorCoords | null
+  nationId: number
+  type: UnitType
+  mobility: number
+  hp: number
+  ammo: number
+  fuel: number
+  lastUpdated: string | null
+  created: string | null
+}
+
+export interface SINation {
+  nationId: number
+  name: string
+  tech: number
+  dailyTechGain: number
+  dailyTechBleed: number
+  hourlyCPGain: number
+  cities: number
+  lastAction: string | null
+  wins: number
+  played: number
+  power: number
+  newMail: boolean
+  newBattle: boolean
+  startCoords: SectorCoords | null
+  commandPoints: number
+  gameId: number
+}
+
+export interface SICityUpdate {
+  coords: SectorCoords
+  type: CityType
+  field: CityFieldToUpdate | null
+  build: UnitType | null
+  nextBuild: UnitType | null
+  nationId: number
+  lastUpdated: string | null
+  switchOnTechChange: boolean
+  nextCoords: SectorCoords | null
+}
+
+export interface SIRelation {
+  nationId: number
+  meToThem: RelationType
+  myNextType: RelationType
+  mineSwitches: string | null
+  themToMe: RelationType
+  theirNextType: RelationType
+  theirsSwitches: string | null
+}
+
+export interface SIBattleLog {
+  id: number
+  date: string
+  coords: SectorCoords
+  messages: string[]
+  attackerId: number
+  defenderId: number
+  attackerUnit: string
+  defenderUnit: string
+  damage: number
+  returnDamage: number
+  attackerDied: boolean
+  defenderDied: boolean
+  type: NewsCategory
+  flak: number
+  iAmAttacker: boolean
+}
+
+export interface SILaunchedSatellite {
+  id: number
+  nationId: number
+  coords: SectorCoords
+}
+
+export interface SIUpdate {
+  nationId: number
+  sectors: SISector[]
+  units: SIUnit[]
+  seenUnits: SIUnit[]
+  nations: SINation[]
+  cities: SICityUpdate[]
+  log: SIBattleLog[]
+  relations: SIRelation[]
+  launchedSatellites: SILaunchedSatellite[]
+}
+
+export interface SIUnitBase {
+  builtIn: CityType
+  type: UnitType
+  attack: number
+  hp: number
+  mobility: number
+  sight: number
+  productionTime: number
+  tech: number
+  ammo: number
+  flak: number
+  lightAir: boolean
+  canSeeSubs: boolean
+  requiresFuel: boolean
+  bombPercentage: number
+  weight: number
+  capacity: number
+  navyCapital: boolean
+  navyCanAttackLand: boolean
+  landCanAttackShips: boolean
+  launchable: boolean
+  requiresSupply: boolean
+  blastRadius: number
+}
+
+export interface SIGame {
+  id: number
+  name: string
+  players: number
+  noAlliancesVote: number
+  noAlliances: boolean
+  myNoAlliances: boolean
+  islands: number
+  size: number
+  started: string | null
+  mapped: string | null
+  created: string | null
+  ends: string | null
+  blitz: boolean
+}
+
+// Result wrapper
+export interface Result<T> {
+  success: boolean
+  value: T
+  messages: string[]
+  silogs: SIBattleLog[]
+  moveSuccess: boolean
+  commandPoints: number
+}

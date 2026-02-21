@@ -20,31 +20,33 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: '100px auto', fontFamily: 'sans-serif' }}>
-      <h1>Strategic Initiative</h1>
+    <div className="max-w-sm mx-auto mt-24 font-sans">
+      <h1 className="text-2xl font-bold mb-6">Strategic Initiative</h1>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label htmlFor="username">Username</label><br />
+        <div className="mb-3">
+          <label htmlFor="username" className="block mb-1">Username</label>
           <input
             id="username"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
-            style={{ width: '100%', padding: 8 }}
+            className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        <div style={{ marginBottom: 12 }}>
-          <label htmlFor="password">Password</label><br />
+        <div className="mb-3">
+          <label htmlFor="password" className="block mb-1">Password</label>
           <input
             id="password"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            style={{ width: '100%', padding: 8 }}
+            className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        {error && <div style={{ color: 'red', marginBottom: 12 }}>{error}</div>}
-        <button type="submit" style={{ padding: '8px 24px' }}>Login</button>
+        {error && <div className="text-red-600 mb-3">{error}</div>}
+        <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Login
+        </button>
       </form>
     </div>
   )

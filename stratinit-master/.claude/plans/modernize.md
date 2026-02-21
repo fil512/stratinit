@@ -8,33 +8,44 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 1. Replace Wicket + SWT with a Modern SPA
 
-**Status: STARTED — React scaffold in place, not yet at feature parity**
+**Status: IN PROGRESS — core gameplay screen implemented**
 
 **What's done:**
 - `stratinit-ui` Maven module created with `frontend-maven-plugin` (Node 20, Vite, React 18, TypeScript)
+- Tailwind CSS v4 with `@tailwindcss/vite` plugin
 - Login page (`LoginPage.tsx`) authenticates via JWT and stores token
-- Game list page (`GameListPage.tsx`) fetches `GET /stratinit/joinedGames` with Bearer token
+- Game list page (`GameListPage.tsx`) fetches `GET /stratinit/joinedGames` with Bearer token, links to game pages
 - API client (`client.ts`) adds JWT `Authorization` header to all requests
 - WebSocket hook (`useGameSocket.ts`) connects to STOMP `/ws` and subscribes to `/topic/game/{gameId}`
 - Vite dev proxy routes `/stratinit` and `/ws` to `localhost:8081`
 - `WebConfig.java` serves SPA with fallback to `index.html` for client-side routing
 - Static assets from `stratinit-ui` are on the classpath via dependency in `stratinit-rest`
-- Builds and passes all tests via `mvn clean install`
+- TypeScript types (`src/types/game.ts`) mirroring all Java DTOs
+- Game API module (`src/api/game.ts`) with API wrappers for setGame, getUpdate, moveUnits, updateCity, setRelation
+- Game state context (`src/context/GameContext.tsx`) using `useReducer` with coord-keyed lookup maps
+- HTML5 Canvas map component (`src/components/GameMap.tsx`) — 8px cells, Y-axis inversion, terrain/city/unit rendering, click-to-select/move
+- Side panel with 5 tabs: Sector info, Units list, Cities overview, Battle log, Players/diplomacy
+- App shell with header, routing (`/game/:gameId`), logout
+- WebSocket messages trigger automatic state refresh
+- City production management with build/nextBuild dropdowns
+- Diplomacy: change relations via dropdown in Players tab
+- Builds and passes all 426 tests via `mvn clean install`
 
 **What remains:**
-- Game map view (the core gameplay screen — replace GIF sprites with SVG or canvas renderer)
-- Unit management UI (move, disband, build)
-- City management UI (set build orders)
-- Diplomacy/relations UI
 - Messaging UI (mail, announcements)
-- News/battle log viewer
+- News log viewer (separate from battle log)
+- Unit disband, cancel move, cede units/city, build city, switch terrain commands
 - Replace Google Charts with Chart.js or Recharts for unit statistics
 - Responsive/mobile layout
 - Once SPA reaches feature parity, retire `stratinit-wicket` and `stratinit-client-master` modules
 
 **Key files:**
-- `stratinit-ui/src/pages/LoginPage.tsx`, `GameListPage.tsx`
-- `stratinit-ui/src/api/auth.ts`, `client.ts`
+- `stratinit-ui/src/pages/LoginPage.tsx`, `GameListPage.tsx`, `GamePage.tsx`
+- `stratinit-ui/src/api/auth.ts`, `client.ts`, `game.ts`
+- `stratinit-ui/src/types/game.ts`
+- `stratinit-ui/src/context/GameContext.tsx`
+- `stratinit-ui/src/components/GameMap.tsx`, `AppShell.tsx`, `SidePanel.tsx`
+- `stratinit-ui/src/components/tabs/SectorTab.tsx`, `UnitsTab.tsx`, `CitiesTab.tsx`, `BattleLogTab.tsx`, `PlayersTab.tsx`
 - `stratinit-ui/src/hooks/useGameSocket.ts`
 - `stratinit-rest/.../config/WebConfig.java` (SPA routing)
 
@@ -272,7 +283,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 STARTED (scaffold + login + game list)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (login + game list + game map + side panels)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)

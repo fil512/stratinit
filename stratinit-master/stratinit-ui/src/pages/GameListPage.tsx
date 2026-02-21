@@ -1,20 +1,8 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { apiFetch } from '../api/client'
-import { isLoggedIn, logout } from '../api/auth'
-
-interface SIGame {
-  id: number
-  gamename: string
-  started: boolean
-  players: number
-}
-
-interface Result<T> {
-  success: boolean
-  value: T
-  message: string
-}
+import { isLoggedIn } from '../api/auth'
+import type { SIGame, Result } from '../types/game'
 
 export default function GameListPage() {
   const [games, setGames] = useState<SIGame[]>([])
@@ -38,38 +26,34 @@ export default function GameListPage() {
       .finally(() => setLoading(false))
   }, [navigate])
 
-  function handleLogout() {
-    logout()
-    navigate('/login')
-  }
-
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', fontFamily: 'sans-serif' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>My Games</h1>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
+    <div className="max-w-2xl mx-auto mt-10">
+      <h1 className="text-2xl font-bold mb-4">My Games</h1>
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-gray-400">Loading...</p>
       ) : games.length === 0 ? (
-        <p>No games joined yet.</p>
+        <p className="text-gray-400">No games joined yet.</p>
       ) : (
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+        <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc', padding: 8 }}>ID</th>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc', padding: 8 }}>Name</th>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc', padding: 8 }}>Players</th>
-              <th style={{ textAlign: 'left', borderBottom: '1px solid #ccc', padding: 8 }}>Status</th>
+              <th className="text-left border-b border-gray-600 p-2">ID</th>
+              <th className="text-left border-b border-gray-600 p-2">Name</th>
+              <th className="text-left border-b border-gray-600 p-2">Players</th>
+              <th className="text-left border-b border-gray-600 p-2">Status</th>
             </tr>
           </thead>
           <tbody>
             {games.map(game => (
-              <tr key={game.id}>
-                <td style={{ padding: 8 }}>{game.id}</td>
-                <td style={{ padding: 8 }}>{game.gamename}</td>
-                <td style={{ padding: 8 }}>{game.players}</td>
-                <td style={{ padding: 8 }}>{game.started ? 'In Progress' : 'Waiting'}</td>
+              <tr key={game.id} className="hover:bg-gray-800">
+                <td className="p-2">{game.id}</td>
+                <td className="p-2">
+                  <Link to={`/game/${game.id}`} className="text-blue-400 hover:underline">
+                    {game.name}
+                  </Link>
+                </td>
+                <td className="p-2">{game.players}</td>
+                <td className="p-2">{game.started ? 'In Progress' : 'Waiting'}</td>
               </tr>
             ))}
           </tbody>

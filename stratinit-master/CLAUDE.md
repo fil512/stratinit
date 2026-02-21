@@ -55,7 +55,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 - **Spring Boot 3.5** with Spring Security, Spring Data JPA, WebSocket (STOMP)
 - **Jakarta EE** namespace (`jakarta.persistence.*`, `jakarta.annotation.*`)
 - **QueryDSL 5.1** with Jakarta classifier (Q-classes generated via APT)
-- **React 18** + TypeScript + Vite for SPA frontend
+- **React 18** + TypeScript + Vite + Tailwind CSS for SPA frontend
 - **JWT authentication** (JJWT 0.12.6) with HTTP Basic fallback
 - **PostgreSQL** (production) / **H2** (tests)
 - **Flyway 11** for database migrations (`stratinit-dao/src/main/resources/db/migration/`)
@@ -81,7 +81,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 **REST paths:** Defined in `SIRestPaths`, base path `/stratinit/`. Server runs on port 8081.
 
-**React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven.
+**React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven. Game page at `/game/:gameId` renders HTML5 Canvas map with side panel (sector info, units, cities, battle log, players). State managed via `GameContext` (`useReducer`) with coord-keyed lookup maps. TypeScript types in `src/types/game.ts` mirror Java DTOs.
 
 ## Testing
 
