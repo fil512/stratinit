@@ -23,8 +23,6 @@ public class CityDao extends CacheDao {
     private CityRepo cityRepo;
     @Autowired
     private CityMoveRepo cityMoveRepo;
-    @Autowired
-    private SectorDao sectorDao;
 
     public City findCity(CityPK cityPK) {
         return getGameCache(cityPK.getGameId()).getCity(cityPK.getCoords());
@@ -111,33 +109,6 @@ public class CityDao extends CacheDao {
         markCacheModified(city);
         getGameCache(city.getParentGame()).transferCity(city, nation);
         markCacheModified(city);
-    }
-
-    // TODO REF Move this method into a helper, it doesn't belong here
-    public boolean canEstablishCity(Nation nation, Sector sector) {
-        if (!sector.isLand() && !sector.isWater()) {
-            return false;
-        }
-        World world = sectorDao.getWorld(nation.getGame());
-        if (isBesideCity(world, nation, sector)) {
-            return false;
-        }
-        return !world.isAtSea(sector);
-    }
-
-    private boolean isBesideCity(World world, Nation nation, Sector sector) {
-        for (Sector neighbour : world.getNeighbours(sector)) {
-            if (neighbour.isPlayerCity()) {
-                City city = getCity(neighbour);
-                if (city == null) {
-                    return true;
-                }
-                if (!city.getNation().equals(nation)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public void clearCityMove(City city) {

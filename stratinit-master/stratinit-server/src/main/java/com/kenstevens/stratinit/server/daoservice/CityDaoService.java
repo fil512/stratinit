@@ -167,8 +167,30 @@ public class CityDaoService {
         return new Result<>("City established at " + coords + ".", true);
     }
 
-    private boolean canEstablishCity(Nation nation, Sector sector) {
-        return cityDao.canEstablishCity(nation, sector);
+    public boolean canEstablishCity(Nation nation, Sector sector) {
+        if (!sector.isLand() && !sector.isWater()) {
+            return false;
+        }
+        World world = sectorDao.getWorld(nation.getGame());
+        if (isBesideCity(world, nation, sector)) {
+            return false;
+        }
+        return !world.isAtSea(sector);
+    }
+
+    private boolean isBesideCity(World world, Nation nation, Sector sector) {
+        for (Sector neighbour : world.getNeighbours(sector)) {
+            if (neighbour.isPlayerCity()) {
+                City city = cityDao.getCity(neighbour);
+                if (city == null) {
+                    return true;
+                }
+                if (!city.getNation().equals(nation)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Result<None> destroyCity(City city) {
