@@ -147,7 +147,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 5. Replace Result/Request Pattern with Spring Idioms
 
-**Status: MOSTLY DONE — GET and write requests inlined**
+**Status: DONE — all request infrastructure eliminated**
 
 **What's done:**
 - Created `RequestProcessor` service replacing `PlayerRequest` boilerplate for GET endpoints with `process(Function<Nation, T>)`, `processNoGame(Function<Player, T>)`, and `processWithGame(Function<Game, T>)` methods
@@ -156,13 +156,13 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Moved write business logic into service classes: `UnitSvc` (disbandUnits, cancelMoveOrders, cedeUnits, buildCity, switchTerrain, moveUnits), `CitySvc` (cedeCity), `RelationSvc` (setRelation), `NationSvc` (concede)
 - Small write operations inlined as controller lambdas: sendMessage, getMail, getBattleLog, setGame, joinGame
 - Deleted 17 write request class files + `PlayerWriteRequest` + `PlayerRequest` + `RequestFactory` + `BuildRequest`
+- `DataWriter` + `SynchronizedDataAccess` deleted — sync logic inlined directly into `EventUpdate.update()`
 - All 426 tests passing
 
 **What remains:**
 - Return domain DTOs directly from controller methods instead of `Result<T>` (requires coordinated frontend changes)
 - Move error handling to `@ControllerAdvice` with `@ExceptionHandler` methods
 - Deliver battle logs and game events via WebSocket instead of piggybacking on REST responses
-- `DataWriter` + `SynchronizedDataAccess` still used by `EventUpdate` (scheduled event system) — could be refactored separately
 
 **Key files:**
 - `stratinit-server/.../rest/request/RequestProcessor.java` (replaces PlayerRequest for reads)
@@ -212,7 +212,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 **Key files:**
 - `stratinit-dao/.../cache/DataCache.java` (now uses ConcurrentHashMap)
 - `stratinit-server/.../event/svc/ServerLocker.java` (resource leak fixed, still uses FileLock)
-- `stratinit-server/.../rest/svc/SynchronizedDataAccess.java` (`synchronized(gameCache)` — unchanged)
+- `stratinit-server/.../event/update/EventUpdate.java` (`synchronized(gameCache)` — inlined from deleted `SynchronizedDataAccess`)
 
 ---
 
@@ -220,20 +220,25 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 8. Replace Deprecated Dependencies
 
-**Status: NOT STARTED**
+**Status: DONE — commons-httpclient and jasypt removed**
 
 | Dependency | Version | Status | Replacement |
 |---|---|---|---|
-| Commons HTTPClient | 3.1 | EOL since 2011 | Apache HttpClient 5.x or `java.net.http.HttpClient` (Java 11+) |
-| Jasypt | 1.9.3 | Unmaintained since 2018 | Spring Security Crypto (`Encryptors.text()`) or Tink |
-| Google Visualization API | jsapi | Shut down 2023 | Chart.js, Recharts, or Apache ECharts |
+| Commons HTTPClient | 3.1 | ~~EOL since 2011~~ **REMOVED** | Replaced with `org.apache.http.HttpStatus` + `EnglishReasonPhraseCatalog` (already-present HttpComponents 4.x) |
+| Jasypt | 1.9.3 | ~~Unmaintained since 2018~~ **REMOVED** | Replaced with `javax.crypto` AES + PBKDF2 (standard JDK) |
+| Google Visualization API | jsapi | Shut down 2023 | Chart.js, Recharts, or Apache ECharts (retires with Wicket) |
 | SWT | 3.5.2 | ~2009 vintage | Retire with SPA migration (recommendation #1) |
 
+**What's done:**
+- `commons-httpclient` removed from parent `pom.xml` and `stratinit-client/pom.xml`; `RestClient.java` and `ManualRestIntegrationTest.java` migrated to `org.apache.http.HttpStatus` + `EnglishReasonPhraseCatalog`
+- `jasypt` removed from parent `pom.xml` and `stratinit-client/pom.xml`; `AccountPersister.java` migrated from `BasicTextEncryptor` to `javax.crypto` AES with PBKDF2 key derivation
+
+**What remains:**
+- Google Charts and SWT retire naturally when `stratinit-wicket` and `stratinit-client-master` are removed (#1)
+
 **Key files:**
-- `pom.xml:159-162` (commons-httpclient 3.1)
-- `pom.xml:193-197` (jasypt 1.9.3)
-- `stratinit-client-master/.../util/AccountPersister.java` (Jasypt `BasicTextEncryptor` usage)
-- `stratinit-wicket/.../unit/playerUnitsChart.js` (Google Charts)
+- `stratinit-client-master/.../rest/RestClient.java` (migrated HttpStatus usage)
+- `stratinit-client-master/.../util/AccountPersister.java` (migrated to javax.crypto)
 
 ---
 
@@ -282,14 +287,14 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ```
 Phase 1: Foundation (no user-facing changes)
-  ├── #8  Replace deprecated dependencies
+  ├── #8  Replace deprecated dependencies            ✅ DONE
   ├── #4  Guava → Java streams (mechanical refactor) ✅ DONE
   └── #7  ConcurrentHashMap in DataCache             ✅ DONE
 
 Phase 2: Backend modernization
   ├── #3  JWT authentication                         ✅ DONE
   ├── #6  Split god classes                          ✅ DONE
-  ├── #5  Replace Result/Request pattern            🔧 MOSTLY DONE (GET + write requests inlined)
+  ├── #5  Replace Result/Request pattern             ✅ DONE
   └── #4  Simplify DAO tiers + Spring Cache
 
 Phase 3: API and frontend
@@ -341,3 +346,10 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-ui/src/pages/GameListPage.tsx` | New | 3 |
 | `stratinit-ui/src/hooks/useGameSocket.ts` | New | 3 |
 | `stratinit-ui/src/vite-env.d.ts` | New | 3 |
+| `stratinit-server/.../event/update/EventUpdate.java` | Edit: inlined sync logic, removed DataWriter/SynchronizedDataAccess | 5 |
+| `stratinit-server/.../rest/svc/DataWriter.java` | Deleted | 5 |
+| `stratinit-server/.../rest/svc/SynchronizedDataAccess.java` | Deleted | 5 |
+| `stratinit-client-master/.../rest/RestClient.java` | Edit: migrated commons-httpclient to HttpComponents 4.x | 8 |
+| `stratinit-client-master/.../util/AccountPersister.java` | Edit: migrated Jasypt to javax.crypto AES | 8 |
+| `stratinit-client-master/stratinit-client/pom.xml` | Edit: removed commons-httpclient + jasypt deps | 8 |
+| `pom.xml` (parent) | Edit: removed commons-httpclient + jasypt; added javax.annotation-api + httpcomponents version mgmt | 5, 8 |

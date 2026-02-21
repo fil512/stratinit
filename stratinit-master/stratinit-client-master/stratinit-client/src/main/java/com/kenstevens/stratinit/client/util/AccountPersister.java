@@ -5,24 +5,41 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.kenstevens.stratinit.client.main.ClientConstants;
 import com.kenstevens.stratinit.client.model.Account;
-import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.spec.KeySpec;
+import java.util.Base64;
 
 @Component
 public class AccountPersister extends JsonPersister {
+    private static final String ALGORITHM = "AES";
+    private static final byte[] SALT = {0x53, 0x74, 0x72, 0x61, 0x74, 0x49, 0x6e, 0x69}; // "StratIni"
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+    private final SecretKey secretKey;
     @Autowired
     private Account account;
 
     public AccountPersister() {
-        textEncryptor.setPassword(ClientConstants.KEY);
+        try {
+            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+            KeySpec spec = new PBEKeySpec(ClientConstants.KEY.toCharArray(), SALT, 65536, 128);
+            SecretKey tmp = factory.generateSecret(spec);
+            secretKey = new SecretKeySpec(tmp.getEncoded(), ALGORITHM);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException("Failed to initialize encryption key", e);
+        }
     }
 
     public String load() {
@@ -36,7 +53,24 @@ public class AccountPersister extends JsonPersister {
     }
 
     public String decryptPassword(String encryptedPassword) {
-        return textEncryptor.decrypt(encryptedPassword);
+        try {
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] decoded = Base64.getDecoder().decode(encryptedPassword);
+            return new String(cipher.doFinal(decoded));
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException("Failed to decrypt password", e);
+        }
+    }
+
+    private String encryptPassword(String password) {
+        try {
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(password.getBytes()));
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException("Failed to encrypt password", e);
+        }
     }
 
     protected String deserialize(File source) throws IOException {
@@ -52,7 +86,7 @@ public class AccountPersister extends JsonPersister {
     protected void serialize(File result) throws IOException {
         Account savedAccount = new Account();
         savedAccount.load(account);
-        String encryptedPassword = textEncryptor.encrypt(account.getPassword());
+        String encryptedPassword = encryptPassword(account.getPassword());
         savedAccount.setPassword(encryptedPassword);
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());

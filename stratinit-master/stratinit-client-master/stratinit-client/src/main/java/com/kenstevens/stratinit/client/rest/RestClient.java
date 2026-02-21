@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.kenstevens.stratinit.client.model.Account;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.IRestRequestJson;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpHost;
+import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
@@ -20,6 +20,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.EnglishReasonPhraseCatalog;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 
 @Service
@@ -78,7 +80,7 @@ public class RestClient {
 
     private <T> Result<T> failedResultFromStatusCode(CloseableHttpResponse response) {
         int statusCode = response.getStatusLine().getStatusCode();
-        return new Result<>("Request failed with status code " + statusCode + ": " + HttpStatus.getStatusText(statusCode), false);
+        return new Result<>("Request failed with status code " + statusCode + ": " + EnglishReasonPhraseCatalog.INSTANCE.getReason(statusCode, Locale.ENGLISH), false);
     }
 
     public <T> Result<T> post(String path, IRestRequestJson request, Class<T> valueClass) {

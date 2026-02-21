@@ -1,18 +1,15 @@
 package com.kenstevens.stratinit.server.event.update;
 
 import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.util.StackTraceHelper;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.server.rest.mail.SMTPService;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
-import com.kenstevens.stratinit.server.rest.svc.DataWriter;
-import com.kenstevens.stratinit.server.rest.svc.SynchronizedDataAccess;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import jakarta.annotation.PostConstruct;
-
-public abstract class EventUpdate implements DataWriter {
+public abstract class EventUpdate {
     @Autowired
     DataCache dataCache;
     @Autowired
@@ -22,26 +19,19 @@ public abstract class EventUpdate implements DataWriter {
     private Game game;
     @Autowired
     private SMTPService smtpService;
-    private SynchronizedDataAccess synchronizedDataAccess;
-
-    @PostConstruct
-    public void init() {
-        synchronizedDataAccess = new SynchronizedDataAccess(dataCache, this);
-    }
 
     public final void update(int gameId) {
         try {
             checkRunning();
             game = gameDao.findGame(gameId);
-            synchronizedDataAccess.write(game);
+            GameCache gameCache = dataCache.getGameCache(game);
+            synchronized (gameCache) {
+                executeWrite();
+            }
         } catch (RuntimeException e) {
             smtpService.sendException("Stratinit Update Exception " + gameId, StackTraceHelper.getStackTrace(e));
             throw e;
         }
-    }
-
-    public void writeData() {
-        executeWrite();
     }
 
     protected Game getGame() {

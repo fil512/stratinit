@@ -10,7 +10,7 @@ import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.type.Constants;
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
