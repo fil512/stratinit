@@ -6,9 +6,11 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.CedeCityJson;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.CitySvc;
+import com.kenstevens.stratinit.server.rest.svc.CityUpdater;
+import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +20,19 @@ import java.util.List;
 @RequestMapping(path = SIRestPaths.BASE_PATH)
 public class CityController {
     @Autowired
-    private RequestFactory requestFactory;
-    @Autowired
     private RequestProcessor requestProcessor;
     @Autowired
+    private WriteProcessor writeProcessor;
+    @Autowired
     private CitySvc citySvc;
+    @Autowired
+    private CityUpdater cityUpdater;
 
     @PostMapping(path = SIRestPaths.UPDATE_CITY)
     public Result<SICityUpdate> updateCity(@RequestBody UpdateCityJson updateCityJson) {
-        return requestFactory.getUpdateCityRequest(updateCityJson.sicity, updateCityJson.sicity.field).process();
+        return writeProcessor.process(
+                nation -> cityUpdater.updateCity(nation, updateCityJson.sicity, updateCityJson.sicity.field),
+                Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.CITY)
@@ -41,6 +47,8 @@ public class CityController {
 
     @PostMapping(path = SIRestPaths.CEDE_CITY)
     public Result<SIUpdate> cedeCity(@RequestBody CedeCityJson request) {
-        return requestFactory.getCedeCityRequest(request.city, request.nationId).process();
+        return writeProcessor.process(
+                nation -> citySvc.cedeCity(nation, request.city, request.nationId, nation.getGame()),
+                Constants.COMMAND_COST);
     }
 }

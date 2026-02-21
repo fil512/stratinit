@@ -5,7 +5,7 @@ import com.kenstevens.stratinit.client.model.UnitSeen;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.svc.UnitSvc;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ public class CedeUnitTest extends TwoPlayerBase {
     private static final SectorCoords AT_SEA = new SectorCoords(5, 4);
 
     @Autowired
-    private RequestFactory requestFactory;
+    private UnitSvc unitSvc;
 
     @Test
     public void cededCanSee() {
@@ -32,8 +32,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         Unit inf2 = unitDaoService.buildUnit(nationMe, MY_CITY, UnitType.INFANTRY);
         UnitSeen unitSeen = unitDao.findUnitSeen(nationThem, inf2);
         assertNull(unitSeen);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertResult(result);
         unitSeen = unitDao.findUnitSeen(nationThem, inf2);
         assertNotNull(unitSeen);
@@ -48,8 +47,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         List<Unit> units = new ArrayList<Unit>();
         units.add(inf);
         units.add(inf2);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(units), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(units), nationThemId);
         assertResult(result);
         inf = unitDao.findUnit(inf.getId());
         assertEquals(nationThem, inf.getNation());
@@ -64,16 +62,14 @@ public class CedeUnitTest extends TwoPlayerBase {
     public void cannotCedeWithNeutralOthers() {
         Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
 
     @Test
     public void cannotCedeIfNeutral() {
         Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
 
@@ -82,8 +78,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         declareFriendly();
         friendlyDeclared();
         Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
 
@@ -92,8 +87,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         declareWar();
         warDeclared();
         Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertFalseResult(result);
     }
 
@@ -102,8 +96,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         declareAlliance();
         allianceDeclared();
         Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertResult(result);
     }
 
@@ -113,8 +106,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         allianceDeclared();
         Unit inf = unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
         unitDaoService.buildUnit(nationMe, BESIDE_MY_CITY, UnitType.INFANTRY);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(inf), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(inf), nationThemId);
         assertResult(result);
     }
 
@@ -124,8 +116,7 @@ public class CedeUnitTest extends TwoPlayerBase {
         allianceDeclared();
         Unit inf = unitDaoService.buildUnit(nationMe, AT_SEA, UnitType.INFANTRY);
         Unit trans = unitDaoService.buildUnit(nationMe, AT_SEA, UnitType.TRANSPORT);
-        CedeUnitsRequest cedeUnitsRequest = requestFactory.getCedeUnitsRequest(makeUnitList(trans), nationThemId);
-        Result<SIUpdate> result = cedeUnitsRequest.executeWrite();
+        Result<SIUpdate> result = unitSvc.cedeUnits(nationMe, makeUnitList(trans), nationThemId);
         assertResult(result);
         inf = unitDao.findUnit(inf.getId());
         assertEquals(nationThem, inf.getNation());

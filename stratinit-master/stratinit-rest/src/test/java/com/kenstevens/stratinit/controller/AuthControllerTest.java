@@ -8,7 +8,8 @@ import com.kenstevens.stratinit.config.JwtTokenService;
 import com.kenstevens.stratinit.config.RestWebSecurityAdapterConfig;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.repo.PlayerRoleRepo;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
+import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.type.Constants;
 import org.junit.jupiter.api.Test;
@@ -53,9 +54,9 @@ class AuthControllerTest {
     private UserDetailsService userDetailsService;
 
     @MockBean
-    private RequestFactory requestFactory;
+    private WriteProcessor writeProcessor;
     @MockBean
-    private com.kenstevens.stratinit.server.rest.request.RequestProcessor requestProcessor;
+    private RequestProcessor requestProcessor;
     @MockBean
     private ErrorProcessor errorProcessor;
     @MockBean
@@ -80,6 +81,8 @@ class AuthControllerTest {
     @MockBean
     private com.kenstevens.stratinit.server.rest.svc.PlayerMessageList playerMessageList;
     @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.CityUpdater cityUpdater;
+    @MockBean
     private com.kenstevens.stratinit.server.daoservice.GameDaoService gameDaoService;
     @MockBean
     private com.kenstevens.stratinit.server.daoservice.MessageDaoService messageDaoService;
@@ -87,6 +90,14 @@ class AuthControllerTest {
     private com.kenstevens.stratinit.dao.MessageDao messageDao;
     @MockBean
     private com.kenstevens.stratinit.dao.UnitDao unitDao;
+    @MockBean
+    private com.kenstevens.stratinit.dao.NationDao nationDao;
+    @MockBean
+    private com.kenstevens.stratinit.dao.LogDao logDao;
+    @MockBean
+    private com.kenstevens.stratinit.cache.DataCache dataCache;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.session.StratInitSessionManager sessionManager;
 
     private final ObjectMapper mapper = new ObjectMapper();
 

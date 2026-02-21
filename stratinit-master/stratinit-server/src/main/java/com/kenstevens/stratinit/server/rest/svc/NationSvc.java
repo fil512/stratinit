@@ -1,15 +1,21 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
 import com.kenstevens.stratinit.cache.DataCache;
-import com.kenstevens.stratinit.client.model.Game;
-import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
+import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
+import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.remote.None;
+import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.CityDaoService;
+import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
+import com.kenstevens.stratinit.server.daoservice.RelationDaoService;
 import com.kenstevens.stratinit.server.daoservice.UnitDaoService;
+import com.kenstevens.stratinit.server.svc.FogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +36,18 @@ public class NationSvc {
     private RelationDao relationDao;
     @Autowired
     private UnitDaoService unitDaoService;
+    @Autowired
+    private UnitDao unitDao;
+    @Autowired
+    private CityDaoService cityDaoService;
+    @Autowired
+    private MessageDaoService messageDaoService;
+    @Autowired
+    private RelationDaoService relationDaoService;
+    @Autowired
+    private FogService fogService;
+    @Autowired
+    private PlayerWorldViewUpdate playerWorldViewUpdate;
 
     public List<SINation> getNations(final Nation me, final boolean includePower) {
         List<Nation> nations = dataCache.getGameCache(me.getGameId())
@@ -80,5 +98,43 @@ public class NationSvc {
         List<Nation> nations = dataCache.getGameCache(game)
                 .getNations();
         return nationsToSINations(null, true, nations, new ArrayList<Nation>());
+    }
+
+    public Result<SIUpdate> concede(Nation nation) {
+        List<City> cities = new ArrayList<>(cityDao.getCities(nation));
+        List<Unit> units = new ArrayList<>(unitDao.getUnits(nation));
+
+        Collection<Nation> allies = relationDaoService.getAllies(nation);
+        Nation ally = null;
+        int allyCityCount = 0;
+        if (!allies.isEmpty()) {
+            ally = allies.iterator().next();
+            allyCityCount = cityDao.getNumberOfCities(ally);
+        }
+
+        Result<None> result = Result.trueInstance();
+        if (ally != null && allyCityCount > 0) {
+            for (Unit unit : units) {
+                result.or(unitDaoService.cedeUnit(unit, ally));
+            }
+            for (City city : cities) {
+                result.or(cityDaoService.cedeCity(city, ally));
+            }
+            messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units transferred to " + ally + ".", null);
+        } else {
+            for (Unit unit : units) {
+                result.or(unitDaoService.disbandUnit(unit));
+            }
+            for (City city : cities) {
+                result.or(cityDaoService.destroyCity(city));
+            }
+            messageDaoService.postBulletin(nation.getGame(), nation + " conceeded.  All cities and units destroyed.", null);
+        }
+        fogService.survey(nation);
+        if (ally != null) {
+            fogService.survey(ally);
+        }
+        SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
+        return new Result<>(result.getMessages(), true, siupdate, result.getBattleLogs(), result.isSuccess());
     }
 }

@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.controller;
 
-import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.audit.UnitBuildAudit;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.dto.SIUnit;
@@ -11,9 +10,10 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.CedeUnitsJson;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SIUnitListJson;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.UnitSvc;
+import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 @RequestMapping(path = SIRestPaths.BASE_PATH)
 public class UnitController {
     @Autowired
-    private RequestFactory requestFactory;
-    @Autowired
     private RequestProcessor requestProcessor;
+    @Autowired
+    private WriteProcessor writeProcessor;
     @Autowired
     private UnitSvc unitSvc;
     @Autowired
@@ -34,7 +34,9 @@ public class UnitController {
 
     @PostMapping(path = SIRestPaths.MOVE_UNITS)
     public Result<SIUpdate> moveUnits(@RequestBody MoveUnitsJson moveUnitsJson) {
-        return requestFactory.getMoveUnitsRequest(moveUnitsJson.units, moveUnitsJson.target).process();
+        return writeProcessor.processDynamicCost(
+                nation -> unitSvc.moveUnits(nation, moveUnitsJson.units, moveUnitsJson.target),
+                Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.UNIT)
@@ -49,27 +51,27 @@ public class UnitController {
 
     @PostMapping(path = SIRestPaths.DISBAND_UNITS)
     public Result<SIUpdate> disbandUnits(@RequestBody SIUnitListJson request) {
-        return requestFactory.getDisbandUnitRequest(request.siunits).process();
+        return writeProcessor.process(nation -> unitSvc.disbandUnits(nation, request.siunits), Constants.COMMAND_COST);
     }
 
     @PostMapping(path = SIRestPaths.CANCEL_MOVE)
     public Result<SIUpdate> cancelMove(@RequestBody SIUnitListJson request) {
-        return requestFactory.getCancelMoveOrderRequest(request.siunits).process();
+        return writeProcessor.process(nation -> unitSvc.cancelMoveOrders(nation, request.siunits), Constants.COMMAND_COST);
     }
 
     @PostMapping(path = SIRestPaths.BUILD_CITY)
     public Result<SIUpdate> buildCity(@RequestBody SIUnitListJson request) {
-        return requestFactory.getBuildCityRequest(request.siunits).process();
+        return writeProcessor.process(nation -> unitSvc.buildCity(nation, request.siunits), Constants.COMMAND_COST_BUILD_CITY);
     }
 
     @PostMapping(path = SIRestPaths.SWITCH_TERRAIN)
     public Result<SIUpdate> switchTerrain(@RequestBody SIUnitListJson request) {
-        return requestFactory.getSwitchTerrainRequest(request.siunits).process();
+        return writeProcessor.process(nation -> unitSvc.switchTerrain(nation, request.siunits), Constants.COMMAND_COST_SWITCH_TERRAIN);
     }
 
     @PostMapping(path = SIRestPaths.CEDE_UNITS)
     public Result<SIUpdate> cedeUnits(@RequestBody CedeUnitsJson request) {
-        return requestFactory.getCedeUnitsRequest(request.siunits, request.nationId).process();
+        return writeProcessor.process(nation -> unitSvc.cedeUnits(nation, request.siunits, request.nationId), Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BUILT)

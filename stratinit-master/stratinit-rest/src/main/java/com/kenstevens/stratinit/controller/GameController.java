@@ -1,20 +1,22 @@
 package com.kenstevens.stratinit.controller;
 
+import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.cache.GameCache;
+import com.kenstevens.stratinit.client.model.Game;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.UnitBase;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
-import com.kenstevens.stratinit.dto.SIGame;
-import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.dto.SIUnitBase;
-import com.kenstevens.stratinit.dto.SIUpdate;
+import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.ErrorJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.server.daoservice.GameDaoService;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
+import com.kenstevens.stratinit.server.rest.session.StratInitSessionManager;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.server.rest.svc.NationSvc;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
@@ -33,9 +35,9 @@ import java.util.stream.Collectors;
 @RequestMapping(path = SIRestPaths.BASE_PATH)
 public class GameController {
     @Autowired
-    private RequestFactory requestFactory;
-    @Autowired
     private RequestProcessor requestProcessor;
+    @Autowired
+    private WriteProcessor writeProcessor;
     @Autowired
     private ErrorProcessor errorProcessor;
     @Autowired
@@ -46,6 +48,10 @@ public class GameController {
     private GameDaoService gameDaoService;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
+    @Autowired
+    private DataCache dataCache;
+    @Autowired
+    private StratInitSessionManager sessionManager;
 
     @GetMapping(path = SIRestPaths.VERSION)
     public Result<String> getVersion() {
@@ -78,12 +84,43 @@ public class GameController {
 
     @PostMapping(path = SIRestPaths.SET_GAME)
     public Result<None> setGame(@RequestBody SetGameJson request) {
-        return requestFactory.getSetGameRequest(request.gameId, request.noAlliances).process(request.gameId);
+        return writeProcessor.processForGame(request.gameId, session -> {
+            GameCache gameCache = dataCache.getGameCache(request.gameId);
+            if (gameCache == null) {
+                return new Result<>("The game " + request.gameId + " does not exist.", false);
+            }
+            Game game = gameCache.getGame();
+            if (game == null) {
+                return new Result<>("The game " + request.gameId + " does not exist.", false);
+            }
+            if (game.hasEnded()) {
+                return new Result<>("The game " + request.gameId + " has ended.", false);
+            }
+            if (!game.isMapped()) {
+                return new Result<>("The game " + request.gameId + " is not open yet.", false);
+            }
+            Nation nation = sessionManager.setNation(session.getPlayer(), request.gameId);
+            if (nation == null || dataCache.getGameCache(nation.getGame()) == null) {
+                return new Result<>("You have not joined game #" + request.gameId + " (This error should never happen!)", false);
+            }
+            if (!game.hasStarted()) {
+                nation.setNoAlliances(request.noAlliances);
+                gameDaoService.merge(nation);
+                gameDaoService.calculateAllianceVote(game);
+                gameDaoService.merge(game);
+            }
+            return Result.trueInstance();
+        });
     }
 
     @PostMapping(path = SIRestPaths.JOIN_GAME)
     public Result<SINation> joinGame(@RequestBody SetGameJson request) {
-        return requestFactory.getJoinGameRequest(null, request.gameId, request.noAlliances).process(request.gameId);
+        return writeProcessor.processForGame(request.gameId, session -> {
+            Result<Nation> result = gameDaoService.joinGame(session.getPlayer(), request.gameId, request.noAlliances);
+            Nation nation = result.getValue();
+            SINation siNation = nationSvc.nationToSINation(nation, nation, false, false);
+            return new Result<>(result, siNation);
+        });
     }
 
     @GetMapping(path = SIRestPaths.GAME_JOINED)
@@ -106,7 +143,7 @@ public class GameController {
 
     @GetMapping(path = SIRestPaths.CONCEDE)
     public Result<SIUpdate> concede() {
-        return requestFactory.getConcedeRequest().process();
+        return writeProcessor.process(nation -> nationSvc.concede(nation), 0);
     }
 
     @PostMapping(path = SIRestPaths.SUBMIT_ERROR)

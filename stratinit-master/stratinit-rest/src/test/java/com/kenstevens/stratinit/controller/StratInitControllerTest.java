@@ -3,22 +3,18 @@ package com.kenstevens.stratinit.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenstevens.stratinit.client.model.PlayerRole;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
-import com.kenstevens.stratinit.config.IServerConfig;
-import com.kenstevens.stratinit.config.RestWebSecurityAdapterConfig;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.dto.StratInitDTO;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.repo.PlayerRepo;
 import com.kenstevens.stratinit.repo.PlayerRoleRepo;
-import com.kenstevens.stratinit.server.rest.request.PlayerRequest;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
-import com.kenstevens.stratinit.server.rest.request.write.GetBattleLogRequest;
-import com.kenstevens.stratinit.server.rest.request.write.MoveUnitsRequest;
+import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
+import com.kenstevens.stratinit.config.IServerConfig;
+import com.kenstevens.stratinit.config.RestWebSecurityAdapterConfig;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.junit.jupiter.api.Test;
@@ -48,6 +44,7 @@ import java.util.function.Function;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -65,7 +62,7 @@ class StratInitControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private RequestFactory requestFactory;
+    private WriteProcessor writeProcessor;
     @MockBean
     private RequestProcessor requestProcessor;
     @MockBean
@@ -92,6 +89,8 @@ class StratInitControllerTest {
     @MockBean
     private com.kenstevens.stratinit.server.rest.svc.PlayerMessageList playerMessageList;
     @MockBean
+    private com.kenstevens.stratinit.server.rest.svc.CityUpdater cityUpdater;
+    @MockBean
     private com.kenstevens.stratinit.server.daoservice.GameDaoService gameDaoService;
     @MockBean
     private com.kenstevens.stratinit.server.daoservice.MessageDaoService messageDaoService;
@@ -99,6 +98,14 @@ class StratInitControllerTest {
     private com.kenstevens.stratinit.dao.MessageDao messageDao;
     @MockBean
     private com.kenstevens.stratinit.dao.UnitDao unitDao;
+    @MockBean
+    private com.kenstevens.stratinit.dao.NationDao nationDao;
+    @MockBean
+    private com.kenstevens.stratinit.dao.LogDao logDao;
+    @MockBean
+    private com.kenstevens.stratinit.cache.DataCache dataCache;
+    @MockBean
+    private com.kenstevens.stratinit.server.rest.session.StratInitSessionManager sessionManager;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
@@ -115,11 +122,11 @@ class StratInitControllerTest {
                 .andExpect(jsonPath("value", is(Constants.SERVER_VERSION)));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void battleLog() throws Exception {
-        GetBattleLogRequest mockRequest = mockListResponse(GetBattleLogRequest.class);
-        when(requestFactory.getGetBattleLogRequest()).thenReturn(mockRequest);
+        when(writeProcessor.process(any(Function.class), anyInt())).thenReturn(Result.make(new ArrayList<>()));
         performGet(SIRestPaths.BATTLE_LOG).andExpect(jsonPath("value", empty()));
     }
 
@@ -139,13 +146,13 @@ class StratInitControllerTest {
         performGet(SIRestPaths.CITY_SEEN).andExpect(jsonPath("value", empty()));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void moveUnits() throws Exception {
         SIUpdate response = new SIUpdate();
         response.nationId = 2401;
-        MoveUnitsRequest mockRequest = mockResponse(MoveUnitsRequest.class, response);
-        when(requestFactory.getMoveUnitsRequest(any(), any())).thenReturn(mockRequest);
+        when(writeProcessor.processDynamicCost(any(Function.class), anyInt())).thenReturn(Result.make(response));
 
         SIUnit siunit = new SIUnit();
         List<SIUnit> list = List.of(siunit);
@@ -154,18 +161,6 @@ class StratInitControllerTest {
 
         performPost(SIRestPaths.MOVE_UNITS, request)
                 .andExpect(jsonPath("value.nationId", is(2401)));
-    }
-
-    private <T extends PlayerRequest> T mockListResponse(Class<T> classToMock) {
-        T request = mock(classToMock);
-        when(request.process()).thenReturn(Result.make(new ArrayList<>()));
-        return request;
-    }
-
-    private <T extends PlayerRequest> T mockResponse(Class<T> classToMock, StratInitDTO response) {
-        T request = mock(classToMock);
-        when(request.process()).thenReturn(Result.make(response));
-        return request;
     }
 
     private ResultActions performGet(String path) throws Exception {

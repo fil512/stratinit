@@ -1,14 +1,19 @@
 package com.kenstevens.stratinit.controller;
 
+import com.kenstevens.stratinit.client.model.Mail;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.dao.MessageDao;
+import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dto.SIMessage;
 import com.kenstevens.stratinit.dto.news.SINewsLogsDay;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.daoservice.GameDaoService;
 import com.kenstevens.stratinit.server.daoservice.MessageDaoService;
-import com.kenstevens.stratinit.server.rest.request.RequestFactory;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
+import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.PlayerMessageList;
+import com.kenstevens.stratinit.type.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,24 +23,40 @@ import java.util.List;
 @RequestMapping(path = SIRestPaths.BASE_PATH)
 public class MessageController {
     @Autowired
-    private RequestFactory requestFactory;
-    @Autowired
     private RequestProcessor requestProcessor;
     @Autowired
+    private WriteProcessor writeProcessor;
+    @Autowired
     private MessageDao messageDao;
+    @Autowired
+    private NationDao nationDao;
     @Autowired
     private PlayerMessageList playerMessageList;
     @Autowired
     private MessageDaoService messageDaoService;
+    @Autowired
+    private GameDaoService gameDaoService;
 
     @PostMapping(path = SIRestPaths.SEND_MESSAGE)
     public Result<Integer> sendMessage(@RequestBody SIMessage simessage) {
-        return requestFactory.getSendMessageRequest(simessage).process();
+        return writeProcessor.process(nation -> {
+            Nation to = null;
+            if (simessage.toNationId != Constants.UNASSIGNED) {
+                to = nationDao.getNation(nation.getGameId(), simessage.toNationId);
+            }
+            Mail mail = messageDaoService.sendMail(nation, to, simessage.subject, simessage.body);
+            return Result.make(Integer.valueOf(mail.getMessageId()));
+        }, 0);
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_MAIL)
     public Result<List<SIMessage>> getMail() {
-        return requestFactory.getGetMailRequest().process();
+        return writeProcessor.process(nation -> {
+            nation.setNewMail(false);
+            gameDaoService.merge(nation);
+            Iterable<Mail> messages = messageDao.getMail(nation);
+            return Result.make(playerMessageList.messagesToSIMessages(messages));
+        }, 0);
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_SENT)

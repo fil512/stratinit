@@ -63,7 +63,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `WebSocketSecurityConfig.java` — requires authentication for subscriptions to `/topic/game/**`
 - `WebSocketAuthInterceptor.java` — authenticates STOMP CONNECT frames via JWT token in Authorization header
 - `GameNotificationService.java` — sends JSON messages to `/topic/game/{gameId}` (with `@Autowired(required = false)` so tests without WebSocket context still work)
-- `PlayerWriteRequest.java` — calls `GameNotificationService.notifyGameUpdate()` after every successful write operation
+- `WriteProcessor.java` — calls `GameNotificationService.notifyGameUpdate()` after every successful write operation
 - `StratInitUpdater.java` — calls `GameNotificationService.notifyGameUpdate()` after tech updates and unit builds
 - All 426 tests pass
 
@@ -78,7 +78,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-rest/.../config/WebSocketSecurityConfig.java`
 - `stratinit-rest/.../config/WebSocketAuthInterceptor.java`
 - `stratinit-server/.../svc/GameNotificationService.java`
-- `stratinit-server/.../request/write/PlayerWriteRequest.java` (integration point)
+- `stratinit-server/.../rest/request/WriteProcessor.java` (integration point)
 - `stratinit-server/.../event/svc/StratInitUpdater.java` (integration point)
 
 ---
@@ -147,25 +147,26 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 5. Replace Result/Request Pattern with Spring Idioms
 
-**Status: PARTIALLY DONE — GET requests inlined, write requests remain**
+**Status: MOSTLY DONE — GET and write requests inlined**
 
 **What's done:**
 - Created `RequestProcessor` service replacing `PlayerRequest` boilerplate for GET endpoints with `process(Function<Nation, T>)`, `processNoGame(Function<Player, T>)`, and `processWithGame(Function<Game, T>)` methods
 - Inlined 18 GET request classes directly into controllers — controllers now call domain services (NationSvc, CitySvc, UnitSvc, etc.) via `RequestProcessor`
-- Deleted 18 GET request class files
-- Trimmed `RequestFactory` from 32 to 16 `@Lookup` methods (write requests + 2 GET-as-write requests that clear notification flags)
+- Created `WriteProcessor` service replacing `PlayerWriteRequest` boilerplate for write endpoints with `process(Function<Nation, Result<T>>, int commandCost)`, `processForGame(int gameId, Function<PlayerSession, Result<T>>)`, and `processDynamicCost(Function<Nation, CommandResult<T>>, int preCheckCost)` methods
+- Moved write business logic into service classes: `UnitSvc` (disbandUnits, cancelMoveOrders, cedeUnits, buildCity, switchTerrain, moveUnits), `CitySvc` (cedeCity), `RelationSvc` (setRelation), `NationSvc` (concede)
+- Small write operations inlined as controller lambdas: sendMessage, getMail, getBattleLog, setGame, joinGame
+- Deleted 17 write request class files + `PlayerWriteRequest` + `PlayerRequest` + `RequestFactory` + `BuildRequest`
 - All 426 tests passing
 
 **What remains:**
-- Replace `PlayerWriteRequest` subclasses with a `WriteProcessor` or inline write logic into service methods (requires handling synchronization, command points, WebSocket notifications)
 - Return domain DTOs directly from controller methods instead of `Result<T>` (requires coordinated frontend changes)
 - Move error handling to `@ControllerAdvice` with `@ExceptionHandler` methods
 - Deliver battle logs and game events via WebSocket instead of piggybacking on REST responses
-- Remove `RequestFactory` entirely once all write requests are converted
+- `DataWriter` + `SynchronizedDataAccess` still used by `EventUpdate` (scheduled event system) — could be refactored separately
 
 **Key files:**
-- `stratinit-server/.../rest/request/RequestProcessor.java` (new — replaces PlayerRequest for reads)
-- `stratinit-server/.../rest/request/RequestFactory.java` (16 `@Lookup` methods remaining)
+- `stratinit-server/.../rest/request/RequestProcessor.java` (replaces PlayerRequest for reads)
+- `stratinit-server/.../rest/request/WriteProcessor.java` (replaces PlayerWriteRequest for writes)
 - `stratinit-core/.../remote/Result.java` (618-line god object — still used)
 - `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java`
 
@@ -288,7 +289,7 @@ Phase 1: Foundation (no user-facing changes)
 Phase 2: Backend modernization
   ├── #3  JWT authentication                         ✅ DONE
   ├── #6  Split god classes                          ✅ DONE
-  ├── #5  Replace Result/Request pattern
+  ├── #5  Replace Result/Request pattern            🔧 MOSTLY DONE (GET + write requests inlined)
   └── #4  Simplify DAO tiers + Spring Cache
 
 Phase 3: API and frontend
@@ -324,7 +325,7 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-rest/.../config/WebSocketAuthInterceptor.java` | New | 2 |
 | `stratinit-rest/.../config/WebConfig.java` | New | 3 |
 | `stratinit-server/.../svc/GameNotificationService.java` | New | 2 |
-| `stratinit-server/.../request/write/PlayerWriteRequest.java` | Edit: added notification after write | 2 |
+| `stratinit-server/.../rest/request/WriteProcessor.java` | New: replaces PlayerWriteRequest for all writes | 2, 5 |
 | `stratinit-server/.../event/svc/StratInitUpdater.java` | Edit: added notification after events | 2 |
 | `stratinit-rest/.../controller/AuthControllerTest.java` | New | 1 |
 | `stratinit-ui/pom.xml` | New | 3 |
