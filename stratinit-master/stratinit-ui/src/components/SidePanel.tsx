@@ -4,8 +4,10 @@ import UnitsTab from './tabs/UnitsTab'
 import CitiesTab from './tabs/CitiesTab'
 import BattleLogTab from './tabs/BattleLogTab'
 import PlayersTab from './tabs/PlayersTab'
+import MessagesTab from './tabs/MessagesTab'
+import NewsTab from './tabs/NewsTab'
 
-const TABS = ['Sector', 'Units', 'Cities', 'Battle', 'Players'] as const
+const TABS = ['Sector', 'Units', 'Cities', 'Battle', 'Players', 'Mail', 'News'] as const
 type TabName = typeof TABS[number]
 
 export default function SidePanel() {
@@ -34,6 +36,8 @@ export default function SidePanel() {
         {activeTab === 'Cities' && <CitiesTab />}
         {activeTab === 'Battle' && <BattleLogTab />}
         {activeTab === 'Players' && <PlayersTab />}
+        {activeTab === 'Mail' && <MessagesTab />}
+        {activeTab === 'News' && <NewsTab />}
       </div>
     </div>
   )

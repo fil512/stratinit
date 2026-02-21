@@ -81,7 +81,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 **REST paths:** Defined in `SIRestPaths`, base path `/stratinit/`. Server runs on port 8081.
 
-**React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven. Game page at `/game/:gameId` renders HTML5 Canvas map with side panel (sector info, units, cities, battle log, players). State managed via `GameContext` (`useReducer`) with coord-keyed lookup maps. TypeScript types in `src/types/game.ts` mirror Java DTOs.
+**React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven. Game page at `/game/:gameId` renders HTML5 Canvas map with side panel (7 tabs: Sector, Units, Cities, Battle, Players, Mail, News). State managed via `GameContext` (`useReducer`) with coord-keyed lookup maps. TypeScript types in `src/types/game.ts` mirror Java DTOs. Unit commands (disband, cancel move, build city, switch terrain, cede) in Units tab. Messaging (inbox, sent, announcements, compose) in Mail tab. News log viewer in News tab.
 
 ## Testing
 

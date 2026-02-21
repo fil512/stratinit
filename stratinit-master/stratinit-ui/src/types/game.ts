@@ -176,6 +176,88 @@ export interface SIGame {
   blitz: boolean
 }
 
+// Messages
+export interface SIMessage {
+  messageId: number
+  fromNationId: number
+  toNationId: number
+  subject: string
+  body: string
+  date: string | null
+}
+
+// News log types
+export interface SINewsBulletin {
+  category: NewsCategory
+  message: string
+}
+
+export interface SINewsFirst {
+  category: NewsCategory
+  nationName: string
+  unitType: UnitType
+}
+
+export interface SINewsForeignAffairs {
+  category: NewsCategory
+  nationName: string
+  opponentName: string
+  oldRelation: RelationType
+  newRelation: RelationType
+  effective: string | null
+}
+
+export interface SINewsNeutralConquest {
+  category: NewsCategory
+  nationName: string
+  count: number
+}
+
+export interface SINewsOpponentConquest {
+  category: NewsCategory
+  nationName: string
+  opponentName: string
+  count: number
+}
+
+export interface SINewsFromTheFront {
+  category: NewsCategory
+  nationName: string
+  opponentName: string
+  count: number
+  killed: boolean
+  nationUnitType: UnitType
+  opponentUnitType: UnitType
+}
+
+export interface SINewsNuclearDetonations {
+  category: NewsCategory
+  nationName: string
+  opponentName: string
+  count: number
+  launchableUnit: UnitType
+}
+
+export interface SINewsAirDefense {
+  category: NewsCategory
+  nationName: string
+  opponentName: string
+  count: number
+  nationUnitType: UnitType
+}
+
+export interface SINewsLogsDay {
+  day: number
+  bulletins: SINewsBulletin[]
+  firsts: SINewsFirst[]
+  foreignAffairs: SINewsForeignAffairs[]
+  neutralConquests: SINewsNeutralConquest[]
+  nuclearDetonations: SINewsNuclearDetonations[]
+  airDefense: SINewsAirDefense[]
+  newsFromTheFront: SINewsFromTheFront[]
+  opponentConquest: SINewsOpponentConquest[]
+}
+
 // Result wrapper
 export interface Result<T> {
   success: boolean

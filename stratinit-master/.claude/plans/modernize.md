@@ -24,17 +24,18 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Game API module (`src/api/game.ts`) with API wrappers for setGame, getUpdate, moveUnits, updateCity, setRelation
 - Game state context (`src/context/GameContext.tsx`) using `useReducer` with coord-keyed lookup maps
 - HTML5 Canvas map component (`src/components/GameMap.tsx`) — 8px cells, Y-axis inversion, terrain/city/unit rendering, click-to-select/move
-- Side panel with 5 tabs: Sector info, Units list, Cities overview, Battle log, Players/diplomacy
+- Side panel with 7 tabs: Sector info, Units list, Cities overview, Battle log, Players/diplomacy, Mail, News
 - App shell with header, routing (`/game/:gameId`), logout
 - WebSocket messages trigger automatic state refresh
 - City production management with build/nextBuild dropdowns
 - Diplomacy: change relations via dropdown in Players tab
+- Unit commands: disband, cancel move, build city, switch terrain (in Units tab)
+- Cede units to allied nations (in Units tab)
+- Messaging UI: inbox, sent mail, announcements, compose message (Mail tab)
+- News log viewer with categorized entries by day (News tab)
 - Builds and passes all 426 tests via `mvn clean install`
 
 **What remains:**
-- Messaging UI (mail, announcements)
-- News log viewer (separate from battle log)
-- Unit disband, cancel move, cede units/city, build city, switch terrain commands
 - Replace Google Charts with Chart.js or Recharts for unit statistics
 - Responsive/mobile layout
 - Once SPA reaches feature parity, retire `stratinit-wicket` and `stratinit-client-master` modules
@@ -45,7 +46,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-ui/src/types/game.ts`
 - `stratinit-ui/src/context/GameContext.tsx`
 - `stratinit-ui/src/components/GameMap.tsx`, `AppShell.tsx`, `SidePanel.tsx`
-- `stratinit-ui/src/components/tabs/SectorTab.tsx`, `UnitsTab.tsx`, `CitiesTab.tsx`, `BattleLogTab.tsx`, `PlayersTab.tsx`
+- `stratinit-ui/src/components/tabs/SectorTab.tsx`, `UnitsTab.tsx`, `CitiesTab.tsx`, `BattleLogTab.tsx`, `PlayersTab.tsx`, `MessagesTab.tsx`, `NewsTab.tsx`
 - `stratinit-ui/src/hooks/useGameSocket.ts`
 - `stratinit-rest/.../config/WebConfig.java` (SPA routing)
 
@@ -283,7 +284,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (login + game list + game map + side panels)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — unit cmds, messaging, news done)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)

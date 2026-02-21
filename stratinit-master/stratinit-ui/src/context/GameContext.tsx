@@ -118,6 +118,12 @@ interface GameContextValue {
   toggleUnit: (unitId: number) => void
   clearSelection: () => void
   moveSelectedUnits: (target: SectorCoords) => Promise<void>
+  disbandSelectedUnits: () => Promise<void>
+  cancelSelectedMoves: () => Promise<void>
+  buildCityWithUnit: () => Promise<void>
+  switchTerrainWithUnit: () => Promise<void>
+  cedeSelectedUnits: (nationId: number) => Promise<void>
+  cedeCityAt: (city: SICityUpdate, nationId: number) => Promise<void>
   updateCityProduction: (city: SICityUpdate, field: CityFieldToUpdate, build: string) => Promise<void>
   changeRelation: (nationId: number, relationType: RelationType) => Promise<void>
   getSectorAt: (x: number, y: number) => SISector | undefined
@@ -197,6 +203,92 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [state.selectedUnitIds, state.update])
 
+  const getSelectedUnits = useCallback(() => {
+    if (state.selectedUnitIds.size === 0 || !state.update) return []
+    return state.update.units.filter(u => state.selectedUnitIds.has(u.id))
+  }, [state.selectedUnitIds, state.update])
+
+  const disbandSelectedUnits = useCallback(async () => {
+    const selected = getSelectedUnits()
+    if (selected.length === 0) return
+    try {
+      const result = await gameApi.disbandUnits(selected)
+      if (result.success) {
+        dispatch({ type: 'SET_UPDATE', update: result.value })
+      }
+      dispatch({ type: 'CLEAR_SELECTION' })
+    } catch {
+      // Silently fail
+    }
+  }, [getSelectedUnits])
+
+  const cancelSelectedMoves = useCallback(async () => {
+    const selected = getSelectedUnits().filter(u => u.nextCoords !== null)
+    if (selected.length === 0) return
+    try {
+      const result = await gameApi.cancelMove(selected)
+      if (result.success) {
+        dispatch({ type: 'SET_UPDATE', update: result.value })
+      }
+      dispatch({ type: 'CLEAR_SELECTION' })
+    } catch {
+      // Silently fail
+    }
+  }, [getSelectedUnits])
+
+  const buildCityWithUnit = useCallback(async () => {
+    const selected = getSelectedUnits().filter(u => u.type === 'ENGINEER')
+    if (selected.length === 0) return
+    try {
+      const result = await gameApi.buildCity(selected)
+      if (result.success) {
+        dispatch({ type: 'SET_UPDATE', update: result.value })
+      }
+      dispatch({ type: 'CLEAR_SELECTION' })
+    } catch {
+      // Silently fail
+    }
+  }, [getSelectedUnits])
+
+  const switchTerrainWithUnit = useCallback(async () => {
+    const selected = getSelectedUnits().filter(u => u.type === 'ENGINEER')
+    if (selected.length === 0) return
+    try {
+      const result = await gameApi.switchTerrain(selected)
+      if (result.success) {
+        dispatch({ type: 'SET_UPDATE', update: result.value })
+      }
+      dispatch({ type: 'CLEAR_SELECTION' })
+    } catch {
+      // Silently fail
+    }
+  }, [getSelectedUnits])
+
+  const cedeSelectedUnits = useCallback(async (nationId: number) => {
+    const selected = getSelectedUnits()
+    if (selected.length === 0) return
+    try {
+      const result = await gameApi.cedeUnits(selected, nationId)
+      if (result.success) {
+        dispatch({ type: 'SET_UPDATE', update: result.value })
+      }
+      dispatch({ type: 'CLEAR_SELECTION' })
+    } catch {
+      // Silently fail
+    }
+  }, [getSelectedUnits])
+
+  const cedeCityAt = useCallback(async (city: SICityUpdate, nationId: number) => {
+    try {
+      const result = await gameApi.cedeCity(city, nationId)
+      if (result.success) {
+        dispatch({ type: 'SET_UPDATE', update: result.value })
+      }
+    } catch {
+      // Silently fail
+    }
+  }, [])
+
   const updateCityProduction = useCallback(async (
     city: SICityUpdate, field: CityFieldToUpdate, build: string,
   ) => {
@@ -246,6 +338,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
     toggleUnit,
     clearSelection,
     moveSelectedUnits,
+    disbandSelectedUnits,
+    cancelSelectedMoves,
+    buildCityWithUnit,
+    switchTerrainWithUnit,
+    cedeSelectedUnits,
+    cedeCityAt,
     updateCityProduction,
     changeRelation,
     getSectorAt,
