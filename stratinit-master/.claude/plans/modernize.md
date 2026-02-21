@@ -167,7 +167,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 6. Break Up God Classes
 
-**Status: PARTIALLY DONE — StratInitController split complete**
+**Status: DONE**
 
 **What's done:**
 - `StratInitController` (279 lines, 36 endpoints) split into 5 domain controllers:
@@ -176,18 +176,15 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
   - `CityController` — updateCity, getCities, getSeenCities, cedeCity
   - `NationController` — getNations, getMyNation, getSectors, getRelations, setRelation, getBattleLog, getTeams
   - `MessageController` — sendMessage, getMail, getSentMail, getMessages, getAnnouncements, getNewsLogs
-- All 426 tests updated and passing
-
-**What remains:**
-- Split `EventSchedulerImpl` by event domain: `UnitEventScheduler`, `CityEventScheduler`, `GameEventScheduler`
-- Extract `UnitBase` definitions into a YAML/JSON config file or database table, loaded at startup
+- `EventSchedulerImpl` reduced from 14 to 8 autowired dependencies by extracting `GameStartupService` (handles game startup orchestration: city/unit/relation catch-up, fog of war survey, integrity checks)
+- `UnitBase` definitions extracted from 185-line static initializer to `unit-definitions.json` config file, loaded at startup by `UnitBaseLoader`
+- All 426 tests passing
 
 **Key files:**
-- `stratinit-rest/.../controller/GameController.java`
-- `stratinit-rest/.../controller/UnitController.java`
-- `stratinit-rest/.../controller/CityController.java`
-- `stratinit-rest/.../controller/NationController.java`
-- `stratinit-rest/.../controller/MessageController.java`
+- `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java`
+- `stratinit-server/.../event/svc/GameStartupService.java` (extracted from EventSchedulerImpl)
+- `stratinit-core/src/main/resources/unit-definitions.json` (unit definitions)
+- `stratinit-core/.../client/model/UnitBaseLoader.java` (JSON loader)
 
 ---
 
@@ -259,17 +256,15 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Composite keys using `EventKey` with manual `hashCode`/`equals` (`stratinit-core/.../model/EventKey.java`)
 - Manual DTO conversion scattered across 10+ service classes (e.g., `new SIUnit(unit)`, `new SIGame(game)` in `NationSvc.java`, `CitySvc.java`, `UnitSvc.java`)
 - 70+ hardcoded constants in `Constants.java` including game balance values, email addresses, and server version
-- Unit stats hardcoded in `UnitBase.java` static initializer (attack, defense, movement, cost for 20+ unit types)
+- Unit stats now in `unit-definitions.json` (see #6) but game balance constants still hardcoded
 
 **Recommendation:**
 - Replace manual DTO mapping with MapStruct interfaces — define `@Mapper` interfaces for each entity/DTO pair
 - Move game balance constants (`TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES`, `HOURS_BETWEEN_UNIT_UPDATES`, etc.) to `application.yml` with `@ConfigurationProperties`
-- Move unit definitions from `UnitBase` static initializer to a data file (YAML or database table)
 - Replace `EventKey` manual hashCode/equals with Java 16+ `record` classes
 - Move email addresses and server version to configuration
 
 **Key files:**
-- `stratinit-core/.../model/UnitBase.java` (618 lines, hardcoded unit stats)
 - `stratinit-core/.../type/Constants.java` (70+ hardcoded values)
 - `stratinit-core/.../model/EventKey.java` (manual hashCode/equals)
 - `stratinit-server/.../svc/NationSvc.java`, `CitySvc.java`, `UnitSvc.java` (manual DTO conversion)
@@ -286,7 +281,7 @@ Phase 1: Foundation (no user-facing changes)
 
 Phase 2: Backend modernization
   ├── #3  JWT authentication                         ✅ DONE
-  ├── #6  Split god classes                          🔧 IN PROGRESS (controller split done)
+  ├── #6  Split god classes                          ✅ DONE
   ├── #5  Replace Result/Request pattern
   └── #4  Simplify DAO tiers + Spring Cache
 

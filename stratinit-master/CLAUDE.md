@@ -73,7 +73,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 **Caching:** `DataCache` holds in-memory game state using `ConcurrentHashMap` (`GameCache`, `NationCache`, `UnitCache`, `CityCache`). Games are loaded via `GameLoaderService`.
 
-**Domain model:** Entities in `stratinit-core/.../client/model/` — key entities are `Game`, `Player`, `Nation`, `Unit`, `City`, `Sector`.
+**Domain model:** Entities in `stratinit-core/.../client/model/` — key entities are `Game`, `Player`, `Nation`, `Unit`, `City`, `Sector`. Unit type definitions (stats, abilities) are in `unit-definitions.json`, loaded by `UnitBaseLoader` into the `UnitBase` class hierarchy.
 
 **DTOs:** Prefixed with `SI` (e.g., `SIGame`, `SINation`, `SIUnit`) in `stratinit-core`.
 
@@ -97,3 +97,4 @@ Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest
 - Custom properties: `stratinit.email.enabled`, `stratinit.scheduler.enabled`, `stratinit.mode`
 - JWT config: `stratinit.jwt.secret`, `stratinit.jwt.expiration-ms`
 - CORS: `stratinit.cors.allowed-origins` (defaults to `http://localhost:5173`)
+- Unit definitions: `stratinit-core/src/main/resources/unit-definitions.json` (23 unit types with stats and abilities)

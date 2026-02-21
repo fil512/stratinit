@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.server.event.update;
 
-import com.kenstevens.stratinit.server.event.svc.EventSchedulerImpl;
+import com.kenstevens.stratinit.server.event.svc.GameStartupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class StartGameEventUpdate extends EventUpdate {
     @Autowired
-    private EventSchedulerImpl eventScheduler;
+    private GameStartupService gameStartupService;
 
     @Override
     protected void executeWrite() {
-        eventScheduler.startGame(getGame(), true);
+        gameStartupService.startGame(getGame(), true);
     }
 }

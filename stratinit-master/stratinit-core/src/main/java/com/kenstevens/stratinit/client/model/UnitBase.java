@@ -7,7 +7,6 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,182 +41,13 @@ public abstract class UnitBase {
 	private boolean devastates = false;
 	private boolean base = false;
 	private final UnitBaseType unitBaseType;
-	private static final List<UnitType> ORDERED_UNIT_TYPES = new ArrayList<>();
+	private static final List<UnitType> ORDERED_UNIT_TYPES;
 
-	private static final Map<UnitType, UnitBase> UNIT_BASE_MAP = new HashMap<UnitType, UnitBase>();
-	// DOC heavy and naval bombers have ammo
+	private static final Map<UnitType, UnitBase> UNIT_BASE_MAP;
+
 	static {
-		// t c a
-		// e o m s a m
-		// c s o e t m h
-		// h t b e t o p
-		//
-		LandUnitBase infantry = new LandUnitBase(UnitType.INFANTRY, 0, 8, 2, 1,
-				2, 1, 5);
-		LandUnitBase tank = new LandUnitBase(UnitType.TANK, 6, 10, 3, 1, 3, 1,
-				9);
-		NavalUnitBase transport = new NavalUnitBase(UnitType.TRANSPORT, 0, 12,
-				6, 1, 0, 6, 8);
-		NavalUnitBase supply = new NavalUnitBase(UnitType.SUPPLY, 0, 6, 6, 1,
-				0, 10, 10);
-		NavalUnitBase patrol = new NavalUnitBase(UnitType.PATROL, 0, 8, 8, 2,
-				1, 1, 4);
-		NavalUnitBase destroyer = new NavalUnitBase(UnitType.DESTROYER, 3, 14,
-				8, 2, 5, 2, 14);
-		NavalUnitBase battleship = new NavalUnitBase(UnitType.BATTLESHIP, 4,
-				20, 6, 2, 12, 4, 40);
-		NavalUnitBase submarine = new NavalUnitBase(UnitType.SUBMARINE, 6, 16,
-				10, 1, 5, 8, 12);
-		NavalUnitBase carrier = new NavalUnitBase(UnitType.CARRIER, 7, 20, 6,
-				1, 4, 2, 24);
-		NavalUnitBase cruiser = new NavalUnitBase(UnitType.CRUISER, 9, 20, 8,
-				2, 8, 6, 30);
-		// t c a
-		// e o m s a m
-		// c s o e t m h
-		// h t b e t o p
-		//
-		AirUnitBase fighter = new AirUnitBase(UnitType.FIGHTER, 6, 8, 16, 1, 2,
-				2, 4);
-		AirUnitBase cargoPlane = new AirUnitBase(UnitType.CARGO_PLANE, 7, 14,
-				30, 1, 0, 0, 8);
-		AirUnitBase heavyBomber = new AirUnitBase(UnitType.HEAVY_BOMBER, 7, 18,
-				30, 1, 0, 2, 8);
-		AirUnitBase navalBomber = new AirUnitBase(UnitType.NAVAL_BOMBER, 8, 12,
-				20, 1, 8, 1, 7);
-		AirUnitBase helicopter = new AirUnitBase(UnitType.HELICOPTER, 9, 6, 16,
-				2, 5, 2, 5);
-		LandUnitBase engineer = new LandUnitBase(UnitType.ENGINEER, 0, 16, 3,
-				1, 0, 10, 4);
-		AirUnitBase zeppelin = new AirUnitBase(UnitType.ZEPPELIN, 0, 12, 5, 3,
-				0, 4, 2);
-		TechUnitBase satellite = new TechUnitBase(UnitType.SATELLITE, 10, 24,
-				100, 0, 0, 0, 4);
-		TechUnitBase icbm1 = new TechUnitBase(UnitType.ICBM_1, 12, 36, 30, 0,
-				0, 0, 4);
-		TechUnitBase icbm2 = new TechUnitBase(UnitType.ICBM_2, 14, 30, 40, 0,
-				0, 0, 4);
-		TechUnitBase icbm3 = new TechUnitBase(UnitType.ICBM_3, 16, 24, 50, 0,
-				0, 0, 4);
-		BaseUnitBase base = new BaseUnitBase(UnitType.BASE, 0, 24, 0, 0, 0, 0,
-				1);
-		TechUnitBase research = new TechUnitBase(UnitType.RESEARCH, 0, 24, 0,
-				0, 0, 0, 1);
-		// Weight
-		engineer.setWeight(1);
-		infantry.setWeight(1);
-		tank.setWeight(1);
-		fighter.setWeight(1);
-		helicopter.setWeight(1);
-		navalBomber.setWeight(1);
-		icbm1.setWeight(1);
-		icbm2.setWeight(1);
-		icbm3.setWeight(1);
-		// Supply
-		engineer.setSuppliesLand(true);
-		transport.setSuppliesLand(true);
-		supply.setSuppliesLand(true);
-		supply.setSuppliesNavy(true);
-		// Carries Units
-		transport.setCapacity(6);
-		cargoPlane.setCapacity(4);
-		carrier.setCapacity(8);
-		helicopter.setCapacity(2);
-		engineer.setCapacity(1);
-		submarine.setCapacity(1);
-		// Can See Subs
-		destroyer.setCanSeeSubs(true);
-		submarine.setCanSeeSubs(true);
-		cruiser.setCanSeeSubs(true);
-		navalBomber.setCanSeeSubs(true);
-		helicopter.setCanSeeSubs(true);
-		// Bomber
-		zeppelin.setBombPercentage(10);
-		navalBomber.setBombPercentage(25);
-		heavyBomber.setBombPercentage(50);
-		// Capital
-		carrier.setNavyCapital(true);
-		battleship.setNavyCapital(true);
-		// Flak
-		carrier.setFlak(4);
-		battleship.setFlak(4);
-		cruiser.setFlak(6);
-		// Blast radius
-		icbm2.setBlastRadius(1);
-		icbm3.setBlastRadius(2);
-		// Light Air
-		fighter.setLightAir(true);
-		navalBomber.setLightAir(true);
-		helicopter.setLightAir(true);
-		// Can Attack Land
-		battleship.setNavyCanAttackLand(true);
-		// Can Attack Ships
-		tank.setLandCanAttackShips(true);
-		// Launchable
-		satellite.setLaunchable(true);
-		icbm1.setLaunchable(true);
-		icbm2.setLaunchable(true);
-		icbm3.setLaunchable(true);
-		// Devastates
-		icbm1.setDevastates(true);
-		icbm2.setDevastates(true);
-		icbm3.setDevastates(true);
-		// Exceptions
-		zeppelin.setBuiltIn(CityType.TECH);
-		engineer.setBuiltIn(CityType.TECH);
-		// Patrol boat exception
-		patrol.setRequiresSupply(false);
-		supply.setRequiresSupply(false);
-		// Base
-		base.setBase(true);
-
-		UNIT_BASE_MAP.put(UnitType.INFANTRY, infantry);
-		UNIT_BASE_MAP.put(UnitType.TANK, tank);
-		UNIT_BASE_MAP.put(UnitType.TRANSPORT, transport);
-		UNIT_BASE_MAP.put(UnitType.SUPPLY, supply);
-		UNIT_BASE_MAP.put(UnitType.PATROL, patrol);
-		UNIT_BASE_MAP.put(UnitType.DESTROYER, destroyer);
-		UNIT_BASE_MAP.put(UnitType.BATTLESHIP, battleship);
-		UNIT_BASE_MAP.put(UnitType.SUBMARINE, submarine);
-		UNIT_BASE_MAP.put(UnitType.CARRIER, carrier);
-		UNIT_BASE_MAP.put(UnitType.CRUISER, cruiser);
-		UNIT_BASE_MAP.put(UnitType.FIGHTER, fighter);
-		UNIT_BASE_MAP.put(UnitType.CARGO_PLANE, cargoPlane);
-		UNIT_BASE_MAP.put(UnitType.HEAVY_BOMBER, heavyBomber);
-		UNIT_BASE_MAP.put(UnitType.NAVAL_BOMBER, navalBomber);
-		UNIT_BASE_MAP.put(UnitType.HELICOPTER, helicopter);
-		UNIT_BASE_MAP.put(UnitType.ENGINEER, engineer);
-		UNIT_BASE_MAP.put(UnitType.ZEPPELIN, zeppelin);
-		UNIT_BASE_MAP.put(UnitType.SATELLITE, satellite);
-		UNIT_BASE_MAP.put(UnitType.ICBM_1, icbm1);
-		UNIT_BASE_MAP.put(UnitType.ICBM_2, icbm2);
-		UNIT_BASE_MAP.put(UnitType.ICBM_3, icbm3);
-		UNIT_BASE_MAP.put(UnitType.BASE, base);
-		UNIT_BASE_MAP.put(UnitType.RESEARCH, research);
-
-		ORDERED_UNIT_TYPES.add(UnitType.INFANTRY);
-		ORDERED_UNIT_TYPES.add(UnitType.TANK);
-		ORDERED_UNIT_TYPES.add(UnitType.TRANSPORT);
-		ORDERED_UNIT_TYPES.add(UnitType.SUPPLY);
-		ORDERED_UNIT_TYPES.add(UnitType.PATROL);
-		ORDERED_UNIT_TYPES.add(UnitType.DESTROYER);
-		ORDERED_UNIT_TYPES.add(UnitType.BATTLESHIP);
-		ORDERED_UNIT_TYPES.add(UnitType.SUBMARINE);
-		ORDERED_UNIT_TYPES.add(UnitType.CARRIER);
-		ORDERED_UNIT_TYPES.add(UnitType.CRUISER);
-		ORDERED_UNIT_TYPES.add(UnitType.FIGHTER);
-		ORDERED_UNIT_TYPES.add(UnitType.CARGO_PLANE);
-		ORDERED_UNIT_TYPES.add(UnitType.HEAVY_BOMBER);
-		ORDERED_UNIT_TYPES.add(UnitType.NAVAL_BOMBER);
-		ORDERED_UNIT_TYPES.add(UnitType.HELICOPTER);
-		ORDERED_UNIT_TYPES.add(UnitType.ENGINEER);
-		ORDERED_UNIT_TYPES.add(UnitType.ZEPPELIN);
-		ORDERED_UNIT_TYPES.add(UnitType.SATELLITE);
-		ORDERED_UNIT_TYPES.add(UnitType.ICBM_1);
-		ORDERED_UNIT_TYPES.add(UnitType.ICBM_2);
-		ORDERED_UNIT_TYPES.add(UnitType.ICBM_3);
-		ORDERED_UNIT_TYPES.add(UnitType.BASE);
-		ORDERED_UNIT_TYPES.add(UnitType.RESEARCH);
+		UNIT_BASE_MAP = UnitBaseLoader.load();
+		ORDERED_UNIT_TYPES = new ArrayList<>(UNIT_BASE_MAP.keySet());
 
 		for (UnitType type : UnitType.values()) {
 			UnitBase unitBase = getUnitBase(type);
