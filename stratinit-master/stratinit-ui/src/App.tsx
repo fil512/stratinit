@@ -1,6 +1,9 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
+import RegistrationPage from './pages/RegistrationPage'
 import GameListPage from './pages/GameListPage'
+import LeaderboardPage from './pages/LeaderboardPage'
+import RankingsPage from './pages/RankingsPage'
 import GamePage from './pages/GamePage'
 import AppShell from './components/AppShell'
 import { GameProvider } from './context/GameContext'
@@ -10,8 +13,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
         <Route element={<AppShell />}>
           <Route path="/games" element={<GameListPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/rankings" element={<RankingsPage />} />
           <Route
             path="/game/:gameId"
             element={

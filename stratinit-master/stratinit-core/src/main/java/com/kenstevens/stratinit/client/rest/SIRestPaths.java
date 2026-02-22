@@ -44,4 +44,6 @@ public class SIRestPaths {
     public static final String SWITCH_TERRAIN = "/switch-terrain";
     public static final String CONCEDE = "/concede";
     public static final String SUBMIT_ERROR = "/submit-error";
+    public static final String LEADERBOARD = "/leaderboard";
+    public static final String RANKINGS_TEAM = "/rankings/team";
 }

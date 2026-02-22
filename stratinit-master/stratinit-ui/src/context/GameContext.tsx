@@ -126,6 +126,7 @@ interface GameContextValue {
   cedeCityAt: (city: SICityUpdate, nationId: number) => Promise<void>
   updateCityProduction: (city: SICityUpdate, field: CityFieldToUpdate, build: string) => Promise<void>
   changeRelation: (nationId: number, relationType: RelationType) => Promise<void>
+  concedeGame: () => Promise<void>
   getSectorAt: (x: number, y: number) => SISector | undefined
   getUnitsAt: (x: number, y: number) => SIUnit[]
   getCityAt: (x: number, y: number) => SICityUpdate | undefined
@@ -294,6 +295,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [refreshState])
 
+  const concedeGame = useCallback(async () => {
+    try {
+      const update = await gameApi.concede()
+      dispatch({ type: 'SET_UPDATE', update })
+    } catch {
+      // Silently fail
+    }
+  }, [])
+
   const getSectorAt = useCallback((x: number, y: number) => {
     return state.lookups?.sectorMap.get(coordKey(x, y))
   }, [state.lookups])
@@ -326,6 +336,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     cedeCityAt,
     updateCityProduction,
     changeRelation,
+    concedeGame,
     getSectorAt,
     getUnitsAt,
     getCityAt,

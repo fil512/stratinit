@@ -35,13 +35,22 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - News log viewer with categorized entries by day (News tab)
 - Builds and passes all 426 tests via `mvn clean install`
 
+- Game browsing and joining: `GameListPage.tsx` shows "My Games" and "Available Games" sections, unjoined games have "Join" button
+- Concede from game: Concede button with two-step confirmation in Players tab
+- Player registration: `POST /stratinit/auth/register` endpoint in `AuthController.java`, `RegistrationPage.tsx` with username/email/password form, linked from login page
+- Leaderboard: `GET /stratinit/leaderboard` endpoint in `RankingController.java`, `LeaderboardPage.tsx` with player rankings sorted by wins
+- Team rankings: `GET /stratinit/rankings/team` endpoint in `RankingController.java`, `RankingsPage.tsx` with ELO-based team rankings
+- App navigation: `AppShell.tsx` header nav with links to Games, Leaderboard, Rankings
+- New DTOs: `SIPlayerRank.java` for player leaderboard data; `SITeamRank` (existing) used for team rankings
+- Builds and passes all 426 tests via `mvn clean install`
+
 **What remains:**
 - Replace Google Charts with Chart.js or Recharts for unit statistics
 - Responsive/mobile layout
 - Once SPA reaches feature parity, retire `stratinit-wicket` and `stratinit-client-master` modules
 
 **Key files:**
-- `stratinit-ui/src/pages/LoginPage.tsx`, `GameListPage.tsx`, `GamePage.tsx`
+- `stratinit-ui/src/pages/LoginPage.tsx`, `RegistrationPage.tsx`, `GameListPage.tsx`, `GamePage.tsx`, `LeaderboardPage.tsx`, `RankingsPage.tsx`
 - `stratinit-ui/src/api/auth.ts`, `client.ts`, `game.ts`
 - `stratinit-ui/src/types/game.ts`
 - `stratinit-ui/src/context/GameContext.tsx`
@@ -49,6 +58,9 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-ui/src/components/tabs/SectorTab.tsx`, `UnitsTab.tsx`, `CitiesTab.tsx`, `BattleLogTab.tsx`, `PlayersTab.tsx`, `MessagesTab.tsx`, `NewsTab.tsx`
 - `stratinit-ui/src/hooks/useGameSocket.ts`
 - `stratinit-rest/.../config/WebConfig.java` (SPA routing)
+- `stratinit-rest/.../controller/AuthController.java` (login + registration)
+- `stratinit-rest/.../controller/RankingController.java` (leaderboard + team rankings)
+- `stratinit-core/.../dto/SIPlayerRank.java` (player leaderboard DTO)
 
 ---
 
@@ -194,6 +206,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
   - `CityController` — updateCity, getCities, getSeenCities, cedeCity
   - `NationController` — getNations, getMyNation, getSectors, getRelations, setRelation, getBattleLog, getTeams
   - `MessageController` — sendMessage, getMail, getSentMail, getMessages, getAnnouncements, getNewsLogs
+  - `RankingController` — leaderboard, team rankings
 - `EventSchedulerImpl` reduced from 14 to 8 autowired dependencies by extracting `GameStartupService` (handles game startup orchestration: city/unit/relation catch-up, fog of war survey, integrity checks)
 - `UnitBase` definitions extracted from 185-line static initializer to `unit-definitions.json` config file, loaded at startup by `UnitBaseLoader`
 - All 426 tests passing
@@ -311,7 +324,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — unit cmds, messaging, news done)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, concede, leaderboard, rankings done)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)

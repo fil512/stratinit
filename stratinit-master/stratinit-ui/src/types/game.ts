@@ -246,6 +246,29 @@ export interface SINewsAirDefense {
   nationUnitType: UnitType
 }
 
+// Rankings
+export interface SIPlayerRank {
+  username: string
+  wins: number
+  played: number
+  winPercentage: number
+}
+
+export interface SITeamRank {
+  name: string
+  rank: number | null
+  victories: number
+  opponents: number
+  wins: number
+  played: number
+  team: {
+    nation1: string
+    nation2: string | null
+    score: number
+    name: string
+  }
+}
+
 export interface SINewsLogsDay {
   day: number
   bulletins: SINewsBulletin[]

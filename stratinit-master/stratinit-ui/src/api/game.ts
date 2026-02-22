@@ -1,7 +1,8 @@
 import { apiFetch } from './client'
 import type {
   SIUpdate, SIUnitBase, SIUnit, SICityUpdate, SIRelation,
-  SectorCoords, RelationType, SIGame, SIMessage, SINewsLogsDay,
+  SectorCoords, RelationType, SIGame, SINation, SIMessage, SINewsLogsDay,
+  SIPlayerRank, SITeamRank,
 } from '../types/game'
 
 export function setGame(gameId: number) {
@@ -107,4 +108,27 @@ export function sendMessage(message: { toNationId: number; subject: string; body
 
 export function getNewsLogs() {
   return apiFetch<SINewsLogsDay[]>('/stratinit/newslog')
+}
+
+export function getUnjoinedGames() {
+  return apiFetch<SIGame[]>('/stratinit/unjoinedGames')
+}
+
+export function joinGame(gameId: number, noAlliances: boolean) {
+  return apiFetch<SINation>('/stratinit/joinGame', {
+    method: 'POST',
+    body: JSON.stringify({ gameId, noAlliances }),
+  })
+}
+
+export function concede() {
+  return apiFetch<SIUpdate>('/stratinit/concede')
+}
+
+export function getLeaderboard() {
+  return apiFetch<SIPlayerRank[]>('/stratinit/leaderboard')
+}
+
+export function getTeamRankings() {
+  return apiFetch<SITeamRank[]>('/stratinit/rankings/team')
 }

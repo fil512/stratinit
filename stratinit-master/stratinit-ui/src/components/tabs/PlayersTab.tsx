@@ -1,17 +1,24 @@
+import { useState } from 'react'
 import { useGame } from '../../context/GameContext'
 import type { RelationType } from '../../types/game'
 
 const RELATION_OPTIONS: RelationType[] = ['WAR', 'NEUTRAL', 'FRIENDLY', 'ALLIED']
 
 export default function PlayersTab() {
-  const { state, changeRelation } = useGame()
+  const { state, changeRelation, concedeGame } = useGame()
   const { update } = state
+  const [confirming, setConfirming] = useState(false)
 
   if (!update) return <p className="text-gray-500">No game loaded.</p>
 
   const myNationId = update.nationId
   const nations = update.nations
   const relations = update.relations
+
+  async function handleConcede() {
+    await concedeGame()
+    setConfirming(false)
+  }
 
   return (
     <div className="space-y-1">
@@ -51,6 +58,32 @@ export default function PlayersTab() {
           </div>
         )
       })}
+      <div className="pt-3 border-t border-gray-700">
+        {confirming ? (
+          <div className="flex items-center gap-2">
+            <span className="text-red-400 text-xs">Are you sure? This cannot be undone.</span>
+            <button
+              onClick={handleConcede}
+              className="px-2 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => setConfirming(false)}
+              className="px-2 py-1 text-xs border border-gray-600 rounded hover:bg-gray-800"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setConfirming(true)}
+            className="px-3 py-1 text-xs border border-red-600 text-red-400 rounded hover:bg-red-900/30"
+          >
+            Concede
+          </button>
+        )}
+      </div>
     </div>
   )
 }

@@ -86,6 +86,8 @@ class AuthControllerTest {
     @MockBean
     private com.kenstevens.stratinit.server.service.GameService gameService;
     @MockBean
+    private com.kenstevens.stratinit.server.service.PlayerService playerService;
+    @MockBean
     private com.kenstevens.stratinit.server.service.MessageService messageService;
     @MockBean
     private com.kenstevens.stratinit.dao.MessageDao messageDao;
@@ -97,6 +99,10 @@ class AuthControllerTest {
     private com.kenstevens.stratinit.dao.LogDao logDao;
     @MockBean
     private com.kenstevens.stratinit.cache.DataCache dataCache;
+    @MockBean
+    private com.kenstevens.stratinit.rank.TeamProvider teamProvider;
+    @MockBean
+    private com.kenstevens.stratinit.repo.GameHistoryRepo gameHistoryRepo;
     @MockBean
     private com.kenstevens.stratinit.server.rest.session.StratInitSessionManager sessionManager;
 
@@ -185,8 +191,15 @@ class AuthControllerTest {
         }
 
         @Bean
-        AuthController authController(AuthenticationManager authenticationManager, JwtTokenService jwtTokenService) {
-            return new AuthController(authenticationManager, jwtTokenService);
+        RankingController rankingController() {
+            return new RankingController();
+        }
+
+        @Bean
+        AuthController authController(AuthenticationManager authenticationManager, JwtTokenService jwtTokenService,
+                                      com.kenstevens.stratinit.server.service.PlayerService playerService,
+                                      BCryptPasswordEncoder passwordEncoder) {
+            return new AuthController(authenticationManager, jwtTokenService, playerService, passwordEncoder);
         }
     }
 }
