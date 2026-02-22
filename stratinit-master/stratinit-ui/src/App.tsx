@@ -7,6 +7,7 @@ import RankingsPage from './pages/RankingsPage'
 import UnitStatsPage from './pages/UnitStatsPage'
 import SettingsPage from './pages/SettingsPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
+import AdminPage from './pages/AdminPage'
 import GamePage from './pages/GamePage'
 import AppShell from './components/AppShell'
 import { GameProvider } from './context/GameContext'
@@ -25,6 +26,7 @@ function App() {
           <Route path="/stats/:gameId" element={<UnitStatsPage />} />
           <Route path="/stats" element={<UnitStatsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route
             path="/game/:gameId"
             element={

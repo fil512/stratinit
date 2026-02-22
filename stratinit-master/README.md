@@ -53,7 +53,7 @@ stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server
 ## Backend Architecture
 
 ```
-Controllers (GameController, UnitController, CityController, NationController, MessageController, RankingController, ProfileController)
+Controllers (GameController, UnitController, CityController, NationController, MessageController, RankingController, ProfileController, AdminController)
   ↓ return DTOs directly (no Result<T> wrapper)
   ↓ thin lambdas via RequestProcessor (reads) / WriteProcessor (writes)
 REST Services (UnitSvc, CitySvc, NationSvc, RelationSvc)
@@ -84,6 +84,7 @@ GlobalExceptionHandler (@ControllerAdvice)
 - Login and registration with JWT authentication
 - Password recovery via email
 - Account settings (update email, password, email notification preferences)
+- Admin panel (post announcements, player list, server shutdown — ROLE_ADMIN only)
 - Game list and game selection
 - HTML5 Canvas game map with terrain, city, and unit rendering
 - Side panel with 7 tabs:

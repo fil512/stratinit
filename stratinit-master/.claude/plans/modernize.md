@@ -50,6 +50,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
   - Nav link "Stats" in `AppShell.tsx`, routes `/stats` and `/stats/:gameId` in `App.tsx`
 - Account settings page: `ProfileController.java` with `GET /stratinit/profile` and `PUT /stratinit/profile` endpoints (requires auth), `SettingsPage.tsx` with profile info display, email update, email notification preference toggle, password change with confirmation. Settings link in `AppShell.tsx` header, `/settings` route in `App.tsx`
 - Password recovery: `POST /stratinit/auth/forgot-password` endpoint in `AuthController.java` (calls existing `PlayerService.forgottenPassword()` which generates random password and emails it), `ForgotPasswordPage.tsx` with username or email lookup, linked from login page
+- Admin panel: `AdminController.java` with `GET /stratinit/admin/players`, `POST /stratinit/admin/announcement`, `POST /stratinit/admin/shutdown` endpoints (secured to `ROLE_ADMIN` in `RestWebSecurityAdapterConfig`). `AdminPage.tsx` with post announcement form, player list table, server shutdown button with two-step confirmation. Admin link in `AppShell.tsx` nav (conditionally visible based on `admin` flag from `GET /stratinit/profile`). `ProfileController` response now includes `admin` boolean.
 - Builds and passes all 426 tests via `mvn clean install`
 
 **What remains:**
@@ -71,8 +72,10 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-core/.../dto/SIUnitLove.java`, `SIUnitDayRow.java`, `SIGameHistory.java` (unit statistics DTOs)
 - `stratinit-server/.../service/UnitStatisticsService.java` (aggregation logic for unit statistics)
 - `stratinit-ui/src/pages/UnitStatsPage.tsx` (Recharts pie + area charts)
-- `stratinit-rest/.../controller/ProfileController.java` (account settings endpoints)
+- `stratinit-rest/.../controller/ProfileController.java` (account settings endpoints, admin flag)
+- `stratinit-rest/.../controller/AdminController.java` (admin endpoints: players, announcements, shutdown)
 - `stratinit-ui/src/pages/SettingsPage.tsx` (account settings UI)
+- `stratinit-ui/src/pages/AdminPage.tsx` (admin panel UI)
 
 ---
 
@@ -336,7 +339,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, password recovery, account settings, concede, leaderboard, rankings, unit statistics charts done)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, password recovery, account settings, admin panel, concede, leaderboard, rankings, unit statistics charts done)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)
@@ -424,3 +427,7 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-rest/.../controller/AuthController.java` | Edit: added forgot-password endpoint | 1 |
 | `stratinit-ui/src/pages/ForgotPasswordPage.tsx` | New: password recovery page | 1 |
 | `stratinit-ui/src/pages/LoginPage.tsx` | Edit: added forgot password link | 1 |
+| `stratinit-rest/.../controller/AdminController.java` | New: admin endpoints (players, announcements, shutdown) | 1 |
+| `stratinit-rest/.../config/RestWebSecurityAdapterConfig.java` | Edit: added /stratinit/admin/** ROLE_ADMIN restriction | 1 |
+| `stratinit-rest/.../controller/ProfileController.java` | Edit: added admin flag to profile response | 1 |
+| `stratinit-ui/src/pages/AdminPage.tsx` | New: admin panel page | 1 |

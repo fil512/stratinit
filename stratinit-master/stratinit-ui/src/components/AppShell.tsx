@@ -1,8 +1,19 @@
+import { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { logout } from '../api/auth'
+import { apiFetch } from '../api/client'
 
 export default function AppShell() {
   const navigate = useNavigate()
+  const [isAdmin, setIsAdmin] = useState(false)
+
+  useEffect(() => {
+    apiFetch<{ admin?: boolean }>('/stratinit/profile')
+      .then(data => {
+        if (data.admin) setIsAdmin(true)
+      })
+      .catch(() => {})
+  }, [])
 
   function handleLogout() {
     logout()
@@ -21,6 +32,9 @@ export default function AppShell() {
             <Link to="/leaderboard" className="text-gray-300 hover:text-blue-400">Leaderboard</Link>
             <Link to="/rankings" className="text-gray-300 hover:text-blue-400">Rankings</Link>
             <Link to="/stats" className="text-gray-300 hover:text-blue-400">Stats</Link>
+            {isAdmin && (
+              <Link to="/admin" className="text-yellow-400 hover:text-yellow-300">Admin</Link>
+            )}
           </nav>
         </div>
         <div className="flex items-center gap-3">

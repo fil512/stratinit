@@ -30,15 +30,17 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Player not found"));
         }
-        return ResponseEntity.ok(Map.of(
-                "username", player.getUsername(),
-                "email", player.getEmail() != null ? player.getEmail() : "",
-                "emailGameMail", player.isEmailGameMail(),
-                "created", player.getCreated() != null ? player.getCreated().getTime() : 0,
-                "wins", player.getWins(),
-                "played", player.getPlayed(),
-                "winPerc", player.getWinPerc()
-        ));
+        // Use HashMap since Map.of() doesn't allow many entries easily
+        java.util.HashMap<String, Object> profile = new java.util.HashMap<>();
+        profile.put("username", player.getUsername());
+        profile.put("email", player.getEmail() != null ? player.getEmail() : "");
+        profile.put("emailGameMail", player.isEmailGameMail());
+        profile.put("created", player.getCreated() != null ? player.getCreated().getTime() : 0);
+        profile.put("wins", player.getWins());
+        profile.put("played", player.getPlayed());
+        profile.put("winPerc", player.getWinPerc());
+        profile.put("admin", playerService.isAdmin(player));
+        return ResponseEntity.ok(profile);
     }
 
     @PutMapping
