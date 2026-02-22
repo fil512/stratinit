@@ -23,12 +23,15 @@ export default function AppShell() {
             <Link to="/stats" className="text-gray-300 hover:text-blue-400">Stats</Link>
           </nav>
         </div>
-        <button
-          onClick={handleLogout}
-          className="px-3 py-1 text-sm border border-gray-600 rounded hover:bg-gray-800"
-        >
-          Logout
-        </button>
+        <div className="flex items-center gap-3">
+          <Link to="/settings" className="text-sm text-gray-300 hover:text-blue-400">Settings</Link>
+          <button
+            onClick={handleLogout}
+            className="px-3 py-1 text-sm border border-gray-600 rounded hover:bg-gray-800"
+          >
+            Logout
+          </button>
+        </div>
       </header>
       <main className="flex-1 overflow-hidden">
         <Outlet />

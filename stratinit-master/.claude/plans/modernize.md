@@ -48,6 +48,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
   - `UnitStatsPage.tsx` with Recharts: pie chart for "unit love" metric, 4 stacked area charts (LAND/NAVY/AIR/TECH) for units built per day
   - Game selector dropdown (completed games), player selector dropdown
   - Nav link "Stats" in `AppShell.tsx`, routes `/stats` and `/stats/:gameId` in `App.tsx`
+- Account settings page: `ProfileController.java` with `GET /stratinit/profile` and `PUT /stratinit/profile` endpoints (requires auth), `SettingsPage.tsx` with profile info display, email update, email notification preference toggle, password change with confirmation. Settings link in `AppShell.tsx` header, `/settings` route in `App.tsx`
 - Builds and passes all 426 tests via `mvn clean install`
 
 **What remains:**
@@ -69,6 +70,8 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-core/.../dto/SIUnitLove.java`, `SIUnitDayRow.java`, `SIGameHistory.java` (unit statistics DTOs)
 - `stratinit-server/.../service/UnitStatisticsService.java` (aggregation logic for unit statistics)
 - `stratinit-ui/src/pages/UnitStatsPage.tsx` (Recharts pie + area charts)
+- `stratinit-rest/.../controller/ProfileController.java` (account settings endpoints)
+- `stratinit-ui/src/pages/SettingsPage.tsx` (account settings UI)
 
 ---
 
@@ -332,7 +335,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, concede, leaderboard, rankings, unit statistics charts done)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, account settings, concede, leaderboard, rankings, unit statistics charts done)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)
@@ -413,3 +416,7 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-ui/src/pages/GamePage.tsx` | Edit: removed Result wrapper | 5 |
 | `stratinit-ui/src/components/tabs/NewsTab.tsx` | Edit: removed Result wrapper | 5 |
 | `stratinit-ui/src/components/tabs/MessagesTab.tsx` | Edit: removed Result wrapper | 5 |
+| `stratinit-rest/.../controller/ProfileController.java` | New: account settings GET/PUT endpoints | 1 |
+| `stratinit-ui/src/pages/SettingsPage.tsx` | New: account settings page | 1 |
+| `stratinit-ui/src/App.tsx` | Edit: added /settings route | 1 |
+| `stratinit-ui/src/components/AppShell.tsx` | Edit: added Settings nav link | 1 |

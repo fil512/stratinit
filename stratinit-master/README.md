@@ -53,7 +53,7 @@ stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server
 ## Backend Architecture
 
 ```
-Controllers (GameController, UnitController, CityController, NationController, MessageController, RankingController)
+Controllers (GameController, UnitController, CityController, NationController, MessageController, RankingController, ProfileController)
   ↓ return DTOs directly (no Result<T> wrapper)
   ↓ thin lambdas via RequestProcessor (reads) / WriteProcessor (writes)
 REST Services (UnitSvc, CitySvc, NationSvc, RelationSvc)
@@ -81,7 +81,8 @@ GlobalExceptionHandler (@ControllerAdvice)
 
 ## React SPA Features
 
-- Login with JWT authentication
+- Login and registration with JWT authentication
+- Account settings (update email, password, email notification preferences)
 - Game list and game selection
 - HTML5 Canvas game map with terrain, city, and unit rendering
 - Side panel with 7 tabs:
