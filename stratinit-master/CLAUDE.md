@@ -99,3 +99,4 @@ Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest
 - JWT config: `stratinit.jwt.secret`, `stratinit.jwt.expiration-ms`
 - CORS: `stratinit.cors.allowed-origins` (defaults to `http://localhost:5173`)
 - Unit definitions: `stratinit-core/src/main/resources/unit-definitions.json` (23 unit types with stats and abilities)
+- Graceful shutdown: `ShutdownHook` (`@PreDestroy`) calls `ServerManager.shutdown()` to flush caches on container stop
