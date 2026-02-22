@@ -49,6 +49,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
   - Game selector dropdown (completed games), player selector dropdown
   - Nav link "Stats" in `AppShell.tsx`, routes `/stats` and `/stats/:gameId` in `App.tsx`
 - Account settings page: `ProfileController.java` with `GET /stratinit/profile` and `PUT /stratinit/profile` endpoints (requires auth), `SettingsPage.tsx` with profile info display, email update, email notification preference toggle, password change with confirmation. Settings link in `AppShell.tsx` header, `/settings` route in `App.tsx`
+- Password recovery: `POST /stratinit/auth/forgot-password` endpoint in `AuthController.java` (calls existing `PlayerService.forgottenPassword()` which generates random password and emails it), `ForgotPasswordPage.tsx` with username or email lookup, linked from login page
 - Builds and passes all 426 tests via `mvn clean install`
 
 **What remains:**
@@ -335,7 +336,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, account settings, concede, leaderboard, rankings, unit statistics charts done)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, password recovery, account settings, concede, leaderboard, rankings, unit statistics charts done)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)
@@ -420,3 +421,6 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-ui/src/pages/SettingsPage.tsx` | New: account settings page | 1 |
 | `stratinit-ui/src/App.tsx` | Edit: added /settings route | 1 |
 | `stratinit-ui/src/components/AppShell.tsx` | Edit: added Settings nav link | 1 |
+| `stratinit-rest/.../controller/AuthController.java` | Edit: added forgot-password endpoint | 1 |
+| `stratinit-ui/src/pages/ForgotPasswordPage.tsx` | New: password recovery page | 1 |
+| `stratinit-ui/src/pages/LoginPage.tsx` | Edit: added forgot password link | 1 |

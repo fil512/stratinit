@@ -6,6 +6,7 @@ import LeaderboardPage from './pages/LeaderboardPage'
 import RankingsPage from './pages/RankingsPage'
 import UnitStatsPage from './pages/UnitStatsPage'
 import SettingsPage from './pages/SettingsPage'
+import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import GamePage from './pages/GamePage'
 import AppShell from './components/AppShell'
 import { GameProvider } from './context/GameContext'
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route element={<AppShell />}>
           <Route path="/games" element={<GameListPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />

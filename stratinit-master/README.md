@@ -82,6 +82,7 @@ GlobalExceptionHandler (@ControllerAdvice)
 ## React SPA Features
 
 - Login and registration with JWT authentication
+- Password recovery via email
 - Account settings (update email, password, email notification preferences)
 - Game list and game selection
 - HTML5 Canvas game map with terrain, city, and unit rendering

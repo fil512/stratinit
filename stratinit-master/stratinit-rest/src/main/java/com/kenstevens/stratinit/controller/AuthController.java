@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.controller;
 
 import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.config.JwtTokenService;
+import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.service.PlayerService;
 import org.springframework.http.HttpStatus;
@@ -78,6 +79,27 @@ public class AuthController {
                 .body(Map.of("message", "Registration successful"));
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+        if ((request.username() == null || request.username().isBlank())
+                && (request.email() == null || request.email().isBlank())) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Username or email is required"));
+        }
+
+        String username = request.username() != null ? request.username() : "";
+        String email = request.email() != null ? request.email() : "";
+
+        Result<None> result = playerService.forgottenPassword(username, email);
+        if (!result.isSuccess()) {
+            return ResponseEntity.badRequest().body(Map.of("error", result.toString()));
+        }
+
+        return ResponseEntity.ok(Map.of("message",
+                "A new password has been sent to your email address."));
+    }
+
     public record LoginRequest(String username, String password) {}
     public record RegisterRequest(String username, String email, String password) {}
+    public record ForgotPasswordRequest(String username, String email) {}
 }
