@@ -47,7 +47,6 @@ stratinit-test      → Test helpers and configuration (depends on dao)
 stratinit-server    → Game engine, services, request processing (depends on dao)
 stratinit-rest      → REST API via Spring Boot (depends on server, ui)
 stratinit-ui        → React SPA frontend (Vite, TypeScript, React 18)
-stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server)
 ```
 
 ## Backend Architecture
@@ -100,11 +99,3 @@ GlobalExceptionHandler (@ControllerAdvice)
   - **Stacked area charts** — units built per day (days 1-10) by category (LAND, NAVY, AIR, TECH)
   - Game selector and player selector dropdowns
 - Real-time WebSocket updates via STOMP
-
-## Legacy Clients (Being Retired)
-
-```bash
-# SWT desktop client
-cd stratinit-client-master
-mvn -Pwin64 clean install
-```

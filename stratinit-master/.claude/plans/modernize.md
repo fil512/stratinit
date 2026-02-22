@@ -8,7 +8,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 1. Replace Wicket + SWT with a Modern SPA
 
-**Status: IN PROGRESS — core gameplay screen implemented**
+**Status: DONE — SPA at feature parity, Wicket + SWT retired**
 
 **What's done:**
 - `stratinit-ui` Maven module created with `frontend-maven-plugin` (Node 20, Vite, React 18, TypeScript)
@@ -55,7 +55,6 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 **What remains:**
 - Responsive/mobile layout
-- Once SPA reaches feature parity, retire `stratinit-wicket` and `stratinit-client-master` modules
 
 **Key files:**
 - `stratinit-ui/src/pages/LoginPage.tsx`, `RegistrationPage.tsx`, `GameListPage.tsx`, `GamePage.tsx`, `LeaderboardPage.tsx`, `RankingsPage.tsx`
@@ -135,7 +134,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Generate a cryptographically random 256-bit secret for production (current secret is a placeholder)
 - Consider CSRF protection for browser-based cookie auth if needed
 - OAuth2 support (Google, GitHub login) if desired
-- BCrypt password migration for existing users (the REST layer already uses BCrypt; verify Wicket users are migrated)
+- BCrypt password migration for existing users (the REST layer already uses BCrypt)
 
 **Key files:**
 - `stratinit-rest/.../config/JwtProperties.java`
@@ -259,25 +258,17 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 8. Replace Deprecated Dependencies
 
-**Status: DONE — commons-httpclient and jasypt removed**
+**Status: DONE — all deprecated dependencies removed**
 
 | Dependency | Version | Status | Replacement |
 |---|---|---|---|
-| Commons HTTPClient | 3.1 | ~~EOL since 2011~~ **REMOVED** | Replaced with `org.apache.http.HttpStatus` + `EnglishReasonPhraseCatalog` (already-present HttpComponents 4.x) |
-| Jasypt | 1.9.3 | ~~Unmaintained since 2018~~ **REMOVED** | Replaced with `javax.crypto` AES + PBKDF2 (standard JDK) |
-| Google Visualization API | jsapi | ~~Shut down 2023~~ **REPLACED** | Recharts in SPA (Wicket charts superseded) |
-| SWT | 3.5.2 | ~2009 vintage | Retire with SPA migration (recommendation #1) |
-
-**What's done:**
-- `commons-httpclient` removed from parent `pom.xml` and `stratinit-client/pom.xml`; `RestClient.java` and `ManualRestIntegrationTest.java` migrated to `org.apache.http.HttpStatus` + `EnglishReasonPhraseCatalog`
-- `jasypt` removed from parent `pom.xml` and `stratinit-client/pom.xml`; `AccountPersister.java` migrated from `BasicTextEncryptor` to `javax.crypto` AES with PBKDF2 key derivation
+| Commons HTTPClient | 3.1 | ~~EOL since 2011~~ **REMOVED** | Was only used by SWT client (now deleted) |
+| Jasypt | 1.9.3 | ~~Unmaintained since 2018~~ **REMOVED** | Was only used by SWT client (now deleted) |
+| Google Visualization API | jsapi | ~~Shut down 2023~~ **REPLACED** | Recharts in SPA |
+| SWT | 3.5.2 | ~~2009 vintage~~ **REMOVED** | `stratinit-client-master` deleted |
 
 **What remains:**
-- SWT retires naturally when `stratinit-client-master` is removed (#1)
-
-**Key files:**
-- `stratinit-client-master/.../rest/RestClient.java` (migrated HttpStatus usage)
-- `stratinit-client-master/.../util/AccountPersister.java` (migrated to javax.crypto)
+- Nothing — all deprecated dependencies removed
 
 ---
 
@@ -339,11 +330,10 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, password recovery, account settings, admin panel, concede, leaderboard, rankings, unit statistics charts done)
+  └── #1  SPA frontend                               ✅ DONE (feature parity reached, Wicket + SWT retired)
 
 Phase 4: Polish
-  ├── #10 Domain model cleanup (MapStruct, records, config externalization)
-  └── #1  Retire Wicket + SWT modules
+  └── #10 Domain model cleanup (MapStruct, records, config externalization)
 ```
 
 Each phase builds on the previous. Phase 1 items are low-risk, mechanical changes that reduce tech debt without changing behavior. Phase 2 modernizes the backend architecture. Phase 3 delivers the user-facing improvements. Phase 4 is cleanup that can happen incrementally.
@@ -388,10 +378,10 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-server/.../event/update/EventUpdate.java` | Edit: inlined sync logic, removed DataWriter/SynchronizedDataAccess | 5 |
 | `stratinit-server/.../rest/svc/DataWriter.java` | Deleted | 5 |
 | `stratinit-server/.../rest/svc/SynchronizedDataAccess.java` | Deleted | 5 |
-| `stratinit-client-master/.../rest/RestClient.java` | Edit: migrated commons-httpclient to HttpComponents 4.x | 8 |
-| `stratinit-client-master/.../util/AccountPersister.java` | Edit: migrated Jasypt to javax.crypto AES | 8 |
-| `stratinit-client-master/stratinit-client/pom.xml` | Edit: removed commons-httpclient + jasypt deps | 8 |
-| `pom.xml` (parent) | Edit: removed commons-httpclient + jasypt; added javax.annotation-api + httpcomponents version mgmt | 5, 8 |
+| `pom.xml` (parent) | Edit: removed commons-httpclient + jasypt; removed wicket, SWT, client deps | 5, 8 |
+| `stratinit-wicket/` | Deleted: legacy Wicket web UI module (88 Java files) | 1 |
+| `stratinit-client-master/` | Deleted: legacy SWT desktop client (351 Java files) | 1, 8 |
+| `stratinit-rest/.../config/ShutdownHook.java` | New: @PreDestroy graceful shutdown (replaces Wicket's FlushCache) | 1 |
 | `stratinit-server/.../daoservice/GameHistoryDaoService.java` | Deleted (pure pass-through) | 4 |
 | `stratinit-server/.../event/svc/GameArchiver.java` | Edit: inject repos directly instead of GameHistoryDaoService | 4 |
 | `stratinit-dao/.../dao/CityDao.java` | Edit: removed canEstablishCity/isBesideCity business logic, removed SectorDao dep | 4 |

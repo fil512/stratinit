@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Strategic Initiative is a multiplayer strategy game with a Java server, REST API, React SPA frontend, and legacy Wicket web UI / SWT desktop client (being retired).
+Strategic Initiative is a multiplayer strategy game with a Java server, REST API, and React SPA frontend.
 
 ## Build Commands
 
@@ -44,10 +44,9 @@ stratinit-test      → Test helpers and configuration (depends on dao)
 stratinit-server    → Game engine, services, business logic (depends on dao)
 stratinit-rest      → REST API via Spring Boot (depends on server, ui)
 stratinit-ui        → React SPA frontend (Vite, TypeScript, React 18)
-stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server)
 ```
 
-Dependencies flow downward. `stratinit-client-master/` is a separate module tree for the SWT desktop client (being retired).
+Dependencies flow downward.
 
 ## Tech Stack
 
@@ -94,7 +93,7 @@ Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest
 ## Configuration
 
 - JPA config: `persistence.properties` in each module's resources
-- App config: `application.yml` in `stratinit-rest` and `stratinit-wicket`
+- App config: `application.yml` in `stratinit-rest`
 - Maven JVM settings: `.mvn/jvm.config` (`-Xmx2048m -Xms1024m -Djava.awt.headless=true`)
 - Custom properties: `stratinit.email.enabled`, `stratinit.scheduler.enabled`, `stratinit.mode`
 - JWT config: `stratinit.jwt.secret`, `stratinit.jwt.expiration-ms`
