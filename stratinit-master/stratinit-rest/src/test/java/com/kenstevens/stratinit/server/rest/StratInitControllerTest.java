@@ -3,7 +3,6 @@ package com.kenstevens.stratinit.server.rest;
 import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;
 import com.kenstevens.stratinit.controller.GameController;
 import com.kenstevens.stratinit.dto.SIUnitBase;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
@@ -20,15 +19,13 @@ public class StratInitControllerTest extends StratInitDaoBase {
 
     @Test
     public void getUnitBases() {
-        Result<List<SIUnitBase>> result = gameController.getUnitBases();
-        List<SIUnitBase> unitBases = result.getValue();
+        List<SIUnitBase> unitBases = gameController.getUnitBases();
         assertEquals(UnitType.INFANTRY, unitBases.get(0).type);
     }
 
     @Test
     public void getServerConfig() {
-        Result<Properties> result = gameController.getServerConfig();
-        Properties props = result.getValue();
+        Properties props = gameController.getServerConfig();
         assertEquals("" + Constants.MAX_PLAYERS_PER_GAME, props.get("MAX_PLAYERS_PER_GAME"));
     }
 

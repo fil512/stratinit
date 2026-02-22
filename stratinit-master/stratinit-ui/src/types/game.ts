@@ -257,13 +257,3 @@ export interface SINewsLogsDay {
   newsFromTheFront: SINewsFromTheFront[]
   opponentConquest: SINewsOpponentConquest[]
 }
-
-// Result wrapper
-export interface Result<T> {
-  success: boolean
-  value: T
-  messages: string[]
-  silogs: SIBattleLog[]
-  moveSuccess: boolean
-  commandPoints: number
-}

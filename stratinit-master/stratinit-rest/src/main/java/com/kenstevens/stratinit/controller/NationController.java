@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.controller;
 
 import com.kenstevens.stratinit.client.model.CityCapturedBattleLog;
 import com.kenstevens.stratinit.client.model.FlakBattleLog;
-import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.UnitAttackedBattleLog;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.dao.LogDao;
@@ -41,34 +40,34 @@ public class NationController {
     private LogDao logDao;
 
     @GetMapping(path = SIRestPaths.NATION)
-    public Result<List<SINation>> getNations() {
+    public List<SINation> getNations() {
         return requestProcessor.process(nation -> nationSvc.getNations(nation, true));
     }
 
     @GetMapping(path = SIRestPaths.NATION_ME)
-    public Result<SINation> getMyNation() {
+    public SINation getMyNation() {
         return requestProcessor.process(nation -> nationSvc.getMyNation(nation));
     }
 
     @GetMapping(path = SIRestPaths.SECTOR)
-    public Result<List<SISector>> getSectors() {
+    public List<SISector> getSectors() {
         return requestProcessor.process(nation -> playerWorldView.getWorldViewSectors(nation));
     }
 
     @GetMapping(path = SIRestPaths.RELATION)
-    public Result<List<SIRelation>> getRelations() {
+    public List<SIRelation> getRelations() {
         return requestProcessor.process(nation -> relationSvc.getRelations(nation));
     }
 
     @PostMapping(path = SIRestPaths.SET_RELATION)
-    public Result<SIRelation> setRelation(@RequestBody SetRelationJson request) {
+    public SIRelation setRelation(@RequestBody SetRelationJson request) {
         return writeProcessor.process(
                 nation -> relationSvc.setRelation(nation, request.nationId, request.relationType),
                 Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.BATTLE_LOG)
-    public Result<List<SIBattleLog>> getBattleLog() {
+    public List<SIBattleLog> getBattleLog() {
         return writeProcessor.process(nation -> {
             nation.setNewBattle(false);
             gameService.merge(nation);
@@ -91,7 +90,7 @@ public class NationController {
     }
 
     @GetMapping(path = SIRestPaths.TEAM)
-    public Result<List<SITeam>> getTeams() {
+    public List<SITeam> getTeams() {
         return requestProcessor.processWithGame(game -> gameService.getTeams(game));
     }
 }

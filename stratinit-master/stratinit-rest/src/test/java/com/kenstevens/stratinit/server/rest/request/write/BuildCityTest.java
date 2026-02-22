@@ -3,8 +3,7 @@ package com.kenstevens.stratinit.server.rest.request.write;
 import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.CommandFailedException;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
@@ -28,10 +27,8 @@ public class BuildCityTest extends TwoPlayerBase {
         List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
         long cp = nationMe.getCommandPoints();
-        Result<SIUpdate> result = buildCity(eng);
+        assertThrows(CommandFailedException.class, () -> buildCity(eng));
         assertEquals(cp, nationMe.getCommandPoints());
-        assertFalseResult(result);
-        assertTrue(result.toString().contains("mobility"));
         cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
     }
@@ -43,8 +40,7 @@ public class BuildCityTest extends TwoPlayerBase {
         tank.setMobility(9);
         List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
-        Result<SIUpdate> result = buildCity(tank);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> buildCity(tank));
         cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
     }
@@ -61,12 +57,11 @@ public class BuildCityTest extends TwoPlayerBase {
         assertEquals(58, sectors.size());
         SectorSeen near = new SectorSeen(nationMe, NEAR);
         assertFalse(sectors.contains(near));
-        Result<SIUpdate> result = buildCity(eng);
+        buildCity(eng);
         sectors = sectorDao.getSectorsSeen(nationMe);
         assertEquals(84, sectors.size());
         assertTrue(sectors.contains(near));
         assertEquals(cp - Constants.COMMAND_COST_BUILD_CITY, nationMe.getCommandPoints());
-        assertResult(result);
         assertEquals(0, eng.getMobility());
         assertTrue(eng.isAlive());
         cities = cityDao.getCities(nationMe);
@@ -81,8 +76,7 @@ public class BuildCityTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
         List<City> cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
-        Result<SIUpdate> result = buildCity(eng);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> buildCity(eng));
         cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
     }

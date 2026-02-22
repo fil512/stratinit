@@ -6,7 +6,6 @@ import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUnitBuilt;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.CedeUnitsJson;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.remote.request.SIUnitListJson;
@@ -33,49 +32,49 @@ public class UnitController {
     private UnitDao unitDao;
 
     @PostMapping(path = SIRestPaths.MOVE_UNITS)
-    public Result<SIUpdate> moveUnits(@RequestBody MoveUnitsJson moveUnitsJson) {
+    public SIUpdate moveUnits(@RequestBody MoveUnitsJson moveUnitsJson) {
         return writeProcessor.processDynamicCost(
                 nation -> unitSvc.moveUnits(nation, moveUnitsJson.units, moveUnitsJson.target),
                 Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.UNIT)
-    public Result<List<SIUnit>> getUnits() {
+    public List<SIUnit> getUnits() {
         return requestProcessor.process(nation -> unitSvc.getUnits(nation));
     }
 
     @GetMapping(path = SIRestPaths.UNIT_SEEN)
-    public Result<List<SIUnit>> getSeenUnits() {
+    public List<SIUnit> getSeenUnits() {
         return requestProcessor.process(nation -> unitSvc.getSeenUnits(nation));
     }
 
     @PostMapping(path = SIRestPaths.DISBAND_UNITS)
-    public Result<SIUpdate> disbandUnits(@RequestBody SIUnitListJson request) {
+    public SIUpdate disbandUnits(@RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.disbandUnits(nation, request.siunits), Constants.COMMAND_COST);
     }
 
     @PostMapping(path = SIRestPaths.CANCEL_MOVE)
-    public Result<SIUpdate> cancelMove(@RequestBody SIUnitListJson request) {
+    public SIUpdate cancelMove(@RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.cancelMoveOrders(nation, request.siunits), Constants.COMMAND_COST);
     }
 
     @PostMapping(path = SIRestPaths.BUILD_CITY)
-    public Result<SIUpdate> buildCity(@RequestBody SIUnitListJson request) {
+    public SIUpdate buildCity(@RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.buildCity(nation, request.siunits), Constants.COMMAND_COST_BUILD_CITY);
     }
 
     @PostMapping(path = SIRestPaths.SWITCH_TERRAIN)
-    public Result<SIUpdate> switchTerrain(@RequestBody SIUnitListJson request) {
+    public SIUpdate switchTerrain(@RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.switchTerrain(nation, request.siunits), Constants.COMMAND_COST_SWITCH_TERRAIN);
     }
 
     @PostMapping(path = SIRestPaths.CEDE_UNITS)
-    public Result<SIUpdate> cedeUnits(@RequestBody CedeUnitsJson request) {
+    public SIUpdate cedeUnits(@RequestBody CedeUnitsJson request) {
         return writeProcessor.process(nation -> unitSvc.cedeUnits(nation, request.siunits, request.nationId), Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BUILT)
-    public Result<List<SIUnitBuilt>> getUnitsBuilt() {
+    public List<SIUnitBuilt> getUnitsBuilt() {
         return requestProcessor.process(nation -> {
             List<UnitBuildAudit> builds = unitDao.getBuildAudits(nation.getGameId(), nation.toString());
             return builds.stream()

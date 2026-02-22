@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { apiFetch } from '../api/client'
 import { isLoggedIn } from '../api/auth'
-import type { SIGame, Result } from '../types/game'
+import type { SIGame } from '../types/game'
 
 export default function GameListPage() {
   const [games, setGames] = useState<SIGame[]>([])
@@ -14,11 +14,9 @@ export default function GameListPage() {
       navigate('/login')
       return
     }
-    apiFetch<Result<SIGame[]>>('/stratinit/joinedGames')
-      .then(result => {
-        if (result.success) {
-          setGames(result.value)
-        }
+    apiFetch<SIGame[]>('/stratinit/joinedGames')
+      .then(games => {
+        setGames(games)
       })
       .catch(() => {
         navigate('/login')

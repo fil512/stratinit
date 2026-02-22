@@ -18,12 +18,8 @@ export default function GamePage() {
       return
     }
     // Fetch joined games to get boardSize, then init
-    getJoinedGames().then(result => {
-      if (!result.success) {
-        navigate('/games')
-        return
-      }
-      const game = result.value.find(g => g.id === gameIdNum)
+    getJoinedGames().then(games => {
+      const game = games.find(g => g.id === gameIdNum)
       if (!game) {
         navigate('/games')
         return

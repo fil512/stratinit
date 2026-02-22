@@ -10,7 +10,6 @@ import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.helper.PlayerHelper;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SIUnitListJson;
 import com.kenstevens.stratinit.remote.request.SetRelationJson;
 import com.kenstevens.stratinit.type.RelationType;
@@ -69,16 +68,16 @@ public abstract class TwoPlayerBase extends BaseStratInitControllerTest {
         setTheirRelation(RelationType.ALLIED);
     }
 
-    final protected Result<SIRelation> setRelation(int nationThemId, RelationType relationType) {
+    final protected SIRelation setRelation(int nationThemId, RelationType relationType) {
         return nationController.setRelation(new SetRelationJson(nationThemId, relationType));
     }
 
-    final protected Result<SIUpdate> buildCity(Unit unit) {
+    final protected SIUpdate buildCity(Unit unit) {
         SIUnitListJson request = new SIUnitListJson(new SIUnit(unit));
         return unitController.buildCity(request);
     }
 
-    final protected Result<SIUpdate> switchTerrain(Unit unit) {
+    final protected SIUpdate switchTerrain(Unit unit) {
         SIUnitListJson request = new SIUnitListJson(new SIUnit(unit));
         return unitController.switchTerrain(request);
     }

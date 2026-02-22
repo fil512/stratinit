@@ -139,10 +139,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const refreshState = useCallback(async () => {
     try {
-      const result = await gameApi.getUpdate()
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.getUpdate()
+      dispatch({ type: 'SET_UPDATE', update })
     } catch (err) {
       dispatch({ type: 'SET_ERROR', error: 'Failed to fetch game state' })
     }
@@ -153,16 +151,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'INIT_GAME', gameId, boardSize })
     try {
       await gameApi.setGame(gameId)
-      const [updateResult, basesResult] = await Promise.all([
+      const [update, unitBases] = await Promise.all([
         gameApi.getUpdate(),
         gameApi.getUnitBases(),
       ])
-      if (updateResult.success) {
-        dispatch({ type: 'SET_UPDATE', update: updateResult.value })
-      }
-      if (basesResult.success) {
-        dispatch({ type: 'SET_UNIT_BASES', unitBases: basesResult.value })
-      }
+      dispatch({ type: 'SET_UPDATE', update })
+      dispatch({ type: 'SET_UNIT_BASES', unitBases })
     } catch (err) {
       dispatch({ type: 'SET_ERROR', error: 'Failed to initialize game' })
     }
@@ -193,10 +187,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const selected = allUnits.filter(u => state.selectedUnitIds.has(u.id))
     if (selected.length === 0) return
     try {
-      const result = await gameApi.moveUnits(selected, target)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.moveUnits(selected, target)
+      dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail — user can retry
@@ -212,10 +204,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const selected = getSelectedUnits()
     if (selected.length === 0) return
     try {
-      const result = await gameApi.disbandUnits(selected)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.disbandUnits(selected)
+      dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -226,10 +216,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const selected = getSelectedUnits().filter(u => u.nextCoords !== null)
     if (selected.length === 0) return
     try {
-      const result = await gameApi.cancelMove(selected)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.cancelMove(selected)
+      dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -240,10 +228,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const selected = getSelectedUnits().filter(u => u.type === 'ENGINEER')
     if (selected.length === 0) return
     try {
-      const result = await gameApi.buildCity(selected)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.buildCity(selected)
+      dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -254,10 +240,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const selected = getSelectedUnits().filter(u => u.type === 'ENGINEER')
     if (selected.length === 0) return
     try {
-      const result = await gameApi.switchTerrain(selected)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.switchTerrain(selected)
+      dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -268,10 +252,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const selected = getSelectedUnits()
     if (selected.length === 0) return
     try {
-      const result = await gameApi.cedeUnits(selected, nationId)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.cedeUnits(selected, nationId)
+      dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -280,10 +262,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const cedeCityAt = useCallback(async (city: SICityUpdate, nationId: number) => {
     try {
-      const result = await gameApi.cedeCity(city, nationId)
-      if (result.success) {
-        dispatch({ type: 'SET_UPDATE', update: result.value })
-      }
+      const update = await gameApi.cedeCity(city, nationId)
+      dispatch({ type: 'SET_UPDATE', update })
     } catch {
       // Silently fail
     }

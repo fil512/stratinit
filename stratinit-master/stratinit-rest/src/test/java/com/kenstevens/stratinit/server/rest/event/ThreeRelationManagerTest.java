@@ -2,8 +2,6 @@ package com.kenstevens.stratinit.server.rest.event;
 
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Relation;
-import com.kenstevens.stratinit.dto.SIRelation;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.ThreePlayerBase;
 import com.kenstevens.stratinit.type.RelationType;
@@ -18,8 +16,7 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
 
     // TODO REF repeated with TwoPlayerBase
     protected void changedTo(RelationType nextType) {
-        Result<SIRelation> result = setRelation(nationThemId, nextType);
-        assertResult(result);
+        setRelation(nationThemId, nextType);
         assertRelationChanged(nationThem, nextType);
     }
 
@@ -39,9 +36,8 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     protected void changedToDelayed(RelationType nextType) {
         Relation relation = relationDao.findRelation(nationMe, nationThem);
         RelationType pre = relation.getType();
-        Result<SIRelation> result = setRelation(nationThemId, nextType);
-        assertResult(result);
-        assertEquals(pre, relation.getType(), result.toString());
+        setRelation(nationThemId, nextType);
+        assertEquals(pre, relation.getType());
         assertRelationDelayed(nationThem, nextType);
     }
 
@@ -58,10 +54,9 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     }
 
     protected void thirdChangedTo(RelationType nextType) {
-        Result<SIRelation> result = setRelation(nationThreeId, nextType);
-        assertResult(result);
+        setRelation(nationThreeId, nextType);
         Relation relation = relationDao.findRelation(nationMe, nationThird);
-        assertEquals(nextType, relation.getType(), result.toString());
+        assertEquals(nextType, relation.getType());
         assertNull(relation.getNextType());
         assertNull(relation.getSwitchTime());
         assertFalse(eventQueue.cancel(relation));
@@ -70,11 +65,10 @@ public abstract class ThreeRelationManagerTest extends ThreePlayerBase {
     protected void thirdChangedToDelayed(RelationType nextType) {
         Relation relation = relationDao.findRelation(nationMe, nationThird);
         RelationType pre = relation.getType();
-        Result<SIRelation> result = setRelation(nationThreeId, nextType);
-        assertResult(result);
+        setRelation(nationThreeId, nextType);
         relation = relationDao.findRelation(nationMe, nationThird);
-        assertEquals(pre, relation.getType(), result.toString());
-        assertEquals(nextType, relation.getNextType(), result.toString());
+        assertEquals(pre, relation.getType());
+        assertEquals(nextType, relation.getNextType());
         assertNotNull(relation.getSwitchTime());
         assertTrue(eventQueue.cancel(relation));
     }

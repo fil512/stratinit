@@ -5,7 +5,6 @@ import com.kenstevens.stratinit.client.model.PlayerRole;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 import com.kenstevens.stratinit.remote.request.MoveUnitsJson;
 import com.kenstevens.stratinit.repo.PlayerRepo;
@@ -50,6 +49,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -119,31 +119,31 @@ class StratInitControllerTest {
     @WithUserDetails(HAPPY_USER)
     public void version() throws Exception {
         performGet(SIRestPaths.VERSION)
-                .andExpect(jsonPath("value", is(Constants.SERVER_VERSION)));
+                .andExpect(content().string(Constants.SERVER_VERSION));
     }
 
     @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void battleLog() throws Exception {
-        when(writeProcessor.process(any(Function.class), anyInt())).thenReturn(Result.make(new ArrayList<>()));
-        performGet(SIRestPaths.BATTLE_LOG).andExpect(jsonPath("value", empty()));
+        when(writeProcessor.process(any(Function.class), anyInt())).thenReturn(new ArrayList<>());
+        performGet(SIRestPaths.BATTLE_LOG).andExpect(jsonPath("$", empty()));
     }
 
     @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void city() throws Exception {
-        when(requestProcessor.process(any(Function.class))).thenReturn(Result.make(new ArrayList<>()));
-        performGet(SIRestPaths.CITY).andExpect(jsonPath("value", empty()));
+        when(requestProcessor.process(any(Function.class))).thenReturn(new ArrayList<>());
+        performGet(SIRestPaths.CITY).andExpect(jsonPath("$", empty()));
     }
 
     @SuppressWarnings("unchecked")
     @Test
     @WithUserDetails(HAPPY_USER)
     public void seenCity() throws Exception {
-        when(requestProcessor.process(any(Function.class))).thenReturn(Result.make(new ArrayList<>()));
-        performGet(SIRestPaths.CITY_SEEN).andExpect(jsonPath("value", empty()));
+        when(requestProcessor.process(any(Function.class))).thenReturn(new ArrayList<>());
+        performGet(SIRestPaths.CITY_SEEN).andExpect(jsonPath("$", empty()));
     }
 
     @SuppressWarnings("unchecked")
@@ -152,7 +152,7 @@ class StratInitControllerTest {
     public void moveUnits() throws Exception {
         SIUpdate response = new SIUpdate();
         response.nationId = 2401;
-        when(writeProcessor.processDynamicCost(any(Function.class), anyInt())).thenReturn(Result.make(response));
+        when(writeProcessor.processDynamicCost(any(Function.class), anyInt())).thenReturn(response);
 
         SIUnit siunit = new SIUnit();
         List<SIUnit> list = List.of(siunit);
@@ -160,7 +160,7 @@ class StratInitControllerTest {
         MoveUnitsJson request = new MoveUnitsJson(list, coords);
 
         performPost(SIRestPaths.MOVE_UNITS, request)
-                .andExpect(jsonPath("value.nationId", is(2401)));
+                .andExpect(jsonPath("nationId", is(2401)));
     }
 
     private ResultActions performGet(String path) throws Exception {

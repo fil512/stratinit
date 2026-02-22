@@ -4,7 +4,6 @@ import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.world.WorldHelper;
 import org.junit.jupiter.api.Test;
@@ -28,9 +27,7 @@ public class GetGamesTest extends BaseStratInitControllerTest {
 
     @Test
     public void getUnjoinedGames() {
-        Result<List<SIGame>> result = gameController.getUnjoinedGames();
-        assertResult(result);
-        List<SIGame> games = result.getValue();
+        List<SIGame> games = gameController.getUnjoinedGames();
         assertEquals(testGame.getId(), Integer.valueOf(testGameId));
         assertFalse(games.isEmpty());
         assertEquals(testGame.getId(), Integer.valueOf(games.get(games.size() - 2).id));
@@ -44,18 +41,17 @@ public class GetGamesTest extends BaseStratInitControllerTest {
 
     @Test
     public void joinGameGetPlayerGames() {
-        List<SIGame> games = gameController.getJoinedGames().getValue();
+        List<SIGame> games = gameController.getJoinedGames();
         assertTrue(games.isEmpty());
-        Result<SINation> result = joinGamePlayerMe();
-        assertTrue(result.isSuccess());
-        assertEquals(nationMe.getPlayer().getUsername(), result.getValue().getName());
-        games = gameController.getJoinedGames().getValue();
+        SINation result = joinGamePlayerMe();
+        assertEquals(nationMe.getPlayer().getUsername(), result.getName());
+        games = gameController.getJoinedGames();
         assertEquals(1, games.size());
     }
 
     @Test
     public void getConfig() {
-        Properties properties = gameController.getServerConfig().getValue();
+        Properties properties = gameController.getServerConfig();
         assertEquals(Constants.SERVER_VERSION, properties.get("SERVER_VERSION"));
     }
 

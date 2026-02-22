@@ -22,11 +22,11 @@ export default function MessagesTab() {
     if (v === 'compose') return
     setLoading(true)
     try {
-      let result
-      if (v === 'inbox') result = await gameApi.getMail()
-      else if (v === 'sent') result = await gameApi.getSentMail()
-      else result = await gameApi.getAnnouncements()
-      if (result.success) setMessages(result.value)
+      let msgs: SIMessage[]
+      if (v === 'inbox') msgs = await gameApi.getMail()
+      else if (v === 'sent') msgs = await gameApi.getSentMail()
+      else msgs = await gameApi.getAnnouncements()
+      setMessages(msgs)
     } catch {
       // Silently fail
     }
@@ -52,13 +52,11 @@ export default function MessagesTab() {
     if (!subject.trim()) return
     setSending(true)
     try {
-      const result = await gameApi.sendMessage({ toNationId, subject, body })
-      if (result.success) {
-        setSubject('')
-        setBody('')
-        setToNationId(-1)
-        setView('sent')
-      }
+      await gameApi.sendMessage({ toNationId, subject, body })
+      setSubject('')
+      setBody('')
+      setToNationId(-1)
+      setView('sent')
     } catch {
       // Silently fail
     }

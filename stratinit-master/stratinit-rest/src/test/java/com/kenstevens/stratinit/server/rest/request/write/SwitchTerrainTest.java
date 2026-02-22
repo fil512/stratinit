@@ -1,8 +1,7 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
 import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.dto.SIUpdate;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.CommandFailedException;
 import com.kenstevens.stratinit.server.rest.TwoPlayerBase;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -10,6 +9,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SwitchTerrainTest extends TwoPlayerBase {
     private static final SectorCoords INLAND = new SectorCoords(1, 1);
@@ -24,8 +24,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
                 UnitType.ENGINEER);
 
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> switchTerrain(eng));
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
     }
 
@@ -35,8 +34,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
                 UnitType.TANK);
         tank.setMobility(tank.getMaxMobility());
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
-        Result<SIUpdate> result = switchTerrain(tank);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> switchTerrain(tank));
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
     }
 
@@ -49,8 +47,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
                 UnitType.INFANTRY);
 
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> switchTerrain(eng));
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
     }
 
@@ -61,8 +58,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
 
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(INLAND).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> switchTerrain(eng));
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(INLAND).getType());
     }
 
@@ -73,8 +69,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
 
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(COASTLAND).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertResult(result);
+        switchTerrain(eng);
         assertEquals(SectorType.WATER, testWorld.getSectorOrNull(COASTLAND).getType());
     }
 
@@ -85,8 +80,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
 
         assertEquals(SectorType.WATER, testWorld.getSectorOrNull(BEACHWATER).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertResult(result);
+        switchTerrain(eng);
         assertEquals(SectorType.LAND, testWorld.getSectorOrNull(BEACHWATER).getType());
     }
 
@@ -97,8 +91,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
 
         assertEquals(SectorType.WATER, testWorld.getSectorOrNull(DEEPSEA).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> switchTerrain(eng));
         assertEquals(SectorType.WATER, testWorld.getSectorOrNull(DEEPSEA).getType());
     }
 
@@ -109,8 +102,7 @@ public class SwitchTerrainTest extends TwoPlayerBase {
         eng.setMobility(eng.getMaxMobility());
 
         assertEquals(SectorType.NEUTRAL_CITY, testWorld.getSectorOrNull(CITY).getType());
-        Result<SIUpdate> result = switchTerrain(eng);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class, () -> switchTerrain(eng));
         assertEquals(SectorType.NEUTRAL_CITY, testWorld.getSectorOrNull(CITY).getType());
     }
 

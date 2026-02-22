@@ -54,6 +54,7 @@ stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server
 
 ```
 Controllers (GameController, UnitController, CityController, NationController, MessageController)
+  ↓ return DTOs directly (no Result<T> wrapper)
   ↓ thin lambdas via RequestProcessor (reads) / WriteProcessor (writes)
 REST Services (UnitSvc, CitySvc, NationSvc, RelationSvc)
   ↓ request-level orchestration
@@ -62,6 +63,12 @@ Domain Services (UnitService, CityService, RelationService, SectorService, ...)
 DAOs (UnitDao, CityDao, SectorDao, ...)
   ↓ cache + DB persistence via DataCache
 Spring Data JPA Repositories
+
+GlobalExceptionHandler (@ControllerAdvice)
+  ↓ centralized error handling
+  ├── CommandFailedException → HTTP 400 (business logic failures)
+  ├── StratInitException → HTTP 400 (validation errors)
+  └── Exception → HTTP 500 (unexpected errors)
 ```
 
 ## Tech Stack

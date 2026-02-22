@@ -9,8 +9,8 @@ import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.dto.*;
-import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.StratInitException;
 import com.kenstevens.stratinit.remote.request.ErrorJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
 import com.kenstevens.stratinit.server.service.GameService;
@@ -54,20 +54,19 @@ public class GameController {
     private StratInitSessionManager sessionManager;
 
     @GetMapping(path = SIRestPaths.VERSION)
-    public Result<String> getVersion() {
-        return Result.make(Constants.SERVER_VERSION);
+    public String getVersion() {
+        return Constants.SERVER_VERSION;
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BASE)
-    public Result<List<SIUnitBase>> getUnitBases() {
-        List<SIUnitBase> result = Arrays.stream(UnitType.values())
+    public List<SIUnitBase> getUnitBases() {
+        return Arrays.stream(UnitType.values())
                 .map(unitType -> new SIUnitBase(UnitBase.getUnitBase(unitType)))
                 .collect(Collectors.toList());
-        return Result.make(result);
     }
 
     @GetMapping(path = SIRestPaths.SERVER_CONFIG)
-    public Result<Properties> getServerConfig() {
+    public Properties getServerConfig() {
         Properties properties = new Properties();
         Class<Constants> clazz = Constants.class;
         for (Field field : clazz.getFields()) {
@@ -79,29 +78,29 @@ public class GameController {
             }
         }
         properties.setProperty(RunModeEnum.class.getSimpleName(), serverConfig.getRunMode().toString());
-        return Result.make(properties);
+        return properties;
     }
 
     @PostMapping(path = SIRestPaths.SET_GAME)
-    public Result<None> setGame(@RequestBody SetGameJson request) {
-        return writeProcessor.processForGame(request.gameId, session -> {
+    public void setGame(@RequestBody SetGameJson request) {
+        writeProcessor.processForGame(request.gameId, session -> {
             GameCache gameCache = dataCache.getGameCache(request.gameId);
             if (gameCache == null) {
-                return new Result<>("The game " + request.gameId + " does not exist.", false);
+                throw new StratInitException("The game " + request.gameId + " does not exist.");
             }
             Game game = gameCache.getGame();
             if (game == null) {
-                return new Result<>("The game " + request.gameId + " does not exist.", false);
+                throw new StratInitException("The game " + request.gameId + " does not exist.");
             }
             if (game.hasEnded()) {
-                return new Result<>("The game " + request.gameId + " has ended.", false);
+                throw new StratInitException("The game " + request.gameId + " has ended.");
             }
             if (!game.isMapped()) {
-                return new Result<>("The game " + request.gameId + " is not open yet.", false);
+                throw new StratInitException("The game " + request.gameId + " is not open yet.");
             }
             Nation nation = sessionManager.setNation(session.getPlayer(), request.gameId);
             if (nation == null || dataCache.getGameCache(nation.getGame()) == null) {
-                return new Result<>("You have not joined game #" + request.gameId + " (This error should never happen!)", false);
+                throw new StratInitException("You have not joined game #" + request.gameId + " (This error should never happen!)");
             }
             if (!game.hasStarted()) {
                 nation.setNoAlliances(request.noAlliances);
@@ -114,9 +113,12 @@ public class GameController {
     }
 
     @PostMapping(path = SIRestPaths.JOIN_GAME)
-    public Result<SINation> joinGame(@RequestBody SetGameJson request) {
+    public SINation joinGame(@RequestBody SetGameJson request) {
         return writeProcessor.processForGame(request.gameId, session -> {
             Result<Nation> result = gameService.joinGame(session.getPlayer(), request.gameId, request.noAlliances);
+            if (!result.isSuccess()) {
+                return new Result<SINation>(result);
+            }
             Nation nation = result.getValue();
             SINation siNation = nationSvc.nationToSINation(nation, nation, false, false);
             return new Result<>(result, siNation);
@@ -124,12 +126,12 @@ public class GameController {
     }
 
     @GetMapping(path = SIRestPaths.GAME_JOINED)
-    public Result<List<SIGame>> getJoinedGames() {
+    public List<SIGame> getJoinedGames() {
         return requestProcessor.processNoGame(player -> nationSvc.getJoinedGames(player));
     }
 
     @GetMapping(path = SIRestPaths.GAME_UNJOINED)
-    public Result<List<SIGame>> getUnjoinedGames() {
+    public List<SIGame> getUnjoinedGames() {
         return requestProcessor.processNoGame(player ->
                 gameService.getUnjoinedGames(player).stream()
                         .map(game -> new SIGame(game, false))
@@ -137,17 +139,17 @@ public class GameController {
     }
 
     @GetMapping(path = SIRestPaths.UPDATE)
-    public Result<SIUpdate> getUpdate() {
+    public SIUpdate getUpdate() {
         return requestProcessor.process(nation -> playerWorldViewUpdate.getWorldViewUpdate(nation));
     }
 
     @GetMapping(path = SIRestPaths.CONCEDE)
-    public Result<SIUpdate> concede() {
+    public SIUpdate concede() {
         return writeProcessor.process(nation -> nationSvc.concede(nation), 0);
     }
 
     @PostMapping(path = SIRestPaths.SUBMIT_ERROR)
-    public Result<Integer> submitError(@RequestBody ErrorJson request) {
+    public Integer submitError(@RequestBody ErrorJson request) {
         return errorProcessor.processError(request.subject, request.stackTrace);
     }
 }

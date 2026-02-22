@@ -20,20 +20,20 @@ public class JoinGameTest extends BaseStratInitControllerTest {
 
     @Test
     public void getJoinedGames() {
-        List<SIGame> games = gameController.getJoinedGames().getValue();
+        List<SIGame> games = gameController.getJoinedGames();
         assertEquals(1, games.size());
         assertEquals(1, games.get(0).players);
     }
 
     @Test
     public void getSectors() {
-        List<SISector> sectors = nationController.getSectors().getValue();
+        List<SISector> sectors = nationController.getSectors();
         assertEquals(49, sectors.size());
     }
 
     @Test
     public void getCities() {
-        List<SICityUpdate> cities = cityController.getCities().getValue();
+        List<SICityUpdate> cities = cityController.getCities();
         assertEquals(2, cities.size());
         SICityUpdate fort;
         SICityUpdate tech;
@@ -51,7 +51,7 @@ public class JoinGameTest extends BaseStratInitControllerTest {
 
     @Test
     public void getUnits() {
-        List<SIUnit> units = unitController.getUnits().getValue();
+        List<SIUnit> units = unitController.getUnits();
         assertEquals(5, units.size());
         int infantry = 0;
         int zeppelins = 0;
@@ -71,7 +71,7 @@ public class JoinGameTest extends BaseStratInitControllerTest {
 
     @Test
     public void getNations() {
-        List<SINation> nations = nationController.getNations().getValue();
+        List<SINation> nations = nationController.getNations();
         assertEquals(1, nations.size());
     }
 

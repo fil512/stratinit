@@ -151,7 +151,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 5. Replace Result/Request Pattern with Spring Idioms
 
-**Status: DONE — all request infrastructure eliminated**
+**Status: DONE — request infrastructure eliminated, Result wrapper removed from REST API**
 
 **What's done:**
 - Created `RequestProcessor` service replacing `PlayerRequest` boilerplate for GET endpoints with `process(Function<Nation, T>)`, `processNoGame(Function<Player, T>)`, and `processWithGame(Function<Game, T>)` methods
@@ -161,17 +161,24 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Small write operations inlined as controller lambdas: sendMessage, getMail, getBattleLog, setGame, joinGame
 - Deleted 17 write request class files + `PlayerWriteRequest` + `PlayerRequest` + `RequestFactory` + `BuildRequest`
 - `DataWriter` + `SynchronizedDataAccess` deleted — sync logic inlined directly into `EventUpdate.update()`
+- **Controllers return `T` directly** instead of `Result<T>` — the `Result` wrapper is no longer part of the REST API
+- **`@RestControllerAdvice` (`GlobalExceptionHandler`)** handles all exceptions centrally: `CommandFailedException` → HTTP 400, `StratInitException` → HTTP 400, unexpected exceptions → HTTP 500 with error email
+- **Exception hierarchy:** `StratInitException` (base), `CommandFailedException` (wraps failed `Result` with messages list), `InsufficientCommandPointsException` (command point validation)
+- **`WriteProcessor` unwraps `Result<T>`** from service lambdas: on failure throws `CommandFailedException`, on success returns `result.getValue()`
+- **React frontend updated:** removed `Result<T>` interface from TypeScript types, all API calls return `T` directly, error handling uses HTTP status codes
+- **`Result.java` cleaned up:** removed `commandPoints` and `runMode` fields (no longer serialized to clients). `Result<T>` is still used internally by ~105 service-layer sites.
 - All 426 tests passing
 
 **What remains:**
-- Return domain DTOs directly from controller methods instead of `Result<T>` (requires coordinated frontend changes)
-- Move error handling to `@ControllerAdvice` with `@ExceptionHandler` methods
 - Deliver battle logs and game events via WebSocket instead of piggybacking on REST responses
 
 **Key files:**
 - `stratinit-server/.../rest/request/RequestProcessor.java` (replaces PlayerRequest for reads)
-- `stratinit-server/.../rest/request/WriteProcessor.java` (replaces PlayerWriteRequest for writes)
-- `stratinit-core/.../remote/Result.java` (618-line god object — still used)
+- `stratinit-server/.../rest/request/WriteProcessor.java` (replaces PlayerWriteRequest for writes, unwraps Result)
+- `stratinit-rest/.../controller/GlobalExceptionHandler.java` (@ControllerAdvice for centralized error handling)
+- `stratinit-rest/.../controller/ErrorResponse.java` (error response record)
+- `stratinit-core/.../remote/exception/StratInitException.java`, `CommandFailedException.java`, `InsufficientCommandPointsException.java` (exception hierarchy)
+- `stratinit-core/.../remote/Result.java` (service-layer internal use only)
 - `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java`
 
 ---
@@ -363,3 +370,25 @@ Each phase builds on the previous. Phase 1 items are low-risk, mechanical change
 | `stratinit-server/.../service/CityService.java` | Edit: inlined canEstablishCity logic (was CityDaoService) | 4 |
 | `stratinit-server/.../service/*.java` | Renamed: `*DaoService` → `*Service`, package `daoservice` → `service` (~140 files) | 4 |
 | `stratinit-server/.../service/BattleLogService.java` | Renamed from `LogDaoService` | 4 |
+| `stratinit-core/.../remote/exception/StratInitException.java` | New: base exception for business errors | 5 |
+| `stratinit-core/.../remote/exception/CommandFailedException.java` | New: wraps failed Result with messages | 5 |
+| `stratinit-core/.../remote/exception/InsufficientCommandPointsException.java` | New: command point validation | 5 |
+| `stratinit-rest/.../controller/GlobalExceptionHandler.java` | New: @RestControllerAdvice centralized error handling | 5 |
+| `stratinit-rest/.../controller/ErrorResponse.java` | New: error response record | 5 |
+| `stratinit-core/.../remote/Result.java` | Edit: removed commandPoints, runMode fields | 5 |
+| `stratinit-server/.../rest/request/RequestProcessor.java` | Edit: returns T directly, throws on errors | 5 |
+| `stratinit-server/.../rest/request/WriteProcessor.java` | Edit: returns T directly, unwraps Result | 5 |
+| `stratinit-rest/.../controller/GameController.java` | Edit: returns T directly instead of Result<T> | 5 |
+| `stratinit-rest/.../controller/UnitController.java` | Edit: returns T directly instead of Result<T> | 5 |
+| `stratinit-rest/.../controller/CityController.java` | Edit: returns T directly instead of Result<T> | 5 |
+| `stratinit-rest/.../controller/NationController.java` | Edit: returns T directly instead of Result<T> | 5 |
+| `stratinit-rest/.../controller/MessageController.java` | Edit: returns T directly instead of Result<T> | 5 |
+| `stratinit-server/.../rest/svc/ErrorProcessor.java` | Edit: returns Integer directly instead of Result | 5 |
+| `stratinit-ui/src/api/client.ts` | Edit: enhanced error extraction, handles empty responses | 5 |
+| `stratinit-ui/src/api/game.ts` | Edit: all API calls return T directly | 5 |
+| `stratinit-ui/src/types/game.ts` | Edit: deleted Result<T> interface | 5 |
+| `stratinit-ui/src/context/GameContext.tsx` | Edit: removed result.success/result.value unwrapping | 5 |
+| `stratinit-ui/src/pages/GameListPage.tsx` | Edit: removed Result wrapper | 5 |
+| `stratinit-ui/src/pages/GamePage.tsx` | Edit: removed Result wrapper | 5 |
+| `stratinit-ui/src/components/tabs/NewsTab.tsx` | Edit: removed Result wrapper | 5 |
+| `stratinit-ui/src/components/tabs/MessagesTab.tsx` | Edit: removed Result wrapper | 5 |

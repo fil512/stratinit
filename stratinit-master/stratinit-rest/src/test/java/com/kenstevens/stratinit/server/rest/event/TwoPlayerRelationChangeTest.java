@@ -1,12 +1,14 @@
 package com.kenstevens.stratinit.server.rest.event;
 
-import com.kenstevens.stratinit.dto.SIRelation;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.CommandFailedException;
+import com.kenstevens.stratinit.remote.request.SetRelationJson;
 import com.kenstevens.stratinit.type.RelationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TwoPlayerRelationChangeTest extends RelationManagerTest {
 
@@ -35,8 +37,8 @@ public class TwoPlayerRelationChangeTest extends RelationManagerTest {
 
     @Test
     public void neutralToMe() {
-        Result<SIRelation> result = setRelation(nationThemId, RelationType.ME);
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class,
+                () -> nationController.setRelation(new SetRelationJson(nationThemId, RelationType.ME)));
     }
 
     @Test

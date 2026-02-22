@@ -4,17 +4,16 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.client.util.StackTraceHelper;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.CommandFailedException;
+import com.kenstevens.stratinit.remote.exception.InsufficientCommandPointsException;
+import com.kenstevens.stratinit.remote.exception.StratInitException;
 import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.service.PlayerService;
-import com.kenstevens.stratinit.server.rest.mail.SMTPService;
 import com.kenstevens.stratinit.server.rest.session.PlayerSession;
 import com.kenstevens.stratinit.server.rest.session.PlayerSessionFactory;
 import com.kenstevens.stratinit.server.rest.state.ServerStatus;
 import com.kenstevens.stratinit.server.rest.svc.GameNotificationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +22,11 @@ import java.util.function.Function;
 
 @Service
 public class WriteProcessor {
-    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private PlayerSessionFactory playerSessionFactory;
     @Autowired
     private ServerStatus serverStatus;
-    @Autowired
-    private SMTPService smtpService;
     @Autowired
     private DataCache dataCache;
     @Autowired
@@ -42,90 +38,61 @@ public class WriteProcessor {
 
     public record CommandResult<T>(Result<T> result, int commandCost) {}
 
-    public <T> Result<T> process(Function<Nation, Result<T>> action, int commandCost) {
-        try {
-            if (!serverStatus.isRunning()) {
-                return new Result<>("The server is not running.  Server is " + serverStatus.getState(), false);
-            }
-            PlayerSession session = playerSessionFactory.getPlayerSession();
-            Nation nation = session.getNation();
-            if (nation == null || session.getGame() == null) {
-                return new Result<>("Game not set.", false);
-            }
-            Game game = session.getGame();
-            GameCache gameCache = dataCache.getGameCache(game);
-            synchronized (gameCache) {
-                return executeWrite(nation, game, action, commandCost);
-            }
-        } catch (Exception e) {
-            return handleException(e);
+    public <T> T process(Function<Nation, Result<T>> action, int commandCost) {
+        checkServerRunning();
+        PlayerSession session = playerSessionFactory.getPlayerSession();
+        Nation nation = session.getNation();
+        if (nation == null || session.getGame() == null) {
+            throw new StratInitException("Game not set.");
+        }
+        Game game = session.getGame();
+        GameCache gameCache = dataCache.getGameCache(game);
+        synchronized (gameCache) {
+            return executeWrite(nation, game, action, commandCost);
         }
     }
 
-    public <T> Result<T> processForGame(int gameId, Function<PlayerSession, Result<T>> action) {
-        try {
-            if (!serverStatus.isRunning()) {
-                return new Result<>("The server is not running.  Server is " + serverStatus.getState(), false);
-            }
-            PlayerSession session = playerSessionFactory.getPlayerSession();
-            session.setGame(gameId);
-            GameCache gameCache = dataCache.getGameCache(gameId);
-            if (gameCache == null) {
-                return new Result<>("Game not set.", false);
-            }
-            synchronized (gameCache) {
-                Result<T> result = action.apply(session);
-                Nation nation = session.getNation();
-                if (nation != null) {
-                    result.setCommandPoints(nation.getCommandPoints());
-                }
-                return result;
-            }
-        } catch (Exception e) {
-            return handleException(e);
+    public <T> T processForGame(int gameId, Function<PlayerSession, Result<T>> action) {
+        checkServerRunning();
+        PlayerSession session = playerSessionFactory.getPlayerSession();
+        session.setGame(gameId);
+        GameCache gameCache = dataCache.getGameCache(gameId);
+        if (gameCache == null) {
+            throw new StratInitException("Game not set.");
+        }
+        synchronized (gameCache) {
+            Result<T> result = action.apply(session);
+            return unwrapResult(result);
         }
     }
 
-    public <T> Result<T> processDynamicCost(Function<Nation, CommandResult<T>> action, int preCheckCost) {
-        try {
-            if (!serverStatus.isRunning()) {
-                return new Result<>("The server is not running.  Server is " + serverStatus.getState(), false);
+    public <T> T processDynamicCost(Function<Nation, CommandResult<T>> action, int preCheckCost) {
+        checkServerRunning();
+        PlayerSession session = playerSessionFactory.getPlayerSession();
+        Nation nation = session.getNation();
+        if (nation == null || session.getGame() == null) {
+            throw new StratInitException("Game not set.");
+        }
+        Game game = session.getGame();
+        GameCache gameCache = dataCache.getGameCache(game);
+        synchronized (gameCache) {
+            if (preCheckCost > 0) {
+                checkCommandPoints(nation, preCheckCost);
             }
-            PlayerSession session = playerSessionFactory.getPlayerSession();
-            Nation nation = session.getNation();
-            if (nation == null || session.getGame() == null) {
-                return new Result<>("Game not set.", false);
+            setLastAction(nation);
+            CommandResult<T> commandResult = action.apply(nation);
+            Result<T> result = commandResult.result();
+            if (result.isSuccess()) {
+                nation.decreaseCommandPoints(commandResult.commandCost());
+                gameNotificationService.notifyGameUpdate(game.getId(), nation.getNationId());
             }
-            Game game = session.getGame();
-            GameCache gameCache = dataCache.getGameCache(game);
-            synchronized (gameCache) {
-                if (preCheckCost > 0) {
-                    Result<T> costCheck = checkCommandPoints(nation, preCheckCost);
-                    if (costCheck != null) {
-                        return costCheck;
-                    }
-                }
-                setLastAction(nation);
-                CommandResult<T> commandResult = action.apply(nation);
-                Result<T> result = commandResult.result();
-                if (result.isSuccess()) {
-                    nation.decreaseCommandPoints(commandResult.commandCost());
-                    gameNotificationService.notifyGameUpdate(game.getId(), nation.getNationId());
-                }
-                result.setCommandPoints(nation.getCommandPoints());
-                return result;
-            }
-        } catch (Exception e) {
-            return handleException(e);
+            return unwrapResult(result);
         }
     }
 
-    private <T> Result<T> executeWrite(Nation nation, Game game, Function<Nation, Result<T>> action, int commandCost) {
+    private <T> T executeWrite(Nation nation, Game game, Function<Nation, Result<T>> action, int commandCost) {
         if (commandCost > 0) {
-            Result<T> costCheck = checkCommandPoints(nation, commandCost);
-            if (costCheck != null) {
-                return costCheck;
-            }
+            checkCommandPoints(nation, commandCost);
         }
         setLastAction(nation);
         Result<T> result = action.apply(nation);
@@ -135,18 +102,24 @@ public class WriteProcessor {
         if (result.isSuccess()) {
             gameNotificationService.notifyGameUpdate(game.getId(), nation.getNationId());
         }
-        result.setCommandPoints(nation.getCommandPoints());
-        return result;
+        return unwrapResult(result);
     }
 
-    private <T> Result<T> checkCommandPoints(Nation nation, int commandCost) {
+    private <T> T unwrapResult(Result<T> result) {
+        if (!result.isSuccess()) {
+            throw new CommandFailedException(result.getMessages());
+        }
+        return result.getValue();
+    }
+
+    private void checkCommandPoints(Nation nation, int commandCost) {
         if (nation.getCommandPoints() <= 0) {
-            return new Result<>("You are out of command points.", false);
+            throw new InsufficientCommandPointsException("You are out of command points.");
         }
         if (nation.getCommandPoints() < commandCost) {
-            return new Result<>("Insufficient command points.  Need " + commandCost + " have " + nation.getCommandPoints() + ".", false);
+            throw new InsufficientCommandPointsException(
+                    "Insufficient command points.  Need " + commandCost + " have " + nation.getCommandPoints() + ".");
         }
-        return null;
     }
 
     private void setLastAction(Nation nation) {
@@ -159,13 +132,9 @@ public class WriteProcessor {
         playerService.setLastLogin(nation.getPlayer(), now);
     }
 
-    private <T> Result<T> handleException(Exception e) {
-        String message = e.getMessage();
-        if (message == null) {
-            message = e.getClass().getName();
+    private void checkServerRunning() {
+        if (!serverStatus.isRunning()) {
+            throw new StratInitException("The server is not running.  Server is " + serverStatus.getState());
         }
-        logger.error(message, e);
-        smtpService.sendException("Stratinit WriteProcessor Exception", StackTraceHelper.getStackTrace(e));
-        return new Result<>(message, false);
     }
 }

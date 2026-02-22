@@ -59,10 +59,9 @@ public class MoveUnitsTest extends WithUnitsBase {
     public void canMove() {
         List<SIUnit> units = makeUnitList(testInfantry);
         SectorCoords target = new SectorCoords(0, 2);
-        Result<SIUpdate> result = unitController.moveUnits(new MoveUnitsJson(units, target));
-        assertResult(result);
-        assertCoords(result, testInfantryId, target);
-        List<SISector> sisectors = result.getValue().sectors;
+        SIUpdate update = unitController.moveUnits(new MoveUnitsJson(units, target));
+        assertCoords(update, testInfantryId, target);
+        List<SISector> sisectors = update.sectors;
         for (SISector sisector : sisectors) {
             if (sisector.coords.equals(target)) {
                 assertEquals(testInfantry.getType(), sisector.topUnitType);
@@ -98,9 +97,8 @@ public class MoveUnitsTest extends WithUnitsBase {
     @Test
     public void landEmptyTransport() {
         List<SIUnit> units = makeUnitList(testInfantry);
-        Result<SIUpdate> result = unitController.moveUnits(new MoveUnitsJson(units, SEA1));
-        assertResult(result);
-        assertCoords(result, testInfantryId, SEA1);
+        SIUpdate update = unitController.moveUnits(new MoveUnitsJson(units, SEA1));
+        assertCoords(update, testInfantryId, SEA1);
     }
 
     @Test
@@ -162,8 +160,8 @@ public class MoveUnitsTest extends WithUnitsBase {
         assertFalse(SEA1.equals(tank.getCoords()));
     }
 
-    private void assertCoords(Result<SIUpdate> result, int unitId, SectorCoords target) {
-        List<SIUnit> units = result.getValue().units;
+    private void assertCoords(SIUpdate update, int unitId, SectorCoords target) {
+        List<SIUnit> units = update.units;
         for (SIUnit unit : units) {
             if (unit.id == unitId) {
                 assertEquals(target, unit.coords);

@@ -9,9 +9,9 @@ export default function NewsTab() {
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    gameApi.getNewsLogs().then(result => {
+    gameApi.getNewsLogs().then(days => {
       if (cancelled) return
-      if (result.success) setDays(result.value)
+      setDays(days)
       setLoading(false)
     }).catch(() => {
       if (!cancelled) setLoading(false)

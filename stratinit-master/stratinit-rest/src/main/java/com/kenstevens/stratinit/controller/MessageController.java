@@ -38,7 +38,7 @@ public class MessageController {
     private GameService gameService;
 
     @PostMapping(path = SIRestPaths.SEND_MESSAGE)
-    public Result<Integer> sendMessage(@RequestBody SIMessage simessage) {
+    public Integer sendMessage(@RequestBody SIMessage simessage) {
         return writeProcessor.process(nation -> {
             Nation to = null;
             if (simessage.toNationId != Constants.UNASSIGNED) {
@@ -50,7 +50,7 @@ public class MessageController {
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_MAIL)
-    public Result<List<SIMessage>> getMail() {
+    public List<SIMessage> getMail() {
         return writeProcessor.process(nation -> {
             nation.setNewMail(false);
             gameService.merge(nation);
@@ -60,25 +60,25 @@ public class MessageController {
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_SENT)
-    public Result<List<SIMessage>> getSentMail() {
+    public List<SIMessage> getSentMail() {
         return requestProcessor.process(nation ->
                 playerMessageList.messagesToSIMessages(messageDao.getSentMail(nation)));
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE)
-    public Result<List<SIMessage>> getMessages() {
+    public List<SIMessage> getMessages() {
         return requestProcessor.process(nation ->
                 playerMessageList.messagesToSIMessages(messageDao.getMessages(nation)));
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_ANNOUNCEMENT)
-    public Result<List<SIMessage>> getAnnouncements() {
+    public List<SIMessage> getAnnouncements() {
         return requestProcessor.processWithGame(game ->
                 playerMessageList.messagesToSIMessages(messageDao.getAnnouncements(game)));
     }
 
     @GetMapping(path = SIRestPaths.NEWS_LOG)
-    public Result<List<SINewsLogsDay>> getNewsLogs() {
+    public List<SINewsLogsDay> getNewsLogs() {
         return requestProcessor.processWithGame(game -> messageService.getNewsLogs(game));
     }
 }

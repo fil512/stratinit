@@ -2,7 +2,6 @@ package com.kenstevens.stratinit.server.rest.attack;
 
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dto.SICityUpdate;
-import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.helper.PlayerHelper;
@@ -69,14 +68,14 @@ public class LaunchTest extends TwoPlayerBase {
     public void satSeesSectors() {
         Unit sat = unitService.buildUnit(nationMe, CITY,
                 UnitType.SATELLITE);
-        List<SISector> sseen = nationController.getSectors().getValue();
-        List<SICityUpdate> cseen = cityController.getSeenCities().getValue();
-        List<SIUnit> useen = unitController.getSeenUnits().getValue();
+        List<SISector> sseen = nationController.getSectors();
+        List<SICityUpdate> cseen = cityController.getSeenCities();
+        List<SIUnit> useen = unitController.getSeenUnits();
         Result<MoveCost> result = moveUnits(makeUnitList(sat), ECITY);
         assertResult(result);
-        List<SISector> sseen2 = nationController.getSectors().getValue();
-        List<SICityUpdate> cseen2 = cityController.getSeenCities().getValue();
-        List<SIUnit> useen2 = unitController.getSeenUnits().getValue();
+        List<SISector> sseen2 = nationController.getSectors();
+        List<SICityUpdate> cseen2 = cityController.getSeenCities();
+        List<SIUnit> useen2 = unitController.getSeenUnits();
         assertTrue(sseen2.size() > sseen.size());
         assertTrue(cseen2.size() > cseen.size());
         assertTrue(useen2.size() > useen.size());
@@ -87,11 +86,11 @@ public class LaunchTest extends TwoPlayerBase {
     public void satSeesUnits() {
         Unit sat = unitService.buildUnit(nationMe, CITY,
                 UnitType.SATELLITE);
-        List<SIUnit> unitsSeen = unitController.getSeenUnits().getValue();
+        List<SIUnit> unitsSeen = unitController.getSeenUnits();
         assertEquals(0, unitsSeen.size());
         Result<MoveCost> result = moveUnits(makeUnitList(sat), BYCITY);
         assertResult(result);
-        unitsSeen = unitController.getSeenUnits().getValue();
+        unitsSeen = unitController.getSeenUnits();
         assertEquals(5, unitsSeen.size());
     }
 
@@ -100,11 +99,11 @@ public class LaunchTest extends TwoPlayerBase {
         Unit sat = unitService.buildUnit(nationMe, CITY,
                 UnitType.SATELLITE);
         Unit inf = unitService.buildUnit(nationThem, ECITY, UnitType.INFANTRY);
-        List<SIUnit> unitsSeen = unitController.getSeenUnits().getValue();
+        List<SIUnit> unitsSeen = unitController.getSeenUnits();
         assertEquals(0, unitsSeen.size());
         Result<MoveCost> result = moveUnits(makeUnitList(sat), OUTCITY);
         assertResult(result);
-        unitsSeen = unitController.getSeenUnits().getValue();
+        unitsSeen = unitController.getSeenUnits();
         assertEquals(0, unitsSeen.size());
         result = moveUnits(nationThem, makeUnitList(inf), ECITYW);
         assertResult(result);
@@ -112,7 +111,7 @@ public class LaunchTest extends TwoPlayerBase {
         assertEquals(ECITYW, inf.getCoords());
         Collection<SectorSeen> sectorsSeen = sectorDao.getSectorsSeen(nationMe);
         assertTrue(contains(sectorsSeen, ECITYW));
-        unitsSeen = unitController.getSeenUnits().getValue();
+        unitsSeen = unitController.getSeenUnits();
         assertEquals(1, unitsSeen.size());
     }
 
@@ -129,14 +128,13 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void allyNoSeesSectors() {
-        List<SISector> sseen = nationController.getSectors().getValue();
-        List<SICityUpdate> cseen = cityController.getSeenCities().getValue();
-        List<SIUnit> useen = unitController.getSeenUnits().getValue();
-        Result<SIRelation> result = setRelation(nationThemId, RelationType.ALLIED);
-        assertResult(result);
-        List<SISector> sseen2 = nationController.getSectors().getValue();
-        List<SICityUpdate> cseen2 = cityController.getSeenCities().getValue();
-        List<SIUnit> useen2 = unitController.getSeenUnits().getValue();
+        List<SISector> sseen = nationController.getSectors();
+        List<SICityUpdate> cseen = cityController.getSeenCities();
+        List<SIUnit> useen = unitController.getSeenUnits();
+        setRelation(nationThemId, RelationType.ALLIED);
+        List<SISector> sseen2 = nationController.getSectors();
+        List<SICityUpdate> cseen2 = cityController.getSeenCities();
+        List<SIUnit> useen2 = unitController.getSeenUnits();
         assertFalse(sseen2.size() > sseen.size());
         assertFalse(cseen2.size() > cseen.size());
         assertFalse(useen2.size() > useen.size());
@@ -144,18 +142,16 @@ public class LaunchTest extends TwoPlayerBase {
 
     @Test
     public void alliedSeesSectors() {
-        List<SISector> sseen = nationController.getSectors().getValue();
-        List<SICityUpdate> cseen = cityController.getSeenCities().getValue();
-        List<SIUnit> useen = unitController.getSeenUnits().getValue();
+        List<SISector> sseen = nationController.getSectors();
+        List<SICityUpdate> cseen = cityController.getSeenCities();
+        List<SIUnit> useen = unitController.getSeenUnits();
         setAuthentication(PLAYER_THEM_NAME);
-        Result<SIRelation> result = setRelation(nationMeId, RelationType.ALLIED);
-        assertResult(result);
+        setRelation(nationMeId, RelationType.ALLIED);
         setAuthentication(PlayerHelper.PLAYER_ME);
-        result = setRelation(nationThemId, RelationType.ALLIED);
-        assertResult(result);
-        List<SISector> sseen2 = nationController.getSectors().getValue();
-        List<SICityUpdate> cseen2 = cityController.getSeenCities().getValue();
-        List<SIUnit> useen2 = unitController.getSeenUnits().getValue();
+        setRelation(nationThemId, RelationType.ALLIED);
+        List<SISector> sseen2 = nationController.getSectors();
+        List<SICityUpdate> cseen2 = cityController.getSeenCities();
+        List<SIUnit> useen2 = unitController.getSeenUnits();
         assertTrue(sseen2.size() > sseen.size());
         assertTrue(cseen2.size() > cseen.size());
         assertTrue(useen2.size() > useen.size());

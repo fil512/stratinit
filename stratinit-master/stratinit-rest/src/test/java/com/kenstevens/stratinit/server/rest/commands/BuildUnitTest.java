@@ -3,7 +3,7 @@ package com.kenstevens.stratinit.server.rest.commands;
 import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.dto.SICityUpdate;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
-import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.CommandFailedException;
 import com.kenstevens.stratinit.remote.request.UpdateCityJson;
 import com.kenstevens.stratinit.type.CityType;
 import com.kenstevens.stratinit.type.UnitType;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BuildUnitTest extends BaseStratInitControllerTest {
     private SICityUpdate sicity;
@@ -21,53 +21,50 @@ public class BuildUnitTest extends BaseStratInitControllerTest {
     @BeforeEach
     public void doJoinGame() throws InterruptedException {
         joinGamePlayerMe();
-        List<SICityUpdate> cities = cityController.getCities().getValue();
+        List<SICityUpdate> cities = cityController.getCities();
         sicity = cities.get(0);
     }
 
     @Test
     public void airport() {
         sicity.build = UnitType.FIGHTER;
-        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class,
+                () -> cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD)));
     }
 
     @Test
     public void tech() {
         sicity.build = UnitType.ZEPPELIN;
-        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
-        assertTrue(result.isSuccess());
-        assertEquals(UnitType.ZEPPELIN, result.getValue().build);
-        assertEquals(CityType.TECH, result.getValue().type);
+        SICityUpdate result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        assertEquals(UnitType.ZEPPELIN, result.build);
+        assertEquals(CityType.TECH, result.type);
     }
 
     @Test
     public void noWater() {
         sicity.build = UnitType.PATROL;
-        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class,
+                () -> cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD)));
     }
 
     @Test
     public void insufficientTech() {
         sicity.build = UnitType.TANK;
-        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
-        assertFalseResult(result);
+        assertThrows(CommandFailedException.class,
+                () -> cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD)));
     }
 
     @Test
     public void fort() {
         sicity.build = UnitType.ZEPPELIN;
-        Result<SICityUpdate> result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
-        assertTrue(result.isSuccess());
-        assertEquals(UnitType.ZEPPELIN, result.getValue().build);
-        assertEquals(CityType.TECH, result.getValue().type);
+        SICityUpdate result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
+        assertEquals(UnitType.ZEPPELIN, result.build);
+        assertEquals(CityType.TECH, result.type);
 
         sicity.build = UnitType.INFANTRY;
         result = cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.BUILD));
-        assertTrue(result.isSuccess());
-        assertEquals(UnitType.INFANTRY, result.getValue().build);
-        assertEquals(CityType.FORT, result.getValue().type);
+        assertEquals(UnitType.INFANTRY, result.build);
+        assertEquals(CityType.FORT, result.type);
     }
 
 }

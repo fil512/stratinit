@@ -45,8 +45,8 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 	@Autowired
 	private MoveService moveService;
 
-	protected Result<SINation> joinGamePlayerMe() {
-		Result<SINation> retval = joinGame(playerMe);
+	protected SINation joinGamePlayerMe() {
+		SINation retval = joinGame(playerMe);
 		nationMe = nationDao.findNation(testGameId, playerMe);
 		setAuthentication(PlayerHelper.PLAYER_ME);
 		return retval;
@@ -59,13 +59,16 @@ public abstract class BaseStratInitControllerTest extends StratInitDaoBase {
 
     protected void setAuthentication(String username) {
 		new AuthenticationHelper().setAuthentication(username);
-		gameController.setGame(new SetGameJson(testGameId, false));
+		try {
+			gameController.setGame(new SetGameJson(testGameId, false));
+		} catch (Exception e) {
+			// Ignore — player may not have joined the game yet
+		}
     }
 
-    protected Result<SINation> joinGame(Player player) {
+    protected SINation joinGame(Player player) {
 		setAuthentication(player.getUsername());
-		Result<SINation> result = gameController.joinGame(new SetGameJson(testGameId, false));
-		assertResult(result);
+		SINation result = gameController.joinGame(new SetGameJson(testGameId, false));
 		return result;
 	}
 
