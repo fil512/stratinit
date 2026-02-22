@@ -55,7 +55,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 - **Spring Boot 3.5** with Spring Security, Spring Data JPA, WebSocket (STOMP)
 - **Jakarta EE** namespace (`jakarta.persistence.*`, `jakarta.annotation.*`)
 - **QueryDSL 5.1** with Jakarta classifier (Q-classes generated via APT)
-- **React 18** + TypeScript + Vite + Tailwind CSS for SPA frontend
+- **React 18** + TypeScript + Vite + Tailwind CSS + Recharts for SPA frontend
 - **JWT authentication** (JJWT 0.12.6) with HTTP Basic fallback
 - **PostgreSQL** (production) / **H2** (tests)
 - **Flyway 11** for database migrations (`stratinit-dao/src/main/resources/db/migration/`)
@@ -83,7 +83,7 @@ Dependencies flow downward. `stratinit-client-master/` is a separate module tree
 
 **REST paths:** Defined in `SIRestPaths`, base path `/stratinit/`. Server runs on port 8081.
 
-**React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven. Routes: `/login`, `/register`, `/games` (joined + available games with join), `/game/:gameId` (gameplay), `/leaderboard`, `/rankings`. Game page renders HTML5 Canvas map with side panel (7 tabs: Sector, Units, Cities, Battle, Players, Mail, News). State managed via `GameContext` (`useReducer`) with coord-keyed lookup maps. TypeScript types in `src/types/game.ts` mirror Java DTOs. Unit commands (disband, cancel move, build city, switch terrain, cede) in Units tab. Concede button in Players tab. Messaging (inbox, sent, announcements, compose) in Mail tab. News log viewer in News tab.
+**React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven. Routes: `/login`, `/register`, `/games` (joined + available games with join), `/game/:gameId` (gameplay), `/leaderboard`, `/rankings`, `/stats` and `/stats/:gameId` (unit statistics charts). Game page renders HTML5 Canvas map with side panel (7 tabs: Sector, Units, Cities, Battle, Players, Mail, News). State managed via `GameContext` (`useReducer`) with coord-keyed lookup maps. TypeScript types in `src/types/game.ts` mirror Java DTOs. Unit commands (disband, cancel move, build city, switch terrain, cede) in Units tab. Concede button in Players tab. Messaging (inbox, sent, announcements, compose) in Mail tab. News log viewer in News tab. Unit statistics page with Recharts pie chart (unit love metric) and stacked area charts (units built per day by LAND/NAVY/AIR/TECH category).
 
 ## Testing
 

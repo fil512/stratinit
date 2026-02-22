@@ -2,7 +2,7 @@ import { apiFetch } from './client'
 import type {
   SIUpdate, SIUnitBase, SIUnit, SICityUpdate, SIRelation,
   SectorCoords, RelationType, SIGame, SINation, SIMessage, SINewsLogsDay,
-  SIPlayerRank, SITeamRank,
+  SIPlayerRank, SITeamRank, SIUnitLove, SIUnitDayRow, SIGameHistory,
 } from '../types/game'
 
 export function setGame(gameId: number) {
@@ -131,4 +131,20 @@ export function getLeaderboard() {
 
 export function getTeamRankings() {
   return apiFetch<SITeamRank[]>('/stratinit/rankings/team')
+}
+
+export function getCompletedGames() {
+  return apiFetch<SIGameHistory[]>('/stratinit/stats/games')
+}
+
+export function getGamePlayers(gameId: number) {
+  return apiFetch<string[]>(`/stratinit/stats/players?gameId=${gameId}`)
+}
+
+export function getGameUnitLove(gameId: number) {
+  return apiFetch<SIUnitLove[]>(`/stratinit/stats/game-units?gameId=${gameId}`)
+}
+
+export function getPlayerUnits(gameId: number, unitBaseType: string, username: string) {
+  return apiFetch<SIUnitDayRow[]>(`/stratinit/stats/player-units?gameId=${gameId}&unitBaseType=${unitBaseType}&username=${encodeURIComponent(username)}`)
 }

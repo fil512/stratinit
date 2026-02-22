@@ -269,6 +269,25 @@ export interface SITeamRank {
   }
 }
 
+// Unit statistics
+export interface SIUnitLove {
+  unitType: string
+  love: number
+}
+
+export interface SIUnitDayRow {
+  day: number
+  counts: Record<string, number>
+}
+
+export interface SIGameHistory {
+  gameId: number
+  gamename: string
+  gamesize: number
+  startTime: string | null
+  ends: string | null
+}
+
 export interface SINewsLogsDay {
   day: number
   bulletins: SINewsBulletin[]

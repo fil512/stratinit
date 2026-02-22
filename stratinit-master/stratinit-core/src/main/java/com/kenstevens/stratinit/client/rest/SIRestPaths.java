@@ -46,4 +46,8 @@ public class SIRestPaths {
     public static final String SUBMIT_ERROR = "/submit-error";
     public static final String LEADERBOARD = "/leaderboard";
     public static final String RANKINGS_TEAM = "/rankings/team";
+    public static final String STATS_GAME_UNITS = "/stats/game-units";
+    public static final String STATS_PLAYER_UNITS = "/stats/player-units";
+    public static final String STATS_GAMES = "/stats/games";
+    public static final String STATS_PLAYERS = "/stats/players";
 }

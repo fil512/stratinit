@@ -20,6 +20,7 @@ export default function AppShell() {
             <Link to="/games" className="text-gray-300 hover:text-blue-400">Games</Link>
             <Link to="/leaderboard" className="text-gray-300 hover:text-blue-400">Leaderboard</Link>
             <Link to="/rankings" className="text-gray-300 hover:text-blue-400">Rankings</Link>
+            <Link to="/stats" className="text-gray-300 hover:text-blue-400">Stats</Link>
           </nav>
         </div>
         <button

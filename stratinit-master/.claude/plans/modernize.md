@@ -33,8 +33,6 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Cede units to allied nations (in Units tab)
 - Messaging UI: inbox, sent mail, announcements, compose message (Mail tab)
 - News log viewer with categorized entries by day (News tab)
-- Builds and passes all 426 tests via `mvn clean install`
-
 - Game browsing and joining: `GameListPage.tsx` shows "My Games" and "Available Games" sections, unjoined games have "Join" button
 - Concede from game: Concede button with two-step confirmation in Players tab
 - Player registration: `POST /stratinit/auth/register` endpoint in `AuthController.java`, `RegistrationPage.tsx` with username/email/password form, linked from login page
@@ -42,10 +40,17 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - Team rankings: `GET /stratinit/rankings/team` endpoint in `RankingController.java`, `RankingsPage.tsx` with ELO-based team rankings
 - App navigation: `AppShell.tsx` header nav with links to Games, Leaderboard, Rankings
 - New DTOs: `SIPlayerRank.java` for player leaderboard data; `SITeamRank` (existing) used for team rankings
+
+- Unit statistics charts replacing Google Charts (shut down 2023):
+  - `UnitStatisticsService.java` in `stratinit-server` — aggregation logic extracted from Wicket's `UnitsBuiltProvider`/`BuildAuditsAggregator`
+  - New DTOs: `SIUnitLove.java` (unit type + love value), `SIUnitDayRow.java` (day + per-unit-type counts), `SIGameHistory.java` (completed game info)
+  - New REST endpoints in `RankingController`: `/stats/games`, `/stats/players`, `/stats/game-units`, `/stats/player-units`
+  - `UnitStatsPage.tsx` with Recharts: pie chart for "unit love" metric, 4 stacked area charts (LAND/NAVY/AIR/TECH) for units built per day
+  - Game selector dropdown (completed games), player selector dropdown
+  - Nav link "Stats" in `AppShell.tsx`, routes `/stats` and `/stats/:gameId` in `App.tsx`
 - Builds and passes all 426 tests via `mvn clean install`
 
 **What remains:**
-- Replace Google Charts with Chart.js or Recharts for unit statistics
 - Responsive/mobile layout
 - Once SPA reaches feature parity, retire `stratinit-wicket` and `stratinit-client-master` modules
 
@@ -59,8 +64,11 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-ui/src/hooks/useGameSocket.ts`
 - `stratinit-rest/.../config/WebConfig.java` (SPA routing)
 - `stratinit-rest/.../controller/AuthController.java` (login + registration)
-- `stratinit-rest/.../controller/RankingController.java` (leaderboard + team rankings)
+- `stratinit-rest/.../controller/RankingController.java` (leaderboard + team rankings + unit statistics endpoints)
 - `stratinit-core/.../dto/SIPlayerRank.java` (player leaderboard DTO)
+- `stratinit-core/.../dto/SIUnitLove.java`, `SIUnitDayRow.java`, `SIGameHistory.java` (unit statistics DTOs)
+- `stratinit-server/.../service/UnitStatisticsService.java` (aggregation logic for unit statistics)
+- `stratinit-ui/src/pages/UnitStatsPage.tsx` (Recharts pie + area charts)
 
 ---
 
@@ -250,7 +258,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 |---|---|---|---|
 | Commons HTTPClient | 3.1 | ~~EOL since 2011~~ **REMOVED** | Replaced with `org.apache.http.HttpStatus` + `EnglishReasonPhraseCatalog` (already-present HttpComponents 4.x) |
 | Jasypt | 1.9.3 | ~~Unmaintained since 2018~~ **REMOVED** | Replaced with `javax.crypto` AES + PBKDF2 (standard JDK) |
-| Google Visualization API | jsapi | Shut down 2023 | Chart.js, Recharts, or Apache ECharts (retires with Wicket) |
+| Google Visualization API | jsapi | ~~Shut down 2023~~ **REPLACED** | Recharts in SPA (Wicket charts superseded) |
 | SWT | 3.5.2 | ~2009 vintage | Retire with SPA migration (recommendation #1) |
 
 **What's done:**
@@ -258,7 +266,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `jasypt` removed from parent `pom.xml` and `stratinit-client/pom.xml`; `AccountPersister.java` migrated from `BasicTextEncryptor` to `javax.crypto` AES with PBKDF2 key derivation
 
 **What remains:**
-- Google Charts and SWT retire naturally when `stratinit-wicket` and `stratinit-client-master` are removed (#1)
+- SWT retires naturally when `stratinit-client-master` is removed (#1)
 
 **Key files:**
 - `stratinit-client-master/.../rest/RestClient.java` (migrated HttpStatus usage)
@@ -324,7 +332,7 @@ Phase 2: Backend modernization
 Phase 3: API and frontend
   ├── #9  API versioning + OpenAPI docs
   ├── #2  WebSocket support                          ✅ DONE
-  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, concede, leaderboard, rankings done)
+  └── #1  SPA frontend                               🔧 IN PROGRESS (near feature parity — game browse/join, registration, concede, leaderboard, rankings, unit statistics charts done)
 
 Phase 4: Polish
   ├── #10 Domain model cleanup (MapStruct, records, config externalization)

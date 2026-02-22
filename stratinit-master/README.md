@@ -53,7 +53,7 @@ stratinit-wicket    → Wicket web UI [legacy, being retired] (depends on server
 ## Backend Architecture
 
 ```
-Controllers (GameController, UnitController, CityController, NationController, MessageController)
+Controllers (GameController, UnitController, CityController, NationController, MessageController, RankingController)
   ↓ return DTOs directly (no Result<T> wrapper)
   ↓ thin lambdas via RequestProcessor (reads) / WriteProcessor (writes)
 REST Services (UnitSvc, CitySvc, NationSvc, RelationSvc)
@@ -74,7 +74,7 @@ GlobalExceptionHandler (@ControllerAdvice)
 ## Tech Stack
 
 - **Backend:** Java 21, Spring Boot 3.5, Spring Security, Spring Data JPA, WebSocket (STOMP)
-- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS v4
+- **Frontend:** React 18, TypeScript, Vite, Tailwind CSS v4, Recharts
 - **Auth:** JWT (JJWT 0.12.6) with HTTP Basic fallback
 - **Database:** PostgreSQL (production) / H2 (tests), Flyway migrations
 - **Testing:** JUnit 5, Mockito
@@ -92,6 +92,10 @@ GlobalExceptionHandler (@ControllerAdvice)
   - **Players** — nation list, diplomacy/relation management
   - **Mail** — inbox, sent mail, announcements, compose messages
   - **News** — news log organized by day with categorized entries
+- Unit statistics page with Recharts charts:
+  - **Pie chart** — "unit love" metric (weighted by count, tech factor, production time)
+  - **Stacked area charts** — units built per day (days 1-10) by category (LAND, NAVY, AIR, TECH)
+  - Game selector and player selector dropdowns
 - Real-time WebSocket updates via STOMP
 
 ## Legacy Clients (Being Retired)

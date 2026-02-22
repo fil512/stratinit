@@ -105,6 +105,8 @@ class AuthControllerTest {
     private com.kenstevens.stratinit.repo.GameHistoryRepo gameHistoryRepo;
     @MockBean
     private com.kenstevens.stratinit.server.rest.session.StratInitSessionManager sessionManager;
+    @MockBean
+    private com.kenstevens.stratinit.server.service.UnitStatisticsService unitStatisticsService;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
