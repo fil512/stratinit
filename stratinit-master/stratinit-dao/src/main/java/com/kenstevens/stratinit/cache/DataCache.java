@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -83,6 +84,7 @@ public class DataCache extends Updatable {
 	public List<GameCache> getGameCaches() {
 		return gameMap.values().stream()
 				.filter(gameCache -> gameCache.getGame().isEnabled())
+				.sorted(Comparator.comparingInt(gc -> gc.getGame().getId()))
 				.collect(Collectors.toList());
 	}
 
