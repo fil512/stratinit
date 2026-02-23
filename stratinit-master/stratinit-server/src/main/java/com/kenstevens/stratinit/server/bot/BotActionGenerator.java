@@ -1,9 +1,6 @@
 package com.kenstevens.stratinit.server.bot;
 
-import com.kenstevens.stratinit.client.model.City;
-import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.client.model.Unit;
-import com.kenstevens.stratinit.client.model.UnitBase;
+import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.server.bot.action.*;
 import com.kenstevens.stratinit.server.service.CityService;
 import com.kenstevens.stratinit.server.service.RelationService;
@@ -97,13 +94,86 @@ public class BotActionGenerator {
                 actions.add(new BuildCityWithEngineerAction(unit, cityService));
             }
             if (unit.getType() == UnitType.INFANTRY || unit.getType() == UnitType.TANK) {
-                generateDirectionalMoves(unit, gameSize, nation, actions);
+                generateSmartExpansionMoves(unit, state, nation, actions, true);
             }
         }
 
         // Naval expansion: idle naval units can explore water
         for (Unit unit : state.getIdleNavalUnits()) {
+            generateSmartExpansionMoves(unit, state, nation, actions, false);
+        }
+
+        // Neutral city capture: send idle land units to free cities
+        generateNeutralCityCaptureActions(state, nation, actions);
+    }
+
+    private void generateSmartExpansionMoves(Unit unit, BotWorldState state, Nation nation,
+                                              List<BotAction> actions, boolean isLand) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        SectorCoords unitCoords = unit.getCoords();
+
+        // Find frontier: unscouted sectors adjacent to scouted sectors with matching terrain
+        List<SectorCoords> frontierTargets = new ArrayList<>();
+        for (SectorCoords scouted : findScoutedCoordsOfMatchingTerrain(state, world, gameSize, isLand)) {
+            List<SectorCoords> neighbours = scouted.neighbours(gameSize);
+            for (SectorCoords neighbour : neighbours) {
+                if (!state.isExplored(neighbour)) {
+                    // Target the scouted coord next to the frontier (unit can actually reach it)
+                    frontierTargets.add(scouted);
+                    break;
+                }
+            }
+        }
+
+        // Sort by distance to unit, take nearest 4
+        frontierTargets.sort(Comparator.comparingInt(
+                c -> SectorCoords.distance(gameSize, unitCoords, c)));
+        int limit = Math.min(4, frontierTargets.size());
+        for (int i = 0; i < limit; i++) {
+            SectorCoords target = frontierTargets.get(i);
+            int distance = SectorCoords.distance(gameSize, unitCoords, target);
+            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService));
+        }
+
+        // Fallback: if no frontier found, use directional moves
+        if (frontierTargets.isEmpty()) {
             generateDirectionalMoves(unit, gameSize, nation, actions);
+        }
+    }
+
+    private Set<SectorCoords> findScoutedCoordsOfMatchingTerrain(BotWorldState state, World world,
+                                                                   int gameSize, boolean isLand) {
+        Set<SectorCoords> matching = new HashSet<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!state.isExplored(coords)) {
+                    continue;
+                }
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null) {
+                    continue;
+                }
+                if (isLand && !sector.isWater()) {
+                    matching.add(coords);
+                } else if (!isLand && sector.isWater()) {
+                    matching.add(coords);
+                }
+            }
+        }
+        return matching;
+    }
+
+    private void generateNeutralCityCaptureActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        for (SectorCoords cityCoords : state.getNeutralCityCoords()) {
+            for (Unit unit : state.getIdleLandUnits()) {
+                int distance = SectorCoords.distance(gameSize, unit.getCoords(), cityCoords);
+                if (distance <= unit.getMobility()) {
+                    actions.add(new CaptureNeutralCityAction(unit, cityCoords, distance, nation, moveService));
+                }
+            }
         }
     }
 

@@ -18,15 +18,22 @@ public class BotWorldState {
     private final double gameTimePercent;
     private final Set<SectorCoords> coastalCityCoords;
     private final List<City> enemyCities;
+    private final World world;
+    private final Set<SectorCoords> scoutedCoords;
+    private final List<SectorCoords> neutralCityCoords;
 
     public BotWorldState(Nation nation, Game game, List<Unit> myUnits, List<City> myCities,
                          Collection<Unit> allVisibleUnits,
                          Map<Nation, RelationType> myRelations,
                          Map<Nation, RelationType> theirRelations,
                          Set<SectorCoords> coastalCityCoords,
-                         List<City> enemyCities) {
+                         List<City> enemyCities,
+                         World world,
+                         Set<SectorCoords> scoutedCoords,
+                         List<SectorCoords> neutralCityCoords) {
         this(nation, game, myUnits, myCities, allVisibleUnits, myRelations, theirRelations,
-                coastalCityCoords, enemyCities, System.currentTimeMillis());
+                coastalCityCoords, enemyCities, world, scoutedCoords, neutralCityCoords,
+                System.currentTimeMillis());
     }
 
     public BotWorldState(Nation nation, Game game, List<Unit> myUnits, List<City> myCities,
@@ -35,6 +42,9 @@ public class BotWorldState {
                          Map<Nation, RelationType> theirRelations,
                          Set<SectorCoords> coastalCityCoords,
                          List<City> enemyCities,
+                         World world,
+                         Set<SectorCoords> scoutedCoords,
+                         List<SectorCoords> neutralCityCoords,
                          long nowMillis) {
         this.nation = nation;
         this.game = game;
@@ -45,6 +55,9 @@ public class BotWorldState {
         this.theirRelations = theirRelations;
         this.coastalCityCoords = coastalCityCoords;
         this.enemyCities = enemyCities;
+        this.world = world;
+        this.scoutedCoords = scoutedCoords;
+        this.neutralCityCoords = neutralCityCoords;
 
         // Calculate game time progress (0.0 = start, 1.0 = end)
         if (game.getStartTime() != null && game.getEnds() != null) {
@@ -152,5 +165,17 @@ public class BotWorldState {
 
     public double getTech() {
         return nation.getTech();
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public boolean isExplored(SectorCoords coords) {
+        return scoutedCoords.contains(coords);
+    }
+
+    public List<SectorCoords> getNeutralCityCoords() {
+        return neutralCityCoords;
     }
 }

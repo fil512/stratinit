@@ -48,7 +48,7 @@ The bot AI uses a **Utility AI** pattern — each possible action is scored by a
 #### Turn Execution (`BotExecutor`)
 
 ```
-1. Build BotWorldState snapshot (units, cities, enemies, relations, tech, CP, game time, coastal cities, enemy cities)
+1. Build BotWorldState snapshot (units, cities, enemies, relations, tech, CP, game time, coastal cities, enemy cities, world terrain, scouted coords, neutral cities)
 2. Generate all candidate actions via BotActionGenerator (8 generator methods)
 3. Score each action via computeUtility(state, weights)
 4. Sort by score descending
@@ -60,23 +60,32 @@ The bot AI uses a **Utility AI** pattern — each possible action is scored by a
 
 Immutable snapshot built by `BotWorldStateBuilder` at the start of each turn:
 - Own units and cities
-- All visible units (for spotting enemies)
+- Fog-of-war filtered visible units (via `UnitDao.getSeenUnits()` — only units within sight range of own units/satellites)
+- Fog-of-war filtered enemy cities (via `CityDao.getSeenCities()` — only cities in sectors the nation has scouted)
+- World terrain (via `SectorDao.getWorld()` — enables terrain-aware movement decisions)
+- Scouted coordinates (via `SectorDao.getSectorsSeen()` — tracks explored territory)
+- Neutral city locations (scouted sectors with `SectorType.NEUTRAL_CITY` — free captures)
 - Diplomatic relations (both directions)
 - Game time progress (0.0–1.0)
 - Command points available
 
-Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getIdleNavalUnits()`, `getIdleAirUnits()`, `getLaunchableUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `getEnemyCities()`, `isCoastalCity(city)`, `hasEnoughCP(cost)`
+Bots respect the same fog-of-war rules as human players: they can only see enemy units within their units' sight range and enemy cities in sectors they have previously scouted. This means bots must scout before they can attack, making satellite launches and expansion genuinely useful for intelligence gathering.
+
+Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getIdleNavalUnits()`, `getIdleAirUnits()`, `getLaunchableUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `getEnemyCities()`, `isCoastalCity(city)`, `hasEnoughCP(cost)`, `getWorld()`, `isExplored(coords)`, `getNeutralCityCoords()`
 
 Pre-computed data (built by `BotWorldStateBuilder`):
 - **Coastal city coords**: Cities adjacent to water sectors (enables naval unit production gating)
-- **Enemy cities**: All cities owned by nations at WAR (for ICBM/bombing targeting)
+- **Enemy cities**: Cities owned by nations at WAR, filtered to only those in scouted sectors
+- **Scouted coords**: All sector coordinates the nation has ever seen (for frontier detection)
+- **Neutral city coords**: Scouted sectors containing neutral cities (for targeted capture)
 
 #### Action Types
 
 | Class | Category | What It Does | CP Cost |
 |-------|----------|-------------|---------|
 | `SetCityProductionAction` | ECONOMY | Sets city build to any of 23 unit types (gated by tech + coastal) | 0 |
-| `MoveUnitToExpandAction` | EXPANSION | Moves land or naval unit toward unexplored areas | 1 |
+| `MoveUnitToExpandAction` | EXPANSION | Moves land or naval unit toward frontier (unscouted territory) | 1 |
+| `CaptureNeutralCityAction` | EXPANSION | Moves land unit to capture a scouted neutral city | 1 |
 | `BuildCityWithEngineerAction` | EXPANSION | Engineer creates a new city | 128 |
 | `AttackEnemyAction` | MILITARY | Moves land combat unit to attack visible land enemy | 2 |
 | `AttackNavalAction` | MILITARY | Moves naval unit to attack enemy naval unit | 2 |
@@ -109,7 +118,7 @@ Tech requirements are enforced in `SetCityProductionAction.computeUtility()` (re
 
 **Action generators**: `BotActionGenerator.generateActions()` calls 8 generator methods:
 - `generateCityProductionActions()` — all unit types with coastal/tech gating
-- `generateExpansionActions()` — land + naval directional movement, engineer city building
+- `generateExpansionActions()` — frontier-based land + naval exploration, neutral city capture, engineer city building
 - `generateMilitaryActions()` — land-vs-land combat
 - `generateNavalActions()` — naval combat + transport loading
 - `generateAirActions()` — air strikes + city bombing
@@ -145,6 +154,7 @@ All utility calculations use configurable weights loaded from `bot-weights.json`
   "airStrikeDesire": 0.7,
   "satelliteLaunchDesire": 0.5,
   "icbmLaunchDesire": 0.8,
+  "neutralCityCaptureDesire": 1.2,
   "tankDesire": 0.6
 }
 ```
@@ -192,7 +202,8 @@ stratinit-server/
   server/bot/action/BotAction.java     — Action interface (with getInvolvedUnitId())
   server/bot/action/BotActionCategory.java         — Category enum
   server/bot/action/SetCityProductionAction.java    — Economy: all 23 unit types
-  server/bot/action/MoveUnitToExpandAction.java     — Expansion: land + naval movement
+  server/bot/action/MoveUnitToExpandAction.java     — Expansion: frontier-based land + naval movement
+  server/bot/action/CaptureNeutralCityAction.java   — Expansion: capture neutral cities
   server/bot/action/BuildCityWithEngineerAction.java — Expansion: engineer builds city
   server/bot/action/LoadTransportAction.java        — Expansion: transport picks up land units
   server/bot/action/LaunchSatelliteAction.java      — Expansion: satellite launch for vision
@@ -287,8 +298,7 @@ stratinit-server/
 ## Future Improvements
 
 - **Difficulty levels**: Multiple weight profiles (easy/medium/hard)
-- **Smarter pathfinding**: Use the `stratinit-graph` module for optimal movement paths
-- **Fog-of-war awareness**: Currently bots see all units; could be restricted to their actual vision
+- **Allied vision sharing**: Bots could share fog-of-war with allies via `getTeamSeenUnits()`
 - **Coordination**: Multi-unit attack groups, combined arms tactics
 - **Transport destination planning**: Bots load transports but don't plan where to unload across islands
 - **Larger training runs**: More generations, larger populations, parallel game simulation

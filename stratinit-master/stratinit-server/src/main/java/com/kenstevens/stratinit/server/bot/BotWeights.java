@@ -45,6 +45,9 @@ public class BotWeights {
     public double satelliteLaunchDesire = 0.5;
     public double icbmLaunchDesire = 0.8;
 
+    // Neutral city capture
+    public double neutralCityCaptureDesire = 1.2;
+
     // Production weights
     public double tankDesire = 0.6;
 
