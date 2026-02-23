@@ -38,7 +38,7 @@
         <stratinit.version>1.2.1-SNAPSHOT</stratinit.version>
         <spring.boot.version>3.5.11</spring.boot.version>
         <querydsl.version>5.1.0</querydsl.version>
-        <liquibase.version>4.32.0</liquibase.version>
+        <liquibase.version>4.29.2</liquibase.version>
         <jjwt.version>0.12.6</jjwt.version>
     </properties>
     <build>

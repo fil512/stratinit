@@ -1,4 +1,6 @@
 spring:
+  main:
+    allow-circular-references: true
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
 logging:

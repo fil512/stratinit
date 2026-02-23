@@ -12,7 +12,7 @@ public class ErrorLog {
 	private Date date;
 	private Integer gameId;
 	private String username;
-	@Lob
+	@Column(columnDefinition = "text")
 	private String stackTrace;
 
 	public ErrorLog() {}
