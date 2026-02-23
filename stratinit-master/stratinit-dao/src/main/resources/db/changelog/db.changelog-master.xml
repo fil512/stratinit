@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="V20100131223900" author="stratinit">
+        <sqlFile path="migrations/V20100131223900.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20100131223901" author="stratinit">
+        <sqlFile path="migrations/V20100131223901.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20100419000000" author="stratinit">
+        <sqlFile path="migrations/V20100419000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20100602000000" author="stratinit">
+        <sqlFile path="migrations/V20100602000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20100614000000" author="stratinit">
+        <sqlFile path="migrations/V20100614000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20100623000000" author="stratinit">
+        <sqlFile path="migrations/V20100623000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20100923000000" author="stratinit">
+        <sqlFile path="migrations/V20100923000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20101107000000" author="stratinit">
+        <sqlFile path="migrations/V20101107000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110209000000" author="stratinit">
+        <sqlFile path="migrations/V20110209000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110219000000" author="stratinit">
+        <sqlFile path="migrations/V20110219000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110303000000" author="stratinit">
+        <sqlFile path="migrations/V20110303000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110529000000" author="stratinit">
+        <sqlFile path="migrations/V20110529000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110606000000" author="stratinit">
+        <sqlFile path="migrations/V20110606000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110620000000" author="stratinit">
+        <sqlFile path="migrations/V20110620000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110706000000" author="stratinit">
+        <sqlFile path="migrations/V20110706000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20110720000000" author="stratinit">
+        <sqlFile path="migrations/V20110720000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20120226000001" author="stratinit">
+        <sqlFile path="migrations/V20120226000001.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20120228000000" author="stratinit">
+        <sqlFile path="migrations/V20120228000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20120229000000" author="stratinit">
+        <sqlFile path="migrations/V20120229000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="V20120326000001" author="stratinit">
+        <sqlFile path="migrations/V20120326000001.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>

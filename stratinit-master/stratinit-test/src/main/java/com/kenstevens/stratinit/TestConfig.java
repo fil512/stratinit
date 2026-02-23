@@ -1,6 +1,10 @@
 package com.kenstevens.stratinit;
 
-import org.flywaydb.core.Flyway;
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +17,14 @@ public class TestConfig {
     DataSource dataSource;
 
     @PostConstruct
-    public void migrate() {
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
-        flyway.migrate();
+    public void migrate() throws Exception {
+        Database database = DatabaseFactory.getInstance()
+                .findCorrectDatabaseImplementation(new JdbcConnection(dataSource.getConnection()));
+        try (Liquibase liquibase = new Liquibase(
+                "db/changelog/db.changelog-master.xml",
+                new ClassLoaderResourceAccessor(),
+                database)) {
+            liquibase.update("");
+        }
     }
 }

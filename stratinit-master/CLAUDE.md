@@ -28,7 +28,7 @@ mvn spring-boot:run -pl stratinit-rest
 cd stratinit-ui && npm run dev
 
 # Database migration (requires PostgreSQL running)
-mvn compile flyway:migrate -pl stratinit-dao
+mvn liquibase:update -pl stratinit-dao
 
 # Start PostgreSQL via Docker
 docker run -p 5432:5432 --name ken-postgres -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgr3S -e POSTGRES_DB=stratinit -d postgres
@@ -39,7 +39,7 @@ docker run -p 5432:5432 --name ken-postgres -e POSTGRES_USER=postgres -e POSTGRE
 ```
 stratinit-graph     → Graph algorithms (no dependencies)
 stratinit-core      → Domain entities, DTOs, enums (depends on graph)
-stratinit-dao       → JPA repositories, DAOs, caching, Flyway migrations (depends on core)
+stratinit-dao       → JPA repositories, DAOs, caching, Liquibase migrations (depends on core)
 stratinit-test      → Test helpers and configuration (depends on dao)
 stratinit-server    → Game engine, services, business logic (depends on dao)
 stratinit-rest      → REST API via Spring Boot (depends on server, ui)
@@ -57,7 +57,7 @@ Dependencies flow downward.
 - **React 18** + TypeScript + Vite + Tailwind CSS + Recharts for SPA frontend
 - **JWT authentication** (JJWT 0.12.6) with HTTP Basic fallback
 - **PostgreSQL** (production) / **H2** (tests)
-- **Flyway 11** for database migrations (`stratinit-dao/src/main/resources/db/migration/`)
+- **Liquibase 4.32** for database migrations (`stratinit-dao/src/main/resources/db/changelog/`)
 - **Bean Validation** (`jakarta.validation`) on request DTOs, `@Valid` in controllers
 - **springdoc-openapi 2.8.5** — Swagger UI at `/swagger-ui.html`, OpenAPI spec at `/v3/api-docs`
 - **JUnit 5** + Mockito for testing
@@ -88,7 +88,7 @@ Dependencies flow downward.
 
 ## Testing
 
-Tests use H2 in-memory database (`MODE=LEGACY`) with Flyway migrations applied automatically. Test config in `src/test/resources/persistence.properties` and `application.yml`. The `stratinit-test` module provides helpers: `PlayerHelper`, `GameHelper`, `NationHelper`, `UnitHelper`, `WorldHelper`, `SectorHelper`.
+Tests use H2 in-memory database (`MODE=LEGACY`) with Liquibase migrations applied programmatically via `TestConfig`. Test config in `src/test/resources/persistence.properties` and `application.yml`. The `stratinit-test` module provides helpers: `PlayerHelper`, `GameHelper`, `NationHelper`, `UnitHelper`, `WorldHelper`, `SectorHelper`.
 
 Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest` (extends `StratInitDaoBase`).
 
