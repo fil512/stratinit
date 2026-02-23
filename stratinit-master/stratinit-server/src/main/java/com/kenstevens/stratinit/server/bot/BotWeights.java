@@ -52,6 +52,12 @@ public class BotWeights {
     // Neutral city capture
     public double neutralCityCaptureDesire = 1.2;
 
+    // Coordination weights
+    public double coordinationBonus = 0.3;
+    public double airSupportBonus = 0.4;
+    public double navalEscortBonus = 0.5;
+    public double massAttackThreshold = 2.0;
+
     // Production weights
     public double tankDesire = 0.6;
 

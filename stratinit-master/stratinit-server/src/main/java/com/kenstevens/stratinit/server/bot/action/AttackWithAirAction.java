@@ -46,6 +46,11 @@ public class AttackWithAirAction implements BotAction {
             utility *= 1.2;
         }
 
+        // Air support bonus: prioritize strikes where ground forces can follow up
+        if (state.hasLandThreatNear(targetCoords)) {
+            utility += weights.airSupportBonus;
+        }
+
         return utility;
     }
 

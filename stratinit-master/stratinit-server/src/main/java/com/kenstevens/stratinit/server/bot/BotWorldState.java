@@ -217,4 +217,27 @@ public class BotWorldState {
                 })
                 .collect(Collectors.toList());
     }
+
+    public int countLandUnitsInRangeOf(SectorCoords target) {
+        return (int) getIdleLandUnits().stream()
+                .filter(u -> u.getCoords().distanceTo(world, target) <= u.getMobility())
+                .count();
+    }
+
+    public int countAirUnitsInRangeOf(SectorCoords target) {
+        return (int) getIdleAirUnits().stream()
+                .filter(u -> u.getAttack() > 0)
+                .filter(u -> u.getCoords().distanceTo(world, target) <= u.getMobility())
+                .count();
+    }
+
+    public boolean hasNearbyTransport(SectorCoords target, int radius) {
+        return myUnits.stream()
+                .filter(u -> u.isAlive() && u.carriesUnits())
+                .anyMatch(u -> u.getCoords().distanceTo(world, target) <= radius);
+    }
+
+    public boolean hasLandThreatNear(SectorCoords target) {
+        return countLandUnitsInRangeOf(target) > 0;
+    }
 }

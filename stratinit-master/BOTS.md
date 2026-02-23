@@ -73,6 +73,12 @@ Bots respect the same fog-of-war rules as human players: they can only see enemy
 
 Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getIdleNavalUnits()`, `getIdleAirUnits()`, `getLaunchableUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `getEnemyCities()`, `isCoastalCity(city)`, `hasEnoughCP(cost)`, `getWorld()`, `isExplored(coords)`, `getNeutralCityCoords()`, `getHomeIslandId()`, `getLoadedTransports()`, `getLandUnitsAtSea()`
 
+Coordination queries (used by attack actions to compute multi-unit bonuses):
+- `countLandUnitsInRangeOf(target)` — idle land units within mobility range of target
+- `countAirUnitsInRangeOf(target)` — idle air units (attack > 0) within mobility range
+- `hasNearbyTransport(target, radius)` — any friendly transport within radius
+- `hasLandThreatNear(target)` — shorthand for `countLandUnitsInRangeOf > 0`
+
 Pre-computed data (built by `BotWorldStateBuilder`):
 - **Coastal city coords**: Cities adjacent to water sectors (enables naval unit production gating)
 - **Enemy cities**: Cities owned by nations at WAR, filtered to only those in scouted sectors
@@ -87,9 +93,9 @@ Pre-computed data (built by `BotWorldStateBuilder`):
 | `MoveUnitToExpandAction` | EXPANSION | Moves land or naval unit toward frontier (unscouted territory) | 1 |
 | `CaptureNeutralCityAction` | EXPANSION | Moves land unit to capture a scouted neutral city | 1 |
 | `BuildCityWithEngineerAction` | EXPANSION | Engineer creates a new city | 128 |
-| `AttackEnemyAction` | MILITARY | Moves land combat unit to attack visible land enemy | 2 |
-| `AttackNavalAction` | MILITARY | Moves naval unit to attack enemy naval unit | 2 |
-| `AttackWithAirAction` | MILITARY | Air unit strikes enemy units or bombs enemy cities | 2 |
+| `AttackEnemyAction` | MILITARY | Moves land unit to attack enemy; coordination bonus when allies converge, partial air synergy | 2 |
+| `AttackNavalAction` | MILITARY | Moves naval unit to attack enemy; escort bonus near friendly transports | 2 |
+| `AttackWithAirAction` | MILITARY | Air strike/bomb; air support bonus when ground forces can follow up | 2 |
 | `LoadTransportAction` | EXPANSION | Moves transport/carrier to pick up idle land units | 1 |
 | `MoveTransportToTargetAction` | EXPANSION | Sails loaded transport toward landing zone on another island | 1 |
 | `DisembarkUnitAction` | EXPANSION | Moves land unit from water onto adjacent land sector | 1 |
@@ -159,7 +165,11 @@ All utility calculations use configurable weights loaded from `bot-weights.json`
   "satelliteLaunchDesire": 0.5,
   "icbmLaunchDesire": 0.8,
   "neutralCityCaptureDesire": 1.2,
-  "tankDesire": 0.6
+  "tankDesire": 0.6,
+  "coordinationBonus": 0.3,
+  "airSupportBonus": 0.4,
+  "navalEscortBonus": 0.5,
+  "massAttackThreshold": 2.0
 }
 ```
 
@@ -170,6 +180,17 @@ Utility formula: `categoryBaseWeight * specificDesire * contextMultipliers * tim
 Time modifiers shift bot behavior during the game:
 - **Early game** (< 30% elapsed): expansion and economy bonus
 - **Late game** (> 50% elapsed): military bonus
+
+#### Multi-Unit Coordination
+
+Coordination emerges through utility bonuses rather than explicit multi-unit planning. When multiple friendly units can reach the same target, each gets a bonus that pushes coordinated attacks above isolated ones in the greedy sort:
+
+- **Land coordination** (`AttackEnemyAction`): When `alliesInRange >= massAttackThreshold - 1`, each ally adds `coordinationBonus` to utility. Three infantry converging on one enemy each score higher than a solo attacker.
+- **Air support** (`AttackWithAirAction`): Air strikes targeting sectors where ground forces can also reach get `airSupportBonus`. Since the bonus makes air utility exceed ground utility, the greedy executor picks air first (softening), then ground (finishing).
+- **Naval escort** (`AttackNavalAction`): Naval combat near friendly transports (within 3 sectors) gets `navalEscortBonus`, causing destroyers to prioritize clearing threats around transports.
+- **Ground-side air synergy** (`AttackEnemyAction`): Ground attacks also get a partial `airSupportBonus * 0.5` when air units can reach the same target, further rewarding combined-arms convergence.
+
+No changes to `BotAction` interface, `BotExecutor`, or `BotActionGenerator` are needed — coordination is purely a scoring change.
 
 ### Bot-Specific Behavior
 
@@ -305,6 +326,5 @@ stratinit-server/
 
 - **Difficulty levels**: Multiple weight profiles (easy/medium/hard)
 - **Allied vision sharing**: Bots could share fog-of-war with allies via `getTeamSeenUnits()`
-- **Coordination**: Multi-unit attack groups, combined arms tactics
 - **Larger training runs**: More generations, larger populations, parallel game simulation
 - **Alternative algorithms**: Gradient-free optimization (CMA-ES), neuroevolution

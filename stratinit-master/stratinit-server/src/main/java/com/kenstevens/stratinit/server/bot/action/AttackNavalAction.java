@@ -43,6 +43,11 @@ public class AttackNavalAction implements BotAction {
             utility *= (1.0 + weights.lateMilitaryBonus);
         }
 
+        // Escort bonus: prioritize clearing threats near friendly transports
+        if (state.hasNearbyTransport(target.getCoords(), 3)) {
+            utility += weights.navalEscortBonus;
+        }
+
         return utility;
     }
 

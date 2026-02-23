@@ -47,6 +47,17 @@ public class AttackEnemyAction implements BotAction {
             utility *= (1.0 + weights.lateMilitaryBonus);
         }
 
+        // Coordination bonus: reward converging multiple units on the same target
+        int alliesInRange = state.countLandUnitsInRangeOf(target.getCoords()) - 1; // exclude self
+        if (alliesInRange >= weights.massAttackThreshold - 1) {
+            utility += alliesInRange * weights.coordinationBonus;
+        }
+
+        // Partial synergy when air can also reach this target
+        if (state.countAirUnitsInRangeOf(target.getCoords()) > 0) {
+            utility += weights.airSupportBonus * 0.5;
+        }
+
         return utility;
     }
 
