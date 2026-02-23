@@ -172,11 +172,84 @@ stratinit-ui/
   src/pages/GamePage.tsx               — "Add Bot" button in GameLobby
 ```
 
+## Reinforcement Learning Training
+
+An evolutionary hill-climbing framework tunes `BotWeights` by simulating games between bot populations.
+
+### How It Works
+
+1. Start with a population of 8 weight configurations (seed + 7 mutations)
+2. Each generation runs 2 simulated 4-bot blitz games, randomly picking 4 configs per game
+3. Score each bot: `10 * citiesOwned + 1 * aliveUnits + 0.5 * tech`
+4. Keep the top 4 performers, replace the bottom 4 with mutated/crossed winners
+5. Repeat for N generations (default 10, test uses 3)
+6. Save best weights and score history to `training-results/`
+
+### Synchronous Game Simulation
+
+`TrainingGameSimulator` runs a complete game synchronously without the event system:
+
+1. Creates a blitz game with 4 bot players
+2. Maps the game and calls `GameStartupService.initializeGameState()` (no event scheduling)
+3. Sets start time in the past (so `hasStarted()` returns true) and ends far in the future
+4. Runs 100 turns, each advancing simulated time by one tick interval:
+   - Processes city builds using `CityBuilderService.buildUnit(city, simDate)`
+   - Processes unit updates using `UnitService.updateUnit(unit, simDate)`
+   - Updates tech/CP via `GameService.updateGame(game, simDate)`
+   - Executes bot turns via `BotExecutor.executeTurn(nation, weights, simulatedTime)`
+5. Scores all nations and returns results
+
+The tick interval is computed using `UpdateCalculator.shrinkTime(blitz=true, ...)` to match blitz timing.
+
+### Key Modifications for Training
+
+- **`BotWorldState`**: Added constructor accepting `long nowMillis` for simulated time (replaces `System.currentTimeMillis()`)
+- **`BotWorldStateBuilder`**: Added `build(Nation, long simulatedTimeMillis)` overload
+- **`BotExecutor`**: Added `executeTurn(Nation, BotWeights)` and `executeTurn(Nation, BotWeights, long simulatedTimeMillis)` overloads
+- **`GameStartupService`**: Extracted `initializeGameState(Game, boolean)` from `startGame()` — initializes game state (cities, units, fog) without scheduling timer events
+
+### Mutation
+
+`WeightMutator` operates via reflection on `BotWeights` public double fields:
+- **Mutation**: Each weight has 30% chance of Gaussian noise (stddev=0.2), clamped to [0.01, 3.0]
+- **Crossover**: Uniform crossover picks each weight randomly from parent A or B
+
+### Running Training
+
+```bash
+# Run the training test (3 generations, ~10 seconds)
+mvn test -pl stratinit-server -Dtest=BotRLTrainingTest
+
+# Results saved to:
+#   training-results/best-weights.json    — best weight configuration
+#   training-results/score-history.json   — best score per generation
+```
+
+Resuming training loads previous best weights from `training-results/best-weights.json` as the seed.
+
+### Training File Layout
+
+```
+stratinit-server/
+  server/bot/training/
+    TrainingSession.java           — Evolutionary training orchestration
+    TrainingGameSimulator.java     — Synchronous game simulation
+    TrainingScorer.java            — Nation performance scoring
+    WeightMutator.java             — Gaussian mutation + uniform crossover
+    TrainingGameResult.java        — Single game result record
+    TrainingResult.java            — Full session result record
+
+  (test)
+  server/bot/training/
+    BotRLTrainingTest.java         — Integration test entry point
+```
+
 ## Future Improvements
 
-- **Reinforcement learning**: Swap `bot-weights.json` with trained weights. `BotWeights` is already Jackson-serializable for this purpose.
 - **More action types**: Naval operations, air support, satellite launches, ICBM strikes, transport loading
 - **Difficulty levels**: Multiple weight profiles (easy/medium/hard)
 - **Smarter pathfinding**: Use the `stratinit-graph` module for optimal movement paths
 - **Fog-of-war awareness**: Currently bots see all units; could be restricted to their actual vision
 - **Coordination**: Multi-unit attack groups, combined arms tactics
+- **Larger training runs**: More generations, larger populations, parallel game simulation
+- **Alternative algorithms**: Gradient-free optimization (CMA-ES), neuroevolution

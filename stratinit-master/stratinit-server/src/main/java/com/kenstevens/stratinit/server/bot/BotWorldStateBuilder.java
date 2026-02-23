@@ -41,4 +41,22 @@ public class BotWorldStateBuilder {
                 theirRelations
         );
     }
+
+    public BotWorldState build(Nation nation, long simulatedTimeMillis) {
+        Game game = gameDao.findGame(nation.getGameId());
+        Collection<Unit> allUnits = unitDao.getUnits(game);
+        Map<Nation, RelationType> myRelations = relationService.getMyRelationsAsMap(nation);
+        Map<Nation, RelationType> theirRelations = relationService.getTheirRelationTypesAsMap(nation);
+
+        return new BotWorldState(
+                nation,
+                game,
+                unitDao.getUnits(nation),
+                cityDao.getCities(nation),
+                allUnits,
+                myRelations,
+                theirRelations,
+                simulatedTimeMillis
+        );
+    }
 }

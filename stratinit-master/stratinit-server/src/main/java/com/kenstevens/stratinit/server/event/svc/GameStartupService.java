@@ -46,15 +46,21 @@ public class GameStartupService {
     private IntegrityCheckerService integrityCheckerService;
 
     public void startGame(Game game, boolean fromEvent) {
+        initializeGameState(game, fromEvent);
+        scheduleCityEvents(game);
+        scheduleUnitEvents(game);
+        updateRelations(game);
+        updateUnitSeen(game);
+        eventQueue.schedule(game, true);
+    }
+
+    public void initializeGameState(Game game, boolean fromEvent) {
         logger.info("Starting up game " + game + ".");
         integrityCheck(game);
         updateCities(game, fromEvent);
         updateUnits(game);
-        updateRelations(game);
-        updateUnitSeen(game);
         survey(game);
         gameService.setNoAlliances(game);
-        eventQueue.schedule(game, true);
     }
 
     private void integrityCheck(Game game) {
@@ -84,6 +90,12 @@ public class GameStartupService {
                     cityBuilderService.buildUnit(city, nextMissedBuildTime);
                 }
             }
+        }
+    }
+
+    private void scheduleCityEvents(Game game) {
+        Collection<City> cities = cityDao.getCities(game);
+        for (City city : cities) {
             eventQueue.schedule(city);
         }
         if (cities.size() > 0) {
@@ -147,6 +159,12 @@ public class GameStartupService {
                         .getNextMissedBuildTime();
                 unitService.updateUnit(unit, nextMissedBuildTime);
             }
+        }
+    }
+
+    private void scheduleUnitEvents(Game game) {
+        Collection<Unit> units = unitDao.getUnits(game);
+        for (Unit unit : units) {
             eventQueue.schedule(unit);
         }
         if (units.size() > 0) {

@@ -22,18 +22,26 @@ public class BotExecutor {
     private BotWeights weights;
 
     public void executeTurn(Nation nation) {
-        BotWorldState state = worldStateBuilder.build(nation);
+        executeTurn(nation, weights);
+    }
+
+    public void executeTurn(Nation nation, BotWeights overrideWeights) {
+        executeTurn(nation, overrideWeights, System.currentTimeMillis());
+    }
+
+    public void executeTurn(Nation nation, BotWeights overrideWeights, long simulatedTimeMillis) {
+        BotWorldState state = worldStateBuilder.build(nation, simulatedTimeMillis);
 
         if (!state.getGame().hasStarted() || state.getGame().hasEnded()) {
             return;
         }
 
-        List<BotAction> candidates = actionGenerator.generateActions(state, weights);
+        List<BotAction> candidates = actionGenerator.generateActions(state, overrideWeights);
 
         // Score all actions
         List<ScoredAction> scored = new ArrayList<>();
         for (BotAction action : candidates) {
-            double utility = action.computeUtility(state, weights);
+            double utility = action.computeUtility(state, overrideWeights);
             if (utility > 0) {
                 scored.add(new ScoredAction(action, utility));
             }

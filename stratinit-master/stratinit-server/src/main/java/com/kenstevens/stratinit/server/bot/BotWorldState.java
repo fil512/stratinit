@@ -21,6 +21,14 @@ public class BotWorldState {
                          Collection<Unit> allVisibleUnits,
                          Map<Nation, RelationType> myRelations,
                          Map<Nation, RelationType> theirRelations) {
+        this(nation, game, myUnits, myCities, allVisibleUnits, myRelations, theirRelations, System.currentTimeMillis());
+    }
+
+    public BotWorldState(Nation nation, Game game, List<Unit> myUnits, List<City> myCities,
+                         Collection<Unit> allVisibleUnits,
+                         Map<Nation, RelationType> myRelations,
+                         Map<Nation, RelationType> theirRelations,
+                         long nowMillis) {
         this.nation = nation;
         this.game = game;
         this.myUnits = myUnits;
@@ -32,7 +40,7 @@ public class BotWorldState {
         // Calculate game time progress (0.0 = start, 1.0 = end)
         if (game.getStartTime() != null && game.getEnds() != null) {
             long total = game.getEnds().getTime() - game.getStartTime().getTime();
-            long elapsed = System.currentTimeMillis() - game.getStartTime().getTime();
+            long elapsed = nowMillis - game.getStartTime().getTime();
             this.gameTimePercent = total > 0 ? Math.min(1.0, Math.max(0.0, (double) elapsed / total)) : 0.0;
         } else {
             this.gameTimePercent = 0.0;
