@@ -1,0 +1,17 @@
+# Eclipse / IDE
+.classpath
+.project
+.factorypath
+.settings/
+
+# Claude Code plans (session-specific, not project docs)
+.claude/plans/
+.claude/settings.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+.env.*
