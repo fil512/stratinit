@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.rest.mail;
 
-import com.kenstevens.stratinit.type.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,9 @@ import java.util.Properties;
 @Service
 public class SMTPService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Autowired
+    private EmailProperties emailProperties;
 
     @Value("${stratinit.email.hostname}")
     private String smptHostname;
@@ -53,8 +56,8 @@ public class SMTPService {
     }
 
     public void sendException(String subject, String stackTrace) {
-        sendEmail(Constants.EMAIL_ADMIN_ADDRESS,
-                Constants.EMAIL_FROM_ADDRESS, subject,
+        sendEmail(emailProperties.getAdminAddress(),
+                emailProperties.getFromAddress(), subject,
                 stackTrace);
     }
 }

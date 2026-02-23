@@ -76,7 +76,7 @@ Dependencies flow downward.
 
 **Caching:** `DataCache` holds in-memory game state using `ConcurrentHashMap` (`GameCache`, `NationCache`, `UnitCache`, `CityCache`). Games are loaded via `GameLoaderService`.
 
-**Domain model:** Entities in `stratinit-core/.../client/model/` — key entities are `Game`, `Player`, `Nation`, `Unit`, `City`, `Sector`. Unit type definitions (stats, abilities) are in `unit-definitions.json`, loaded by `UnitBaseLoader` into the `UnitBase` class hierarchy.
+**Domain model:** Entities in `stratinit-core/.../client/model/` — key entities are `Game`, `Player`, `Nation`, `Unit`, `City`, `Sector`. Unit type definitions (stats, abilities) are in `unit-definitions.json`, loaded by `UnitBaseLoader` into the `UnitBase` class hierarchy. Value classes `EventKey` and `SectorCoordVector` are Java records. Game balance constants remain in `Constants.java` (used by non-Spring-managed classes).
 
 **DTOs:** Prefixed with `SI` (e.g., `SIGame`, `SINation`, `SIUnit`) in `stratinit-core`.
 
@@ -97,7 +97,8 @@ Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest
 - JPA config: `persistence.properties` in each module's resources
 - App config: `application.yml` in `stratinit-rest`
 - Maven JVM settings: `.mvn/jvm.config` (`-Xmx2048m -Xms1024m -Djava.awt.headless=true`)
-- Custom properties: `stratinit.email.enabled`, `stratinit.scheduler.enabled`, `stratinit.mode`
+- Custom properties: `stratinit.version`, `stratinit.email.enabled`, `stratinit.email.from-address`, `stratinit.email.admin-address`, `stratinit.scheduler.enabled`, `stratinit.mode`
+- Email config: `EmailProperties` (`@ConfigurationProperties(prefix = "stratinit.email")`) in `stratinit-server`
 - JWT config: `stratinit.jwt.secret`, `stratinit.jwt.expiration-ms`
 - CORS: `stratinit.cors.allowed-origins` (defaults to `http://localhost:5173`)
 - Unit definitions: `stratinit-core/src/main/resources/unit-definitions.json` (23 unit types with stats and abilities)

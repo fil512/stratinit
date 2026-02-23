@@ -19,7 +19,7 @@ public class RelationChangeEvent extends Event {
 
 	@Override
 	protected void execute() {
-		RelationPK relationPK = (RelationPK) getEventKey().getKey();
+		RelationPK relationPK = (RelationPK) getEventKey().key();
 		stratInitUpdater.switchRelation(relationPK);
 	}
 }

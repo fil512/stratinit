@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
@@ -57,10 +58,13 @@ public class GameController {
     @Autowired
     private StratInitSessionManager sessionManager;
 
+    @Value("${stratinit.version:1.2.8}")
+    private String serverVersion;
+
     @GetMapping(path = SIRestPaths.VERSION)
     @Operation(summary = "Get server version")
     public String getVersion() {
-        return Constants.SERVER_VERSION;
+        return serverVersion;
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BASE)
@@ -85,6 +89,7 @@ public class GameController {
             }
         }
         properties.setProperty(RunModeEnum.class.getSimpleName(), serverConfig.getRunMode().toString());
+        properties.setProperty("SERVER_VERSION", serverVersion);
         return properties;
     }
 

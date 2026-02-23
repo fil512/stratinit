@@ -301,24 +301,40 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 10. Domain Model Cleanup
 
-**Status: NOT STARTED**
+**Status: DONE — records + config externalization complete; game balance constants and MapStruct NOT RECOMMENDED**
 
-**Current state:**
-- Composite keys using `EventKey` with manual `hashCode`/`equals` (`stratinit-core/.../model/EventKey.java`)
-- Manual DTO conversion scattered across 10+ service classes (e.g., `new SIUnit(unit)`, `new SIGame(game)` in `NationSvc.java`, `CitySvc.java`, `UnitSvc.java`)
-- 70+ hardcoded constants in `Constants.java` including game balance values, email addresses, and server version
-- Unit stats now in `unit-definitions.json` (see #6) but game balance constants still hardcoded
+**What's done:**
+- `EventKey` converted to Java record (49 lines → 12 lines), eliminating manual `hashCode`/`equals`/`getKey()`
+- `SectorCoordVector` converted to Java record (51 lines → 3 lines), eliminating manual `hashCode`/`equals`/getters
+- Updated 8 event classes: `getEventKey().getKey()` → `getEventKey().key()` (record accessor)
+- `EmailProperties` (`@ConfigurationProperties(prefix = "stratinit.email")`) externalizes `from-address` and `admin-address`
+- `MailService` and `SMTPService` now inject `EmailProperties` instead of using `Constants.EMAIL_FROM_ADDRESS`/`EMAIL_ADMIN_ADDRESS`
+- `GameController.getVersion()` uses `@Value("${stratinit.version:1.2.8}")` instead of `Constants.SERVER_VERSION`
+- `GameController.getServerConfig()` includes `SERVER_VERSION` from the externalized property
+- `application.yml` (main + test) updated with `stratinit.version`, `stratinit.email.from-address`, `stratinit.email.admin-address`
+- Removed `EMAIL_FROM_ADDRESS`, `EMAIL_ADMIN_ADDRESS`, `SERVER_VERSION` from `Constants.java`
+- All 426 tests passing
 
-**Recommendation:**
-- Replace manual DTO mapping with MapStruct interfaces — define `@Mapper` interfaces for each entity/DTO pair
-- Move game balance constants (`TECH_INCREASE_DAILY_BY_NUM_TECH_CENTRES`, `HOURS_BETWEEN_UNIT_UPDATES`, etc.) to `application.yml` with `@ConfigurationProperties`
-- Replace `EventKey` manual hashCode/equals with Java 16+ `record` classes
-- Move email addresses and server version to configuration
+**NOT RECOMMENDED — Game balance constants:**
+- Constants are referenced by non-Spring-managed classes (`Nation.java`, `Unit.java`, `MoveCost.java`, predicates) that cannot use `@Value` or `@Autowired`
+- Externalizing would require passing a config object through constructors of ~30 model/predicate classes, adding significant complexity
+- Game balance values are architectural decisions, not deployment configuration — they don't vary per environment
+- The `getServerConfig()` endpoint already exposes all Constants to the frontend via reflection
+
+**NOT RECOMMENDED — MapStruct:**
+- Two-step construction pattern: Most DTOs use `new SIUnit(unit)` + `addPrivateData(nation, unit)` for permission-based field filtering. MapStruct cannot model conditional field mapping based on runtime authorization.
+- Service-layer computed fields: `NationSvc` calls `nationDao.getNumberOfCities()`, `unitDao` lookups, etc. during mapping — these aren't field copies.
+- Type hierarchy discrimination: `SIBattleLog` uses `instanceof` to handle 3 BattleLog subtypes differently.
+- Dual-entity mapping: `SIRelation` maps two `Relation` entities simultaneously (both directions).
+- Only ~60% of fields are simple copies; the rest require custom logic that would need `@AfterMapping` hooks, making MapStruct mappers more complex than the current constructors.
 
 **Key files:**
-- `stratinit-core/.../type/Constants.java` (70+ hardcoded values)
-- `stratinit-core/.../model/EventKey.java` (manual hashCode/equals)
-- `stratinit-server/.../svc/NationSvc.java`, `CitySvc.java`, `UnitSvc.java` (manual DTO conversion)
+- `stratinit-core/.../client/model/EventKey.java` (now a record)
+- `stratinit-core/.../type/SectorCoordVector.java` (now a record)
+- `stratinit-server/.../rest/mail/EmailProperties.java` (`@ConfigurationProperties` for email)
+- `stratinit-rest/.../controller/GameController.java` (`@Value` for version)
+- `stratinit-rest/src/main/resources/application.yml` (email + version config)
+- `stratinit-core/.../type/Constants.java` (game balance constants remain — by design)
 
 ---
 
@@ -342,7 +358,7 @@ Phase 3: API and frontend
   └── #1  SPA frontend                               ✅ DONE (feature parity reached, Wicket + SWT retired)
 
 Phase 4: Polish
-  └── #10 Domain model cleanup (MapStruct, records, config externalization)
+  └── #10 Domain model cleanup (records, config externalization)  ✅ DONE
 ```
 
 Each phase builds on the previous. Phase 1 items are low-risk, mechanical changes that reduce tech debt without changing behavior. Phase 2 modernizes the backend architecture. Phase 3 delivers the user-facing improvements. Phase 4 is cleanup that can happen incrementally.

@@ -29,7 +29,7 @@ public class CityBuildEvent extends Event {
 
 	@Override
 	protected void execute() {
-		CityPK cityPK = (CityPK) getEventKey().getKey();
+		CityPK cityPK = (CityPK) getEventKey().key();
 		UnitType oldBuild = cityDao.findCity(cityPK).getBuild();
 		stratInitUpdater.buildUnit(cityPK, new Date());
 		City city = cityDao.findCity(cityPK);

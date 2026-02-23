@@ -27,7 +27,7 @@ public class UnitUpdateEvent extends Event {
 	}
 
 	private void updateUnit() {
-		Integer unitId = (Integer) getEventKey().getKey();
+		Integer unitId = (Integer) getEventKey().key();
 		Unit unit = unitDao.findUnit(unitId);
 		if (unit == null) {
 			cancel();

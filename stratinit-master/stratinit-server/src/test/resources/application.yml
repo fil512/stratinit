@@ -9,6 +9,8 @@ stratinit:
   email:
     hostname: localhost
     enabled: false
+    from-address: hq@strategicinitiative.org
+    admin-address: ken.stevens@sympatico.ca
   scheduler:
     enabled: false
   mode: PRODUCTION

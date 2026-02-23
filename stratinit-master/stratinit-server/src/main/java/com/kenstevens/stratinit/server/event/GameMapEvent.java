@@ -19,7 +19,7 @@ public class GameMapEvent extends Event {
 
     @Override
     protected void execute() {
-        Integer gameId = (Integer) getEventKey().getKey();
+        Integer gameId = (Integer) getEventKey().key();
         stratInitUpdater.mapGame(gameId);
     }
 }

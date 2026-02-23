@@ -11,7 +11,6 @@ import com.kenstevens.stratinit.repo.PlayerRoleRepo;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
-import com.kenstevens.stratinit.type.Constants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -142,7 +141,7 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(Constants.SERVER_VERSION));
+                .andExpect(content().string("1.2.8"));
     }
 
     @Test

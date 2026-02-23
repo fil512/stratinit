@@ -20,7 +20,7 @@ public class TechUpdateEvent extends Event {
 
 	@Override
 	public void execute() {
-		Integer gameId = (Integer) getEventKey().getKey();
+		Integer gameId = (Integer) getEventKey().key();
 		stratInitUpdater.updateTech(gameId, new Date());
 	}
 }

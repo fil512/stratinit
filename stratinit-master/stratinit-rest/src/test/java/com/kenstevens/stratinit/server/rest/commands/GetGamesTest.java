@@ -4,7 +4,6 @@ import com.kenstevens.stratinit.BaseStratInitControllerTest;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
-import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.world.WorldHelper;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +51,7 @@ public class GetGamesTest extends BaseStratInitControllerTest {
     @Test
     public void getConfig() {
         Properties properties = gameController.getServerConfig();
-        assertEquals(Constants.SERVER_VERSION, properties.get("SERVER_VERSION"));
+        assertEquals("1.2.8", properties.get("SERVER_VERSION"));
     }
 
 }

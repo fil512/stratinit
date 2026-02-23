@@ -19,7 +19,7 @@ public class UnitSeenEvent extends Event {
 
 	@Override
 	protected void execute() {
-		UnitSeenPK unitSeenPK = (UnitSeenPK) getEventKey().getKey();
+		UnitSeenPK unitSeenPK = (UnitSeenPK) getEventKey().key();
 		stratInitUpdater.disable(unitSeenPK);
 	}
 }

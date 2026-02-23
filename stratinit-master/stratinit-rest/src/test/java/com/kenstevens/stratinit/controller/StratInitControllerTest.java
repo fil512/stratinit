@@ -14,7 +14,6 @@ import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RestWebSecurityAdapterConfig;
-import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -119,7 +118,7 @@ class StratInitControllerTest {
     @WithUserDetails(HAPPY_USER)
     public void version() throws Exception {
         performGet(SIRestPaths.VERSION)
-                .andExpect(content().string(Constants.SERVER_VERSION));
+                .andExpect(content().string("1.2.8"));
     }
 
     @SuppressWarnings("unchecked")

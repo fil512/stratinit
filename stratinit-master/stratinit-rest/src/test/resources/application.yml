@@ -6,9 +6,12 @@ logging:
 server:
   port: 8081
 stratinit:
+  version: 1.2.8
   email:
     hostname: localhost
     enabled: false
+    from-address: hq@strategicinitiative.org
+    admin-address: ken.stevens@sympatico.ca
   scheduler:
     enabled: false
   mode: PRODUCTION
