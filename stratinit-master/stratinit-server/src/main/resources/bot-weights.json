@@ -21,6 +21,8 @@
   "airStrikeDesire": 0.7,
   "satelliteLaunchDesire": 0.5,
   "icbmLaunchDesire": 0.8,
+  "transportDestinationDesire": 0.9,
+  "disembarkDesire": 1.0,
   "neutralCityCaptureDesire": 1.2,
   "tankDesire": 0.6
 }

@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.server.svc.MoveService;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,8 +88,14 @@ public class BotActionGenerator {
 
     private void generateExpansionActions(BotWorldState state, Nation nation, List<BotAction> actions) {
         int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
 
         for (Unit unit : state.getIdleLandUnits()) {
+            // Skip land units riding on transports (at sea)
+            Sector unitSector = world.getSectorOrNull(unit.getCoords());
+            if (unitSector != null && unitSector.isWater()) {
+                continue;
+            }
             if (unit.getType() == UnitType.ENGINEER && unit.getMobility() >= com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY) {
                 // Engineer can build a city
                 actions.add(new BuildCityWithEngineerAction(unit, cityService));
@@ -277,6 +284,97 @@ public class BotActionGenerator {
                     if (distance <= myUnit.getMobility() && distance > 0) {
                         actions.add(new LoadTransportAction(myUnit, coords, nation, moveService));
                     }
+                }
+            }
+        }
+
+        // Transport destination planning: sail loaded transports to other islands
+        generateTransportDestinationActions(state, nation, actions);
+
+        // Disembark: land units at sea step onto adjacent land
+        generateDisembarkActions(state, nation, actions);
+    }
+
+    private record LandingCandidate(SectorCoords coords, int distance, boolean hasCityTarget) {}
+
+    private void generateTransportDestinationActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        List<Unit> loadedTransports = state.getLoadedTransports();
+        if (loadedTransports.isEmpty()) {
+            return;
+        }
+
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        int homeIslandId = state.getHomeIslandId();
+
+        // Build set of city coords on non-home islands (enemy + neutral)
+        Set<SectorCoords> targetCityCoords = new HashSet<>();
+        for (City enemyCity : state.getEnemyCities()) {
+            Sector s = world.getSectorOrNull(enemyCity.getCoords());
+            if (s != null && s.getIsland() != homeIslandId) {
+                targetCityCoords.add(enemyCity.getCoords());
+            }
+        }
+        for (SectorCoords neutralCoords : state.getNeutralCityCoords()) {
+            Sector s = world.getSectorOrNull(neutralCoords);
+            if (s != null && s.getIsland() != homeIslandId) {
+                targetCityCoords.add(neutralCoords);
+            }
+        }
+
+        for (Unit transport : loadedTransports) {
+            SectorCoords transportCoords = transport.getCoords();
+            List<LandingCandidate> candidates = new ArrayList<>();
+
+            // Find water sectors adjacent to non-home island coast
+            for (int x = 0; x < gameSize; x++) {
+                for (int y = 0; y < gameSize; y++) {
+                    SectorCoords coords = new SectorCoords(x, y);
+                    if (!state.isExplored(coords)) {
+                        continue;
+                    }
+                    Sector sector = world.getSectorOrNull(coords);
+                    if (sector == null || !sector.isWater()) {
+                        continue;
+                    }
+                    // Check if adjacent to non-home island land
+                    boolean adjacentToLand = false;
+                    boolean adjacentToCity = false;
+                    for (Sector neighbour : world.getNeighbours(coords)) {
+                        if (!neighbour.isWater() && neighbour.getIsland() != homeIslandId) {
+                            adjacentToLand = true;
+                            if (targetCityCoords.contains(neighbour.getCoords())) {
+                                adjacentToCity = true;
+                            }
+                        }
+                    }
+                    if (adjacentToLand) {
+                        int dist = SectorCoords.distance(gameSize, transportCoords, coords);
+                        candidates.add(new LandingCandidate(coords, dist, adjacentToCity));
+                    }
+                }
+            }
+
+            // Prioritize city targets, then sort by distance
+            candidates.sort(Comparator.<LandingCandidate>comparingInt(c -> c.hasCityTarget ? 0 : 1)
+                    .thenComparingInt(c -> c.distance));
+            int limit = Math.min(3, candidates.size());
+            for (int i = 0; i < limit; i++) {
+                LandingCandidate c = candidates.get(i);
+                actions.add(new MoveTransportToTargetAction(transport, c.coords, c.distance,
+                        c.hasCityTarget, nation, moveService));
+            }
+        }
+    }
+
+    private void generateDisembarkActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        World world = state.getWorld();
+        for (Unit landUnit : state.getLandUnitsAtSea()) {
+            for (Sector neighbour : world.getNeighbours(landUnit.getCoords())) {
+                if (!neighbour.isWater()) {
+                    boolean isCity = neighbour.getType() == SectorType.PLAYER_CITY
+                            || neighbour.getType() == SectorType.NEUTRAL_CITY;
+                    actions.add(new DisembarkUnitAction(landUnit, neighbour.getCoords(), isCity, nation, moveService));
                 }
             }
         }

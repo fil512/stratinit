@@ -45,6 +45,10 @@ public class BotWeights {
     public double satelliteLaunchDesire = 0.5;
     public double icbmLaunchDesire = 0.8;
 
+    // Transport destination planning
+    public double transportDestinationDesire = 0.9;
+    public double disembarkDesire = 1.0;
+
     // Neutral city capture
     public double neutralCityCaptureDesire = 1.2;
 

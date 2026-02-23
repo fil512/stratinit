@@ -71,7 +71,7 @@ Immutable snapshot built by `BotWorldStateBuilder` at the start of each turn:
 
 Bots respect the same fog-of-war rules as human players: they can only see enemy units within their units' sight range and enemy cities in sectors they have previously scouted. This means bots must scout before they can attack, making satellite launches and expansion genuinely useful for intelligence gathering.
 
-Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getIdleNavalUnits()`, `getIdleAirUnits()`, `getLaunchableUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `getEnemyCities()`, `isCoastalCity(city)`, `hasEnoughCP(cost)`, `getWorld()`, `isExplored(coords)`, `getNeutralCityCoords()`
+Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getIdleNavalUnits()`, `getIdleAirUnits()`, `getLaunchableUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `getEnemyCities()`, `isCoastalCity(city)`, `hasEnoughCP(cost)`, `getWorld()`, `isExplored(coords)`, `getNeutralCityCoords()`, `getHomeIslandId()`, `getLoadedTransports()`, `getLandUnitsAtSea()`
 
 Pre-computed data (built by `BotWorldStateBuilder`):
 - **Coastal city coords**: Cities adjacent to water sectors (enables naval unit production gating)
@@ -91,6 +91,8 @@ Pre-computed data (built by `BotWorldStateBuilder`):
 | `AttackNavalAction` | MILITARY | Moves naval unit to attack enemy naval unit | 2 |
 | `AttackWithAirAction` | MILITARY | Air unit strikes enemy units or bombs enemy cities | 2 |
 | `LoadTransportAction` | EXPANSION | Moves transport/carrier to pick up idle land units | 1 |
+| `MoveTransportToTargetAction` | EXPANSION | Sails loaded transport toward landing zone on another island | 1 |
+| `DisembarkUnitAction` | EXPANSION | Moves land unit from water onto adjacent land sector | 1 |
 | `LaunchSatelliteAction` | EXPANSION | Launches satellite toward map center for vision | 8 |
 | `LaunchICBMAction` | MILITARY | Launches ICBM at enemy city | 32 |
 | `DefendCityAction` | DEFENSE | Moves idle unit to undefended own city | 1 |
@@ -120,7 +122,7 @@ Tech requirements are enforced in `SetCityProductionAction.computeUtility()` (re
 - `generateCityProductionActions()` — all unit types with coastal/tech gating
 - `generateExpansionActions()` — frontier-based land + naval exploration, neutral city capture, engineer city building
 - `generateMilitaryActions()` — land-vs-land combat
-- `generateNavalActions()` — naval combat + transport loading
+- `generateNavalActions()` — naval combat + transport loading + transport destination planning + disembark
 - `generateAirActions()` — air strikes + city bombing
 - `generateStrategicActions()` — satellite launch (map center) + ICBM launch (enemy cities)
 - `generateDefenseActions()` — move to undefended cities
@@ -151,6 +153,8 @@ All utility calculations use configurable weights loaded from `bot-weights.json`
   "navalBaseWeight": 0.6,
   "navalCombatDesire": 0.7,
   "transportLoadDesire": 0.5,
+  "transportDestinationDesire": 0.9,
+  "disembarkDesire": 1.0,
   "airStrikeDesire": 0.7,
   "satelliteLaunchDesire": 0.5,
   "icbmLaunchDesire": 0.8,
@@ -206,6 +210,8 @@ stratinit-server/
   server/bot/action/CaptureNeutralCityAction.java   — Expansion: capture neutral cities
   server/bot/action/BuildCityWithEngineerAction.java — Expansion: engineer builds city
   server/bot/action/LoadTransportAction.java        — Expansion: transport picks up land units
+  server/bot/action/MoveTransportToTargetAction.java — Expansion: sail loaded transport to other island
+  server/bot/action/DisembarkUnitAction.java        — Expansion: land unit steps off transport onto land
   server/bot/action/LaunchSatelliteAction.java      — Expansion: satellite launch for vision
   server/bot/action/AttackEnemyAction.java          — Military: land combat
   server/bot/action/AttackNavalAction.java          — Military: naval combat
@@ -300,6 +306,5 @@ stratinit-server/
 - **Difficulty levels**: Multiple weight profiles (easy/medium/hard)
 - **Allied vision sharing**: Bots could share fog-of-war with allies via `getTeamSeenUnits()`
 - **Coordination**: Multi-unit attack groups, combined arms tactics
-- **Transport destination planning**: Bots load transports but don't plan where to unload across islands
 - **Larger training runs**: More generations, larger populations, parallel game simulation
 - **Alternative algorithms**: Gradient-free optimization (CMA-ES), neuroevolution

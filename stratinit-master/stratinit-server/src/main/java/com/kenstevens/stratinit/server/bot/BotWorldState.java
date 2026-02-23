@@ -178,4 +178,43 @@ public class BotWorldState {
     public List<SectorCoords> getNeutralCityCoords() {
         return neutralCityCoords;
     }
+
+    public int getHomeIslandId() {
+        Map<Integer, Integer> islandCounts = new HashMap<>();
+        for (City city : myCities) {
+            Sector sector = world.getSectorOrNull(city.getCoords());
+            if (sector != null && sector.getIsland() >= 0) {
+                islandCounts.merge(sector.getIsland(), 1, Integer::sum);
+            }
+        }
+        return islandCounts.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(-1);
+    }
+
+    public List<Unit> getLoadedTransports() {
+        Set<SectorCoords> landUnitCoords = new HashSet<>();
+        for (Unit u : myUnits) {
+            if (u.isAlive() && u.getUnitBase().isLand()) {
+                Sector sector = world.getSectorOrNull(u.getCoords());
+                if (sector != null && sector.isWater()) {
+                    landUnitCoords.add(u.getCoords());
+                }
+            }
+        }
+        return getIdleNavalUnits().stream()
+                .filter(u -> u.carriesUnits() && landUnitCoords.contains(u.getCoords()))
+                .collect(Collectors.toList());
+    }
+
+    public List<Unit> getLandUnitsAtSea() {
+        return getIdleUnits().stream()
+                .filter(u -> u.getUnitBase().isLand())
+                .filter(u -> {
+                    Sector sector = world.getSectorOrNull(u.getCoords());
+                    return sector != null && sector.isWater();
+                })
+                .collect(Collectors.toList());
+    }
 }
