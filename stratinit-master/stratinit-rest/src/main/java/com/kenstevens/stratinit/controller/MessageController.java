@@ -14,6 +14,8 @@ import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.PlayerMessageList;
 import com.kenstevens.stratinit.type.Constants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = SIRestPaths.BASE_PATH)
+@Tag(name = "Messaging")
 public class MessageController {
     @Autowired
     private RequestProcessor requestProcessor;
@@ -38,6 +41,7 @@ public class MessageController {
     private GameService gameService;
 
     @PostMapping(path = SIRestPaths.SEND_MESSAGE)
+    @Operation(summary = "Send a message to a nation or broadcast")
     public Integer sendMessage(@RequestBody SIMessage simessage) {
         return writeProcessor.process(nation -> {
             Nation to = null;
@@ -50,6 +54,7 @@ public class MessageController {
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_MAIL)
+    @Operation(summary = "Get received messages (inbox)")
     public List<SIMessage> getMail() {
         return writeProcessor.process(nation -> {
             nation.setNewMail(false);
@@ -60,24 +65,28 @@ public class MessageController {
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_SENT)
+    @Operation(summary = "Get sent messages")
     public List<SIMessage> getSentMail() {
         return requestProcessor.process(nation ->
                 playerMessageList.messagesToSIMessages(messageDao.getSentMail(nation)));
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE)
+    @Operation(summary = "Get all messages")
     public List<SIMessage> getMessages() {
         return requestProcessor.process(nation ->
                 playerMessageList.messagesToSIMessages(messageDao.getMessages(nation)));
     }
 
     @GetMapping(path = SIRestPaths.MESSAGE_ANNOUNCEMENT)
+    @Operation(summary = "Get game announcements")
     public List<SIMessage> getAnnouncements() {
         return requestProcessor.processWithGame(game ->
                 playerMessageList.messagesToSIMessages(messageDao.getAnnouncements(game)));
     }
 
     @GetMapping(path = SIRestPaths.NEWS_LOG)
+    @Operation(summary = "Get news logs organized by day")
     public List<SINewsLogsDay> getNewsLogs() {
         return requestProcessor.processWithGame(game -> messageService.getNewsLogs(game));
     }

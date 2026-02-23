@@ -2,10 +2,12 @@ package com.kenstevens.stratinit.dto;
 
 import com.kenstevens.stratinit.client.model.Relation;
 import com.kenstevens.stratinit.type.RelationType;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 
+@Schema(description = "Diplomatic relation between two nations, including current and pending relation types")
 public class SIRelation implements StratInitDTO {
     private static final long serialVersionUID = 1L;
     public int nationId;

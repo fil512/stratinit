@@ -3,6 +3,8 @@ package com.kenstevens.stratinit.controller;
 import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.service.PlayerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/stratinit/profile")
+@Tag(name = "Profile")
 public class ProfileController {
     private final PlayerService playerService;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -24,6 +27,7 @@ public class ProfileController {
     }
 
     @GetMapping
+    @Operation(summary = "Get the authenticated player's profile")
     public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
         Player player = playerService.findPlayer(userDetails.getUsername());
         if (player == null) {
@@ -44,6 +48,7 @@ public class ProfileController {
     }
 
     @PutMapping
+    @Operation(summary = "Update email, password, or notification preferences")
     public ResponseEntity<?> updateProfile(@AuthenticationPrincipal UserDetails userDetails,
                                            @RequestBody UpdateProfileRequest request) {
         Player player = playerService.findPlayer(userDetails.getUsername());

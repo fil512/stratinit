@@ -3,10 +3,12 @@ package com.kenstevens.stratinit.dto;
 import com.kenstevens.stratinit.client.model.Mail;
 import com.kenstevens.stratinit.remote.request.IRestRequestJson;
 import com.kenstevens.stratinit.type.Constants;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 
+@Schema(description = "In-game message with sender, recipient, subject, and body")
 public class SIMessage implements StratInitDTO, IRestRequestJson {
 	private static final long serialVersionUID = 1L;
 	public int messageId;

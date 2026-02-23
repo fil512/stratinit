@@ -58,13 +58,15 @@ Dependencies flow downward.
 - **JWT authentication** (JJWT 0.12.6) with HTTP Basic fallback
 - **PostgreSQL** (production) / **H2** (tests)
 - **Flyway 11** for database migrations (`stratinit-dao/src/main/resources/db/migration/`)
+- **Bean Validation** (`jakarta.validation`) on request DTOs, `@Valid` in controllers
+- **springdoc-openapi 2.8.5** — Swagger UI at `/swagger-ui.html`, OpenAPI spec at `/v3/api-docs`
 - **JUnit 5** + Mockito for testing
 
 ## Key Architecture Patterns
 
 **Request processing flow:** Domain controllers (`GameController`, `UnitController`, `CityController`, `NationController`, `MessageController`, `RankingController`, `ProfileController`, `AdminController`) return domain DTOs directly (not wrapped in `Result<T>`). Reads go through `RequestProcessor`, writes through `WriteProcessor` (synchronizes on `GameCache`, checks command points, sets lastAction, sends WebSocket notifications, unwraps `Result<T>` from service lambdas — throwing `CommandFailedException` on failure). Error handling is centralized in `GlobalExceptionHandler` (`@RestControllerAdvice`): business errors → HTTP 400, unexpected errors → HTTP 500. Exception hierarchy: `StratInitException` → `CommandFailedException`, `InsufficientCommandPointsException`. Controllers are thin lambdas delegating to REST service classes (`UnitSvc`, `CitySvc`, `NationSvc`, `RelationSvc`) for request-level orchestration. Deeper business logic lives in domain service classes (`UnitService`, `CityService`, `RelationService`, `SectorService`, etc.) in `stratinit-server/.../server/service/`.
 
-**Error handling:** Centralized in `GlobalExceptionHandler` (`@RestControllerAdvice`). Exception hierarchy in `stratinit-core/.../remote/exception/`: `StratInitException` (base) → `CommandFailedException` (wraps failed service `Result` with messages), `InsufficientCommandPointsException`. Business errors return HTTP 400 with `ErrorResponse` JSON (`{error, messages}`). Unexpected errors return HTTP 500.
+**Error handling:** Centralized in `GlobalExceptionHandler` (`@RestControllerAdvice`). Exception hierarchy in `stratinit-core/.../remote/exception/`: `StratInitException` (base) → `CommandFailedException` (wraps failed service `Result` with messages), `InsufficientCommandPointsException`. Bean Validation errors (`MethodArgumentNotValidException`) return HTTP 400 with field-level messages. Business errors return HTTP 400 with `ErrorResponse` JSON (`{error, messages}`). Unexpected errors return HTTP 500.
 
 **Authentication:** JWT tokens via `POST /stratinit/auth/login`. Player registration via `POST /stratinit/auth/register`. Password recovery via `POST /stratinit/auth/forgot-password`. Account settings via `GET/PUT /stratinit/profile` (`ProfileController`). `JwtAuthenticationFilter` validates Bearer tokens. HTTP Basic still supported for backward compatibility. Stateless sessions.
 

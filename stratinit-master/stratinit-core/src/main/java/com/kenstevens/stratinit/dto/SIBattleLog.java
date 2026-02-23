@@ -3,11 +3,13 @@ package com.kenstevens.stratinit.dto;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.type.NewsCategory;
 import com.kenstevens.stratinit.type.SectorCoords;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 import java.util.List;
 
 
+@Schema(description = "Battle log entry with combat details, damage, and outcome")
 public class SIBattleLog implements StratInitDTO {
 	private static final long serialVersionUID = 7730883345140043294L;
 	public int id;

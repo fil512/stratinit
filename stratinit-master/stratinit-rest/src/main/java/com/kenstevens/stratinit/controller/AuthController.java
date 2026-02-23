@@ -4,7 +4,14 @@ import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.config.JwtTokenService;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.remote.exception.StratInitException;
 import com.kenstevens.stratinit.server.service.PlayerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +29,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/stratinit/auth")
+@Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenService jwtTokenService;
@@ -37,7 +45,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    @Operation(summary = "Authenticate and receive a JWT token")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password())
@@ -50,29 +59,20 @@ public class AuthController {
             ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid username or password"));
+                    .body(new ErrorResponse("Invalid username or password", java.util.List.of("Invalid username or password")));
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        if (request.username() == null || request.username().isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Username is required"));
-        }
-        if (request.password() == null || request.password().isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Password is required"));
-        }
-        if (request.email() == null || request.email().isBlank()) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Email is required"));
-        }
-
+    @Operation(summary = "Register a new player account")
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         Player player = new Player(request.username());
         player.setEmail(request.email());
         player.setPassword(passwordEncoder.encode(request.password()));
 
         Result<Player> result = playerService.register(player);
         if (!result.isSuccess()) {
-            return ResponseEntity.badRequest().body(Map.of("error", result.toString()));
+            throw new StratInitException(result.toString());
         }
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -80,11 +80,11 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
+    @Operation(summary = "Request a password reset via email")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         if ((request.username() == null || request.username().isBlank())
                 && (request.email() == null || request.email().isBlank())) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Username or email is required"));
+            throw new StratInitException("Username or email is required");
         }
 
         String username = request.username() != null ? request.username() : "";
@@ -92,14 +92,15 @@ public class AuthController {
 
         Result<None> result = playerService.forgottenPassword(username, email);
         if (!result.isSuccess()) {
-            return ResponseEntity.badRequest().body(Map.of("error", result.toString()));
+            throw new StratInitException(result.toString());
         }
 
         return ResponseEntity.ok(Map.of("message",
                 "A new password has been sent to your email address."));
     }
 
-    public record LoginRequest(String username, String password) {}
-    public record RegisterRequest(String username, String email, String password) {}
+    public record LoginRequest(@NotBlank String username, @NotBlank String password) {}
+    public record RegisterRequest(@NotBlank String username, @NotBlank @Email String email,
+                                  @NotBlank @Size(min = 6) String password) {}
     public record ForgotPasswordRequest(String username, String email) {}
 }

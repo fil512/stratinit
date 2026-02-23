@@ -1,8 +1,11 @@
 package com.kenstevens.stratinit.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
 
+@Schema(description = "Complete world view update containing sectors, units, cities, nations, battle logs, and relations")
 public class SIUpdate implements StratInitDTO {
     private static final long serialVersionUID = 1L;
     public int nationId;

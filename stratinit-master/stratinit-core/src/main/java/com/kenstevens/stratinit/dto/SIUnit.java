@@ -4,10 +4,12 @@ import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 
+@Schema(description = "Unit state including position, type, HP, and private data (mobility, ammo, fuel) for the owning player")
 public class SIUnit implements StratInitDTO {
     private static final long serialVersionUID = 1L;
     public int id;

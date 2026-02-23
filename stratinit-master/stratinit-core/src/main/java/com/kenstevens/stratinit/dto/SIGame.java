@@ -1,10 +1,12 @@
 package com.kenstevens.stratinit.dto;
 
 import com.kenstevens.stratinit.client.model.Game;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 
+@Schema(description = "Game state including metadata, player count, and schedule")
 public class SIGame implements StratInitDTO {
     private static final long serialVersionUID = 1L;
     public int id;

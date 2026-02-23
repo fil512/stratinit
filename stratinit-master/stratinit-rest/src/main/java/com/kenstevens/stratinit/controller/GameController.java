@@ -22,6 +22,9 @@ import com.kenstevens.stratinit.server.rest.svc.NationSvc;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitType;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +36,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = SIRestPaths.BASE_PATH)
+@Tag(name = "Game Management")
 public class GameController {
     @Autowired
     private RequestProcessor requestProcessor;
@@ -54,11 +58,13 @@ public class GameController {
     private StratInitSessionManager sessionManager;
 
     @GetMapping(path = SIRestPaths.VERSION)
+    @Operation(summary = "Get server version")
     public String getVersion() {
         return Constants.SERVER_VERSION;
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BASE)
+    @Operation(summary = "Get all unit type definitions and stats")
     public List<SIUnitBase> getUnitBases() {
         return Arrays.stream(UnitType.values())
                 .map(unitType -> new SIUnitBase(UnitBase.getUnitBase(unitType)))
@@ -66,6 +72,7 @@ public class GameController {
     }
 
     @GetMapping(path = SIRestPaths.SERVER_CONFIG)
+    @Operation(summary = "Get server configuration properties")
     public Properties getServerConfig() {
         Properties properties = new Properties();
         Class<Constants> clazz = Constants.class;
@@ -82,7 +89,8 @@ public class GameController {
     }
 
     @PostMapping(path = SIRestPaths.SET_GAME)
-    public void setGame(@RequestBody SetGameJson request) {
+    @Operation(summary = "Set the active game for the current player")
+    public void setGame(@Valid @RequestBody SetGameJson request) {
         writeProcessor.processForGame(request.gameId, session -> {
             GameCache gameCache = dataCache.getGameCache(request.gameId);
             if (gameCache == null) {
@@ -113,7 +121,8 @@ public class GameController {
     }
 
     @PostMapping(path = SIRestPaths.JOIN_GAME)
-    public SINation joinGame(@RequestBody SetGameJson request) {
+    @Operation(summary = "Join an existing game")
+    public SINation joinGame(@Valid @RequestBody SetGameJson request) {
         return writeProcessor.processForGame(request.gameId, session -> {
             Result<Nation> result = gameService.joinGame(session.getPlayer(), request.gameId, request.noAlliances);
             if (!result.isSuccess()) {
@@ -126,11 +135,13 @@ public class GameController {
     }
 
     @GetMapping(path = SIRestPaths.GAME_JOINED)
+    @Operation(summary = "Get games the current player has joined")
     public List<SIGame> getJoinedGames() {
         return requestProcessor.processNoGame(player -> nationSvc.getJoinedGames(player));
     }
 
     @GetMapping(path = SIRestPaths.GAME_UNJOINED)
+    @Operation(summary = "Get available games the player can join")
     public List<SIGame> getUnjoinedGames() {
         return requestProcessor.processNoGame(player ->
                 gameService.getUnjoinedGames(player).stream()
@@ -139,17 +150,20 @@ public class GameController {
     }
 
     @GetMapping(path = SIRestPaths.UPDATE)
+    @Operation(summary = "Get full world view update for current game")
     public SIUpdate getUpdate() {
         return requestProcessor.process(nation -> playerWorldViewUpdate.getWorldViewUpdate(nation));
     }
 
     @GetMapping(path = SIRestPaths.CONCEDE)
+    @Operation(summary = "Concede from the current game")
     public SIUpdate concede() {
         return writeProcessor.process(nation -> nationSvc.concede(nation), 0);
     }
 
     @PostMapping(path = SIRestPaths.SUBMIT_ERROR)
-    public Integer submitError(@RequestBody ErrorJson request) {
+    @Operation(summary = "Submit a client-side error report")
+    public Integer submitError(@Valid @RequestBody ErrorJson request) {
         return errorProcessor.processError(request.subject, request.stackTrace);
     }
 }

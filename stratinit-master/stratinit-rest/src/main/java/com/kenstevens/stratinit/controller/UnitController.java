@@ -13,6 +13,9 @@ import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.svc.UnitSvc;
 import com.kenstevens.stratinit.type.Constants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = SIRestPaths.BASE_PATH)
+@Tag(name = "Units")
 public class UnitController {
     @Autowired
     private RequestProcessor requestProcessor;
@@ -32,48 +36,57 @@ public class UnitController {
     private UnitDao unitDao;
 
     @PostMapping(path = SIRestPaths.MOVE_UNITS)
-    public SIUpdate moveUnits(@RequestBody MoveUnitsJson moveUnitsJson) {
+    @Operation(summary = "Move units to a target sector")
+    public SIUpdate moveUnits(@Valid @RequestBody MoveUnitsJson moveUnitsJson) {
         return writeProcessor.processDynamicCost(
                 nation -> unitSvc.moveUnits(nation, moveUnitsJson.units, moveUnitsJson.target),
                 Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.UNIT)
+    @Operation(summary = "Get all units owned by the current player")
     public List<SIUnit> getUnits() {
         return requestProcessor.process(nation -> unitSvc.getUnits(nation));
     }
 
     @GetMapping(path = SIRestPaths.UNIT_SEEN)
+    @Operation(summary = "Get all visible units from other nations")
     public List<SIUnit> getSeenUnits() {
         return requestProcessor.process(nation -> unitSvc.getSeenUnits(nation));
     }
 
     @PostMapping(path = SIRestPaths.DISBAND_UNITS)
-    public SIUpdate disbandUnits(@RequestBody SIUnitListJson request) {
+    @Operation(summary = "Disband units")
+    public SIUpdate disbandUnits(@Valid @RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.disbandUnits(nation, request.siunits), Constants.COMMAND_COST);
     }
 
     @PostMapping(path = SIRestPaths.CANCEL_MOVE)
-    public SIUpdate cancelMove(@RequestBody SIUnitListJson request) {
+    @Operation(summary = "Cancel pending move orders for units")
+    public SIUpdate cancelMove(@Valid @RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.cancelMoveOrders(nation, request.siunits), Constants.COMMAND_COST);
     }
 
     @PostMapping(path = SIRestPaths.BUILD_CITY)
-    public SIUpdate buildCity(@RequestBody SIUnitListJson request) {
+    @Operation(summary = "Build a city with engineer units")
+    public SIUpdate buildCity(@Valid @RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.buildCity(nation, request.siunits), Constants.COMMAND_COST_BUILD_CITY);
     }
 
     @PostMapping(path = SIRestPaths.SWITCH_TERRAIN)
-    public SIUpdate switchTerrain(@RequestBody SIUnitListJson request) {
+    @Operation(summary = "Switch unit terrain type")
+    public SIUpdate switchTerrain(@Valid @RequestBody SIUnitListJson request) {
         return writeProcessor.process(nation -> unitSvc.switchTerrain(nation, request.siunits), Constants.COMMAND_COST_SWITCH_TERRAIN);
     }
 
     @PostMapping(path = SIRestPaths.CEDE_UNITS)
-    public SIUpdate cedeUnits(@RequestBody CedeUnitsJson request) {
+    @Operation(summary = "Transfer units to an allied nation")
+    public SIUpdate cedeUnits(@Valid @RequestBody CedeUnitsJson request) {
         return writeProcessor.process(nation -> unitSvc.cedeUnits(nation, request.siunits, request.nationId), Constants.COMMAND_COST);
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BUILT)
+    @Operation(summary = "Get unit build history for the current player")
     public List<SIUnitBuilt> getUnitsBuilt() {
         return requestProcessor.process(nation -> {
             List<UnitBuildAudit> builds = unitDao.getBuildAudits(nation.getGameId(), nation.toString());

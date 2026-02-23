@@ -2,10 +2,12 @@ package com.kenstevens.stratinit.dto;
 
 import com.kenstevens.stratinit.client.model.WorldSector;
 import com.kenstevens.stratinit.type.*;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Date;
 
 
+@Schema(description = "Map sector with terrain type, city info, unit presence, and supply status")
 public class SISector implements StratInitDTO {
     private static final long serialVersionUID = 1L;
     public SectorCoords coords;

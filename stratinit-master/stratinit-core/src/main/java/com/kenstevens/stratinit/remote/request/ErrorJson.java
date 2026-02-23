@@ -1,6 +1,9 @@
 package com.kenstevens.stratinit.remote.request;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ErrorJson implements IRestRequestJson {
+    @NotBlank
     public String subject;
     public String stackTrace;
 

@@ -242,10 +242,10 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `ServerLocker`: fixed `RandomAccessFile` resource leak by storing as instance field and closing in `releaseLock()`
 - `Profiler`: replaced `Collections.synchronizedMap(new HashMap<>())` with `ConcurrentHashMap`
 
-**What remains:**
-- Add JPA optimistic locking (`@Version` column) to `Game`, `Unit`, `City` entities to detect concurrent modifications
-- Replace `ServerLocker` file lock with database-based leader election (Spring Integration's `LockRegistry` or a simple `SELECT FOR UPDATE`)
-- Use `@Transactional` boundaries instead of manual `synchronized` blocks where possible
+**NOT RECOMMENDED — remaining items are not feasible given the architecture:**
+- **`@Version` optimistic locking won't work:** Entities live in `DataCache` (ConcurrentHashMap) indefinitely and are flushed to the DB via explicit `repo.save()` every 15 minutes. They are not managed within JPA sessions. Adding `@Version` would cause `OptimisticLockException` on every flush since the version in memory would be stale.
+- **`@Transactional` can't replace `synchronized`:** The `synchronized(gameCache)` blocks protect mutable in-memory HashMap/TreeMap state (unit positions, city ownership, nation stats), not database transactions. `@Transactional` boundaries are orthogonal to this concern.
+- **`ServerLocker` DB replacement is low value:** The application is deployed as a single server instance. Replacing FileLock with a DB-based lock adds complexity with no practical benefit.
 
 **Key files:**
 - `stratinit-dao/.../cache/DataCache.java` (now uses ConcurrentHashMap)
@@ -274,19 +274,28 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 9. Improve API Design
 
-**Status: NOT STARTED**
+**Status: DONE — OpenAPI docs + Bean Validation complete**
 
-**Current state:** 36 endpoints split across 5 domain controllers (see #6), no OpenAPI/Swagger annotations, no API versioning, and a flat namespace under `/stratinit/`. Endpoint paths are defined in `SIRestPaths` as string constants.
+**What's done:**
+- `springdoc-openapi-starter-webmvc-ui` 2.8.5 now active — Swagger UI at `/swagger-ui.html`, OpenAPI spec at `/v3/api-docs`
+- `spring-boot-starter-validation` added to `stratinit-rest`, `jakarta.validation-api` + `swagger-annotations` added to `stratinit-core`
+- `@Tag` on all 9 controllers: Game Management, Units, Cities, Nations & Diplomacy, Messaging, Rankings & Statistics, Profile, Administration, Authentication
+- `@Operation(summary=...)` on every endpoint (40+ endpoints)
+- `@Schema(description=...)` on 8 key response DTOs: `SIGame`, `SINation`, `SIUnit`, `SIUpdate`, `SISector`, `SIRelation`, `SIBattleLog`, `SIMessage`
+- Bean Validation annotations on request DTOs: `@NotEmpty`, `@NotNull`, `@Positive`, `@NotBlank`, `@Email`, `@Size` as appropriate
+- `@Valid` on all `@RequestBody` controller parameters
+- `MethodArgumentNotValidException` handler in `GlobalExceptionHandler` → HTTP 400 with field-level `ErrorResponse`
+- `AuthController` and `AdminController` error responses standardized to throw `StratInitException` (caught by `GlobalExceptionHandler`) instead of manual `Map.of("error", ...)` responses
+- All 426 tests passing
 
-**Recommendation:**
-- Add `springdoc-openapi-starter-webmvc-ui` for automatic OpenAPI 3.0 docs (already in POM)
-- Version the API: `/api/v1/games`, `/api/v1/units`, etc.
-- Add `@Operation`, `@ApiResponse`, `@Schema` annotations to document request/response contracts
-- Add request validation with `@Valid` and Bean Validation annotations on DTOs
+**What remains:**
+- API versioning (`/api/v1/...`) — deferred, would require frontend URL updates and adds complexity with no current need
 
 **Key files:**
-- `stratinit-rest/.../controller/GameController.java`, `UnitController.java`, `CityController.java`, `NationController.java`, `MessageController.java`
-- `stratinit-core/.../remote/SIRestPaths.java` (path constants)
+- `stratinit-rest/.../controller/*.java` — all 9 controllers with `@Tag`, `@Operation`, `@Valid`
+- `stratinit-rest/.../controller/GlobalExceptionHandler.java` — validation error handler
+- `stratinit-core/.../remote/request/*.java` — Bean Validation annotations
+- `stratinit-core/.../dto/SI*.java` — `@Schema` annotations
 
 ---
 
@@ -328,7 +337,7 @@ Phase 2: Backend modernization
   └── #4  Simplify DAO layer (pragmatic cleanup) ✅ DONE
 
 Phase 3: API and frontend
-  ├── #9  API versioning + OpenAPI docs
+  ├── #9  API versioning + OpenAPI docs              ✅ DONE
   ├── #2  WebSocket support                          ✅ DONE
   └── #1  SPA frontend                               ✅ DONE (feature parity reached, Wicket + SWT retired)
 
