@@ -33,6 +33,21 @@ public class BotWeights {
     public double earlyExpansionBonus = 0.5;
     public double lateMilitaryBonus = 0.3;
 
+    // Naval weights
+    public double navalBaseWeight = 0.6;
+    public double navalCombatDesire = 0.7;
+    public double transportLoadDesire = 0.5;
+
+    // Air weights
+    public double airStrikeDesire = 0.7;
+
+    // Tech/strategic weights
+    public double satelliteLaunchDesire = 0.5;
+    public double icbmLaunchDesire = 0.8;
+
+    // Production weights
+    public double tankDesire = 0.6;
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public String toJson() {

@@ -9,4 +9,8 @@ public interface BotAction {
     boolean execute();
     int getCommandPointCost();
     String describe();
+
+    default Integer getInvolvedUnitId() {
+        return null;
+    }
 }

@@ -9,17 +9,16 @@ import com.kenstevens.stratinit.server.bot.BotWeights;
 import com.kenstevens.stratinit.server.bot.BotWorldState;
 import com.kenstevens.stratinit.server.svc.MoveService;
 import com.kenstevens.stratinit.type.Constants;
-import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class AttackEnemyAction implements BotAction {
+public class AttackNavalAction implements BotAction {
     private final Unit attacker;
     private final Unit target;
     private final Nation nation;
     private final MoveService moveService;
 
-    public AttackEnemyAction(Unit attacker, Unit target, Nation nation, MoveService moveService) {
+    public AttackNavalAction(Unit attacker, Unit target, Nation nation, MoveService moveService) {
         this.attacker = attacker;
         this.target = target;
         this.nation = nation;
@@ -33,16 +32,13 @@ public class AttackEnemyAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.militaryBaseWeight;
+        double utility = weights.militaryBaseWeight * weights.navalCombatDesire;
 
-        // Prefer attacking weaker enemies
         double hpRatio = (double) attacker.getHp() / Math.max(1, target.getHp());
         if (hpRatio > 1.0) {
-            utility *= weights.attackWeakDesire;
             utility += (hpRatio - 1.0) * weights.hpAdvantageFactor;
         }
 
-        // Late game military bonus
         if (state.getGameTimePercent() > 0.5) {
             utility *= (1.0 + weights.lateMilitaryBonus);
         }
@@ -53,8 +49,7 @@ public class AttackEnemyAction implements BotAction {
     @Override
     public boolean execute() {
         SIUnit siUnit = new SIUnit(attacker);
-        SectorCoords targetCoords = target.getCoords();
-        Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), targetCoords);
+        Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), target.getCoords());
         return result.isSuccess();
     }
 
@@ -70,6 +65,6 @@ public class AttackEnemyAction implements BotAction {
 
     @Override
     public String describe() {
-        return "Attack " + target.toEnemyString() + " at " + target.getCoords() + " with " + attacker.toMyString();
+        return "Naval attack " + target.toEnemyString() + " at " + target.getCoords() + " with " + attacker.toMyString();
     }
 }

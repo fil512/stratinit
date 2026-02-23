@@ -48,6 +48,11 @@ public class DefendCityAction implements BotAction {
     }
 
     @Override
+    public Integer getInvolvedUnitId() {
+        return unit.getId();
+    }
+
+    @Override
     public String describe() {
         return "Defend city at " + city.getCoords() + " with " + unit.toMyString();
     }

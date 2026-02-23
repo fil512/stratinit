@@ -62,10 +62,18 @@ public class BotExecutor {
                 continue;
             }
 
+            Integer unitId = action.getInvolvedUnitId();
+            if (unitId != null && usedUnitIds.contains(unitId)) {
+                continue;
+            }
+
             try {
                 boolean success = action.execute();
                 if (success) {
                     actionsExecuted++;
+                    if (unitId != null) {
+                        usedUnitIds.add(unitId);
+                    }
                     if (cost > 0) {
                         nation.decreaseCommandPoints(cost);
                     }

@@ -13,17 +13,20 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class AttackEnemyAction implements BotAction {
-    private final Unit attacker;
-    private final Unit target;
+public class AttackWithAirAction implements BotAction {
+    private final Unit airUnit;
+    private final SectorCoords targetCoords;
     private final Nation nation;
     private final MoveService moveService;
+    private final boolean isBombingCity;
 
-    public AttackEnemyAction(Unit attacker, Unit target, Nation nation, MoveService moveService) {
-        this.attacker = attacker;
-        this.target = target;
+    public AttackWithAirAction(Unit airUnit, SectorCoords targetCoords, Nation nation,
+                               MoveService moveService, boolean isBombingCity) {
+        this.airUnit = airUnit;
+        this.targetCoords = targetCoords;
         this.nation = nation;
         this.moveService = moveService;
+        this.isBombingCity = isBombingCity;
     }
 
     @Override
@@ -33,18 +36,14 @@ public class AttackEnemyAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.militaryBaseWeight;
+        double utility = weights.militaryBaseWeight * weights.airStrikeDesire;
 
-        // Prefer attacking weaker enemies
-        double hpRatio = (double) attacker.getHp() / Math.max(1, target.getHp());
-        if (hpRatio > 1.0) {
-            utility *= weights.attackWeakDesire;
-            utility += (hpRatio - 1.0) * weights.hpAdvantageFactor;
-        }
-
-        // Late game military bonus
         if (state.getGameTimePercent() > 0.5) {
             utility *= (1.0 + weights.lateMilitaryBonus);
+        }
+
+        if (isBombingCity) {
+            utility *= 1.2;
         }
 
         return utility;
@@ -52,8 +51,7 @@ public class AttackEnemyAction implements BotAction {
 
     @Override
     public boolean execute() {
-        SIUnit siUnit = new SIUnit(attacker);
-        SectorCoords targetCoords = target.getCoords();
+        SIUnit siUnit = new SIUnit(airUnit);
         Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), targetCoords);
         return result.isSuccess();
     }
@@ -65,11 +63,12 @@ public class AttackEnemyAction implements BotAction {
 
     @Override
     public Integer getInvolvedUnitId() {
-        return attacker.getId();
+        return airUnit.getId();
     }
 
     @Override
     public String describe() {
-        return "Attack " + target.toEnemyString() + " at " + target.getCoords() + " with " + attacker.toMyString();
+        String action = isBombingCity ? "Bomb city" : "Air strike";
+        return action + " at " + targetCoords + " with " + airUnit.toMyString();
     }
 }

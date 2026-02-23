@@ -13,38 +13,30 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class AttackEnemyAction implements BotAction {
-    private final Unit attacker;
-    private final Unit target;
+public class LoadTransportAction implements BotAction {
+    private final Unit transport;
+    private final SectorCoords pickupCoords;
     private final Nation nation;
     private final MoveService moveService;
 
-    public AttackEnemyAction(Unit attacker, Unit target, Nation nation, MoveService moveService) {
-        this.attacker = attacker;
-        this.target = target;
+    public LoadTransportAction(Unit transport, SectorCoords pickupCoords, Nation nation, MoveService moveService) {
+        this.transport = transport;
+        this.pickupCoords = pickupCoords;
         this.nation = nation;
         this.moveService = moveService;
     }
 
     @Override
     public BotActionCategory getCategory() {
-        return BotActionCategory.MILITARY;
+        return BotActionCategory.EXPANSION;
     }
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.militaryBaseWeight;
+        double utility = weights.navalBaseWeight * weights.transportLoadDesire;
 
-        // Prefer attacking weaker enemies
-        double hpRatio = (double) attacker.getHp() / Math.max(1, target.getHp());
-        if (hpRatio > 1.0) {
-            utility *= weights.attackWeakDesire;
-            utility += (hpRatio - 1.0) * weights.hpAdvantageFactor;
-        }
-
-        // Late game military bonus
-        if (state.getGameTimePercent() > 0.5) {
-            utility *= (1.0 + weights.lateMilitaryBonus);
+        if (state.getGameTimePercent() < 0.3) {
+            utility *= (1.0 + weights.earlyExpansionBonus);
         }
 
         return utility;
@@ -52,24 +44,23 @@ public class AttackEnemyAction implements BotAction {
 
     @Override
     public boolean execute() {
-        SIUnit siUnit = new SIUnit(attacker);
-        SectorCoords targetCoords = target.getCoords();
-        Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), targetCoords);
+        SIUnit siUnit = new SIUnit(transport);
+        Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), pickupCoords);
         return result.isSuccess();
     }
 
     @Override
     public int getCommandPointCost() {
-        return Constants.COMMAND_COST_ATTACK;
+        return Constants.COMMAND_COST;
     }
 
     @Override
     public Integer getInvolvedUnitId() {
-        return attacker.getId();
+        return transport.getId();
     }
 
     @Override
     public String describe() {
-        return "Attack " + target.toEnemyString() + " at " + target.getCoords() + " with " + attacker.toMyString();
+        return "Move transport " + transport.toMyString() + " to pick up units at " + pickupCoords;
     }
 }

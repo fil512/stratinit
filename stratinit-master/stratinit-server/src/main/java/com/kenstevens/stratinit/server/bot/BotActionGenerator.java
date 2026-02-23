@@ -14,9 +14,7 @@ import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BotActionGenerator {
@@ -27,6 +25,24 @@ public class BotActionGenerator {
     @Autowired
     private RelationService relationService;
 
+    // Unit types that require a coastal city
+    private static final Set<UnitType> NAVAL_UNIT_TYPES = EnumSet.of(
+            UnitType.TRANSPORT, UnitType.PATROL, UnitType.DESTROYER,
+            UnitType.BATTLESHIP, UnitType.SUBMARINE, UnitType.CARRIER,
+            UnitType.CRUISER, UnitType.SUPPLY
+    );
+
+    // Air units (auto-convert city to airport)
+    private static final Set<UnitType> AIR_UNIT_TYPES = EnumSet.of(
+            UnitType.FIGHTER, UnitType.HEAVY_BOMBER, UnitType.NAVAL_BOMBER,
+            UnitType.HELICOPTER, UnitType.CARGO_PLANE, UnitType.ZEPPELIN
+    );
+
+    // Tech units (auto-convert city to tech center)
+    private static final Set<UnitType> STRATEGIC_UNIT_TYPES = EnumSet.of(
+            UnitType.SATELLITE, UnitType.ICBM_1, UnitType.ICBM_2, UnitType.ICBM_3
+    );
+
     public List<BotAction> generateActions(BotWorldState state, BotWeights weights) {
         List<BotAction> actions = new ArrayList<>();
         Nation nation = state.getNation();
@@ -36,23 +52,38 @@ public class BotActionGenerator {
         generateMilitaryActions(state, nation, actions);
         generateDefenseActions(state, nation, actions);
         generateDiplomacyActions(state, nation, actions);
+        generateNavalActions(state, nation, actions);
+        generateAirActions(state, nation, actions);
+        generateStrategicActions(state, nation, actions);
 
         return actions;
     }
 
     private void generateCityProductionActions(BotWorldState state, Nation nation, List<BotAction> actions) {
         for (City city : state.getMyCities()) {
-            // Suggest building infantry early, tech centres if we have few
-            if (UnitBase.isNotUnit(city.getBuild())) {
-                actions.add(new SetCityProductionAction(city, UnitType.INFANTRY, nation, cityService));
+            boolean isCoastal = state.isCoastalCity(city);
+
+            // Always suggest land units
+            actions.add(new SetCityProductionAction(city, UnitType.INFANTRY, nation, cityService));
+            actions.add(new SetCityProductionAction(city, UnitType.TANK, nation, cityService));
+            actions.add(new SetCityProductionAction(city, UnitType.RESEARCH, nation, cityService));
+            actions.add(new SetCityProductionAction(city, UnitType.ENGINEER, nation, cityService));
+
+            // Naval units: coastal cities only
+            if (isCoastal) {
+                for (UnitType navalType : NAVAL_UNIT_TYPES) {
+                    actions.add(new SetCityProductionAction(city, navalType, nation, cityService));
+                }
             }
-            // Suggest tech centre if tech is low and we have some cities
-            if (state.getMyCities().size() >= 2 && state.getTech() < 4.0) {
-                actions.add(new SetCityProductionAction(city, UnitType.RESEARCH, nation, cityService));
+
+            // Air units: any city (auto-converts to airport)
+            for (UnitType airType : AIR_UNIT_TYPES) {
+                actions.add(new SetCityProductionAction(city, airType, nation, cityService));
             }
-            // Suggest engineer for expansion
-            if (state.getMyCities().size() < 5) {
-                actions.add(new SetCityProductionAction(city, UnitType.ENGINEER, nation, cityService));
+
+            // Strategic units: any city (auto-converts to tech center)
+            for (UnitType stratType : STRATEGIC_UNIT_TYPES) {
+                actions.add(new SetCityProductionAction(city, stratType, nation, cityService));
             }
         }
     }
@@ -66,19 +97,25 @@ public class BotActionGenerator {
                 actions.add(new BuildCityWithEngineerAction(unit, cityService));
             }
             if (unit.getType() == UnitType.INFANTRY || unit.getType() == UnitType.TANK) {
-                // Try moving toward undefended cities or unexplored areas
-                // Simple heuristic: move in a direction away from our start
-                SectorCoords unitCoords = unit.getCoords();
-                // Generate a few candidate movement directions
-                int[][] offsets = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, -1}};
-                for (int[] offset : offsets) {
-                    int newX = (unitCoords.x + offset[0] * 2 + gameSize) % gameSize;
-                    int newY = (unitCoords.y + offset[1] * 2 + gameSize) % gameSize;
-                    SectorCoords target = new SectorCoords(newX, newY);
-                    int distance = SectorCoords.distance(gameSize, unitCoords, target);
-                    actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService));
-                }
+                generateDirectionalMoves(unit, gameSize, nation, actions);
             }
+        }
+
+        // Naval expansion: idle naval units can explore water
+        for (Unit unit : state.getIdleNavalUnits()) {
+            generateDirectionalMoves(unit, gameSize, nation, actions);
+        }
+    }
+
+    private void generateDirectionalMoves(Unit unit, int gameSize, Nation nation, List<BotAction> actions) {
+        SectorCoords unitCoords = unit.getCoords();
+        int[][] offsets = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, -1}};
+        for (int[] offset : offsets) {
+            int newX = (unitCoords.x + offset[0] * 2 + gameSize) % gameSize;
+            int newY = (unitCoords.y + offset[1] * 2 + gameSize) % gameSize;
+            SectorCoords target = new SectorCoords(newX, newY);
+            int distance = SectorCoords.distance(gameSize, unitCoords, target);
+            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService));
         }
     }
 
@@ -137,6 +174,87 @@ public class BotActionGenerator {
             // If they declared war, declare war back
             if (theirStance == RelationType.WAR && myStance != RelationType.WAR) {
                 actions.add(new SetRelationAction(nation, other, RelationType.WAR, relationService));
+            }
+        }
+    }
+
+    private void generateNavalActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        List<Unit> enemies = state.getEnemyUnits();
+        int gameSize = state.getGame().getGamesize();
+
+        for (Unit myUnit : state.getIdleNavalUnits()) {
+            // Naval combat: attack enemy naval units
+            if (myUnit.getAttack() > 0) {
+                for (Unit enemy : enemies) {
+                    if (!enemy.getUnitBase().isNavy()) {
+                        continue;
+                    }
+                    int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemy.getCoords());
+                    if (distance <= myUnit.getMobility()) {
+                        actions.add(new AttackNavalAction(myUnit, enemy, nation, moveService));
+                    }
+                }
+            }
+
+            // Transport loading: move transport/carrier to pick up idle land units
+            if (myUnit.getUnitBase().getCapacity() > 0) {
+                Set<SectorCoords> landUnitCoords = new HashSet<>();
+                for (Unit landUnit : state.getIdleLandUnits()) {
+                    landUnitCoords.add(landUnit.getCoords());
+                }
+                for (SectorCoords coords : landUnitCoords) {
+                    int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), coords);
+                    if (distance <= myUnit.getMobility() && distance > 0) {
+                        actions.add(new LoadTransportAction(myUnit, coords, nation, moveService));
+                    }
+                }
+            }
+        }
+    }
+
+    private void generateAirActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        List<Unit> enemies = state.getEnemyUnits();
+        List<City> enemyCities = state.getEnemyCities();
+        int gameSize = state.getGame().getGamesize();
+
+        for (Unit myUnit : state.getIdleAirUnits()) {
+            // Air combat: attack enemy units
+            if (myUnit.getAttack() > 0) {
+                for (Unit enemy : enemies) {
+                    int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemy.getCoords());
+                    if (distance <= myUnit.getMobility()) {
+                        actions.add(new AttackWithAirAction(myUnit, enemy.getCoords(), nation, moveService, false));
+                    }
+                }
+            }
+
+            // Bombing: bombers target enemy cities
+            if (myUnit.getUnitBase().getBombPercentage() > 0) {
+                for (City enemyCity : enemyCities) {
+                    int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemyCity.getCoords());
+                    if (distance <= myUnit.getMobility()) {
+                        actions.add(new AttackWithAirAction(myUnit, enemyCity.getCoords(), nation, moveService, true));
+                    }
+                }
+            }
+        }
+    }
+
+    private void generateStrategicActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        SectorCoords mapCenter = new SectorCoords(gameSize / 2, gameSize / 2);
+        List<City> enemyCities = state.getEnemyCities();
+
+        for (Unit unit : state.getLaunchableUnits()) {
+            UnitBase unitBase = unit.getUnitBase();
+
+            if (unit.getType() == UnitType.SATELLITE) {
+                actions.add(new LaunchSatelliteAction(unit, mapCenter, nation, moveService));
+            } else if (unitBase.getDevastates()) {
+                // ICBM: target each enemy city
+                for (City enemyCity : enemyCities) {
+                    actions.add(new LaunchICBMAction(unit, enemyCity, nation, moveService));
+                }
             }
         }
     }

@@ -13,18 +13,15 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class MoveUnitToExpandAction implements BotAction {
-    private final Unit unit;
+public class LaunchSatelliteAction implements BotAction {
+    private final Unit satellite;
     private final SectorCoords target;
     private final Nation nation;
     private final MoveService moveService;
-    private final int distance;
 
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService) {
-        this.unit = unit;
+    public LaunchSatelliteAction(Unit satellite, SectorCoords target, Nation nation, MoveService moveService) {
+        this.satellite = satellite;
         this.target = target;
-        this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -36,35 +33,28 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight;
-        // Penalize distant targets
-        utility -= distance * weights.distancePenalty;
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
-        return Math.max(0, utility);
+        return weights.economyBaseWeight * weights.satelliteLaunchDesire;
     }
 
     @Override
     public boolean execute() {
-        SIUnit siUnit = new SIUnit(unit);
+        SIUnit siUnit = new SIUnit(satellite);
         Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), target);
         return result.isSuccess();
     }
 
     @Override
     public int getCommandPointCost() {
-        return Constants.COMMAND_COST;
+        return Constants.COMMAND_COST_LAUNCH_SATELLITE;
     }
 
     @Override
     public Integer getInvolvedUnitId() {
-        return unit.getId();
+        return satellite.getId();
     }
 
     @Override
     public String describe() {
-        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " toward " + target + " (expand)";
+        return "Launch satellite " + satellite.toMyString() + " toward " + target;
     }
 }

@@ -48,11 +48,11 @@ The bot AI uses a **Utility AI** pattern — each possible action is scored by a
 #### Turn Execution (`BotExecutor`)
 
 ```
-1. Build BotWorldState snapshot (units, cities, enemies, relations, tech, CP, game time)
-2. Generate all candidate actions via BotActionGenerator
+1. Build BotWorldState snapshot (units, cities, enemies, relations, tech, CP, game time, coastal cities, enemy cities)
+2. Generate all candidate actions via BotActionGenerator (8 generator methods)
 3. Score each action via computeUtility(state, weights)
 4. Sort by score descending
-5. Greedily execute top actions until command points exhausted
+5. Greedily execute top actions until command points exhausted, tracking usedUnitIds to prevent same unit acting twice
 6. Log executed actions
 ```
 
@@ -65,16 +65,25 @@ Immutable snapshot built by `BotWorldStateBuilder` at the start of each turn:
 - Game time progress (0.0–1.0)
 - Command points available
 
-Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `hasEnoughCP(cost)`
+Convenience methods: `getIdleUnits()`, `getIdleLandUnits()`, `getIdleNavalUnits()`, `getIdleAirUnits()`, `getLaunchableUnits()`, `getUndefendedCities()`, `getEnemyUnits()`, `getEnemyCities()`, `isCoastalCity(city)`, `hasEnoughCP(cost)`
+
+Pre-computed data (built by `BotWorldStateBuilder`):
+- **Coastal city coords**: Cities adjacent to water sectors (enables naval unit production gating)
+- **Enemy cities**: All cities owned by nations at WAR (for ICBM/bombing targeting)
 
 #### Action Types
 
 | Class | Category | What It Does | CP Cost |
 |-------|----------|-------------|---------|
-| `SetCityProductionAction` | ECONOMY | Sets city build to infantry/research/engineer | 0 |
-| `MoveUnitToExpandAction` | EXPANSION | Moves infantry/tank toward unexplored areas | 1 |
+| `SetCityProductionAction` | ECONOMY | Sets city build to any of 23 unit types (gated by tech + coastal) | 0 |
+| `MoveUnitToExpandAction` | EXPANSION | Moves land or naval unit toward unexplored areas | 1 |
 | `BuildCityWithEngineerAction` | EXPANSION | Engineer creates a new city | 128 |
-| `AttackEnemyAction` | MILITARY | Moves combat unit to attack visible enemy | 2 |
+| `AttackEnemyAction` | MILITARY | Moves land combat unit to attack visible land enemy | 2 |
+| `AttackNavalAction` | MILITARY | Moves naval unit to attack enemy naval unit | 2 |
+| `AttackWithAirAction` | MILITARY | Air unit strikes enemy units or bombs enemy cities | 2 |
+| `LoadTransportAction` | EXPANSION | Moves transport/carrier to pick up idle land units | 1 |
+| `LaunchSatelliteAction` | EXPANSION | Launches satellite toward map center for vision | 8 |
+| `LaunchICBMAction` | MILITARY | Launches ICBM at enemy city | 32 |
 | `DefendCityAction` | DEFENSE | Moves idle unit to undefended own city | 1 |
 | `SetRelationAction` | DIPLOMACY | Mirrors diplomatic stance (friendly→friendly, war→war) | 0 |
 
@@ -86,8 +95,27 @@ public interface BotAction {
     boolean execute();                         // Perform the action
     int getCommandPointCost();                 // CP cost
     String describe();                         // For logging
+    default Integer getInvolvedUnitId();       // Prevents same unit acting twice per turn
 }
 ```
+
+**City production gating**: `BotActionGenerator` suggests all 23 unit types but gates them:
+- **Land units** (INFANTRY, TANK, ENGINEER, RESEARCH): any city
+- **Naval units** (TRANSPORT, PATROL, DESTROYER, BATTLESHIP, SUBMARINE, CARRIER, CRUISER, SUPPLY): coastal cities only (`isCoastalCity()`)
+- **Air units** (FIGHTER, HEAVY_BOMBER, NAVAL_BOMBER, HELICOPTER, CARGO_PLANE, ZEPPELIN): any city (auto-converts to airport)
+- **Strategic units** (SATELLITE, ICBM_1/2/3): any city (auto-converts to tech center)
+
+Tech requirements are enforced in `SetCityProductionAction.computeUtility()` (returns 0 if tech too low).
+
+**Action generators**: `BotActionGenerator.generateActions()` calls 8 generator methods:
+- `generateCityProductionActions()` — all unit types with coastal/tech gating
+- `generateExpansionActions()` — land + naval directional movement, engineer city building
+- `generateMilitaryActions()` — land-vs-land combat
+- `generateNavalActions()` — naval combat + transport loading
+- `generateAirActions()` — air strikes + city bombing
+- `generateStrategicActions()` — satellite launch (map center) + ICBM launch (enemy cities)
+- `generateDefenseActions()` — move to undefended cities
+- `generateDiplomacyActions()` — mirror diplomatic stance
 
 #### Weights (`BotWeights`)
 
@@ -110,7 +138,14 @@ All utility calculations use configurable weights loaded from `bot-weights.json`
   "undefendedPenalty": 1.0,
   "diplomacyBaseWeight": 0.3,
   "earlyExpansionBonus": 0.5,
-  "lateMilitaryBonus": 0.3
+  "lateMilitaryBonus": 0.3,
+  "navalBaseWeight": 0.6,
+  "navalCombatDesire": 0.7,
+  "transportLoadDesire": 0.5,
+  "airStrikeDesire": 0.7,
+  "satelliteLaunchDesire": 0.5,
+  "icbmLaunchDesire": 0.8,
+  "tankDesire": 0.6
 }
 ```
 
@@ -154,12 +189,17 @@ stratinit-server/
   server/bot/BotWorldStateBuilder.java — Builds BotWorldState from DAOs
   server/bot/BotWeights.java           — Tunable weight parameters
   server/bot/BotWeightsConfig.java     — Spring config for weight loading
-  server/bot/action/BotAction.java     — Action interface
+  server/bot/action/BotAction.java     — Action interface (with getInvolvedUnitId())
   server/bot/action/BotActionCategory.java         — Category enum
-  server/bot/action/SetCityProductionAction.java    — Economy action
-  server/bot/action/MoveUnitToExpandAction.java     — Expansion action
-  server/bot/action/BuildCityWithEngineerAction.java — Expansion action
-  server/bot/action/AttackEnemyAction.java          — Military action
+  server/bot/action/SetCityProductionAction.java    — Economy: all 23 unit types
+  server/bot/action/MoveUnitToExpandAction.java     — Expansion: land + naval movement
+  server/bot/action/BuildCityWithEngineerAction.java — Expansion: engineer builds city
+  server/bot/action/LoadTransportAction.java        — Expansion: transport picks up land units
+  server/bot/action/LaunchSatelliteAction.java      — Expansion: satellite launch for vision
+  server/bot/action/AttackEnemyAction.java          — Military: land combat
+  server/bot/action/AttackNavalAction.java          — Military: naval combat
+  server/bot/action/AttackWithAirAction.java        — Military: air strikes + city bombing
+  server/bot/action/LaunchICBMAction.java           — Military: ICBM at enemy cities
   server/bot/action/DefendCityAction.java           — Defense action
   server/bot/action/SetRelationAction.java          — Diplomacy action
   resources/bot-weights.json           — Default weight values
@@ -246,10 +286,10 @@ stratinit-server/
 
 ## Future Improvements
 
-- **More action types**: Naval operations, air support, satellite launches, ICBM strikes, transport loading
 - **Difficulty levels**: Multiple weight profiles (easy/medium/hard)
 - **Smarter pathfinding**: Use the `stratinit-graph` module for optimal movement paths
 - **Fog-of-war awareness**: Currently bots see all units; could be restricted to their actual vision
 - **Coordination**: Multi-unit attack groups, combined arms tactics
+- **Transport destination planning**: Bots load transports but don't plan where to unload across islands
 - **Larger training runs**: More generations, larger populations, parallel game simulation
 - **Alternative algorithms**: Gradient-free optimization (CMA-ES), neuroevolution

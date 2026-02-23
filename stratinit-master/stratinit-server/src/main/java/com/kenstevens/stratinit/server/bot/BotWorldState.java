@@ -16,18 +16,25 @@ public class BotWorldState {
     private final Map<Nation, RelationType> myRelations;
     private final Map<Nation, RelationType> theirRelations;
     private final double gameTimePercent;
+    private final Set<SectorCoords> coastalCityCoords;
+    private final List<City> enemyCities;
 
     public BotWorldState(Nation nation, Game game, List<Unit> myUnits, List<City> myCities,
                          Collection<Unit> allVisibleUnits,
                          Map<Nation, RelationType> myRelations,
-                         Map<Nation, RelationType> theirRelations) {
-        this(nation, game, myUnits, myCities, allVisibleUnits, myRelations, theirRelations, System.currentTimeMillis());
+                         Map<Nation, RelationType> theirRelations,
+                         Set<SectorCoords> coastalCityCoords,
+                         List<City> enemyCities) {
+        this(nation, game, myUnits, myCities, allVisibleUnits, myRelations, theirRelations,
+                coastalCityCoords, enemyCities, System.currentTimeMillis());
     }
 
     public BotWorldState(Nation nation, Game game, List<Unit> myUnits, List<City> myCities,
                          Collection<Unit> allVisibleUnits,
                          Map<Nation, RelationType> myRelations,
                          Map<Nation, RelationType> theirRelations,
+                         Set<SectorCoords> coastalCityCoords,
+                         List<City> enemyCities,
                          long nowMillis) {
         this.nation = nation;
         this.game = game;
@@ -36,6 +43,8 @@ public class BotWorldState {
         this.allVisibleUnits = allVisibleUnits;
         this.myRelations = myRelations;
         this.theirRelations = theirRelations;
+        this.coastalCityCoords = coastalCityCoords;
+        this.enemyCities = enemyCities;
 
         // Calculate game time progress (0.0 = start, 1.0 = end)
         if (game.getStartTime() != null && game.getEnds() != null) {
@@ -75,6 +84,24 @@ public class BotWorldState {
                 .collect(Collectors.toList());
     }
 
+    public List<Unit> getIdleNavalUnits() {
+        return getIdleUnits().stream()
+                .filter(u -> u.getUnitBase().isNavy())
+                .collect(Collectors.toList());
+    }
+
+    public List<Unit> getIdleAirUnits() {
+        return getIdleUnits().stream()
+                .filter(u -> u.getUnitBase().isAir())
+                .collect(Collectors.toList());
+    }
+
+    public List<Unit> getLaunchableUnits() {
+        return myUnits.stream()
+                .filter(u -> u.isAlive() && u.getUnitBase().isLaunchable())
+                .collect(Collectors.toList());
+    }
+
     public List<City> getUndefendedCities() {
         Set<SectorCoords> unitLocations = myUnits.stream()
                 .filter(u -> u.isAlive() && u.getUnitBase().isLand())
@@ -93,6 +120,14 @@ public class BotWorldState {
                     return rel == null || rel == RelationType.WAR;
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<City> getEnemyCities() {
+        return enemyCities;
+    }
+
+    public boolean isCoastalCity(City city) {
+        return coastalCityCoords.contains(city.getCoords());
     }
 
     public boolean hasEnoughCP(int cost) {

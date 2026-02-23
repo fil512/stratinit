@@ -48,6 +48,11 @@ public class BuildCityWithEngineerAction implements BotAction {
     }
 
     @Override
+    public Integer getInvolvedUnitId() {
+        return engineer.getId();
+    }
+
+    @Override
     public String describe() {
         return "Engineer at " + engineer.getCoords() + " builds city";
     }

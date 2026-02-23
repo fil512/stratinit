@@ -48,6 +48,15 @@ public class SetCityProductionAction implements BotAction {
             utility *= weights.infantryDesire;
         } else if (unitType == UnitType.ENGINEER) {
             utility *= weights.engineerDesire;
+        } else if (unitType == UnitType.TANK) {
+            utility *= weights.tankDesire;
+        } else if (unitBase.isNavy()) {
+            utility *= weights.navalBaseWeight;
+        } else if (unitBase.isAir()) {
+            utility *= weights.airStrikeDesire;
+        } else if (unitBase.isTech() && unitType != UnitType.RESEARCH) {
+            utility *= weights.icbmLaunchDesire;
+            utility *= state.getGameTimePercent();
         }
 
         // Early game: prefer economy/expansion units
