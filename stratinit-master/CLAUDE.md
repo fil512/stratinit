@@ -86,6 +86,8 @@ Dependencies flow downward.
 
 **React frontend:** Dev server on port 5173 with Vite proxy to backend. Built assets bundled into `stratinit-rest` JAR via Maven. Routes: `/login`, `/register`, `/forgot-password`, `/games` (joined + available games with join), `/game/:gameId` (gameplay), `/leaderboard`, `/rankings`, `/stats` and `/stats/:gameId` (unit statistics charts), `/settings` (account settings), `/admin` (admin panel, visible to ROLE_ADMIN users only). Game page renders HTML5 Canvas map with side panel (7 tabs: Sector, Units, Cities, Battle, Players, Mail, News). State managed via `GameContext` (`useReducer`) with coord-keyed lookup maps. TypeScript types in `src/types/game.ts` mirror Java DTOs. Unit commands (disband, cancel move, build city, switch terrain, cede) in Units tab. Concede button in Players tab. Messaging (inbox, sent, announcements, compose) in Mail tab. News log viewer in News tab. Unit statistics page with Recharts pie chart (unit love metric) and stacked area charts (units built per day by LAND/NAVY/AIR/TECH category). Account settings page for updating email, password, and email notification preferences.
 
+**Bot players:** Server-side AI players that can be added from the game lobby via `POST /stratinit/add-bot`. Bots call domain services directly (no REST/HTTP/JWT). Games with bots start immediately (skip 24-hour scheduling delay). Bot turns execute periodically via `BotTurnEvent` (every 5 minutes, blitz-scaled). The AI uses a **Utility AI** pattern with configurable weights in `bot-weights.json` (designed for future RL tuning). Key classes: `BotService` (join/create), `BotExecutor` (orchestration), `BotActionGenerator` (candidate generation), `BotWorldState` (snapshot), `BotWeights` (tunable parameters). Six action types: city production, expansion movement, build city, attack enemy, defend city, set diplomacy. Bots are skipped for email notifications and scoring. See [BOTS.md](BOTS.md) for full architecture details.
+
 ## Testing
 
 Tests use H2 in-memory database (`MODE=LEGACY`) with Liquibase migrations applied programmatically via `TestConfig`. Test config in `src/test/resources/persistence.properties` and `application.yml`. The `stratinit-test` module provides helpers: `PlayerHelper`, `GameHelper`, `NationHelper`, `UnitHelper`, `WorldHelper`, `SectorHelper`.
@@ -102,4 +104,5 @@ Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest
 - JWT config: `stratinit.jwt.secret`, `stratinit.jwt.expiration-ms`
 - CORS: `stratinit.cors.allowed-origins` (defaults to `http://localhost:5173`)
 - Unit definitions: `stratinit-core/src/main/resources/unit-definitions.json` (23 unit types with stats and abilities)
+- Bot AI weights: `stratinit-server/src/main/resources/bot-weights.json` (loaded by `BotWeightsConfig`, falls back to defaults)
 - Graceful shutdown: `ShutdownHook` (`@PreDestroy`) calls `ServerManager.shutdown()` to flush caches on container stop
