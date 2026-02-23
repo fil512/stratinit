@@ -80,7 +80,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 
 ### 2. Add WebSocket for Real-Time Game Updates
 
-**Status: DONE — infrastructure complete, topic design can evolve**
+**Status: DONE — infrastructure complete, battle logs delivered, typed messages**
 
 **What's done:**
 - `spring-boot-starter-websocket` added to `stratinit-rest`
@@ -88,16 +88,18 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `WebSocketConfig.java` — STOMP endpoint at `/ws` with SockJS fallback, simple broker on `/topic`, app prefix `/app`
 - `WebSocketSecurityConfig.java` — requires authentication for subscriptions to `/topic/game/**`
 - `WebSocketAuthInterceptor.java` — authenticates STOMP CONNECT frames via JWT token in Authorization header
-- `GameNotificationService.java` — sends JSON messages to `/topic/game/{gameId}` (with `@Autowired(required = false)` so tests without WebSocket context still work)
+- `GameNotificationService.java` — sends typed JSON messages to `/topic/game/{gameId}`: `{type: "UPDATE"}` after writes, `{type: "BATTLE", x, y}` after combat (`@Autowired(required = false)` so tests without WebSocket context still work)
 - `WriteProcessor.java` — calls `GameNotificationService.notifyGameUpdate()` after every successful write operation
 - `StratInitUpdater.java` — calls `GameNotificationService.notifyGameUpdate()` after tech updates and unit builds
+- `BattleLogService.save()` — calls `GameNotificationService.notifyBattle()` after every battle log save, pushing real-time battle coordinates to all connected clients
+- `PlayerWorldViewUpdate.getWorldViewUpdate()` — populates `SIUpdate.log` with battle logs via `NationSvc.getBattleLogs()`, making `BattleLogTab` work for all scenarios (own moves, other players' moves, scheduled events)
+- `NationSvc.getBattleLogs()` — reusable method querying all 4 battle log types (city captured, unit attacked, flak, city nuked) and converting to `SIBattleLog` DTOs. Used by both `PlayerWorldViewUpdate` and `NationController`
+- `useGameSocket.ts` — typed `GameSocketMessage` interface (`UPDATE` | `BATTLE` with optional coords), `GamePage` triggers refresh on any message type
 - All 426 tests pass
 
 **What remains:**
-- Add more granular topics (e.g., `/topic/game/{gameId}/battles` for battle logs)
-- Push richer payloads (currently sends `{type, gameId, nationId}` — could include the actual `SIUpdate` diff)
-- Add battle log notifications from relevant event handlers
-- Client-side handling: the `useGameSocket` hook exists but the React pages don't yet react to incoming messages (e.g., auto-refresh game state)
+- Push richer payloads (currently client refreshes full state — could include the actual `SIUpdate` diff)
+- Client-side battle indicators (e.g., toast/sound when `BATTLE` message received with coords)
 
 **Key files:**
 - `stratinit-rest/.../config/WebSocketConfig.java`
@@ -106,6 +108,10 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - `stratinit-server/.../svc/GameNotificationService.java`
 - `stratinit-server/.../rest/request/WriteProcessor.java` (integration point)
 - `stratinit-server/.../event/svc/StratInitUpdater.java` (integration point)
+- `stratinit-server/.../service/BattleLogService.java` (battle notification integration point)
+- `stratinit-server/.../rest/svc/PlayerWorldViewUpdate.java` (populates `SIUpdate.log`)
+- `stratinit-server/.../rest/svc/NationSvc.java` (`getBattleLogs()` reusable query)
+- `stratinit-ui/src/hooks/useGameSocket.ts` (typed WebSocket messages)
 
 ---
 
@@ -196,7 +202,7 @@ Prioritized recommendations for modernizing the Strategic Initiative codebase, o
 - All 426 tests passing
 
 **What remains:**
-- Deliver battle logs and game events via WebSocket instead of piggybacking on REST responses
+- Nothing — battle logs are now delivered via `SIUpdate.log` (populated by `PlayerWorldViewUpdate`) and real-time battle notifications via WebSocket
 
 **Key files:**
 - `stratinit-server/.../rest/request/RequestProcessor.java` (replaces PlayerRequest for reads)

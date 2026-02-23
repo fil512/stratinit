@@ -98,4 +98,5 @@ GlobalExceptionHandler (@ControllerAdvice)
   - **Pie chart** — "unit love" metric (weighted by count, tech factor, production time)
   - **Stacked area charts** — units built per day (days 1-10) by category (LAND, NAVY, AIR, TECH)
   - Game selector and player selector dropdowns
-- Real-time WebSocket updates via STOMP
+- Real-time WebSocket updates via STOMP (typed messages: UPDATE after writes, BATTLE after combat with coordinates)
+- Battle logs populated in every game state update (all 4 types: unit attacks, city captures, flak, nukes)

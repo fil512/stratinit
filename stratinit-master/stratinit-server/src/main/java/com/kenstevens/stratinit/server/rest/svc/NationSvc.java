@@ -3,9 +3,11 @@ package com.kenstevens.stratinit.server.rest.svc;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
+import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.dto.SIGame;
 import com.kenstevens.stratinit.dto.SINation;
 import com.kenstevens.stratinit.dto.SIUpdate;
@@ -30,6 +32,8 @@ public class NationSvc {
     private DataCache dataCache;
     @Autowired
     private CityDao cityDao;
+    @Autowired
+    private LogDao logDao;
     @Autowired
     private NationDao nationDao;
     @Autowired
@@ -98,6 +102,23 @@ public class NationSvc {
         List<Nation> nations = dataCache.getGameCache(game)
                 .getNations();
         return nationsToSINations(null, true, nations, new ArrayList<Nation>());
+    }
+
+    public List<SIBattleLog> getBattleLogs(Nation nation) {
+        List<SIBattleLog> logs = new ArrayList<>();
+        for (CityCapturedBattleLog log : logDao.getCityCapturedBattleLogs(nation)) {
+            logs.add(new SIBattleLog(nation, log));
+        }
+        for (UnitAttackedBattleLog log : logDao.getUnitAttackedBattleLogs(nation)) {
+            logs.add(new SIBattleLog(nation, log));
+        }
+        for (FlakBattleLog log : logDao.getFlakBattleLogs(nation)) {
+            logs.add(new SIBattleLog(nation, log));
+        }
+        for (CityNukedBattleLog log : logDao.getCityNukedBattleLogs(nation)) {
+            logs.add(new SIBattleLog(nation, log));
+        }
+        return logs;
     }
 
     public Result<SIUpdate> concede(Nation nation) {

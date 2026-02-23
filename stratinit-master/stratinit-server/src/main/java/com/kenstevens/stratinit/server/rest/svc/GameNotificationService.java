@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
 import com.kenstevens.stratinit.dto.SIBattleLog;
+import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,14 @@ public class GameNotificationService {
         }
         logger.debug("Sending battle logs for game {}", gameId);
         messagingTemplate.convertAndSend("/topic/game/" + gameId + "/battles", logs);
+    }
+
+    public void notifyBattle(int gameId, SectorCoords coords) {
+        if (messagingTemplate == null) {
+            return;
+        }
+        logger.debug("Sending battle notification for game {} at {}", gameId, coords);
+        messagingTemplate.convertAndSend("/topic/game/" + gameId,
+                Map.of("type", "BATTLE", "gameId", gameId, "x", coords.x, "y", coords.y));
     }
 }

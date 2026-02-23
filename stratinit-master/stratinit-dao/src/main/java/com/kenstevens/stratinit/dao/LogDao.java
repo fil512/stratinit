@@ -62,6 +62,11 @@ public class LogDao {
 		return flakBattleLogRepo.findAll(log.attacker.eq(nation).or(log.defender.eq(nation)));
 	}
 
+	public Iterable<CityNukedBattleLog> getCityNukedBattleLogs(Nation nation) {
+		QCityNukedBattleLog log = QCityNukedBattleLog.cityNukedBattleLog;
+		return cityNukedBattleLogRepo.findAll(log.attacker.eq(nation).or(log.defender.eq(nation)));
+	}
+
 	public void delete(@Nonnull CityCapturedBattleLog cityCapturedBattleLog) {
 		cityCapturedBattleLogRepo.delete(cityCapturedBattleLog);
 	}

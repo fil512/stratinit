@@ -70,7 +70,7 @@ Dependencies flow downward.
 
 **Authentication:** JWT tokens via `POST /stratinit/auth/login`. Player registration via `POST /stratinit/auth/register`. Password recovery via `POST /stratinit/auth/forgot-password`. Account settings via `GET/PUT /stratinit/profile` (`ProfileController`). `JwtAuthenticationFilter` validates Bearer tokens. HTTP Basic still supported for backward compatibility. Stateless sessions.
 
-**WebSocket:** STOMP over SockJS at `/ws`. `GameNotificationService` pushes updates to `/topic/game/{gameId}` after write operations and scheduled events.
+**WebSocket:** STOMP over SockJS at `/ws`. `GameNotificationService` pushes typed JSON messages to `/topic/game/{gameId}`: `{type: "UPDATE", gameId, nationId}` after write operations and scheduled events, `{type: "BATTLE", gameId, x, y}` after combat. `BattleLogService` sends battle notifications on every battle log save. Client (`useGameSocket.ts`) receives typed `GameSocketMessage` and triggers state refresh. Battle logs are populated in every `SIUpdate` via `PlayerWorldViewUpdate` (queries all 4 battle log types through `NationSvc.getBattleLogs()`).
 
 **Data access:** Spring Data JPA repositories (`stratinit-dao/.../repo/`) wrapped by DAO classes (`stratinit-dao/.../dao/`) which also manage `DataCache`. ~30 classes inject DAOs directly for data operations.
 

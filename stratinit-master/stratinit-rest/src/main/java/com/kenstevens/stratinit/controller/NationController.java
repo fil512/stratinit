@@ -1,10 +1,6 @@
 package com.kenstevens.stratinit.controller;
 
-import com.kenstevens.stratinit.client.model.CityCapturedBattleLog;
-import com.kenstevens.stratinit.client.model.FlakBattleLog;
-import com.kenstevens.stratinit.client.model.UnitAttackedBattleLog;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
-import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.request.SetRelationJson;
@@ -21,7 +17,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -40,8 +35,6 @@ public class NationController {
     private RelationSvc relationSvc;
     @Autowired
     private GameService gameService;
-    @Autowired
-    private LogDao logDao;
 
     @GetMapping(path = SIRestPaths.NATION)
     @Operation(summary = "Get all nations in the current game")
@@ -81,21 +74,7 @@ public class NationController {
         return writeProcessor.process(nation -> {
             nation.setNewBattle(false);
             gameService.merge(nation);
-            List<SIBattleLog> retval = new ArrayList<>();
-            for (CityCapturedBattleLog log : logDao.getCityCapturedBattleLogs(nation)) {
-                retval.add(new SIBattleLog(nation, log));
-            }
-            List<UnitAttackedBattleLog> uabattleLogs = new ArrayList<>();
-            logDao.getUnitAttackedBattleLogs(nation).forEach(uabattleLogs::add);
-            for (UnitAttackedBattleLog log : uabattleLogs) {
-                retval.add(new SIBattleLog(nation, log));
-            }
-            List<FlakBattleLog> fbattleLogs = new ArrayList<>();
-            logDao.getFlakBattleLogs(nation).forEach(fbattleLogs::add);
-            for (FlakBattleLog log : fbattleLogs) {
-                retval.add(new SIBattleLog(nation, log));
-            }
-            return Result.make(retval);
+            return Result.make(nationSvc.getBattleLogs(nation));
         }, 0);
     }
 

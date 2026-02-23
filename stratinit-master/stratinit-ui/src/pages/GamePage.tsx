@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
-import { useGameSocket } from '../hooks/useGameSocket'
+import { useGameSocket, GameSocketMessage } from '../hooks/useGameSocket'
 import { getJoinedGames } from '../api/game'
 import GameMap from '../components/GameMap'
 import SidePanel from '../components/SidePanel'
@@ -30,7 +30,7 @@ export default function GamePage() {
     })
   }, [gameIdNum, navigate, initGame])
 
-  const onSocketMessage = useCallback(() => {
+  const onSocketMessage = useCallback((_msg: GameSocketMessage) => {
     refreshState()
   }, [refreshState])
 

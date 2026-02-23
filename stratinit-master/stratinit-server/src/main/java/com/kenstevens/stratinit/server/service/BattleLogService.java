@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.service;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.dao.NationDao;
+import com.kenstevens.stratinit.server.rest.svc.GameNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ public class BattleLogService {
     private LogDao logDao;
     @Autowired
     private NationDao nationDao;
+    @Autowired
+    private GameNotificationService gameNotificationService;
 
     public void save(BattleLog battleLog) {
         logDao.save(battleLog);
@@ -21,6 +24,8 @@ public class BattleLogService {
             defender.setNewBattle(true);
             nationDao.markCacheModified(defender);
         }
+        int gameId = battleLog.getAttacker().getGameId();
+        gameNotificationService.notifyBattle(gameId, battleLog.getCoords());
     }
 
     public void removeLogs(Game game) {

@@ -35,7 +35,7 @@ public class PlayerWorldViewUpdate {
 		siupdate.units = unitSvc.getUnits(nation);
 		siupdate.seenUnits = unitSvc.getSeenUnits(nation);
 		siupdate.launchedSatellites = satelliteSvc.getLaunchedSatellites(nation);
-
+		siupdate.log = nationSvc.getBattleLogs(nation);
 
 		return siupdate;
 	}

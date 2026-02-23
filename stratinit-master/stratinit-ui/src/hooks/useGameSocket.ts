@@ -3,7 +3,15 @@ import { Client } from '@stomp/stompjs'
 import SockJS from 'sockjs-client'
 import { getToken } from '../api/auth'
 
-export function useGameSocket(gameId: number | null, onMessage: (body: unknown) => void) {
+export interface GameSocketMessage {
+  type: 'UPDATE' | 'BATTLE'
+  gameId: number
+  nationId?: number
+  x?: number
+  y?: number
+}
+
+export function useGameSocket(gameId: number | null, onMessage: (msg: GameSocketMessage) => void) {
   const clientRef = useRef<Client | null>(null)
 
   useEffect(() => {
@@ -15,7 +23,7 @@ export function useGameSocket(gameId: number | null, onMessage: (body: unknown) 
       connectHeaders: token ? { Authorization: `Bearer ${token}` } : {},
       onConnect: () => {
         client.subscribe(`/topic/game/${gameId}`, message => {
-          onMessage(JSON.parse(message.body))
+          onMessage(JSON.parse(message.body) as GameSocketMessage)
         })
       },
       onStompError: frame => {
