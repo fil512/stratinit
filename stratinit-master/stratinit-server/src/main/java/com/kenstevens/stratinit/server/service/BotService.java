@@ -69,9 +69,9 @@ public class BotService {
         // Reload game after join (player count may have changed)
         game = gameDao.findGame(gameId);
 
-        // If we now have enough players and the game was just scheduled,
-        // start it immediately for bot games
-        if (game.getStartTime() != null && !game.isMapped()) {
+        // Once we have enough players, start the bot game immediately
+        // (skip the normal scheduling delay)
+        if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule() && !game.isMapped()) {
             startBotGameImmediately(game);
         }
 

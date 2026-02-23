@@ -69,8 +69,9 @@ public class GameDao extends CacheDao {
 
     @Transactional
     public void remove(Game game) {
-        nationRepo.deleteAll(nationRepo.findAll(QNation.nation.nationPK.game.eq(game)));
         unitRepo.deleteAll(unitRepo.findAll(QUnit.unit.nation.nationPK.game.eq(game)));
+        cityRepo.deleteAll(cityRepo.findAll(QCity.city.cityPK.game.eq(game)));
+        nationRepo.deleteAll(nationRepo.findAll(QNation.nation.nationPK.game.eq(game)));
         sectorRepo.deleteAll(sectorRepo.findAll(QSector.sector.sectorPK.game.eq(game)));
         gameRepo.delete(game);
         dataCache.remove(game);

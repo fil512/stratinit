@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { useGame } from '../context/GameContext'
 import type { RelationType } from '../types/game'
 
@@ -28,6 +28,8 @@ function relationColor(relation: RelationType | null): string {
 
 export default function GameMap() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [hasScrolled, setHasScrolled] = useState(false)
   const { state, selectSector, moveSelectedUnits } = useGame()
   const { boardSize, update, lookups, selectedCoords, selectedUnitIds } = state
 
@@ -47,6 +49,10 @@ export default function GameMap() {
     if (!ctx) return
 
     ctx.clearRect(0, 0, canvasSize, canvasSize)
+
+    // Layer 0: Fill unknown/fog-of-war background
+    ctx.fillStyle = TERRAIN_COLORS.UNKNOWN
+    ctx.fillRect(0, 0, canvasSize, canvasSize)
 
     // Layer 1: Terrain
     for (const sector of update.sectors) {
@@ -103,6 +109,27 @@ export default function GameMap() {
     }
   }, [update, lookups, selectedCoords, selectedUnitIds, boardSize, canvasSize, toCanvasY])
 
+  // Auto-scroll to center on player's units on first render
+  useEffect(() => {
+    if (hasScrolled || !update || !containerRef.current) return
+    const myUnits = update.units.filter(u => u.nationId === update.nationId)
+    if (myUnits.length === 0) return
+
+    // Find center of player's units
+    const avgX = myUnits.reduce((sum, u) => sum + u.coords.x, 0) / myUnits.length
+    const avgY = myUnits.reduce((sum, u) => sum + u.coords.y, 0) / myUnits.length
+
+    const canvasX = avgX * CELL_SIZE + CELL_SIZE / 2
+    const canvasY = toCanvasY(avgY) + CELL_SIZE / 2
+
+    const container = containerRef.current
+    // Padding is canvasSize/2 on each side
+    const pad = canvasSize / 2
+    container.scrollLeft = pad + canvasX - container.clientWidth / 2
+    container.scrollTop = pad + canvasY - container.clientHeight / 2
+    setHasScrolled(true)
+  }, [update, hasScrolled, toCanvasY])
+
   // Click handler
   const handleClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
@@ -128,15 +155,20 @@ export default function GameMap() {
 
   if (!update) return null
 
+  // Half-canvas padding on all sides allows centering on any map position
+  const pad = canvasSize / 2
+
   return (
-    <div className="overflow-auto border border-gray-600">
-      <canvas
-        ref={canvasRef}
-        width={canvasSize}
-        height={canvasSize}
-        onClick={handleClick}
-        className="cursor-crosshair"
-      />
+    <div ref={containerRef} className="overflow-auto h-full w-full border border-gray-600">
+      <div style={{ padding: pad, display: 'inline-block' }}>
+        <canvas
+          ref={canvasRef}
+          width={canvasSize}
+          height={canvasSize}
+          onClick={handleClick}
+          className="cursor-crosshair"
+        />
+      </div>
     </div>
   )
 }

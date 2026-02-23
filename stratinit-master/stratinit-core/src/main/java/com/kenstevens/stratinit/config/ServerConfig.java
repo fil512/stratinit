@@ -54,11 +54,7 @@ public class ServerConfig implements IServerConfig {
 
     @Override
     public int getMinPlayersToSchedule() {
-        if (runModeEnum == RunModeEnum.TEST) {
-            return 1;
-        } else {
-            return MIN_PLAYERS_TO_SCHEDULE;
-        }
+        return MIN_PLAYERS_TO_SCHEDULE;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.kenstevens.stratinit.server.bot.training;
 
-import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
-import com.kenstevens.stratinit.client.util.ExpungeSvc;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.client.util.UpdateCalculator;
 import com.kenstevens.stratinit.dao.CityDao;
@@ -51,10 +49,6 @@ public class TrainingGameSimulator {
     private BotExecutor botExecutor;
     @Autowired
     private TrainingScorer scorer;
-    @Autowired
-    private DataCache dataCache;
-    @Autowired
-    private ExpungeSvc expungeSvc;
     @Autowired
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
@@ -139,8 +133,8 @@ public class TrainingGameSimulator {
                 }
             }
 
-            // Process unit updates
-            for (Unit unit : unitDao.getUnits(game)) {
+            // Process unit updates (copy to avoid ConcurrentModificationException)
+            for (Unit unit : new ArrayList<>(unitDao.getUnits(game))) {
                 if (!unit.isAlive()) continue;
                 long period = UpdateCalculator.shrinkTime(true, unit.getUpdatePeriodMilliseconds());
                 if (period > 0 && unit.getLastUpdated() != null) {
@@ -183,12 +177,8 @@ public class TrainingGameSimulator {
             scores.put(entry.getKey(), scorer.score(entry.getValue()));
         }
 
-        // Cleanup
-        try {
-            dataCache.remove(game);
-        } catch (Exception e) {
-            logger.debug("Cache cleanup failed: {}", e.getMessage());
-        }
+        // Cleanup game from cache and database to prevent OOM across generations
+        cleanup(game);
 
         return new TrainingGameResult(scores, playerWeights, turnsPlayed);
     }
@@ -207,8 +197,7 @@ public class TrainingGameSimulator {
 
     public void cleanup(Game game) {
         try {
-            dataCache.remove(game);
-            gameDao.removeGame(game.getId());
+            gameDao.remove(game);
         } catch (Exception e) {
             logger.warn("Failed to cleanup training game: {}", e.getMessage());
         }

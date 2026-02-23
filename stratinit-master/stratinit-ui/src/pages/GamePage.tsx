@@ -135,7 +135,7 @@ export default function GamePage() {
 
   return (
     <div className="flex h-full">
-      <div className="flex-1 overflow-auto flex items-center justify-center p-2">
+      <div className="flex-1 overflow-hidden p-2">
         <GameMap />
       </div>
       <SidePanel />
