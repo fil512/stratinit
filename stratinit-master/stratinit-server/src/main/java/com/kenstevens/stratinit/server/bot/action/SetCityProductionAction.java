@@ -1,0 +1,76 @@
+package com.kenstevens.stratinit.server.bot.action;
+
+import com.kenstevens.stratinit.client.model.City;
+import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.UnitBase;
+import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
+import com.kenstevens.stratinit.server.bot.BotWeights;
+import com.kenstevens.stratinit.server.bot.BotWorldState;
+import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.type.UnitType;
+
+public class SetCityProductionAction implements BotAction {
+    private final City city;
+    private final UnitType unitType;
+    private final Nation nation;
+    private final CityService cityService;
+
+    public SetCityProductionAction(City city, UnitType unitType, Nation nation, CityService cityService) {
+        this.city = city;
+        this.unitType = unitType;
+        this.nation = nation;
+        this.cityService = cityService;
+    }
+
+    @Override
+    public BotActionCategory getCategory() {
+        return BotActionCategory.ECONOMY;
+    }
+
+    @Override
+    public double computeUtility(BotWorldState state, BotWeights weights) {
+        double utility = weights.economyBaseWeight;
+
+        // Don't change if already building this
+        if (city.getBuild() == unitType) {
+            return 0;
+        }
+
+        UnitBase unitBase = UnitBase.getUnitBase(unitType);
+        // Can't build if tech too low
+        if (unitBase.getTech() > state.getTech()) {
+            return 0;
+        }
+
+        if (unitType == UnitType.RESEARCH) {
+            utility *= weights.techCentreDesire;
+        } else if (unitType == UnitType.INFANTRY) {
+            utility *= weights.infantryDesire;
+        } else if (unitType == UnitType.ENGINEER) {
+            utility *= weights.engineerDesire;
+        }
+
+        // Early game: prefer economy/expansion units
+        if (state.getGameTimePercent() < 0.3) {
+            utility *= (1.0 + weights.earlyExpansionBonus);
+        }
+
+        return utility;
+    }
+
+    @Override
+    public boolean execute() {
+        return cityService.updateCity(nation, city.getCoords(),
+                CityFieldToUpdateEnum.BUILD, unitType, null, false, null).isSuccess();
+    }
+
+    @Override
+    public int getCommandPointCost() {
+        return 0;
+    }
+
+    @Override
+    public String describe() {
+        return "Set " + city.getCoords() + " to build " + unitType;
+    }
+}

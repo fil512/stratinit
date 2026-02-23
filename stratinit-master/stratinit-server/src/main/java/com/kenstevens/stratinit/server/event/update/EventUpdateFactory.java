@@ -50,4 +50,9 @@ public class EventUpdateFactory {
     public MapGameEventUpdate getMapGameEventUpdate() {
         return new MapGameEventUpdate();
     }
+
+    @Lookup
+    public BotTurnEventUpdate getBotTurnEventUpdate() {
+        return new BotTurnEventUpdate();
+    }
 }

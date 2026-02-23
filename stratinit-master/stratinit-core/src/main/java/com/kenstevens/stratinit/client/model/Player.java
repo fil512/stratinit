@@ -25,8 +25,18 @@ public class Player implements Serializable {
 	private boolean emailGameMail = true;
 	private Date lastLogin;
 	private String userAgent;
+	private boolean bot = false;
 
 	public Player() {}
+
+	public static Player makeBotPlayer(String botName) {
+		Player player = new Player(botName);
+		player.setBot(true);
+		player.setPassword("");
+		player.setEnabled(true);
+		player.setEmailGameMail(false);
+		return player;
+	}
 
     public Player(String username) {
     	this.username = username;
@@ -179,5 +189,13 @@ public class Player implements Serializable {
 
 	public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
+	}
+
+	public boolean isBot() {
+		return bot;
+	}
+
+	public void setBot(boolean bot) {
+		this.bot = bot;
 	}
 }

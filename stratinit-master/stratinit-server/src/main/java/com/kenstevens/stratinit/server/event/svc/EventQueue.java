@@ -5,9 +5,11 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.server.event.*;
+import com.kenstevens.stratinit.server.service.BotService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,6 +26,9 @@ public class EventQueue {
     private EventFactory eventFactory;
     @Autowired
     private IServerConfig serverConfig;
+    @Lazy
+    @Autowired
+    private BotService botService;
 
     public void shutdown() {
         eventTimer.shutdown();
@@ -109,6 +114,12 @@ public class EventQueue {
 
         TechUpdateEvent techupdateEvent = eventFactory.getTechUpdateEvent(game);
         eventTimer.schedule(techupdateEvent);
+
+        if (botService.gameHasBots(game)) {
+            logger.info("Scheduling bot turns for game " + game);
+            BotTurnEvent botTurnEvent = eventFactory.getBotTurnEvent(game);
+            eventTimer.schedule(botTurnEvent);
+        }
     }
 
     public void schedule(Unit unit) {

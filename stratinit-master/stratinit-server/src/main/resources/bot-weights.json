@@ -1,0 +1,18 @@
+{
+  "economyBaseWeight": 1.0,
+  "techCentreDesire": 0.8,
+  "infantryDesire": 0.7,
+  "engineerDesire": 0.8,
+  "expansionBaseWeight": 0.9,
+  "distancePenalty": 0.1,
+  "buildCityDesire": 0.7,
+  "militaryBaseWeight": 0.7,
+  "attackWeakDesire": 0.9,
+  "hpAdvantageFactor": 0.5,
+  "defenseBaseWeight": 0.8,
+  "cityDefenseDesire": 0.9,
+  "undefendedPenalty": 1.0,
+  "diplomacyBaseWeight": 0.3,
+  "earlyExpansionBonus": 0.5,
+  "lateMilitaryBonus": 0.3
+}

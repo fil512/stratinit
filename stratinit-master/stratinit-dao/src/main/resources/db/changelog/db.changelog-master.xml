@@ -85,4 +85,8 @@
         <sqlFile path="migrations/V20120326000001.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="V20260222000000" author="stratinit">
+        <sqlFile path="migrations/V20260222000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

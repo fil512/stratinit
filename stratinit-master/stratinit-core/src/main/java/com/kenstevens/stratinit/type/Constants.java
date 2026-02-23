@@ -71,5 +71,6 @@ public final class Constants {
 	public static final int SHIP_COUNTERFIRE_RANGE = 1;
 	public static final int ESCORT_RADIUS = 2;
 
+	public static final int BOT_TURN_INTERVAL_SECONDS = 5 * 60;
 
 }

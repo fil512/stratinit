@@ -85,6 +85,8 @@ class AuthControllerTest {
     @MockBean
     private com.kenstevens.stratinit.server.service.GameService gameService;
     @MockBean
+    private com.kenstevens.stratinit.server.service.BotService botService;
+    @MockBean
     private com.kenstevens.stratinit.server.service.PlayerService playerService;
     @MockBean
     private com.kenstevens.stratinit.server.service.MessageService messageService;

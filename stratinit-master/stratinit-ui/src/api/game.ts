@@ -125,6 +125,13 @@ export function concede() {
   return apiFetch<SIUpdate>('/stratinit/concede')
 }
 
+export function addBot(gameId: number) {
+  return apiFetch<SINation>('/stratinit/add-bot', {
+    method: 'POST',
+    body: JSON.stringify({ gameId, noAlliances: false }),
+  })
+}
+
 export function getLeaderboard() {
   return apiFetch<SIPlayerRank[]>('/stratinit/leaderboard')
 }

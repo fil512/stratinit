@@ -91,7 +91,9 @@ public class GameService {
         if (started != null) {
             for (Nation nation : nationDao.getNations(game)) {
                 Player player = nation.getPlayer();
-                mailService.sendEmail(player, MailTemplateLibrary.getGameScheduled(player, game, serverConfig));
+                if (!player.isBot()) {
+                    mailService.sendEmail(player, MailTemplateLibrary.getGameScheduled(player, game, serverConfig));
+                }
             }
         }
     }
@@ -311,6 +313,9 @@ public class GameService {
 
         for (Nation nation : nations) {
             Player player = playerDao.find(nation.getPlayer().getId());
+            if (player.isBot()) {
+                continue;
+            }
             player.addPlayed();
             if (score.get(nation) == topScore) {
                 player.addWins();

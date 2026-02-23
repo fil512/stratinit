@@ -46,4 +46,9 @@ public class EventFactory {
     public RelationChangeEvent getRelationChangeEvent(Relation relation) {
         return new RelationChangeEvent(relation);
     }
+
+    @Lookup
+    public BotTurnEvent getBotTurnEvent(Game game) {
+        return new BotTurnEvent(game);
+    }
 }

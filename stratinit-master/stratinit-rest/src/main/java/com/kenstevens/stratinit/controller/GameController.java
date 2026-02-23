@@ -13,6 +13,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.remote.exception.StratInitException;
 import com.kenstevens.stratinit.remote.request.ErrorJson;
 import com.kenstevens.stratinit.remote.request.SetGameJson;
+import com.kenstevens.stratinit.server.service.BotService;
 import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
@@ -51,6 +52,8 @@ public class GameController {
     private NationSvc nationSvc;
     @Autowired
     private GameService gameService;
+    @Autowired
+    private BotService botService;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
     @Autowired
@@ -170,5 +173,19 @@ public class GameController {
     @Operation(summary = "Submit a client-side error report")
     public Integer submitError(@Valid @RequestBody ErrorJson request) {
         return errorProcessor.processError(request.subject, request.stackTrace);
+    }
+
+    @PostMapping(path = SIRestPaths.ADD_BOT)
+    @Operation(summary = "Add a bot player to a game lobby")
+    public SINation addBot(@Valid @RequestBody SetGameJson request) {
+        return writeProcessor.processForGame(request.gameId, session -> {
+            Result<Nation> result = botService.addBotToGame(request.gameId);
+            if (!result.isSuccess()) {
+                return new Result<SINation>(result);
+            }
+            Nation nation = result.getValue();
+            SINation siNation = nationSvc.nationToSINation(nation, nation, false, false);
+            return new Result<>(result, siNation);
+        });
     }
 }

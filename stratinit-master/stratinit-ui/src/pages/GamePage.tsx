@@ -2,17 +2,25 @@ import { useEffect, useCallback, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
 import { useGameSocket, GameSocketMessage } from '../hooks/useGameSocket'
-import { getJoinedGames } from '../api/game'
+import { getJoinedGames, addBot } from '../api/game'
 import type { SIGame } from '../types/game'
 import GameMap from '../components/GameMap'
 import SidePanel from '../components/SidePanel'
 
 function GameLobby({ game }: { game: SIGame }) {
+  const [addingBot, setAddingBot] = useState(false)
   const status = game.mapped
     ? 'Game is mapped — starting soon...'
     : game.started
       ? 'World is being generated...'
       : 'Waiting for players to join...'
+
+  const handleAddBot = () => {
+    setAddingBot(true)
+    addBot(game.id)
+      .catch(() => {})
+      .finally(() => setAddingBot(false))
+  }
 
   return (
     <div className="flex items-center justify-center h-full">
@@ -41,6 +49,15 @@ function GameLobby({ game }: { game: SIGame }) {
             </div>
           )}
         </div>
+        {!game.mapped && (
+          <button
+            onClick={handleAddBot}
+            disabled={addingBot}
+            className="mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded text-white font-medium transition-colors"
+          >
+            {addingBot ? 'Adding Bot...' : 'Add Bot'}
+          </button>
+        )}
         <p className="text-sm text-gray-500">This page will update automatically.</p>
       </div>
     </div>

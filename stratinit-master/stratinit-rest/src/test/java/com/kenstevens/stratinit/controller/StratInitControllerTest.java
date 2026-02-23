@@ -92,6 +92,8 @@ class StratInitControllerTest {
     @MockBean
     private com.kenstevens.stratinit.server.service.GameService gameService;
     @MockBean
+    private com.kenstevens.stratinit.server.service.BotService botService;
+    @MockBean
     private com.kenstevens.stratinit.server.service.MessageService messageService;
     @MockBean
     private com.kenstevens.stratinit.dao.MessageDao messageDao;

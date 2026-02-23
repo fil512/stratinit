@@ -51,4 +51,9 @@ public class StratInitUpdater {
     public void mapGame(Integer gameId) {
         eventUpdateFactory.getMapGameEventUpdate().update(gameId);
     }
+
+    public void executeBotTurns(Integer gameId) {
+        eventUpdateFactory.getBotTurnEventUpdate().update(gameId);
+        gameNotificationService.notifyGameUpdate(gameId, -1);
+    }
 }
