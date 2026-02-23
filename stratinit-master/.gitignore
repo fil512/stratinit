@@ -16,5 +16,8 @@ Thumbs.db
 .env
 .env.*
 
+# Runtime lock files
+StratInit.lock
+
 # RL training output
 training-results/
