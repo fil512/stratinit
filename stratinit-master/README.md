@@ -14,6 +14,7 @@ mvn clean install -DskipTests
 
 # Database migration
 mvn compile flyway:migrate -pl stratinit-dao
+mvn flyway:info -pl stratinit-dao  # check migration status
 
 # Run the Spring Boot server (port 8081)
 mvn spring-boot:run -pl stratinit-rest
@@ -100,3 +101,10 @@ GlobalExceptionHandler (@ControllerAdvice)
   - Game selector and player selector dropdowns
 - Real-time WebSocket updates via STOMP (typed messages: UPDATE after writes, BATTLE after combat with coordinates)
 - Battle logs populated in every game state update (all 4 types: unit attacks, city captures, flak, nukes)
+
+## Legacy SWT Client (being retired)
+
+```bash
+cd stratinit-client-master
+mvn -Pwin64 clean install
+```
