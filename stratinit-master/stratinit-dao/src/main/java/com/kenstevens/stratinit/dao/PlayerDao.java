@@ -58,6 +58,7 @@ public class PlayerDao {
 
 	public void saveAndUpdateNations(Player player) {
         playerRepo.save(player);
+        dataCache.add(player);
         // Note this behavior is different from other daos.  We don't mind doing a db save every time
         // since player updates are rare.
         List<Nation> nations = nationDao.getNations(player);
