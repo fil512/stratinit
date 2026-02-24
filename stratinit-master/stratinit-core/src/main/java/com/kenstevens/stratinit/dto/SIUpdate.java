@@ -17,6 +17,7 @@ public class SIUpdate implements StratInitDTO {
     public List<SIBattleLog> log;
     public List<SIRelation> relations;
     public List<SILaunchedSatellite> launchedSatellites;
-	
+    public List<String> messages;
+
 	public SIUpdate() {}
 }

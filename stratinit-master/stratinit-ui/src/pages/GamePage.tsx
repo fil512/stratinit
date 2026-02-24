@@ -68,7 +68,7 @@ function GameLobby({ game }: { game: SIGame }) {
 export default function GamePage() {
   const { gameId } = useParams<{ gameId: string }>()
   const navigate = useNavigate()
-  const { state, initGame, refreshState } = useGame()
+  const { state, initGame, refreshState, commandError } = useGame()
   const gameIdNum = gameId ? parseInt(gameId, 10) : null
   const [lobbyGame, setLobbyGame] = useState<SIGame | null>(null)
 
@@ -135,11 +135,16 @@ export default function GamePage() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full relative">
       <div className="flex-1 overflow-hidden p-2">
         <GameMap />
       </div>
       <SidePanel />
+      {commandError && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-red-900/90 text-red-100 px-4 py-2 rounded shadow-lg text-sm">
+          {commandError}
+        </div>
+      )}
     </div>
   )
 }

@@ -133,6 +133,7 @@ export interface SIUpdate {
   log: SIBattleLog[]
   relations: SIRelation[]
   launchedSatellites: SILaunchedSatellite[]
+  messages?: string[]
 }
 
 export interface SIUnitBase {

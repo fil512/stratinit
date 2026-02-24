@@ -194,6 +194,9 @@ public class UnitSvc {
 			commandCost = moveCost.getCommandCost();
 		}
 		SIUpdate siupdate = playerWorldViewUpdate.getWorldViewUpdate(nation);
+		if (!result.isSuccess() && !result.getMessages().isEmpty()) {
+			siupdate.messages = result.getMessages();
+		}
 		Result<SIUpdate> updateResult = new Result<>(result.getMessages(), true, siupdate, result.getBattleLogs(), result.isSuccess());
 		return new WriteProcessor.CommandResult<>(updateResult, commandCost);
 	}

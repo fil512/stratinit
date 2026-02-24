@@ -72,6 +72,7 @@ class RestWebSecurityAdapterConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/stratinit/auth/**").permitAll()
+                        .requestMatchers("/stratinit/version").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/index.html", "/assets/**", "/favicon.ico", "/").permitAll()
                         .requestMatchers("/stratinit/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)

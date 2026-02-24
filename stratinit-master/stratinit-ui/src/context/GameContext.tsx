@@ -51,6 +51,7 @@ interface GameState {
   selectedUnitIds: Set<number>
   loading: boolean
   error: string | null
+  commandError: string | null
 }
 
 const initialState: GameState = {
@@ -63,6 +64,7 @@ const initialState: GameState = {
   selectedUnitIds: new Set(),
   loading: false,
   error: null,
+  commandError: null,
 }
 
 // Actions
@@ -75,6 +77,8 @@ type GameAction =
   | { type: 'SELECT_SECTOR'; coords: SectorCoords; unitIds: number[] }
   | { type: 'TOGGLE_UNIT'; unitId: number }
   | { type: 'CLEAR_SELECTION' }
+  | { type: 'SET_COMMAND_ERROR'; error: string }
+  | { type: 'CLEAR_COMMAND_ERROR' }
 
 function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
@@ -104,6 +108,10 @@ function reducer(state: GameState, action: GameAction): GameState {
     }
     case 'CLEAR_SELECTION':
       return { ...state, selectedCoords: null, selectedUnitIds: new Set() }
+    case 'SET_COMMAND_ERROR':
+      return { ...state, commandError: action.error }
+    case 'CLEAR_COMMAND_ERROR':
+      return { ...state, commandError: null }
     default:
       return state
   }
@@ -127,6 +135,7 @@ interface GameContextValue {
   updateCityProduction: (city: SICityUpdate, field: CityFieldToUpdate, build: string) => Promise<void>
   changeRelation: (nationId: number, relationType: RelationType) => Promise<void>
   concedeGame: () => Promise<void>
+  commandError: string | null
   getSectorAt: (x: number, y: number) => SISector | undefined
   getUnitsAt: (x: number, y: number) => SIUnit[]
   getCityAt: (x: number, y: number) => SICityUpdate | undefined
@@ -182,6 +191,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLEAR_SELECTION' })
   }, [])
 
+  const showCommandError = useCallback((msg: string) => {
+    dispatch({ type: 'SET_COMMAND_ERROR', error: msg })
+    setTimeout(() => dispatch({ type: 'CLEAR_COMMAND_ERROR' }), 4000)
+  }, [])
+
   const moveSelectedUnits = useCallback(async (target: SectorCoords) => {
     if (state.selectedUnitIds.size === 0 || !state.update) return
     const allUnits = state.update.units
@@ -191,10 +205,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const update = await gameApi.moveUnits(selected, target)
       dispatch({ type: 'SET_UPDATE', update })
       dispatch({ type: 'CLEAR_SELECTION' })
-    } catch {
-      // Silently fail — user can retry
+      if (update.messages && update.messages.length > 0) {
+        showCommandError(update.messages.join('; '))
+      }
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Move failed')
     }
-  }, [state.selectedUnitIds, state.update])
+  }, [state.selectedUnitIds, state.update, showCommandError])
 
   const getSelectedUnits = useCallback(() => {
     if (state.selectedUnitIds.size === 0 || !state.update) return []
@@ -337,6 +354,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     updateCityProduction,
     changeRelation,
     concedeGame,
+    commandError: state.commandError,
     getSectorAt,
     getUnitsAt,
     getCityAt,

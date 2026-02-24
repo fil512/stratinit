@@ -64,10 +64,19 @@ public class GameController {
     @Value("${stratinit.version:1.2.8}")
     private String serverVersion;
 
+    @Autowired(required = false)
+    private org.springframework.boot.info.GitProperties gitProperties;
+
     @GetMapping(path = SIRestPaths.VERSION)
     @Operation(summary = "Get server version")
     public String getVersion() {
-        return serverVersion;
+        if (gitProperties == null) {
+            return serverVersion;
+        }
+        String commitId = gitProperties.getShortCommitId();
+        String branch = gitProperties.getBranch();
+        String dirty = "true".equals(gitProperties.get("dirty")) ? "-dirty" : "";
+        return serverVersion + " (" + branch + "@" + commitId + dirty + ")";
     }
 
     @GetMapping(path = SIRestPaths.UNIT_BASE)

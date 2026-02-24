@@ -21,16 +21,10 @@ public final class UnitHelper {
 			return mobility;
 		}
 		int fuel = unit.getFuel();
-		int range = mobility;
-		// TODO TEST I changed this from fuel < mobility to fuel <= mobility.  Hope this is correct!
-		if (fuel <= mobility) {
-			if (fuel > 0) {
-				range = fuel - 1;
-			} else if (fuel == 0) {
-				range = 0;
-			}
+		if (fuel == 0) {
+			return 0;
 		}
-		return range;
+		return Math.min(fuel, mobility);
 	}
 
 
