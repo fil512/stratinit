@@ -7,9 +7,11 @@ import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.config.RunModeEnum;
 import com.kenstevens.stratinit.config.ServerConfig;
+import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.helper.GameHelper;
 import com.kenstevens.stratinit.helper.NationHelper;
 import com.kenstevens.stratinit.helper.PlayerHelper;
@@ -53,6 +55,10 @@ public class GameDaoStateChangeTest {
     private GameCreator gameCreator;
     @Mock
     private RelationService relationService;
+    @Mock
+    private CityDao cityDao;
+    @Mock
+    private UnitDao unitDao;
 
     private Game game;
 

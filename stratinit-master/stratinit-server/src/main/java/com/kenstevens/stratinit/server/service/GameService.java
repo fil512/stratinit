@@ -152,6 +152,7 @@ public class GameService {
         nation.setNoAlliances(noAlliances);
         nation.setNationId(nationId);
         nationDao.save(nation);
+        initCommandPointGain(nation);
         calculateAllianceVote(game);
         gameDao.merge(game);
         relationService.setRelations(nation);
@@ -240,6 +241,12 @@ public class GameService {
         game.setLastUpdated(lastUpdated);
         gameDao.merge(game);
 
+    }
+
+    private void initCommandPointGain(Nation nation) {
+        int cpGain = capitalPointsToCommandPoints(getCapitalPoints(nation));
+        nation.setHourlyCPGain(cpGain * 3600 / Constants.TECH_UPDATE_INTERVAL_SECONDS);
+        nationDao.markCacheModified(nation);
     }
 
     private void updateCommandPoints(Game game) {
