@@ -48,6 +48,16 @@ public class ThreePlayerRelationChangeTest extends ThreeRelationManagerTest {
 
 
     @Test
+    public void cannotAllyWithPlayerWhoAlreadyHasAlly_issue72() {
+        // nationThem and nationThird are mutual allies
+        themThirdAlly();
+        // nationMe tries to ally with nationThem, who already has an ally
+        Result<Relation> result = relationService.setRelation(nationMe, nationThem, RelationType.ALLIED, false);
+        assertFalseResult(result);
+        assertEquals(nationThem + " already has an ally.", result.toString());
+    }
+
+    @Test
     public void noDoubleUnrequiredAlly() {
         declareAlliance();
         Result<Relation> result = relationService.setRelation(nationMe, nationThird, RelationType.ALLIED, false);

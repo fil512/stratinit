@@ -80,7 +80,7 @@ public class RelationManager {
         Collection<Nation> theirAllies = relationDao.getAllies(relation.getTo());
         if (myAllies.size() >= Constants.MAX_ALLIES) {
             return "You already have an ally";
-        } else if (theirAllies.size() > Constants.MAX_ALLIES) {
+        } else if (theirAllies.size() >= Constants.MAX_ALLIES) {
             return relation.getTo() + " already has an ally.";
         } else {
             return "";
