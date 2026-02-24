@@ -90,8 +90,10 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
         unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
         unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
-        assertEquals((TOP_CITY_SCORE + BOTTOM_CITY_SCORE) * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
-        assertEquals(BETWEEN_CITIES, target.getCoords());
+        // In hex, infantry sight=1 can't see BOTTOM_CITY from BETWEEN_CITIES (distance 2)
+        // ICBM_2 blast radius finds (7,4) as optimal aim point in hex iteration order
+        assertEquals(TOP_CITY_SCORE * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
+        assertEquals(new SectorCoords(7, 4), target.getCoords());
     }
 
     @Test
@@ -101,24 +103,22 @@ public class NukeTargetChooserTest extends TwoPlayerBase {
         Unit icbm2 = unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
         unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.INFANTRY);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
-        assertEquals((TOP_CITY_SCORE + BOTTOM_CITY_SCORE) * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
-        assertEquals(BETWEEN_CITIES, target.getCoords());
+        // In hex, infantry sight=1 can't see BOTTOM_CITY from BETWEEN_CITIES
+        // Hex iteration finds (7,4) as optimal aim point
+        assertEquals(TOP_CITY_SCORE * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
+        assertEquals(new SectorCoords(7, 4), target.getCoords());
         assertEquals(icbm2, target.getNuke());
     }
 
     @Test
     public void findEnemySeeTargetBetween2Zep() {
         declareWar();
-        // MY_PORT = 1,4
         unitService.buildUnit(nationMe, MY_PORT, UnitType.ICBM_2);
-        // BETWEEN_CITIES = 7,5
         unitService.buildUnit(nationMe, BETWEEN_CITIES, UnitType.ZEPPELIN);
         NukeTargetScore target = nukeTargetChooser.chooseTarget(nationMe);
+        // Zep sight=2 can see both cities; hex iteration picks (8,5) as optimal aim point
         assertEquals((TOP_CITY_SCORE + BOTTOM_CITY_SCORE) * TargetScore.getMultiplier(RelationType.WAR), target.getScore());
-        // BETWEEN_CITIES_FAR = 9,5
-        // FIXME the test used to expect BETWEEN_CITIES_FAR.  Is it a bug?  Guessing zep can't see far enough?
-//		assertEquals(BETWEEN_CITIES_FAR, target.getCoords());
-        assertEquals(BETWEEN_CITIES, target.getCoords());
+        assertEquals(new SectorCoords(8, 5), target.getCoords());
     }
 
     @Test

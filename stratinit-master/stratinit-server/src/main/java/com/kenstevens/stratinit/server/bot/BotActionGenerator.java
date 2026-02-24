@@ -186,13 +186,11 @@ public class BotActionGenerator {
 
     private void generateDirectionalMoves(Unit unit, int gameSize, Nation nation, List<BotAction> actions) {
         SectorCoords unitCoords = unit.getCoords();
-        int[][] offsets = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {-1, -1}};
-        for (int[] offset : offsets) {
-            int newX = (unitCoords.x + offset[0] * 2 + gameSize) % gameSize;
-            int newY = (unitCoords.y + offset[1] * 2 + gameSize) % gameSize;
-            SectorCoords target = new SectorCoords(newX, newY);
+        for (SectorCoords target : unitCoords.sectorsWithin(gameSize, 2, false)) {
             int distance = SectorCoords.distance(gameSize, unitCoords, target);
-            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService));
+            if (distance == 2) {
+                actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService));
+            }
         }
     }
 

@@ -250,11 +250,12 @@ public class CounterAttackTest extends ThreePlayerBase {
                 UnitType.BATTLESHIP);
         Unit dest4 = unitService.buildUnit(nationThem, SEA42,
                 UnitType.DESTROYER);
+        // In hex, (5,1) is not adjacent to (4,2). Use (5,3) which IS a hex neighbor of (4,2).
         Unit mdest = unitService.buildUnit(nationMe, SEA52, UnitType.DESTROYER);
         unitService.buildUnit(nationThem, SUPPLY,
                 UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(
-                makeUnitList(mdest), SEA51);
+                makeUnitList(mdest), new SectorCoords(5, 3));
         assertFalseResult(result);
         assertMoved(result, dest4);
         assertEquals(dest4.getCoords(), SEA42);

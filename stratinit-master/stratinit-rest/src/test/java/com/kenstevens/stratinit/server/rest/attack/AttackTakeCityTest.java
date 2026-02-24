@@ -218,7 +218,8 @@ public class AttackTakeCityTest extends TwoPlayerBase {
         assertResult(result);
         assertDamaged(result, inf);
         assertTookCity(result);
-        assertEquals(ATTACK_FROM, plane.getCoords());
+        // In hex, plane moves one step closer to attack (ATTACK_FROM is no longer adjacent to CITY)
+        assertEquals(new SectorCoords(1, 2), plane.getCoords());
     }
 
 }

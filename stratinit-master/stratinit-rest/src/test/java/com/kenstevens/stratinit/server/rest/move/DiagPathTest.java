@@ -72,7 +72,7 @@ public class DiagPathTest extends BaseStratInitControllerTest {
         Unit supply = unitService.buildUnit(nationMe, START, UnitType.SUPPLY);
         Result<MoveCost> result = moveUnits(makeUnitList(supply), END);
         assertResult(result);
-        assertEquals(4, supply.getUnitBase().getMobility() - supply.getMobility(), result.toString());
+        assertEquals(6, supply.getUnitBase().getMobility() - supply.getMobility(), result.toString());
     }
 
     @Test

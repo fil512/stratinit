@@ -50,23 +50,16 @@ public class Movement {
 		if (fuel >= Constants.MAX_RANGE) {
 			return false;
 		}
-		boolean retval = true;
-		for (int xdel = -1 * fuel; xdel <= fuel; ++xdel) {
-			for (int ydel = -1 * fuel; ydel <= fuel; ++ydel) {
-				if (xdel == 0 && ydel == 0) {
-					continue;
-				}
-				WorldSector sector = worldView.getWorldSector(unit.getCoords().x
-						+ xdel, unit.getCoords().y + ydel);
-				if (sector == null) {
-					continue;
-				}
-				if (sector.canRefuel(unit)) {
-					return false;
-				}
+		for (SectorCoords coords : unit.getCoords().sectorsWithin(worldView.size(), fuel, false)) {
+			WorldSector sector = worldView.getWorldSector(coords);
+			if (sector == null) {
+				continue;
+			}
+			if (sector.canRefuel(unit)) {
+				return false;
 			}
 		}
-		return retval;
+		return true;
 	}
 
 	public List<SectorCoords> getPath(AttackType attackType, Unit unit,
@@ -151,16 +144,19 @@ public class Movement {
 	}
 
 	private void moveCloser(SectorCoords step, SectorCoords target) {
-		if (step.x < target.x) {
-			step.x += 1;
-		} else if (step.x > target.x) {
-			step.x -= 1;
+		int size = worldView.size();
+		List<SectorCoords> neighbors = step.neighbours(size);
+		SectorCoords best = step;
+		int bestDist = SectorCoords.distance(size, step, target);
+		for (SectorCoords neighbor : neighbors) {
+			int dist = SectorCoords.distance(size, neighbor, target);
+			if (dist < bestDist) {
+				bestDist = dist;
+				best = neighbor;
+			}
 		}
-		if (step.y < target.y) {
-			step.y += 1;
-		} else if (step.y > target.y) {
-			step.y -= 1;
-		}
+		step.x = best.x;
+		step.y = best.y;
 	}
 
 	public boolean isInlandCity(WorldSector targetSector) {
@@ -282,12 +278,9 @@ public class Movement {
 	public Set<SectorCoords> canReachUnknown(Unit unit) {
 		Set<SectorCoords> retval = new HashSet<>();
 		int range = UnitHelper.range(unit);
-		for (int x = unit.getX() - range; x <= unit.getX() + range; ++x) {
-			for (int y = unit.getY() - range; y <= unit.getY() + range; ++y) {
-				SectorCoords coords = new SectorCoords(worldView.size(), x, y);
-				if (worldView.getWorldSector(coords) == null) {
-					retval.add(coords);
-				}
+		for (SectorCoords coords : unit.getCoords().sectorsWithin(worldView.size(), range, false)) {
+			if (worldView.getWorldSector(coords) == null) {
+				retval.add(coords);
 			}
 		}
 		return retval;

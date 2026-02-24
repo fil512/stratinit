@@ -23,7 +23,7 @@ public class SupplyTest extends BaseStratInitControllerTest {
     private static final SectorCoords IN_TSUPPLY = new SectorCoords(9, 5);
     private static final SectorCoords OUT_TSUPPLY = new SectorCoords(9, 6);
     private static final SectorCoords SEA_OUT_OF_REACH = new SectorCoords(11, 0);
-    private static final SectorCoords FAR_PORT = new SectorCoords(6, 2);
+    private static final SectorCoords FAR_PORT = new SectorCoords(5, 2);
     private static final SectorCoords CLOSE_ENOUGH_TO_PORT = new SectorCoords(6, 3);
     private static final SectorCoords NEAR_PORT = new SectorCoords(6, 8);
     private static final SectorCoords PORT = new SectorCoords(7, 8);

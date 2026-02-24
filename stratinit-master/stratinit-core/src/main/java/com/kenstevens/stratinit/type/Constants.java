@@ -14,9 +14,9 @@ public final class Constants {
     public static final int NO_FUEL_REQUIRED = -1;
     public static final int START_INFANTRY = 4;
     public static final int START_ZEPPELINS = 1;
-	public static final int SUPPLY_RADIUS = 5;
-	public static final int INTERCEPTION_RADIUS = 5;
-	public static final int BATTLE_GROUP_RADIUS = 5;
+	public static final int SUPPLY_RADIUS = 6;
+	public static final int INTERCEPTION_RADIUS = 6;
+	public static final int BATTLE_GROUP_RADIUS = 6;
 	public static final int SECONDS_PER_DAY = 24 * 60 * 60;
 	public static final int UNIT_VISIBLE_INTERVAL = SECONDS_PER_DAY; // 24 hours
 	public static final int SUB_VISIBLE_INTERVAL = 8 * 60 * 60; // 8 hours

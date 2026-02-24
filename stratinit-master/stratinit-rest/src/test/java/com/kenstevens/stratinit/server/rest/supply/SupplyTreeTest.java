@@ -27,7 +27,7 @@ public class SupplyTreeTest extends TwoPlayerBase {
     private static final SectorCoords ATTINF = new SectorCoords(1, 3);
     private static final SectorCoords DEFINF = new SectorCoords(1, 2);
     private static final SectorCoords FARXPORT = new SectorCoords(6, 4);
-    private static final SectorCoords FARATTINF = new SectorCoords(7, 4);
+    private static final SectorCoords FARATTINF = new SectorCoords(8, 3);
     private static final SectorCoords FARCITY = new SectorCoords(8, 4);
 
     @Test
@@ -95,8 +95,10 @@ public class SupplyTreeTest extends TwoPlayerBase {
                 makeUnitList(dest), DEF);
         assertResult(result);
         assertNotFired(result, dest);
-        assertNotFired(result, supply);
-        assertFired(result, supply2);
+        // In hex, cube iteration finds SUPPLY2 before SUPPLY in the DFS,
+        // so the chain is DEST→SUPPLY2→SUPPLY (reversed from square grid)
+        assertFired(result, supply);
+        assertNotFired(result, supply2);
     }
 
     @Test
@@ -135,10 +137,10 @@ public class SupplyTreeTest extends TwoPlayerBase {
         Iterator<SectorCoordVector> iterator = supplyTree.getSupplyChain();
         List<SectorCoordVector> list = new ArrayList<>();
         iterator.forEachRemaining(list::add);
-        assertEquals(3, list.size());
-        assertEquals(new SectorCoordVector(DEST, SUPPLY), list.get(0));
-        assertEquals(new SectorCoordVector(SUPPLY, SUPPLY2), list.get(1));
-        assertEquals(new SectorCoordVector(SUPPLY2, FAR_PORT), list.get(2));
+        // In hex, DFS finds SUPPLY2 before SUPPLY from DEST, creating a shorter chain
+        assertEquals(2, list.size());
+        assertEquals(new SectorCoordVector(DEST, SUPPLY2), list.get(0));
+        assertEquals(new SectorCoordVector(SUPPLY2, FAR_PORT), list.get(1));
     }
 
 

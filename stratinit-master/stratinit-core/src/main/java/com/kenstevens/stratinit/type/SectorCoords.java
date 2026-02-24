@@ -71,9 +71,8 @@ public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 
 	public int euclidianDistanceSquared(CoordMeasure coordMeasure,
 										SectorCoords target) {
-		int xdist = distance(coordMeasure.size(), x, target.x);
-		int ydist = distance(coordMeasure.size(), y, target.y);
-		return xdist * xdist + ydist * ydist;
+		int hexDist = distance(coordMeasure.size(), this, target);
+		return hexDist * hexDist;
 	}
 
 	public List<SectorCoords> neighbours(int size) {
@@ -82,19 +81,25 @@ public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 
 	public List<SectorCoords> sectorsWithin(int size, int distance,
 											boolean includeSelf) {
-		List<SectorCoords> neighbours = new ArrayList<SectorCoords>();
-		for (int sx = x - distance; sx <= x + distance; ++sx) {
-			for (int sy = y - distance; sy <= y + distance; ++sy) {
-				if (!includeSelf && sx == x && sy == y) {
+		List<SectorCoords> result = new ArrayList<>();
+		int[] center = offsetToCube(x, y);
+		int cx = center[0], cy = center[1], cz = center[2];
+		for (int dx = -distance; dx <= distance; ++dx) {
+			int dyMin = Math.max(-distance, -dx - distance);
+			int dyMax = Math.min(distance, -dx + distance);
+			for (int dy = dyMin; dy <= dyMax; ++dy) {
+				int dz = -dx - dy;
+				if (!includeSelf && dx == 0 && dy == 0) {
 					continue;
 				}
-				neighbours.add(new SectorCoords(norm(size, sx), norm(size, sy)));
+				int[] offset = cubeToOffset(cx + dx, cz + dz);
+				result.add(new SectorCoords(norm(size, offset[0]), norm(size, offset[1])));
 			}
 		}
-		return neighbours;
+		return result;
 	}
 
-	private static int norm(int size, int a) {
+	static int norm(int size, int a) {
 		return (((a) < 0) ? (size - 1 - ((-(a) - 1) % size)) : ((a) % size));
 	}
 
@@ -112,17 +117,44 @@ public class SectorCoords implements Serializable, Comparable<SectorCoords> {
 
 	public static int distance(int size, SectorCoords source,
 							   SectorCoords target) {
-		int xdist = distance(size, source.x, target.x);
-		int ydist = distance(size, source.y, target.y);
-		return Math.max(xdist, ydist);
+		// For toroidal wrapping, check all 9 wrapped copies and take minimum
+		int minDist = Integer.MAX_VALUE;
+		for (int dx = -1; dx <= 1; ++dx) {
+			for (int dy = -1; dy <= 1; ++dy) {
+				int wrappedX = target.x + dx * size;
+				int wrappedY = target.y + dy * size;
+				int dist = hexDistance(source.x, source.y, wrappedX, wrappedY);
+				if (dist < minDist) {
+					minDist = dist;
+				}
+			}
+		}
+		return minDist;
 	}
 
-	private static int distance(int size, int a, int b) {
-		int dist = Math.abs(a - b);
-		if (dist > size / 2) {
-			dist = size - dist;
-		}
-		return dist;
+	private static int hexDistance(int x1, int y1, int x2, int y2) {
+		int[] a = offsetToCube(x1, y1);
+		int[] b = offsetToCube(x2, y2);
+		return cubeDistance(a, b);
+	}
+
+	// Even-Q offset -> cube coordinates (flat-top hexagons)
+	private static int[] offsetToCube(int col, int row) {
+		int cx = col;
+		int cz = row - (col + (col & 1)) / 2;
+		int cy = -cx - cz;
+		return new int[]{cx, cy, cz};
+	}
+
+	// Cube -> even-Q offset coordinates
+	private static int[] cubeToOffset(int cx, int cz) {
+		int col = cx;
+		int row = cz + (cx + (cx & 1)) / 2;
+		return new int[]{col, row};
+	}
+
+	private static int cubeDistance(int[] a, int[] b) {
+		return (Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) + Math.abs(a[2] - b[2])) / 2;
 	}
 
 	public SectorCoords shift(int size, SectorCoords coords) {

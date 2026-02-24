@@ -79,7 +79,8 @@ public class TwoInfAttackTest extends TwoPlayerBase {
         assertFired(result, inf1);
         assertNotMoved(result, inf2);
         assertNotFired(result, inf2);
-        assertEquals(ATT, inf1.getCoords());
+        // In hex, the path from ATT_FAR (9,3) to DEF (9,0) goes via (9,1)
+        assertEquals(new SectorCoords(9, 1), inf1.getCoords());
         assertEquals(ATT_FAR, inf2.getCoords());
     }
 

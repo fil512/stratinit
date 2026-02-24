@@ -55,12 +55,12 @@ public class BuildCityTest extends TwoPlayerBase {
         assertEquals(2, cities.size());
         long cp = nationMe.getCommandPoints();
         Collection<SectorSeen> sectors = sectorDao.getSectorsSeen(nationMe);
-        assertEquals(58, sectors.size());
+        assertEquals(44, sectors.size());
         SectorSeen near = new SectorSeen(nationMe, NEAR);
         assertFalse(sectors.contains(near));
         buildCity(eng);
         sectors = sectorDao.getSectorsSeen(nationMe);
-        assertEquals(84, sectors.size());
+        assertEquals(70, sectors.size());
         assertTrue(sectors.contains(near));
         assertEquals(cp - Constants.COMMAND_COST_BUILD_CITY, nationMe.getCommandPoints());
         assertEquals(0, eng.getMobility());

@@ -76,7 +76,7 @@ public class UnitService {
     private void executeMoveOrder(Unit unit, SectorCoords target) {
         Nation nation = unit.getNation();
         WorldView worldView = sectorService.getAllWorldView(nation);
-        if (unit.getMobility() < worldView.distance(unit.getCoords(), target)) {
+        if (unit.getMobility() < 1) {
             return;
         }
         moveUnitFromOrder(unit, target, nation, worldView);
@@ -93,6 +93,9 @@ public class UnitService {
                 worldView);
         @SuppressWarnings("unused") // TODO ENH For now remove the output of this command.  Maybe archive it later.
         Result<MoveCost> result = unitMover.move();
+        if (!unit.getCoords().equals(target) && unit.isAlive()) {
+            setUnitMove(unit, target);
+        }
     }
 
     public void clearUnitMove(Unit unit) {

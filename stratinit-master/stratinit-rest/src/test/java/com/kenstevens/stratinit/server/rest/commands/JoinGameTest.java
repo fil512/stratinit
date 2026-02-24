@@ -28,7 +28,7 @@ public class JoinGameTest extends BaseStratInitControllerTest {
     @Test
     public void getSectors() {
         List<SISector> sectors = nationController.getSectors();
-        assertEquals(49, sectors.size());
+        assertEquals(37, sectors.size());
     }
 
     @Test

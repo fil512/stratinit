@@ -18,7 +18,7 @@ public class SectorDaoTest extends TwoPlayerBase {
     @Test
     public void getSectorsWithin() {
         List<Sector> sectors = testWorld.getSectorsWithin(new SectorCoords(0, 0), 2, true);
-        assertEquals(25, sectors.size());
+        assertEquals(19, sectors.size());
     }
 
     @Test

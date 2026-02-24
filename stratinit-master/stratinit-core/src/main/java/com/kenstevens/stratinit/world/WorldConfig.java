@@ -2,7 +2,7 @@ package com.kenstevens.stratinit.world;
 
 public class WorldConfig {
 	private int portsPerPlayerIsland = 2;
-	private int playerIslandSize = 50;
+	private int playerIslandSize = 60;
 	private int minDistanceEntreIslands = 4;
 	private int minDistanceEntreCities = 2;
 	private int minContinentSize = 30;
@@ -11,7 +11,7 @@ public class WorldConfig {
 	private int maxPercentCities = 7;
 	private int percentWater = 85;
 	private int startDistanceEntreContinents = 15;
-	private int spikiness = 40; // percent chance next sector grows from same location as last growth
+	private int spikiness = 50; // percent chance next sector grows from same location as last growth
 	public void setPortsPerPlayerIsland(int portsPerPlayerIsland) {
 		this.portsPerPlayerIsland = portsPerPlayerIsland;
 	}

@@ -27,6 +27,7 @@ public class WorldTest {
         World world = new World(game, true);
         assertEquals(1, world.getSectorOrNull(0, 0).getCoords().distanceTo(world, world.getSectorOrNull(0, 39).getCoords()));
         assertEquals(1, world.getSectorOrNull(0, 0).getCoords().distanceTo(world, world.getSectorOrNull(39, 0).getCoords()));
-        assertEquals(1, world.getSectorOrNull(0, 0).getCoords().distanceTo(world, world.getSectorOrNull(39, 39).getCoords()));
+        // In hex grid, diagonal wrap (0,0)->(39,39) costs 2 steps, not 1
+        assertEquals(2, world.getSectorOrNull(0, 0).getCoords().distanceTo(world, world.getSectorOrNull(39, 39).getCoords()));
     }
 }

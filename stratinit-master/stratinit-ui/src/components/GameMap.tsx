@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { useGame } from '../context/GameContext'
-import type { RelationType, UnitType, CityType, SISector, SIUnit, SICityUpdate } from '../types/game'
+import type { RelationType, UnitType, CityType, SISector, SIUnit, SIUnitBase, SICityUpdate } from '../types/game'
 
 // Zoom bounds and animation
 const MIN_CELL = 8
@@ -9,6 +9,7 @@ const ZOOM_FACTOR = 1.2      // multiplier per wheel notch
 const LERP_SPEED = 0.18      // per-frame exponential lerp (0–1, higher = faster)
 const SNAP_THRESHOLD = 0.003 // fraction of target to snap
 const DRAG_THRESHOLD = 4
+const SQRT3 = Math.sqrt(3)
 
 // Unit type abbreviations
 const UNIT_SHORT: Record<UnitType, string> = {
@@ -36,11 +37,74 @@ function relationColor(relation: RelationType | null): string {
   return relation ? (RELATION_COLORS[relation] ?? '#c0c0c0') : '#c0c0c0'
 }
 
-function hpBarColor(hp: number): string {
-  if (hp >= 8) return '#00ff00'
-  if (hp >= 5) return '#ffff00'
-  if (hp >= 3) return '#ff8800'
+function hpBarColor(ratio: number): string {
+  if (ratio >= 0.8) return '#00ff00'
+  if (ratio >= 0.5) return '#ffff00'
+  if (ratio >= 0.3) return '#ff8800'
   return '#ff0000'
+}
+
+// ── Hex geometry utilities ──
+
+// Compute pixel center of a flat-top hex at grid position (gx, gy)
+// r = hex radius (half of cellSize)
+// bs = board size
+function hexCenter(gx: number, gy: number, r: number, bs: number): [number, number] {
+  const px = r + gx * 1.5 * r
+  const flippedY = bs - 1 - gy
+  const py = SQRT3 / 2 * r + flippedY * SQRT3 * r + (gx & 1 ? SQRT3 / 2 * r : 0)
+  return [px, py]
+}
+
+// Draw a flat-top hexagon path centered at (cx, cy) with radius r
+function drawHex(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) {
+  ctx.beginPath()
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.PI / 3 * i  // flat-top: starts at 0°
+    const px = cx + r * Math.cos(angle)
+    const py = cy + r * Math.sin(angle)
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+}
+
+// Canvas dimensions for hex grid
+function hexCanvasSize(bs: number, r: number): { w: number; h: number } {
+  const w = r + bs * 1.5 * r + 0.5 * r
+  const h = SQRT3 * r * bs + SQRT3 / 2 * r
+  return { w, h }
+}
+
+// Pixel position to hex grid coordinates (flat-top even-Q)
+function pixelToHex(px: number, py: number, r: number, bs: number): { x: number; y: number } | null {
+  // Approximate column
+  const col = Math.round((px - r) / (1.5 * r))
+  // Approximate row (flipped y)
+  const rowOffset = (col & 1) ? SQRT3 / 2 * r : 0
+  const adjustedPy = py - SQRT3 / 2 * r - rowOffset
+  const row = Math.round(adjustedPy / (SQRT3 * r))
+  const gameY = bs - 1 - row
+
+  // Check candidate and its neighbors to find closest hex center
+  let bestCol = col, bestRow = gameY
+  let bestDist = Infinity
+  for (let dc = -1; dc <= 1; dc++) {
+    for (let dr = -1; dr <= 1; dr++) {
+      const cc = col + dc
+      const gy = gameY + dr
+      if (cc < 0 || cc >= bs || gy < 0 || gy >= bs) continue
+      const [hx, hy] = hexCenter(cc, gy, r, bs)
+      const d = (px - hx) * (px - hx) + (py - hy) * (py - hy)
+      if (d < bestDist) {
+        bestDist = d
+        bestCol = cc
+        bestRow = gy
+      }
+    }
+  }
+
+  if (bestCol < 0 || bestCol >= bs || bestRow < 0 || bestRow >= bs) return null
+  return { x: bestCol, y: bestRow }
 }
 
 // ── Imperative draw function (used by both useEffect and rAF animation) ──
@@ -53,78 +117,77 @@ interface DrawParams {
   lookups: { sectorMap: Map<string, SISector>; unitMap: Map<string, SIUnit[]>; cityMap: Map<string, SICityUpdate> }
   selectedCoords: import('../types/game').SectorCoords | null
   selectedUnitIds: Set<number>
+  unitBaseMap: Map<UnitType, SIUnitBase>
 }
 
 function drawMap(p: DrawParams) {
-  const { canvas, cellSize: cs, boardSize: bs, update, lookups, selectedCoords, selectedUnitIds } = p
-  const size = bs * cs
-  canvas.width = size
-  canvas.height = size
+  const { canvas, cellSize: cs, boardSize: bs, update, lookups, selectedCoords, selectedUnitIds, unitBaseMap } = p
+  const r = cs / 2  // hex radius
+  const { w: canvasW, h: canvasH } = hexCanvasSize(bs, r)
+  canvas.width = canvasW
+  canvas.height = canvasH
 
   const ctx = canvas.getContext('2d')
   if (!ctx) return
 
-  const toY = (gy: number) => (bs - 1 - gy) * cs
-
   // Layer 0: fog-of-war background
   ctx.fillStyle = TERRAIN_COLORS.UNKNOWN
-  ctx.fillRect(0, 0, size, size)
+  ctx.fillRect(0, 0, canvasW, canvasH)
 
   // Layer 1: Terrain
   for (const sector of update.sectors) {
-    const x = sector.coords.x * cs
-    const y = toY(sector.coords.y)
+    const [cx, cy] = hexCenter(sector.coords.x, sector.coords.y, r, bs)
     ctx.fillStyle = TERRAIN_COLORS[sector.type] ?? '#111'
-    ctx.fillRect(x, y, cs, cs)
+    drawHex(ctx, cx, cy, r)
+    ctx.fill()
   }
 
   // Grid lines at 24px+
   if (cs >= 24) {
     ctx.strokeStyle = 'rgba(255,255,255,0.08)'
     ctx.lineWidth = 0.5
-    for (let i = 0; i <= bs; i++) {
-      const pos = i * cs
-      ctx.beginPath(); ctx.moveTo(pos, 0); ctx.lineTo(pos, size); ctx.stroke()
-      ctx.beginPath(); ctx.moveTo(0, pos); ctx.lineTo(size, pos); ctx.stroke()
+    for (const sector of update.sectors) {
+      const [cx, cy] = hexCenter(sector.coords.x, sector.coords.y, r, bs)
+      drawHex(ctx, cx, cy, r)
+      ctx.stroke()
     }
   }
 
   // Layer 2: Cities
   for (const sector of update.sectors) {
     if (!sector.cityType) continue
-    const x = sector.coords.x * cs
-    const y = toY(sector.coords.y)
+    const [cx, cy] = hexCenter(sector.coords.x, sector.coords.y, r, bs)
     ctx.fillStyle = relationColor(sector.myRelation)
-    const inset = Math.max(1, Math.round(cs * 0.1))
-    ctx.fillRect(x + inset, y + inset, cs - inset * 2, cs - inset * 2)
-    drawCityDetails(ctx, sector, x, y, cs, lookups)
+    const insetR = r * 0.8
+    drawHex(ctx, cx, cy, insetR)
+    ctx.fill()
+    drawCityDetails(ctx, sector, cx, cy, cs, r, lookups)
   }
 
   // Layer 3: Units
   for (const sector of update.sectors) {
     if (!sector.topUnitType) continue
-    const x = sector.coords.x * cs
-    const y = toY(sector.coords.y)
+    const [cx, cy] = hexCenter(sector.coords.x, sector.coords.y, r, bs)
     ctx.fillStyle = relationColor(sector.myRelation)
-    const inset = Math.max(2, Math.round(cs * 0.2))
-    ctx.fillRect(x + inset, y + inset, cs - inset * 2, cs - inset * 2)
-    drawUnitDetails(ctx, sector, x, y, cs, lookups)
+    const insetR = r * 0.6
+    drawHex(ctx, cx, cy, insetR)
+    ctx.fill()
+    drawUnitDetails(ctx, sector, cx, cy, cs, r, lookups, unitBaseMap)
   }
 
   // Supply dots at 24px+
   if (cs >= 24) {
     for (const sector of update.sectors) {
       if (!sector.suppliesLand && !sector.suppliesNavy) continue
-      const x = sector.coords.x * cs
-      const y = toY(sector.coords.y)
+      const [cx, cy] = hexCenter(sector.coords.x, sector.coords.y, r, bs)
       const dotR = Math.max(1.5, cs * 0.06)
       if (sector.suppliesLand) {
         ctx.fillStyle = '#00ff88'
-        ctx.beginPath(); ctx.arc(x + cs - dotR - 1, y + dotR + 1, dotR, 0, Math.PI * 2); ctx.fill()
+        ctx.beginPath(); ctx.arc(cx + r * 0.6, cy - r * 0.6, dotR, 0, Math.PI * 2); ctx.fill()
       }
       if (sector.suppliesNavy) {
         ctx.fillStyle = '#0088ff'
-        ctx.beginPath(); ctx.arc(x + cs - dotR - 1, y + dotR * 3 + 2, dotR, 0, Math.PI * 2); ctx.fill()
+        ctx.beginPath(); ctx.arc(cx + r * 0.6, cy - r * 0.3, dotR, 0, Math.PI * 2); ctx.fill()
       }
     }
   }
@@ -135,21 +198,21 @@ function drawMap(p: DrawParams) {
       if (!sector.myRelation || sector.myRelation === 'ME') continue
       if (sector.type === 'WATER' || sector.type === 'UNKNOWN' || sector.type === 'WASTELAND') continue
       if (!sector.cityType && !sector.topUnitType) continue
-      const x = sector.coords.x * cs
-      const y = toY(sector.coords.y)
+      const [cx, cy] = hexCenter(sector.coords.x, sector.coords.y, r, bs)
       ctx.strokeStyle = relationColor(sector.myRelation)
       ctx.lineWidth = 1.5
-      ctx.strokeRect(x + 0.5, y + 0.5, cs - 1, cs - 1)
+      drawHex(ctx, cx, cy, r * 0.95)
+      ctx.stroke()
     }
   }
 
   // Selection highlight
   if (selectedCoords) {
-    const x = selectedCoords.x * cs
-    const y = toY(selectedCoords.y)
+    const [cx, cy] = hexCenter(selectedCoords.x, selectedCoords.y, r, bs)
     ctx.strokeStyle = '#ffffff'
     ctx.lineWidth = 2
-    ctx.strokeRect(x, y, cs, cs)
+    drawHex(ctx, cx, cy, r)
+    ctx.stroke()
   }
 
   // Movement lines — always show for all player units with pending move orders
@@ -158,19 +221,17 @@ function drawMap(p: DrawParams) {
     if (!unit.nextCoords || unit.nationId !== update.nationId) continue
     const isSelected = selectedUnitIds.has(unit.id)
     ctx.strokeStyle = isSelected ? '#ffff00' : 'rgba(255,255,0,0.45)'
-    const fromX = unit.coords.x * cs + cs / 2
-    const fromY = toY(unit.coords.y) + cs / 2
-    const toX = unit.nextCoords.x * cs + cs / 2
-    const toYv = toY(unit.nextCoords.y) + cs / 2
-    ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toYv); ctx.stroke()
+    const [fromX, fromY] = hexCenter(unit.coords.x, unit.coords.y, r, bs)
+    const [toX, toY] = hexCenter(unit.nextCoords.x, unit.nextCoords.y, r, bs)
+    ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toY); ctx.stroke()
     if (cs >= 48) {
-      const angle = Math.atan2(toYv - fromY, toX - fromX)
+      const angle = Math.atan2(toY - fromY, toX - fromX)
       const hl = 8
       ctx.beginPath()
-      ctx.moveTo(toX, toYv)
-      ctx.lineTo(toX - hl * Math.cos(angle - 0.4), toYv - hl * Math.sin(angle - 0.4))
-      ctx.moveTo(toX, toYv)
-      ctx.lineTo(toX - hl * Math.cos(angle + 0.4), toYv - hl * Math.sin(angle + 0.4))
+      ctx.moveTo(toX, toY)
+      ctx.lineTo(toX - hl * Math.cos(angle - 0.4), toY - hl * Math.sin(angle - 0.4))
+      ctx.moveTo(toX, toY)
+      ctx.lineTo(toX - hl * Math.cos(angle + 0.4), toY - hl * Math.sin(angle + 0.4))
       ctx.stroke()
     }
   }
@@ -184,7 +245,7 @@ export default function GameMap() {
   const paddingRef = useRef<HTMLDivElement>(null)
   const [hasScrolled, setHasScrolled] = useState(false)
   const { state, selectSector, moveSelectedUnits } = useGame()
-  const { boardSize, update, lookups, selectedCoords, selectedUnitIds } = state
+  const { boardSize, update, lookups, selectedCoords, selectedUnitIds, unitBases } = state
 
   // ── Zoom state ──
   // cellSize is React state (settled value, used for layout/clicks when not animating)
@@ -198,8 +259,12 @@ export default function GameMap() {
 
   // Keep a ref to draw params so rAF can read latest without stale closures
   const drawParamsRef = useRef<Omit<DrawParams, 'canvas' | 'cellSize'> | null>(null)
+  const unitBaseMapRef = useRef(new Map<UnitType, SIUnitBase>())
+  if (unitBases.length > 0 && unitBaseMapRef.current.size === 0) {
+    for (const ub of unitBases) unitBaseMapRef.current.set(ub.type, ub)
+  }
   if (update && lookups) {
-    drawParamsRef.current = { boardSize, update, lookups, selectedCoords, selectedUnitIds }
+    drawParamsRef.current = { boardSize, update, lookups, selectedCoords, selectedUnitIds, unitBaseMap: unitBaseMapRef.current }
   }
 
   // Drag-to-pan state
@@ -222,24 +287,28 @@ export default function GameMap() {
     const params = drawParamsRef.current
     if (!canvas || !container || !paddingDiv || !params) return
 
-    const oldSize = canvas.width
-    const newSize = params.boardSize * cs
+    const oldW = canvas.width
+    const oldH = canvas.height
+    const r = cs / 2
+    const { w: newW, h: newH } = hexCanvasSize(params.boardSize, r)
 
     // Update padding (keeps canvas centerable at any scroll position)
-    const pad = newSize / 2
-    paddingDiv.style.padding = `${pad}px`
+    const padX = newW / 2
+    const padY = newH / 2
+    paddingDiv.style.padding = `${padY}px ${padX}px`
 
     // Draw at new size
     drawMap({ canvas, cellSize: cs, ...params })
 
     // Adjust scroll to keep focal point fixed
     const focal = focalRef.current
-    if (focal && oldSize > 0) {
-      const scale = newSize / oldSize
+    if (focal && oldW > 0) {
+      const scaleX = newW / oldW
+      const scaleY = newH / oldH
       const contentX = container.scrollLeft + focal.screenX
       const contentY = container.scrollTop + focal.screenY
-      container.scrollLeft = contentX * scale - focal.screenX
-      container.scrollTop = contentY * scale - focal.screenY
+      container.scrollLeft = contentX * scaleX - focal.screenX
+      container.scrollTop = contentY * scaleY - focal.screenY
     }
   }, [])
 
@@ -300,14 +369,14 @@ export default function GameMap() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas || !update || !lookups) return
-    drawMap({ canvas, cellSize: currentCellRef.current, boardSize, update, lookups, selectedCoords, selectedUnitIds })
+    drawMap({ canvas, cellSize: currentCellRef.current, boardSize, update, lookups, selectedCoords, selectedUnitIds, unitBaseMap: unitBaseMapRef.current })
   }, [update, lookups, selectedCoords, selectedUnitIds, boardSize])
 
   // Also redraw when cellSize settles (animation end sets state)
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas || !update || !lookups) return
-    drawMap({ canvas, cellSize, boardSize, update, lookups, selectedCoords, selectedUnitIds })
+    drawMap({ canvas, cellSize, boardSize, update, lookups, selectedCoords, selectedUnitIds, unitBaseMap: unitBaseMapRef.current })
   }, [cellSize]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Auto-scroll to player's units on first load ──
@@ -320,13 +389,15 @@ export default function GameMap() {
     const avgY = myUnits.reduce((sum, u) => sum + u.coords.y, 0) / myUnits.length
 
     const cs = currentCellRef.current
-    const canvasX = avgX * cs + cs / 2
-    const canvasY = (boardSize - 1 - avgY) * cs + cs / 2
+    const r = cs / 2
+    const [canvasX, canvasY] = hexCenter(Math.round(avgX), Math.round(avgY), r, boardSize)
 
     const container = containerRef.current
-    const pad = boardSize * cs / 2
-    container.scrollLeft = pad + canvasX - container.clientWidth / 2
-    container.scrollTop = pad + canvasY - container.clientHeight / 2
+    const { w: canvasW, h: canvasH } = hexCanvasSize(boardSize, r)
+    const padX = canvasW / 2
+    const padY = canvasH / 2
+    container.scrollLeft = padX + canvasX - container.clientWidth / 2
+    container.scrollTop = padY + canvasY - container.clientHeight / 2
     setHasScrolled(true)
   }, [update, hasScrolled, boardSize])
 
@@ -445,14 +516,12 @@ export default function GameMap() {
     if (!canvas || !boardSize) return null
     const rect = canvas.getBoundingClientRect()
     const cs = currentCellRef.current
+    const r = cs / 2
     const scaleX = canvas.width / rect.width
     const scaleY = canvas.height / rect.height
     const pixelX = (e.clientX - rect.left) * scaleX
     const pixelY = (e.clientY - rect.top) * scaleY
-    const gameX = Math.floor(pixelX / cs)
-    const gameY = boardSize - 1 - Math.floor(pixelY / cs)
-    if (gameX < 0 || gameX >= boardSize || gameY < 0 || gameY >= boardSize) return null
-    return { x: gameX, y: gameY }
+    return pixelToHex(pixelX, pixelY, r, boardSize)
   }, [boardSize])
 
   // ── Left-click: move selected units to destination ──
@@ -491,11 +560,13 @@ export default function GameMap() {
     const coords = myNation?.startCoords
     if (!coords) return
     const cs = currentCellRef.current
-    const canvasX = coords.x * cs + cs / 2
-    const canvasY = (boardSize - 1 - coords.y) * cs + cs / 2
-    const pad = boardSize * cs / 2
-    container.scrollLeft = pad + canvasX - container.clientWidth / 2
-    container.scrollTop = pad + canvasY - container.clientHeight / 2
+    const r = cs / 2
+    const [canvasX, canvasY] = hexCenter(coords.x, coords.y, r, boardSize)
+    const { w: canvasW, h: canvasH } = hexCanvasSize(boardSize, r)
+    const padX = canvasW / 2
+    const padY = canvasH / 2
+    container.scrollLeft = padX + canvasX - container.clientWidth / 2
+    container.scrollTop = padY + canvasY - container.clientHeight / 2
   }, [update, boardSize])
 
   // Cleanup animation on unmount
@@ -505,8 +576,10 @@ export default function GameMap() {
 
   if (!update) return null
 
-  const canvasSz = boardSize * cellSize
-  const pad = canvasSz / 2
+  const r = cellSize / 2
+  const { w: canvasW, h: canvasH } = hexCanvasSize(boardSize, r)
+  const padX = canvasW / 2
+  const padY = canvasH / 2
 
   return (
     <div className="relative h-full w-full">
@@ -523,12 +596,12 @@ export default function GameMap() {
         onPointerCancel={onPointerUp}
       >
         <style>{`[data-map-container]::-webkit-scrollbar { display: none; }`}</style>
-        <div ref={paddingRef} style={{ padding: pad, display: 'inline-block' }}>
+        <div ref={paddingRef} style={{ padding: `${padY}px ${padX}px`, display: 'inline-block' }}>
           <canvas
             ref={canvasRef}
             data-testid="game-map-canvas"
-            width={canvasSz}
-            height={canvasSz}
+            width={canvasW}
+            height={canvasH}
             onClick={handleClick}
             onContextMenu={handleContextMenu}
             onDoubleClick={handleDoubleClick}
@@ -582,7 +655,7 @@ export default function GameMap() {
 
 function drawCityDetails(
   ctx: CanvasRenderingContext2D, sector: SISector,
-  x: number, y: number, cs: number,
+  cx: number, cy: number, cs: number, r: number,
   lookups: { cityMap: Map<string, SICityUpdate> },
 ) {
   if (!sector.cityType) return
@@ -590,7 +663,7 @@ function drawCityDetails(
     const label = CITY_SHORT[sector.cityType] ?? ''
     ctx.font = `bold ${Math.max(8, Math.round(cs * 0.4))}px monospace`
     ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-    ctx.fillText(label, x + cs / 2, y + cs / 2)
+    ctx.fillText(label, cx, cy)
   }
   if (cs >= 48) {
     const city = lookups.cityMap.get(`${sector.coords.x},${sector.coords.y}`)
@@ -599,54 +672,58 @@ function drawCityDetails(
       ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
       const b = city.build ? UNIT_SHORT[city.build] : '--'
       const n = city.nextBuild ? UNIT_SHORT[city.nextBuild] : '--'
-      ctx.fillText(`${b}>${n}`, x + cs / 2, y + cs - 2)
+      ctx.fillText(`${b}>${n}`, cx, cy + r * 0.8)
     }
   }
 }
 
 function drawUnitDetails(
   ctx: CanvasRenderingContext2D, sector: SISector,
-  x: number, y: number, cs: number,
+  cx: number, cy: number, cs: number, r: number,
   lookups: { unitMap: Map<string, SIUnit[]> },
+  unitBaseMap: Map<UnitType, SIUnitBase>,
 ) {
   if (!sector.topUnitType) return
   if (cs >= 16) {
     const label = UNIT_SHORT[sector.topUnitType] ?? ''
     ctx.font = `bold ${Math.max(7, Math.round(cs * 0.35))}px monospace`
     ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-    ctx.fillText(label, x + cs / 2, y + cs / 2)
+    ctx.fillText(label, cx, cy)
   }
 
   const units = lookups.unitMap.get(`${sector.coords.x},${sector.coords.y}`)
   const top = units?.[0]
 
   if (cs >= 24 && top) {
-    const barW = cs - 6, barH = Math.max(2, Math.round(cs * 0.1))
-    const bx = x + 3, by = y + cs - barH - 2
+    const barW = r * 1.4, barH = Math.max(2, Math.round(cs * 0.1))
+    const bx = cx - barW / 2, by = cy + r * 0.55
+    const maxHp = unitBaseMap.get(top.type)?.hp ?? 10
+    const hpRatio = Math.max(0, Math.min(1, top.hp / maxHp))
     ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(bx, by, barW, barH)
-    ctx.fillStyle = hpBarColor(top.hp); ctx.fillRect(bx, by, barW * Math.max(0, Math.min(1, top.hp / 10)), barH)
+    ctx.fillStyle = hpBarColor(hpRatio); ctx.fillRect(bx, by, barW * hpRatio, barH)
   }
 
   if (cs >= 32 && top) {
     const fs = Math.max(7, Math.round(cs * 0.22))
     ctx.font = `${fs}px monospace`; ctx.textBaseline = 'top'
-    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left'; ctx.fillText(`${top.hp}`, x + 2, y + 1)
+    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left'; ctx.fillText(`${top.hp}`, cx - r * 0.7, cy - r * 0.7)
     if (sector.flak > 0 || sector.cannons > 0) {
       ctx.textAlign = 'right'; ctx.fillStyle = '#ffaa00'
-      ctx.fillText(sector.flak > 0 ? `F${sector.flak}` : `C${sector.cannons}`, x + cs - 2, y + 1)
+      ctx.fillText(sector.flak > 0 ? `F${sector.flak}` : `C${sector.cannons}`, cx + r * 0.7, cy - r * 0.7)
     }
-    if (top.fuel >= 0 && top.fuel <= 2) {
+    const ub = unitBaseMap.get(top.type)
+    if (ub?.requiresFuel && top.fuel >= 0 && top.fuel <= 2) {
       ctx.fillStyle = '#ff4444'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
-      ctx.fillText('!F', x + 2, y + cs - 2)
+      ctx.fillText('!F', cx - r * 0.7, cy + r * 0.7)
     } else if (top.ammo === 0) {
       ctx.fillStyle = '#ff8800'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
-      ctx.fillText('!A', x + 2, y + cs - 2)
+      ctx.fillText('!A', cx - r * 0.7, cy + r * 0.7)
     }
   }
 
   if (cs >= 48 && top) {
     ctx.font = `${Math.max(7, Math.round(cs * 0.18))}px monospace`
     ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
-    ctx.fillText(`${top.hp}/${top.ammo}/${top.fuel}/${top.mobility}`, x + cs / 2, y + cs - 2)
+    ctx.fillText(`${top.hp}/${top.ammo}/${top.fuel}/${top.mobility}`, cx, cy + r * 0.85)
   }
 }

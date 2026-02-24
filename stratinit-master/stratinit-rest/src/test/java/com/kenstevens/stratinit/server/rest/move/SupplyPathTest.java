@@ -15,9 +15,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SupplyPathTest extends BaseStratInitControllerTest {
-    public static final SectorCoords SUPPLY = new SectorCoords(6, 6);
+    public static final SectorCoords SUPPLY = new SectorCoords(5, 6);
     public static final SectorCoords START = new SectorCoords(6, 11);
     public static final SectorCoords END = new SectorCoords(10, 11);
+
 
 
     private final String[] myTypes = {
@@ -71,7 +72,8 @@ public class SupplyPathTest extends BaseStratInitControllerTest {
     public void shortestPath() {
         unitService.buildUnit(nationMe, SUPPLY, UnitType.SUPPLY);
         Unit dest = unitService.buildUnit(nationMe, START, UnitType.DESTROYER);
-        dest.setMobility(12);
+        // In hex, northern route is 14 steps: 13 in-supply (cost 1) + 1 out-of-supply (cost 2) = 15
+        dest.setMobility(15);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), END);
         assertResult(result);
         assertEquals(0, dest.getMobility(), result.toString());
@@ -82,7 +84,8 @@ public class SupplyPathTest extends BaseStratInitControllerTest {
     public void wentNorth() {
         unitService.buildUnit(nationMe, SUPPLY, UnitType.SUPPLY);
         Unit dest = unitService.buildUnit(nationMe, START, UnitType.DESTROYER);
-        dest.setMobility(11);
+        // In hex, 13 mobility covers the 13 in-supply steps, stopping at (10,10)
+        dest.setMobility(13);
         Result<MoveCost> result = moveUnits(makeUnitList(dest), END);
         assertResult(result);
         assertEquals(0, dest.getMobility(), result.toString());
