@@ -148,7 +148,7 @@ class AuthControllerTest {
 
     @Test
     void protectedEndpointWithoutToken() throws Exception {
-        mockMvc.perform(get(SIRestPaths.BASE_PATH + SIRestPaths.VERSION)
+        mockMvc.perform(get(SIRestPaths.BASE_PATH + SIRestPaths.GAME_JOINED)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());

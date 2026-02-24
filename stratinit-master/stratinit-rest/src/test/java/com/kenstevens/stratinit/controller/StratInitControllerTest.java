@@ -111,7 +111,7 @@ class StratInitControllerTest {
 
     @Test
     public void versionUnauthorized() throws Exception {
-        mockMvc.perform(get(SIRestPaths.BASE_PATH + SIRestPaths.VERSION).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get(SIRestPaths.BASE_PATH + SIRestPaths.GAME_JOINED).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
