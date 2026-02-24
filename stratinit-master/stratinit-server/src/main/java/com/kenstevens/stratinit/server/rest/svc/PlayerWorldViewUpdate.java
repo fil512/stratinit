@@ -29,7 +29,7 @@ public class PlayerWorldViewUpdate {
 		// sectorViews that were touched by units are refreshed
 
 		siupdate.sectors = playerWorldView.getWorldViewSectors(nation);
-		siupdate.nations = nationSvc.getNations(nation, false);
+		siupdate.nations = nationSvc.getNations(nation, true);
 		siupdate.cities = citySvc.getCities(nation);
 		siupdate.relations = relationSvc.getRelations(nation);
 		siupdate.units = unitSvc.getUnits(nation);
