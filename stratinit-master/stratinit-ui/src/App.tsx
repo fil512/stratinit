@@ -11,6 +11,7 @@ import AdminPage from './pages/AdminPage'
 import GamePage from './pages/GamePage'
 import AppShell from './components/AppShell'
 import { GameProvider } from './context/GameContext'
+import { TickProvider } from './context/TickContext'
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route element={<AppShell />}>
+        <Route element={<TickProvider><AppShell /></TickProvider>}>
           <Route path="/games" element={<GameListPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/rankings" element={<RankingsPage />} />

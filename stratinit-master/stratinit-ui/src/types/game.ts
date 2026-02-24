@@ -134,6 +134,8 @@ export interface SIUpdate {
   relations: SIRelation[]
   launchedSatellites: SILaunchedSatellite[]
   messages?: string[]
+  lastUpdated: string | null
+  tickIntervalMs: number
 }
 
 export interface SIUnitBase {

@@ -1,9 +1,10 @@
-import { createContext, useContext, useReducer, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode } from 'react'
 import type {
   SIUpdate, SIUnitBase, SISector, SIUnit, SICityUpdate, SectorCoords,
   RelationType, CityFieldToUpdate,
 } from '../types/game'
 import * as gameApi from '../api/game'
+import { useTick } from './TickContext'
 
 // Coordinate key helper
 function coordKey(x: number, y: number): string {
@@ -146,15 +147,25 @@ const GameContext = createContext<GameContextValue | null>(null)
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+  const { setTickInfo, clearTickInfo } = useTick()
+
+  const dispatchUpdate = useCallback((update: SIUpdate) => {
+    dispatch({ type: 'SET_UPDATE', update })
+    setTickInfo(update.lastUpdated, update.tickIntervalMs)
+  }, [setTickInfo])
+
+  useEffect(() => {
+    return () => clearTickInfo()
+  }, [clearTickInfo])
 
   const refreshState = useCallback(async () => {
     try {
       const update = await gameApi.getUpdate()
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
     } catch (err) {
       dispatch({ type: 'SET_ERROR', error: 'Failed to fetch game state' })
     }
-  }, [])
+  }, [dispatchUpdate])
 
   const initGame = useCallback(async (gameId: number, boardSize: number) => {
     dispatch({ type: 'SET_LOADING', loading: true })
@@ -165,12 +176,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
         gameApi.getUpdate(),
         gameApi.getUnitBases(),
       ])
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'SET_UNIT_BASES', unitBases })
     } catch (err) {
       dispatch({ type: 'SET_ERROR', error: 'Failed to initialize game' })
     }
-  }, [])
+  }, [dispatchUpdate])
 
   const selectSector = useCallback((coords: SectorCoords) => {
     // Auto-select player's units at this sector
@@ -203,7 +214,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (selected.length === 0) return
     try {
       const update = await gameApi.moveUnits(selected, target)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
       if (update.messages && update.messages.length > 0) {
         showCommandError(update.messages.join('; '))
@@ -223,7 +234,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (selected.length === 0) return
     try {
       const update = await gameApi.disbandUnits(selected)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -235,7 +246,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (selected.length === 0) return
     try {
       const update = await gameApi.cancelMove(selected)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -247,7 +258,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (selected.length === 0) return
     try {
       const update = await gameApi.buildCity(selected)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -259,7 +270,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (selected.length === 0) return
     try {
       const update = await gameApi.switchTerrain(selected)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -271,7 +282,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (selected.length === 0) return
     try {
       const update = await gameApi.cedeUnits(selected, nationId)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
     } catch {
       // Silently fail
@@ -281,7 +292,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const cedeCityAt = useCallback(async (city: SICityUpdate, nationId: number) => {
     try {
       const update = await gameApi.cedeCity(city, nationId)
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
     } catch {
       // Silently fail
     }
@@ -315,7 +326,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const concedeGame = useCallback(async () => {
     try {
       const update = await gameApi.concede()
-      dispatch({ type: 'SET_UPDATE', update })
+      dispatchUpdate(update)
     } catch {
       // Silently fail
     }

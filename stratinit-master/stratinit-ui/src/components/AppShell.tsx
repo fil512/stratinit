@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import { logout } from '../api/auth'
 import { apiFetch } from '../api/client'
+import TickProgressBar from './TickProgressBar'
 
 export default function AppShell() {
   const navigate = useNavigate()
@@ -38,6 +39,7 @@ export default function AppShell() {
           </nav>
         </div>
         <div className="flex items-center gap-3">
+          <TickProgressBar />
           <Link to="/settings" data-testid="nav-settings-link" className="text-sm text-gray-300 hover:text-blue-400">Settings</Link>
           <button
             onClick={handleLogout}

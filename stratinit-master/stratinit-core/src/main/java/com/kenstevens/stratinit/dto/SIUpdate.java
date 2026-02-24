@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -18,6 +19,8 @@ public class SIUpdate implements StratInitDTO {
     public List<SIRelation> relations;
     public List<SILaunchedSatellite> launchedSatellites;
     public List<String> messages;
+    public Date lastUpdated;
+    public long tickIntervalMs;
 
 	public SIUpdate() {}
 }

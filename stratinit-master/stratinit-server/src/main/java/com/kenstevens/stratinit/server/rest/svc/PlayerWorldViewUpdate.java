@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
+import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class PlayerWorldViewUpdate {
 		SIUpdate siupdate = new SIUpdate();
 
 		siupdate.nationId = nation.getNationId();
+
+		Game game = nation.getGame();
+		siupdate.lastUpdated = game.getLastUpdated();
+		siupdate.tickIntervalMs = game.getUpdatePeriodMilliseconds();
 
 		// TODO OPT instead of null, pass in world view, but then ensure all
 		// sectorViews that were touched by units are refreshed
