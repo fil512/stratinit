@@ -102,7 +102,7 @@ public class WorldSector extends Sector {
 		if (air.getType() == UnitType.HELICOPTER) {
 			return onMyTeam() && (isPlayerCity() || holdsMyCapital);
 		} else if (air.getType() == UnitType.ZEPPELIN) {
-			return onMyTeam() && isPlayerCity();
+			return onMyTeam() && (isPlayerCity() || isHoldsFriendlyCarrier());
 		}
 		if (!isFuelingStation()) {
 			return false;

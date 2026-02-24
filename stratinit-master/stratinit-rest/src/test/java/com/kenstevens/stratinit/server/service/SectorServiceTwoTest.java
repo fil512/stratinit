@@ -61,6 +61,12 @@ public class SectorServiceTwoTest extends TwoPlayerBase {
         assertTrue(sea.canRefuel(fight));
         assertFalse(ecity.canRefuel(fight));
 
+        // Issue #83: zeppelins should refuel on carriers
+        Unit zep = unitService.buildUnit(nationMe, CITY, UnitType.ZEPPELIN);
+        assertTrue(city.canRefuel(zep), "Zeppelin should refuel in own city");
+        assertTrue(sea.canRefuel(zep), "Zeppelin should refuel on friendly carrier");
+        assertFalse(esea.canRefuel(zep), "Zeppelin should not refuel on enemy carrier");
+
         assertEquals(CityType.FORT, city.getCityType());
         assertEquals(CityType.PORT, port.getCityType());
         assertNull(sea.getCityType());
