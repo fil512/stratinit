@@ -15,7 +15,7 @@ public class WebSocketSecurityConfig {
             MessageMatcherDelegatingAuthorizationManager.Builder messages) {
         messages
                 .simpSubscribeDestMatchers("/topic/game/**").authenticated()
-                .anyMessage().authenticated();
+                .anyMessage().permitAll();
         return messages.build();
     }
 }
