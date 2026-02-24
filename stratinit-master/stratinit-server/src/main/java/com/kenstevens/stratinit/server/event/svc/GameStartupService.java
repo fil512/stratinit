@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -152,7 +153,7 @@ public class GameStartupService {
             logger.info("Updating " + units.size() + " units");
         }
 
-        for (Unit unit : units) {
+        for (Unit unit : new ArrayList<>(units)) {
             UpdateManager updateManager = new UpdateManager(unit);
             while (updateManager.missedUpdates() > 0) {
                 Date nextMissedBuildTime = updateManager

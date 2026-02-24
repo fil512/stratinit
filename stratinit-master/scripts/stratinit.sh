@@ -56,7 +56,30 @@ start_rest() {
     echo "Starting REST server..."
     nohup mvn spring-boot:run -pl stratinit-rest -f "$BASE_DIR/pom.xml" >> "$REST_LOG" 2>&1 &
     echo $! > "$REST_PID"
-    echo "REST server started (PID $!), logging to $REST_LOG"
+    echo "REST server launched (PID $!), logging to $REST_LOG"
+}
+
+wait_rest() {
+    local timeout="${1:-120}"
+    printf "Waiting for REST server on port 8081"
+    for i in $(seq 1 "$timeout"); do
+        if ! get_pid "$REST_PID" >/dev/null 2>&1; then
+            echo " FAILED"
+            echo "REST server process died. Check $REST_LOG"
+            return 1
+        fi
+        if curl -sf --max-time 2 http://localhost:8081/stratinit/version >/dev/null 2>&1; then
+            local version
+            version=$(get_rest_version)
+            echo " OK ($version) [${i}s]"
+            return 0
+        fi
+        printf "."
+        sleep 1
+    done
+    echo " TIMEOUT after ${timeout}s"
+    echo "REST server did not become healthy. Check $REST_LOG"
+    return 1
 }
 
 start_ui() {
@@ -71,7 +94,28 @@ start_ui() {
     echo "Starting UI dev server..."
     (cd "$UI_DIR" && nohup npm run dev >> "$UI_LOG" 2>&1 &
     echo $! > "$UI_PID")
-    echo "UI dev server started, logging to $UI_LOG"
+    echo "UI dev server launched, logging to $UI_LOG"
+}
+
+wait_ui() {
+    local timeout="${1:-30}"
+    printf "Waiting for UI dev server on port 5173"
+    for i in $(seq 1 "$timeout"); do
+        if ! get_pid "$UI_PID" >/dev/null 2>&1; then
+            echo " FAILED"
+            echo "UI dev server process died. Check $UI_LOG"
+            return 1
+        fi
+        if curl -sf --max-time 2 http://localhost:5173/ >/dev/null 2>&1; then
+            echo " OK [${i}s]"
+            return 0
+        fi
+        printf "."
+        sleep 1
+    done
+    echo " TIMEOUT after ${timeout}s"
+    echo "UI dev server did not become healthy. Check $UI_LOG"
+    return 1
 }
 
 get_rest_version() {
@@ -110,6 +154,9 @@ status_all() {
 do_start() {
     start_rest
     start_ui
+    wait_rest 120
+    wait_ui 30
+    echo "All servers ready."
 }
 
 do_stop() {

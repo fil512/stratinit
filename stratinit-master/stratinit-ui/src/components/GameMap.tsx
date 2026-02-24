@@ -113,12 +113,15 @@ function drawMap(p: DrawParams) {
   const ws = worldSize(bs, r)
   const cam = wrapCamera(camera, ws)
 
-  // Canvas sized to viewport
-  canvas.width = viewport.w
-  canvas.height = viewport.h
+  // Resize canvas only when viewport dimensions change (avoids expensive GPU reallocation)
+  if (canvas.width !== viewport.w || canvas.height !== viewport.h) {
+    canvas.width = viewport.w
+    canvas.height = viewport.h
+  }
 
   const ctx = canvas.getContext('2d')
   if (!ctx) return
+  ctx.clearRect(0, 0, viewport.w, viewport.h)
 
   // Fog-of-war background
   ctx.fillStyle = TERRAIN_COLORS.UNKNOWN
@@ -434,7 +437,6 @@ export default function GameMap() {
       const target = targetCellRef.current
 
       if (Math.abs(current - target) / target < SNAP_THRESHOLD) {
-        currentCellRef.current = target
         applyZoomFrame(target)
         setCellSize(target)
         animFrameRef.current = 0
@@ -445,7 +447,6 @@ export default function GameMap() {
       const logCurr = Math.log(current)
       const logTarg = Math.log(target)
       const next = Math.exp(logCurr + (logTarg - logCurr) * LERP_SPEED)
-      currentCellRef.current = next
       applyZoomFrame(next)
 
       animFrameRef.current = requestAnimationFrame(animate)
@@ -715,11 +716,13 @@ export default function GameMap() {
     requestRedraw()
   }, [update, boardSize, requestRedraw])
 
-  // Cleanup animation on unmount
+  // Cleanup animation on unmount (reset refs so StrictMode remount works)
   useEffect(() => {
     return () => {
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current)
       if (redrawFrameRef.current) cancelAnimationFrame(redrawFrameRef.current)
+      animFrameRef.current = 0
+      redrawFrameRef.current = 0
     }
   }, [])
 
