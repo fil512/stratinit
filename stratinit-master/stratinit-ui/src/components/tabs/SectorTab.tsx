@@ -30,7 +30,7 @@ export default function SectorTab() {
   }
 
   return (
-    <div className="space-y-3">
+    <div data-testid="sector-info" className="space-y-3">
       <div>
         <h3 className="font-bold text-gray-300">
           Sector ({selectedCoords.x}, {selectedCoords.y})
@@ -59,6 +59,7 @@ export default function SectorTab() {
           <label className="block mt-1">
             <span className="text-xs text-gray-400">Build:</span>
             <select
+              data-testid="sector-build-select"
               value={city.build ?? ''}
               onChange={e => handleBuildChange('BUILD', e.target.value)}
               className="block w-full mt-0.5 bg-gray-800 border border-gray-600 rounded px-1 py-0.5 text-xs"
@@ -72,6 +73,7 @@ export default function SectorTab() {
           <label className="block mt-1">
             <span className="text-xs text-gray-400">Next Build:</span>
             <select
+              data-testid="sector-next-build-select"
               value={city.nextBuild ?? ''}
               onChange={e => handleBuildChange('NEXT_BUILD', e.target.value)}
               className="block w-full mt-0.5 bg-gray-800 border border-gray-600 rounded px-1 py-0.5 text-xs"

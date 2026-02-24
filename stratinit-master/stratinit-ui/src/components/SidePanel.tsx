@@ -14,11 +14,12 @@ export default function SidePanel() {
   const [activeTab, setActiveTab] = useState<TabName>('Sector')
 
   return (
-    <div className="w-80 flex flex-col border-l border-gray-600 bg-gray-900 text-gray-100 text-sm">
+    <div data-testid="side-panel" className="w-80 flex flex-col border-l border-gray-600 bg-gray-900 text-gray-100 text-sm">
       <div className="flex border-b border-gray-700">
         {TABS.map(tab => (
           <button
             key={tab}
+            data-testid={`tab-${tab.toLowerCase()}`}
             onClick={() => setActiveTab(tab)}
             className={`flex-1 px-1 py-2 text-xs font-medium ${
               activeTab === tab

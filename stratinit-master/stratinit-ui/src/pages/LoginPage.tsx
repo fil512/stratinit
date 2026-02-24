@@ -27,6 +27,7 @@ export default function LoginPage() {
           <label htmlFor="username" className="block mb-1">Username</label>
           <input
             id="username"
+            data-testid="login-username-input"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
@@ -37,23 +38,24 @@ export default function LoginPage() {
           <label htmlFor="password" className="block mb-1">Password</label>
           <input
             id="password"
+            data-testid="login-password-input"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        {error && <div className="text-red-600 mb-3">{error}</div>}
-        <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        {error && <div data-testid="login-error" className="text-red-600 mb-3">{error}</div>}
+        <button data-testid="login-submit-button" type="submit" className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Login
         </button>
       </form>
       <p className="mt-4 text-sm text-gray-400">
         Don't have an account?{' '}
-        <Link to="/register" className="text-blue-400 hover:underline">Register</Link>
+        <Link to="/register" data-testid="login-register-link" className="text-blue-400 hover:underline">Register</Link>
       </p>
       <p className="mt-2 text-sm text-gray-400">
-        <Link to="/forgot-password" className="text-blue-400 hover:underline">Forgot password?</Link>
+        <Link to="/forgot-password" data-testid="login-forgot-password-link" className="text-blue-400 hover:underline">Forgot password?</Link>
       </p>
     </div>
   )

@@ -76,6 +76,7 @@ export default function MessagesTab() {
         {viewButtons.map(v => (
           <button
             key={v.key}
+            data-testid={`messages-tab-${v.key === 'announcements' ? 'news' : v.key === 'compose' ? 'new' : v.key}`}
             onClick={() => setView(v.key)}
             className={`flex-1 px-1 py-1 text-xs font-medium ${
               view === v.key
@@ -93,6 +94,7 @@ export default function MessagesTab() {
           <label className="block">
             <span className="text-xs text-gray-400">To:</span>
             <select
+              data-testid="compose-to-select"
               value={toNationId}
               onChange={e => setToNationId(Number(e.target.value))}
               className="block w-full mt-0.5 bg-gray-800 border border-gray-600 rounded px-1 py-0.5 text-xs"
@@ -106,6 +108,7 @@ export default function MessagesTab() {
           <label className="block">
             <span className="text-xs text-gray-400">Subject:</span>
             <input
+              data-testid="compose-subject-input"
               value={subject}
               onChange={e => setSubject(e.target.value)}
               className="block w-full mt-0.5 bg-gray-800 border border-gray-600 rounded px-1 py-0.5 text-xs"
@@ -115,6 +118,7 @@ export default function MessagesTab() {
           <label className="block">
             <span className="text-xs text-gray-400">Body:</span>
             <textarea
+              data-testid="compose-body-textarea"
               value={body}
               onChange={e => setBody(e.target.value)}
               rows={4}
@@ -123,6 +127,7 @@ export default function MessagesTab() {
             />
           </label>
           <button
+            data-testid="compose-send-button"
             onClick={handleSend}
             disabled={sending || !subject.trim()}
             className="text-xs px-3 py-1 bg-blue-700 rounded hover:bg-blue-600 disabled:opacity-50"

@@ -47,6 +47,7 @@ export default function RegistrationPage() {
           <label htmlFor="username" className="block mb-1">Username</label>
           <input
             id="username"
+            data-testid="register-username-input"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
@@ -58,6 +59,7 @@ export default function RegistrationPage() {
           <label htmlFor="email" className="block mb-1">Email</label>
           <input
             id="email"
+            data-testid="register-email-input"
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -69,6 +71,7 @@ export default function RegistrationPage() {
           <label htmlFor="password" className="block mb-1">Password</label>
           <input
             id="password"
+            data-testid="register-password-input"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -80,6 +83,7 @@ export default function RegistrationPage() {
           <label htmlFor="confirmPassword" className="block mb-1">Confirm Password</label>
           <input
             id="confirmPassword"
+            data-testid="register-confirm-password-input"
             type="password"
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
@@ -87,9 +91,10 @@ export default function RegistrationPage() {
             required
           />
         </div>
-        {error && <div className="text-red-600 mb-3">{error}</div>}
+        {error && <div data-testid="register-error" className="text-red-600 mb-3">{error}</div>}
         <button
           type="submit"
+          data-testid="register-submit-button"
           disabled={submitting}
           className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
         >

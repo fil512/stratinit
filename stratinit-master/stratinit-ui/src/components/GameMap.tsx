@@ -152,27 +152,26 @@ function drawMap(p: DrawParams) {
     ctx.strokeRect(x, y, cs, cs)
   }
 
-  // Movement lines
-  if (selectedUnitIds.size > 0) {
-    ctx.strokeStyle = '#ffff00'
-    ctx.lineWidth = cs >= 48 ? 2 : 1
-    for (const unit of update.units) {
-      if (!selectedUnitIds.has(unit.id) || !unit.nextCoords) continue
-      const fromX = unit.coords.x * cs + cs / 2
-      const fromY = toY(unit.coords.y) + cs / 2
-      const toX = unit.nextCoords.x * cs + cs / 2
-      const toYv = toY(unit.nextCoords.y) + cs / 2
-      ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toYv); ctx.stroke()
-      if (cs >= 48) {
-        const angle = Math.atan2(toYv - fromY, toX - fromX)
-        const hl = 8
-        ctx.beginPath()
-        ctx.moveTo(toX, toYv)
-        ctx.lineTo(toX - hl * Math.cos(angle - 0.4), toYv - hl * Math.sin(angle - 0.4))
-        ctx.moveTo(toX, toYv)
-        ctx.lineTo(toX - hl * Math.cos(angle + 0.4), toYv - hl * Math.sin(angle + 0.4))
-        ctx.stroke()
-      }
+  // Movement lines — always show for all player units with pending move orders
+  ctx.lineWidth = cs >= 48 ? 2 : 1
+  for (const unit of update.units) {
+    if (!unit.nextCoords || unit.nationId !== update.nationId) continue
+    const isSelected = selectedUnitIds.has(unit.id)
+    ctx.strokeStyle = isSelected ? '#ffff00' : 'rgba(255,255,0,0.45)'
+    const fromX = unit.coords.x * cs + cs / 2
+    const fromY = toY(unit.coords.y) + cs / 2
+    const toX = unit.nextCoords.x * cs + cs / 2
+    const toYv = toY(unit.nextCoords.y) + cs / 2
+    ctx.beginPath(); ctx.moveTo(fromX, fromY); ctx.lineTo(toX, toYv); ctx.stroke()
+    if (cs >= 48) {
+      const angle = Math.atan2(toYv - fromY, toX - fromX)
+      const hl = 8
+      ctx.beginPath()
+      ctx.moveTo(toX, toYv)
+      ctx.lineTo(toX - hl * Math.cos(angle - 0.4), toYv - hl * Math.sin(angle - 0.4))
+      ctx.moveTo(toX, toYv)
+      ctx.lineTo(toX - hl * Math.cos(angle + 0.4), toYv - hl * Math.sin(angle + 0.4))
+      ctx.stroke()
     }
   }
 }
@@ -440,12 +439,11 @@ export default function GameMap() {
     if (pointersRef.current.size < 2) pinchStartDistRef.current = null
   }, [])
 
-  // ── Click (select / move) ──
-  const handleClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+  // ── Helper: convert mouse event to game coordinates ──
+  const eventToGameCoords = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
-    if (!canvas || !boardSize) return
+    if (!canvas || !boardSize) return null
     const rect = canvas.getBoundingClientRect()
-    // Use current animated cellSize for coordinate conversion
     const cs = currentCellRef.current
     const scaleX = canvas.width / rect.width
     const scaleY = canvas.height / rect.height
@@ -453,14 +451,23 @@ export default function GameMap() {
     const pixelY = (e.clientY - rect.top) * scaleY
     const gameX = Math.floor(pixelX / cs)
     const gameY = boardSize - 1 - Math.floor(pixelY / cs)
-    if (gameX < 0 || gameX >= boardSize || gameY < 0 || gameY >= boardSize) return
+    if (gameX < 0 || gameX >= boardSize || gameY < 0 || gameY >= boardSize) return null
+    return { x: gameX, y: gameY }
+  }, [boardSize])
 
-    if (selectedUnitIds.size > 0) {
-      moveSelectedUnits({ x: gameX, y: gameY })
-    } else {
-      selectSector({ x: gameX, y: gameY })
-    }
-  }, [boardSize, selectedUnitIds, moveSelectedUnits, selectSector])
+  // ── Left-click: move selected units to destination ──
+  const handleClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (selectedUnitIds.size === 0) return
+    const coords = eventToGameCoords(e)
+    if (coords) moveSelectedUnits(coords)
+  }, [eventToGameCoords, selectedUnitIds, moveSelectedUnits])
+
+  // ── Right-click: select sector (and auto-select units there) ──
+  const handleContextMenu = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    e.preventDefault()
+    const coords = eventToGameCoords(e)
+    if (coords) selectSector(coords)
+  }, [eventToGameCoords, selectSector])
 
   // ── Keyboard: +/- zoom, arrows pan ──
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -519,9 +526,11 @@ export default function GameMap() {
         <div ref={paddingRef} style={{ padding: pad, display: 'inline-block' }}>
           <canvas
             ref={canvasRef}
+            data-testid="game-map-canvas"
             width={canvasSz}
             height={canvasSz}
             onClick={handleClick}
+            onContextMenu={handleContextMenu}
             onDoubleClick={handleDoubleClick}
             className="cursor-crosshair"
           />
@@ -531,6 +540,8 @@ export default function GameMap() {
       <div className="absolute bottom-2 right-2 flex flex-col gap-1">
         <button
           data-zoom-btn
+          data-testid="map-center-button"
+          aria-label="Center map"
           onClick={centerOnStart}
           className="w-7 h-7 bg-white text-gray-600 border border-gray-300 rounded-sm hover:bg-gray-100 leading-none flex items-center justify-center shadow"
           title="Center on start"
@@ -547,12 +558,16 @@ export default function GameMap() {
         <div className="flex flex-col gap-0 shadow">
           <button
             data-zoom-btn
+            data-testid="map-zoom-in-button"
+            aria-label="Zoom in"
             onClick={() => zoomCenter(ZOOM_FACTOR)}
             className="w-7 h-7 bg-white text-gray-600 border border-gray-300 rounded-t-sm hover:bg-gray-100 text-base font-light leading-none"
             title="Zoom in"
           >+</button>
           <button
             data-zoom-btn
+            data-testid="map-zoom-out-button"
+            aria-label="Zoom out"
             onClick={() => zoomCenter(1 / ZOOM_FACTOR)}
             className="w-7 h-7 bg-white text-gray-600 border border-gray-300 border-t-0 rounded-b-sm hover:bg-gray-100 text-base font-light leading-none"
             title="Zoom out"

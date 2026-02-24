@@ -27,20 +27,21 @@ export default function AppShell() {
           <Link to="/games" className="text-lg font-bold hover:text-blue-400">
             Strategic Initiative
           </Link>
-          <nav className="flex items-center gap-3 text-sm">
-            <Link to="/games" className="text-gray-300 hover:text-blue-400">Games</Link>
-            <Link to="/leaderboard" className="text-gray-300 hover:text-blue-400">Leaderboard</Link>
-            <Link to="/rankings" className="text-gray-300 hover:text-blue-400">Rankings</Link>
-            <Link to="/stats" className="text-gray-300 hover:text-blue-400">Stats</Link>
+          <nav className="flex items-center gap-3 text-sm" aria-label="Main navigation">
+            <Link to="/games" data-testid="nav-games-link" className="text-gray-300 hover:text-blue-400">Games</Link>
+            <Link to="/leaderboard" data-testid="nav-leaderboard-link" className="text-gray-300 hover:text-blue-400">Leaderboard</Link>
+            <Link to="/rankings" data-testid="nav-rankings-link" className="text-gray-300 hover:text-blue-400">Rankings</Link>
+            <Link to="/stats" data-testid="nav-stats-link" className="text-gray-300 hover:text-blue-400">Stats</Link>
             {isAdmin && (
-              <Link to="/admin" className="text-yellow-400 hover:text-yellow-300">Admin</Link>
+              <Link to="/admin" data-testid="nav-admin-link" className="text-yellow-400 hover:text-yellow-300">Admin</Link>
             )}
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <Link to="/settings" className="text-sm text-gray-300 hover:text-blue-400">Settings</Link>
+          <Link to="/settings" data-testid="nav-settings-link" className="text-sm text-gray-300 hover:text-blue-400">Settings</Link>
           <button
             onClick={handleLogout}
+            data-testid="nav-logout-button"
             className="px-3 py-1 text-sm border border-gray-600 rounded hover:bg-gray-800"
           >
             Logout

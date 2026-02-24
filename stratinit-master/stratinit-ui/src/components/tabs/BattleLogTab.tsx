@@ -12,11 +12,12 @@ export default function BattleLogTab() {
   }
 
   return (
-    <div className="space-y-1">
+    <div data-testid="battle-log-list" className="space-y-1">
       <h3 className="font-bold text-gray-300">Battle Log ({logs.length})</h3>
-      {logs.map(entry => (
+      {logs.map((entry, index) => (
         <div
           key={entry.id}
+          data-testid={`battle-log-entry-${index}`}
           className="p-1 bg-gray-800 rounded text-xs cursor-pointer hover:bg-gray-700"
           onClick={() => selectSector(entry.coords)}
         >

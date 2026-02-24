@@ -19,13 +19,14 @@ export default function CitiesTab() {
   }
 
   return (
-    <div className="space-y-2">
+    <div data-testid="cities-list" className="space-y-2">
       <h3 className="font-bold text-gray-300">Cities ({myCities.length})</h3>
       {myCities.map((city, i) => {
         const buildable = unitBases.filter(ub => ub.builtIn === city.type)
         return (
           <div
             key={`${city.coords.x},${city.coords.y}`}
+            data-testid={`city-row-${city.coords.x}-${city.coords.y}`}
             className="p-1 bg-gray-800 rounded text-xs"
           >
             <div
@@ -38,6 +39,7 @@ export default function CitiesTab() {
               <label className="flex-1">
                 <span className="text-gray-400">Build:</span>
                 <select
+                  data-testid={`city-build-select-${city.coords.x}-${city.coords.y}`}
                   value={city.build ?? ''}
                   onChange={e => handleBuildChange(i, 'BUILD', e.target.value)}
                   className="block w-full bg-gray-700 border border-gray-600 rounded px-1 py-0.5"
@@ -51,6 +53,7 @@ export default function CitiesTab() {
               <label className="flex-1">
                 <span className="text-gray-400">Next:</span>
                 <select
+                  data-testid={`city-next-build-select-${city.coords.x}-${city.coords.y}`}
                   value={city.nextBuild ?? ''}
                   onChange={e => handleBuildChange(i, 'NEXT_BUILD', e.target.value)}
                   className="block w-full bg-gray-700 border border-gray-600 rounded px-1 py-0.5"

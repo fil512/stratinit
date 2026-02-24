@@ -21,13 +21,13 @@ export default function PlayersTab() {
   }
 
   return (
-    <div className="space-y-1">
+    <div data-testid="players-list" className="space-y-1">
       <h3 className="font-bold text-gray-300">Players ({nations.length})</h3>
       {nations.map(nation => {
         const isMe = nation.nationId === myNationId
         const rel = relations.find(r => r.nationId === nation.nationId)
         return (
-          <div key={nation.nationId} className="p-1 bg-gray-800 rounded text-xs">
+          <div key={nation.nationId} data-testid={`player-row-${nation.nationId}`} className="p-1 bg-gray-800 rounded text-xs">
             <div className="flex justify-between items-center">
               <span className={`font-semibold ${isMe ? 'text-cyan-400' : ''}`}>
                 {nation.name}
@@ -42,6 +42,7 @@ export default function PlayersTab() {
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-gray-400">Relation:</span>
                 <select
+                  data-testid={`relation-select-${nation.nationId}`}
                   value={rel.meToThem}
                   onChange={e => changeRelation(nation.nationId, e.target.value as RelationType)}
                   className="bg-gray-700 border border-gray-600 rounded px-1 py-0.5"
@@ -77,6 +78,7 @@ export default function PlayersTab() {
           </div>
         ) : (
           <button
+            data-testid="concede-button"
             onClick={() => setConfirming(true)}
             className="px-3 py-1 text-xs border border-red-600 text-red-400 rounded hover:bg-red-900/30"
           >

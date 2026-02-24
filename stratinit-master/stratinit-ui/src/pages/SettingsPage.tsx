@@ -97,6 +97,7 @@ export default function SettingsPage() {
           <label htmlFor="email" className="block mb-1 text-sm">Email</label>
           <input
             id="email"
+            data-testid="settings-email-input"
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -109,6 +110,7 @@ export default function SettingsPage() {
           <label className="flex items-center gap-2 text-sm cursor-pointer">
             <input
               type="checkbox"
+              data-testid="settings-email-notifications-checkbox"
               checked={emailGameMail}
               onChange={e => setEmailGameMail(e.target.checked)}
               className="rounded"
@@ -125,6 +127,7 @@ export default function SettingsPage() {
           <label htmlFor="password" className="block mb-1 text-sm">New Password</label>
           <input
             id="password"
+            data-testid="settings-password-input"
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
@@ -136,6 +139,7 @@ export default function SettingsPage() {
           <label htmlFor="confirmPassword" className="block mb-1 text-sm">Confirm New Password</label>
           <input
             id="confirmPassword"
+            data-testid="settings-confirm-password-input"
             type="password"
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
@@ -148,6 +152,7 @@ export default function SettingsPage() {
 
         <button
           type="submit"
+          data-testid="settings-save-button"
           disabled={submitting}
           className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
         >

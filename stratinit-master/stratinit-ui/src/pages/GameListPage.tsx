@@ -51,7 +51,7 @@ export default function GameListPage() {
       {joinedGames.length === 0 ? (
         <p className="text-gray-400">No games joined yet.</p>
       ) : (
-        <table className="w-full border-collapse mb-8">
+        <table data-testid="my-games-table" className="w-full border-collapse mb-8">
           <thead>
             <tr>
               <th className="text-left border-b border-gray-600 p-2">ID</th>
@@ -81,7 +81,7 @@ export default function GameListPage() {
       {unjoinedGames.length === 0 ? (
         <p className="text-gray-400">No games available to join.</p>
       ) : (
-        <table className="w-full border-collapse">
+        <table data-testid="available-games-table" className="w-full border-collapse">
           <thead>
             <tr>
               <th className="text-left border-b border-gray-600 p-2">ID</th>
@@ -100,6 +100,7 @@ export default function GameListPage() {
                 <td className="p-2">{game.size}</td>
                 <td className="p-2">
                   <button
+                    data-testid={`join-game-button-${game.id}`}
                     onClick={() => handleJoin(game.id)}
                     disabled={joining === game.id}
                     className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"

@@ -23,7 +23,7 @@ export default function NewsTab() {
   if (days.length === 0) return <p className="text-xs text-gray-500">No news.</p>
 
   return (
-    <div className="space-y-3">
+    <div data-testid="news-log" className="space-y-3">
       {days.map(day => {
         const entries: { category: string; text: string }[] = []
 

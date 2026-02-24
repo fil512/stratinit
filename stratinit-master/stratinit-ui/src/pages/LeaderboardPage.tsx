@@ -21,7 +21,7 @@ export default function LeaderboardPage() {
       ) : players.length === 0 ? (
         <p className="text-gray-400">No players yet.</p>
       ) : (
-        <table className="w-full border-collapse">
+        <table data-testid="leaderboard-table" className="w-full border-collapse">
           <thead>
             <tr>
               <th className="text-left border-b border-gray-600 p-2">#</th>

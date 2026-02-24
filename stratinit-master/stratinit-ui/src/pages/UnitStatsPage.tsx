@@ -133,6 +133,7 @@ export default function UnitStatsPage() {
       <div className="mb-6">
         <label className="text-sm text-gray-400 mr-2">Game:</label>
         <select
+          data-testid="stats-game-select"
           value={selectedGameId ?? ''}
           onChange={e => {
             const id = Number(e.target.value)
@@ -186,6 +187,7 @@ export default function UnitStatsPage() {
           <div className="mb-4">
             <label className="text-sm text-gray-400 mr-2">Player:</label>
             <select
+              data-testid="stats-player-select"
               value={selectedPlayer}
               onChange={e => setSelectedPlayer(e.target.value)}
               className="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-gray-100"

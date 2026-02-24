@@ -23,7 +23,7 @@ function GameLobby({ game }: { game: SIGame }) {
   }
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div data-testid="game-lobby" className="flex items-center justify-center h-full">
       <div className="text-center max-w-md">
         <h2 className="text-2xl font-bold mb-4">{game.name}</h2>
         <p className="text-gray-400 mb-6">{status}</p>
@@ -51,6 +51,7 @@ function GameLobby({ game }: { game: SIGame }) {
         </div>
         {!game.mapped && (
           <button
+            data-testid="add-bot-button"
             onClick={handleAddBot}
             disabled={addingBot}
             className="mb-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded text-white font-medium transition-colors"

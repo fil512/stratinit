@@ -77,6 +77,7 @@ export default function AdminPage() {
             <label htmlFor="subject" className="block text-sm mb-1">Subject</label>
             <input
               id="subject"
+              data-testid="admin-subject-input"
               type="text"
               value={subject}
               onChange={e => setSubject(e.target.value)}
@@ -88,6 +89,7 @@ export default function AdminPage() {
             <label htmlFor="body" className="block text-sm mb-1">Body</label>
             <textarea
               id="body"
+              data-testid="admin-body-textarea"
               value={body}
               onChange={e => setBody(e.target.value)}
               rows={6}
@@ -99,6 +101,7 @@ export default function AdminPage() {
           {postSuccess && <div className="text-green-400 text-sm">{postSuccess}</div>}
           <button
             type="submit"
+            data-testid="admin-post-button"
             disabled={posting}
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
           >
@@ -114,7 +117,7 @@ export default function AdminPage() {
           <div className="text-gray-400">Loading...</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
+            <table data-testid="admin-players-table" className="w-full text-sm border-collapse">
               <thead>
                 <tr className="border-b border-gray-700 text-left">
                   <th className="p-2">Username</th>
@@ -144,6 +147,7 @@ export default function AdminPage() {
       <section>
         <h2 className="text-lg font-semibold mb-3">Server</h2>
         <button
+          data-testid="admin-shutdown-button"
           onClick={handleShutdown}
           className={`px-4 py-2 rounded text-white ${
             shutdownConfirm

@@ -56,12 +56,13 @@ export default function UnitsTab() {
   }
 
   return (
-    <div className="space-y-2">
+    <div data-testid="units-list" className="space-y-2">
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-gray-300">
           Units at ({selectedCoords.x}, {selectedCoords.y})
         </h3>
         <button
+          data-testid="units-select-all-button"
           onClick={selectAll}
           className="text-xs px-2 py-0.5 bg-gray-700 rounded hover:bg-gray-600"
         >
@@ -77,6 +78,7 @@ export default function UnitsTab() {
           <div className="flex flex-wrap gap-1">
             {hasMovingUnits && (
               <button
+                data-testid="units-cancel-move-button"
                 onClick={cancelSelectedMoves}
                 className="text-xs px-2 py-0.5 bg-yellow-800 rounded hover:bg-yellow-700"
               >
@@ -86,12 +88,14 @@ export default function UnitsTab() {
             {hasEngineer && (
               <>
                 <button
+                  data-testid="units-build-city-button"
                   onClick={buildCityWithUnit}
                   className="text-xs px-2 py-0.5 bg-green-800 rounded hover:bg-green-700"
                 >
                   Build City
                 </button>
                 <button
+                  data-testid="units-switch-terrain-button"
                   onClick={switchTerrainWithUnit}
                   className="text-xs px-2 py-0.5 bg-teal-800 rounded hover:bg-teal-700"
                 >
@@ -100,6 +104,7 @@ export default function UnitsTab() {
               </>
             )}
             <button
+              data-testid="units-disband-button"
               onClick={handleDisband}
               className="text-xs px-2 py-0.5 bg-red-800 rounded hover:bg-red-700"
             >
@@ -109,6 +114,7 @@ export default function UnitsTab() {
           {alliedNations.length > 0 && (
             <div className="flex items-center gap-1">
               <select
+                data-testid="units-cede-select"
                 value={cedeNationId ?? ''}
                 onChange={e => setCedeNationId(e.target.value ? Number(e.target.value) : null)}
                 className="text-xs bg-gray-800 border border-gray-600 rounded px-1 py-0.5"
@@ -120,6 +126,7 @@ export default function UnitsTab() {
               </select>
               {cedeNationId !== null && (
                 <button
+                  data-testid="units-cede-button"
                   onClick={handleCede}
                   className="text-xs px-2 py-0.5 bg-purple-800 rounded hover:bg-purple-700"
                 >
@@ -134,6 +141,7 @@ export default function UnitsTab() {
       {units.map(u => (
         <div
           key={u.id}
+          data-testid={`unit-row-${u.id}`}
           onClick={() => toggleUnit(u.id)}
           className={`p-1 rounded cursor-pointer text-xs ${
             selectedUnitIds.has(u.id)

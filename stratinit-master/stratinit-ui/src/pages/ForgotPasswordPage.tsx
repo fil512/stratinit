@@ -49,6 +49,7 @@ export default function ForgotPasswordPage() {
           <label htmlFor="username" className="block mb-1">Username</label>
           <input
             id="username"
+            data-testid="forgot-username-input"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
@@ -61,6 +62,7 @@ export default function ForgotPasswordPage() {
           <label htmlFor="email" className="block mb-1">Email</label>
           <input
             id="email"
+            data-testid="forgot-email-input"
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -72,6 +74,7 @@ export default function ForgotPasswordPage() {
         {success && <div className="text-green-500 mb-3">{success}</div>}
         <button
           type="submit"
+          data-testid="forgot-submit-button"
           disabled={submitting}
           className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
         >
