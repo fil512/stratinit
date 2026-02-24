@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.service;
 import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.CityDao;
+import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
@@ -28,6 +29,8 @@ public class CityService {
 
     @Autowired
     private CityDao cityDao;
+    @Autowired
+    private RelationDao relationDao;
     @Autowired
     private SectorDao sectorDao;
     @Autowired
@@ -185,7 +188,8 @@ public class CityService {
                 if (city == null) {
                     return true;
                 }
-                if (!city.getNation().equals(nation)) {
+                if (!city.getNation().equals(nation)
+                        && !relationDao.getAllies(nation).contains(city.getNation())) {
                     return true;
                 }
             }

@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.rest.request.write;
 
 import com.kenstevens.stratinit.client.model.City;
+import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.exception.CommandFailedException;
@@ -79,5 +80,25 @@ public class BuildCityTest extends TwoPlayerBase {
         assertThrows(CommandFailedException.class, () -> buildCity(eng));
         cities = cityDao.getCities(nationMe);
         assertEquals(2, cities.size());
+    }
+
+    @Test
+    public void buildCityNextToAlly() {
+        // Ally captures a city next to our build location
+        cityService.captureCity(nationThem, PORT);
+        // Set mutual alliance
+        declareAlliance();
+        allianceDeclared();
+        // Verify alliance is active
+        Collection<Nation> allies = relationDao.getAllies(nationMe);
+        assertTrue(allies.contains(nationThem), "nationThem should be an ally of nationMe");
+        // Build engineer next to ally's city - should succeed
+        Unit eng = unitService.buildUnit(nationMe, LAND, UnitType.ENGINEER);
+        eng.setMobility(eng.getMaxMobility());
+        List<City> cities = cityDao.getCities(nationMe);
+        assertEquals(2, cities.size());
+        buildCity(eng);
+        cities = cityDao.getCities(nationMe);
+        assertEquals(3, cities.size());
     }
 }
