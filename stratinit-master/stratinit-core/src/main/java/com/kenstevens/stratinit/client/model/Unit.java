@@ -180,7 +180,7 @@ public class Unit extends GameUpdatable {
 		}
 		
 		int maxHP = getUnitBase().getHp();
-		int hps = percent * maxHP / 100;
+		int hps = Math.max(1, percent * maxHP / 100);
 		hp += hps;
 
 		if (hp > maxHP) {

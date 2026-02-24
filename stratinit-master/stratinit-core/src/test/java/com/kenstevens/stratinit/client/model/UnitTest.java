@@ -62,6 +62,14 @@ public class UnitTest {
 	}
 	
 	@Test
+	public void healZeppelinInCity_issue70() {
+		Unit zeppelin = new Unit(nation, UnitType.ZEPPELIN, coords);
+		zeppelin.setHp(1); // damaged zeppelin (max HP = 2)
+		zeppelin.healPercent(Constants.CITY_HEAL_PERCENT);
+		assertEquals(2, zeppelin.getHp(), "Zeppelins should heal to full HP in cities");
+	}
+
+	@Test
 	public void healFromFull() {
 		inf.healPercent(Constants.CITY_HEAL_PERCENT);
 		assertEquals(inf.getUnitBase().getHp(), inf.getHp());
