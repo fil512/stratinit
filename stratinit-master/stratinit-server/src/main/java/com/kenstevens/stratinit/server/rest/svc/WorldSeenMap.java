@@ -51,6 +51,12 @@ public class WorldSeenMap implements CoordMeasure {
 		sisector.myRelation = myWorldView.getMyRelation(worldSector.getNation());
 		sisector.theirRelation = myWorldView.getTheirRelation(worldSector
 				.getNation());
+		// Allied supply units don't provide supply to us — only show our own supply sources
+		if (sectorWorldView != myWorldView) {
+			sisector.suppliesLand = false;
+			sisector.suppliesNavy = false;
+			sisector.holdsMyTransport = false;
+		}
 		return sisector;
 	}
 
