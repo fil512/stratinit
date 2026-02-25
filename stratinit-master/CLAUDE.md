@@ -96,6 +96,10 @@ Tests use H2 in-memory database (`MODE=LEGACY`) with Liquibase migrations applie
 
 Base test class for REST tests: `BaseStratInitControllerTest` in `stratinit-rest` (extends `StratInitDaoBase`).
 
+## Test Credentials
+
+- Username: `tester` / Password: `tester123`
+
 ## Configuration
 
 - JPA config: `persistence.properties` in each module's resources

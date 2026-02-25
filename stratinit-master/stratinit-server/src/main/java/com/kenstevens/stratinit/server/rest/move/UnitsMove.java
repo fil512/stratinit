@@ -46,6 +46,7 @@ public class UnitsMove {
     private WorldSector targetSector;
     private Attack attack;
     private Passengers passengers;
+    private List<Unit> partialMoveUnits = new ArrayList<>();
 
     public UnitsMove(UnitsToMove unitsToMove, WorldView worldView) {
         this.unitsToMove = unitsToMove;
@@ -149,6 +150,14 @@ public class UnitsMove {
 
         List<SectorCoords> path = getPath();
         if (path == null) {
+            if (unknown) {
+                // Destination is in fog of war — accept the move order; the unit
+                // will advance as far as possible once the path becomes known.
+                for (Unit unit : unitsToMove) {
+                    setUnitMove(unit, unitsToMove.getTargetCoords());
+                }
+                return new Result<None>("Move order set toward unexplored territory.", true);
+            }
             return new Result<None>("Unable to find a path from "
                     + unitsToMove.getFirstCoords() + " to "
                     + unitsToMove.getTargetCoords(), false);
@@ -157,7 +166,19 @@ public class UnitsMove {
             // Already there
             return Result.trueInstance();
         }
-        return moveUnitsAlongPath(path);
+        Result<None> result = moveUnitsAlongPath(path);
+        setMoveOrdersForPartialMoveUnits(result);
+        return result;
+    }
+
+    private void setMoveOrdersForPartialMoveUnits(Result<None> moveResult) {
+        SectorCoords target = unitsToMove.getTargetCoords();
+        for (Unit unit : partialMoveUnits) {
+            if (unit.isAlive() && !unit.getCoords().equals(target)) {
+                setUnitMove(unit, target);
+                moveResult.addMessage(unit + " moved as far as possible. Move order set.");
+            }
+        }
     }
 
     private Result<None> moveUnitsAlongPath(List<SectorCoords> path) {
@@ -167,6 +188,9 @@ public class UnitsMove {
             retval.or(moveUnitsOneSectorResult);
             if (!retval.isSuccess()) {
                 retval.addMessage("Units stopped short at " + coords);
+                break;
+            }
+            if (unitsToMove.isEmpty()) {
                 break;
             }
             fogService.updateSeen(worldView, unitsToMove.getUnits(),
@@ -213,23 +237,38 @@ public class UnitsMove {
         Result<List<Unit>> unitsOutOfRangeResult = unitsToMove
                 .getUnitsOutOfRange(worldView, targetSector, unknown);
         List<Unit> unitsOutOfRange = unitsOutOfRangeResult.getValue();
-        remove(unitsOutOfRange);
-        List<Unit> unitsOrdered = addMoveOrder(unitsOutOfRange);
-        clearMoveOrder();
-        if (unitsToMove.isEmpty()) {
-            moveResult.setSuccess(false);
-            if (unitsOrdered.size() == 1) {
-                moveResult
-                        .addMessage("Unit out of range.  Setting move order on unit.");
-            } else if (unitsOrdered.size() > 1) {
-                moveResult
-                        .addMessage("All units out of range.  Setting move order on units.");
-            } else {
+
+        boolean someInRange = unitsOutOfRange.size() < unitsToMove.getNumberOfUnits();
+
+        if (someInRange) {
+            // Mixed group: some units can reach, some can't.
+            // Remove out-of-range units and set move orders on them (preserves old behavior).
+            remove(unitsOutOfRange);
+            List<Unit> unitsOrdered = addMoveOrder(unitsOutOfRange);
+            clearMoveOrder();
+            if (!unitsOrdered.isEmpty()) {
+                moveResult.addMessage("Some units out of range.  Setting move order on those units.");
+            }
+        } else {
+            // All units are out of range. Separate truly blocked from those that
+            // can advance partway this turn.
+            List<Unit> trulyBlocked = new ArrayList<>();
+            partialMoveUnits = new ArrayList<>();
+            for (Unit unit : unitsOutOfRange) {
+                if (couldMoveTo(unit)) {
+                    partialMoveUnits.add(unit);
+                } else {
+                    trulyBlocked.add(unit);
+                }
+            }
+            // Only remove truly blocked units; keep partial-move units so they can
+            // advance along the path as far as their mobility allows this turn
+            remove(trulyBlocked);
+            clearMoveOrder();
+            if (unitsToMove.isEmpty()) {
+                moveResult.setSuccess(false);
                 moveResult.addMessages(unitsOutOfRangeResult.getMessages());
             }
-        } else if (unitsOutOfRange.size() > 0) {
-            moveResult
-                    .addMessage("Some units out of range.  Setting move order on those units.");
         }
     }
 

@@ -92,6 +92,36 @@ function gameToColRow(gx: number, gy: number, bs: number): [number, number] {
   return [gx, bs - 1 - gy]
 }
 
+// ── Hex distance (even-Q flat-top, toroidal) ──
+
+// Convert odd-Q offset to cube coords (odd columns are shifted down)
+function oddQToCube(col: number, row: number): [number, number, number] {
+  const q = col
+  const r = row - Math.floor(col / 2)
+  const s = -q - r
+  return [q, r, s]
+}
+
+// Hex distance on a toroidal even-Q grid
+function hexDistWrapped(gx1: number, gy1: number, gx2: number, gy2: number, bs: number): number {
+  // Convert game coords to col/row
+  const [col1, row1] = gameToColRow(gx1, gy1, bs)
+  const [col2, row2] = gameToColRow(gx2, gy2, bs)
+  // Check all 9 toroidal copies and return minimum distance
+  let best = Infinity
+  for (let dx = -1; dx <= 1; dx++) {
+    for (let dy = -1; dy <= 1; dy++) {
+      const c2 = col2 + dx * bs
+      const r2 = row2 + dy * bs
+      const [q1, r1s, s1] = oddQToCube(col1, row1)
+      const [q2, r2s, s2] = oddQToCube(c2, r2)
+      const d = Math.max(Math.abs(q1 - q2), Math.abs(r1s - r2s), Math.abs(s1 - s2))
+      if (d < best) best = d
+    }
+  }
+  return best
+}
+
 // ── Imperative draw function ──
 
 interface DrawParams {
@@ -205,24 +235,84 @@ function drawMap(p: DrawParams) {
     }
   }
 
-  // Supply dots at 24px+
-  if (cs >= 24) {
-    for (let col = colMin; col <= colMax; col++) {
-      for (let row = rowMin; row <= rowMax; row++) {
-        const sector = getSector(col, row)
-        if (!sector || (!sector.suppliesLand && !sector.suppliesNavy)) continue
-        const [cx, cy] = screenPos(col, row)
-        const dotR = Math.max(1.5, cs * 0.06)
-        if (sector.suppliesLand) {
-          ctx.fillStyle = '#00ff88'
-          ctx.beginPath(); ctx.arc(cx + r * 0.6, cy - r * 0.6, dotR, 0, Math.PI * 2); ctx.fill()
+  // Supply lines — dotted lines from each of my units to nearest supply source
+  if (cs >= 16) {
+    const SUPPLY_RADIUS = 6
+    // Collect supply source game coords
+    const landSupplySources: [number, number][] = []
+    const navySupplySources: [number, number][] = []
+    for (const [key, sector] of lookups.sectorMap) {
+      if (sector.suppliesLand || sector.suppliesNavy) {
+        const [gx, gy] = key.split(',').map(Number)
+        if (sector.suppliesLand) landSupplySources.push([gx, gy])
+        if (sector.suppliesNavy) navySupplySources.push([gx, gy])
+      }
+    }
+
+    ctx.save()
+    ctx.setLineDash([Math.max(2, cs * 0.1), Math.max(2, cs * 0.1)])
+    ctx.lineWidth = Math.max(0.5, cs * 0.03)
+
+    for (const unit of update.units) {
+      if (unit.nationId !== update.nationId) continue
+      const ub = unitBaseMap.get(unit.type)
+      if (!ub || !ub.requiresSupply) continue
+      // Air units use fuel, not ground supply
+      if (ub.requiresFuel) continue
+
+      // Pick the right supply sources for this unit category
+      const sources = ub.builtIn === 'PORT' ? navySupplySources : landSupplySources
+      if (sources.length === 0) continue
+
+      // Find nearest supply source within SUPPLY_RADIUS
+      let bestSrc: [number, number] | null = null
+      let bestDist = Infinity
+      for (const [sx, sy] of sources) {
+        const d = hexDistWrapped(unit.coords.x, unit.coords.y, sx, sy, bs)
+        if (d > 0 && d <= SUPPLY_RADIUS && d < bestDist) {
+          bestDist = d
+          bestSrc = [sx, sy]
         }
-        if (sector.suppliesNavy) {
-          ctx.fillStyle = '#0088ff'
-          ctx.beginPath(); ctx.arc(cx + r * 0.6, cy - r * 0.3, dotR, 0, Math.PI * 2); ctx.fill()
+      }
+      if (!bestSrc) continue
+
+      // Draw line for each visible copy of the unit's hex
+      const isNavy = ub.builtIn === 'PORT'
+      ctx.strokeStyle = isNavy ? 'rgba(0, 136, 255, 0.5)' : 'rgba(0, 255, 136, 0.5)'
+
+      const [fromCol, fromRow] = gameToColRow(unit.coords.x, unit.coords.y, bs)
+      const [toCol, toRow] = gameToColRow(bestSrc[0], bestSrc[1], bs)
+
+      const nMin = Math.floor((colMin - fromCol) / bs) - 1
+      const nMax = Math.ceil((colMax - fromCol) / bs) + 1
+      const mMin = Math.floor((rowMin - fromRow) / bs) - 1
+      const mMax = Math.ceil((rowMax - fromRow) / bs) + 1
+
+      for (let n = nMin; n <= nMax; n++) {
+        for (let m = mMin; m <= mMax; m++) {
+          const srcCol = fromCol + n * bs
+          const srcRow = fromRow + m * bs
+          const [srcX, srcY] = screenPos(srcCol, srcRow)
+          if (srcX < -cs * 2 || srcX > viewport.w + cs * 2 || srcY < -cs * 2 || srcY > viewport.h + cs * 2) continue
+
+          // Find nearest destination copy (check 9 toroidal offsets)
+          let bestDstCol = toCol + n * bs, bestDstRow = toRow + m * bs, bestPixDist = Infinity
+          for (let ox = -1; ox <= 1; ox++) {
+            for (let oy = -1; oy <= 1; oy++) {
+              const dc = toCol + (n + ox) * bs
+              const dr = toRow + (m + oy) * bs
+              const dx = dc - srcCol, dy = dr - srcRow
+              const dist = dx * dx + dy * dy
+              if (dist < bestPixDist) { bestPixDist = dist; bestDstCol = dc; bestDstRow = dr }
+            }
+          }
+
+          const [dstX, dstY] = screenPos(bestDstCol, bestDstRow)
+          ctx.beginPath(); ctx.moveTo(srcX, srcY); ctx.lineTo(dstX, dstY); ctx.stroke()
         }
       }
     }
+    ctx.restore()
   }
 
   // Relation borders at 32px+
@@ -239,6 +329,75 @@ function drawMap(p: DrawParams) {
         ctx.lineWidth = 1.5
         drawHex(ctx, cx, cy, r * 0.95)
         ctx.stroke()
+      }
+    }
+  }
+
+  // Range overlays — fuel range and mobility range for selected unit
+  if (selectedCoords && selectedUnitIds.size > 0) {
+    const selectedUnitsAtCoords = (lookups.unitMap.get(`${selectedCoords.x},${selectedCoords.y}`) ?? [])
+      .filter(u => selectedUnitIds.has(u.id))
+
+    // Pick the first selected unit that has fuel or mobility to show ranges for
+    const rangeUnit = selectedUnitsAtCoords[0]
+    const rangeUnitBase = rangeUnit ? unitBaseMap.get(rangeUnit.type) : undefined
+
+    if (rangeUnit && rangeUnitBase) {
+      const hasFuel = rangeUnitBase.requiresFuel && rangeUnit.fuel > 0
+      const fuelRange = hasFuel ? rangeUnit.fuel : 0
+      const mobRange = rangeUnit.mobility
+      const unitCategory = rangeUnitBase.builtIn // FORT=land, PORT=navy, AIRPORT=air, TECH=tech
+
+      // Determine if hex is traversable by this unit
+      const isTraversable = (gx: number, gy: number): boolean => {
+        const sector = lookups.sectorMap.get(`${gx},${gy}`)
+        const sType = sector?.type
+        if (unitCategory === 'AIRPORT') return true // air units go anywhere
+        if (unitCategory === 'FORT') {
+          // Land units: land, cities, or fog-of-war (treated as land)
+          return !sType || sType === 'UNKNOWN' || sType === 'LAND' || sType === 'PLAYER_CITY' || sType === 'NEUTRAL_CITY' || sType === 'START_CITY' || sType === 'WASTELAND'
+        }
+        if (unitCategory === 'PORT') {
+          // Naval units: water, cities, or fog-of-war (treated as water)
+          return !sType || sType === 'UNKNOWN' || sType === 'WATER' || sType === 'PLAYER_CITY' || sType === 'NEUTRAL_CITY' || sType === 'START_CITY'
+        }
+        return true // TECH or unknown category
+      }
+
+      // Fuel range overlay (outer ring)
+      if (fuelRange > 0) {
+        ctx.fillStyle = 'rgba(0, 180, 255, 0.15)'
+        for (let col = colMin; col <= colMax; col++) {
+          for (let row = rowMin; row <= rowMax; row++) {
+            const gx = wrapCoord(col, bs)
+            const gy = bs - 1 - wrapCoord(row, bs)
+            const dist = hexDistWrapped(selectedCoords.x, selectedCoords.y, gx, gy, bs)
+            if (dist > 0 && dist <= fuelRange) {
+              const [cx, cy] = screenPos(col, row)
+              drawHex(ctx, cx, cy, r)
+              ctx.fill()
+            }
+          }
+        }
+      }
+
+      // Mobility range overlay (inner ring, brighter)
+      // Show for: fuel units (mobility within fuel range), and land/naval units
+      const showMobility = hasFuel || unitCategory === 'FORT' || unitCategory === 'PORT'
+      if (showMobility && mobRange > 0) {
+        ctx.fillStyle = 'rgba(0, 255, 120, 0.18)'
+        for (let col = colMin; col <= colMax; col++) {
+          for (let row = rowMin; row <= rowMax; row++) {
+            const gx = wrapCoord(col, bs)
+            const gy = bs - 1 - wrapCoord(row, bs)
+            const dist = hexDistWrapped(selectedCoords.x, selectedCoords.y, gx, gy, bs)
+            if (dist > 0 && dist <= mobRange && isTraversable(gx, gy)) {
+              const [cx, cy] = screenPos(col, row)
+              drawHex(ctx, cx, cy, r)
+              ctx.fill()
+            }
+          }
+        }
       }
     }
   }
@@ -318,7 +477,7 @@ function drawMap(p: DrawParams) {
 export default function GameMap() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const { state, selectSector, moveSelectedUnits } = useGame()
+  const { state, selectSectorFromMap, moveSelectedUnits } = useGame()
   const { boardSize, update, lookups, selectedCoords, selectedUnitIds, unitBases } = state
 
   // ── Camera state (world-pixel offset) ──
@@ -506,25 +665,60 @@ export default function GameMap() {
     })
   }, [cellSize]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── Auto-center on player's units on first load ──
+  // ── Auto-zoom to fit visible map on first load ──
   useEffect(() => {
-    if (hasCenteredRef.current || !update) return
-    const myUnits = update.units.filter(u => u.nationId === update.nationId)
-    if (myUnits.length === 0) return
-
-    const avgX = myUnits.reduce((sum, u) => sum + u.coords.x, 0) / myUnits.length
-    const avgY = myUnits.reduce((sum, u) => sum + u.coords.y, 0) / myUnits.length
-
-    const cs = currentCellRef.current
-    const r = cs / 2
-    const [col, row] = gameToColRow(Math.round(avgX), Math.round(avgY), boardSize)
-    const [worldPx, worldPy] = unwrappedHexCenter(col, row, r)
+    if (hasCenteredRef.current || !update || !lookups) return
     const vp = viewportRef.current
+    if (vp.w === 0 || vp.h === 0) return
 
+    // Find bounding box of all non-UNKNOWN sectors in col/row space
+    let colMin = Infinity, colMax = -Infinity, rowMin = Infinity, rowMax = -Infinity
+    let hasVisible = false
+    for (const sector of update.sectors) {
+      if (sector.type === 'UNKNOWN') continue
+      const [col, row] = gameToColRow(sector.coords.x, sector.coords.y, boardSize)
+      if (col < colMin) colMin = col
+      if (col > colMax) colMax = col
+      if (row < rowMin) rowMin = row
+      if (row > rowMax) rowMax = row
+      hasVisible = true
+    }
+
+    if (!hasVisible) return
+
+    // Add padding of 1 hex on each side
+    colMin -= 1
+    colMax += 1
+    rowMin -= 1
+    rowMax += 1
+
+    // Calculate cell size that fits this bounding box into the viewport
+    // Width: cols span from colMin to colMax, pixel width = (colMax - colMin) * 1.5 * r + 2 * r
+    // Height: rows span from rowMin to rowMax, pixel height = (rowMax - rowMin + 1) * sqrt3 * r
+    const colSpan = colMax - colMin + 1
+    const rowSpan = rowMax - rowMin + 1
+    // Solve for r: vp.w = colSpan * 1.5 * r + 2 * r => r = vp.w / (colSpan * 1.5 + 2)
+    const rFromWidth = vp.w / (colSpan * 1.5 + 2)
+    // Solve for r: vp.h = rowSpan * sqrt3 * r + sqrt3 * r => r = vp.h / ((rowSpan + 1) * sqrt3)
+    const rFromHeight = vp.h / ((rowSpan + 1) * SQRT3)
+    const r = Math.min(rFromWidth, rFromHeight)
+    const cs = Math.max(MIN_CELL, Math.min(MAX_CELL, r * 2))
+
+    // Set zoom level
+    currentCellRef.current = cs
+    targetCellRef.current = cs
+    setCellSize(cs)
+
+    // Center camera on midpoint of bounding box
+    const finalR = cs / 2
+    const midCol = (colMin + colMax) / 2
+    const midRow = (rowMin + rowMax) / 2
+    const [worldPx, worldPy] = unwrappedHexCenter(midCol, midRow, finalR)
     cameraRef.current = { x: worldPx - vp.w / 2, y: worldPy - vp.h / 2 }
+
     hasCenteredRef.current = true
     requestRedraw()
-  }, [update, boardSize, requestRedraw])
+  }, [update, lookups, boardSize, requestRedraw])
 
   // ── Scroll wheel zoom ──
   useEffect(() => {
@@ -686,8 +880,8 @@ export default function GameMap() {
   const handleContextMenu = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault()
     const coords = eventToGameCoords(e)
-    if (coords) selectSector(coords)
-  }, [eventToGameCoords, selectSector])
+    if (coords) selectSectorFromMap(coords)
+  }, [eventToGameCoords, selectSectorFromMap])
 
   // ── Keyboard: +/- zoom, arrows pan ──
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {

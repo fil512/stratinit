@@ -49,18 +49,24 @@ public class UnitServiceTest extends TwoPlayerBase {
     }
 
     @Test
-    public void updateUnitTwiceFirstTimeCantMoveSecondTimeCanMove() {
+    public void updateUnitTwiceFirstTimeMovesPartiallySecondTimeArrives() {
         Unit inf = unitService.buildUnit(nationMe, TOP,
                 UnitType.INFANTRY);
         inf.setMobility(0);
         unitService.setUnitMove(inf, BOTTOM);
+        // First tick: gains 2 mobility, moves as far as possible (2 hexes at cost 1 in supply)
         unitService.updateUnit(inf, new Date());
-        assertEquals(inf.getUnitBase().getMobility(), inf.getMobility());
-        assertEquals(TOP, inf.getCoords());
+        int baseMob = inf.getUnitBase().getMobility();
+        assertEquals(0, inf.getMobility(), "Should have used all mobility moving partway");
+        assertTrue(inf.getCoords().y > TOP.y, "Unit should have moved south from " + TOP);
+        assertNotNull(inf.getUnitMove(), "Move order should still be set for remaining distance");
         assertEquals(BOTTOM, inf.getUnitMove().getCoords());
+        SectorCoords afterFirstTick = inf.getCoords();
+        // Second tick: gains 2 more mobility, reaches destination
         unitService.updateUnit(inf, new Date());
-        assertEquals(inf.getUnitBase().getMobility() * 2 - TOP.distanceTo(testWorld, BOTTOM), inf.getMobility());
         assertEquals(BOTTOM, inf.getCoords());
+        int expectedMob = baseMob - BOTTOM.distanceTo(testWorld, afterFirstTick);
+        assertEquals(expectedMob, inf.getMobility());
         assertNull(inf.getUnitMove());
     }
 

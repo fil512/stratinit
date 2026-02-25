@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.util.UpdateCalculator;
 import com.kenstevens.stratinit.dto.SIUpdate;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,7 @@ public class PlayerWorldViewUpdate {
 		Game game = nation.getGame();
 		siupdate.lastUpdated = game.getLastUpdated();
 		siupdate.tickIntervalMs = UpdateCalculator.shrinkTime(game.isBlitz(), game.getUpdatePeriodMilliseconds());
+		siupdate.buildTickIntervalMs = UpdateCalculator.shrinkTime(game.isBlitz(), DateUtils.MILLIS_PER_HOUR);
 		siupdate.gameId = game.getId();
 		siupdate.gameName = game.getGamename();
 		siupdate.gameEnds = game.getEnds();

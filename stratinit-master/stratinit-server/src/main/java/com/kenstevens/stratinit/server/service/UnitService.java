@@ -91,9 +91,11 @@ public class UnitService {
         clearUnitMove(unit);
         UnitsMove unitMover = unitCommandFactory.getUnitsMove(unitsToMove,
                 worldView);
-        @SuppressWarnings("unused") // TODO ENH For now remove the output of this command.  Maybe archive it later.
         Result<MoveCost> result = unitMover.move();
-        if (!unit.getCoords().equals(target) && unit.isAlive()) {
+        // Re-set the move order only if the unit made progress or is heading
+        // into fog of war.  If the move failed (path blocked, unreachable
+        // terrain now visible) the order is cancelled so the unit stops.
+        if (result.isSuccess() && !unit.getCoords().equals(target) && unit.isAlive()) {
             setUnitMove(unit, target);
         }
     }

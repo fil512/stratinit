@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SectorTab from './tabs/SectorTab'
 import UnitsTab from './tabs/UnitsTab'
 import CitiesTab from './tabs/CitiesTab'
@@ -6,12 +6,21 @@ import BattleLogTab from './tabs/BattleLogTab'
 import PlayersTab from './tabs/PlayersTab'
 import MessagesTab from './tabs/MessagesTab'
 import NewsTab from './tabs/NewsTab'
+import { useGame } from '../context/GameContext'
 
 const TABS = ['Sector', 'Units', 'Cities', 'Battle', 'Players', 'Mail', 'News'] as const
 type TabName = typeof TABS[number]
 
 export default function SidePanel() {
   const [activeTab, setActiveTab] = useState<TabName>('Sector')
+  const { state } = useGame()
+  const { sectorSelectedAt } = state
+
+  useEffect(() => {
+    if (sectorSelectedAt > 0) {
+      setActiveTab('Sector')
+    }
+  }, [sectorSelectedAt])
 
   return (
     <div data-testid="side-panel" className="w-80 flex flex-col border-l border-gray-600 bg-gray-900 text-gray-100 text-sm">

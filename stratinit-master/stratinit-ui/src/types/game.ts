@@ -136,6 +136,7 @@ export interface SIUpdate {
   messages?: string[]
   lastUpdated: string | null
   tickIntervalMs: number
+  buildTickIntervalMs: number
   gameId: number
   gameName: string
   gameEnds: string | null

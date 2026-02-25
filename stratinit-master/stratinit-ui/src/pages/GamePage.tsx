@@ -118,6 +118,13 @@ export default function GamePage() {
 
   useGameSocket(gameIdNum, onSocketMessage)
 
+  // Polling fallback: refresh every 10s in case WebSocket is disconnected
+  useEffect(() => {
+    if (!state.update) return
+    const interval = setInterval(() => refreshState(), 10000)
+    return () => clearInterval(interval)
+  }, [state.update, refreshState])
+
   if (lobbyGame) {
     return <GameLobby game={lobbyGame} />
   }

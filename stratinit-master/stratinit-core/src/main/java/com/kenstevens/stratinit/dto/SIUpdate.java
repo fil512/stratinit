@@ -21,6 +21,7 @@ public class SIUpdate implements StratInitDTO {
     public List<String> messages;
     public Date lastUpdated;
     public long tickIntervalMs;
+    public long buildTickIntervalMs;
     public int gameId;
     public String gameName;
     public Date gameEnds;

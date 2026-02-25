@@ -53,6 +53,7 @@ interface GameState {
   loading: boolean
   error: string | null
   commandError: string | null
+  sectorSelectedAt: number
 }
 
 const initialState: GameState = {
@@ -66,6 +67,7 @@ const initialState: GameState = {
   loading: false,
   error: null,
   commandError: null,
+  sectorSelectedAt: 0,
 }
 
 // Actions
@@ -75,8 +77,9 @@ type GameAction =
   | { type: 'INIT_GAME'; gameId: number; boardSize: number }
   | { type: 'SET_UPDATE'; update: SIUpdate }
   | { type: 'SET_UNIT_BASES'; unitBases: SIUnitBase[] }
-  | { type: 'SELECT_SECTOR'; coords: SectorCoords; unitIds: number[] }
+  | { type: 'SELECT_SECTOR'; coords: SectorCoords; unitIds: number[]; fromMap?: boolean }
   | { type: 'TOGGLE_UNIT'; unitId: number }
+  | { type: 'SELECT_ONLY_UNIT'; unitId: number }
   | { type: 'CLEAR_SELECTION' }
   | { type: 'SET_COMMAND_ERROR'; error: string }
   | { type: 'CLEAR_COMMAND_ERROR' }
@@ -100,6 +103,7 @@ function reducer(state: GameState, action: GameAction): GameState {
         ...state,
         selectedCoords: action.coords,
         selectedUnitIds: new Set(action.unitIds),
+        sectorSelectedAt: action.fromMap ? Date.now() : state.sectorSelectedAt,
       }
     case 'TOGGLE_UNIT': {
       const next = new Set(state.selectedUnitIds)
@@ -107,6 +111,8 @@ function reducer(state: GameState, action: GameAction): GameState {
       else next.add(action.unitId)
       return { ...state, selectedUnitIds: next }
     }
+    case 'SELECT_ONLY_UNIT':
+      return { ...state, selectedUnitIds: new Set([action.unitId]) }
     case 'CLEAR_SELECTION':
       return { ...state, selectedCoords: null, selectedUnitIds: new Set() }
     case 'SET_COMMAND_ERROR':
@@ -124,7 +130,9 @@ interface GameContextValue {
   initGame: (gameId: number, boardSize: number) => Promise<void>
   refreshState: () => Promise<void>
   selectSector: (coords: SectorCoords) => void
+  selectSectorFromMap: (coords: SectorCoords) => void
   toggleUnit: (unitId: number) => void
+  selectOnlyUnit: (unitId: number) => void
   clearSelection: () => void
   moveSelectedUnits: (target: SectorCoords) => Promise<void>
   disbandSelectedUnits: () => Promise<void>
@@ -187,19 +195,30 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }
   }, [dispatchUpdate])
 
-  const selectSector = useCallback((coords: SectorCoords) => {
-    // Auto-select player's units at this sector
+  const selectSectorImpl = useCallback((coords: SectorCoords, fromMap: boolean) => {
     const key = coordKey(coords.x, coords.y)
     const units = state.lookups?.unitMap.get(key) ?? []
     const myNationId = state.update?.nationId ?? -1
     const myUnitIds = units
       .filter(u => u.nationId === myNationId)
       .map(u => u.id)
-    dispatch({ type: 'SELECT_SECTOR', coords, unitIds: myUnitIds })
+    dispatch({ type: 'SELECT_SECTOR', coords, unitIds: myUnitIds, fromMap })
   }, [state.lookups, state.update?.nationId])
+
+  const selectSector = useCallback((coords: SectorCoords) => {
+    selectSectorImpl(coords, false)
+  }, [selectSectorImpl])
+
+  const selectSectorFromMap = useCallback((coords: SectorCoords) => {
+    selectSectorImpl(coords, true)
+  }, [selectSectorImpl])
 
   const toggleUnit = useCallback((unitId: number) => {
     dispatch({ type: 'TOGGLE_UNIT', unitId })
+  }, [])
+
+  const selectOnlyUnit = useCallback((unitId: number) => {
+    dispatch({ type: 'SELECT_ONLY_UNIT', unitId })
   }, [])
 
   const clearSelection = useCallback(() => {
@@ -308,7 +327,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     const updated: SICityUpdate = {
       ...city,
       field,
-      [field === 'BUILD' ? 'build' : 'nextBuild']: build,
+      [field === 'BUILD' ? 'build' : 'nextBuild']: build || null,
     }
     try {
       await gameApi.updateCity(updated)
@@ -357,7 +376,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     initGame,
     refreshState,
     selectSector,
+    selectSectorFromMap,
     toggleUnit,
+    selectOnlyUnit,
     clearSelection,
     moveSelectedUnits,
     disbandSelectedUnits,

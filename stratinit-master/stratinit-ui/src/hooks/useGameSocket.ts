@@ -13,6 +13,8 @@ export interface GameSocketMessage {
 
 export function useGameSocket(gameId: number | null, onMessage: (msg: GameSocketMessage) => void) {
   const clientRef = useRef<Client | null>(null)
+  const onMessageRef = useRef(onMessage)
+  onMessageRef.current = onMessage
 
   useEffect(() => {
     if (gameId === null) return
@@ -21,9 +23,10 @@ export function useGameSocket(gameId: number | null, onMessage: (msg: GameSocket
     const client = new Client({
       webSocketFactory: () => new SockJS('/ws'),
       connectHeaders: token ? { Authorization: `Bearer ${token}` } : {},
+      reconnectDelay: 5000,
       onConnect: () => {
         client.subscribe(`/topic/game/${gameId}`, message => {
-          onMessage(JSON.parse(message.body) as GameSocketMessage)
+          onMessageRef.current(JSON.parse(message.body) as GameSocketMessage)
         })
       },
       onStompError: frame => {
@@ -37,7 +40,7 @@ export function useGameSocket(gameId: number | null, onMessage: (msg: GameSocket
     return () => {
       client.deactivate()
     }
-  }, [gameId, onMessage])
+  }, [gameId])
 
   return clientRef
 }
