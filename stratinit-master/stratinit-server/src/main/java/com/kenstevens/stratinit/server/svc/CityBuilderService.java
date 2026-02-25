@@ -131,12 +131,13 @@ public class CityBuilderService {
 							"skipping " + unitType,
 							"Skipping build unit " + message + ".  Maximum allowable power reached.\n\nKill your units or take some cities to increase your power limit.\n"
 					);
-		} else {
-			logger.debug("Building unit " + message);
-			Unit unit = unitService.buildUnit(nation, coords, unitType, buildTime);
-			if (city.getCityMove() != null) {
-				unitService.executeCityMove(unit, city);
-			}
+			// Don't advance lastUpdated or switch production — retry next period
+			return;
+		}
+		logger.debug("Building unit " + message);
+		Unit unit = unitService.buildUnit(nation, coords, unitType, buildTime);
+		if (city.getCityMove() != null) {
+			unitService.executeCityMove(unit, city);
 		}
 
 		if (switchCityProductionIfTechPermits(city, buildTime)) {
