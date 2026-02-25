@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.bot.action;
 
+import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
@@ -32,6 +33,13 @@ public class BuildCityWithEngineerAction implements BotAction {
         // Only build if engineer has enough mobility
         if (engineer.getMobility() < Constants.MOB_COST_TO_CREATE_CITY) {
             return 0;
+        }
+        // Coastal city bonus: boost when engineer is on a coastal sector and bot has no coastal city
+        if (!state.hasCoastalCity()) {
+            Sector sector = state.getWorld().getSectorOrNull(engineer.getCoords());
+            if (sector != null && state.getWorld().isCoastal(sector)) {
+                utility *= (1.0 + weights.coastalCityDesire);
+            }
         }
         return utility;
     }

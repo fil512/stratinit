@@ -13,27 +13,20 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class MoveUnitToExpandAction implements BotAction {
-    private final Unit unit;
+public class MoveEngineerToCoastAction implements BotAction {
+    private final Unit engineer;
     private final SectorCoords target;
+    private final int distance;
     private final Nation nation;
     private final MoveService moveService;
-    private final int distance;
-    private final boolean isHomeIsland;
 
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService) {
-        this(unit, target, distance, nation, moveService, false);
-    }
-
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService, boolean isHomeIsland) {
-        this.unit = unit;
+    public MoveEngineerToCoastAction(Unit engineer, SectorCoords target, int distance,
+                                      Nation nation, MoveService moveService) {
+        this.engineer = engineer;
         this.target = target;
         this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
-        this.isHomeIsland = isHomeIsland;
     }
 
     @Override
@@ -43,23 +36,23 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight;
+        double utility = weights.expansionBaseWeight * weights.coastalCityDesire;
         // Penalize distant targets
         utility -= distance * weights.distancePenalty;
+        // Reduce desire if bot already has a coastal city
+        if (state.hasCoastalCity()) {
+            utility *= 0.3;
+        }
         // Early game bonus
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
-        }
-        // Home island exploration bonus
-        if (isHomeIsland) {
-            utility += weights.homeIslandExplorationBonus;
         }
         return Math.max(0, utility);
     }
 
     @Override
     public boolean execute() {
-        SIUnit siUnit = new SIUnit(unit);
+        SIUnit siUnit = new SIUnit(engineer);
         Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), target);
         return result.isSuccess();
     }
@@ -71,11 +64,11 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public Integer getInvolvedUnitId() {
-        return unit.getId();
+        return engineer.getId();
     }
 
     @Override
     public String describe() {
-        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " toward " + target + " (expand)";
+        return "Move engineer from " + engineer.getCoords() + " toward coast at " + target;
     }
 }

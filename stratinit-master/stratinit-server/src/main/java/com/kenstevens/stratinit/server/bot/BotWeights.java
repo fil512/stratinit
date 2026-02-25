@@ -58,6 +58,13 @@ public class BotWeights {
     public double navalEscortBonus = 0.5;
     public double massAttackThreshold = 2.0;
 
+    // Island expansion weights
+    public double zeppelinScoutDesire = 1.0;
+    public double homeIslandExplorationBonus = 0.5;
+    public double researchGuaranteeMultiplier = 3.0;
+    public double coastalCityDesire = 1.2;
+    public double moveToCoastDesire = 0.6;
+
     // Production weights
     public double tankDesire = 0.6;
 

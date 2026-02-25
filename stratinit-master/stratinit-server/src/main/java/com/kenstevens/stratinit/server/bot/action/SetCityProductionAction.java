@@ -43,7 +43,12 @@ public class SetCityProductionAction implements BotAction {
         }
 
         if (unitType == UnitType.RESEARCH) {
-            utility *= weights.techCentreDesire;
+            if (!state.isAnyResearchCity()) {
+                // Guarantee at least one city researches tech
+                utility = weights.economyBaseWeight * weights.researchGuaranteeMultiplier;
+            } else {
+                utility *= weights.techCentreDesire;
+            }
         } else if (unitType == UnitType.INFANTRY) {
             utility *= weights.infantryDesire;
         } else if (unitType == UnitType.ENGINEER) {
@@ -57,6 +62,12 @@ public class SetCityProductionAction implements BotAction {
         } else if (unitBase.isTech() && unitType != UnitType.RESEARCH) {
             utility *= weights.icbmLaunchDesire;
             utility *= state.getGameTimePercent();
+        }
+
+        // Transport boost: if coastal city and no city is building transports
+        if (unitType == UnitType.TRANSPORT && state.isCoastalCity(city)
+                && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) {
+            utility *= (1.0 + weights.coastalCityDesire);
         }
 
         // Early game: prefer economy/expansion units

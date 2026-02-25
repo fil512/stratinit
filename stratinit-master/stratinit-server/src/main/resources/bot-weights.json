@@ -28,5 +28,10 @@
   "airSupportBonus" : 1.1766789325263989,
   "navalEscortBonus" : 0.6890245243227866,
   "massAttackThreshold" : 1.084445676485926,
-  "tankDesire" : 0.14029784301501463
+  "tankDesire" : 0.14029784301501463,
+  "zeppelinScoutDesire" : 1.0,
+  "homeIslandExplorationBonus" : 0.5,
+  "researchGuaranteeMultiplier" : 3.0,
+  "coastalCityDesire" : 1.2,
+  "moveToCoastDesire" : 0.6
 }

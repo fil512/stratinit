@@ -13,27 +13,22 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class MoveUnitToExpandAction implements BotAction {
+public class MoveToCoastForPickupAction implements BotAction {
     private final Unit unit;
     private final SectorCoords target;
+    private final int distance;
+    private final boolean transportNearby;
     private final Nation nation;
     private final MoveService moveService;
-    private final int distance;
-    private final boolean isHomeIsland;
 
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService) {
-        this(unit, target, distance, nation, moveService, false);
-    }
-
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService, boolean isHomeIsland) {
+    public MoveToCoastForPickupAction(Unit unit, SectorCoords target, int distance,
+                                       boolean transportNearby, Nation nation, MoveService moveService) {
         this.unit = unit;
         this.target = target;
         this.distance = distance;
+        this.transportNearby = transportNearby;
         this.nation = nation;
         this.moveService = moveService;
-        this.isHomeIsland = isHomeIsland;
     }
 
     @Override
@@ -43,16 +38,16 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight;
+        double utility = weights.expansionBaseWeight * weights.moveToCoastDesire;
         // Penalize distant targets
         utility -= distance * weights.distancePenalty;
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
+        // Boost if transport is within 6 hexes of coast target
+        if (transportNearby) {
+            utility *= 1.5;
         }
-        // Home island exploration bonus
-        if (isHomeIsland) {
-            utility += weights.homeIslandExplorationBonus;
+        // Penalize if home island still has unexplored frontier
+        if (state.hasUnexploredHomeIslandFrontier()) {
+            utility *= 0.2;
         }
         return Math.max(0, utility);
     }
@@ -76,6 +71,6 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public String describe() {
-        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " toward " + target + " (expand)";
+        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " to coast at " + target + " for pickup";
     }
 }

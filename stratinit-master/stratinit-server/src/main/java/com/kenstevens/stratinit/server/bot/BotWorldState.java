@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.bot;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.UnitType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -239,5 +240,118 @@ public class BotWorldState {
 
     public boolean hasLandThreatNear(SectorCoords target) {
         return countLandUnitsInRangeOf(target) > 0;
+    }
+
+    // --- Island expansion query methods ---
+
+    public int distanceToNearestCity(SectorCoords coords) {
+        int minDist = Integer.MAX_VALUE;
+        for (City city : myCities) {
+            int dist = coords.distanceTo(world, city.getCoords());
+            if (dist < minDist) {
+                minDist = dist;
+            }
+        }
+        return minDist;
+    }
+
+    public SectorCoords nearestCityCoords(SectorCoords coords) {
+        SectorCoords nearest = null;
+        int minDist = Integer.MAX_VALUE;
+        for (City city : myCities) {
+            int dist = coords.distanceTo(world, city.getCoords());
+            if (dist < minDist) {
+                minDist = dist;
+                nearest = city.getCoords();
+            }
+        }
+        return nearest;
+    }
+
+    public boolean hasUnexploredHomeIslandFrontier() {
+        int homeIsland = getHomeIslandId();
+        if (homeIsland < 0) return false;
+        int gameSize = game.getGamesize();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!isExplored(coords)) continue;
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null || sector.isWater() || sector.getIsland() != homeIsland) continue;
+                for (SectorCoords neighbour : coords.neighbours(gameSize)) {
+                    if (!isExplored(neighbour)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<SectorCoords> getNeutralCityCoordsOnIsland(int islandId) {
+        return neutralCityCoords.stream()
+                .filter(coords -> {
+                    Sector s = world.getSectorOrNull(coords);
+                    return s != null && s.getIsland() == islandId;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public boolean isAnyResearchCity() {
+        return myCities.stream().anyMatch(c -> c.getBuild() == UnitType.RESEARCH);
+    }
+
+    public long countCitiesBuildingType(UnitType unitType) {
+        return myCities.stream().filter(c -> c.getBuild() == unitType).count();
+    }
+
+    public boolean hasCoastalCity() {
+        return myCities.stream().anyMatch(c -> coastalCityCoords.contains(c.getCoords()));
+    }
+
+    public List<SectorCoords> findCoastalBuildSites(int minDistFromCities) {
+        int gameSize = game.getGamesize();
+        List<SectorCoords> sites = new ArrayList<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!isExplored(coords)) continue;
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null || sector.isWater()) continue;
+                if (!world.isCoastal(sector)) continue;
+                if (distanceToNearestCity(coords) < minDistFromCities) continue;
+                sites.add(coords);
+            }
+        }
+        return sites;
+    }
+
+    public List<SectorCoords> getCoastalPickupPoints() {
+        int homeIsland = getHomeIslandId();
+        if (homeIsland < 0) return Collections.emptyList();
+        int gameSize = game.getGamesize();
+        List<SectorCoords> points = new ArrayList<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!isExplored(coords)) continue;
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null || sector.isWater() || sector.getIsland() != homeIsland) continue;
+                if (world.isCoastal(sector)) {
+                    points.add(coords);
+                }
+            }
+        }
+        return points;
+    }
+
+    public boolean hasTransportCapability() {
+        return myUnits.stream().anyMatch(u -> u.isAlive() && u.carriesUnits())
+                || myCities.stream().anyMatch(c -> c.getBuild() == UnitType.TRANSPORT);
+    }
+
+    public boolean isOnHomeIsland(Unit unit) {
+        int homeIsland = getHomeIslandId();
+        if (homeIsland < 0) return false;
+        Sector sector = world.getSectorOrNull(unit.getCoords());
+        return sector != null && sector.getIsland() == homeIsland;
     }
 }

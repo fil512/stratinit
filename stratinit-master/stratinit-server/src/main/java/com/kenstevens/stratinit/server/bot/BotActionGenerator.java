@@ -89,6 +89,8 @@ public class BotActionGenerator {
     private void generateExpansionActions(BotWorldState state, Nation nation, List<BotAction> actions) {
         int gameSize = state.getGame().getGamesize();
         World world = state.getWorld();
+        int homeIslandId = state.getHomeIslandId();
+        boolean hasUnexploredHome = state.hasUnexploredHomeIslandFrontier();
 
         for (Unit unit : state.getIdleLandUnits()) {
             // Skip land units riding on transports (at sea)
@@ -96,26 +98,125 @@ public class BotActionGenerator {
             if (unitSector != null && unitSector.isWater()) {
                 continue;
             }
-            if (unit.getType() == UnitType.ENGINEER && unit.getMobility() >= com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY) {
-                // Engineer can build a city
-                actions.add(new BuildCityWithEngineerAction(unit, cityService));
+            if (unit.getType() == UnitType.ENGINEER) {
+                if (unit.getMobility() >= com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY) {
+                    // Engineer can build a city (always offer as fallback)
+                    actions.add(new BuildCityWithEngineerAction(unit, cityService));
+                }
+                // Engineer coastal city strategy: move toward coast if no coastal city
+                if (!state.hasCoastalCity()) {
+                    generateEngineerCoastalMoves(unit, state, nation, actions);
+                }
             }
             if (unit.getType() == UnitType.INFANTRY || unit.getType() == UnitType.TANK) {
-                generateSmartExpansionMoves(unit, state, nation, actions, true);
+                // Home island exploration priority
+                if (state.isOnHomeIsland(unit) && hasUnexploredHome) {
+                    generateHomeIslandExpansionMoves(unit, state, nation, actions, homeIslandId);
+                } else {
+                    generateSmartExpansionMoves(unit, state, nation, actions, true, false);
+                }
             }
         }
 
         // Naval expansion: idle naval units can explore water
         for (Unit unit : state.getIdleNavalUnits()) {
-            generateSmartExpansionMoves(unit, state, nation, actions, false);
+            generateSmartExpansionMoves(unit, state, nation, actions, false, false);
         }
 
         // Neutral city capture: send idle land units to free cities
         generateNeutralCityCaptureActions(state, nation, actions);
+
+        // Infantry move to coast for transport pickup
+        if (state.hasTransportCapability() && !hasUnexploredHome) {
+            generateMoveToCoastActions(state, nation, actions);
+        }
+    }
+
+    private void generateHomeIslandExpansionMoves(Unit unit, BotWorldState state, Nation nation,
+                                                    List<BotAction> actions, int homeIslandId) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        SectorCoords unitCoords = unit.getCoords();
+
+        // Find frontier targets only on the home island (land sectors)
+        List<SectorCoords> frontierTargets = new ArrayList<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!state.isExplored(coords)) continue;
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null || sector.isWater() || sector.getIsland() != homeIslandId) continue;
+                for (SectorCoords neighbour : coords.neighbours(gameSize)) {
+                    if (!state.isExplored(neighbour)) {
+                        frontierTargets.add(coords);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Sort by distance to unit, take nearest 4
+        frontierTargets.sort(Comparator.comparingInt(
+                c -> SectorCoords.distance(gameSize, unitCoords, c)));
+        int limit = Math.min(4, frontierTargets.size());
+        for (int i = 0; i < limit; i++) {
+            SectorCoords target = frontierTargets.get(i);
+            int distance = SectorCoords.distance(gameSize, unitCoords, target);
+            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService, true));
+        }
+
+        // Fallback: if no home island frontier, use normal expansion
+        if (frontierTargets.isEmpty()) {
+            generateSmartExpansionMoves(unit, state, nation, actions, true, false);
+        }
+    }
+
+    private void generateEngineerCoastalMoves(Unit unit, BotWorldState state, Nation nation,
+                                                List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        SectorCoords unitCoords = unit.getCoords();
+
+        List<SectorCoords> coastalSites = state.findCoastalBuildSites(2);
+        // Sort by distance to engineer, take nearest 3
+        coastalSites.sort(Comparator.comparingInt(
+                c -> SectorCoords.distance(gameSize, unitCoords, c)));
+        int limit = Math.min(3, coastalSites.size());
+        for (int i = 0; i < limit; i++) {
+            SectorCoords target = coastalSites.get(i);
+            int distance = SectorCoords.distance(gameSize, unitCoords, target);
+            actions.add(new MoveEngineerToCoastAction(unit, target, distance, nation, moveService));
+        }
+    }
+
+    private void generateMoveToCoastActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        List<SectorCoords> coastalPoints = state.getCoastalPickupPoints();
+        if (coastalPoints.isEmpty()) return;
+
+        for (Unit unit : state.getIdleLandUnits()) {
+            if (unit.getType() != UnitType.INFANTRY) continue;
+            // Only inland infantry on home island
+            Sector unitSector = world.getSectorOrNull(unit.getCoords());
+            if (unitSector == null || unitSector.isWater()) continue;
+            if (!state.isOnHomeIsland(unit)) continue;
+            if (world.isCoastal(unitSector)) continue; // already on coast
+
+            // Find nearest 2 coastal pickup points
+            coastalPoints.sort(Comparator.comparingInt(
+                    c -> SectorCoords.distance(gameSize, unit.getCoords(), c)));
+            int limit = Math.min(2, coastalPoints.size());
+            for (int i = 0; i < limit; i++) {
+                SectorCoords target = coastalPoints.get(i);
+                int distance = SectorCoords.distance(gameSize, unit.getCoords(), target);
+                boolean transportNearby = state.hasNearbyTransport(target, 6);
+                actions.add(new MoveToCoastForPickupAction(unit, target, distance, transportNearby, nation, moveService));
+            }
+        }
     }
 
     private void generateSmartExpansionMoves(Unit unit, BotWorldState state, Nation nation,
-                                              List<BotAction> actions, boolean isLand) {
+                                              List<BotAction> actions, boolean isLand, boolean isHomeIsland) {
         int gameSize = state.getGame().getGamesize();
         World world = state.getWorld();
         SectorCoords unitCoords = unit.getCoords();
@@ -140,7 +241,7 @@ public class BotActionGenerator {
         for (int i = 0; i < limit; i++) {
             SectorCoords target = frontierTargets.get(i);
             int distance = SectorCoords.distance(gameSize, unitCoords, target);
-            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService));
+            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService, isHomeIsland));
         }
 
         // Fallback: if no frontier found, use directional moves
@@ -384,6 +485,12 @@ public class BotActionGenerator {
         int gameSize = state.getGame().getGamesize();
 
         for (Unit myUnit : state.getIdleAirUnits()) {
+            // Zeppelins scout instead of attacking (attack=0 anyway)
+            if (myUnit.getType() == UnitType.ZEPPELIN) {
+                generateZeppelinScoutActions(myUnit, state, nation, actions);
+                continue;
+            }
+
             // Air combat: attack enemy units
             if (myUnit.getAttack() > 0) {
                 for (Unit enemy : enemies) {
@@ -401,6 +508,72 @@ public class BotActionGenerator {
                     if (distance <= myUnit.getMobility()) {
                         actions.add(new AttackWithAirAction(myUnit, enemyCity.getCoords(), nation, moveService, true));
                     }
+                }
+            }
+        }
+    }
+
+    private void generateZeppelinScoutActions(Unit zeppelin, BotWorldState state, Nation nation,
+                                                List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        SectorCoords zepCoords = zeppelin.getCoords();
+
+        // Find frontier targets: scouted sectors adjacent to unscouted (any terrain, zeppelins fly)
+        List<SectorCoords> frontierTargets = new ArrayList<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!state.isExplored(coords)) continue;
+                for (SectorCoords neighbour : coords.neighbours(gameSize)) {
+                    if (!state.isExplored(neighbour)) {
+                        frontierTargets.add(coords);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Fuel safety check for zeppelins that require fuel
+        boolean hasFuelConstraint = zeppelin.requiresFuel();
+
+        // Sort by distance, take nearest 4
+        frontierTargets.sort(Comparator.comparingInt(
+                c -> SectorCoords.distance(gameSize, zepCoords, c)));
+
+        int count = 0;
+        for (SectorCoords target : frontierTargets) {
+            if (count >= 4) break;
+            int distToTarget = SectorCoords.distance(gameSize, zepCoords, target);
+
+            if (hasFuelConstraint) {
+                // Fuel safety: ensure enough fuel to reach target and return to nearest city
+                int distFromTargetToCity = state.distanceToNearestCity(target);
+                if (zeppelin.getFuel() - distToTarget < distFromTargetToCity + 2) {
+                    continue; // Skip targets that would strand the zeppelin
+                }
+            }
+
+            actions.add(new ZeppelinScoutAction(zeppelin, target, distToTarget, false, nation, moveService));
+            count++;
+        }
+
+        // If no safe frontier targets or fuel is low, return to nearest city
+        if (count == 0 && hasFuelConstraint && zeppelin.getFuel() < zeppelin.getUnitBase().getMaxFuel() / 2) {
+            SectorCoords nearestCity = state.nearestCityCoords(zepCoords);
+            if (nearestCity != null) {
+                int dist = SectorCoords.distance(gameSize, zepCoords, nearestCity);
+                actions.add(new ZeppelinScoutAction(zeppelin, nearestCity, dist, true, nation, moveService));
+            }
+        }
+
+        // If no frontier at all (everything explored), fall back to directional moves
+        if (count == 0 && !hasFuelConstraint) {
+            // Use directional moves for zeppelins without fuel constraints
+            for (SectorCoords target : zepCoords.sectorsWithin(gameSize, 3, false)) {
+                int distance = SectorCoords.distance(gameSize, zepCoords, target);
+                if (distance == 3) {
+                    actions.add(new ZeppelinScoutAction(zeppelin, target, distance, false, nation, moveService));
                 }
             }
         }

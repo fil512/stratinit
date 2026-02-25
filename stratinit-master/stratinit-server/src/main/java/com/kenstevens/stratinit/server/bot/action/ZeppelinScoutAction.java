@@ -13,27 +13,22 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class MoveUnitToExpandAction implements BotAction {
-    private final Unit unit;
+public class ZeppelinScoutAction implements BotAction {
+    private final Unit zeppelin;
     private final SectorCoords target;
+    private final int distance;
+    private final boolean isReturnToCity;
     private final Nation nation;
     private final MoveService moveService;
-    private final int distance;
-    private final boolean isHomeIsland;
 
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService) {
-        this(unit, target, distance, nation, moveService, false);
-    }
-
-    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
-                                  Nation nation, MoveService moveService, boolean isHomeIsland) {
-        this.unit = unit;
+    public ZeppelinScoutAction(Unit zeppelin, SectorCoords target, int distance,
+                                boolean isReturnToCity, Nation nation, MoveService moveService) {
+        this.zeppelin = zeppelin;
         this.target = target;
         this.distance = distance;
+        this.isReturnToCity = isReturnToCity;
         this.nation = nation;
         this.moveService = moveService;
-        this.isHomeIsland = isHomeIsland;
     }
 
     @Override
@@ -43,23 +38,23 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight;
+        double utility = weights.expansionBaseWeight * weights.zeppelinScoutDesire;
         // Penalize distant targets
         utility -= distance * weights.distancePenalty;
-        // Early game bonus
+        // Early game scouting is more valuable
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        // Home island exploration bonus
-        if (isHomeIsland) {
-            utility += weights.homeIslandExplorationBonus;
+        // Returning to city for resupply is less desirable but necessary
+        if (isReturnToCity) {
+            utility *= 0.5;
         }
         return Math.max(0, utility);
     }
 
     @Override
     public boolean execute() {
-        SIUnit siUnit = new SIUnit(unit);
+        SIUnit siUnit = new SIUnit(zeppelin);
         Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), target);
         return result.isSuccess();
     }
@@ -71,11 +66,11 @@ public class MoveUnitToExpandAction implements BotAction {
 
     @Override
     public Integer getInvolvedUnitId() {
-        return unit.getId();
+        return zeppelin.getId();
     }
 
     @Override
     public String describe() {
-        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " toward " + target + " (expand)";
+        return (isReturnToCity ? "Zeppelin returning to city at " : "Zeppelin scouting toward ") + target;
     }
 }
