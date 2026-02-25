@@ -22,7 +22,8 @@ public class UnitStatisticsService {
     private UnitBuildAuditRepo unitBuildAuditRepo;
 
     public List<SIUnitLove> getGameUnitLove(int gameId) {
-        GameHistory game = gameHistoryRepo.findByGameId(gameId);
+        List<GameHistory> games = gameHistoryRepo.findByGameId(gameId);
+        GameHistory game = games.isEmpty() ? null : games.get(0);
         if (game == null) {
             return Collections.emptyList();
         }
@@ -44,7 +45,8 @@ public class UnitStatisticsService {
     }
 
     public List<SIUnitDayRow> getPlayerUnits(int gameId, UnitBaseType unitBaseType, String username) {
-        GameHistory game = gameHistoryRepo.findByGameId(gameId);
+        List<GameHistory> games = gameHistoryRepo.findByGameId(gameId);
+        GameHistory game = games.isEmpty() ? null : games.get(0);
         if (game == null) {
             return Collections.emptyList();
         }

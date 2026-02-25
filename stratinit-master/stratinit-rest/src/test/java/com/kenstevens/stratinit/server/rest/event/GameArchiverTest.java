@@ -30,7 +30,7 @@ public class GameArchiverTest extends TwoPlayerBase {
     @Test
     public void gameHistoryUpdated() {
         gameArchiver.archive(testGame);
-        GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId());
+        GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId()).get(0);
         assertNotNull(gameHistory);
         assertEquals(testGame.getStartTime(), gameHistory.getStartTime());
         assertEquals(testGame.getDuration(), gameHistory.getDuration());
@@ -43,7 +43,7 @@ public class GameArchiverTest extends TwoPlayerBase {
     @Test
     public void gameHistoryTeamUpdated() {
         gameArchiver.archive(testGame);
-        GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId());
+        GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId()).get(0);
         List<GameHistoryTeam> gameHistoryTeams = gameHistoryTeamRepo.findByGameHistory(gameHistory);
         assertEquals(2, gameHistoryTeams.size());
     }
@@ -51,7 +51,7 @@ public class GameArchiverTest extends TwoPlayerBase {
     @Test
     public void gameHistoryNationUpdated() {
         gameArchiver.archive(testGame);
-        GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId());
+        GameHistory gameHistory = gameHistoryRepo.findByGameId(testGame.getId()).get(0);
         List<GameHistoryTeam> gameHistoryTeams = gameHistoryTeamRepo.findByGameHistory(gameHistory);
         int i = 0;
         for (GameHistoryTeam gameHistoryTeam : gameHistoryTeams) {

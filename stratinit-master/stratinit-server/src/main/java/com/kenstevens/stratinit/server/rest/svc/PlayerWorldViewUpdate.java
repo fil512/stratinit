@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.rest.svc;
 
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.util.UpdateCalculator;
 import com.kenstevens.stratinit.dto.SIUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,11 @@ public class PlayerWorldViewUpdate {
 
 		Game game = nation.getGame();
 		siupdate.lastUpdated = game.getLastUpdated();
-		siupdate.tickIntervalMs = game.getUpdatePeriodMilliseconds();
+		siupdate.tickIntervalMs = UpdateCalculator.shrinkTime(game.isBlitz(), game.getUpdatePeriodMilliseconds());
+		siupdate.gameId = game.getId();
+		siupdate.gameName = game.getGamename();
+		siupdate.gameEnds = game.getEnds();
+		siupdate.blitz = game.isBlitz();
 
 		// TODO OPT instead of null, pass in world view, but then ensure all
 		// sectorViews that were touched by units are refreshed

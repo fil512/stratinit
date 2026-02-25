@@ -136,6 +136,10 @@ export interface SIUpdate {
   messages?: string[]
   lastUpdated: string | null
   tickIntervalMs: number
+  gameId: number
+  gameName: string
+  gameEnds: string | null
+  blitz: boolean
 }
 
 export interface SIUnitBase {
@@ -289,6 +293,23 @@ export interface SIGameHistory {
   gamesize: number
   startTime: string | null
   ends: string | null
+}
+
+export interface SIGameStats {
+  gameId: number
+  gamename: string
+  gamesize: number
+  startTime: string | null
+  ends: string | null
+  duration: number
+  blitz: boolean
+  nations: SINationStats[]
+}
+
+export interface SINationStats {
+  name: string
+  cities: number
+  power: number
 }
 
 export interface SINewsLogsDay {

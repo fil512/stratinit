@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getGameUnitLove, getPlayerUnits, getGamePlayers, getCompletedGames } from '../api/game'
+import { getGameUnitLove, getPlayerUnits, getGamePlayers, getCompletedGames, getGameDetail } from '../api/game'
 import { isLoggedIn } from '../api/auth'
-import type { SIUnitLove, SIUnitDayRow, SIGameHistory } from '../types/game'
+import type { SIUnitLove, SIUnitDayRow, SIGameHistory, SIGameStats } from '../types/game'
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
+  BarChart, Bar,
 } from 'recharts'
 
 const UNIT_BASE_TYPES = ['LAND', 'NAVY', 'AIR', 'TECH'] as const
@@ -18,11 +19,39 @@ const COLORS = [
   '#dc2626', '#059669', '#2563eb',
 ]
 
+const NATION_COLORS = ['#f59e0b', '#3b82f6', '#22c55e', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316']
+
+function formatDate(dateStr: string | null): string {
+  if (!dateStr) return '—'
+  const d = new Date(dateStr)
+  const month = d.getMonth() + 1
+  const day = d.getDate()
+  const hours = d.getHours()
+  const minutes = String(d.getMinutes()).padStart(2, '0')
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+  const h = hours % 12 || 12
+  return `${month}/${day} ${h}:${minutes} ${ampm}`
+}
+
+function formatDuration(startStr: string | null, endStr: string | null): string {
+  if (!startStr || !endStr) return '—'
+  const ms = new Date(endStr).getTime() - new Date(startStr).getTime()
+  const hours = Math.floor(ms / 3600000)
+  const minutes = Math.floor((ms % 3600000) / 60000)
+  if (hours >= 24) {
+    const days = Math.floor(hours / 24)
+    const remainingHours = hours % 24
+    return `${days}d ${remainingHours}h ${minutes}m`
+  }
+  return `${hours}h ${minutes}m`
+}
+
 export default function UnitStatsPage() {
   const { gameId: gameIdParam } = useParams<{ gameId: string }>()
   const navigate = useNavigate()
   const [games, setGames] = useState<SIGameHistory[]>([])
   const [selectedGameId, setSelectedGameId] = useState<number | null>(gameIdParam ? Number(gameIdParam) : null)
+  const [gameStats, setGameStats] = useState<SIGameStats | null>(null)
   const [unitLove, setUnitLove] = useState<SIUnitLove[]>([])
   const [players, setPlayers] = useState<string[]>([])
   const [selectedPlayer, setSelectedPlayer] = useState<string>('')
@@ -42,14 +71,17 @@ export default function UnitStatsPage() {
 
   useEffect(() => {
     if (selectedGameId == null) return
+    setGameStats(null)
     setUnitLove([])
     setPlayers([])
     setSelectedPlayer('')
     setPlayerData({})
     Promise.all([
+      getGameDetail(selectedGameId),
       getGameUnitLove(selectedGameId),
       getGamePlayers(selectedGameId),
-    ]).then(([love, playerNames]) => {
+    ]).then(([detail, love, playerNames]) => {
+      setGameStats(detail)
       setUnitLove(love)
       setPlayers(playerNames)
       if (playerNames.length > 0) {
@@ -128,7 +160,7 @@ export default function UnitStatsPage() {
 
   return (
     <div className="max-w-5xl mx-auto mt-6 px-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 56px)' }}>
-      <h1 className="text-2xl font-bold mb-4">Unit Statistics</h1>
+      <h1 className="text-2xl font-bold mb-4">Game Statistics</h1>
 
       <div className="mb-6">
         <label className="text-sm text-gray-400 mr-2">Game:</label>
@@ -151,6 +183,81 @@ export default function UnitStatsPage() {
         </select>
       </div>
 
+      {/* Game Summary */}
+      {gameStats && (
+        <div className="mb-8 p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <h2 className="text-xl font-bold mb-3 text-gray-100">{gameStats.gamename} <span className="text-gray-400 font-normal text-base">#{gameStats.gameId}</span></h2>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+            <div>
+              <div className="text-xs text-gray-500 uppercase">Players</div>
+              <div className="text-lg font-semibold">{gameStats.gamesize}</div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 uppercase">Type</div>
+              <div className="text-lg font-semibold">{gameStats.blitz ? 'Blitz' : 'Standard'}</div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 uppercase">Started</div>
+              <div className="text-sm">{formatDate(gameStats.startTime)}</div>
+            </div>
+            <div>
+              <div className="text-xs text-gray-500 uppercase">Ended</div>
+              <div className="text-sm">{formatDate(gameStats.ends)}</div>
+            </div>
+          </div>
+          <div className="text-sm text-gray-400">
+            Duration: {formatDuration(gameStats.startTime, gameStats.ends)}
+          </div>
+        </div>
+      )}
+
+      {/* Final Standings */}
+      {gameStats && gameStats.nations.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-3">Final Standings</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left text-xs text-gray-400 pb-2 border-b border-gray-700">#</th>
+                  <th className="text-left text-xs text-gray-400 pb-2 border-b border-gray-700">Nation</th>
+                  <th className="text-right text-xs text-gray-400 pb-2 border-b border-gray-700">Cities</th>
+                  <th className="text-right text-xs text-gray-400 pb-2 border-b border-gray-700">Power</th>
+                </tr>
+              </thead>
+              <tbody>
+                {gameStats.nations.map((n, i) => (
+                  <tr key={n.name} className={i === 0 ? 'text-yellow-300 font-semibold' : ''}>
+                    <td className="py-1.5 pr-2">{i + 1}</td>
+                    <td className="py-1.5">
+                      <span className="inline-block w-2.5 h-2.5 rounded-full mr-2" style={{ backgroundColor: NATION_COLORS[i % NATION_COLORS.length] }} />
+                      {n.name}
+                    </td>
+                    <td className="py-1.5 text-right tabular-nums">{n.cities}</td>
+                    <td className="py-1.5 text-right tabular-nums">{n.power}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={gameStats.nations} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis type="number" stroke="#9ca3af" />
+                <YAxis type="category" dataKey="name" stroke="#9ca3af" width={80} tick={{ fontSize: 12 }} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', color: '#f3f4f6' }}
+                />
+                <Bar dataKey="cities" name="Cities" fill="#f59e0b" />
+                <Bar dataKey="power" name="Power" fill="#3b82f6" />
+                <Legend />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {/* Unit Love */}
       {selectedGameId != null && pieData.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Unit Love</h2>
@@ -182,6 +289,7 @@ export default function UnitStatsPage() {
         </div>
       )}
 
+      {/* Player Unit Production */}
       {selectedGameId != null && players.length > 0 && (
         <>
           <div className="mb-4">
@@ -206,8 +314,8 @@ export default function UnitStatsPage() {
         </>
       )}
 
-      {selectedGameId != null && unitLove.length === 0 && !loading && (
-        <p className="text-gray-400">No unit data available for this game.</p>
+      {selectedGameId != null && unitLove.length === 0 && !gameStats && !loading && (
+        <p className="text-gray-400">No data available for this game.</p>
       )}
     </div>
   )

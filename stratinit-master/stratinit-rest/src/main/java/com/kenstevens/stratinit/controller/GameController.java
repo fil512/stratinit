@@ -184,6 +184,29 @@ public class GameController {
         return errorProcessor.processError(request.subject, request.stackTrace);
     }
 
+    @PostMapping(path = SIRestPaths.CREATE_BLITZ)
+    @Operation(summary = "Create a blitz game with 3 bots and start immediately")
+    public SIGame createBlitz() {
+        return requestProcessor.processNoGame(player -> {
+            Game game = gameService.createGame("Blitz-" + player.getUsername());
+            game.setBlitz(true);
+            game.setIslands(4);
+            gameService.merge(game);
+            Result<Nation> joinResult = gameService.joinGame(player, game.getId(), false);
+            if (!joinResult.isSuccess()) {
+                throw new StratInitException("Failed to join game: " + joinResult.toString());
+            }
+            for (int i = 0; i < 3; i++) {
+                Result<Nation> botResult = botService.addBotToGame(game.getId());
+                if (!botResult.isSuccess()) {
+                    throw new StratInitException("Failed to add bot: " + botResult.toString());
+                }
+            }
+            Game updatedGame = dataCache.getGameCache(game.getId()).getGame();
+            return new SIGame(updatedGame, false);
+        });
+    }
+
     @PostMapping(path = SIRestPaths.ADD_BOT)
     @Operation(summary = "Add a bot player to a game lobby")
     public SINation addBot(@Valid @RequestBody SetGameJson request) {

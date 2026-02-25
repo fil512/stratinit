@@ -151,7 +151,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const dispatchUpdate = useCallback((update: SIUpdate) => {
     dispatch({ type: 'SET_UPDATE', update })
-    setTickInfo(update.lastUpdated, update.tickIntervalMs)
+    setTickInfo(update.lastUpdated, update.tickIntervalMs, {
+      gameId: update.gameId,
+      gameName: update.gameName,
+      gameEnds: update.gameEnds,
+    })
   }, [setTickInfo])
 
   useEffect(() => {
@@ -236,10 +240,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const update = await gameApi.disbandUnits(selected)
       dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Disband failed')
     }
-  }, [getSelectedUnits])
+  }, [getSelectedUnits, showCommandError])
 
   const cancelSelectedMoves = useCallback(async () => {
     const selected = getSelectedUnits().filter(u => u.nextCoords !== null)
@@ -248,10 +252,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const update = await gameApi.cancelMove(selected)
       dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Cancel move failed')
     }
-  }, [getSelectedUnits])
+  }, [getSelectedUnits, showCommandError])
 
   const buildCityWithUnit = useCallback(async () => {
     const selected = getSelectedUnits().filter(u => u.type === 'ENGINEER')
@@ -260,10 +264,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const update = await gameApi.buildCity(selected)
       dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Build city failed')
     }
-  }, [getSelectedUnits])
+  }, [getSelectedUnits, showCommandError])
 
   const switchTerrainWithUnit = useCallback(async () => {
     const selected = getSelectedUnits().filter(u => u.type === 'ENGINEER')
@@ -272,10 +276,10 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const update = await gameApi.switchTerrain(selected)
       dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Switch terrain failed')
     }
-  }, [getSelectedUnits])
+  }, [getSelectedUnits, showCommandError])
 
   const cedeSelectedUnits = useCallback(async (nationId: number) => {
     const selected = getSelectedUnits()
@@ -284,19 +288,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const update = await gameApi.cedeUnits(selected, nationId)
       dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Cede units failed')
     }
-  }, [getSelectedUnits])
+  }, [getSelectedUnits, showCommandError])
 
   const cedeCityAt = useCallback(async (city: SICityUpdate, nationId: number) => {
     try {
       const update = await gameApi.cedeCity(city, nationId)
       dispatchUpdate(update)
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Cede city failed')
     }
-  }, [])
+  }, [showCommandError])
 
   const updateCityProduction = useCallback(async (
     city: SICityUpdate, field: CityFieldToUpdate, build: string,
@@ -309,28 +313,28 @@ export function GameProvider({ children }: { children: ReactNode }) {
     try {
       await gameApi.updateCity(updated)
       await refreshState()
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Update city failed')
     }
-  }, [refreshState])
+  }, [refreshState, showCommandError])
 
   const changeRelation = useCallback(async (nationId: number, relationType: RelationType) => {
     try {
       await gameApi.setRelation(nationId, relationType)
       await refreshState()
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Set relation failed')
     }
-  }, [refreshState])
+  }, [refreshState, showCommandError])
 
   const concedeGame = useCallback(async () => {
     try {
       const update = await gameApi.concede()
       dispatchUpdate(update)
-    } catch {
-      // Silently fail
+    } catch (err) {
+      showCommandError(err instanceof Error ? err.message : 'Concede failed')
     }
-  }, [])
+  }, [showCommandError])
 
   const getSectorAt = useCallback((x: number, y: number) => {
     return state.lookups?.sectorMap.get(coordKey(x, y))

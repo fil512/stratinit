@@ -38,6 +38,7 @@ public class StratInitUpdater {
 
     public void switchRelation(RelationPK relationPK) {
         eventUpdateFactory.getSwitchRelationEventUpdate(relationPK).update(relationPK.getGameId());
+        gameNotificationService.notifyGameUpdate(relationPK.getGameId(), -1);
     }
 
     public void disable(UnitSeenPK unitSeenPK) {
@@ -46,6 +47,7 @@ public class StratInitUpdater {
 
     public void updateUnit(Unit unit, Date date) {
         eventUpdateFactory.getUpdateUnitEventUpdate(unit, date).update(unit.getGameId());
+        gameNotificationService.notifyGameUpdate(unit.getGameId(), -1);
     }
 
     public void mapGame(Integer gameId) {

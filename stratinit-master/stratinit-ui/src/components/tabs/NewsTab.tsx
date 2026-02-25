@@ -1,6 +1,49 @@
 import { useState, useEffect } from 'react'
+import { useGame } from '../../context/GameContext'
 import * as gameApi from '../../api/game'
 import type { SINewsLogsDay } from '../../types/game'
+
+function GameResults() {
+  const { state } = useGame()
+  const { update } = state
+
+  if (!update) return null
+
+  const gameEnds = update.gameEnds
+  const ended = gameEnds ? new Date(gameEnds).getTime() <= Date.now() : false
+  if (!ended) return null
+
+  const nations = [...update.nations].sort((a, b) => {
+    if (b.cities !== a.cities) return b.cities - a.cities
+    return b.power - a.power
+  })
+
+  return (
+    <div className="mb-3 p-2 bg-gray-800 rounded border border-gray-600">
+      <h3 className="font-bold text-yellow-400 text-sm mb-1">Game Over</h3>
+      <table className="w-full text-xs">
+        <thead>
+          <tr className="text-gray-400">
+            <th className="text-left py-0.5">#</th>
+            <th className="text-left py-0.5">Nation</th>
+            <th className="text-right py-0.5">Cities</th>
+            <th className="text-right py-0.5">Power</th>
+          </tr>
+        </thead>
+        <tbody>
+          {nations.map((n, i) => (
+            <tr key={n.nationId} className={i === 0 ? 'text-yellow-300 font-semibold' : ''}>
+              <td className="py-0.5">{i + 1}</td>
+              <td className="py-0.5">{n.name}</td>
+              <td className="text-right py-0.5">{n.cities}</td>
+              <td className="text-right py-0.5">{n.power}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
 
 export default function NewsTab() {
   const [days, setDays] = useState<SINewsLogsDay[]>([])
@@ -19,11 +62,11 @@ export default function NewsTab() {
     return () => { cancelled = true }
   }, [])
 
-  if (loading) return <p className="text-xs text-gray-500">Loading news...</p>
-  if (days.length === 0) return <p className="text-xs text-gray-500">No news.</p>
-
   return (
     <div data-testid="news-log" className="space-y-3">
+      <GameResults />
+      {loading && <p className="text-xs text-gray-500">Loading news...</p>}
+      {!loading && days.length === 0 && <p className="text-xs text-gray-500">No news.</p>}
       {days.map(day => {
         const entries: { category: string; text: string }[] = []
 

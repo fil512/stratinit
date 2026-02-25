@@ -19,8 +19,10 @@ export default function SectorTab() {
   }
 
   const isMyCity = city && city.nationId === myNationId
+  const myNation = update.nations.find(n => n.nationId === myNationId)
+  const myTech = myNation?.tech ?? 0
   const buildableUnits = isMyCity
-    ? unitBases.filter(ub => ub.builtIn === city.type)
+    ? unitBases.filter(ub => ub.builtIn === city.type && ub.tech <= myTech)
     : []
 
   function handleBuildChange(field: CityFieldToUpdate, value: string) {

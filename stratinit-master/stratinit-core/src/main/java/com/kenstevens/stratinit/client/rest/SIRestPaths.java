@@ -50,5 +50,7 @@ public class SIRestPaths {
     public static final String STATS_PLAYER_UNITS = "/stats/player-units";
     public static final String STATS_GAMES = "/stats/games";
     public static final String STATS_PLAYERS = "/stats/players";
+    public static final String STATS_GAME_DETAIL = "/stats/game-detail";
     public static final String ADD_BOT = "/add-bot";
+    public static final String CREATE_BLITZ = "/create-blitz";
 }

@@ -2,7 +2,7 @@ import { apiFetch } from './client'
 import type {
   SIUpdate, SIUnitBase, SIUnit, SICityUpdate, SIRelation,
   SectorCoords, RelationType, SIGame, SINation, SIMessage, SINewsLogsDay,
-  SIPlayerRank, SITeamRank, SIUnitLove, SIUnitDayRow, SIGameHistory,
+  SIPlayerRank, SITeamRank, SIUnitLove, SIUnitDayRow, SIGameHistory, SIGameStats,
 } from '../types/game'
 
 export function setGame(gameId: number) {
@@ -125,6 +125,12 @@ export function concede() {
   return apiFetch<SIUpdate>('/stratinit/concede')
 }
 
+export function createBlitzGame() {
+  return apiFetch<SIGame>('/stratinit/create-blitz', {
+    method: 'POST',
+  })
+}
+
 export function addBot(gameId: number) {
   return apiFetch<SINation>('/stratinit/add-bot', {
     method: 'POST',
@@ -142,6 +148,10 @@ export function getTeamRankings() {
 
 export function getCompletedGames() {
   return apiFetch<SIGameHistory[]>('/stratinit/stats/games')
+}
+
+export function getGameDetail(gameId: number) {
+  return apiFetch<SIGameStats>(`/stratinit/stats/game-detail?gameId=${gameId}`)
 }
 
 export function getGamePlayers(gameId: number) {

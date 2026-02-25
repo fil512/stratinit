@@ -1,5 +1,52 @@
+import { useState, useEffect } from 'react'
 import { useGame } from '../../context/GameContext'
-import type { CityFieldToUpdate } from '../../types/game'
+import type { CityFieldToUpdate, SICityUpdate, SIUnitBase } from '../../types/game'
+
+function shrinkTime(blitz: boolean, ms: number): number {
+  if (!blitz) return ms
+  return (ms * 2) / (10 * 24)
+}
+
+function formatCountdown(ms: number): string {
+  if (ms <= 0) return '00:00:00'
+  const totalSeconds = Math.ceil(ms / 1000)
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = totalSeconds % 60
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+}
+
+function BuildProgress({ city, unitBase, blitz }: { city: SICityUpdate; unitBase: SIUnitBase | undefined; blitz: boolean }) {
+  const [now, setNow] = useState(Date.now())
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  if (!city.build || !unitBase || !city.lastUpdated) return null
+
+  const buildTimeMs = shrinkTime(blitz, unitBase.productionTime * 3600000)
+  const lastUpdatedMs = new Date(city.lastUpdated).getTime()
+  const elapsed = now - lastUpdatedMs
+  const elapsedInBuild = elapsed % buildTimeMs
+  const remaining = buildTimeMs - elapsedInBuild
+  const progress = Math.min(elapsedInBuild / buildTimeMs, 1)
+
+  return (
+    <div className="flex items-center gap-1.5 ml-1 min-w-0">
+      <div className="w-16 h-1.5 bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
+        <div
+          className="h-full bg-blue-500 rounded-full transition-[width] duration-1000 ease-linear"
+          style={{ width: `${progress * 100}%` }}
+        />
+      </div>
+      <span className="text-[10px] text-gray-400 font-mono tabular-nums flex-shrink-0">
+        {formatCountdown(remaining)}
+      </span>
+    </div>
+  )
+}
 
 export default function CitiesTab() {
   const { state, selectSector, updateCityProduction } = useGame()
@@ -8,6 +55,9 @@ export default function CitiesTab() {
   if (!update) return <p className="text-gray-500">No game loaded.</p>
 
   const myCities = update.cities.filter(c => c.nationId === update.nationId)
+  const myNation = update.nations.find(n => n.nationId === update.nationId)
+  const myTech = myNation?.tech ?? 0
+  const blitz = update.blitz ?? false
 
   if (myCities.length === 0) {
     return <p className="text-gray-500">No cities.</p>
@@ -22,7 +72,8 @@ export default function CitiesTab() {
     <div data-testid="cities-list" className="space-y-2">
       <h3 className="font-bold text-gray-300">Cities ({myCities.length})</h3>
       {myCities.map((city, i) => {
-        const buildable = unitBases.filter(ub => ub.builtIn === city.type)
+        const buildable = unitBases.filter(ub => ub.builtIn === city.type && ub.tech <= myTech)
+        const buildingUnit = city.build ? unitBases.find(ub => ub.type === city.build) : undefined
         return (
           <div
             key={`${city.coords.x},${city.coords.y}`}
@@ -30,10 +81,13 @@ export default function CitiesTab() {
             className="p-1 bg-gray-800 rounded text-xs"
           >
             <div
-              className="font-semibold cursor-pointer hover:text-blue-400"
+              className="flex items-center cursor-pointer hover:text-blue-400"
               onClick={() => selectSector(city.coords)}
             >
-              {city.type} ({city.coords.x}, {city.coords.y})
+              <span className="font-semibold">
+                {city.type} ({city.coords.x}, {city.coords.y})
+              </span>
+              <BuildProgress city={city} unitBase={buildingUnit} blitz={blitz} />
             </div>
             <div className="flex gap-2 mt-1">
               <label className="flex-1">
