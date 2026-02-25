@@ -313,6 +313,28 @@ export interface SINationStats {
   power: number
 }
 
+export interface SINationSnapshot {
+  tickNumber: number
+  nationName: string
+  cities: number
+  power: number
+  tech: number
+  commandPoints: number
+  capitalPoints: number
+}
+
+export interface SIGameEvent {
+  gameId: number
+  nationName: string | null
+  eventTime: string
+  source: string
+  eventType: string
+  description: string
+  x: number | null
+  y: number | null
+  detail: string | null
+}
+
 export interface SINewsLogsDay {
   day: number
   bulletins: SINewsBulletin[]

@@ -14,9 +14,11 @@ import com.kenstevens.stratinit.dto.SIUpdate;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.EventLogService;
 import com.kenstevens.stratinit.server.service.MessageService;
 import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.server.service.UnitService;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.server.svc.FogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +54,8 @@ public class NationSvc {
     private FogService fogService;
     @Autowired
     private PlayerWorldViewUpdate playerWorldViewUpdate;
+    @Autowired
+    private EventLogService eventLogService;
 
     public List<SINation> getNations(final Nation me, final boolean includePower) {
         List<Nation> nations = dataCache.getGameCache(me.getGameId())
@@ -122,6 +126,7 @@ public class NationSvc {
     }
 
     public Result<SIUpdate> concede(Nation nation) {
+        eventLogService.logUserEvent(nation, GameEventType.CONCEDE, "Conceded the game");
         List<City> cities = new ArrayList<>(cityDao.getCities(nation));
         List<Unit> units = new ArrayList<>(unitDao.getUnits(nation));
 

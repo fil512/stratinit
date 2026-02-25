@@ -4,14 +4,18 @@ import com.kenstevens.stratinit.client.model.GameHistory;
 import com.kenstevens.stratinit.client.model.GameHistoryNation;
 import com.kenstevens.stratinit.client.model.GameHistoryTeam;
 import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.client.model.audit.GameEventLog;
+import com.kenstevens.stratinit.client.model.audit.GameNationSnapshot;
 import com.kenstevens.stratinit.client.rest.SIRestPaths;
 import com.kenstevens.stratinit.dto.*;
 import com.kenstevens.stratinit.rank.TeamHelper;
 import com.kenstevens.stratinit.rank.TeamProvider;
 import com.kenstevens.stratinit.rank.TeamRanker;
+import com.kenstevens.stratinit.repo.GameEventLogRepo;
 import com.kenstevens.stratinit.repo.GameHistoryNationRepo;
 import com.kenstevens.stratinit.repo.GameHistoryRepo;
 import com.kenstevens.stratinit.repo.GameHistoryTeamRepo;
+import com.kenstevens.stratinit.repo.GameNationSnapshotRepo;
 import com.kenstevens.stratinit.server.rest.request.RequestProcessor;
 import com.kenstevens.stratinit.server.service.PlayerService;
 import com.kenstevens.stratinit.server.service.UnitStatisticsService;
@@ -45,6 +49,10 @@ public class RankingController {
     private GameHistoryNationRepo gameHistoryNationRepo;
     @Autowired
     private UnitStatisticsService unitStatisticsService;
+    @Autowired
+    private GameNationSnapshotRepo gameNationSnapshotRepo;
+    @Autowired
+    private GameEventLogRepo gameEventLogRepo;
 
     @GetMapping(path = SIRestPaths.LEADERBOARD)
     @Operation(summary = "Get player leaderboard sorted by wins")
@@ -148,6 +156,39 @@ public class RankingController {
                     .thenComparingInt(n -> -n.power));
             stats.nations = nations;
             return stats;
+        });
+    }
+
+    @GetMapping(path = SIRestPaths.STATS_GAME_TIMESERIES)
+    @Operation(summary = "Get time-series snapshots for a game (power, cities, tech over time)")
+    public List<SINationSnapshot> getGameTimeSeries(@RequestParam("gameId") int gameId) {
+        return requestProcessor.processNoGame(player -> {
+            List<GameNationSnapshot> snapshots = gameNationSnapshotRepo
+                    .findByGameIdOrderByTickNumberAscNationNameAsc(gameId);
+            return snapshots.stream()
+                    .map(s -> new SINationSnapshot(s.getTickNumber(), s.getNationName(),
+                            s.getCities(), s.getPower(), s.getTech(),
+                            s.getCommandPoints(), s.getCapitalPoints()))
+                    .collect(Collectors.toList());
+        });
+    }
+
+    @GetMapping(path = SIRestPaths.STATS_GAME_EVENTS)
+    @Operation(summary = "Get event log for a game")
+    public List<SIGameEvent> getGameEvents(@RequestParam("gameId") int gameId,
+                                           @RequestParam(value = "nationName", required = false) String nationName) {
+        return requestProcessor.processNoGame(player -> {
+            List<GameEventLog> events;
+            if (nationName != null && !nationName.isEmpty()) {
+                events = gameEventLogRepo.findByGameIdAndNationNameOrderByEventTimeDesc(gameId, nationName);
+            } else {
+                events = gameEventLogRepo.findByGameIdOrderByEventTimeDesc(gameId);
+            }
+            return events.stream()
+                    .map(e -> new SIGameEvent(e.getGameId(), e.getNationName(), e.getEventTime(),
+                            e.getSource().name(), e.getEventType().name(), e.getDescription(),
+                            e.getX(), e.getY(), e.getDetail()))
+                    .collect(Collectors.toList());
         });
     }
 }

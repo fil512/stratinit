@@ -6,8 +6,10 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.server.service.EventLogService;
 import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.service.UnitService;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.server.svc.CityBuilderService;
 import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.server.svc.IntegrityCheckerService;
@@ -45,8 +47,12 @@ public class GameStartupService {
     private CityBuilderService cityBuilderService;
     @Autowired
     private IntegrityCheckerService integrityCheckerService;
+    @Autowired
+    private EventLogService eventLogService;
 
     public void startGame(Game game, boolean fromEvent) {
+        eventLogService.logServerEvent(game.getId(), null, GameEventType.GAME_START,
+                "Game " + game.getGamename() + " started");
         initializeGameState(game, fromEvent);
         scheduleCityEvents(game);
         scheduleUnitEvents(game);

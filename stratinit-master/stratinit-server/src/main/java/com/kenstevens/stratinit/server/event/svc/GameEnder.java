@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dao.UnitDao;
 import com.kenstevens.stratinit.server.service.*;
+import com.kenstevens.stratinit.type.GameEventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,13 @@ public class GameEnder {
     private CityService cityService;
     @Autowired
     private GameArchiver gameArchiver;
+    @Autowired
+    private EventLogService eventLogService;
 
     public void endGame(Game game) {
         logger.info("Ending game " + game);
+        eventLogService.logServerEvent(game.getId(), null, GameEventType.GAME_END,
+                "Game " + game.getGamename() + " ended");
         gameArchiver.archive(game);
         gameService.score(game);
         removeUnitsSeen(game);

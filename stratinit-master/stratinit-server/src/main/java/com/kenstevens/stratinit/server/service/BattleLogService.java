@@ -4,6 +4,7 @@ import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.dao.LogDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.server.rest.svc.GameNotificationService;
+import com.kenstevens.stratinit.type.GameEventType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,8 @@ public class BattleLogService {
     private NationDao nationDao;
     @Autowired
     private GameNotificationService gameNotificationService;
+    @Autowired
+    private EventLogService eventLogService;
 
     public void save(BattleLog battleLog) {
         logDao.save(battleLog);
@@ -25,6 +28,13 @@ public class BattleLogService {
             nationDao.markCacheModified(defender);
         }
         int gameId = battleLog.getAttacker().getGameId();
+        String attackerName = battleLog.getAttacker().getName();
+        String defenderName = defender != null ? defender.getName() : null;
+        GameEventType eventType = (battleLog instanceof CityNukedBattleLog) ? GameEventType.NUKE
+                : (battleLog instanceof CityCapturedBattleLog) ? GameEventType.CITY_CAPTURE
+                : GameEventType.BATTLE;
+        String desc = attackerName + " attacks" + (defenderName != null ? " " + defenderName : "") + " at " + battleLog.getCoords();
+        eventLogService.logServerEvent(gameId, attackerName, eventType, desc, battleLog.getCoords());
         gameNotificationService.notifyBattle(gameId, battleLog.getCoords());
     }
 

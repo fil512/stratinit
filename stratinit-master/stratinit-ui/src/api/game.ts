@@ -3,6 +3,7 @@ import type {
   SIUpdate, SIUnitBase, SIUnit, SICityUpdate, SIRelation,
   SectorCoords, RelationType, SIGame, SINation, SIMessage, SINewsLogsDay,
   SIPlayerRank, SITeamRank, SIUnitLove, SIUnitDayRow, SIGameHistory, SIGameStats,
+  SINationSnapshot, SIGameEvent,
 } from '../types/game'
 
 export function setGame(gameId: number) {
@@ -164,4 +165,14 @@ export function getGameUnitLove(gameId: number) {
 
 export function getPlayerUnits(gameId: number, unitBaseType: string, username: string) {
   return apiFetch<SIUnitDayRow[]>(`/stratinit/stats/player-units?gameId=${gameId}&unitBaseType=${unitBaseType}&username=${encodeURIComponent(username)}`)
+}
+
+export function getGameTimeSeries(gameId: number) {
+  return apiFetch<SINationSnapshot[]>(`/stratinit/stats/game-timeseries?gameId=${gameId}`)
+}
+
+export function getGameEvents(gameId: number, nationName?: string) {
+  let url = `/stratinit/stats/game-events?gameId=${gameId}`
+  if (nationName) url += `&nationName=${encodeURIComponent(nationName)}`
+  return apiFetch<SIGameEvent[]>(url)
 }

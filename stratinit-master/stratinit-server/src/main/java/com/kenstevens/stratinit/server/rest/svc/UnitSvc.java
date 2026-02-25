@@ -17,7 +17,9 @@ import com.kenstevens.stratinit.server.rest.move.UnitCommandFactory;
 import com.kenstevens.stratinit.server.rest.move.UnitsCede;
 import com.kenstevens.stratinit.server.rest.request.WriteProcessor;
 import com.kenstevens.stratinit.server.rest.request.write.TerrainSwitcher;
+import com.kenstevens.stratinit.server.service.EventLogService;
 import com.kenstevens.stratinit.server.svc.MoveService;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +52,8 @@ public class UnitSvc {
 	private CityService cityService;
 	@Autowired
 	private TerrainSwitcher terrainSwitcher;
+	@Autowired
+	private EventLogService eventLogService;
 
 	public List<SIUnit> getUnits(final Nation nation) {
 		List<Unit> units = unitDao.getUnits(nation);
@@ -86,6 +90,8 @@ public class UnitSvc {
 	}
 
 	public Result<SIUpdate> disbandUnits(Nation nation, List<SIUnit> siunits) {
+		eventLogService.logUserEvent(nation, GameEventType.DISBAND,
+				"Disband " + siunits.size() + " unit(s)");
 		Result<None> result = Result.falseInstance();
 		for (SIUnit siunit : siunits) {
 			int unitId = siunit.id;
@@ -103,6 +109,8 @@ public class UnitSvc {
 	}
 
 	public Result<SIUpdate> cancelMoveOrders(Nation nation, List<SIUnit> siunits) {
+		eventLogService.logUserEvent(nation, GameEventType.CANCEL_MOVE,
+				"Cancel move for " + siunits.size() + " unit(s)");
 		Result<None> result = Result.falseInstance();
 		for (SIUnit siunit : siunits) {
 			int unitId = siunit.id;
@@ -122,18 +130,22 @@ public class UnitSvc {
 	}
 
 	public Result<SIUpdate> cedeUnits(Nation nation, List<SIUnit> siunits, int nationId) {
+		eventLogService.logUserEvent(nation, GameEventType.CEDE_UNIT,
+				"Cede " + siunits.size() + " unit(s) to nation " + nationId);
 		WorldView worldView = sectorService.getAllWorldView(nation);
 		UnitsCede unitCeder = unitCommandFactory.getSIUnitsCede(nation, siunits, nationId, worldView);
 		return unitCeder.cede();
 	}
 
 	public Result<SIUpdate> buildCity(Nation nation, List<SIUnit> siunits) {
+		eventLogService.logUserEvent(nation, GameEventType.BUILD_CITY, "Build city");
 		return executeBuild(nation, siunits,
 				com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY,
 				unit -> cityService.establishCity(unit));
 	}
 
 	public Result<SIUpdate> switchTerrain(Nation nation, List<SIUnit> siunits) {
+		eventLogService.logUserEvent(nation, GameEventType.SWITCH_TERRAIN, "Switch terrain");
 		return executeBuild(nation, siunits,
 				com.kenstevens.stratinit.type.Constants.MOB_COST_TO_SWITCH_TERRAIN,
 				unit -> terrainSwitcher.switchTerrain(unit));
@@ -187,6 +199,8 @@ public class UnitSvc {
 	}
 
 	public WriteProcessor.CommandResult<SIUpdate> moveUnits(Nation nation, List<SIUnit> units, SectorCoords target) {
+		eventLogService.logUserEvent(nation, GameEventType.MOVE,
+				"Move " + units.size() + " unit(s) to " + target, target);
 		Result<MoveCost> result = moveService.move(nation, units, target);
 		int commandCost = com.kenstevens.stratinit.type.Constants.COMMAND_COST;
 		MoveCost moveCost = result.getValue();

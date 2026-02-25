@@ -6,9 +6,12 @@ import com.kenstevens.stratinit.client.model.Player;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.config.IServerConfig;
+import com.kenstevens.stratinit.client.model.audit.GameNationSnapshot;
 import com.kenstevens.stratinit.dao.*;
 import com.kenstevens.stratinit.dto.SITeam;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.repo.GameNationSnapshotRepo;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.server.event.svc.EventQueue;
 import com.kenstevens.stratinit.server.rest.mail.MailService;
 import com.kenstevens.stratinit.server.rest.mail.MailTemplateLibrary;
@@ -57,6 +60,10 @@ public class GameService {
     private PlayerDao playerDao;
     @Autowired
     private FogService fogService;
+    @Autowired
+    private GameNationSnapshotRepo gameNationSnapshotRepo;
+    @Autowired
+    private EventLogService eventLogService;
 
     @Autowired
     public GameService(IServerConfig serverConfig) {
@@ -339,6 +346,35 @@ public class GameService {
         updateCommandPoints(game);
         updateTech(game, lastUpdated);
         setGameLastUpdated(game, lastUpdated);
+        takeSnapshots(game, lastUpdated);
+        int tickNumber = computeTickNumber(game, lastUpdated);
+        eventLogService.logServerEvent(game.getId(), null, GameEventType.TECH_UPDATE,
+                "Tick " + tickNumber + " completed");
+    }
+
+    private void takeSnapshots(Game game, Date lastUpdated) {
+        int tickNumber = computeTickNumber(game, lastUpdated);
+        List<Nation> nations = nationDao.getNations(game);
+        for (Nation nation : nations) {
+            int cities = cityDao.getNumberOfCities(nation);
+            int power = unitService.getPower(nation);
+            double tech = nation.getTech();
+            int commandPoints = nation.getCommandPoints();
+            int capitalPoints = getCapitalPoints(nation);
+            GameNationSnapshot snapshot = new GameNationSnapshot(
+                    game.getId(), nation.getName(), lastUpdated, tickNumber,
+                    cities, power, tech, commandPoints, capitalPoints);
+            gameNationSnapshotRepo.save(snapshot);
+        }
+    }
+
+    private int computeTickNumber(Game game, Date lastUpdated) {
+        Date startTime = game.getStartTime();
+        if (startTime == null) {
+            return 0;
+        }
+        long elapsed = lastUpdated.getTime() - startTime.getTime();
+        return (int) (elapsed / (Constants.TECH_UPDATE_INTERVAL_SECONDS * 1000L));
     }
 
     public List<SITeam> getTeams(Game game) {

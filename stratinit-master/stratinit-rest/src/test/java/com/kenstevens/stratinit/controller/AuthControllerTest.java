@@ -105,6 +105,14 @@ class AuthControllerTest {
     @MockBean
     private com.kenstevens.stratinit.repo.GameHistoryRepo gameHistoryRepo;
     @MockBean
+    private com.kenstevens.stratinit.repo.GameHistoryTeamRepo gameHistoryTeamRepo;
+    @MockBean
+    private com.kenstevens.stratinit.repo.GameHistoryNationRepo gameHistoryNationRepo;
+    @MockBean
+    private com.kenstevens.stratinit.repo.GameNationSnapshotRepo gameNationSnapshotRepo;
+    @MockBean
+    private com.kenstevens.stratinit.repo.GameEventLogRepo gameEventLogRepo;
+    @MockBean
     private com.kenstevens.stratinit.server.rest.session.StratInitSessionManager sessionManager;
     @MockBean
     private com.kenstevens.stratinit.server.service.UnitStatisticsService unitStatisticsService;

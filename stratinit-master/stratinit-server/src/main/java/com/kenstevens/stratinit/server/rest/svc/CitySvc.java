@@ -11,7 +11,9 @@ import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.remote.None;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.server.service.EventLogService;
 import com.kenstevens.stratinit.server.service.UnitService;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,8 @@ public class CitySvc {
 	private UnitService unitService;
 	@Autowired
 	private PlayerWorldViewUpdate playerWorldViewUpdate;
+	@Autowired
+	private EventLogService eventLogService;
 
 	public List<SICityUpdate> getCities(Nation nation) {
 		List<City> cities = cityDao.getCities(nation);
@@ -67,6 +71,8 @@ public class CitySvc {
 	}
 
 	public Result<SIUpdate> cedeCity(Nation nation, SICityUpdate sicity, int nationId, Game game) {
+		eventLogService.logUserEvent(nation, GameEventType.CEDE_CITY,
+				"Cede city at " + sicity.coords + " to nation " + nationId, sicity.coords);
 		SectorCoords coords = sicity.coords;
 		City city = cityDao.getCity(nation, coords);
 		if (city == null) {

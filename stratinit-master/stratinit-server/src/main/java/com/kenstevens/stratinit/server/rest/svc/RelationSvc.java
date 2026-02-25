@@ -6,7 +6,9 @@ import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.RelationDao;
 import com.kenstevens.stratinit.dto.SIRelation;
 import com.kenstevens.stratinit.remote.Result;
+import com.kenstevens.stratinit.server.service.EventLogService;
 import com.kenstevens.stratinit.server.service.RelationService;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.type.RelationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class RelationSvc {
     private NationDao nationDao;
     @Autowired
     private RelationService relationService;
+    @Autowired
+    private EventLogService eventLogService;
 
     public List<SIRelation> getRelations(Nation nation) {
         Collection<Relation> relations = relationDao.getMyRelations(nation);
@@ -38,6 +42,8 @@ public class RelationSvc {
     }
 
     public Result<SIRelation> setRelation(Nation nation, int nationId, RelationType relationType) {
+        eventLogService.logUserEvent(nation, GameEventType.SET_RELATION,
+                "Set relation to nation " + nationId + " as " + relationType);
         Nation target = nationDao.getNation(nation.getGameId(), nationId);
         if (nation.equals(target)) {
             return new Result<>("You may not change relations with yourself", false);

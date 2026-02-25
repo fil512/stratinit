@@ -14,6 +14,7 @@ import com.kenstevens.stratinit.server.rest.move.*;
 import com.kenstevens.stratinit.server.svc.FogService;
 import com.kenstevens.stratinit.supply.Supply;
 import com.kenstevens.stratinit.type.Constants;
+import com.kenstevens.stratinit.type.GameEventType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.UnitType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class UnitService {
     private FogService fogService;
     @Autowired
     private MoveSeenFactory moveSeenFactory;
+    @Autowired
+    private EventLogService eventLogService;
 
     public void updateUnit(Unit unit, Date buildTime) {
         Sector sector = dataCache.getWorld(unit.getGameId()).getSectorOrNull(
@@ -113,6 +116,8 @@ public class UnitService {
         unitDao.save(unit);
         UnitBuildAudit unitBuildAudit = new UnitBuildAudit(unit);
         unitDao.save(unitBuildAudit);
+        eventLogService.logServerEvent(nation.getGameId(), nation.getName(),
+                GameEventType.BUILD_UNIT, "Built " + unitType + " at " + coords, coords);
 
         eventQueue.schedule(unit);
         MoveSeen moveSeen = moveSeenFactory.newMoveSeen(nation);

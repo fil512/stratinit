@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getGameUnitLove, getPlayerUnits, getGamePlayers, getCompletedGames, getGameDetail } from '../api/game'
+import { getGameUnitLove, getPlayerUnits, getGamePlayers, getCompletedGames, getGameDetail, getGameTimeSeries } from '../api/game'
 import { isLoggedIn } from '../api/auth'
-import type { SIUnitLove, SIUnitDayRow, SIGameHistory, SIGameStats } from '../types/game'
+import type { SIUnitLove, SIUnitDayRow, SIGameHistory, SIGameStats, SINationSnapshot } from '../types/game'
 import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  BarChart, Bar,
+  BarChart, Bar, LineChart, Line,
 } from 'recharts'
 
 const UNIT_BASE_TYPES = ['LAND', 'NAVY', 'AIR', 'TECH'] as const
@@ -56,6 +56,7 @@ export default function UnitStatsPage() {
   const [players, setPlayers] = useState<string[]>([])
   const [selectedPlayer, setSelectedPlayer] = useState<string>('')
   const [playerData, setPlayerData] = useState<Record<string, SIUnitDayRow[]>>({})
+  const [snapshots, setSnapshots] = useState<SINationSnapshot[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -76,14 +77,17 @@ export default function UnitStatsPage() {
     setPlayers([])
     setSelectedPlayer('')
     setPlayerData({})
+    setSnapshots([])
     Promise.all([
       getGameDetail(selectedGameId),
       getGameUnitLove(selectedGameId),
       getGamePlayers(selectedGameId),
-    ]).then(([detail, love, playerNames]) => {
+      getGameTimeSeries(selectedGameId),
+    ]).then(([detail, love, playerNames, snapshotData]) => {
       setGameStats(detail)
       setUnitLove(love)
       setPlayers(playerNames)
+      setSnapshots(snapshotData)
       if (playerNames.length > 0) {
         setSelectedPlayer(playerNames[0])
       }
@@ -115,6 +119,54 @@ export default function UnitStatsPage() {
   }
 
   const pieData = unitLove.filter(u => u.love > 0)
+
+  // Pivot snapshots into per-tick rows with nation names as keys
+  function buildTimeSeriesData(metric: keyof SINationSnapshot) {
+    const tickMap = new Map<number, Record<string, number>>()
+    const nationNames = new Set<string>()
+    for (const s of snapshots) {
+      nationNames.add(s.nationName)
+      if (!tickMap.has(s.tickNumber)) {
+        tickMap.set(s.tickNumber, { tick: s.tickNumber })
+      }
+      const row = tickMap.get(s.tickNumber)!
+      row[s.nationName] = s[metric] as number
+    }
+    const data = Array.from(tickMap.values()).sort((a, b) => a.tick - b.tick)
+    return { data, nationNames: Array.from(nationNames).sort() }
+  }
+
+  function renderTimeSeriesChart(title: string, metric: keyof SINationSnapshot) {
+    const { data, nationNames } = buildTimeSeriesData(metric)
+    if (data.length === 0) return null
+    return (
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold mb-2">{title}</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <XAxis dataKey="tick" stroke="#9ca3af" label={{ value: 'Tick', position: 'insideBottom', offset: -5, fill: '#9ca3af' }} />
+            <YAxis stroke="#9ca3af" />
+            <Tooltip
+              contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', color: '#f3f4f6' }}
+              labelFormatter={(label) => `Tick ${label}`}
+            />
+            <Legend />
+            {nationNames.map((name, i) => (
+              <Line
+                key={name}
+                type="monotone"
+                dataKey={name}
+                stroke={NATION_COLORS[i % NATION_COLORS.length]}
+                dot={false}
+                strokeWidth={2}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    )
+  }
 
   function getUnitTypeKeys(rows: SIUnitDayRow[]): string[] {
     if (rows.length === 0) return []
@@ -254,6 +306,16 @@ export default function UnitStatsPage() {
               </BarChart>
             </ResponsiveContainer>
           </div>
+        </div>
+      )}
+
+      {/* Time Series Charts */}
+      {snapshots.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-3">Game Progress</h2>
+          {renderTimeSeriesChart('Cities Over Time', 'cities')}
+          {renderTimeSeriesChart('Power Over Time', 'power')}
+          {renderTimeSeriesChart('Tech Over Time', 'tech')}
         </div>
       )}
 
