@@ -20,9 +20,9 @@ import java.util.List;
 @Service
 public class BotService {
     private static final String[] BOT_NAMES = {
-            "Bot Alpha", "Bot Bravo", "Bot Charlie", "Bot Delta",
-            "Bot Echo", "Bot Foxtrot", "Bot Golf", "Bot Hotel",
-            "Bot India", "Bot Juliet"
+            "Genghis Bot", "Attila the Fun", "Napolebot", "Cleopatra CPU",
+            "Alexander the Great.exe", "Julius Seize-r", "Robo Hood", "Joan of Arc Reactor",
+            "Charlemagne.ai", "Frederick the Bot"
     };
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
