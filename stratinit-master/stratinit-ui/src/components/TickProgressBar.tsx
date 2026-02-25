@@ -26,14 +26,21 @@ export default function TickProgressBar() {
   const game = tickInfo.game
   const gameEnded = game?.gameEnds ? new Date(game.gameEnds).getTime() <= now : false
 
+  const powerColor = game && game.power >= game.powerLimit ? 'text-red-400' : 'text-gray-400'
+
   if (gameEnded) {
     return (
       <div className="flex items-center gap-2" data-testid="tick-progress-bar">
         {game && (
-          <span className="text-xs text-gray-400">
-            {game.gameName} #{game.gameId}
-            <span className="text-red-400 font-semibold"> ended {formatEnds(game.gameEnds!)}</span>
-          </span>
+          <>
+            <span className={`text-xs ${powerColor}`}>
+              Pwr: {game.power}/{game.powerLimit}
+            </span>
+            <span className="text-xs text-gray-400">
+              {game.gameName} #{game.gameId}
+              <span className="text-red-400 font-semibold"> ended {formatEnds(game.gameEnds!)}</span>
+            </span>
+          </>
         )}
       </div>
     )
@@ -42,12 +49,17 @@ export default function TickProgressBar() {
   return (
     <div className="flex items-center gap-2" data-testid="tick-progress-bar">
       {game && (
-        <span className="text-xs text-gray-400">
-          {game.gameName} #{game.gameId}
-          {game.gameEnds && (
-            <span className="text-gray-500"> ends {formatEnds(game.gameEnds)}</span>
-          )}
-        </span>
+        <>
+          <span className={`text-xs ${powerColor}`}>
+            Pwr: {game.power}/{game.powerLimit}
+          </span>
+          <span className="text-xs text-gray-400">
+            {game.gameName} #{game.gameId}
+            {game.gameEnds && (
+              <span className="text-gray-500"> ends {formatEnds(game.gameEnds)}</span>
+            )}
+          </span>
+        </>
       )}
     </div>
   )

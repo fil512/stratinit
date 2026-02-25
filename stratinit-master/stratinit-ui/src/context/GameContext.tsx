@@ -159,10 +159,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
 
   const dispatchUpdate = useCallback((update: SIUpdate) => {
     dispatch({ type: 'SET_UPDATE', update })
+    const myNation = update.nations.find(n => n.nationId === update.nationId)
     setTickInfo(update.lastUpdated, update.tickIntervalMs, {
       gameId: update.gameId,
       gameName: update.gameName,
       gameEnds: update.gameEnds,
+      power: myNation?.power ?? 0,
+      powerLimit: (myNation?.cities ?? 0) * 5,
     })
   }, [setTickInfo])
 

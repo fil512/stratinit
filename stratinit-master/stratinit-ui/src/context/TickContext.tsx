@@ -4,6 +4,8 @@ interface GameInfo {
   gameId: number
   gameName: string
   gameEnds: string | null
+  power: number
+  powerLimit: number
 }
 
 interface TickInfo {
