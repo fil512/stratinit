@@ -50,6 +50,7 @@ public class EventSchedulerImpl implements EventScheduler {
     public void scheduleInitialEvents() {
         if (!schedulerEnabled) {
             logger.info("Scheduler disabled.");
+            serverStatus.setRunning();
             return;
         }
 
@@ -61,6 +62,7 @@ public class EventSchedulerImpl implements EventScheduler {
             } else {
                 logger.error("Unable to start scheduler.  Is another server already running?");
             }
+            serverStatus.setRunning();
             return;
         }
 

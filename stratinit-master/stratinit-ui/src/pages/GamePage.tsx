@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
 import { useGameSocket, GameSocketMessage } from '../hooks/useGameSocket'
 import { getJoinedGames, addBot } from '../api/game'
@@ -68,13 +68,20 @@ function GameLobby({ game }: { game: SIGame }) {
 export default function GamePage() {
   const { gameId } = useParams<{ gameId: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const { state, initGame, refreshState, commandError } = useGame()
   const gameIdNum = gameId ? parseInt(gameId, 10) : null
   const [lobbyGame, setLobbyGame] = useState<SIGame | null>(null)
+  const passedGame = (location.state as { game?: SIGame } | null)?.game
 
   useEffect(() => {
     if (!gameIdNum) {
       navigate('/games')
+      return
+    }
+    // If navigated with a pre-loaded game (e.g. from Quick Blitz), use it directly
+    if (passedGame && passedGame.id === gameIdNum && passedGame.mapped) {
+      initGame(gameIdNum, passedGame.size)
       return
     }
     getJoinedGames().then(games => {
@@ -91,7 +98,7 @@ export default function GamePage() {
     }).catch(() => {
       navigate('/login')
     })
-  }, [gameIdNum, navigate, initGame])
+  }, [gameIdNum, navigate, initGame, passedGame])
 
   // Poll for game updates while in lobby
   useEffect(() => {
@@ -108,7 +115,7 @@ export default function GamePage() {
           }
         }
       }).catch(() => {})
-    }, 5000)
+    }, 2000)
     return () => clearInterval(interval)
   }, [lobbyGame, gameIdNum, initGame])
 

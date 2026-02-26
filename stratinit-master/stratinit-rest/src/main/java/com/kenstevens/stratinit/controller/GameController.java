@@ -197,11 +197,14 @@ public class GameController {
                 throw new StratInitException("Failed to join game: " + joinResult.toString());
             }
             for (int i = 0; i < 7; i++) {
-                Result<Nation> botResult = botService.addBotToGame(game.getId());
+                Result<Nation> botResult = botService.addBotToGame(game.getId(), false);
                 if (!botResult.isSuccess()) {
                     throw new StratInitException("Failed to add bot: " + botResult.toString());
                 }
             }
+            // Start the game after all bots have joined
+            game = dataCache.getGameCache(game.getId()).getGame();
+            botService.startBotGameImmediately(game);
             Game updatedGame = dataCache.getGameCache(game.getId()).getGame();
             return new SIGame(updatedGame, false);
         });

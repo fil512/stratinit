@@ -34,7 +34,7 @@ export default function GameListPage() {
     setCreatingBlitz(true)
     try {
       const game = await createBlitzGame()
-      navigate(`/game/${game.id}`)
+      navigate(`/game/${game.id}`, { state: { game } })
     } catch {
       setCreatingBlitz(false)
     }

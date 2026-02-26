@@ -41,6 +41,10 @@ public class BotService {
     private IServerConfig serverConfig;
 
     public Result<Nation> addBotToGame(int gameId) {
+        return addBotToGame(gameId, true);
+    }
+
+    public Result<Nation> addBotToGame(int gameId, boolean autoStart) {
         Game game = gameDao.findGame(gameId);
         if (game == null) {
             return new Result<>("No game with id [" + gameId + "].", false);
@@ -66,19 +70,21 @@ public class BotService {
 
         logger.info("Bot '{}' joined game #{}", botName, gameId);
 
-        // Reload game after join (player count may have changed)
-        game = gameDao.findGame(gameId);
+        if (autoStart) {
+            // Reload game after join (player count may have changed)
+            game = gameDao.findGame(gameId);
 
-        // Once we have enough players, start the bot game immediately
-        // (skip the normal scheduling delay)
-        if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule() && !game.isMapped()) {
-            startBotGameImmediately(game);
+            // Once we have enough players, start the bot game immediately
+            // (skip the normal scheduling delay)
+            if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule() && !game.isMapped()) {
+                startBotGameImmediately(game);
+            }
         }
 
         return result;
     }
 
-    private void startBotGameImmediately(Game game) {
+    public void startBotGameImmediately(Game game) {
         logger.info("Starting bot game #{} immediately", game.getId());
         // Set start time to now so the game starts right away
         java.util.Date now = new java.util.Date();

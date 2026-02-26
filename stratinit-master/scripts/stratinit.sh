@@ -6,6 +6,7 @@ BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 # REST server (Spring Boot on port 8081)
 REST_PID="/tmp/stratinit-rest.pid"
 REST_LOG="/tmp/stratinit-rest.log"
+LOCK_FILE="$BASE_DIR/stratinit-rest/StratInit.lock"
 
 # UI dev server (Vite on port 5173)
 UI_DIR="$BASE_DIR/stratinit-ui"
@@ -162,6 +163,10 @@ do_start() {
 do_stop() {
     stop_process "UI dev server" "$UI_PID" 5
     stop_process "REST server" "$REST_PID" 30
+    if [ -f "$LOCK_FILE" ]; then
+        rm -f "$LOCK_FILE"
+        echo "Removed stale lock file"
+    fi
 }
 
 do_restart() {
