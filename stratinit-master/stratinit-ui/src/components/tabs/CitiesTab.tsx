@@ -3,7 +3,7 @@ import { useGame } from '../../context/GameContext'
 import type { CityFieldToUpdate, SICityUpdate, SIUnitBase } from '../../types/game'
 import { shrinkTime, formatCountdown } from '../../utils/time'
 
-function BuildProgress({ city, unitBase, blitz }: { city: SICityUpdate; unitBase: SIUnitBase | undefined; blitz: boolean }) {
+function BuildProgress({ city, unitBase, blitz, powerBlocked }: { city: SICityUpdate; unitBase: SIUnitBase | undefined; blitz: boolean; powerBlocked: boolean }) {
   const [now, setNow] = useState(Date.now())
 
   useEffect(() => {
@@ -12,11 +12,14 @@ function BuildProgress({ city, unitBase, blitz }: { city: SICityUpdate; unitBase
   }, [])
 
   if (!city.build || !unitBase || !city.lastUpdated) return null
+  if (city.build === 'BASE' || city.build === 'RESEARCH') return null
 
   const buildTimeMs = shrinkTime(blitz, unitBase.productionTime * 3600000)
   const lastUpdatedMs = new Date(city.lastUpdated).getTime()
   const elapsed = now - lastUpdatedMs
-  const elapsedInBuild = elapsed % buildTimeMs
+  const blocked = powerBlocked && elapsed >= buildTimeMs
+
+  const elapsedInBuild = blocked ? buildTimeMs : elapsed % buildTimeMs
   const remaining = buildTimeMs - elapsedInBuild
   const progress = Math.min(elapsedInBuild / buildTimeMs, 1)
 
@@ -24,13 +27,17 @@ function BuildProgress({ city, unitBase, blitz }: { city: SICityUpdate; unitBase
     <div className="flex items-center gap-1.5 ml-1 min-w-0">
       <div className="w-16 h-1.5 bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
         <div
-          className="h-full bg-blue-500 rounded-full transition-[width] duration-1000 ease-linear"
+          className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${blocked ? 'bg-red-500' : 'bg-blue-500'}`}
           style={{ width: `${progress * 100}%` }}
         />
       </div>
-      <span className="text-[10px] text-gray-400 font-mono tabular-nums flex-shrink-0">
-        {formatCountdown(remaining)}
-      </span>
+      {blocked ? (
+        <span className="text-[10px] text-red-400 font-mono tabular-nums flex-shrink-0">POWER</span>
+      ) : (
+        <span className="text-[10px] text-gray-400 font-mono tabular-nums flex-shrink-0">
+          {formatCountdown(remaining)}
+        </span>
+      )}
     </div>
   )
 }
@@ -45,6 +52,9 @@ export default function CitiesTab() {
   const myNation = update.nations.find(n => n.nationId === update.nationId)
   const myTech = myNation?.tech ?? 0
   const blitz = update.blitz ?? false
+  const power = myNation?.power ?? 0
+  const cityCount = myNation?.cities ?? myCities.length
+  const powerBlocked = power >= cityCount * 5
 
   if (myCities.length === 0) {
     return <p className="text-gray-500">No cities.</p>
@@ -74,7 +84,7 @@ export default function CitiesTab() {
               <span className="font-semibold">
                 {city.type} ({city.coords.x}, {city.coords.y})
               </span>
-              <BuildProgress city={city} unitBase={buildingUnit} blitz={blitz} />
+              <BuildProgress city={city} unitBase={buildingUnit} blitz={blitz} powerBlocked={powerBlocked} />
             </div>
             <div className="flex gap-2 mt-1">
               <label className="flex-1">
