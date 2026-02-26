@@ -13,4 +13,8 @@ public interface BotAction {
     default Integer getInvolvedUnitId() {
         return null;
     }
+
+    default String getInvolvedCityKey() {
+        return null;
+    }
 }

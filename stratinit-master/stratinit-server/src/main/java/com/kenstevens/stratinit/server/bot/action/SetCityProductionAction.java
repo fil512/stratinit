@@ -31,8 +31,8 @@ public class SetCityProductionAction implements BotAction {
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.economyBaseWeight;
 
-        // Don't change if already building this
-        if (city.getBuild() == unitType) {
+        // Don't change if already building something
+        if (city.getBuild() != null) {
             return 0;
         }
 
@@ -87,6 +87,11 @@ public class SetCityProductionAction implements BotAction {
     @Override
     public int getCommandPointCost() {
         return 0;
+    }
+
+    @Override
+    public String getInvolvedCityKey() {
+        return city.getCoords().x + "," + city.getCoords().y;
     }
 
     @Override

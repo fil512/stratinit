@@ -52,6 +52,7 @@ public class BotExecutor {
 
         // Greedily execute top actions until CP exhausted
         Set<Integer> usedUnitIds = new HashSet<>();
+        Set<String> usedCityKeys = new HashSet<>();
         int actionsExecuted = 0;
 
         for (ScoredAction sa : scored) {
@@ -67,12 +68,20 @@ public class BotExecutor {
                 continue;
             }
 
+            String cityKey = action.getInvolvedCityKey();
+            if (cityKey != null && usedCityKeys.contains(cityKey)) {
+                continue;
+            }
+
             try {
                 boolean success = action.execute();
                 if (success) {
                     actionsExecuted++;
                     if (unitId != null) {
                         usedUnitIds.add(unitId);
+                    }
+                    if (cityKey != null) {
+                        usedCityKeys.add(cityKey);
                     }
                     if (cost > 0) {
                         nation.decreaseCommandPoints(cost);
