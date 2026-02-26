@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class MoveUnitsTest extends WithUnitsBase {
     public static final SectorCoords PORT = new SectorCoords(2, 2);
@@ -198,6 +198,21 @@ public class MoveUnitsTest extends WithUnitsBase {
         assertResult(result);
         assertEquals(dest.getCoords(), PORT, result.toString());
         assertEquals(MoveType.MOVE, result.getValue().getMoveType());
+    }
+
+    @Test
+    public void fogMoveStopsAtWater() {
+        // testInfantry starts at (0,0) with extra mobility
+        // Target (7,0) is on island 1, in fog of war (never scouted)
+        // Path toward target crosses water at x=3
+        // Infantry should move to the land edge (x=2) and stop — not just set
+        // a move order, which would leak hidden information (revealing the path
+        // is blocked by water in fog)
+        List<SIUnit> units = makeUnitList(testInfantry);
+        Result<MoveCost> result = moveUnits(units, new SectorCoords(7, 0));
+        assertResult(result);
+        assertNotEquals(START_COORDS, testInfantry.getCoords());
+        assertEquals(2, testInfantry.getCoords().x, "Infantry should stop at land edge before water at x=3");
     }
 
     @Test

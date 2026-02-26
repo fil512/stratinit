@@ -18,7 +18,9 @@ import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Scope("prototype")
 @Component
@@ -154,16 +156,24 @@ public class UnitsMove {
         List<SectorCoords> path = getPath();
         if (path == null) {
             if (unknown) {
-                // Destination is in fog of war — accept the move order; the unit
-                // will advance as far as possible once the path becomes known.
-                for (Unit unit : unitsToMove) {
-                    setUnitMove(unit, unitsToMove.getTargetCoords());
+                // Destination is in fog of war and no complete path exists.
+                // Instead of just setting a move order (which leaks hidden info
+                // by revealing the path is blocked), advance as far as possible
+                // toward the target. The unit will stop when it discovers
+                // impassable terrain.
+                path = getDirectPathTowardTarget();
+                if (path == null || path.isEmpty()) {
+                    for (Unit unit : unitsToMove) {
+                        setUnitMove(unit, unitsToMove.getTargetCoords());
+                    }
+                    return new Result<None>("Move order set toward unexplored territory.", true);
                 }
-                return new Result<None>("Move order set toward unexplored territory.", true);
+                // Fall through to move along the direct path
+            } else {
+                return new Result<None>("Unable to find a path from "
+                        + unitsToMove.getFirstCoords() + " to "
+                        + unitsToMove.getTargetCoords(), false);
             }
-            return new Result<None>("Unable to find a path from "
-                    + unitsToMove.getFirstCoords() + " to "
-                    + unitsToMove.getTargetCoords(), false);
         }
         if (path.isEmpty()) {
             // Already there
@@ -447,6 +457,45 @@ private Result<None> moveUnitsAlongPath(List<SectorCoords> path) {
                         unitsToMove.getAttackType(), unit, targetSector,
                         worldView, moveSeen);
         return unitAttacker.attack();
+    }
+
+    private List<SectorCoords> getDirectPathTowardTarget() {
+        SectorCoords current = unitsToMove.getFirstCoords();
+        SectorCoords target = unitsToMove.getTargetCoords();
+        int size = worldView.size();
+        List<SectorCoords> path = new ArrayList<>();
+        Set<SectorCoords> visited = new HashSet<>();
+        visited.add(current);
+
+        int maxSteps = unitsToMove.getFirstUnit().getMobility() + 1;
+        int currentDist = SectorCoords.distance(size, current, target);
+
+        for (int step = 0; step < maxSteps && currentDist > 0; step++) {
+            List<SectorCoords> neighbors = current.neighbours(size);
+            SectorCoords best = null;
+            int bestDist = currentDist;
+
+            for (SectorCoords neighbor : neighbors) {
+                if (visited.contains(neighbor)) {
+                    continue;
+                }
+                int dist = SectorCoords.distance(size, neighbor, target);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    best = neighbor;
+                }
+            }
+
+            if (best == null) {
+                break;
+            }
+            path.add(best);
+            visited.add(best);
+            current = best;
+            currentDist = bestDist;
+        }
+
+        return path;
     }
 
     private List<SectorCoords> getPath() {

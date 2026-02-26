@@ -62,6 +62,10 @@ Dependencies flow downward.
 - **springdoc-openapi 2.8.5** — Swagger UI at `/swagger-ui.html`, OpenAPI spec at `/v3/api-docs`
 - **JUnit 5** + Mockito for testing
 
+## Rules
+
+- **No information leaks through fog of war.** No game mechanic — movement, pathfinding, error messages, or result codes — may reveal hidden information about unseen sectors. If a unit cannot complete a move due to terrain in fog, it must advance as far as possible and stop, rather than failing outright or behaving differently than it would with full visibility. The player must not be able to infer anything about unseen map state from the game's response.
+
 ## Key Architecture Patterns
 
 **Request processing flow:** Domain controllers (`GameController`, `UnitController`, `CityController`, `NationController`, `MessageController`, `RankingController`, `ProfileController`, `AdminController`) return domain DTOs directly (not wrapped in `Result<T>`). Reads go through `RequestProcessor`, writes through `WriteProcessor` (synchronizes on `GameCache`, checks command points, sets lastAction, sends WebSocket notifications, unwraps `Result<T>` from service lambdas — throwing `CommandFailedException` on failure). Error handling is centralized in `GlobalExceptionHandler` (`@RestControllerAdvice`): business errors → HTTP 400, unexpected errors → HTTP 500. Exception hierarchy: `StratInitException` → `CommandFailedException`, `InsufficientCommandPointsException`. Controllers are thin lambdas delegating to REST service classes (`UnitSvc`, `CitySvc`, `NationSvc`, `RelationSvc`) for request-level orchestration. Deeper business logic lives in domain service classes (`UnitService`, `CityService`, `RelationService`, `SectorService`, etc.) in `stratinit-server/.../server/service/`.
