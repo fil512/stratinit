@@ -1,11 +1,21 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
 
+export interface PowerBreakdownEntry {
+  type: string
+  abbrev: string
+  count: number
+  prodTime: number
+  subtotal: number  // count * prodTime
+}
+
 interface GameInfo {
   gameId: number
   gameName: string
   gameEnds: string | null
   power: number
   powerLimit: number
+  powerBreakdown: PowerBreakdownEntry[]
+  cities: number
 }
 
 interface TickInfo {

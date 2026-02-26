@@ -1,6 +1,7 @@
 import { useRef, useEffect, useCallback, useState } from 'react'
 import { useGame } from '../context/GameContext'
 import type { RelationType, UnitType, CityType, SISector, SIUnit, SIUnitBase, SICityUpdate } from '../types/game'
+import { UNIT_SHORT } from '../types/units'
 
 // Zoom bounds and animation
 const MIN_CELL = 8
@@ -10,15 +11,6 @@ const LERP_SPEED = 0.18      // per-frame exponential lerp (0–1, higher = fast
 const SNAP_THRESHOLD = 0.003 // fraction of target to snap
 const DRAG_THRESHOLD = 4
 const SQRT3 = Math.sqrt(3)
-
-// Unit type abbreviations
-const UNIT_SHORT: Record<UnitType, string> = {
-  INFANTRY: 'In', TANK: 'Tk', PATROL: 'Pt', TRANSPORT: 'Tp', DESTROYER: 'DD',
-  SUPPLY: 'Su', BATTLESHIP: 'BB', SUBMARINE: 'SS', CARRIER: 'CV', CRUISER: 'CA',
-  FIGHTER: 'Fi', NAVAL_BOMBER: 'NB', HELICOPTER: 'He', HEAVY_BOMBER: 'HB',
-  ZEPPELIN: 'Zp', SATELLITE: 'Sa', ICBM_1: 'M1', ICBM_2: 'M2', ICBM_3: 'M3',
-  BASE: 'Ba', ENGINEER: 'En', CARGO_PLANE: 'CP', RESEARCH: 'Rs',
-}
 
 const CITY_SHORT: Record<CityType, string> = {
   FORT: 'FT', PORT: 'PT', AIRPORT: 'AP', TECH: 'TC', BASE: 'BA',

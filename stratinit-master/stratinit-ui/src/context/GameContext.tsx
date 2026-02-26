@@ -1,10 +1,11 @@
-import { createContext, useContext, useReducer, useCallback, useEffect, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useCallback, useEffect, useRef, type ReactNode } from 'react'
 import type {
   SIUpdate, SIUnitBase, SISector, SIUnit, SICityUpdate, SectorCoords,
-  RelationType, CityFieldToUpdate,
+  RelationType, CityFieldToUpdate, UnitType,
 } from '../types/game'
 import * as gameApi from '../api/game'
-import { useTick } from './TickContext'
+import { useTick, type PowerBreakdownEntry } from './TickContext'
+import { UNIT_SHORT } from '../types/units'
 
 // Coordinate key helper
 function coordKey(x: number, y: number): string {
@@ -156,16 +157,43 @@ const GameContext = createContext<GameContextValue | null>(null)
 export function GameProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { setTickInfo, clearTickInfo } = useTick()
+  const unitBasesRef = useRef(state.unitBases)
+  unitBasesRef.current = state.unitBases
 
   const dispatchUpdate = useCallback((update: SIUpdate) => {
     dispatch({ type: 'SET_UPDATE', update })
     const myNation = update.nations.find(n => n.nationId === update.nationId)
+    const cities = myNation?.cities ?? 0
+
+    // Compute power breakdown from units and unitBases
+    const unitBaseLookup = new Map(unitBasesRef.current.map(ub => [ub.type, ub]))
+    const countsByType = new Map<UnitType, number>()
+    for (const u of update.units) {
+      if (u.type === 'ZEPPELIN') continue
+      countsByType.set(u.type, (countsByType.get(u.type) ?? 0) + 1)
+    }
+    const powerBreakdown: PowerBreakdownEntry[] = []
+    for (const [type, count] of countsByType) {
+      const ub = unitBaseLookup.get(type)
+      if (!ub) continue
+      powerBreakdown.push({
+        type,
+        abbrev: UNIT_SHORT[type],
+        count,
+        prodTime: ub.productionTime,
+        subtotal: count * ub.productionTime,
+      })
+    }
+    powerBreakdown.sort((a, b) => b.subtotal - a.subtotal)
+
     setTickInfo(update.lastUpdated, update.tickIntervalMs, {
       gameId: update.gameId,
       gameName: update.gameName,
       gameEnds: update.gameEnds,
       power: myNation?.power ?? 0,
-      powerLimit: (myNation?.cities ?? 0) * 5,
+      powerLimit: cities * 5,
+      powerBreakdown,
+      cities,
     })
   }, [setTickInfo])
 
