@@ -147,6 +147,9 @@ public class UnitsMove {
         if (!moveResult.isSuccess()) {
             return moveResult;
         }
+        if (unitsToMove.isEmpty()) {
+            return moveResult;
+        }
 
         List<SectorCoords> path = getPath();
         if (path == null) {
@@ -176,12 +179,14 @@ public class UnitsMove {
         for (Unit unit : partialMoveUnits) {
             if (unit.isAlive() && !unit.getCoords().equals(target)) {
                 setUnitMove(unit, target);
-                moveResult.addMessage(unit + " moved as far as possible. Move order set.");
+                moveResult.setSuccess(true);
+                moveResult.addMessage("Move order set.");
             }
         }
     }
 
-    private Result<None> moveUnitsAlongPath(List<SectorCoords> path) {
+
+private Result<None> moveUnitsAlongPath(List<SectorCoords> path) {
         Result<None> retval = Result.falseInstance();
         for (SectorCoords coords : path) {
             Result<None> moveUnitsOneSectorResult = moveUnitsOneSector(coords);
@@ -250,24 +255,40 @@ public class UnitsMove {
                 moveResult.addMessage("Some units out of range.  Setting move order on those units.");
             }
         } else {
-            // All units are out of range. Separate truly blocked from those that
-            // can advance partway this turn.
+            // All units are out of current range. Separate into three groups:
+            // 1) trulyBlocked: can't enter the target terrain at all
+            // 2) zeroMobUnits: can enter but have 0 mobility — just set move order
+            // 3) partialMoveUnits: can enter and have some mobility — advance partway
             List<Unit> trulyBlocked = new ArrayList<>();
+            List<Unit> zeroMobUnits = new ArrayList<>();
             partialMoveUnits = new ArrayList<>();
             for (Unit unit : unitsOutOfRange) {
-                if (couldMoveTo(unit)) {
-                    partialMoveUnits.add(unit);
-                } else {
+                if (!couldMoveTo(unit)) {
                     trulyBlocked.add(unit);
+                } else if (unit.getMobility() <= 0) {
+                    zeroMobUnits.add(unit);
+                } else {
+                    partialMoveUnits.add(unit);
                 }
             }
-            // Only remove truly blocked units; keep partial-move units so they can
-            // advance along the path as far as their mobility allows this turn
-            remove(trulyBlocked);
+            // Set move orders on zero-mobility units directly (they can't move this turn)
+            SectorCoords targetCoords = unitsToMove.getTargetCoords();
+            for (Unit unit : zeroMobUnits) {
+                setUnitMove(unit, targetCoords);
+            }
+            // Remove truly blocked and zero-mob units; keep partial-move units
+            // so they can advance along the path as far as their mobility allows
+            List<Unit> toRemove = new ArrayList<>(trulyBlocked);
+            toRemove.addAll(zeroMobUnits);
+            remove(toRemove);
             clearMoveOrder();
             if (unitsToMove.isEmpty()) {
-                moveResult.setSuccess(false);
-                moveResult.addMessages(unitsOutOfRangeResult.getMessages());
+                if (!zeroMobUnits.isEmpty()) {
+                    moveResult.addMessage("Move order set.");
+                } else {
+                    moveResult.setSuccess(false);
+                    moveResult.addMessages(unitsOutOfRangeResult.getMessages());
+                }
             }
         }
     }
@@ -292,13 +313,8 @@ public class UnitsMove {
 
     private boolean couldMoveTo(Unit unit) {
         Movement movement = new Movement(unit, worldView);
-        Result<None> result = movement.inMaxRange(unit,
-                targetSector.getCoords());
-        if (result.isSuccess()) {
-            result.and(movement.canEnter(unitsToMove.getAttackType(),
-                    targetSector, unit, unknown));
-        }
-        return result.isSuccess();
+        return movement.canEnter(unitsToMove.getAttackType(),
+                targetSector, unit, unknown).isSuccess();
     }
 
     private void setUnitMove(Unit unit, SectorCoords targetCoords) {

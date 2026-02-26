@@ -25,17 +25,21 @@ public class MoveUnitsTest extends WithUnitsBase {
 
     @Test
     public void unitInsufMob() {
+        // Target is in fog of war — move order should be set even though
+        // the unit can't reach it this turn
         List<SIUnit> units = makeUnitList(testInfantry);
         Result<MoveCost> result = moveUnits(units, new SectorCoords(5, 5));
-        assertFalseResult(result);
+        assertResult(result);
     }
 
     @Test
     public void unitInsufFuel() {
+        // Target is in fog of war — move order should be set even though
+        // the unit doesn't have enough fuel to reach it this turn
         List<SIUnit> units = makeUnitList(testHelicopter);
         testHelicopter.setFuel(5);
         Result<MoveCost> result = moveUnits(units, new SectorCoords(5, 5));
-        assertFalseResult(result);
+        assertResult(result);
     }
 
     @Test

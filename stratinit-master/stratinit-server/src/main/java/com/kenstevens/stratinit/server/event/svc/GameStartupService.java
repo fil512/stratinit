@@ -25,6 +25,7 @@ import java.util.List;
 
 @Service
 public class GameStartupService {
+    private static final int MAX_MISSED_UPDATES = 10;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -91,6 +92,12 @@ public class GameStartupService {
                 city.setLastUpdated(game.getStartTime());
             } else {
                 UpdateManager updateManager = new UpdateManager(city);
+                if (updateManager.missedUpdates() > MAX_MISSED_UPDATES) {
+                    logger.info("City at {},{} has {} missed updates, skipping catch-up",
+                            city.getCoords().x, city.getCoords().y, updateManager.missedUpdates());
+                    city.setLastUpdated(new Date());
+                    continue;
+                }
                 while (updateManager.missedUpdates() > 0) {
                     Date nextMissedBuildTime = updateManager
                             .getNextMissedBuildTime();
@@ -161,6 +168,10 @@ public class GameStartupService {
 
         for (Unit unit : new ArrayList<>(units)) {
             UpdateManager updateManager = new UpdateManager(unit);
+            if (updateManager.missedUpdates() > MAX_MISSED_UPDATES) {
+                unit.setLastUpdated(new Date());
+                continue;
+            }
             while (updateManager.missedUpdates() > 0) {
                 Date nextMissedBuildTime = updateManager
                         .getNextMissedBuildTime();

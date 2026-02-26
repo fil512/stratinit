@@ -41,7 +41,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
                 UnitType.INFANTRY);
         inf.setMobility(0);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), S01);
-        assertFalseResult(result);
+        assertResult(result);
         assertEquals(S00, inf.getCoords());
         assertNotNull(inf.getUnitMove());
     }
@@ -55,7 +55,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
         Result<MoveCost> result = moveUnits(makeUnitList(inf), NO_SUPPLY_DEST);
-        assertFalseResult(result);
+        assertResult(result);
         assertEquals(NO_SUPPLY, inf.getCoords());
         assertNotNull(inf.getUnitMove(), result.toString());
     }
@@ -69,7 +69,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
         Supply supply = new Supply(worldView);
         assertFalse(supply.inSupply(inf));
         Result<MoveCost> result = moveUnits(makeUnitList(inf), NO_SUPPLY_DEST);
-        assertFalseResult(result);
+        assertResult(result);
         assertEquals(NO_SUPPLY, inf.getCoords());
         assertNotNull(inf.getUnitMove(), result.toString());
     }
@@ -80,7 +80,7 @@ public class UnitMoveTest extends BaseStratInitControllerTest {
                 UnitType.INFANTRY);
         inf.setMobility(0);
         Result<MoveCost> result = moveUnits(makeUnitList(inf), S02);
-        assertFalseResult(result);
+        assertResult(result);
         assertEquals(S00, inf.getCoords());
         assertNotNull(inf.getUnitMove());
     }
