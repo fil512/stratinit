@@ -228,6 +228,7 @@ function drawMap(p: DrawParams) {
   }
 
   // Supply lines — dotted lines from each of my units to nearest supply source
+  const outOfSupplyCoords = new Set<string>()
   if (cs >= 16) {
     const SUPPLY_RADIUS = 6
     // Collect supply source game coords
@@ -241,39 +242,10 @@ function drawMap(p: DrawParams) {
       }
     }
 
-    ctx.save()
-    ctx.setLineDash([Math.max(2, cs * 0.1), Math.max(2, cs * 0.1)])
-    ctx.lineWidth = Math.max(0.5, cs * 0.03)
-
-    for (const unit of update.units) {
-      if (unit.nationId !== update.nationId) continue
-      const ub = unitBaseMap.get(unit.type)
-      if (!ub || !ub.requiresSupply) continue
-      // Air units use fuel, not ground supply
-      if (ub.requiresFuel) continue
-
-      // Pick the right supply sources for this unit category
-      const sources = ub.builtIn === 'PORT' ? navySupplySources : landSupplySources
-      if (sources.length === 0) continue
-
-      // Find nearest supply source within SUPPLY_RADIUS
-      let bestSrc: [number, number] | null = null
-      let bestDist = Infinity
-      for (const [sx, sy] of sources) {
-        const d = hexDistWrapped(unit.coords.x, unit.coords.y, sx, sy, bs)
-        if (d > 0 && d <= SUPPLY_RADIUS && d < bestDist) {
-          bestDist = d
-          bestSrc = [sx, sy]
-        }
-      }
-      if (!bestSrc) continue
-
-      // Draw line for each visible copy of the unit's hex
-      const isNavy = ub.builtIn === 'PORT'
-      ctx.strokeStyle = isNavy ? 'rgba(0, 136, 255, 0.5)' : 'rgba(0, 255, 136, 0.5)'
-
-      const [fromCol, fromRow] = gameToColRow(unit.coords.x, unit.coords.y, bs)
-      const [toCol, toRow] = gameToColRow(bestSrc[0], bestSrc[1], bs)
+    // Helper to draw a dotted supply line between two game coords
+    const drawSupplyLine = (fromGx: number, fromGy: number, toGx: number, toGy: number) => {
+      const [fromCol, fromRow] = gameToColRow(fromGx, fromGy, bs)
+      const [toCol, toRow] = gameToColRow(toGx, toGy, bs)
 
       const nMin = Math.floor((colMin - fromCol) / bs) - 1
       const nMax = Math.ceil((colMax - fromCol) / bs) + 1
@@ -302,6 +274,95 @@ function drawMap(p: DrawParams) {
           const [dstX, dstY] = screenPos(bestDstCol, bestDstRow)
           ctx.beginPath(); ctx.moveTo(srcX, srcY); ctx.lineTo(dstX, dstY); ctx.stroke()
         }
+      }
+    }
+
+    ctx.save()
+    ctx.setLineDash([Math.max(2, cs * 0.1), Math.max(2, cs * 0.1)])
+    ctx.lineWidth = Math.max(0.5, cs * 0.03)
+
+    // Draw supply lines from units that require supply to their nearest source
+    for (const unit of update.units) {
+      if (unit.nationId !== update.nationId) continue
+      const ub = unitBaseMap.get(unit.type)
+      if (!ub || !ub.requiresSupply) continue
+      // Air units use fuel, not ground supply
+      if (ub.requiresFuel) continue
+
+      // Pick the right supply sources for this unit category
+      const sources = ub.builtIn === 'PORT' ? navySupplySources : landSupplySources
+      if (sources.length === 0) {
+        outOfSupplyCoords.add(`${unit.coords.x},${unit.coords.y}`)
+        continue
+      }
+
+      // Find nearest supply source within SUPPLY_RADIUS
+      let bestSrc: [number, number] | null = null
+      let bestDist = Infinity
+      for (const [sx, sy] of sources) {
+        const d = hexDistWrapped(unit.coords.x, unit.coords.y, sx, sy, bs)
+        if (d > 0 && d <= SUPPLY_RADIUS && d < bestDist) {
+          bestDist = d
+          bestSrc = [sx, sy]
+        }
+      }
+      if (!bestSrc) {
+        outOfSupplyCoords.add(`${unit.coords.x},${unit.coords.y}`)
+        continue
+      }
+
+      const isNavy = ub.builtIn === 'PORT'
+      ctx.strokeStyle = isNavy ? 'rgba(0, 136, 255, 0.5)' : 'rgba(0, 255, 136, 0.5)'
+      drawSupplyLine(unit.coords.x, unit.coords.y, bestSrc[0], bestSrc[1])
+    }
+
+    // Draw supply chain lines from supply-providing units to their nearest city/port
+    const SUPPLY_UNIT_TYPES: Set<UnitType> = new Set(['SUPPLY' as UnitType, 'TRANSPORT' as UnitType, 'ENGINEER' as UnitType])
+    for (const unit of update.units) {
+      if (unit.nationId !== update.nationId) continue
+      if (!SUPPLY_UNIT_TYPES.has(unit.type)) continue
+
+      // Determine if this unit provides land or navy supply based on its sector
+      const unitKey = `${unit.coords.x},${unit.coords.y}`
+      const unitSector = lookups.sectorMap.get(unitKey)
+      const isNavySupplier = unitSector?.suppliesNavy ?? false
+      const isLandSupplier = unitSector?.suppliesLand ?? false
+      if (!isNavySupplier && !isLandSupplier) continue
+
+      // Find nearest supply source excluding own coords
+      const sources = isNavySupplier ? navySupplySources : landSupplySources
+      let bestSrc: [number, number] | null = null
+      let bestDist = Infinity
+      for (const [sx, sy] of sources) {
+        if (sx === unit.coords.x && sy === unit.coords.y) continue
+        const d = hexDistWrapped(unit.coords.x, unit.coords.y, sx, sy, bs)
+        if (d > 0 && d <= SUPPLY_RADIUS && d < bestDist) {
+          bestDist = d
+          bestSrc = [sx, sy]
+        }
+      }
+      if (!bestSrc) continue
+
+      ctx.strokeStyle = isNavySupplier ? 'rgba(0, 136, 255, 0.5)' : 'rgba(0, 255, 136, 0.5)'
+      drawSupplyLine(unit.coords.x, unit.coords.y, bestSrc[0], bestSrc[1])
+    }
+
+    ctx.restore()
+  }
+
+  // Red border on out-of-supply units
+  if (outOfSupplyCoords.size > 0 && cs >= 16) {
+    ctx.save()
+    ctx.strokeStyle = 'rgba(255, 0, 0, 0.7)'
+    ctx.lineWidth = 1.5
+    for (let col = colMin; col <= colMax; col++) {
+      for (let row = rowMin; row <= rowMax; row++) {
+        const gx = wrapCoord(col, bs)
+        const gy = bs - 1 - wrapCoord(row, bs)
+        if (!outOfSupplyCoords.has(`${gx},${gy}`)) continue
+        const [cx, cy] = screenPos(col, row)
+        drawHex(ctx, cx, cy, r * 0.6)
+        ctx.stroke()
       }
     }
     ctx.restore()

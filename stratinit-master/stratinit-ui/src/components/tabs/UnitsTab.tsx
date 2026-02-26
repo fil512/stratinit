@@ -1,11 +1,44 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useGame } from '../../context/GameContext'
 import type { SIUnit } from '../../types/game'
 import UnitControls from './UnitControls'
+import { shrinkTime, formatCountdownShort } from '../../utils/time'
 
 type GroupBy = 'sector' | 'type'
 
-function UnitRow({ u, selected, onToggle, requiresFuel }: { u: SIUnit; selected: boolean; onToggle: (e: React.MouseEvent) => void; requiresFuel: boolean }) {
+function MobilityProgress({ lastUpdated, blitz }: { lastUpdated: string | null; blitz: boolean }) {
+  const [now, setNow] = useState(Date.now())
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  if (!lastUpdated) return null
+
+  const period = shrinkTime(blitz, 4 * 3600_000)
+  const lastUpdatedMs = new Date(lastUpdated).getTime()
+  const elapsed = now - lastUpdatedMs
+  const elapsedInPeriod = elapsed % period
+  const remaining = period - elapsedInPeriod
+  const progress = Math.min(elapsedInPeriod / period, 1)
+
+  return (
+    <div className="flex items-center gap-1 ml-1 min-w-0">
+      <div className="w-16 h-1.5 bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
+        <div
+          className="h-full bg-green-500 rounded-full transition-[width] duration-1000 ease-linear"
+          style={{ width: `${progress * 100}%` }}
+        />
+      </div>
+      <span className="text-[10px] text-gray-400 font-mono tabular-nums flex-shrink-0">
+        {formatCountdownShort(remaining)}
+      </span>
+    </div>
+  )
+}
+
+function UnitRow({ u, selected, onToggle, requiresFuel, blitz }: { u: SIUnit; selected: boolean; onToggle: (e: React.MouseEvent) => void; requiresFuel: boolean; blitz: boolean }) {
   return (
     <div
       data-testid={`unit-row-${u.id}`}
@@ -16,7 +49,10 @@ function UnitRow({ u, selected, onToggle, requiresFuel }: { u: SIUnit; selected:
           : 'bg-gray-800 hover:bg-gray-700'
       }`}
     >
-      <div className="font-semibold">{u.type}</div>
+      <div className="flex items-center">
+        <span className="font-semibold">{u.type}</span>
+        <MobilityProgress lastUpdated={u.lastUpdated} blitz={blitz} />
+      </div>
       <div>
         HP: {u.hp} | Mob: {u.mobility} | Ammo: {u.ammo}{requiresFuel ? ` | Fuel: ${u.fuel}` : ''}
       </div>
@@ -29,8 +65,8 @@ function UnitRow({ u, selected, onToggle, requiresFuel }: { u: SIUnit; selected:
   )
 }
 
-function UnitRowCompact({ u, selected, onToggle, showCoords, requiresFuel }: {
-  u: SIUnit; selected: boolean; onToggle: (e: React.MouseEvent) => void; showCoords?: boolean; requiresFuel: boolean
+function UnitRowCompact({ u, selected, onToggle, showCoords, requiresFuel, blitz }: {
+  u: SIUnit; selected: boolean; onToggle: (e: React.MouseEvent) => void; showCoords?: boolean; requiresFuel: boolean; blitz: boolean
 }) {
   return (
     <div
@@ -42,16 +78,19 @@ function UnitRowCompact({ u, selected, onToggle, showCoords, requiresFuel }: {
           : 'bg-gray-800 hover:bg-gray-700'
       }`}
     >
-      <span className="font-semibold">{u.type}</span>
-      {showCoords && <span className="text-gray-500 ml-1">({u.coords.x},{u.coords.y})</span>}
-      <span className="text-gray-400 ml-1">
-        HP:{u.hp} Mob:{u.mobility} A:{u.ammo}{requiresFuel ? ` F:${u.fuel}` : ''}
-      </span>
-      {u.nextCoords && (
-        <span className="text-yellow-400 ml-1">
-          → ({u.nextCoords.x},{u.nextCoords.y})
+      <div className="flex items-center flex-wrap">
+        <span className="font-semibold">{u.type}</span>
+        {showCoords && <span className="text-gray-500 ml-1">({u.coords.x},{u.coords.y})</span>}
+        <span className="text-gray-400 ml-1">
+          HP:{u.hp} Mob:{u.mobility} A:{u.ammo}{requiresFuel ? ` F:${u.fuel}` : ''}
         </span>
-      )}
+        <MobilityProgress lastUpdated={u.lastUpdated} blitz={blitz} />
+        {u.nextCoords && (
+          <span className="text-yellow-400 ml-1">
+            → ({u.nextCoords.x},{u.nextCoords.y})
+          </span>
+        )}
+      </div>
     </div>
   )
 }
@@ -64,6 +103,7 @@ export default function UnitsTab() {
   if (!update) return <p className="text-gray-500">No game loaded.</p>
 
   const myNationId = update.nationId
+  const blitz = update.blitz ?? false
   const allMyUnits = update.units.filter(u => u.nationId === myNationId)
 
   if (allMyUnits.length === 0) {
@@ -153,6 +193,7 @@ export default function UnitsTab() {
                 selected={selectedUnitIds.has(u.id)}
                 onToggle={(e) => handleToggle(u, e)}
                 requiresFuel={unitBases.find(ub => ub.type === u.type)?.requiresFuel ?? false}
+                blitz={blitz}
               />
             ))}
           </div>
@@ -172,6 +213,7 @@ export default function UnitsTab() {
               onToggle={(e) => handleToggle(u, e)}
               showCoords
               requiresFuel={unitBases.find(ub => ub.type === u.type)?.requiresFuel ?? false}
+              blitz={blitz}
             />
           ))}
         </div>

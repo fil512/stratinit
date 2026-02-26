@@ -1,20 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useGame } from '../../context/GameContext'
 import type { CityFieldToUpdate, SICityUpdate, SIUnitBase } from '../../types/game'
-
-function shrinkTime(blitz: boolean, ms: number): number {
-  if (!blitz) return ms
-  return (ms * 2) / (10 * 24)
-}
-
-function formatCountdown(ms: number): string {
-  if (ms <= 0) return '00:00:00'
-  const totalSeconds = Math.ceil(ms / 1000)
-  const hours = Math.floor(totalSeconds / 3600)
-  const minutes = Math.floor((totalSeconds % 3600) / 60)
-  const seconds = totalSeconds % 60
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-}
+import { shrinkTime, formatCountdown } from '../../utils/time'
 
 function BuildProgress({ city, unitBase, blitz }: { city: SICityUpdate; unitBase: SIUnitBase | undefined; blitz: boolean }) {
   const [now, setNow] = useState(Date.now())
