@@ -31,9 +31,16 @@ public class SetCityProductionAction implements BotAction {
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.economyBaseWeight;
 
-        // Don't change if already building something
+        // If city has no build, we set BUILD (newly captured city).
+        // If city has a build, we set NEXT_BUILD — skip if already queued.
         if (city.getBuild() != null) {
-            return 0;
+            if (city.getNextBuild() != null) {
+                return 0;
+            }
+            // Don't queue the same thing that's already building
+            if (city.getBuild() == unitType) {
+                return 0;
+            }
         }
 
         UnitBase unitBase = UnitBase.getUnitBase(unitType);
@@ -80,8 +87,11 @@ public class SetCityProductionAction implements BotAction {
 
     @Override
     public boolean execute() {
+        CityFieldToUpdateEnum field = city.getBuild() != null
+                ? CityFieldToUpdateEnum.NEXT_BUILD
+                : CityFieldToUpdateEnum.BUILD;
         return cityService.updateCity(nation, city.getCoords(),
-                CityFieldToUpdateEnum.BUILD, unitType, null, false, null).isSuccess();
+                field, unitType, null, false, null).isSuccess();
     }
 
     @Override
@@ -96,6 +106,7 @@ public class SetCityProductionAction implements BotAction {
 
     @Override
     public String describe() {
-        return "Set " + city.getCoords() + " to build " + unitType;
+        String field = city.getBuild() != null ? "next build" : "build";
+        return "Set " + city.getCoords() + " " + field + " to " + unitType;
     }
 }
