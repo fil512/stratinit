@@ -82,6 +82,7 @@ type GameAction =
   | { type: 'TOGGLE_UNIT'; unitId: number }
   | { type: 'SELECT_ONLY_UNIT'; unitId: number }
   | { type: 'CLEAR_SELECTION' }
+  | { type: 'CLEAR_UNIT_SELECTION' }
   | { type: 'SET_COMMAND_ERROR'; error: string }
   | { type: 'CLEAR_COMMAND_ERROR' }
 
@@ -116,6 +117,8 @@ function reducer(state: GameState, action: GameAction): GameState {
       return { ...state, selectedUnitIds: new Set([action.unitId]) }
     case 'CLEAR_SELECTION':
       return { ...state, selectedCoords: null, selectedUnitIds: new Set() }
+    case 'CLEAR_UNIT_SELECTION':
+      return { ...state, selectedUnitIds: new Set() }
     case 'SET_COMMAND_ERROR':
       return { ...state, commandError: action.error }
     case 'CLEAR_COMMAND_ERROR':
@@ -289,7 +292,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     try {
       const update = await gameApi.disbandUnits(selected)
       dispatchUpdate(update)
-      dispatch({ type: 'CLEAR_SELECTION' })
+      dispatch({ type: 'CLEAR_UNIT_SELECTION' })
     } catch (err) {
       showCommandError(err instanceof Error ? err.message : 'Disband failed')
     }
@@ -313,7 +316,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     try {
       const update = await gameApi.buildCity(selected)
       dispatchUpdate(update)
-      dispatch({ type: 'CLEAR_SELECTION' })
+      dispatch({ type: 'CLEAR_UNIT_SELECTION' })
     } catch (err) {
       showCommandError(err instanceof Error ? err.message : 'Build city failed')
     }

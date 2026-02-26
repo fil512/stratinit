@@ -45,7 +45,7 @@ public class DataCache extends Updatable {
 	private void loadGames() {
 		logger.info("Loading games into cache...");
 		int count = 0;
-		for (Game game : gameRepo.findAll()) {
+		for (Game game : gameRepo.findByEnabledTrue()) {
 			Integer gameId = game.getId();
 			++count;
 			getGameCache(gameId);
