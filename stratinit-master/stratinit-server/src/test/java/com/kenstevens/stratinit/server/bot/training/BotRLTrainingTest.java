@@ -18,8 +18,8 @@ class BotRLTrainingTest extends StratInitDaoBase {
         // Load seed weights (from file if available, otherwise defaults)
         BotWeights seedWeights = TrainingSession.loadBestWeights();
 
-        // Run training with 3 generations (small for test speed)
-        TrainingResult result = trainingSession.train(seedWeights, 3);
+        int generations = Integer.getInteger("training.generations", 3);
+        TrainingResult result = trainingSession.train(seedWeights, generations);
 
         // Verify we got results
         assertNotNull(result.bestWeights());

@@ -10,13 +10,11 @@ Ask the user how many generations to train. Recommend 30 for a meaningful run (~
 
 ### Step 2: Run training
 
-Temporarily edit `BotRLTrainingTest.java` to use the requested generation count, then run:
+Run the training with the requested generation count via `-Dtraining.generations=N`:
 
 ```bash
-mvn test -pl stratinit-server -Dtest=BotRLTrainingTest
+mvn test -pl stratinit-server -Dtest=BotRLTrainingTest -Dtraining.generations=30
 ```
-
-After the test completes, **revert** the test file back to its original 3-generation default.
 
 ### Step 3: Extract and display results
 
