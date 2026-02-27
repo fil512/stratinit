@@ -125,8 +125,8 @@ public class BotActionGenerator {
         // Neutral city capture: send idle land units to free cities
         generateNeutralCityCaptureActions(state, nation, actions);
 
-        // Infantry move to coast for transport pickup (wait until home explored)
-        if (state.hasTransportCapability() && !hasUnexploredHome) {
+        // Infantry move to coast for transport pickup
+        if (state.hasTransportCapability()) {
             generateMoveToCoastActions(state, nation, actions, false);
         }
         // Engineers move to coast even when home unexplored (to build port city)
@@ -365,6 +365,7 @@ public class BotActionGenerator {
     private void generateNavalActions(BotWorldState state, Nation nation, List<BotAction> actions) {
         List<Unit> enemies = state.getEnemyUnits();
         int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
 
         for (Unit myUnit : state.getIdleNavalUnits()) {
             // Naval combat: attack enemy naval units
@@ -380,26 +381,48 @@ public class BotActionGenerator {
                 }
             }
 
-            // Transport loading: move transport/carrier to pick up idle land units
+            // Transport loading: move transport to water tile adjacent to idle land units
             if (myUnit.getUnitBase().getCapacity() > 0) {
-                Set<SectorCoords> landUnitCoords = new HashSet<>();
                 for (Unit landUnit : state.getIdleLandUnits()) {
-                    landUnitCoords.add(landUnit.getCoords());
-                }
-                for (SectorCoords coords : landUnitCoords) {
-                    int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), coords);
-                    if (distance <= myUnit.getMobility() && distance > 0) {
-                        actions.add(new LoadTransportAction(myUnit, coords, nation, moveService));
+                    Sector landSector = world.getSectorOrNull(landUnit.getCoords());
+                    if (landSector == null || landSector.isWater()) continue;
+                    for (Sector neighbour : world.getNeighbours(landUnit.getCoords())) {
+                        if (!neighbour.isWater()) continue;
+                        int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
+                        if (distance <= myUnit.getMobility()) {
+                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), nation, moveService));
+                            break;
+                        }
                     }
                 }
             }
         }
+
+        // Board transport: land units step onto adjacent transport's water tile
+        generateBoardTransportActions(state, nation, actions);
 
         // Transport destination planning: sail loaded transports to other islands
         generateTransportDestinationActions(state, nation, actions);
 
         // Disembark: land units at sea step onto adjacent land
         generateDisembarkActions(state, nation, actions);
+    }
+
+    private void generateBoardTransportActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        World world = state.getWorld();
+        Set<SectorCoords> transportPositions = state.getIdleTransportCoords();
+        if (transportPositions.isEmpty()) return;
+
+        for (Unit landUnit : state.getIdleLandUnits()) {
+            Sector landSector = world.getSectorOrNull(landUnit.getCoords());
+            if (landSector == null || landSector.isWater()) continue;
+            for (Sector neighbour : world.getNeighbours(landUnit.getCoords())) {
+                if (neighbour.isWater() && transportPositions.contains(neighbour.getCoords())) {
+                    actions.add(new BoardTransportAction(landUnit, neighbour.getCoords(), nation, moveService));
+                    break;
+                }
+            }
+        }
     }
 
     private record LandingCandidate(SectorCoords coords, int distance, boolean hasCityTarget) {}

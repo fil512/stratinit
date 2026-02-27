@@ -194,6 +194,13 @@ public class BotWorldState {
                 .orElse(-1);
     }
 
+    public Set<SectorCoords> getIdleTransportCoords() {
+        return getIdleNavalUnits().stream()
+                .filter(Unit::carriesUnits)
+                .map(Unit::getCoords)
+                .collect(Collectors.toSet());
+    }
+
     public List<Unit> getLoadedTransports() {
         Set<SectorCoords> landUnitCoords = new HashSet<>();
         for (Unit u : myUnits) {
