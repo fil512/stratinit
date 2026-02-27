@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useGame } from '../../context/GameContext'
 import type { CityFieldToUpdate } from '../../types/game'
 import UnitControls from './UnitControls'
+import { shrinkTime, formatCountdownShort } from '../../utils/time'
 
 function BuildProgressBar({ lastUpdated, productionTime, tickIntervalMs }: {
   lastUpdated: string | null
@@ -40,6 +41,38 @@ function BuildProgressBar({ lastUpdated, productionTime, tickIntervalMs }: {
   )
 }
 
+function MobilityProgress({ lastUpdated, blitz }: { lastUpdated: string | null; blitz: boolean }) {
+  const [now, setNow] = useState(Date.now())
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  if (!lastUpdated) return null
+
+  const period = shrinkTime(blitz, 4 * 3600_000)
+  const lastUpdatedMs = new Date(lastUpdated).getTime()
+  const elapsed = now - lastUpdatedMs
+  const elapsedInPeriod = elapsed % period
+  const remaining = period - elapsedInPeriod
+  const progress = Math.min(elapsedInPeriod / period, 1)
+
+  return (
+    <div className="flex items-center gap-1 ml-1 min-w-0">
+      <div className="w-16 h-1.5 bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
+        <div
+          className="h-full bg-green-500 rounded-full transition-[width] duration-1000 ease-linear"
+          style={{ width: `${progress * 100}%` }}
+        />
+      </div>
+      <span className="text-[10px] text-gray-400 font-mono tabular-nums flex-shrink-0">
+        {formatCountdownShort(remaining)}
+      </span>
+    </div>
+  )
+}
+
 export default function SectorTab() {
   const { state, getSectorAt, getUnitsAt, getCityAt, updateCityProduction, toggleUnit, selectOnlyUnit } = useGame()
   const { selectedCoords, selectedUnitIds, unitBases, update } = state
@@ -67,6 +100,7 @@ export default function SectorTab() {
   const buildableUnits = isMyCity
     ? unitBases.filter(ub => ub.type !== 'BASE' && ub.tech <= myTech && (ub.builtIn !== 'PORT' || isCoastal))
     : []
+  const blitz = update.blitz ?? false
   const myUnits = units.filter(u => u.nationId === myNationId)
   const enemyUnits = units.filter(u => u.nationId !== myNationId)
 
@@ -102,10 +136,16 @@ export default function SectorTab() {
                   : 'hover:bg-gray-700'
               }`}
             >
-              {u.type} HP:{u.hp} Mob:{u.mobility} A:{u.ammo}{unitBases.find(ub => ub.type === u.type)?.requiresFuel ? ` F:${u.fuel}` : ''}
-              {u.nextCoords && (
-                <span className="text-yellow-400 ml-1">→ ({u.nextCoords.x},{u.nextCoords.y})</span>
-              )}
+              <div className="flex items-center flex-wrap">
+                <span className="font-semibold">{u.type}</span>
+                <span className="text-gray-400 ml-1">
+                  HP:{u.hp} Mob:{u.mobility} A:{u.ammo}{unitBases.find(ub => ub.type === u.type)?.requiresFuel ? ` F:${u.fuel}` : ''}
+                </span>
+                <MobilityProgress lastUpdated={u.lastUpdated} blitz={blitz} />
+                {u.nextCoords && (
+                  <span className="text-yellow-400 ml-1">→ ({u.nextCoords.x},{u.nextCoords.y})</span>
+                )}
+              </div>
             </div>
           ))}
           <UnitControls />

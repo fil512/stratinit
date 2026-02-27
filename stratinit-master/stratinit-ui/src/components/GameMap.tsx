@@ -50,14 +50,6 @@ function worldSize(bs: number, r: number): { w: number; h: number } {
   }
 }
 
-// Wrap camera to [0, worldSize) range
-function wrapCamera(cam: { x: number; y: number }, ws: { w: number; h: number }): { x: number; y: number } {
-  return {
-    x: ((cam.x % ws.w) + ws.w) % ws.w,
-    y: ((cam.y % ws.h) + ws.h) % ws.h,
-  }
-}
-
 // Pixel center of an *unwrapped* (col, row) in flat-top hex layout
 // col/row are unwrapped indices (can be outside [0, bs)), not game coords
 function unwrappedHexCenter(col: number, row: number, r: number): [number, number] {
@@ -132,17 +124,22 @@ interface DrawParams {
 function drawMap(p: DrawParams) {
   const { canvas, cellSize: cs, boardSize: bs, camera, viewport, update, lookups, selectedCoords, selectedUnitIds, unitBaseMap } = p
   const r = cs / 2
-  const ws = worldSize(bs, r)
-  const cam = wrapCamera(camera, ws)
+  // Use raw camera directly — do NOT wrap. Wrapping by one world-width flips
+  // column parity when boardSize is odd, causing hex vertical offsets to shift.
+  const cam = camera
 
-  // Resize canvas only when viewport dimensions change (avoids expensive GPU reallocation)
-  if (canvas.width !== viewport.w || canvas.height !== viewport.h) {
-    canvas.width = viewport.w
-    canvas.height = viewport.h
+  // Resize canvas buffer for device pixel ratio (crisp rendering on HiDPI/Retina)
+  const dpr = window.devicePixelRatio || 1
+  const bufW = Math.round(viewport.w * dpr)
+  const bufH = Math.round(viewport.h * dpr)
+  if (canvas.width !== bufW || canvas.height !== bufH) {
+    canvas.width = bufW
+    canvas.height = bufH
   }
 
   const ctx = canvas.getContext('2d')
   if (!ctx) return
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
   ctx.clearRect(0, 0, viewport.w, viewport.h)
 
   // Fog-of-war background
@@ -170,14 +167,15 @@ function drawMap(p: DrawParams) {
     return lookups.sectorMap.get(`${gx},${gy}`)
   }
 
-  // Layer 1: Terrain
+  // Layer 1: Terrain (slight overlap to eliminate anti-aliasing seams)
+  const terrainR = r + 0.5
   for (let col = colMin; col <= colMax; col++) {
     for (let row = rowMin; row <= rowMax; row++) {
       const sector = getSector(col, row)
       if (!sector) continue
       const [cx, cy] = screenPos(col, row)
       ctx.fillStyle = TERRAIN_COLORS[sector.type] ?? '#111'
-      drawHex(ctx, cx, cy, r)
+      drawHex(ctx, cx, cy, terrainR)
       ctx.fill()
     }
   }
@@ -889,13 +887,11 @@ export default function GameMap() {
     if (!canvas || !boardSize) return null
     const rect = canvas.getBoundingClientRect()
     const r = currentCellRef.current / 2
-    const scaleX = canvas.width / rect.width
-    const scaleY = canvas.height / rect.height
-    // Screen pixel → world pixel (add camera offset)
-    const ws = worldSize(boardSize, r)
-    const cam = wrapCamera(cameraRef.current, ws)
-    const worldX = (e.clientX - rect.left) * scaleX + cam.x
-    const worldY = (e.clientY - rect.top) * scaleY + cam.y
+    // Screen pixel → world pixel (add camera offset); use CSS pixels (not canvas buffer)
+    // Use raw camera (no wrapping) to match drawMap's coordinate system
+    const cam = cameraRef.current
+    const worldX = (e.clientX - rect.left) + cam.x
+    const worldY = (e.clientY - rect.top) + cam.y
 
     // Approximate column from world pixel
     const col = Math.round((worldX - r) / (1.5 * r))
@@ -995,7 +991,7 @@ export default function GameMap() {
           onClick={handleClick}
           onContextMenu={handleContextMenu}
           onDoubleClick={handleDoubleClick}
-          className="cursor-crosshair"
+          className="cursor-crosshair block w-full h-full"
         />
       </div>
       {/* Map controls */}

@@ -34,7 +34,18 @@ function PowerWithTooltip({ power, powerLimit, powerColor, breakdown, cities }: 
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
-      Pwr: {power}/{powerLimit}
+      <span className="flex items-center gap-1">
+        <span>Power:</span>
+        <span className="inline-block w-12 h-2 bg-gray-700 rounded-full overflow-hidden align-middle">
+          <span
+            className={`block h-full rounded-full transition-all duration-300 ${
+              power >= powerLimit ? 'bg-red-500' : 'bg-green-500'
+            }`}
+            style={{ width: `${Math.min((power / Math.max(powerLimit, 1)) * 100, 100)}%` }}
+          />
+        </span>
+        <span>{powerLimit}</span>
+      </span>
       {hover && (
         <div className="absolute top-full left-0 mt-1 z-50 bg-gray-900 border border-gray-700 rounded px-3 py-2 text-xs whitespace-nowrap shadow-lg font-mono text-gray-200">
           <table>

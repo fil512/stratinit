@@ -99,12 +99,15 @@ export default function UnitsTab() {
   const { state, toggleUnit, selectOnlyUnit, selectSector } = useGame()
   const { selectedCoords, selectedUnitIds, update, unitBases } = state
   const [groupBy, setGroupBy] = useState<GroupBy>('sector')
+  const [hideNoMob, setHideNoMob] = useState(true)
 
   if (!update) return <p className="text-gray-500">No game loaded.</p>
 
   const myNationId = update.nationId
   const blitz = update.blitz ?? false
   const allMyUnits = update.units.filter(u => u.nationId === myNationId)
+  const visibleUnits = hideNoMob ? allMyUnits.filter(u => u.mobility > 0) : allMyUnits
+  const hiddenCount = allMyUnits.length - visibleUnits.length
 
   if (allMyUnits.length === 0) {
     return <p className="text-gray-500">No units.</p>
@@ -128,7 +131,7 @@ export default function UnitsTab() {
 
   const groupedBySector = () => {
     const map = new Map<string, SIUnit[]>()
-    for (const u of allMyUnits) {
+    for (const u of visibleUnits) {
       const key = `${u.coords.x},${u.coords.y}`
       const list = map.get(key)
       if (list) list.push(u)
@@ -139,7 +142,7 @@ export default function UnitsTab() {
 
   const groupedByType = () => {
     const map = new Map<string, SIUnit[]>()
-    for (const u of allMyUnits) {
+    for (const u of visibleUnits) {
       const list = map.get(u.type)
       if (list) list.push(u)
       else map.set(u.type, [u])
@@ -150,8 +153,17 @@ export default function UnitsTab() {
   return (
     <div data-testid="units-list" className="space-y-2">
       <div className="flex justify-between items-center">
-        <h3 className="font-bold text-gray-300">Units ({allMyUnits.length})</h3>
+        <h3 className="font-bold text-gray-300">Units ({visibleUnits.length}{hiddenCount > 0 ? `/${allMyUnits.length}` : ''})</h3>
         <div className="flex gap-1">
+          <button
+            onClick={() => setHideNoMob(!hideNoMob)}
+            className={`text-xs px-2 py-0.5 rounded ${
+              hideNoMob ? 'bg-green-700 text-white' : 'bg-gray-700 hover:bg-gray-600'
+            }`}
+            title={hideNoMob ? 'Showing units with mobility — click to show all' : 'Showing all units — click to hide 0 mobility'}
+          >
+            Mob
+          </button>
           <button
             onClick={() => setGroupBy('sector')}
             className={`text-xs px-2 py-0.5 rounded ${

@@ -17,15 +17,17 @@ public class ZeppelinScoutAction implements BotAction {
     private final Unit zeppelin;
     private final SectorCoords target;
     private final int distance;
+    private final int revealCount;
     private final boolean isReturnToCity;
     private final Nation nation;
     private final MoveService moveService;
 
     public ZeppelinScoutAction(Unit zeppelin, SectorCoords target, int distance,
-                                boolean isReturnToCity, Nation nation, MoveService moveService) {
+                                int revealCount, boolean isReturnToCity, Nation nation, MoveService moveService) {
         this.zeppelin = zeppelin;
         this.target = target;
         this.distance = distance;
+        this.revealCount = revealCount;
         this.isReturnToCity = isReturnToCity;
         this.nation = nation;
         this.moveService = moveService;
@@ -39,6 +41,8 @@ public class ZeppelinScoutAction implements BotAction {
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.expansionBaseWeight * weights.zeppelinScoutDesire;
+        // Scale by number of new squares that would be revealed
+        utility *= Math.max(1, revealCount);
         // Penalize distant targets
         utility -= distance * weights.distancePenalty;
         // Early game scouting is more valuable
@@ -71,6 +75,9 @@ public class ZeppelinScoutAction implements BotAction {
 
     @Override
     public String describe() {
-        return (isReturnToCity ? "Zeppelin returning to city at " : "Zeppelin scouting toward ") + target;
+        if (isReturnToCity) {
+            return "Zeppelin returning to city at " + target;
+        }
+        return "Zeppelin scouting toward " + target + " (reveals ~" + revealCount + " squares)";
     }
 }
