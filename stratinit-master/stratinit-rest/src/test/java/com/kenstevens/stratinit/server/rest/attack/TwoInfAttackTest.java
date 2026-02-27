@@ -94,13 +94,18 @@ public class TwoInfAttackTest extends TwoPlayerBase {
         Unit def = unitService.buildUnit(nationThem, DEF, UnitType.INFANTRY);
         Result<MoveCost> result = moveUnits(
                 makeUnitList(inf1, inf2), DEF);
+        // Units have mobility=2 but target is 3 hexes away.
+        // They advance as far as possible and get move orders for the rest.
+        // Result is false because they didn't reach the target to attack.
         assertFalseResult(result);
         assertNotDamaged(result, def);
-        assertNotMoved(result, inf1);
+        assertMoved(result, inf1);
         assertNotFired(result, inf1);
-        assertNotMoved(result, inf2);
+        assertMoved(result, inf2);
         assertNotFired(result, inf2);
-        assertEquals(ATT_FAR, inf1.getCoords());
-        assertEquals(ATT_FAR, inf2.getCoords());
+        // Units are out of supply so each hex costs 2 mobility.
+        // With mobility=2, they advance 1 hex from (9,3) to (9,2).
+        assertEquals(new SectorCoords(9, 2), inf1.getCoords());
+        assertEquals(new SectorCoords(9, 2), inf2.getCoords());
     }
 }
