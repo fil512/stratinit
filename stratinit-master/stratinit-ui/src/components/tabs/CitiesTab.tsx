@@ -88,7 +88,7 @@ export default function CitiesTab() {
             </div>
             <div className="flex gap-2 mt-1">
               <label className="flex-1">
-                <span className="text-gray-400">Build:</span>
+                <span className="text-gray-400">Build (1 CP):</span>
                 <select
                   data-testid={`city-build-select-${city.coords.x}-${city.coords.y}`}
                   value={city.build ?? ''}
@@ -102,7 +102,7 @@ export default function CitiesTab() {
                 </select>
               </label>
               <label className="flex-1">
-                <span className="text-gray-400">Next:</span>
+                <span className="text-gray-400">Next (1 CP):</span>
                 <select
                   data-testid={`city-next-build-select-${city.coords.x}-${city.coords.y}`}
                   value={city.nextBuild ?? ''}

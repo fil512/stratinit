@@ -16,6 +16,8 @@ interface GameInfo {
   powerLimit: number
   powerBreakdown: PowerBreakdownEntry[]
   cities: number
+  commandPoints: number
+  hourlyCPGain: number
 }
 
 interface TickInfo {

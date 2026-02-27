@@ -197,6 +197,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       powerLimit: cities * 5,
       powerBreakdown,
       cities,
+      commandPoints: myNation?.commandPoints ?? 0,
+      hourlyCPGain: myNation?.hourlyCPGain ?? 0,
     })
   }, [setTickInfo])
 

@@ -40,7 +40,7 @@ export default function PlayersTab() {
             <div>Tech: {nation.tech >= 0 ? nation.tech.toFixed(1) : '?'}</div>
             {!isMe && rel && (
               <div className="flex items-center gap-2 mt-1">
-                <span className="text-gray-400">Relation:</span>
+                <span className="text-gray-400">Relation (1 CP):</span>
                 <select
                   data-testid={`relation-select-${nation.nationId}`}
                   value={rel.meToThem}

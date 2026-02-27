@@ -44,7 +44,7 @@ export default function UnitControls() {
   return (
     <div className="space-y-1">
       <p className="text-xs text-blue-400">
-        {selectedUnitIds.size} unit(s) selected — click map to move
+        {selectedUnitIds.size} unit(s) selected — click map to move (1 CP)
       </p>
       <div className="flex flex-wrap gap-1">
         {hasMovingUnits && (
@@ -53,7 +53,7 @@ export default function UnitControls() {
             onClick={cancelSelectedMoves}
             className="text-xs px-2 py-0.5 bg-yellow-800 rounded hover:bg-yellow-700"
           >
-            Cancel Move
+            Cancel Move (1 CP)
           </button>
         )}
         {hasEngineer && (
@@ -69,7 +69,7 @@ export default function UnitControls() {
               }`}
               title={canBuildCity ? undefined : `Needs ${MOB_COST_BUILD_CITY} mobility`}
             >
-              Build City
+              Build City (128 CP)
             </button>
             <button
               data-testid="units-switch-terrain-button"
@@ -82,7 +82,7 @@ export default function UnitControls() {
               }`}
               title={canSwitchTerrain ? undefined : `Needs ${MOB_COST_SWITCH_TERRAIN} mobility`}
             >
-              Switch Terrain
+              Switch Terrain (16 CP)
             </button>
           </>
         )}
@@ -91,7 +91,7 @@ export default function UnitControls() {
           onClick={handleDisband}
           className="text-xs px-2 py-0.5 bg-red-800 rounded hover:bg-red-700"
         >
-          Disband
+          Disband (1 CP)
         </button>
       </div>
       {alliedNations.length > 0 && (
@@ -113,7 +113,7 @@ export default function UnitControls() {
               onClick={handleCede}
               className="text-xs px-2 py-0.5 bg-purple-800 rounded hover:bg-purple-700"
             >
-              Cede
+              Cede (1 CP)
             </button>
           )}
         </div>

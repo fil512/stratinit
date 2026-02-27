@@ -94,6 +94,8 @@ export default function TickProgressBar() {
 
   const powerColor = game && game.power >= game.powerLimit ? 'text-red-400' : 'text-gray-400'
 
+  const cpColor = game && game.commandPoints <= 10 ? 'text-red-400' : 'text-gray-400'
+
   if (gameEnded) {
     return (
       <div className="flex items-center gap-2" data-testid="tick-progress-bar">
@@ -106,6 +108,9 @@ export default function TickProgressBar() {
               breakdown={game.powerBreakdown}
               cities={game.cities}
             />
+            <span className={`text-xs ${cpColor}`} title={`+${game.hourlyCPGain} CP/hr`}>
+              CP: {game.commandPoints}
+            </span>
             <span className="text-xs text-gray-400">
               {game.gameName} #{game.gameId}
               <span className="text-red-400 font-semibold"> ended {formatEnds(game.gameEnds!)}</span>
@@ -127,6 +132,9 @@ export default function TickProgressBar() {
             breakdown={game.powerBreakdown}
             cities={game.cities}
           />
+          <span className={`text-xs ${cpColor}`} title={`+${game.hourlyCPGain} CP/hr`}>
+            CP: {game.commandPoints}
+          </span>
           <span className="text-xs text-gray-400">
             {game.gameName} #{game.gameId}
             {game.gameEnds && (
