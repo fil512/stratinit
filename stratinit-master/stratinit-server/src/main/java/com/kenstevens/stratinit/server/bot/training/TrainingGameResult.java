@@ -7,6 +7,7 @@ import java.util.Map;
 public record TrainingGameResult(
         Map<String, Double> scores,
         Map<String, BotWeights> weightsUsed,
-        int turnsPlayed
+        int turnsPlayed,
+        TrainingActionLog actionLog
 ) {
 }

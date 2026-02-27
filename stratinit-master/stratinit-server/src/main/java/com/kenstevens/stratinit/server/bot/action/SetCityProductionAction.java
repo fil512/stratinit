@@ -116,6 +116,11 @@ public class SetCityProductionAction implements BotAction {
     }
 
     @Override
+    public String getActionType() {
+        return "SetCityProduction:" + unitType.name();
+    }
+
+    @Override
     public String describe() {
         String field = city.getBuild() != null ? "next build" : "build";
         return "Set " + city.getCoords() + " " + field + " to " + unitType;

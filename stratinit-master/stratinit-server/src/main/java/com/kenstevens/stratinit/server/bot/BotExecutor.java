@@ -1,8 +1,8 @@
 package com.kenstevens.stratinit.server.bot;
 
 import com.kenstevens.stratinit.client.model.Nation;
-import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.server.bot.action.BotAction;
+import com.kenstevens.stratinit.server.bot.training.TrainingActionLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +30,17 @@ public class BotExecutor {
     }
 
     public void executeTurn(Nation nation, BotWeights overrideWeights, long simulatedTimeMillis) {
+        executeTurn(nation, overrideWeights, simulatedTimeMillis, null);
+    }
+
+    public void executeTurn(Nation nation, BotWeights overrideWeights, long simulatedTimeMillis, TrainingActionLog log) {
         BotWorldState state = worldStateBuilder.build(nation, simulatedTimeMillis);
 
         if (!state.getGame().hasStarted() || state.getGame().hasEnded()) {
             return;
         }
 
+        String nationName = nation.getName();
         List<BotAction> candidates = actionGenerator.generateActions(state, overrideWeights);
 
         // Score all actions
@@ -60,16 +65,25 @@ public class BotExecutor {
             int cost = action.getCommandPointCost();
 
             if (cost > 0 && !state.hasEnoughCP(cost)) {
+                if (log != null) {
+                    log.recordSkip(nationName, "no_cp");
+                }
                 continue;
             }
 
             Integer unitId = action.getInvolvedUnitId();
             if (unitId != null && usedUnitIds.contains(unitId)) {
+                if (log != null) {
+                    log.recordSkip(nationName, "unit_used");
+                }
                 continue;
             }
 
             String cityKey = action.getInvolvedCityKey();
             if (cityKey != null && usedCityKeys.contains(cityKey)) {
+                if (log != null) {
+                    log.recordSkip(nationName, "city_used");
+                }
                 continue;
             }
 
@@ -77,6 +91,9 @@ public class BotExecutor {
                 boolean success = action.execute();
                 if (success) {
                     actionsExecuted++;
+                    if (log != null) {
+                        log.recordAction(nationName, action.getActionType());
+                    }
                     if (unitId != null) {
                         usedUnitIds.add(unitId);
                     }

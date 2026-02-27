@@ -7,6 +7,7 @@ import java.util.List;
 public record TrainingResult(
         BotWeights bestWeights,
         List<Double> scoreHistory,
-        int totalGamesPlayed
+        int totalGamesPlayed,
+        TrainingAnalysisSummary analysis
 ) {
 }

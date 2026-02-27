@@ -17,4 +17,8 @@ public interface BotAction {
     default String getInvolvedCityKey() {
         return null;
     }
+
+    default String getActionType() {
+        return getClass().getSimpleName();
+    }
 }

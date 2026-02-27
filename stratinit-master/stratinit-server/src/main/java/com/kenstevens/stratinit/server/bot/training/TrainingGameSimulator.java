@@ -6,7 +6,9 @@ import com.kenstevens.stratinit.client.util.UpdateCalculator;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
+import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotExecutor;
 import com.kenstevens.stratinit.server.bot.BotWeights;
@@ -41,6 +43,8 @@ public class TrainingGameSimulator {
     private CityDao cityDao;
     @Autowired
     private UnitDao unitDao;
+    @Autowired
+    private SectorDao sectorDao;
     @Autowired
     private UnitService unitService;
     @Autowired
@@ -113,6 +117,13 @@ public class TrainingGameSimulator {
         // Simulation loop
         long simulatedTime = pastStart.getTime();
         int turnsPlayed = 0;
+        TrainingActionLog actionLog = new TrainingActionLog();
+
+        // Track previous city counts per nation for milestone detection
+        Map<String, Integer> prevCityCounts = new LinkedHashMap<>();
+        for (Map.Entry<String, Nation> entry : nations.entrySet()) {
+            prevCityCounts.put(entry.getKey(), cityDao.getNumberOfCities(entry.getValue()));
+        }
 
         for (int turn = 0; turn < MAX_TURNS; turn++) {
             simulatedTime += tickInterval;
@@ -156,15 +167,39 @@ public class TrainingGameSimulator {
                 logger.debug("Game update failed: {}", e.getMessage());
             }
 
-            // Execute bot turns
+            // Execute bot turns with logging
             for (Map.Entry<String, Nation> entry : nations.entrySet()) {
                 String playerName = entry.getKey();
                 Nation nation = entry.getValue();
                 BotWeights weights = playerWeights.get(playerName);
+
+                // Record turn start metrics
+                int cities = cityDao.getNumberOfCities(nation);
+                List<Unit> nationUnits = unitDao.getUnits(nation);
+                long aliveUnits = nationUnits.stream().filter(Unit::isAlive).count();
+                int explored = sectorDao.getSectorsSeen(nation).size();
+                double tech = nation.getTech();
+                boolean hasTransport = nationUnits.stream()
+                        .anyMatch(u -> u.isAlive() && u.getType() == UnitType.TRANSPORT);
+
+                actionLog.recordTurnStart(playerName, turn,
+                        new TrainingActionLog.TurnStateMetrics(cities, (int) aliveUnits, explored, tech, hasTransport));
+
                 try {
-                    botExecutor.executeTurn(nation, weights, simulatedTime);
+                    botExecutor.executeTurn(nation, weights, simulatedTime, actionLog);
                 } catch (Exception e) {
                     logger.debug("Bot turn failed for {}: {}", playerName, e.getMessage());
+                }
+
+                // Detect milestones
+                int newCities = cityDao.getNumberOfCities(nation);
+                if (newCities > prevCityCounts.getOrDefault(playerName, 0)) {
+                    actionLog.recordMilestone(playerName, "firstNonHomeCityCapture", turn);
+                }
+                prevCityCounts.put(playerName, newCities);
+
+                if (hasTransport) {
+                    actionLog.recordMilestone(playerName, "firstTransportBuilt", turn);
                 }
             }
 
@@ -180,7 +215,7 @@ public class TrainingGameSimulator {
         // Cleanup game from cache and database to prevent OOM across generations
         cleanup(game);
 
-        return new TrainingGameResult(scores, playerWeights, turnsPlayed);
+        return new TrainingGameResult(scores, playerWeights, turnsPlayed, actionLog);
     }
 
     private long computeTickInterval(Game game) {

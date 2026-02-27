@@ -24,6 +24,8 @@ public class TrainingSession {
 
     @Autowired
     private TrainingGameSimulator simulator;
+    @Autowired
+    private TrainingAnalyzer analyzer;
 
     private final WeightMutator mutator = new WeightMutator();
     private final Random random = new Random();
@@ -41,6 +43,7 @@ public class TrainingSession {
         }
 
         List<Double> scoreHistory = new ArrayList<>();
+        List<TrainingGameResult> allResults = new ArrayList<>();
         int totalGamesPlayed = 0;
 
         for (int gen = 0; gen < generations; gen++) {
@@ -63,6 +66,7 @@ public class TrainingSession {
 
                 // Run the game
                 TrainingGameResult result = simulator.simulate(playerWeights);
+                allResults.add(result);
                 totalGamesPlayed++;
 
                 // Accumulate scores
@@ -119,7 +123,10 @@ public class TrainingSession {
         saveBestWeights(bestWeights);
         saveScoreHistory(scoreHistory);
 
-        return new TrainingResult(bestWeights, scoreHistory, totalGamesPlayed);
+        // Analyze bot behavior
+        TrainingAnalysisSummary analysis = analyzer.analyze(allResults);
+
+        return new TrainingResult(bestWeights, scoreHistory, totalGamesPlayed, analysis);
     }
 
     private List<Integer> pickRandomIndices(int populationSize, int count) {
