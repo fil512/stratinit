@@ -138,6 +138,7 @@ public class GameService {
         }
         setNoAlliances(game);
         gameDao.merge(game);
+        gameDao.flush();
         gameCreator.createGameIfAllMapped();
     }
 
@@ -165,6 +166,7 @@ public class GameService {
         relationService.setRelations(nation);
         if (game.isMapped()) {
             worldManager.addPlayerToMap(nationId, nation);
+            gameDao.flush();
         } else if (game.getPlayers() >= serverConfig.getMinPlayersToSchedule()) {
             scheduleGame(game);
         }

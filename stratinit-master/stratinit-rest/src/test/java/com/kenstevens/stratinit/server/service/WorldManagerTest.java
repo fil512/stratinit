@@ -5,13 +5,16 @@ import com.kenstevens.stratinit.client.model.EventKey;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dao.SectorDao;
+import com.kenstevens.stratinit.dto.SISector;
 import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.server.event.CityBuildEvent;
 import com.kenstevens.stratinit.server.event.UnitUpdateEvent;
 import com.kenstevens.stratinit.server.rest.event.EventTimerMockedBase;
 import com.kenstevens.stratinit.server.rest.helper.WorldManagerHelper;
+import com.kenstevens.stratinit.server.rest.svc.PlayerWorldView;
 import com.kenstevens.stratinit.server.svc.CityBuilderService;
 import com.kenstevens.stratinit.server.svc.WorldManager;
+import com.kenstevens.stratinit.type.SectorType;
 import com.kenstevens.stratinit.type.UnitType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -38,6 +41,8 @@ public class WorldManagerTest extends EventTimerMockedBase {
 	CityService cityService;
 	@Autowired
 	CityBuilderService cityBuilderService;
+	@Autowired
+	PlayerWorldView playerWorldView;
 
 	private Nation nation;
 	private Date now;
@@ -63,6 +68,20 @@ public class WorldManagerTest extends EventTimerMockedBase {
 		verify(eventTimer, times(2)).schedule(any(CityBuildEvent.class));
 		verify(eventTimer, times(5)).schedule(any(UnitUpdateEvent.class));
 		verify(eventTimer, times(0)).cancel(any(EventKey.class));
+	}
+
+	@Test
+	public void sectorsCityTypePopulated() {
+		worldManager.addPlayerToMap(2, nation);
+
+		List<SISector> sectors = playerWorldView.getWorldViewSectors(nation);
+		List<SISector> citySectors = sectors.stream()
+				.filter(s -> s.type == SectorType.PLAYER_CITY)
+				.toList();
+		assertFalse(citySectors.isEmpty(), "Should have at least one PLAYER_CITY sector");
+		for (SISector sector : citySectors) {
+			assertNotNull(sector.cityType, "cityType should be set for PLAYER_CITY sector at " + sector.coords);
+		}
 	}
 
 	@Test
