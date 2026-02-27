@@ -131,7 +131,9 @@ public class CityBuilderService {
 							"skipping " + unitType,
 							"Skipping build unit " + message + ".  Maximum allowable power reached.\n\nKill your units or take some cities to increase your power limit.\n"
 					);
-			// Don't advance lastUpdated or switch production — retry next period
+			// Advance lastUpdated so startup catch-up doesn't loop forever
+			city.setLastUpdated(buildTime);
+			cityDao.markCacheModified(city);
 			return;
 		}
 		logger.debug("Building unit " + message);

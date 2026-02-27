@@ -66,6 +66,13 @@ public class SetCityProductionAction implements BotAction {
             }
         } else if (unitType == UnitType.TANK) {
             utility *= weights.tankDesire;
+        } else if (unitType == UnitType.TRANSPORT) {
+            if (!state.hasTransportCapability() && state.isCoastalCity(city)) {
+                // Guarantee: must build a transport if we have none and no city is building one
+                utility = weights.economyBaseWeight * weights.coastalCityDesire * 2.0;
+            } else {
+                utility *= weights.navalBaseWeight;
+            }
         } else if (unitBase.isNavy()) {
             utility *= weights.navalBaseWeight;
         } else if (unitBase.isAir()) {

@@ -117,7 +117,12 @@ export default function SectorTab() {
           Sector ({selectedCoords.x}, {selectedCoords.y})
         </h3>
         <p>Terrain: {sector.type}</p>
-        {sector.cityType && <p>City: {sector.cityType}</p>}
+        {sector.cityType && <p>City: {sector.cityType}{(() => {
+          if (!city) return null
+          if (city.nationId === myNationId) return null
+          const owner = update.nations.find(n => n.nationId === city.nationId)
+          return owner ? <span className="text-gray-400"> ({owner.name})</span> : null
+        })()}</p>}
         {sector.flak > 0 && <p>Flak: {sector.flak}</p>}
         {sector.cannons > 0 && <p>Cannons: {sector.cannons}</p>}
       </div>

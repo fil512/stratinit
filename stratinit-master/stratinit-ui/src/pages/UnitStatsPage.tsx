@@ -57,6 +57,8 @@ export default function UnitStatsPage() {
   const [selectedPlayer, setSelectedPlayer] = useState<string>('')
   const [playerData, setPlayerData] = useState<Record<string, SIUnitDayRow[]>>({})
   const [snapshots, setSnapshots] = useState<SINationSnapshot[]>([])
+  const [navalByNation, setNavalByNation] = useState<Record<string, number>[]>([])
+  const [navalNationNames, setNavalNationNames] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -78,6 +80,8 @@ export default function UnitStatsPage() {
     setSelectedPlayer('')
     setPlayerData({})
     setSnapshots([])
+    setNavalByNation([])
+    setNavalNationNames([])
     Promise.all([
       getGameDetail(selectedGameId),
       getGameUnitLove(selectedGameId),
@@ -91,6 +95,35 @@ export default function UnitStatsPage() {
       if (playerNames.length > 0) {
         setSelectedPlayer(playerNames[0])
       }
+      // Fetch naval units built per day for all players
+      Promise.all(
+        playerNames.map(name =>
+          getPlayerUnits(selectedGameId!, 'NAVY', name).then(rows => ({ name, rows }))
+        )
+      ).then(results => {
+        const dayMap = new Map<number, Record<string, number>>()
+        const names: string[] = []
+        for (const { name, rows } of results) {
+          names.push(name)
+          for (const row of rows) {
+            if (!dayMap.has(row.day)) {
+              dayMap.set(row.day, { day: row.day })
+            }
+            const entry = dayMap.get(row.day)!
+            const total = Object.values(row.counts).reduce((s, v) => s + v, 0)
+            entry[name] = total
+          }
+        }
+        // Fill missing days with 0
+        const data = Array.from(dayMap.values()).sort((a, b) => a.day - b.day)
+        for (const row of data) {
+          for (const name of names) {
+            if (!(name in row)) row[name] = 0
+          }
+        }
+        setNavalByNation(data)
+        setNavalNationNames(names.sort())
+      })
     })
   }, [selectedGameId])
 
@@ -316,6 +349,33 @@ export default function UnitStatsPage() {
           {renderTimeSeriesChart('Cities Over Time', 'cities')}
           {renderTimeSeriesChart('Power Over Time', 'power')}
           {renderTimeSeriesChart('Tech Over Time', 'tech')}
+          {navalByNation.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-lg font-semibold mb-2">Naval Units Built Per Day</h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={navalByNation}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="day" stroke="#9ca3af" label={{ value: 'Day', position: 'insideBottom', offset: -5, fill: '#9ca3af' }} />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: '#1f2937', border: '1px solid #374151', color: '#f3f4f6' }}
+                    labelFormatter={(label) => `Day ${label}`}
+                  />
+                  <Legend />
+                  {navalNationNames.map((name, i) => (
+                    <Line
+                      key={name}
+                      type="monotone"
+                      dataKey={name}
+                      stroke={NATION_COLORS[i % NATION_COLORS.length]}
+                      dot={false}
+                      strokeWidth={2}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </div>
       )}
 
