@@ -132,14 +132,10 @@ public class BotActionGenerator {
         // Neutral city capture: send idle land units to free cities
         generateNeutralCityCaptureActions(state, nation, actions);
 
-        // Infantry move to coast for transport pickup
-        if (state.hasTransportCapability()) {
-            generateMoveToCoastActions(state, nation, actions, false);
-        }
+        // Infantry/tanks move to coast for transport pickup (always, to pre-position)
+        generateMoveToCoastActions(state, nation, actions, false);
         // Engineers move to coast even when home unexplored (to build port city)
-        if (state.hasTransportCapability()) {
-            generateMoveToCoastActions(state, nation, actions, true);
-        }
+        generateMoveToCoastActions(state, nation, actions, true);
 
         // Transport loading guarantee: when idle empty transport exists,
         // generate high-priority actions to connect infantry to transport
@@ -215,8 +211,8 @@ public class BotActionGenerator {
             if (engineersOnly) {
                 if (unit.getType() != UnitType.ENGINEER) continue;
             } else {
-                if (unit.getType() != UnitType.INFANTRY) continue;
-                // Only inland infantry on home island
+                if (unit.getType() != UnitType.INFANTRY && unit.getType() != UnitType.TANK) continue;
+                // Only inland infantry/tanks on home island
                 if (!state.isOnHomeIsland(unit)) continue;
             }
             Sector unitSector = world.getSectorOrNull(unit.getCoords());
@@ -399,9 +395,9 @@ public class BotActionGenerator {
                     continue;
                 }
                 int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemy.getCoords());
-                // Only consider nearby enemies (within movement range)
-                if (distance <= myUnit.getMobility()) {
-                    actions.add(new AttackEnemyAction(myUnit, enemy, nation, moveService));
+                // Consider enemies within extended range (will take multiple turns to reach)
+                if (distance <= myUnit.getMobility() * 3) {
+                    actions.add(new AttackEnemyAction(myUnit, enemy, distance, nation, moveService));
                 }
             }
         }
@@ -458,8 +454,8 @@ public class BotActionGenerator {
                         continue;
                     }
                     int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemy.getCoords());
-                    if (distance <= myUnit.getMobility()) {
-                        actions.add(new AttackNavalAction(myUnit, enemy, nation, moveService));
+                    if (distance <= myUnit.getMobility() * 3) {
+                        actions.add(new AttackNavalAction(myUnit, enemy, distance, nation, moveService));
                     }
                 }
             }
@@ -605,12 +601,12 @@ public class BotActionGenerator {
                 continue;
             }
 
-            // Air combat: attack enemy units
+            // Air combat: attack enemy units (air has high mobility, use 2x range)
             if (myUnit.getAttack() > 0) {
                 for (Unit enemy : enemies) {
                     int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemy.getCoords());
-                    if (distance <= myUnit.getMobility()) {
-                        actions.add(new AttackWithAirAction(myUnit, enemy.getCoords(), nation, moveService, false));
+                    if (distance <= myUnit.getMobility() * 2) {
+                        actions.add(new AttackWithAirAction(myUnit, enemy.getCoords(), distance, nation, moveService, false));
                     }
                 }
             }
@@ -619,8 +615,8 @@ public class BotActionGenerator {
             if (myUnit.getUnitBase().getBombPercentage() > 0) {
                 for (City enemyCity : enemyCities) {
                     int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemyCity.getCoords());
-                    if (distance <= myUnit.getMobility()) {
-                        actions.add(new AttackWithAirAction(myUnit, enemyCity.getCoords(), nation, moveService, true));
+                    if (distance <= myUnit.getMobility() * 2) {
+                        actions.add(new AttackWithAirAction(myUnit, enemyCity.getCoords(), distance, nation, moveService, true));
                     }
                 }
             }

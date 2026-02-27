@@ -67,7 +67,7 @@ class CoordinationUtilityTest {
         BotWorldState state2 = buildState(List.of(inf1, inf2));
         BotWorldState state3 = buildState(List.of(inf1, inf2, inf3));
 
-        AttackEnemyAction action = new AttackEnemyAction(inf1, enemy, null, null);
+        AttackEnemyAction action = new AttackEnemyAction(inf1, enemy, 1, null, null);
 
         double utility2 = action.computeUtility(state2, weights);
         double utility3 = action.computeUtility(state3, weights);
@@ -90,7 +90,7 @@ class CoordinationUtilityTest {
         Unit farUnit = makeUnit(UnitType.INFANTRY, new SectorCoords(19, 19), 2);
         BotWorldState stateWithFar = buildState(List.of(inf1, farUnit));
 
-        AttackEnemyAction action = new AttackEnemyAction(inf1, enemy, null, null);
+        AttackEnemyAction action = new AttackEnemyAction(inf1, enemy, 1, null, null);
 
         double utilAlone = action.computeUtility(stateAlone, weights);
         double utilWithFar = action.computeUtility(stateWithFar, weights);
@@ -112,7 +112,7 @@ class CoordinationUtilityTest {
         BotWorldState stateWithGround = buildState(List.of(fighter, inf));
         BotWorldState stateNoGround = buildState(List.of(fighter));
 
-        AttackWithAirAction action = new AttackWithAirAction(fighter, target, null, null, false);
+        AttackWithAirAction action = new AttackWithAirAction(fighter, target, 1, null, null, false);
 
         double utilWithGround = action.computeUtility(stateWithGround, weights);
         double utilNoGround = action.computeUtility(stateNoGround, weights);
@@ -134,8 +134,8 @@ class CoordinationUtilityTest {
 
         BotWorldState state = buildState(List.of(fighter, inf));
 
-        AttackWithAirAction airAction = new AttackWithAirAction(fighter, target, null, null, false);
-        AttackWithAirAction airActionAlone = new AttackWithAirAction(fighter, target, null, null, false);
+        AttackWithAirAction airAction = new AttackWithAirAction(fighter, target, 1, null, null, false);
+        AttackWithAirAction airActionAlone = new AttackWithAirAction(fighter, target, 1, null, null, false);
 
         BotWorldState stateAlone = buildState(List.of(fighter));
 
@@ -160,7 +160,7 @@ class CoordinationUtilityTest {
         BotWorldState stateWithTransport = buildState(List.of(destroyer, transport));
         BotWorldState stateNoTransport = buildState(List.of(destroyer));
 
-        AttackNavalAction action = new AttackNavalAction(destroyer, enemyShip, null, null);
+        AttackNavalAction action = new AttackNavalAction(destroyer, enemyShip, 1, null, null);
 
         double utilWithTransport = action.computeUtility(stateWithTransport, weights);
         double utilNoTransport = action.computeUtility(stateNoTransport, weights);
@@ -190,7 +190,7 @@ class CoordinationUtilityTest {
 
         BotWorldState state = buildState(List.of(inf1, inf2, inf3));
 
-        AttackEnemyAction action = new AttackEnemyAction(inf1, enemy, null, null);
+        AttackEnemyAction action = new AttackEnemyAction(inf1, enemy, 1, null, null);
 
         // With high threshold, 2 allies (excluding self) should not meet threshold - 1 = 3
         double utilHighThreshold = action.computeUtility(state, highThreshold);

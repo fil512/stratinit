@@ -16,12 +16,14 @@ import java.util.Collections;
 public class AttackEnemyAction implements BotAction {
     private final Unit attacker;
     private final Unit target;
+    private final int distance;
     private final Nation nation;
     private final MoveService moveService;
 
-    public AttackEnemyAction(Unit attacker, Unit target, Nation nation, MoveService moveService) {
+    public AttackEnemyAction(Unit attacker, Unit target, int distance, Nation nation, MoveService moveService) {
         this.attacker = attacker;
         this.target = target;
+        this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -58,7 +60,10 @@ public class AttackEnemyAction implements BotAction {
             utility += weights.airSupportBonus * 0.5;
         }
 
-        return utility;
+        // Distance penalty: farther enemies are less attractive
+        utility -= distance * weights.distancePenalty;
+
+        return Math.max(0, utility);
     }
 
     @Override

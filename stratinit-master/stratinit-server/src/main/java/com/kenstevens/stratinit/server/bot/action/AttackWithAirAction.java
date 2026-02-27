@@ -16,14 +16,16 @@ import java.util.Collections;
 public class AttackWithAirAction implements BotAction {
     private final Unit airUnit;
     private final SectorCoords targetCoords;
+    private final int distance;
     private final Nation nation;
     private final MoveService moveService;
     private final boolean isBombingCity;
 
-    public AttackWithAirAction(Unit airUnit, SectorCoords targetCoords, Nation nation,
+    public AttackWithAirAction(Unit airUnit, SectorCoords targetCoords, int distance, Nation nation,
                                MoveService moveService, boolean isBombingCity) {
         this.airUnit = airUnit;
         this.targetCoords = targetCoords;
+        this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
         this.isBombingCity = isBombingCity;
@@ -51,7 +53,10 @@ public class AttackWithAirAction implements BotAction {
             utility += weights.airSupportBonus;
         }
 
-        return utility;
+        // Distance penalty: farther targets are less attractive
+        utility -= distance * weights.distancePenalty;
+
+        return Math.max(0, utility);
     }
 
     @Override

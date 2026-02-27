@@ -96,10 +96,6 @@ public class TrainingGameSimulator {
         // Set start time in the past so hasStarted() returns true
         Date pastStart = new Date(now.getTime() - 1000);
         game.setStartTime(pastStart);
-        // Set ends far in the future so hasEnded() returns false during simulation
-        game.setEnds(new Date(now.getTime() + 365L * 24 * 60 * 60 * 1000));
-        game.setLastUpdated(pastStart);
-        gameDao.merge(game);
 
         // Set initial lastUpdated on all cities and units
         Collection<City> allCities = cityDao.getCities(game);
@@ -113,6 +109,11 @@ public class TrainingGameSimulator {
 
         // Compute tick interval: use the smallest update period across units and cities
         long tickInterval = computeTickInterval(game);
+
+        // Set ends to match simulation duration so gameTimePercent progresses 0→1
+        game.setEnds(new Date(pastStart.getTime() + MAX_TURNS * tickInterval));
+        game.setLastUpdated(pastStart);
+        gameDao.merge(game);
 
         // Simulation loop
         long simulatedTime = pastStart.getTime();

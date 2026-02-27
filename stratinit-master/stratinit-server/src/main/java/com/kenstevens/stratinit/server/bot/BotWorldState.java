@@ -384,6 +384,14 @@ public class BotWorldState {
         return myCities.stream().anyMatch(c -> c.getBuild() == UnitType.ENGINEER || c.getNextBuild() == UnitType.ENGINEER);
     }
 
+    public boolean hasTankUnit() {
+        return myUnits.stream().anyMatch(u -> u.isAlive() && u.getType() == UnitType.TANK);
+    }
+
+    public boolean hasTankInProduction() {
+        return myCities.stream().anyMatch(c -> c.getBuild() == UnitType.TANK || c.getNextBuild() == UnitType.TANK);
+    }
+
     public int countMyCitiesOnIsland(int islandId) {
         return (int) myCities.stream()
                 .filter(c -> {
