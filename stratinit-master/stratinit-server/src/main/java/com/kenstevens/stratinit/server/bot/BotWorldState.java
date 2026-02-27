@@ -354,4 +354,21 @@ public class BotWorldState {
         Sector sector = world.getSectorOrNull(unit.getCoords());
         return sector != null && sector.getIsland() == homeIsland;
     }
+
+    public boolean hasEngineerUnit() {
+        return myUnits.stream().anyMatch(u -> u.isAlive() && u.getType() == UnitType.ENGINEER);
+    }
+
+    public boolean hasEngineerInProduction() {
+        return myCities.stream().anyMatch(c -> c.getBuild() == UnitType.ENGINEER || c.getNextBuild() == UnitType.ENGINEER);
+    }
+
+    public int countMyCitiesOnIsland(int islandId) {
+        return (int) myCities.stream()
+                .filter(c -> {
+                    Sector s = world.getSectorOrNull(c.getCoords());
+                    return s != null && s.getIsland() == islandId;
+                })
+                .count();
+    }
 }

@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.bot.action;
 
 import com.kenstevens.stratinit.client.model.MoveCost;
 import com.kenstevens.stratinit.client.model.Nation;
+import com.kenstevens.stratinit.client.model.Sector;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dto.SIUnit;
 import com.kenstevens.stratinit.remote.Result;
@@ -36,9 +37,17 @@ public class DisembarkUnitAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.navalBaseWeight * weights.disembarkDesire;
+        double utility = weights.expansionBaseWeight * weights.disembarkDesire;
         if (isCity) {
             utility *= (1.0 + weights.neutralCityCaptureDesire);
+        }
+        // New-island boost: disembarking onto an island with no owned cities
+        Sector targetSector = state.getWorld().getSectorOrNull(targetCoords);
+        if (targetSector != null && !targetSector.isWater()) {
+            int islandId = targetSector.getIsland();
+            if (state.countMyCitiesOnIsland(islandId) == 0) {
+                utility *= (1.0 + weights.coastalCityDesire);
+            }
         }
         return utility;
     }

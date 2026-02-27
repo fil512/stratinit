@@ -10,6 +10,7 @@ public class BotWeights {
     public double techCentreDesire = 0.8;
     public double infantryDesire = 0.7;
     public double engineerDesire = 0.8;
+    public double engineerGuaranteeMultiplier = 3.0;
 
     // Expansion weights
     public double expansionBaseWeight = 0.9;

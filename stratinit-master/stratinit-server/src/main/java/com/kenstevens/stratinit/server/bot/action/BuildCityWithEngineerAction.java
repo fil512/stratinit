@@ -41,6 +41,14 @@ public class BuildCityWithEngineerAction implements BotAction {
                 utility *= (1.0 + weights.coastalCityDesire);
             }
         }
+        // New-island boost: building first city on a non-home island is very high priority
+        Sector engineerSector = state.getWorld().getSectorOrNull(engineer.getCoords());
+        if (engineerSector != null && !engineerSector.isWater()) {
+            int islandId = engineerSector.getIsland();
+            if (islandId != state.getHomeIslandId() && state.countMyCitiesOnIsland(islandId) == 0) {
+                utility *= (1.0 + weights.coastalCityDesire);
+            }
+        }
         return utility;
     }
 

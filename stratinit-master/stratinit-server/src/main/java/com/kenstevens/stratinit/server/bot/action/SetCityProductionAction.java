@@ -59,7 +59,11 @@ public class SetCityProductionAction implements BotAction {
         } else if (unitType == UnitType.INFANTRY) {
             utility *= weights.infantryDesire;
         } else if (unitType == UnitType.ENGINEER) {
-            utility *= weights.engineerDesire;
+            if (!state.hasEngineerUnit() && !state.hasEngineerInProduction()) {
+                utility = weights.economyBaseWeight * weights.engineerGuaranteeMultiplier;
+            } else {
+                utility *= weights.engineerDesire;
+            }
         } else if (unitType == UnitType.TANK) {
             utility *= weights.tankDesire;
         } else if (unitBase.isNavy()) {
