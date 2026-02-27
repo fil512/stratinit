@@ -77,6 +77,16 @@ public class SetCityProductionAction implements BotAction {
                 if (state.hasDiscoveredNonHomeIsland()) {
                     utility *= 1.5;
                 }
+                // Time-based urgency: if game > 20% complete and still no transport, high priority
+                if (state.getGameTimePercent() > 0.2) {
+                    utility = weights.economyBaseWeight * weights.coastalCityDesire * 3.0;
+                }
+            } else if (state.isCoastalCity(city) && state.hasDiscoveredNonHomeIsland()
+                    && !state.hasTransportEnRoute()
+                    && state.getTransportsWithPassengers().isEmpty()
+                    && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) {
+                // Second transport guarantee: keep pipeline flowing when first transport has sailed
+                utility = weights.economyBaseWeight * weights.coastalCityDesire * 1.5;
             } else {
                 utility *= weights.navalBaseWeight;
             }

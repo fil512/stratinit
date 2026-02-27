@@ -119,11 +119,9 @@ public class BotActionGenerator {
         }
 
         // Naval expansion: idle naval units can explore water
-        // Skip empty transports — they should stay near coast for loading, not explore
-        Set<Integer> loadedTransportIds = state.getLoadedTransports().stream()
-                .map(Unit::getId).collect(Collectors.toSet());
+        // Skip all transports — loaded ones use destination planning, empty ones use pre-positioning
         for (Unit unit : state.getIdleNavalUnits()) {
-            if (unit.carriesUnits() && !loadedTransportIds.contains(unit.getId())) {
+            if (unit.carriesUnits()) {
                 continue;
             }
             generateSmartExpansionMoves(unit, state, nation, actions, false, false);
@@ -483,6 +481,9 @@ public class BotActionGenerator {
         // Transport destination planning: sail loaded transports to other islands
         generateTransportDestinationActions(state, nation, actions);
 
+        // Empty transport pre-positioning: sail empty transports toward discovered islands
+        generateEmptyTransportDestinationActions(state, nation, actions);
+
         // Disembark: land units at sea step onto adjacent land
         generateDisembarkActions(state, nation, actions);
     }
@@ -584,6 +585,90 @@ public class BotActionGenerator {
                 LandingCandidate c = candidates.get(i);
                 actions.add(new MoveTransportToTargetAction(transport, c.coords, c.distance,
                         c.hasCityTarget, c.islandScore, nation, moveService));
+            }
+        }
+    }
+
+    private void generateEmptyTransportDestinationActions(BotWorldState state, Nation nation, List<BotAction> actions) {
+        if (!state.hasDiscoveredNonHomeIsland()) return;
+
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        int homeIslandId = state.getHomeIslandId();
+
+        // Find idle empty transports (not loaded, no passengers at same location)
+        Set<SectorCoords> passengerCoords = state.getTransportsWithPassengers().stream()
+                .map(Unit::getCoords).collect(Collectors.toSet());
+        Set<SectorCoords> loadedCoords = state.getLoadedTransports().stream()
+                .map(Unit::getCoords).collect(Collectors.toSet());
+        List<Unit> emptyTransports = state.getIdleNavalUnits().stream()
+                .filter(u -> u.carriesUnits()
+                        && !loadedCoords.contains(u.getCoords())
+                        && !passengerCoords.contains(u.getCoords()))
+                .collect(Collectors.toList());
+        if (emptyTransports.isEmpty()) return;
+
+        // Build target city coords and island scores (same logic as loaded transport destinations)
+        Set<SectorCoords> targetCityCoords = new HashSet<>();
+        for (City enemyCity : state.getEnemyCities()) {
+            Sector s = world.getSectorOrNull(enemyCity.getCoords());
+            if (s != null && s.getIsland() != homeIslandId) {
+                targetCityCoords.add(enemyCity.getCoords());
+            }
+        }
+        for (SectorCoords neutralCoords : state.getNeutralCityCoords()) {
+            Sector s = world.getSectorOrNull(neutralCoords);
+            if (s != null && s.getIsland() != homeIslandId) {
+                targetCityCoords.add(neutralCoords);
+            }
+        }
+
+        Map<Integer, Integer> islandScores = new HashMap<>();
+        for (BotWorldState.DiscoveredIsland island : state.getDiscoveredIslands()) {
+            if (island.hasMyPresence()) continue;
+            int score = island.neutralCityCount() * 3 + island.enemyCityCount() + island.knownLandCount() / 5;
+            islandScores.put(island.islandId(), Math.max(1, score));
+        }
+
+        for (Unit transport : emptyTransports) {
+            SectorCoords transportCoords = transport.getCoords();
+            List<LandingCandidate> candidates = new ArrayList<>();
+
+            for (int x = 0; x < gameSize; x++) {
+                for (int y = 0; y < gameSize; y++) {
+                    SectorCoords coords = new SectorCoords(x, y);
+                    if (!state.isExplored(coords)) continue;
+                    Sector sector = world.getSectorOrNull(coords);
+                    if (sector == null || !sector.isWater()) continue;
+
+                    boolean adjacentToLand = false;
+                    boolean adjacentToCity = false;
+                    int bestIslandScore = 1;
+                    for (Sector neighbour : world.getNeighbours(coords)) {
+                        if (!neighbour.isWater() && neighbour.getIsland() != homeIslandId) {
+                            adjacentToLand = true;
+                            int neighbourScore = islandScores.getOrDefault(neighbour.getIsland(), 1);
+                            bestIslandScore = Math.max(bestIslandScore, neighbourScore);
+                            if (targetCityCoords.contains(neighbour.getCoords())) {
+                                adjacentToCity = true;
+                            }
+                        }
+                    }
+                    if (adjacentToLand) {
+                        int dist = SectorCoords.distance(gameSize, transportCoords, coords);
+                        candidates.add(new LandingCandidate(coords, dist, adjacentToCity, bestIslandScore));
+                    }
+                }
+            }
+
+            candidates.sort(Comparator.<LandingCandidate>comparingInt(c -> -c.islandScore)
+                    .thenComparingInt(c -> c.hasCityTarget ? 0 : 1)
+                    .thenComparingInt(c -> c.distance));
+            int limit = Math.min(3, candidates.size());
+            for (int i = 0; i < limit; i++) {
+                LandingCandidate c = candidates.get(i);
+                actions.add(new MoveTransportToTargetAction(transport, c.coords, c.distance,
+                        c.hasCityTarget, c.islandScore, true, nation, moveService));
             }
         }
     }

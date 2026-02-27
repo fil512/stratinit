@@ -19,16 +19,24 @@ public class MoveTransportToTargetAction implements BotAction {
     private final int distance;
     private final boolean hasCityTarget;
     private final int islandScore;
+    private final boolean isEmpty;
     private final Nation nation;
     private final MoveService moveService;
 
     public MoveTransportToTargetAction(Unit transport, SectorCoords targetCoords, int distance,
                                         boolean hasCityTarget, int islandScore, Nation nation, MoveService moveService) {
+        this(transport, targetCoords, distance, hasCityTarget, islandScore, false, nation, moveService);
+    }
+
+    public MoveTransportToTargetAction(Unit transport, SectorCoords targetCoords, int distance,
+                                        boolean hasCityTarget, int islandScore, boolean isEmpty,
+                                        Nation nation, MoveService moveService) {
         this.transport = transport;
         this.targetCoords = targetCoords;
         this.distance = distance;
         this.hasCityTarget = hasCityTarget;
         this.islandScore = islandScore;
+        this.isEmpty = isEmpty;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -46,6 +54,9 @@ public class MoveTransportToTargetAction implements BotAction {
         }
         utility -= distance * weights.distancePenalty;
         utility *= (1.0 + (islandScore - 1) * 0.2);
+        if (isEmpty) {
+            utility *= 0.5;
+        }
         return Math.max(0, utility);
     }
 
@@ -68,7 +79,8 @@ public class MoveTransportToTargetAction implements BotAction {
 
     @Override
     public String describe() {
-        return "Sail transport " + transport.toMyString() + " toward landing zone " + targetCoords
+        return "Sail " + (isEmpty ? "empty " : "") + "transport " + transport.toMyString()
+                + " toward landing zone " + targetCoords
                 + (hasCityTarget ? " (city target)" : "")
                 + " [island score=" + islandScore + "]";
     }
