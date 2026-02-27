@@ -74,6 +74,9 @@ public class SetCityProductionAction implements BotAction {
             if (!state.hasTransportCapability() && state.isCoastalCity(city)) {
                 // Guarantee: must build a transport if we have none and no city is building one
                 utility = weights.economyBaseWeight * weights.coastalCityDesire * 2.0;
+                if (state.hasDiscoveredNonHomeIsland()) {
+                    utility *= 1.5;
+                }
             } else {
                 utility *= weights.navalBaseWeight;
             }

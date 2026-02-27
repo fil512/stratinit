@@ -504,7 +504,7 @@ public class BotActionGenerator {
         }
     }
 
-    private record LandingCandidate(SectorCoords coords, int distance, boolean hasCityTarget) {}
+    private record LandingCandidate(SectorCoords coords, int distance, boolean hasCityTarget, int islandScore) {}
 
     private void generateTransportDestinationActions(BotWorldState state, Nation nation, List<BotAction> actions) {
         List<Unit> loadedTransports = state.getLoadedTransports();
@@ -531,6 +531,14 @@ public class BotActionGenerator {
             }
         }
 
+        // Compute island scores from discovered islands
+        Map<Integer, Integer> islandScores = new HashMap<>();
+        for (BotWorldState.DiscoveredIsland island : state.getDiscoveredIslands()) {
+            if (island.hasMyPresence()) continue; // Skip islands where we already have presence
+            int score = island.neutralCityCount() * 3 + island.enemyCityCount() + island.knownLandCount() / 5;
+            islandScores.put(island.islandId(), Math.max(1, score));
+        }
+
         for (Unit transport : loadedTransports) {
             SectorCoords transportCoords = transport.getCoords();
             List<LandingCandidate> candidates = new ArrayList<>();
@@ -549,9 +557,12 @@ public class BotActionGenerator {
                     // Check if adjacent to non-home island land
                     boolean adjacentToLand = false;
                     boolean adjacentToCity = false;
+                    int bestIslandScore = 1;
                     for (Sector neighbour : world.getNeighbours(coords)) {
                         if (!neighbour.isWater() && neighbour.getIsland() != homeIslandId) {
                             adjacentToLand = true;
+                            int neighbourScore = islandScores.getOrDefault(neighbour.getIsland(), 1);
+                            bestIslandScore = Math.max(bestIslandScore, neighbourScore);
                             if (targetCityCoords.contains(neighbour.getCoords())) {
                                 adjacentToCity = true;
                             }
@@ -559,19 +570,20 @@ public class BotActionGenerator {
                     }
                     if (adjacentToLand) {
                         int dist = SectorCoords.distance(gameSize, transportCoords, coords);
-                        candidates.add(new LandingCandidate(coords, dist, adjacentToCity));
+                        candidates.add(new LandingCandidate(coords, dist, adjacentToCity, bestIslandScore));
                     }
                 }
             }
 
-            // Prioritize city targets, then sort by distance
-            candidates.sort(Comparator.<LandingCandidate>comparingInt(c -> c.hasCityTarget ? 0 : 1)
+            // Prioritize island score, then city targets, then distance
+            candidates.sort(Comparator.<LandingCandidate>comparingInt(c -> -c.islandScore)
+                    .thenComparingInt(c -> c.hasCityTarget ? 0 : 1)
                     .thenComparingInt(c -> c.distance));
             int limit = Math.min(3, candidates.size());
             for (int i = 0; i < limit; i++) {
                 LandingCandidate c = candidates.get(i);
                 actions.add(new MoveTransportToTargetAction(transport, c.coords, c.distance,
-                        c.hasCityTarget, nation, moveService));
+                        c.hasCityTarget, c.islandScore, nation, moveService));
             }
         }
     }
@@ -632,8 +644,9 @@ public class BotActionGenerator {
         boolean hasFuelConstraint = zeppelin.requiresFuel();
 
         // Score all reachable positions by how many new squares they would reveal
-        record ScoredTarget(SectorCoords coords, int revealCount, int distance) {}
+        record ScoredTarget(SectorCoords coords, int revealCount, int distance, double waterRatio) {}
         List<ScoredTarget> candidates = new ArrayList<>();
+        World world = state.getWorld();
 
         for (SectorCoords target : zepCoords.sectorsWithin(gameSize, mobility, false)) {
             int distToTarget = SectorCoords.distance(gameSize, zepCoords, target);
@@ -647,16 +660,25 @@ public class BotActionGenerator {
                 }
             }
 
-            // Count unexplored squares within sight range of this position
+            // Count unexplored squares and explored water within sight range of this position
             int revealCount = 0;
+            int exploredCount = 0;
+            int exploredWaterCount = 0;
             for (SectorCoords visible : target.sectorsWithin(gameSize, sight, true)) {
                 if (!state.isExplored(visible)) {
                     revealCount++;
+                } else {
+                    exploredCount++;
+                    Sector visibleSector = world.getSectorOrNull(visible);
+                    if (visibleSector != null && visibleSector.isWater()) {
+                        exploredWaterCount++;
+                    }
                 }
             }
             if (revealCount == 0) continue;
 
-            candidates.add(new ScoredTarget(target, revealCount, distToTarget));
+            double waterRatio = exploredCount > 0 ? (double) exploredWaterCount / exploredCount : 0.0;
+            candidates.add(new ScoredTarget(target, revealCount, distToTarget, waterRatio));
         }
 
         // Sort by reveal count descending, then distance ascending
@@ -668,7 +690,7 @@ public class BotActionGenerator {
         for (int i = 0; i < count; i++) {
             ScoredTarget c = candidates.get(i);
             actions.add(new ZeppelinScoutAction(zeppelin, c.coords, c.distance,
-                    c.revealCount, false, nation, moveService));
+                    c.revealCount, c.waterRatio, false, nation, moveService));
         }
 
         // If no exploration targets and fuel is low, return to nearest city
@@ -677,7 +699,7 @@ public class BotActionGenerator {
             if (nearestCity != null) {
                 int dist = SectorCoords.distance(gameSize, zepCoords, nearestCity);
                 actions.add(new ZeppelinScoutAction(zeppelin, nearestCity, dist,
-                        0, true, nation, moveService));
+                        0, 0.0, true, nation, moveService));
             }
         }
     }

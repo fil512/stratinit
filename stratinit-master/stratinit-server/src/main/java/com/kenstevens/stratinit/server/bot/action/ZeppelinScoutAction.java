@@ -18,16 +18,18 @@ public class ZeppelinScoutAction implements BotAction {
     private final SectorCoords target;
     private final int distance;
     private final int revealCount;
+    private final double waterRatio;
     private final boolean isReturnToCity;
     private final Nation nation;
     private final MoveService moveService;
 
     public ZeppelinScoutAction(Unit zeppelin, SectorCoords target, int distance,
-                                int revealCount, boolean isReturnToCity, Nation nation, MoveService moveService) {
+                                int revealCount, double waterRatio, boolean isReturnToCity, Nation nation, MoveService moveService) {
         this.zeppelin = zeppelin;
         this.target = target;
         this.distance = distance;
         this.revealCount = revealCount;
+        this.waterRatio = waterRatio;
         this.isReturnToCity = isReturnToCity;
         this.nation = nation;
         this.moveService = moveService;
@@ -43,6 +45,8 @@ public class ZeppelinScoutAction implements BotAction {
         double utility = weights.expansionBaseWeight * weights.zeppelinScoutDesire;
         // Scale by number of new squares that would be revealed
         utility *= Math.max(1, revealCount);
+        // Boost for water-heavy directions (discover other islands)
+        utility *= (1.0 + waterRatio * weights.zeppelinWaterBonus);
         // Penalize distant targets
         utility -= distance * weights.distancePenalty;
         // Early game scouting is more valuable
@@ -78,6 +82,6 @@ public class ZeppelinScoutAction implements BotAction {
         if (isReturnToCity) {
             return "Zeppelin returning to city at " + target;
         }
-        return "Zeppelin scouting toward " + target + " (reveals ~" + revealCount + " squares)";
+        return "Zeppelin scouting toward " + target + " (reveals ~" + revealCount + " squares, water=" + String.format("%.0f%%", waterRatio * 100) + ")";
     }
 }

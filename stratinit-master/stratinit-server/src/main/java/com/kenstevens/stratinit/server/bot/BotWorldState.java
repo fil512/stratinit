@@ -392,6 +392,68 @@ public class BotWorldState {
         return myCities.stream().anyMatch(c -> c.getBuild() == UnitType.TANK || c.getNextBuild() == UnitType.TANK);
     }
 
+    public record DiscoveredIsland(int islandId, int knownLandCount, int neutralCityCount, int enemyCityCount, boolean hasMyPresence) {}
+
+    public boolean hasDiscoveredNonHomeIsland() {
+        int homeIsland = getHomeIslandId();
+        if (homeIsland < 0) return false;
+        for (SectorCoords coords : scoutedCoords) {
+            Sector sector = world.getSectorOrNull(coords);
+            if (sector != null && !sector.isWater() && sector.getIsland() >= 0 && sector.getIsland() != homeIsland) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<DiscoveredIsland> getDiscoveredIslands() {
+        int homeIsland = getHomeIslandId();
+        Map<Integer, Integer> landCounts = new HashMap<>();
+        Map<Integer, Integer> neutralCounts = new HashMap<>();
+        Map<Integer, Integer> enemyCounts = new HashMap<>();
+        Set<Integer> myPresenceIslands = new HashSet<>();
+
+        Set<SectorCoords> neutralCitySet = new HashSet<>(neutralCityCoords);
+        Set<SectorCoords> enemyCitySet = enemyCities.stream()
+                .map(City::getCoords).collect(Collectors.toSet());
+        Set<SectorCoords> myCitySet = myCities.stream()
+                .map(City::getCoords).collect(Collectors.toSet());
+
+        for (SectorCoords coords : scoutedCoords) {
+            Sector sector = world.getSectorOrNull(coords);
+            if (sector == null || sector.isWater() || sector.getIsland() < 0 || sector.getIsland() == homeIsland) continue;
+            int islandId = sector.getIsland();
+            landCounts.merge(islandId, 1, Integer::sum);
+            if (neutralCitySet.contains(coords)) {
+                neutralCounts.merge(islandId, 1, Integer::sum);
+            }
+            if (enemyCitySet.contains(coords)) {
+                enemyCounts.merge(islandId, 1, Integer::sum);
+            }
+            if (myCitySet.contains(coords)) {
+                myPresenceIslands.add(islandId);
+            }
+        }
+        // Also check if we have units on these islands
+        for (Unit unit : myUnits) {
+            if (!unit.isAlive()) continue;
+            Sector sector = world.getSectorOrNull(unit.getCoords());
+            if (sector != null && !sector.isWater() && sector.getIsland() >= 0 && sector.getIsland() != homeIsland) {
+                myPresenceIslands.add(sector.getIsland());
+            }
+        }
+
+        List<DiscoveredIsland> islands = new ArrayList<>();
+        for (Map.Entry<Integer, Integer> entry : landCounts.entrySet()) {
+            int id = entry.getKey();
+            islands.add(new DiscoveredIsland(id, entry.getValue(),
+                    neutralCounts.getOrDefault(id, 0),
+                    enemyCounts.getOrDefault(id, 0),
+                    myPresenceIslands.contains(id)));
+        }
+        return islands;
+    }
+
     public int countMyCitiesOnIsland(int islandId) {
         return (int) myCities.stream()
                 .filter(c -> {

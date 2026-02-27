@@ -18,15 +18,17 @@ public class MoveTransportToTargetAction implements BotAction {
     private final SectorCoords targetCoords;
     private final int distance;
     private final boolean hasCityTarget;
+    private final int islandScore;
     private final Nation nation;
     private final MoveService moveService;
 
     public MoveTransportToTargetAction(Unit transport, SectorCoords targetCoords, int distance,
-                                        boolean hasCityTarget, Nation nation, MoveService moveService) {
+                                        boolean hasCityTarget, int islandScore, Nation nation, MoveService moveService) {
         this.transport = transport;
         this.targetCoords = targetCoords;
         this.distance = distance;
         this.hasCityTarget = hasCityTarget;
+        this.islandScore = islandScore;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -43,6 +45,7 @@ public class MoveTransportToTargetAction implements BotAction {
             utility *= 1.3;
         }
         utility -= distance * weights.distancePenalty;
+        utility *= (1.0 + (islandScore - 1) * 0.2);
         return Math.max(0, utility);
     }
 
@@ -66,6 +69,7 @@ public class MoveTransportToTargetAction implements BotAction {
     @Override
     public String describe() {
         return "Sail transport " + transport.toMyString() + " toward landing zone " + targetCoords
-                + (hasCityTarget ? " (city target)" : "");
+                + (hasCityTarget ? " (city target)" : "")
+                + " [island score=" + islandScore + "]";
     }
 }

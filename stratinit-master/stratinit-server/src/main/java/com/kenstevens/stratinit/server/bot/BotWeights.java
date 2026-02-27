@@ -65,6 +65,7 @@ public class BotWeights {
     public double researchGuaranteeMultiplier = 3.0;
     public double coastalCityDesire = 1.2;
     public double moveToCoastDesire = 0.6;
+    public double zeppelinWaterBonus = 0.3;
 
     // Production weights
     public double tankDesire = 0.6;
