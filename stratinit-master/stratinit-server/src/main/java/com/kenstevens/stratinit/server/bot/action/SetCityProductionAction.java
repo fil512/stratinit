@@ -98,9 +98,12 @@ public class SetCityProductionAction implements BotAction {
 
     @Override
     public boolean execute() {
-        CityFieldToUpdateEnum field = city.getBuild() != null
-                ? CityFieldToUpdateEnum.NEXT_BUILD
-                : CityFieldToUpdateEnum.BUILD;
+        // Use BUILD when city has no build or is building a non-unit (BASE/RESEARCH),
+        // since non-units never "complete" and would block NEXT_BUILD from starting
+        CityFieldToUpdateEnum field =
+                (city.getBuild() != null && UnitBase.isUnit(city.getBuild()))
+                        ? CityFieldToUpdateEnum.NEXT_BUILD
+                        : CityFieldToUpdateEnum.BUILD;
         return cityService.updateCity(nation, city.getCoords(),
                 field, unitType, null, false, null).isSuccess();
     }

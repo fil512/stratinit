@@ -13,20 +13,23 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class MoveToCoastForPickupAction implements BotAction {
+/**
+ * Guarantee action: move a land unit toward a coastal tile near an empty transport.
+ * Uses the engineer guarantee multiplier to ensure it beats normal expansion,
+ * similar to the engineer and research guarantee patterns.
+ */
+public class MoveToTransportGuaranteeAction implements BotAction {
     private final Unit unit;
     private final SectorCoords target;
     private final int distance;
-    private final boolean transportNearby;
     private final Nation nation;
     private final MoveService moveService;
 
-    public MoveToCoastForPickupAction(Unit unit, SectorCoords target, int distance,
-                                       boolean transportNearby, Nation nation, MoveService moveService) {
+    public MoveToTransportGuaranteeAction(Unit unit, SectorCoords target, int distance,
+                                           Nation nation, MoveService moveService) {
         this.unit = unit;
         this.target = target;
         this.distance = distance;
-        this.transportNearby = transportNearby;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -38,17 +41,14 @@ public class MoveToCoastForPickupAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight * weights.moveToCoastDesire;
-        // Big boost if transport is within 6 hexes of coast target
-        if (transportNearby) {
-            utility *= (1.0 + weights.transportLoadDesire);
-        }
-        // Early game bonus
+        // Guarantee-level utility: expansionBaseWeight * engineerGuaranteeMultiplier
+        // This ensures it beats normal expansion actions
+        double utility = weights.expansionBaseWeight * weights.engineerGuaranteeMultiplier;
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        // Penalize distant targets (after boosts, so distance doesn't zero out boosted utility)
-        utility -= distance * weights.distancePenalty;
+        // Light distance penalty (divided by 3 to keep it high even for far units)
+        utility -= distance * weights.distancePenalty / 3.0;
         return Math.max(0, utility);
     }
 
@@ -70,7 +70,12 @@ public class MoveToCoastForPickupAction implements BotAction {
     }
 
     @Override
+    public String getActionType() {
+        return "MoveToCoastForPickupAction";
+    }
+
+    @Override
     public String describe() {
-        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " to coast at " + target + " for pickup";
+        return "Move " + unit.toMyString() + " from " + unit.getCoords() + " toward transport at coast " + target + " (guarantee)";
     }
 }

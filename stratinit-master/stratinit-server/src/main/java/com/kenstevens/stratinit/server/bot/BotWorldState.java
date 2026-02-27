@@ -355,6 +355,20 @@ public class BotWorldState {
                 || myCities.stream().anyMatch(c -> c.getBuild() == UnitType.TRANSPORT);
     }
 
+    public boolean hasIdleEmptyTransport() {
+        Set<SectorCoords> landAtSeaCoords = myUnits.stream()
+                .filter(u -> u.isAlive() && u.getUnitBase().isLand())
+                .filter(u -> {
+                    Sector sector = world.getSectorOrNull(u.getCoords());
+                    return sector != null && sector.isWater();
+                })
+                .map(Unit::getCoords)
+                .collect(Collectors.toSet());
+        return getIdleNavalUnits().stream()
+                .filter(u -> u.carriesUnits())
+                .anyMatch(u -> !landAtSeaCoords.contains(u.getCoords()));
+    }
+
     public boolean isOnHomeIsland(Unit unit) {
         int homeIsland = getHomeIslandId();
         if (homeIsland < 0) return false;

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BotActionGenerator {
@@ -118,7 +119,13 @@ public class BotActionGenerator {
         }
 
         // Naval expansion: idle naval units can explore water
+        // Skip empty transports — they should stay near coast for loading, not explore
+        Set<Integer> loadedTransportIds = state.getLoadedTransports().stream()
+                .map(Unit::getId).collect(Collectors.toSet());
         for (Unit unit : state.getIdleNavalUnits()) {
+            if (unit.carriesUnits() && !loadedTransportIds.contains(unit.getId())) {
+                continue;
+            }
             generateSmartExpansionMoves(unit, state, nation, actions, false, false);
         }
 
@@ -132,6 +139,12 @@ public class BotActionGenerator {
         // Engineers move to coast even when home unexplored (to build port city)
         if (state.hasTransportCapability()) {
             generateMoveToCoastActions(state, nation, actions, true);
+        }
+
+        // Transport loading guarantee: when idle empty transport exists,
+        // generate high-priority actions to connect infantry to transport
+        if (state.hasIdleEmptyTransport()) {
+            generateTransportLoadingGuarantee(state, nation, actions);
         }
     }
 
@@ -219,6 +232,76 @@ public class BotActionGenerator {
                 int distance = SectorCoords.distance(gameSize, unit.getCoords(), target);
                 boolean transportNearby = state.hasNearbyTransport(target, 6);
                 actions.add(new MoveToCoastForPickupAction(unit, target, distance, transportNearby, nation, moveService));
+            }
+        }
+    }
+
+    private void generateTransportLoadingGuarantee(BotWorldState state, Nation nation, List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+
+        // Find idle empty transports
+        Set<SectorCoords> loadedCoords = state.getLoadedTransports().stream()
+                .map(Unit::getCoords).collect(Collectors.toSet());
+        List<Unit> emptyTransports = state.getIdleNavalUnits().stream()
+                .filter(u -> u.carriesUnits() && !loadedCoords.contains(u.getCoords()))
+                .collect(Collectors.toList());
+        if (emptyTransports.isEmpty()) return;
+
+        // Find idle land units on land (infantry/tank)
+        List<Unit> landUnits = state.getIdleLandUnits().stream()
+                .filter(u -> u.getType() == UnitType.INFANTRY || u.getType() == UnitType.TANK)
+                .filter(u -> {
+                    Sector s = world.getSectorOrNull(u.getCoords());
+                    return s != null && !s.isWater();
+                })
+                .collect(Collectors.toList());
+        if (landUnits.isEmpty()) return;
+
+        for (Unit transport : emptyTransports) {
+            // Find coastal land tiles adjacent to the transport (where a land unit could board from)
+            List<SectorCoords> coastalTiles = new ArrayList<>();
+            for (Sector neighbour : world.getNeighbours(transport.getCoords())) {
+                if (!neighbour.isWater()) {
+                    coastalTiles.add(neighbour.getCoords());
+                }
+            }
+            if (coastalTiles.isEmpty()) continue;
+
+            // Find nearest land unit to any of these coastal tiles
+            Unit bestUnit = null;
+            SectorCoords bestCoastalTile = null;
+            int bestDist = Integer.MAX_VALUE;
+            for (Unit landUnit : landUnits) {
+                for (SectorCoords coastal : coastalTiles) {
+                    int dist = SectorCoords.distance(gameSize, landUnit.getCoords(), coastal);
+                    if (dist < bestDist) {
+                        bestDist = dist;
+                        bestUnit = landUnit;
+                        bestCoastalTile = coastal;
+                    }
+                }
+            }
+            if (bestUnit == null) continue;
+
+            if (bestDist == 0) {
+                // Land unit is already on coast next to transport — board it
+                actions.add(new BoardTransportAction(bestUnit, transport.getCoords(), nation, moveService));
+            } else {
+                // Guarantee: move infantry toward the coastal tile near the transport
+                // Uses high utility (engineerGuaranteeMultiplier) to beat normal expansion
+                actions.add(new MoveToTransportGuaranteeAction(bestUnit, bestCoastalTile, bestDist,
+                        nation, moveService));
+            }
+
+            // Also try to move transport toward nearest land unit (if it has water neighbors within range)
+            for (Sector neighbour : world.getNeighbours(bestUnit.getCoords())) {
+                if (!neighbour.isWater()) continue;
+                int distToNeighbour = SectorCoords.distance(gameSize, transport.getCoords(), neighbour.getCoords());
+                if (distToNeighbour <= transport.getMobility()) {
+                    actions.add(new LoadTransportGuaranteeAction(transport, neighbour.getCoords(), nation, moveService));
+                    break;
+                }
             }
         }
     }
