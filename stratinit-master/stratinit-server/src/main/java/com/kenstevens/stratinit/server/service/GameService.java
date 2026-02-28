@@ -125,8 +125,10 @@ public class GameService {
                         + " may not be mapped.  It has no players.");
             }
         }
-        GameSizer.setIslands(game);
-        GameSizer.setSize(game);
+        if (!game.isBlitz() || game.getGamesize() <= 0) {
+            GameSizer.setIslands(game);
+            GameSizer.setSize(game);
+        }
         World world = createWorld(game);
         sectorDao.save(world);
         game.setMapped();

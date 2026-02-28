@@ -314,18 +314,20 @@ public class BotWorldState {
         return myCities.stream().anyMatch(c -> coastalCityCoords.contains(c.getCoords()));
     }
 
-    public List<SectorCoords> findCoastalBuildSites(int minDistFromCities) {
+    public record BuildSite(SectorCoords coords, boolean coastal) {}
+
+    public List<BuildSite> findBuildSites(int minDistFromCities) {
         int gameSize = game.getGamesize();
-        List<SectorCoords> sites = new ArrayList<>();
+        List<BuildSite> sites = new ArrayList<>();
         for (int x = 0; x < gameSize; x++) {
             for (int y = 0; y < gameSize; y++) {
                 SectorCoords coords = new SectorCoords(x, y);
                 if (!isExplored(coords)) continue;
                 Sector sector = world.getSectorOrNull(coords);
                 if (sector == null || sector.isWater()) continue;
-                if (!world.isCoastal(sector)) continue;
+                if (sector.isPlayerCity()) continue;
                 if (distanceToNearestCity(coords) < minDistFromCities) continue;
-                sites.add(coords);
+                sites.add(new BuildSite(coords, world.isCoastal(sector)));
             }
         }
         return sites;

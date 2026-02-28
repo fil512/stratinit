@@ -12,10 +12,12 @@ import com.kenstevens.stratinit.type.Constants;
 public class BuildCityWithEngineerAction implements BotAction {
     private final Unit engineer;
     private final CityService cityService;
+    private final boolean canBuild;
 
-    public BuildCityWithEngineerAction(Unit engineer, CityService cityService) {
+    public BuildCityWithEngineerAction(Unit engineer, CityService cityService, boolean canBuild) {
         this.engineer = engineer;
         this.cityService = cityService;
+        this.canBuild = canBuild;
     }
 
     @Override
@@ -25,16 +27,20 @@ public class BuildCityWithEngineerAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
+        // Only build if engineer has enough mobility
+        if (engineer.getMobility() < Constants.MOB_COST_TO_CREATE_CITY) {
+            return 0;
+        }
+        // Check if the server will actually allow city placement here
+        if (!canBuild) {
+            return 0;
+        }
         double utility = weights.expansionBaseWeight * weights.buildCityDesire;
         // Early game bonus
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        // Only build if engineer has enough mobility
-        if (engineer.getMobility() < Constants.MOB_COST_TO_CREATE_CITY) {
-            return 0;
-        }
-        // Coastal city bonus: boost when engineer is on a coastal sector and bot has no coastal city
+        // Coastal city bonus: boost when engineer is on a coastal sector and bot has no port
         if (!state.hasCoastalCity()) {
             Sector sector = state.getWorld().getSectorOrNull(engineer.getCoords());
             if (sector != null && state.getWorld().isCoastal(sector)) {

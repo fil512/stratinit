@@ -26,7 +26,8 @@ import java.util.*;
 
 @Service
 public class TrainingGameSimulator {
-    private static final int MAX_TURNS = 100;
+    // 2880 ticks = full blitz game (2 hours real time, bot turn every 2.5 sec)
+    private static final int MAX_TURNS = 2880;
     private static final int PLAYERS_PER_GAME = 8;
     private static final String TRAINING_GAME_PREFIX = "Training-";
 
@@ -68,7 +69,7 @@ public class TrainingGameSimulator {
         Game game = new Game(gameName);
         game.setBlitz(true);
         game.setIslands(PLAYERS_PER_GAME);
-        game.setGamesize(40);
+        game.setGamesize(60);
         gameDao.save(game);
 
         List<String> playerNames = new ArrayList<>(playerWeights.keySet());
@@ -243,15 +244,11 @@ public class TrainingGameSimulator {
     }
 
     private long computeTickInterval(Game game) {
-        // Use the game's tech update interval (15 min real → ~1.5s blitz)
-        // But for training, use a reasonable tick that captures both unit and city updates
-        // Blitz shrink: 10 days → 2 hours, factor = 120
-        long unitPeriod = UpdateCalculator.shrinkTime(true,
-                com.kenstevens.stratinit.type.Constants.HOURS_BETWEEN_UNIT_UPDATES * org.apache.commons.lang3.time.DateUtils.MILLIS_PER_HOUR);
-        long gamePeriod = UpdateCalculator.shrinkTime(true,
-                com.kenstevens.stratinit.type.Constants.TECH_UPDATE_INTERVAL_SECONDS * 1000L);
-        // Use the smaller of the two as our tick
-        return Math.min(unitPeriod, gamePeriod);
+        // Use the bot turn interval as the tick — this is the most frequent scheduled event
+        // Blitz shrink: 5 min real → 2.5 sec blitz
+        long botPeriod = UpdateCalculator.shrinkTime(true,
+                com.kenstevens.stratinit.type.Constants.BOT_TURN_INTERVAL_SECONDS * 1000L);
+        return botPeriod;
     }
 
     public void cleanup(Game game) {

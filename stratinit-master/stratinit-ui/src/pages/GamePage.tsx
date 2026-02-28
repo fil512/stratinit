@@ -125,6 +125,22 @@ export default function GamePage() {
 
   useGameSocket(gameIdNum, onSocketMessage)
 
+  // Navigate to stats page when game ends
+  useEffect(() => {
+    if (!state.update?.gameEnds || !gameIdNum) return
+    const endsTime = new Date(state.update.gameEnds).getTime()
+    const remaining = endsTime - Date.now()
+    if (remaining <= 0) {
+      navigate(`/stats/${gameIdNum}`)
+      return
+    }
+    // Schedule navigation for when the game ends
+    const timer = setTimeout(() => {
+      navigate(`/stats/${gameIdNum}`)
+    }, remaining)
+    return () => clearTimeout(timer)
+  }, [state.update?.gameEnds, gameIdNum, navigate])
+
   // Polling fallback: refresh every 10s in case WebSocket is disconnected
   useEffect(() => {
     if (!state.update) return

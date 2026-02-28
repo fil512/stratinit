@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class BotActionGenerator {
+
     @Autowired
     private CityService cityService;
     @Autowired
@@ -100,16 +101,25 @@ public class BotActionGenerator {
                 continue;
             }
             if (unit.getType() == UnitType.ENGINEER) {
-                if (unit.getMobility() >= com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY) {
-                    // Engineer can build a city (always offer as fallback)
-                    actions.add(new BuildCityWithEngineerAction(unit, cityService));
-                }
-                // Engineer coastal city strategy: always consider moving to coast
-                // (MoveEngineerToCoastAction already reduces utility when coastal city exists)
-                generateEngineerCoastalMoves(unit, state, nation, actions);
-                // Engineer swim to discovered non-home islands
-                if (state.hasDiscoveredNonHomeIsland()) {
-                    generateEngineerSwimActions(unit, state, nation, actions);
+                // Check if this is a good build site (regardless of current mobility)
+                Sector engSector = world.getSectorOrNull(unit.getCoords());
+                boolean serverAllows = engSector != null && cityService.canEstablishCity(nation, engSector);
+                boolean spacedOut = state.distanceToNearestCity(unit.getCoords()) >= 2;
+                boolean goodBuildSite = serverAllows && spacedOut;
+
+                if (goodBuildSite) {
+                    // At a valid build site — build if we have mobility, otherwise wait
+                    if (unit.getMobility() >= com.kenstevens.stratinit.type.Constants.MOB_COST_TO_CREATE_CITY) {
+                        actions.add(new BuildCityWithEngineerAction(unit, cityService, true));
+                    }
+                    // Don't generate move actions — let the engineer sit and recharge
+                } else {
+                    // Not at a build site — move toward one (engineers are builders, not scouts)
+                    generateEngineerBuildSiteMoves(unit, state, nation, actions);
+                    // Engineer swim to discovered non-home islands (only when not at a build site)
+                    if (state.hasDiscoveredNonHomeIsland()) {
+                        generateEngineerSwimActions(unit, state, nation, actions);
+                    }
                 }
             }
             if (unit.getType() == UnitType.INFANTRY || unit.getType() == UnitType.TANK) {
@@ -136,8 +146,6 @@ public class BotActionGenerator {
 
         // Infantry/tanks move to coast for transport pickup (always, to pre-position)
         generateMoveToCoastActions(state, nation, actions, false);
-        // Engineers move to coast even when home unexplored (to build port city)
-        generateMoveToCoastActions(state, nation, actions, true);
 
         // Transport loading guarantee: when idle empty transport exists,
         // generate high-priority actions to connect infantry to transport
@@ -185,20 +193,31 @@ public class BotActionGenerator {
         }
     }
 
-    private void generateEngineerCoastalMoves(Unit unit, BotWorldState state, Nation nation,
-                                                List<BotAction> actions) {
+    private void generateEngineerBuildSiteMoves(Unit unit, BotWorldState state, Nation nation,
+                                                  List<BotAction> actions) {
         int gameSize = state.getGame().getGamesize();
         SectorCoords unitCoords = unit.getCoords();
 
-        List<SectorCoords> coastalSites = state.findCoastalBuildSites(2);
-        // Sort by distance to engineer, take nearest 3
-        coastalSites.sort(Comparator.comparingInt(
-                c -> SectorCoords.distance(gameSize, unitCoords, c)));
-        int limit = Math.min(3, coastalSites.size());
-        for (int i = 0; i < limit; i++) {
-            SectorCoords target = coastalSites.get(i);
-            int distance = SectorCoords.distance(gameSize, unitCoords, target);
-            actions.add(new MoveEngineerToCoastAction(unit, target, distance, nation, moveService));
+        List<BotWorldState.BuildSite> sites = state.findBuildSites(2);
+        if (!sites.isEmpty()) {
+            // Move toward known build sites — sort by distance, take nearest 3
+            sites.sort(Comparator.comparingInt(
+                    s -> SectorCoords.distance(gameSize, unitCoords, s.coords())));
+            int limit = Math.min(3, sites.size());
+            for (int i = 0; i < limit; i++) {
+                BotWorldState.BuildSite site = sites.get(i);
+                int distance = SectorCoords.distance(gameSize, unitCoords, site.coords());
+                actions.add(new MoveEngineerToBuildSiteAction(unit, site.coords(), distance,
+                        site.coastal(), nation, moveService));
+            }
+        } else {
+            // No known build sites — explore to discover them
+            int homeIslandId = state.getHomeIslandId();
+            if (state.isOnHomeIsland(unit) && state.hasUnexploredHomeIslandFrontier()) {
+                generateHomeIslandExpansionMoves(unit, state, nation, actions, homeIslandId);
+            } else {
+                generateSmartExpansionMoves(unit, state, nation, actions, true, false);
+            }
         }
     }
 
@@ -409,6 +428,8 @@ public class BotActionGenerator {
         int gameSize = state.getGame().getGamesize();
         for (SectorCoords cityCoords : state.getNeutralCityCoords()) {
             for (Unit unit : state.getIdleLandUnits()) {
+                // Engineers are builders, not captors — skip them
+                if (unit.getType() == UnitType.ENGINEER) continue;
                 int distance = SectorCoords.distance(gameSize, unit.getCoords(), cityCoords);
                 if (distance <= unit.getMobility()) {
                     actions.add(new CaptureNeutralCityAction(unit, cityCoords, distance, nation, moveService));
@@ -435,6 +456,8 @@ public class BotActionGenerator {
             if (!myUnit.getUnitBase().isLand()) {
                 continue;
             }
+            // Engineers are builders, not fighters
+            if (myUnit.getType() == UnitType.ENGINEER) continue;
             for (Unit enemy : enemies) {
                 if (!enemy.getUnitBase().isLand()) {
                     continue;
@@ -457,6 +480,8 @@ public class BotActionGenerator {
         int gameSize = state.getGame().getGamesize();
 
         for (Unit unit : state.getIdleLandUnits()) {
+            // Engineers are builders, not defenders
+            if (unit.getType() == UnitType.ENGINEER) continue;
             for (City city : undefended) {
                 int distance = SectorCoords.distance(gameSize, unit.getCoords(), city.getCoords());
                 if (distance <= unit.getMobility() && distance > 0) {
@@ -541,6 +566,8 @@ public class BotActionGenerator {
         if (transportPositions.isEmpty()) return;
 
         for (Unit landUnit : state.getIdleLandUnits()) {
+            // Engineers swim on their own, don't board transports
+            if (landUnit.getType() == UnitType.ENGINEER) continue;
             Sector landSector = world.getSectorOrNull(landUnit.getCoords());
             if (landSector == null || landSector.isWater()) continue;
             for (Sector neighbour : world.getNeighbours(landUnit.getCoords())) {

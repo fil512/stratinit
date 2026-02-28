@@ -13,18 +13,20 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class MoveEngineerToCoastAction implements BotAction {
+public class MoveEngineerToBuildSiteAction implements BotAction {
     private final Unit engineer;
     private final SectorCoords target;
     private final int distance;
+    private final boolean coastal;
     private final Nation nation;
     private final MoveService moveService;
 
-    public MoveEngineerToCoastAction(Unit engineer, SectorCoords target, int distance,
-                                      Nation nation, MoveService moveService) {
+    public MoveEngineerToBuildSiteAction(Unit engineer, SectorCoords target, int distance,
+                                         boolean coastal, Nation nation, MoveService moveService) {
         this.engineer = engineer;
         this.target = target;
         this.distance = distance;
+        this.coastal = coastal;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -36,18 +38,18 @@ public class MoveEngineerToCoastAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight * weights.coastalCityDesire;
-        // Penalize distant targets
-        utility -= distance * weights.distancePenalty;
-        // Reduce desire if bot already has a coastal city
-        if (state.hasCoastalCity()) {
-            utility *= 0.3;
+        double utility = weights.expansionBaseWeight * weights.buildCityDesire;
+        // Penalize distant targets (multiplicative to avoid zeroing out)
+        utility /= (1.0 + distance * weights.distancePenalty);
+        // Boost coastal sites when bot has no port
+        if (coastal && !state.hasCoastalCity()) {
+            utility *= (1.0 + weights.coastalCityDesire);
         }
         // Early game bonus
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        return Math.max(0, utility);
+        return utility;
     }
 
     @Override
@@ -69,6 +71,6 @@ public class MoveEngineerToCoastAction implements BotAction {
 
     @Override
     public String describe() {
-        return "Move engineer from " + engineer.getCoords() + " toward coast at " + target;
+        return "Move engineer from " + engineer.getCoords() + " toward " + (coastal ? "coastal " : "") + "build site at " + target;
     }
 }

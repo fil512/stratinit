@@ -63,16 +63,20 @@ public class TrainingAnalyzer {
                     }
                 }
 
-                // State progression at every 10th turn
+                // State progression at every 10% of game
+                int totalTurns = turns.size();
+                Set<Integer> recordedBuckets = new HashSet<>();
                 for (TrainingActionLog.TurnSnapshot turn : turns) {
                     int turnNum = turn.getTurnNumber();
-                    if (turnNum % 10 == 0) {
+                    int pct = totalTurns > 0 ? (turnNum * 100) / totalTurns : 0;
+                    int bucket = (pct / 10) * 10; // round down to nearest 10%
+                    if (bucket <= 90 && recordedBuckets.add(bucket)) {
                         Map<String, Double> metrics = new LinkedHashMap<>();
                         metrics.put("cities", (double) turn.getMetrics().cities());
                         metrics.put("units", (double) turn.getMetrics().units());
                         metrics.put("explored", (double) turn.getMetrics().explored());
                         metrics.put("tech", turn.getMetrics().tech());
-                        progressionByTurn.computeIfAbsent(turnNum, k -> new ArrayList<>()).add(metrics);
+                        progressionByTurn.computeIfAbsent(bucket, k -> new ArrayList<>()).add(metrics);
                     }
                 }
 

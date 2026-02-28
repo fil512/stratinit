@@ -60,10 +60,10 @@ public class AttackEnemyAction implements BotAction {
             utility += weights.airSupportBonus * 0.5;
         }
 
-        // Distance penalty: farther enemies are less attractive
-        utility -= distance * weights.distancePenalty;
+        // Distance penalty: multiplicative to avoid zeroing out
+        utility /= (1.0 + distance * weights.distancePenalty);
 
-        return Math.max(0, utility);
+        return utility;
     }
 
     @Override

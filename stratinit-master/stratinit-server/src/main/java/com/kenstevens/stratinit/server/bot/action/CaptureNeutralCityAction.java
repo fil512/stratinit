@@ -37,11 +37,12 @@ public class CaptureNeutralCityAction implements BotAction {
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.expansionBaseWeight * weights.neutralCityCaptureDesire;
-        utility -= distance * weights.distancePenalty;
+        // Distance penalty: multiplicative to avoid zeroing out
+        utility /= (1.0 + distance * weights.distancePenalty);
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        return Math.max(0, utility);
+        return utility;
     }
 
     @Override

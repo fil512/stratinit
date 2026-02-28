@@ -47,9 +47,9 @@ public class MoveToTransportGuaranteeAction implements BotAction {
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        // Light distance penalty (divided by 3 to keep it high even for far units)
-        utility -= distance * weights.distancePenalty / 3.0;
-        return Math.max(0, utility);
+        // Distance penalty: multiplicative to avoid zeroing out (divided by 3 to keep it high even for far units)
+        utility /= (1.0 + distance * weights.distancePenalty / 3.0);
+        return utility;
     }
 
     @Override

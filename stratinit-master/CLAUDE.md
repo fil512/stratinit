@@ -94,6 +94,43 @@ Dependencies flow downward.
 
 **Bot RL training:** Evolutionary hill-climbing framework for tuning bot weights. Population of 8 weight configs compete in simulated 4-bot blitz games, scored by cities owned + units + tech. Top 4 survive each generation; bottom 4 are replaced by mutated/crossed winners. Key classes in `server/bot/training/`: `TrainingSession` (orchestration), `TrainingGameSimulator` (synchronous game simulation), `TrainingScorer` (performance scoring), `WeightMutator` (Gaussian mutation + uniform crossover). Results saved to `training-results/best-weights.json` and `training-results/score-history.json`. Run via: `mvn test -pl stratinit-server -Dtest=BotRLTrainingTest`.
 
+## Game Timing & Update System
+
+### Blitz shrink factor
+
+`UpdateCalculator.shrinkTime(blitz, periodMillis)` = `periodMillis * 2 / 240` = `periodMillis / 120`. This shrinks 10 days (240 hours) down to 2 hours. All event intervals below use this formula in blitz mode.
+
+### Event timing
+
+The game uses four independent scheduled events. In training, the **bot turn** is the fundamental tick (1 tick = 1 bot turn).
+
+| Event | Real Game | Blitz | Training Ticks Between | Source Constant |
+|-------|-----------|-------|------------------------|-----------------|
+| **Bot Turn** | 5 min | 2.5 sec | 1 (every tick) | `BOT_TURN_INTERVAL_SECONDS = 300` |
+| **Tech Update** | 15 min | 7.5 sec | 3 | `TECH_UPDATE_INTERVAL_SECONDS = 900` |
+| **Unit Update** | 4 hours | 120 sec (2 min) | 48 | `HOURS_BETWEEN_UNIT_UPDATES = 4` |
+| **City Build** | 6-36h (varies by unit) | 3-18 min | 72-432 | `UnitBase.productionTime` (hours) |
+
+### Unit mobility mechanics
+
+- **`addMobility()`** is called once per **unit update** (every 48 bot ticks in training). Each call adds `UnitBase.getMobility()` (base stat) to the unit's current mobility, capped at `base × MAX_MOBILITY_MULTIPLIER(3)`.
+- **Newly built units start with 1× base mobility** (set in `Unit` constructor: `this.mobility = unitBase.getMobility()`), NOT zero.
+- Units in transports still receive mobility updates on schedule.
+- **Movement costs:** 1 mobility/hex in supply, 2 mobility/hex out of supply (land/naval units). Air units always cost 1.
+- **Key mobility values:** Infantry base=2 max=6, Engineer base=3 max=9, Tank base=3 max=9, Transport base=6 max=18.
+
+### Training simulation
+
+`TrainingGameSimulator` runs a synchronous loop of **2880 ticks** (= full blitz game duration of 2 hours at 2.5 sec/tick). Each tick: process city builds (if elapsed) → process unit updates (if elapsed) → tech/game update (if elapsed) → execute all bot turns. Over a full game: **60 unit updates** (2880/48), **960 tech updates** (2880/3).
+
+### Engineer city building
+
+`MOB_COST_TO_CREATE_CITY = 9` = engineer max mobility (base 3 × multiplier 3). Engineers are built with 3 mobility (1× base). They need **2 more unit-update recharge cycles** (+3 each) to reach 9, which is **96 bot ticks** of idle waiting (2 × 48). In the utility AI, engineers at valid build sites generate no move actions (to preserve partial mobility), and engineers are excluded from non-builder actions (attack, defend, capture, board transport) to prevent being diverted.
+
+### Sector type caveat
+
+**`Sector.isLand()`** returns true ONLY for `SectorType.LAND` — it returns false for `PLAYER_CITY`, `START_CITY`, `NEUTRAL_CITY`, `WATER`, `WASTELAND`. Use `!sector.isWater()` to check for any non-water sector.
+
 ## Testing
 
 Tests use H2 in-memory database (`MODE=LEGACY`) with Liquibase migrations applied programmatically via `TestConfig`. Test config in `src/test/resources/persistence.properties` and `application.yml`. The `stratinit-test` module provides helpers: `PlayerHelper`, `GameHelper`, `NationHelper`, `UnitHelper`, `WorldHelper`, `SectorHelper`.

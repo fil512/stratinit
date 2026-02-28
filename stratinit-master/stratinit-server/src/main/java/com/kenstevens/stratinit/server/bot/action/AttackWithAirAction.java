@@ -53,10 +53,10 @@ public class AttackWithAirAction implements BotAction {
             utility += weights.airSupportBonus;
         }
 
-        // Distance penalty: farther targets are less attractive
-        utility -= distance * weights.distancePenalty;
+        // Distance penalty: multiplicative to avoid zeroing out
+        utility /= (1.0 + distance * weights.distancePenalty);
 
-        return Math.max(0, utility);
+        return utility;
     }
 
     @Override

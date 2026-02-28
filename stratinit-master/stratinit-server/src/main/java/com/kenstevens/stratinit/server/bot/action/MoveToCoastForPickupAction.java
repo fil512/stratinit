@@ -47,9 +47,9 @@ public class MoveToCoastForPickupAction implements BotAction {
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
-        // Penalize distant targets (after boosts, so distance doesn't zero out boosted utility)
-        utility -= distance * weights.distancePenalty;
-        return Math.max(0, utility);
+        // Distance penalty: multiplicative to avoid zeroing out
+        utility /= (1.0 + distance * weights.distancePenalty);
+        return utility;
     }
 
     @Override

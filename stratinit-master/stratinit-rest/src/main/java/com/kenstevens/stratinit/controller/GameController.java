@@ -192,7 +192,7 @@ public class GameController {
             Game game = gameService.createGame("Blitz-" + player.getUsername());
             game.setBlitz(true);
             game.setIslands(8);
-            game.setGamesize(40);
+            game.setGamesize(60);
             gameService.merge(game);
             Result<Nation> joinResult = gameService.joinGame(player, game.getId(), false);
             if (!joinResult.isSuccess()) {

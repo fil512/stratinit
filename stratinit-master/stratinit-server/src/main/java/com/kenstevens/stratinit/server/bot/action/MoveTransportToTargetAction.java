@@ -52,12 +52,13 @@ public class MoveTransportToTargetAction implements BotAction {
         if (hasCityTarget) {
             utility *= 1.3;
         }
-        utility -= distance * weights.distancePenalty;
+        // Distance penalty: multiplicative to avoid zeroing out
+        utility /= (1.0 + distance * weights.distancePenalty);
         utility *= (1.0 + (islandScore - 1) * 0.2);
         if (isEmpty) {
             utility *= 0.5;
         }
-        return Math.max(0, utility);
+        return utility;
     }
 
     @Override
