@@ -434,7 +434,7 @@ function drawMap(p: DrawParams) {
 
       // Mobility range overlay (inner ring, brighter)
       // Show for: fuel units (mobility within fuel range), and land/naval units
-      const showMobility = hasFuel || unitCategory === 'FORT' || unitCategory === 'PORT'
+      const showMobility = hasFuel || unitCategory === 'FORT' || unitCategory === 'PORT' || unitCategory === 'TECH'
       if (showMobility && mobRange > 0) {
         ctx.fillStyle = 'rgba(0, 255, 120, 0.18)'
         for (let col = colMin; col <= colMax; col++) {
