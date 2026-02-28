@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.bot;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.server.bot.action.BotAction;
 import com.kenstevens.stratinit.server.bot.training.TrainingActionLog;
+import com.kenstevens.stratinit.type.BotPersonality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,12 @@ public class BotExecutor {
     private BotWeights weights;
 
     public void executeTurn(Nation nation) {
-        executeTurn(nation, weights);
+        BotPersonality personality = nation.getBotPersonality();
+        if (personality != null) {
+            executeTurn(nation, BotWeights.forPersonality(personality));
+        } else {
+            executeTurn(nation, weights);
+        }
     }
 
     public void executeTurn(Nation nation, BotWeights overrideWeights) {

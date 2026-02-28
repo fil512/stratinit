@@ -1,11 +1,14 @@
 package com.kenstevens.stratinit.client.model;
 
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,6 +32,8 @@ public class Nation implements Serializable {
 	private int hourlyCPGain = 0;
 	private int commandPoints = Constants.START_COMMAND_POINTS;
 	private boolean noAlliances; // preference vote whether player prefers alliances or not
+	@Enumerated(EnumType.STRING)
+	private BotPersonality botPersonality;
 
 	public Nation() {
 	}
@@ -196,5 +201,13 @@ public class Nation implements Serializable {
 
 	public void setNoAlliances(boolean noAlliances) {
 		this.noAlliances = noAlliances;
+	}
+
+	public BotPersonality getBotPersonality() {
+		return botPersonality;
+	}
+
+	public void setBotPersonality(BotPersonality botPersonality) {
+		this.botPersonality = botPersonality;
 	}
 }

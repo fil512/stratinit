@@ -3,6 +3,7 @@ package com.kenstevens.stratinit.server.service;
 import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Player;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.config.IServerConfig;
 import com.kenstevens.stratinit.dao.GameDao;
@@ -41,10 +42,14 @@ public class BotService {
     private IServerConfig serverConfig;
 
     public Result<Nation> addBotToGame(int gameId) {
-        return addBotToGame(gameId, true);
+        return addBotToGame(gameId, true, null);
     }
 
     public Result<Nation> addBotToGame(int gameId, boolean autoStart) {
+        return addBotToGame(gameId, autoStart, null);
+    }
+
+    public Result<Nation> addBotToGame(int gameId, boolean autoStart, BotPersonality personality) {
         Game game = gameDao.findGame(gameId);
         if (game == null) {
             return new Result<>("No game with id [" + gameId + "].", false);
@@ -68,7 +73,14 @@ public class BotService {
             return result;
         }
 
-        logger.info("Bot '{}' joined game #{}", botName, gameId);
+        if (personality != null) {
+            Nation nation = result.getValue();
+            nation.setBotPersonality(personality);
+            gameService.merge(nation);
+        }
+
+        logger.info("Bot '{}' ({}) joined game #{}", botName,
+                personality != null ? personality.name() : "default", gameId);
 
         if (autoStart) {
             // Reload game after join (player count may have changed)

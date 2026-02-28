@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotExecutor;
@@ -26,7 +27,7 @@ import java.util.*;
 @Service
 public class TrainingGameSimulator {
     private static final int MAX_TURNS = 100;
-    private static final int PLAYERS_PER_GAME = 4;
+    private static final int PLAYERS_PER_GAME = 8;
     private static final String TRAINING_GAME_PREFIX = "Training-";
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -57,12 +58,17 @@ public class TrainingGameSimulator {
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
     public TrainingGameResult simulate(Map<String, BotWeights> playerWeights) {
+        return simulate(playerWeights, Collections.emptyMap());
+    }
+
+    public TrainingGameResult simulate(Map<String, BotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
         String gameName = TRAINING_GAME_PREFIX + System.currentTimeMillis();
 
         // Create game and players
         Game game = new Game(gameName);
         game.setBlitz(true);
         game.setIslands(PLAYERS_PER_GAME);
+        game.setGamesize(40);
         gameDao.save(game);
 
         List<String> playerNames = new ArrayList<>(playerWeights.keySet());
@@ -84,7 +90,12 @@ public class TrainingGameSimulator {
             if (!result.isSuccess()) {
                 throw new RuntimeException("Failed to join game: " + result);
             }
-            nations.put(name, result.getValue());
+            Nation nation = result.getValue();
+            BotPersonality personality = playerPersonalities.get(name);
+            if (personality != null) {
+                nation.setBotPersonality(personality);
+            }
+            nations.put(name, nation);
         }
 
         // Map the game
@@ -169,6 +180,7 @@ public class TrainingGameSimulator {
             }
 
             // Execute bot turns with logging
+            World simWorld = sectorDao.getWorld(game);
             for (Map.Entry<String, Nation> entry : nations.entrySet()) {
                 String playerName = entry.getKey();
                 Nation nation = entry.getValue();
@@ -204,7 +216,6 @@ public class TrainingGameSimulator {
                 }
 
                 // Detect engineer swim milestone: any live engineer on a water sector
-                World simWorld = sectorDao.getWorld(game);
                 boolean hasEngineerSwimming = nationUnits.stream()
                         .filter(u -> u.isAlive() && u.getType() == UnitType.ENGINEER)
                         .anyMatch(u -> {

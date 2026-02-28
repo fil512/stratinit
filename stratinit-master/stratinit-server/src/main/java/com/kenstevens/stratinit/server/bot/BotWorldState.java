@@ -397,6 +397,10 @@ public class BotWorldState {
         return sector != null && sector.getIsland() == homeIsland;
     }
 
+    public long countAliveUnitsOfType(UnitType unitType) {
+        return myUnits.stream().filter(u -> u.isAlive() && u.getType() == unitType).count();
+    }
+
     public boolean hasEngineerUnit() {
         return myUnits.stream().anyMatch(u -> u.isAlive() && u.getType() == UnitType.ENGINEER);
     }

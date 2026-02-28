@@ -21,6 +21,7 @@ import com.kenstevens.stratinit.server.rest.session.StratInitSessionManager;
 import com.kenstevens.stratinit.server.rest.svc.ErrorProcessor;
 import com.kenstevens.stratinit.server.rest.svc.NationSvc;
 import com.kenstevens.stratinit.server.rest.svc.PlayerWorldViewUpdate;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.UnitType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -191,13 +192,21 @@ public class GameController {
             Game game = gameService.createGame("Blitz-" + player.getUsername());
             game.setBlitz(true);
             game.setIslands(8);
+            game.setGamesize(40);
             gameService.merge(game);
             Result<Nation> joinResult = gameService.joinGame(player, game.getId(), false);
             if (!joinResult.isSuccess()) {
                 throw new StratInitException("Failed to join game: " + joinResult.toString());
             }
-            for (int i = 0; i < 7; i++) {
-                Result<Nation> botResult = botService.addBotToGame(game.getId(), false);
+            // 7 bots: 2 RUSH, 2 BOOM, 2 TURTLE, 1 TECH
+            BotPersonality[] blitzPersonalities = {
+                    BotPersonality.RUSH, BotPersonality.RUSH,
+                    BotPersonality.BOOM, BotPersonality.BOOM,
+                    BotPersonality.TURTLE, BotPersonality.TURTLE,
+                    BotPersonality.TECH
+            };
+            for (BotPersonality personality : blitzPersonalities) {
+                Result<Nation> botResult = botService.addBotToGame(game.getId(), false, personality);
                 if (!botResult.isSuccess()) {
                     throw new StratInitException("Failed to add bot: " + botResult.toString());
                 }

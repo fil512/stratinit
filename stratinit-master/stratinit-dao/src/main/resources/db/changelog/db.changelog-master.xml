@@ -93,4 +93,8 @@
         <sqlFile path="migrations/V20260224000000.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="V20260228000000" author="stratinit">
+        <sqlFile path="migrations/V20260228000000.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

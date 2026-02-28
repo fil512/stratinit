@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.remote.CityFieldToUpdateEnum;
 import com.kenstevens.stratinit.server.bot.BotWeights;
 import com.kenstevens.stratinit.server.bot.BotWorldState;
 import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.UnitType;
 
 public class SetCityProductionAction implements BotAction {
@@ -29,8 +30,6 @@ public class SetCityProductionAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.economyBaseWeight;
-
         // If city has no build, we set BUILD (newly captured city).
         // If city has a build, we set NEXT_BUILD — skip if already queued.
         if (city.getBuild() != null) {
@@ -49,9 +48,104 @@ public class SetCityProductionAction implements BotAction {
             return 0;
         }
 
+        // Personality-specific production logic overrides weight-based scoring
+        if (weights.personality != null) {
+            return computePersonalityUtility(state, weights);
+        }
+
+        return computeDefaultUtility(state, weights, unitBase);
+    }
+
+    private double computePersonalityUtility(BotWorldState state, BotWeights weights) {
+        int cityCount = state.getMyCities().size();
+        double tech = state.getTech();
+
+        return switch (weights.personality) {
+            case TECH -> computeTechUtility(state, cityCount, tech);
+            case RUSH -> computeRushUtility(state);
+            case BOOM -> computeBoomUtility(state);
+            case TURTLE -> computeTurtleUtility(state, cityCount);
+        };
+    }
+
+    private double computeTechUtility(BotWorldState state, int cityCount, double tech) {
+        // Phase 1 (< 4 cities): All cities build ENGINEER
+        if (cityCount < 4) {
+            return unitType == UnitType.ENGINEER ? 10.0 : 0;
+        }
+        // Phase 2 (>= 4 cities, tech < 16): All cities build RESEARCH
+        if (tech < 16) {
+            return unitType == UnitType.RESEARCH ? 10.0 : 0;
+        }
+        // Phase 3 (tech >= 16): Half SATELLITE, half ICBM_3
+        if (unitType != UnitType.SATELLITE && unitType != UnitType.ICBM_3) {
+            return 0;
+        }
+        long satCount = state.countCitiesBuildingType(UnitType.SATELLITE);
+        long icbmCount = state.countCitiesBuildingType(UnitType.ICBM_3);
+        if (unitType == UnitType.SATELLITE) {
+            return satCount <= icbmCount ? 10.0 : 5.0;
+        }
+        return icbmCount <= satCount ? 10.0 : 5.0;
+    }
+
+    private double computeRushUtility(BotWorldState state) {
+        if (state.isCoastalCity(city)) {
+            // Coastal cities: TRANSPORT if infantry-to-transport ratio < 6, else INFANTRY
+            long infantryCount = state.countAliveUnitsOfType(UnitType.INFANTRY);
+            long transportCount = state.countAliveUnitsOfType(UnitType.TRANSPORT);
+            long transportBuilding = state.countCitiesBuildingType(UnitType.TRANSPORT);
+            long effectiveTransports = transportCount + transportBuilding;
+            if (effectiveTransports == 0 || (infantryCount / Math.max(1, effectiveTransports)) >= 6) {
+                return unitType == UnitType.TRANSPORT ? 10.0 : (unitType == UnitType.INFANTRY ? 5.0 : 0);
+            }
+            return unitType == UnitType.INFANTRY ? 10.0 : (unitType == UnitType.TRANSPORT ? 3.0 : 0);
+        }
+        // Non-coastal cities: always INFANTRY
+        return unitType == UnitType.INFANTRY ? 10.0 : 0;
+    }
+
+    private double computeBoomUtility(BotWorldState state) {
+        // TECH cities: build ENGINEER (always)
+        if (city.getBuild() == UnitType.RESEARCH) {
+            return unitType == UnitType.ENGINEER ? 10.0 : 0;
+        }
+        // Coastal cities: ZEPPELIN or PATROL (for scouting)
+        if (state.isCoastalCity(city)) {
+            if (unitType == UnitType.ZEPPELIN) return 10.0;
+            if (unitType == UnitType.PATROL) return 8.0;
+            if (unitType == UnitType.ENGINEER) return 6.0;
+            return 0;
+        }
+        // Non-coastal cities: build ENGINEER
+        return unitType == UnitType.ENGINEER ? 10.0 : 0;
+    }
+
+    private double computeTurtleUtility(BotWorldState state, int cityCount) {
+        // Phase 1 (< 2 engineers ever built): build ENGINEER
+        long engineerCount = state.countAliveUnitsOfType(UnitType.ENGINEER);
+        long engineerBuilding = state.countCitiesBuildingType(UnitType.ENGINEER);
+        if ((engineerCount + engineerBuilding) < 2) {
+            return unitType == UnitType.ENGINEER ? 10.0 : 0;
+        }
+        // Phase 2: Alternate RESEARCH / INFANTRY / FIGHTER across cities
+        long researchCount = state.countCitiesBuildingType(UnitType.RESEARCH);
+        long infantryCount = state.countCitiesBuildingType(UnitType.INFANTRY);
+        long fighterCount = state.countCitiesBuildingType(UnitType.FIGHTER);
+        if (unitType == UnitType.RESEARCH && researchCount <= infantryCount && researchCount <= fighterCount) return 10.0;
+        if (unitType == UnitType.INFANTRY && infantryCount <= researchCount && infantryCount <= fighterCount) return 9.0;
+        if (unitType == UnitType.FIGHTER && fighterCount <= researchCount && fighterCount <= infantryCount) return 8.0;
+        if (unitType == UnitType.RESEARCH) return 7.0;
+        if (unitType == UnitType.INFANTRY) return 6.0;
+        if (unitType == UnitType.FIGHTER) return 5.0;
+        return 0;
+    }
+
+    private double computeDefaultUtility(BotWorldState state, BotWeights weights, UnitBase unitBase) {
+        double utility = weights.economyBaseWeight;
+
         if (unitType == UnitType.RESEARCH) {
             if (!state.isAnyResearchCity()) {
-                // Guarantee at least one city researches tech
                 utility = weights.economyBaseWeight * weights.researchGuaranteeMultiplier;
             } else {
                 utility *= weights.techCentreDesire;
@@ -64,7 +158,6 @@ public class SetCityProductionAction implements BotAction {
             } else {
                 utility *= weights.engineerDesire;
             }
-            // Boost engineer production when non-home island discovered but no engineer swimming/there
             if (state.hasDiscoveredNonHomeIsland() && !state.hasEngineerSwimmingOrOnNonHomeIsland()) {
                 utility *= (1.0 + weights.engineerIslandHopBoost);
             }
@@ -76,12 +169,10 @@ public class SetCityProductionAction implements BotAction {
             }
         } else if (unitType == UnitType.TRANSPORT) {
             if (!state.hasTransportCapability() && state.isCoastalCity(city)) {
-                // Guarantee: must build a transport if we have none and no city is building one
                 utility = weights.economyBaseWeight * weights.coastalCityDesire * 2.0;
                 if (state.hasDiscoveredNonHomeIsland()) {
                     utility *= 1.5;
                 }
-                // Time-based urgency: if game > 20% complete and still no transport, high priority
                 if (state.getGameTimePercent() > 0.2) {
                     utility = weights.economyBaseWeight * weights.coastalCityDesire * 3.0;
                 }
@@ -89,7 +180,6 @@ public class SetCityProductionAction implements BotAction {
                     && !state.hasTransportEnRoute()
                     && state.getTransportsWithPassengers().isEmpty()
                     && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) {
-                // Second transport guarantee: keep pipeline flowing when first transport has sailed
                 utility = weights.economyBaseWeight * weights.coastalCityDesire * 1.5;
             } else {
                 utility *= weights.navalBaseWeight;
@@ -103,13 +193,11 @@ public class SetCityProductionAction implements BotAction {
             utility *= state.getGameTimePercent();
         }
 
-        // Transport boost: if coastal city and no city is building transports
         if (unitType == UnitType.TRANSPORT && state.isCoastalCity(city)
                 && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) {
             utility *= (1.0 + weights.coastalCityDesire);
         }
 
-        // Early game: prefer economy/expansion units
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
         }
