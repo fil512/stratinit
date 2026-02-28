@@ -66,6 +66,9 @@ public class BotWeights {
     public double coastalCityDesire = 1.2;
     public double moveToCoastDesire = 0.6;
     public double zeppelinWaterBonus = 0.3;
+    public double engineerSwimDesire = 1.2;
+    public double engineerIslandHopBoost = 1.5;
+    public double zeppelinIslandHopBonus = 0.5;
 
     // Production weights
     public double tankDesire = 0.6;

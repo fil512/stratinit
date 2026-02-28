@@ -88,8 +88,16 @@ public class TrainingAnalyzer {
                 if (moveToCoastCount > 3 && loadCount == 0) {
                     failurePatterns.add(nationName + ": Units moved to coast but no transport loaded");
                 }
-                if (disembarkCount == 0 && finalMetrics.cities() <= 4) {
+                int swimCount = nationActionCounts.getOrDefault("SwimEngineerToIslandAction", 0);
+                if (disembarkCount == 0 && swimCount == 0 && finalMetrics.cities() <= 4) {
                     failurePatterns.add(nationName + ": Never expanded off home island");
+                }
+                if (swimCount > 0) {
+                    // Check if engineer swam but never built a city on new island
+                    boolean builtCityAction = nationActionCounts.containsKey("BuildCityWithEngineerAction");
+                    if (!builtCityAction && disembarkCount == 0 && finalMetrics.cities() <= 4) {
+                        failurePatterns.add(nationName + ": Engineer swam but never built city on new island");
+                    }
                 }
                 if (finalMetrics.explored() < 100) {
                     failurePatterns.add(nationName + ": Low exploration (" + finalMetrics.explored() + " hexes)");

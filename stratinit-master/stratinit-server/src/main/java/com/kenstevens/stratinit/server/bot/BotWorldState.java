@@ -475,6 +475,31 @@ public class BotWorldState {
         return islands;
     }
 
+    public Set<SectorCoords> getNonHomeIslandCityCoords() {
+        int homeIsland = getHomeIslandId();
+        Set<SectorCoords> coords = new HashSet<>();
+        for (City city : myCities) {
+            Sector sector = world.getSectorOrNull(city.getCoords());
+            if (sector != null && sector.getIsland() >= 0 && sector.getIsland() != homeIsland) {
+                coords.add(city.getCoords());
+            }
+        }
+        return coords;
+    }
+
+    public boolean hasEngineerSwimmingOrOnNonHomeIsland() {
+        int homeIsland = getHomeIslandId();
+        if (homeIsland < 0) return false;
+        for (Unit unit : myUnits) {
+            if (!unit.isAlive() || unit.getType() != UnitType.ENGINEER) continue;
+            Sector sector = world.getSectorOrNull(unit.getCoords());
+            if (sector == null) continue;
+            if (sector.isWater()) return true;
+            if (sector.getIsland() >= 0 && sector.getIsland() != homeIsland) return true;
+        }
+        return false;
+    }
+
     public int countMyCitiesOnIsland(int islandId) {
         return (int) myCities.stream()
                 .filter(c -> {

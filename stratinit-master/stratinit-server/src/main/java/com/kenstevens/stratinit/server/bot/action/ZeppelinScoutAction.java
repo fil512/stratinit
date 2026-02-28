@@ -20,17 +20,25 @@ public class ZeppelinScoutAction implements BotAction {
     private final int revealCount;
     private final double waterRatio;
     private final boolean isReturnToCity;
+    private final boolean isIslandHopDirection;
     private final Nation nation;
     private final MoveService moveService;
 
     public ZeppelinScoutAction(Unit zeppelin, SectorCoords target, int distance,
                                 int revealCount, double waterRatio, boolean isReturnToCity, Nation nation, MoveService moveService) {
+        this(zeppelin, target, distance, revealCount, waterRatio, isReturnToCity, false, nation, moveService);
+    }
+
+    public ZeppelinScoutAction(Unit zeppelin, SectorCoords target, int distance,
+                                int revealCount, double waterRatio, boolean isReturnToCity,
+                                boolean isIslandHopDirection, Nation nation, MoveService moveService) {
         this.zeppelin = zeppelin;
         this.target = target;
         this.distance = distance;
         this.revealCount = revealCount;
         this.waterRatio = waterRatio;
         this.isReturnToCity = isReturnToCity;
+        this.isIslandHopDirection = isIslandHopDirection;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -52,6 +60,10 @@ public class ZeppelinScoutAction implements BotAction {
         // Early game scouting is more valuable
         if (state.getGameTimePercent() < 0.3) {
             utility *= (1.0 + weights.earlyExpansionBonus);
+        }
+        // Boost for island-hop direction (scouting toward non-home island cities)
+        if (isIslandHopDirection) {
+            utility *= (1.0 + weights.zeppelinIslandHopBonus);
         }
         // Returning to city for resupply is less desirable but necessary
         if (isReturnToCity) {

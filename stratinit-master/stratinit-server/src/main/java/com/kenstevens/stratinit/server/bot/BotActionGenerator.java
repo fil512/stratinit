@@ -94,9 +94,9 @@ public class BotActionGenerator {
         boolean hasUnexploredHome = state.hasUnexploredHomeIslandFrontier();
 
         for (Unit unit : state.getIdleLandUnits()) {
-            // Skip land units riding on transports (at sea)
+            // Skip land units riding on transports (at sea) — except engineers who can swim
             Sector unitSector = world.getSectorOrNull(unit.getCoords());
-            if (unitSector != null && unitSector.isWater()) {
+            if (unitSector != null && unitSector.isWater() && unit.getType() != UnitType.ENGINEER) {
                 continue;
             }
             if (unit.getType() == UnitType.ENGINEER) {
@@ -107,6 +107,10 @@ public class BotActionGenerator {
                 // Engineer coastal city strategy: always consider moving to coast
                 // (MoveEngineerToCoastAction already reduces utility when coastal city exists)
                 generateEngineerCoastalMoves(unit, state, nation, actions);
+                // Engineer swim to discovered non-home islands
+                if (state.hasDiscoveredNonHomeIsland()) {
+                    generateEngineerSwimActions(unit, state, nation, actions);
+                }
             }
             if (unit.getType() == UnitType.INFANTRY || unit.getType() == UnitType.TANK) {
                 // Home island exploration priority
@@ -195,6 +199,49 @@ public class BotActionGenerator {
             SectorCoords target = coastalSites.get(i);
             int distance = SectorCoords.distance(gameSize, unitCoords, target);
             actions.add(new MoveEngineerToCoastAction(unit, target, distance, nation, moveService));
+        }
+    }
+
+    private void generateEngineerSwimActions(Unit engineer, BotWorldState state, Nation nation,
+                                               List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        int homeIslandId = state.getHomeIslandId();
+        SectorCoords unitCoords = engineer.getCoords();
+
+        // Compute island scores
+        Map<Integer, Integer> islandScores = new HashMap<>();
+        for (BotWorldState.DiscoveredIsland island : state.getDiscoveredIslands()) {
+            int score = island.neutralCityCount() * 3 + island.enemyCityCount() + island.knownLandCount() / 5;
+            islandScores.put(island.islandId(), Math.max(1, score));
+        }
+
+        // Find explored coastal land on scoreable non-home islands
+        record SwimCandidate(SectorCoords coords, int distance, int islandScore) {}
+        List<SwimCandidate> candidates = new ArrayList<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!state.isExplored(coords)) continue;
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null || sector.isWater()) continue;
+                if (sector.getIsland() == homeIslandId) continue;
+                if (!islandScores.containsKey(sector.getIsland())) continue;
+                // Must be coastal (so engineer can swim to it)
+                if (!world.isCoastal(sector)) continue;
+                int dist = SectorCoords.distance(gameSize, unitCoords, coords);
+                candidates.add(new SwimCandidate(coords, dist, islandScores.get(sector.getIsland())));
+            }
+        }
+
+        // Sort by score desc, then distance asc
+        candidates.sort(Comparator.<SwimCandidate>comparingInt(c -> -c.islandScore)
+                .thenComparingInt(c -> c.distance));
+        int limit = Math.min(3, candidates.size());
+        for (int i = 0; i < limit; i++) {
+            SwimCandidate c = candidates.get(i);
+            actions.add(new SwimEngineerToIslandAction(engineer, c.coords, c.distance,
+                    c.islandScore, nation, moveService));
         }
     }
 
@@ -770,12 +817,25 @@ public class BotActionGenerator {
         candidates.sort(Comparator.<ScoredTarget>comparingInt(c -> -c.revealCount)
                 .thenComparingInt(c -> c.distance));
 
+        // Check for island-hop direction bonus
+        Set<SectorCoords> nonHomeCities = state.getNonHomeIslandCityCoords();
+
         // Generate actions for top candidates
         int count = Math.min(4, candidates.size());
         for (int i = 0; i < count; i++) {
             ScoredTarget c = candidates.get(i);
+            boolean isIslandHopDirection = false;
+            if (!nonHomeCities.isEmpty()) {
+                int currentMinDist = nonHomeCities.stream()
+                        .mapToInt(city -> SectorCoords.distance(gameSize, zepCoords, city))
+                        .min().orElse(Integer.MAX_VALUE);
+                int targetMinDist = nonHomeCities.stream()
+                        .mapToInt(city -> SectorCoords.distance(gameSize, c.coords, city))
+                        .min().orElse(Integer.MAX_VALUE);
+                isIslandHopDirection = targetMinDist < currentMinDist;
+            }
             actions.add(new ZeppelinScoutAction(zeppelin, c.coords, c.distance,
-                    c.revealCount, c.waterRatio, false, nation, moveService));
+                    c.revealCount, c.waterRatio, false, isIslandHopDirection, nation, moveService));
         }
 
         // If no exploration targets and fuel is low, return to nearest city

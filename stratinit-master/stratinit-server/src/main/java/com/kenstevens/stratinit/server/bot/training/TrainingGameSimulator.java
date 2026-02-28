@@ -202,6 +202,18 @@ public class TrainingGameSimulator {
                 if (hasTransport) {
                     actionLog.recordMilestone(playerName, "firstTransportBuilt", turn);
                 }
+
+                // Detect engineer swim milestone: any live engineer on a water sector
+                World simWorld = sectorDao.getWorld(game);
+                boolean hasEngineerSwimming = nationUnits.stream()
+                        .filter(u -> u.isAlive() && u.getType() == UnitType.ENGINEER)
+                        .anyMatch(u -> {
+                            Sector s = simWorld.getSectorOrNull(u.getCoords());
+                            return s != null && s.isWater();
+                        });
+                if (hasEngineerSwimming) {
+                    actionLog.recordMilestone(playerName, "firstEngineerSwim", turn);
+                }
             }
 
             turnsPlayed++;
@@ -210,7 +222,7 @@ public class TrainingGameSimulator {
         // Score all nations
         Map<String, Double> scores = new LinkedHashMap<>();
         for (Map.Entry<String, Nation> entry : nations.entrySet()) {
-            scores.put(entry.getKey(), scorer.score(entry.getValue()));
+            scores.put(entry.getKey(), scorer.score(entry.getValue(), actionLog));
         }
 
         // Cleanup game from cache and database to prevent OOM across generations

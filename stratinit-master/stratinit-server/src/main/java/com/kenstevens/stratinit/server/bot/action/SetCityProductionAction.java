@@ -64,6 +64,10 @@ public class SetCityProductionAction implements BotAction {
             } else {
                 utility *= weights.engineerDesire;
             }
+            // Boost engineer production when non-home island discovered but no engineer swimming/there
+            if (state.hasDiscoveredNonHomeIsland() && !state.hasEngineerSwimmingOrOnNonHomeIsland()) {
+                utility *= (1.0 + weights.engineerIslandHopBoost);
+            }
         } else if (unitType == UnitType.TANK) {
             if (!state.hasTankUnit() && !state.hasTankInProduction()) {
                 utility = weights.economyBaseWeight * weights.tankDesire * 1.5;
