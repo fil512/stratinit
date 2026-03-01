@@ -515,6 +515,19 @@ public class BotActionGenerator {
                 actions.add(new SetRelationAction(nation, other, RelationType.WAR, relationService));
             }
         }
+
+        // Proactive war declaration: declare war on neutral nations whose units/cities we can see
+        if (state.getTech() >= 3.0) {
+            for (Map.Entry<Nation, RelationType> entry : myRelations.entrySet()) {
+                Nation other = entry.getKey();
+                RelationType myStance = entry.getValue();
+                if (myStance != RelationType.NEUTRAL) continue;
+                // Only declare war if we can see their units or cities
+                if (state.canSeeNation(other)) {
+                    actions.add(new SetRelationAction(nation, other, RelationType.WAR, relationService));
+                }
+            }
+        }
     }
 
     private void generateNavalActions(BotWorldState state, Nation nation, List<BotAction> actions) {
@@ -536,6 +549,26 @@ public class BotActionGenerator {
                 }
             }
 
+            // Battleship bombardment: shell enemy cities from adjacent water
+            if (myUnit.getUnitBase().isNavyCanAttackLand() && myUnit.getAttack() > 0) {
+                for (City enemyCity : state.getEnemyCities()) {
+                    // Check if city is adjacent to water (battleship can reach)
+                    boolean cityNearWater = false;
+                    for (Sector neighbour : world.getNeighbours(enemyCity.getCoords())) {
+                        if (neighbour.isWater()) {
+                            cityNearWater = true;
+                            break;
+                        }
+                    }
+                    if (cityNearWater) {
+                        int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemyCity.getCoords());
+                        if (distance <= myUnit.getMobility() * 2) {
+                            actions.add(new BombardCityAction(myUnit, enemyCity.getCoords(), distance, nation, moveService));
+                        }
+                    }
+                }
+            }
+
             // Transport loading: move transport to water tile adjacent to idle land units
             if (myUnit.getUnitBase().getCapacity() > 0) {
                 for (Unit landUnit : state.getIdleLandUnits()) {
@@ -544,7 +577,7 @@ public class BotActionGenerator {
                     for (Sector neighbour : world.getNeighbours(landUnit.getCoords())) {
                         if (!neighbour.isWater()) continue;
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
-                        if (distance <= myUnit.getMobility()) {
+                        if (distance <= myUnit.getMobility() * 3) {
                             actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), nation, moveService));
                             break;
                         }

@@ -37,6 +37,7 @@ public class BotWeights {
 
     // Air weights
     public double airStrikeDesire = 0.7;
+    public double bombardCityDesire = 1.5;
 
     // Tech/strategic weights
     public double satelliteLaunchDesire = 0.5;

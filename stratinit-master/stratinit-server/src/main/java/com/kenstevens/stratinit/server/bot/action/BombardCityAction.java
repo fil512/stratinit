@@ -13,22 +13,20 @@ import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.Collections;
 
-public class AttackWithAirAction implements BotAction {
-    private final Unit airUnit;
+public class BombardCityAction implements BotAction {
+    private final Unit battleship;
     private final SectorCoords targetCoords;
     private final int distance;
     private final Nation nation;
     private final MoveService moveService;
-    private final boolean isBombingCity;
 
-    public AttackWithAirAction(Unit airUnit, SectorCoords targetCoords, int distance, Nation nation,
-                               MoveService moveService, boolean isBombingCity) {
-        this.airUnit = airUnit;
+    public BombardCityAction(Unit battleship, SectorCoords targetCoords, int distance, Nation nation,
+                             MoveService moveService) {
+        this.battleship = battleship;
         this.targetCoords = targetCoords;
         this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
-        this.isBombingCity = isBombingCity;
     }
 
     @Override
@@ -38,18 +36,9 @@ public class AttackWithAirAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.militaryBaseWeight * weights.airStrikeDesire;
+        double utility = weights.militaryBaseWeight * weights.bombardCityDesire;
 
-        if (isBombingCity) {
-            utility *= 2.0;
-        }
-
-        // Air support bonus: prioritize strikes where ground forces can follow up
-        if (state.hasLandThreatNear(targetCoords)) {
-            utility += weights.airSupportBonus;
-        }
-
-        // Distance penalty: multiplicative to avoid zeroing out
+        // Distance penalty
         utility /= (1.0 + distance * weights.distancePenalty);
 
         return utility;
@@ -57,7 +46,7 @@ public class AttackWithAirAction implements BotAction {
 
     @Override
     public boolean execute() {
-        SIUnit siUnit = new SIUnit(airUnit);
+        SIUnit siUnit = new SIUnit(battleship);
         Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), targetCoords);
         return result.isSuccess();
     }
@@ -69,12 +58,11 @@ public class AttackWithAirAction implements BotAction {
 
     @Override
     public Integer getInvolvedUnitId() {
-        return airUnit.getId();
+        return battleship.getId();
     }
 
     @Override
     public String describe() {
-        String action = isBombingCity ? "Bomb city" : "Air strike";
-        return action + " at " + targetCoords + " with " + airUnit.toMyString();
+        return "Bombard city at " + targetCoords + " with " + battleship.toMyString();
     }
 }

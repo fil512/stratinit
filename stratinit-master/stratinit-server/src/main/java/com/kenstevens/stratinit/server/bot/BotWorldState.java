@@ -517,6 +517,30 @@ public class BotWorldState {
         return false;
     }
 
+    public boolean canSeeNation(Nation other) {
+        // Check if we can see any of their units
+        for (Unit u : allVisibleUnits) {
+            if (u.getNation().equals(other)) return true;
+        }
+        // Check if we can see any of their cities
+        for (City c : enemyCities) {
+            if (c.getNation().equals(other)) return true;
+        }
+        return false;
+    }
+
+    public boolean hasZeppelinUnit() {
+        return myUnits.stream().anyMatch(u -> u.isAlive() && u.getType() == UnitType.ZEPPELIN);
+    }
+
+    public boolean hasZeppelinInProduction() {
+        return myCities.stream().anyMatch(c -> c.getBuild() == UnitType.ZEPPELIN || c.getNextBuild() == UnitType.ZEPPELIN);
+    }
+
+    public boolean hasEnemyAtWar() {
+        return myRelations.values().stream().anyMatch(r -> r == RelationType.WAR);
+    }
+
     public int countMyCitiesOnIsland(int islandId) {
         return (int) myCities.stream()
                 .filter(c -> {

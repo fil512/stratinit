@@ -185,6 +185,24 @@ public class SetCityProductionAction implements BotAction {
             } else {
                 utility *= weights.navalBaseWeight;
             }
+        } else if (unitType == UnitType.ZEPPELIN) {
+            utility *= weights.zeppelinScoutDesire;
+            if (!state.hasZeppelinUnit() && !state.hasZeppelinInProduction()) {
+                utility *= 2.0;
+            }
+        } else if (unitType == UnitType.HEAVY_BOMBER) {
+            utility *= weights.airStrikeDesire;
+            if (state.hasEnemyAtWar() && state.countAliveUnitsOfType(UnitType.HEAVY_BOMBER) == 0
+                    && state.countCitiesBuildingType(UnitType.HEAVY_BOMBER) == 0) {
+                utility = weights.militaryBaseWeight * weights.airStrikeDesire * 1.5;
+            }
+        } else if (unitType == UnitType.BATTLESHIP) {
+            utility *= weights.navalBaseWeight;
+            if (state.isCoastalCity(city) && state.hasEnemyAtWar()
+                    && state.countAliveUnitsOfType(UnitType.BATTLESHIP) == 0
+                    && state.countCitiesBuildingType(UnitType.BATTLESHIP) == 0) {
+                utility = weights.navalBaseWeight * weights.bombardCityDesire;
+            }
         } else if (unitBase.isNavy()) {
             utility *= weights.navalBaseWeight;
         } else if (unitBase.isAir()) {

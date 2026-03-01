@@ -29,6 +29,10 @@ public class SetRelationAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
+        if (newRelation == RelationType.WAR) {
+            // Proactive war declaration scored by military intent
+            return weights.militaryBaseWeight * weights.attackWeakDesire;
+        }
         return weights.diplomacyBaseWeight;
     }
 

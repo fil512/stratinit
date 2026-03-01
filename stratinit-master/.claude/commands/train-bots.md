@@ -6,7 +6,7 @@ Run the bot RL training simulation to improve `bot-weights.json` weights used by
 
 ### Step 1: Configure generations
 
-Ask the user how many generations to train. Recommend 30 for a meaningful run (~1 minute), 50+ for thorough training (~2 minutes). Minimum 10.
+Ask the user how many generations to train. Offer options: 10 (quick test), 20 (short run), 30 (meaningful run ~1 minute), 50 (thorough ~2 minutes), 100 (extended). Minimum 10.
 
 ### Step 2: Run training
 
