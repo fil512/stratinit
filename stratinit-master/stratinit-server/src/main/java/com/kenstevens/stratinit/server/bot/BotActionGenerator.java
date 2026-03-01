@@ -309,14 +309,17 @@ public class BotActionGenerator {
         if (emptyTransports.isEmpty()) return;
 
         // Find idle land units on land (infantry/tank)
-        List<Unit> landUnits = state.getIdleLandUnits().stream()
+        List<Unit> landUnits = new ArrayList<>(state.getIdleLandUnits().stream()
                 .filter(u -> u.getType() == UnitType.INFANTRY || u.getType() == UnitType.TANK)
                 .filter(u -> {
                     Sector s = world.getSectorOrNull(u.getCoords());
                     return s != null && !s.isWater();
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
         if (landUnits.isEmpty()) return;
+
+        // Track which land units have been paired so each transport gets a unique unit
+        Set<Integer> pairedUnitIds = new HashSet<>();
 
         for (Unit transport : emptyTransports) {
             // Find coastal land tiles adjacent to the transport (where a land unit could board from)
@@ -328,11 +331,12 @@ public class BotActionGenerator {
             }
             if (coastalTiles.isEmpty()) continue;
 
-            // Find nearest land unit to any of these coastal tiles
+            // Find nearest unpaired land unit to any of these coastal tiles
             Unit bestUnit = null;
             SectorCoords bestCoastalTile = null;
             int bestDist = Integer.MAX_VALUE;
             for (Unit landUnit : landUnits) {
+                if (pairedUnitIds.contains(landUnit.getId())) continue;
                 for (SectorCoords coastal : coastalTiles) {
                     int dist = SectorCoords.distance(gameSize, landUnit.getCoords(), coastal);
                     if (dist < bestDist) {
@@ -343,6 +347,7 @@ public class BotActionGenerator {
                 }
             }
             if (bestUnit == null) continue;
+            pairedUnitIds.add(bestUnit.getId());
 
             if (bestDist == 0) {
                 // Land unit is already on coast next to transport — board it
@@ -675,10 +680,31 @@ public class BotActionGenerator {
                 .map(Unit::getCoords).collect(Collectors.toSet());
         Set<SectorCoords> loadedCoords = state.getLoadedTransports().stream()
                 .map(Unit::getCoords).collect(Collectors.toSet());
+
+        // Find land units waiting on coast (idle land units on land adjacent to water)
+        Set<SectorCoords> coastalLandUnitCoords = new HashSet<>();
+        for (Unit landUnit : state.getIdleLandUnits()) {
+            if (landUnit.getType() == UnitType.ENGINEER) continue;
+            Sector landSector = world.getSectorOrNull(landUnit.getCoords());
+            if (landSector == null || landSector.isWater()) continue;
+            if (world.isCoastal(landSector)) {
+                coastalLandUnitCoords.add(landUnit.getCoords());
+            }
+        }
+
         List<Unit> emptyTransports = state.getIdleNavalUnits().stream()
                 .filter(u -> u.carriesUnits()
                         && !loadedCoords.contains(u.getCoords())
                         && !passengerCoords.contains(u.getCoords()))
+                // Don't send away transports adjacent to coast with waiting land units
+                .filter(u -> {
+                    for (Sector neighbour : world.getNeighbours(u.getCoords())) {
+                        if (!neighbour.isWater() && coastalLandUnitCoords.contains(neighbour.getCoords())) {
+                            return false; // transport should stay to load this unit
+                        }
+                    }
+                    return true;
+                })
                 .collect(Collectors.toList());
         if (emptyTransports.isEmpty()) return;
 

@@ -195,8 +195,19 @@ public class BotWorldState {
     }
 
     public Set<SectorCoords> getIdleTransportCoords() {
+        // Find coords where land units are on water (i.e. loaded on a transport)
+        Set<SectorCoords> loadedCoords = myUnits.stream()
+                .filter(u -> u.isAlive() && u.getUnitBase().isLand())
+                .filter(u -> {
+                    Sector sector = world.getSectorOrNull(u.getCoords());
+                    return sector != null && sector.isWater();
+                })
+                .map(Unit::getCoords)
+                .collect(Collectors.toSet());
+        // Only return transports that don't already have land units aboard
         return getIdleNavalUnits().stream()
                 .filter(Unit::carriesUnits)
+                .filter(u -> !loadedCoords.contains(u.getCoords()))
                 .map(Unit::getCoords)
                 .collect(Collectors.toSet());
     }

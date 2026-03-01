@@ -17,6 +17,7 @@ import java.util.*;
 public class TrainingSession {
     private static final int PLAYERS_PER_GAME = 8;
     private static final int DEFAULT_GENERATIONS = 10;
+    private static final int CROSSOVER_INTERVAL = 5;
 
     // 8 bots: 2 of each personality
     private static final BotPersonality[] TRAINING_PERSONALITIES = {
@@ -41,16 +42,28 @@ public class TrainingSession {
         List<Double> scoreHistory = new ArrayList<>();
         List<TrainingGameResult> allResults = new ArrayList<>();
         int totalGamesPlayed = 0;
+        WeightMutator mutator = new WeightMutator();
 
-        // Build player-weights and personality maps once (identical across generations)
+        // Build player-weights and personality maps — deep copy from personality cache
         Map<String, PhasedBotWeights> playerWeights = new LinkedHashMap<>();
         Map<String, BotPersonality> playerPersonalities = new LinkedHashMap<>();
+        // Track per-personality weights separately for evolution
+        Map<BotPersonality, PhasedBotWeights> personalityWeights = new EnumMap<>(BotPersonality.class);
+        for (BotPersonality p : BotPersonality.values()) {
+            // Deep copy via mutate with zero perturbation — or just use mutator's copy behavior
+            // Use toJson/fromJson for a clean deep copy to avoid corrupting the static cache
+            PhasedBotWeights original = PhasedBotWeights.forPersonality(p);
+            personalityWeights.put(p, PhasedBotWeights.fromJson(original.toJson()));
+        }
         for (int i = 0; i < PLAYERS_PER_GAME; i++) {
             String playerName = "TrainBot-" + i;
             BotPersonality personality = TRAINING_PERSONALITIES[i];
-            playerWeights.put(playerName, PhasedBotWeights.forPersonality(personality));
+            playerWeights.put(playerName, personalityWeights.get(personality));
             playerPersonalities.put(playerName, personality);
         }
+
+        PhasedBotWeights bestWeightsOverall = null;
+        double bestScoreOverall = Double.NEGATIVE_INFINITY;
 
         for (int gen = 0; gen < generations; gen++) {
             logger.info("=== Generation {} ===", gen + 1);
@@ -60,7 +73,7 @@ public class TrainingSession {
             allResults.add(result);
             totalGamesPlayed++;
 
-            // Log scores per personality
+            // Compute average scores per personality
             Map<BotPersonality, List<Double>> personalityScores = new EnumMap<>(BotPersonality.class);
             int i = 0;
             List<String> playerNames = new ArrayList<>(result.scores().keySet());
@@ -70,20 +83,69 @@ public class TrainingSession {
                 i++;
             }
 
-            // Compute average scores per personality
+            Map<BotPersonality, Double> avgScores = new EnumMap<>(BotPersonality.class);
             double bestAvg = 0;
+            BotPersonality bestPersonality = null;
+            BotPersonality worstPersonality = null;
+            double worstAvg = Double.MAX_VALUE;
             for (Map.Entry<BotPersonality, List<Double>> entry : personalityScores.entrySet()) {
                 double avg = entry.getValue().stream().mapToDouble(Double::doubleValue).average().orElse(0);
+                avgScores.put(entry.getKey(), avg);
                 logger.info("  {} avg score: {}", entry.getKey(), String.format("%.2f", avg));
-                bestAvg = Math.max(bestAvg, avg);
+                if (avg > bestAvg) {
+                    bestAvg = avg;
+                    bestPersonality = entry.getKey();
+                }
+                if (avg < worstAvg) {
+                    worstAvg = avg;
+                    worstPersonality = entry.getKey();
+                }
             }
 
             scoreHistory.add(bestAvg);
             logger.info("  Game scores={}, turns={}", result.scores(), result.turnsPlayed());
+
+            // Track best weights across all generations
+            if (bestPersonality != null && bestAvg > bestScoreOverall) {
+                bestScoreOverall = bestAvg;
+                bestWeightsOverall = PhasedBotWeights.fromJson(personalityWeights.get(bestPersonality).toJson());
+            }
+
+            // Evolve weights for next generation (skip after last generation)
+            if (gen < generations - 1) {
+                // Mutate all personalities except the best (elite preservation)
+                for (BotPersonality p : BotPersonality.values()) {
+                    if (p.equals(bestPersonality)) {
+                        logger.info("  {} elite — preserved", p);
+                        continue;
+                    }
+                    PhasedBotWeights mutated = mutator.mutate(personalityWeights.get(p));
+                    personalityWeights.put(p, mutated);
+                    logger.info("  {} mutated", p);
+                }
+
+                // Periodically crossover best into worst
+                if ((gen + 1) % CROSSOVER_INTERVAL == 0 && bestPersonality != null
+                        && worstPersonality != null && !bestPersonality.equals(worstPersonality)) {
+                    PhasedBotWeights crossed = mutator.crossover(
+                            personalityWeights.get(bestPersonality),
+                            personalityWeights.get(worstPersonality));
+                    personalityWeights.put(worstPersonality, crossed);
+                    logger.info("  Crossover: {} x {} -> {}", bestPersonality, worstPersonality, worstPersonality);
+                }
+
+                // Update playerWeights map to point to the evolved personality weights
+                for (Map.Entry<String, BotPersonality> entry : playerPersonalities.entrySet()) {
+                    playerWeights.put(entry.getKey(), personalityWeights.get(entry.getValue()));
+                }
+            }
         }
 
         // Save results
         saveScoreHistory(scoreHistory);
+        if (bestWeightsOverall != null) {
+            saveBestWeights(bestWeightsOverall);
+        }
 
         // Analyze bot behavior
         TrainingAnalysisSummary analysis = analyzer.analyze(allResults);
@@ -105,6 +167,17 @@ public class TrainingSession {
             logger.info("Saved score history to training-results/score-history.json");
         } catch (IOException e) {
             logger.warn("Failed to save score history: {}", e.getMessage());
+        }
+    }
+
+    private void saveBestWeights(PhasedBotWeights weights) {
+        try {
+            Path dir = Paths.get("training-results");
+            Files.createDirectories(dir);
+            Files.writeString(dir.resolve("best-weights.json"), weights.toJson());
+            logger.info("Saved best weights to training-results/best-weights.json");
+        } catch (IOException e) {
+            logger.warn("Failed to save best weights: {}", e.getMessage());
         }
     }
 
