@@ -26,6 +26,28 @@ public class GameDao extends CacheDao {
     private SectorRepo sectorRepo;
     @Autowired
     private UnitRepo unitRepo;
+    @Autowired
+    private UnitAttackedBattleLogRepo unitAttackedBattleLogRepo;
+    @Autowired
+    private CityCapturedBattleLogRepo cityCapturedBattleLogRepo;
+    @Autowired
+    private CityNukedBattleLogRepo cityNukedBattleLogRepo;
+    @Autowired
+    private FlakBattleLogRepo flakBattleLogRepo;
+    @Autowired
+    private UnitSeenRepo unitSeenRepo;
+    @Autowired
+    private UnitMoveRepo unitMoveRepo;
+    @Autowired
+    private CityMoveRepo cityMoveRepo;
+    @Autowired
+    private SectorSeenRepo sectorSeenRepo;
+    @Autowired
+    private RelationRepo relationRepo;
+    @Autowired
+    private LaunchedSatelliteRepo launchedSatelliteRepo;
+    @Autowired
+    private MailRepo mailRepo;
 
     public Game findGame(int gameId) {
         GameCache gameCache = getGameCache(gameId);
@@ -69,8 +91,37 @@ public class GameDao extends CacheDao {
 
     @Transactional
     public void remove(Game game) {
+        // Delete in FK dependency order: children before parents
+        // Battle logs reference Unit and Nation
+        unitAttackedBattleLogRepo.deleteAll(unitAttackedBattleLogRepo.findAll(
+                QUnitAttackedBattleLog.unitAttackedBattleLog.attacker.nationPK.game.eq(game)));
+        cityCapturedBattleLogRepo.deleteAll(cityCapturedBattleLogRepo.findAll(
+                QCityCapturedBattleLog.cityCapturedBattleLog.attacker.nationPK.game.eq(game)));
+        cityNukedBattleLogRepo.deleteAll(cityNukedBattleLogRepo.findAll(
+                QCityNukedBattleLog.cityNukedBattleLog.attacker.nationPK.game.eq(game)));
+        flakBattleLogRepo.deleteAll(flakBattleLogRepo.findAll(
+                QFlakBattleLog.flakBattleLog.attacker.nationPK.game.eq(game)));
+        // UnitSeen and UnitMove reference Unit
+        unitSeenRepo.deleteAll(unitSeenRepo.findAll(
+                QUnitSeen.unitSeen.unitSeenPK.nation.nationPK.game.eq(game)));
+        unitMoveRepo.deleteAll(unitMoveRepo.findAll(
+                QUnitMove.unitMove.unit.nation.nationPK.game.eq(game)));
+        // CityMove references City
+        cityMoveRepo.deleteAll(cityMoveRepo.findAll(
+                QCityMove.cityMove.city.nation.nationPK.game.eq(game)));
+        // Units and Cities reference Nation
         unitRepo.deleteAll(unitRepo.findAll(QUnit.unit.nation.nationPK.game.eq(game)));
         cityRepo.deleteAll(cityRepo.findAll(QCity.city.cityPK.game.eq(game)));
+        // LaunchedSatellite, Relation, Mail reference Nation
+        launchedSatelliteRepo.deleteAll(launchedSatelliteRepo.findAll(
+                QLaunchedSatellite.launchedSatellite.nation.nationPK.game.eq(game)));
+        relationRepo.deleteAll(relationRepo.findAll(
+                QRelation.relation.relationPK.from.nationPK.game.eq(game)));
+        mailRepo.deleteAll(mailRepo.findAll(QMail.mail.game.eq(game)));
+        // SectorSeen references Nation and Sector
+        sectorSeenRepo.deleteAll(sectorSeenRepo.findAll(
+                QSectorSeen.sectorSeen.sectorSeenPK.nation.nationPK.game.eq(game)));
+        // Nation and Sector reference Game
         nationRepo.deleteAll(nationRepo.findAll(QNation.nation.nationPK.game.eq(game)));
         sectorRepo.deleteAll(sectorRepo.findAll(QSector.sector.sectorPK.game.eq(game)));
         gameRepo.delete(game);
