@@ -1,11 +1,11 @@
 package com.kenstevens.stratinit.server.bot.training;
 
-import com.kenstevens.stratinit.server.bot.BotWeights;
+import com.kenstevens.stratinit.server.bot.PhasedBotWeights;
 
 import java.util.List;
 
 public record TrainingResult(
-        BotWeights bestWeights,
+        PhasedBotWeights bestWeights,
         List<Double> scoreHistory,
         int totalGamesPlayed,
         TrainingAnalysisSummary analysis

@@ -57,10 +57,6 @@ public class ZeppelinScoutAction implements BotAction {
         utility *= (1.0 + waterRatio * weights.zeppelinWaterBonus);
         // Distance penalty: multiplicative to avoid zeroing out
         utility /= (1.0 + distance * weights.distancePenalty);
-        // Early game scouting is more valuable
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Boost for island-hop direction (scouting toward non-home island cities)
         if (isIslandHopDirection) {
             utility *= (1.0 + weights.zeppelinIslandHopBonus);

@@ -40,10 +40,6 @@ public class AttackWithAirAction implements BotAction {
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.militaryBaseWeight * weights.airStrikeDesire;
 
-        if (state.getGameTimePercent() > 0.5) {
-            utility *= (1.0 + weights.lateMilitaryBonus);
-        }
-
         if (isBombingCity) {
             utility *= 1.2;
         }

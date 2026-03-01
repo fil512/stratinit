@@ -20,39 +20,42 @@ public class BotExecutor {
     @Autowired
     private BotActionGenerator actionGenerator;
     @Autowired
-    private BotWeights weights;
+    private PhasedBotWeights phasedWeights;
 
     public void executeTurn(Nation nation) {
         BotPersonality personality = nation.getBotPersonality();
         if (personality != null) {
-            executeTurn(nation, BotWeights.forPersonality(personality));
+            executeTurn(nation, PhasedBotWeights.forPersonality(personality));
         } else {
-            executeTurn(nation, weights);
+            executeTurn(nation, phasedWeights);
         }
     }
 
-    public void executeTurn(Nation nation, BotWeights overrideWeights) {
+    public void executeTurn(Nation nation, PhasedBotWeights overrideWeights) {
         executeTurn(nation, overrideWeights, System.currentTimeMillis());
     }
 
-    public void executeTurn(Nation nation, BotWeights overrideWeights, long simulatedTimeMillis) {
+    public void executeTurn(Nation nation, PhasedBotWeights overrideWeights, long simulatedTimeMillis) {
         executeTurn(nation, overrideWeights, simulatedTimeMillis, null);
     }
 
-    public void executeTurn(Nation nation, BotWeights overrideWeights, long simulatedTimeMillis, TrainingActionLog log) {
+    public void executeTurn(Nation nation, PhasedBotWeights overrideWeights, long simulatedTimeMillis, TrainingActionLog log) {
         BotWorldState state = worldStateBuilder.build(nation, simulatedTimeMillis);
 
         if (!state.getGame().hasStarted() || state.getGame().hasEnded()) {
             return;
         }
 
+        // Resolve tech-phase weights
+        BotWeights weights = overrideWeights.resolve(state.getTech());
+
         String nationName = nation.getName();
-        List<BotAction> candidates = actionGenerator.generateActions(state, overrideWeights);
+        List<BotAction> candidates = actionGenerator.generateActions(state, weights);
 
         // Score all actions
         List<ScoredAction> scored = new ArrayList<>();
         for (BotAction action : candidates) {
-            double utility = action.computeUtility(state, overrideWeights);
+            double utility = action.computeUtility(state, weights);
             if (utility > 0) {
                 scored.add(new ScoredAction(action, utility));
             }

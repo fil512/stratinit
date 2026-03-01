@@ -34,9 +34,6 @@ public class BoardTransportAction implements BotAction {
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.navalBaseWeight * weights.transportLoadDesire;
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Boarding is high priority — unit is already adjacent to the transport
         utility *= 2.0;
         return utility;

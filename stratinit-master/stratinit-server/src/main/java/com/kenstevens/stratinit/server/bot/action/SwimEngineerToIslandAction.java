@@ -43,10 +43,6 @@ public class SwimEngineerToIslandAction implements BotAction {
         utility *= (1.0 + (islandScore - 1) * 0.2);
         // Penalize distant targets (multiplicative to avoid zeroing out)
         utility /= (1.0 + distance * weights.distancePenalty);
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Extra boost if island has no bot presence
         if (state.countMyCitiesOnIsland(getTargetIslandId(state)) == 0) {
             utility *= (1.0 + weights.coastalCityDesire);

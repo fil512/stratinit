@@ -49,18 +49,19 @@ public class SetCityProductionAction implements BotAction {
         }
 
         // Personality-specific production logic overrides weight-based scoring
-        if (weights.personality != null) {
-            return computePersonalityUtility(state, weights);
+        BotPersonality personality = state.getNation().getBotPersonality();
+        if (personality != null) {
+            return computePersonalityUtility(state, personality);
         }
 
         return computeDefaultUtility(state, weights, unitBase);
     }
 
-    private double computePersonalityUtility(BotWorldState state, BotWeights weights) {
+    private double computePersonalityUtility(BotWorldState state, BotPersonality personality) {
         int cityCount = state.getMyCities().size();
         double tech = state.getTech();
 
-        return switch (weights.personality) {
+        return switch (personality) {
             case TECH -> computeTechUtility(state, cityCount, tech);
             case RUSH -> computeRushUtility(state);
             case BOOM -> computeBoomUtility(state);
@@ -196,10 +197,6 @@ public class SetCityProductionAction implements BotAction {
         if (unitType == UnitType.TRANSPORT && state.isCoastalCity(city)
                 && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) {
             utility *= (1.0 + weights.coastalCityDesire);
-        }
-
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
         }
 
         return utility;

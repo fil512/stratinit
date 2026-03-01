@@ -1,6 +1,6 @@
 package com.kenstevens.stratinit.server.bot.training;
 
-import com.kenstevens.stratinit.server.bot.BotWeights;
+import com.kenstevens.stratinit.server.bot.PhasedBotWeights;
 import com.kenstevens.stratinit.type.BotPersonality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,22 +33,22 @@ public class TrainingSession {
     @Autowired
     private TrainingAnalyzer analyzer;
 
-    public TrainingResult train(BotWeights seedWeights) {
+    public TrainingResult train(PhasedBotWeights seedWeights) {
         return train(seedWeights, DEFAULT_GENERATIONS);
     }
 
-    public TrainingResult train(BotWeights seedWeights, int generations) {
+    public TrainingResult train(PhasedBotWeights seedWeights, int generations) {
         List<Double> scoreHistory = new ArrayList<>();
         List<TrainingGameResult> allResults = new ArrayList<>();
         int totalGamesPlayed = 0;
 
         // Build player-weights and personality maps once (identical across generations)
-        Map<String, BotWeights> playerWeights = new LinkedHashMap<>();
+        Map<String, PhasedBotWeights> playerWeights = new LinkedHashMap<>();
         Map<String, BotPersonality> playerPersonalities = new LinkedHashMap<>();
         for (int i = 0; i < PLAYERS_PER_GAME; i++) {
             String playerName = "TrainBot-" + i;
             BotPersonality personality = TRAINING_PERSONALITIES[i];
-            playerWeights.put(playerName, BotWeights.forPersonality(personality));
+            playerWeights.put(playerName, PhasedBotWeights.forPersonality(personality));
             playerPersonalities.put(playerName, personality);
         }
 
@@ -108,16 +108,21 @@ public class TrainingSession {
         }
     }
 
-    public static BotWeights loadBestWeights() {
+    public static PhasedBotWeights loadBestWeights() {
         try {
             Path path = Paths.get("training-results/best-weights.json");
             if (Files.exists(path)) {
                 String json = Files.readString(path);
-                return BotWeights.fromJson(json);
+                // Handle both phased and flat formats
+                if (json.contains("\"phases\"")) {
+                    return PhasedBotWeights.fromJson(json);
+                } else {
+                    return PhasedBotWeights.fromFlat(com.kenstevens.stratinit.server.bot.BotWeights.fromJson(json));
+                }
             }
         } catch (IOException e) {
             // Fall through to default
         }
-        return new BotWeights();
+        return new PhasedBotWeights();
     }
 }

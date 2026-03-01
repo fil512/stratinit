@@ -12,7 +12,7 @@ import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotExecutor;
-import com.kenstevens.stratinit.server.bot.BotWeights;
+import com.kenstevens.stratinit.server.bot.PhasedBotWeights;
 import com.kenstevens.stratinit.server.event.svc.GameStartupService;
 import com.kenstevens.stratinit.server.service.GameService;
 import com.kenstevens.stratinit.server.service.UnitService;
@@ -58,11 +58,11 @@ public class TrainingGameSimulator {
     @Autowired
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
-    public TrainingGameResult simulate(Map<String, BotWeights> playerWeights) {
+    public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights) {
         return simulate(playerWeights, Collections.emptyMap());
     }
 
-    public TrainingGameResult simulate(Map<String, BotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
+    public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
         String gameName = TRAINING_GAME_PREFIX + System.currentTimeMillis();
 
         // Create game and players
@@ -185,7 +185,7 @@ public class TrainingGameSimulator {
             for (Map.Entry<String, Nation> entry : nations.entrySet()) {
                 String playerName = entry.getKey();
                 Nation nation = entry.getValue();
-                BotWeights weights = playerWeights.get(playerName);
+                PhasedBotWeights weights = playerWeights.get(playerName);
 
                 // Record turn start metrics
                 int cities = cityDao.getNumberOfCities(nation);

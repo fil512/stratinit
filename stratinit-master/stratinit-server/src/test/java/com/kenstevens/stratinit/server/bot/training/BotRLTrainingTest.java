@@ -1,7 +1,7 @@
 package com.kenstevens.stratinit.server.bot.training;
 
 import com.kenstevens.stratinit.client.server.rest.StratInitDaoBase;
-import com.kenstevens.stratinit.server.bot.BotWeights;
+import com.kenstevens.stratinit.server.bot.PhasedBotWeights;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +16,7 @@ class BotRLTrainingTest extends StratInitDaoBase {
     @Test
     void trainBotsAndVerifyImprovement() {
         // Load seed weights (from file if available, otherwise defaults)
-        BotWeights seedWeights = TrainingSession.loadBestWeights();
+        PhasedBotWeights seedWeights = TrainingSession.loadBestWeights();
 
         int generations = Integer.getInteger("training.generations", 3);
         TrainingResult result = trainingSession.train(seedWeights, generations);

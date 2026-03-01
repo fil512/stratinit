@@ -43,10 +43,6 @@ public class MoveToCoastForPickupAction implements BotAction {
         if (transportNearby) {
             utility *= (1.0 + weights.transportLoadDesire);
         }
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Distance penalty: multiplicative to avoid zeroing out
         utility /= (1.0 + distance * weights.distancePenalty);
         return utility;

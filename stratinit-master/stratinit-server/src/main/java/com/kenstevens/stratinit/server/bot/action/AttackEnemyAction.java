@@ -44,11 +44,6 @@ public class AttackEnemyAction implements BotAction {
             utility += (hpRatio - 1.0) * weights.hpAdvantageFactor;
         }
 
-        // Late game military bonus
-        if (state.getGameTimePercent() > 0.5) {
-            utility *= (1.0 + weights.lateMilitaryBonus);
-        }
-
         // Coordination bonus: reward converging multiple units on the same target
         int alliesInRange = state.countLandUnitsInRangeOf(target.getCoords()) - 1; // exclude self
         if (alliesInRange >= weights.massAttackThreshold - 1) {

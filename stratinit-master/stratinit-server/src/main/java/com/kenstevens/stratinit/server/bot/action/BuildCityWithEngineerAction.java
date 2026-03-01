@@ -36,10 +36,6 @@ public class BuildCityWithEngineerAction implements BotAction {
             return 0;
         }
         double utility = weights.expansionBaseWeight * weights.buildCityDesire;
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Coastal city bonus: boost when engineer is on a coastal sector and bot has no port
         if (!state.hasCoastalCity()) {
             Sector sector = state.getWorld().getSectorOrNull(engineer.getCoords());

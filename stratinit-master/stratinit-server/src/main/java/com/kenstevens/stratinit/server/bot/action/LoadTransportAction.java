@@ -34,11 +34,6 @@ public class LoadTransportAction implements BotAction {
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.navalBaseWeight * weights.transportLoadDesire;
-
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
-
         return utility;
     }
 

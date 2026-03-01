@@ -41,9 +41,6 @@ public class LoadTransportGuaranteeAction implements BotAction {
         // Guarantee-level utility: must beat expansion actions
         double utility = weights.expansionBaseWeight * weights.transportLoadDesire
                 * weights.engineerGuaranteeMultiplier;
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         return utility;
     }
 

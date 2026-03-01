@@ -44,9 +44,6 @@ public class MoveToTransportGuaranteeAction implements BotAction {
         // Guarantee-level utility: expansionBaseWeight * engineerGuaranteeMultiplier
         // This ensures it beats normal expansion actions
         double utility = weights.expansionBaseWeight * weights.engineerGuaranteeMultiplier;
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Distance penalty: multiplicative to avoid zeroing out (divided by 3 to keep it high even for far units)
         utility /= (1.0 + distance * weights.distancePenalty / 3.0);
         return utility;

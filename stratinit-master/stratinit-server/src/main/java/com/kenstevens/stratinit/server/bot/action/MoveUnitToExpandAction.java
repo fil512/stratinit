@@ -46,10 +46,6 @@ public class MoveUnitToExpandAction implements BotAction {
         double utility = weights.expansionBaseWeight;
         // Distance penalty: multiplicative to avoid zeroing out
         utility /= (1.0 + distance * weights.distancePenalty);
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         // Home island exploration bonus
         if (isHomeIsland) {
             utility += weights.homeIslandExplorationBonus;

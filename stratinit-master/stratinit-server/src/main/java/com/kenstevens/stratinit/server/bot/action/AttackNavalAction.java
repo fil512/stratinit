@@ -41,10 +41,6 @@ public class AttackNavalAction implements BotAction {
             utility += (hpRatio - 1.0) * weights.hpAdvantageFactor;
         }
 
-        if (state.getGameTimePercent() > 0.5) {
-            utility *= (1.0 + weights.lateMilitaryBonus);
-        }
-
         // Escort bonus: prioritize clearing threats near friendly transports
         if (state.hasNearbyTransport(target.getCoords(), 3)) {
             utility += weights.navalEscortBonus;

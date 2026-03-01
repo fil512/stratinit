@@ -45,10 +45,6 @@ public class MoveEngineerToBuildSiteAction implements BotAction {
         if (coastal && !state.hasCoastalCity()) {
             utility *= (1.0 + weights.coastalCityDesire);
         }
-        // Early game bonus
-        if (state.getGameTimePercent() < 0.3) {
-            utility *= (1.0 + weights.earlyExpansionBonus);
-        }
         return utility;
     }
 
