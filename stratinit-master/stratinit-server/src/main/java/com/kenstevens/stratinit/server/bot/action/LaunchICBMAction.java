@@ -35,8 +35,6 @@ public class LaunchICBMAction implements BotAction {
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.militaryBaseWeight * weights.icbmLaunchDesire;
 
-        utility *= state.getGameTimePercent();
-
         // Higher utility for larger blast radius ICBMs
         int blastRadius = icbm.getUnitBase().getBlastRadius();
         utility *= (1.0 + blastRadius * 0.2);

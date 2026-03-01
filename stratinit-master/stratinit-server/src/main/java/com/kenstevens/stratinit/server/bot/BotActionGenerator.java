@@ -2,6 +2,7 @@ package com.kenstevens.stratinit.server.bot;
 
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.server.bot.action.*;
+import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.server.service.CityService;
 import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.server.svc.MoveService;
@@ -903,15 +904,16 @@ public class BotActionGenerator {
     }
 
     private void generateStrategicActions(BotWorldState state, Nation nation, List<BotAction> actions) {
-        int gameSize = state.getGame().getGamesize();
-        SectorCoords mapCenter = new SectorCoords(gameSize / 2, gameSize / 2);
         List<City> enemyCities = state.getEnemyCities();
 
         for (Unit unit : state.getLaunchableUnits()) {
             UnitBase unitBase = unit.getUnitBase();
 
             if (unit.getType() == UnitType.SATELLITE) {
-                actions.add(new LaunchSatelliteAction(unit, mapCenter, nation, moveService));
+                List<SectorCoords> targets = findBestSatelliteTargets(state, 3);
+                for (SectorCoords target : targets) {
+                    actions.add(new LaunchSatelliteAction(unit, target, nation, moveService));
+                }
             } else if (unitBase.getDevastates()) {
                 // ICBM: target each enemy city
                 for (City enemyCity : enemyCities) {
@@ -919,5 +921,42 @@ public class BotActionGenerator {
                 }
             }
         }
+    }
+
+    private List<SectorCoords> findBestSatelliteTargets(BotWorldState state, int count) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        int step = 4;
+
+        // Score each candidate by how many unexplored sectors it would reveal
+        List<Map.Entry<SectorCoords, Integer>> candidates = new ArrayList<>();
+        for (int x = 0; x < gameSize; x += step) {
+            for (int y = 0; y < gameSize; y += step) {
+                SectorCoords candidate = new SectorCoords(x, y);
+                int unexplored = 0;
+                for (Sector s : world.getSectorsWithin(candidate, Constants.SATELLITE_SIGHT)) {
+                    if (!state.isExplored(s.getCoords())) {
+                        unexplored++;
+                    }
+                }
+                if (unexplored > 0) {
+                    candidates.add(Map.entry(candidate, unexplored));
+                }
+            }
+        }
+
+        candidates.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+
+        List<SectorCoords> result = new ArrayList<>();
+        for (int i = 0; i < Math.min(count, candidates.size()); i++) {
+            result.add(candidates.get(i).getKey());
+        }
+
+        // Fallback to map center if no unexplored areas found
+        if (result.isEmpty()) {
+            result.add(new SectorCoords(gameSize / 2, gameSize / 2));
+        }
+
+        return result;
     }
 }

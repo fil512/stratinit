@@ -1,6 +1,5 @@
 package com.kenstevens.stratinit.server.bot.training;
 
-import com.kenstevens.stratinit.client.model.City;
 import com.kenstevens.stratinit.client.model.Nation;
 import com.kenstevens.stratinit.client.model.Unit;
 import com.kenstevens.stratinit.dao.CityDao;
@@ -9,9 +8,7 @@ import com.kenstevens.stratinit.dao.UnitDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class TrainingScorer {
@@ -19,12 +16,6 @@ public class TrainingScorer {
     private static final double UNIT_WEIGHT = 1.0;
     private static final double TECH_WEIGHT = 0.5;
     private static final double EXPLORATION_WEIGHT = 0.1;
-
-    private static final double ATTACKED_ENEMY_MULTIPLIER = 2.0;
-    private static final double FOUND_ENEMY_MULTIPLIER = 1.5;
-
-    private static final Set<String> ATTACK_ACTION_TYPES = Set.of(
-            "AttackEnemyAction", "AttackNavalAction", "AttackWithAirAction", "LaunchICBMAction");
 
     @Autowired
     private CityDao cityDao;
@@ -34,46 +25,35 @@ public class TrainingScorer {
     private SectorDao sectorDao;
 
     public double score(Nation nation) {
-        return computeBaseScore(nation);
+        return computeRawPower(nation);
     }
 
-    public double score(Nation nation, TrainingActionLog actionLog) {
-        double baseScore = computeBaseScore(nation);
-
-        // Check for enemy interaction multipliers
-        String nationName = nation.getName();
-        Map<String, List<TrainingActionLog.TurnSnapshot>> nationTurns = actionLog.getNationTurns();
-        List<TrainingActionLog.TurnSnapshot> turns = nationTurns.get(nationName);
-
-        if (turns != null) {
-            boolean attackedEnemy = false;
-            for (TrainingActionLog.TurnSnapshot turn : turns) {
-                for (String actionType : turn.getExecutedCounts().keySet()) {
-                    if (ATTACK_ACTION_TYPES.contains(actionType) && turn.getExecutedCounts().get(actionType) > 0) {
-                        attackedEnemy = true;
-                        break;
-                    }
-                }
-                if (attackedEnemy) break;
-            }
-
-            if (attackedEnemy) {
-                return baseScore * ATTACKED_ENEMY_MULTIPLIER;
-            }
-
-            // Check if bot found enemy cities (scouted them)
-            List<City> seenCities = cityDao.getSeenCities(nation);
-            boolean foundEnemy = seenCities.stream()
-                    .anyMatch(c -> !c.getNation().equals(nation));
-            if (foundEnemy) {
-                return baseScore * FOUND_ENEMY_MULTIPLIER;
-            }
+    public Map<String, Double> scoreAll(Map<String, Nation> nations) {
+        // Compute raw power for each nation
+        Map<String, Double> rawPowers = new LinkedHashMap<>();
+        for (Map.Entry<String, Nation> entry : nations.entrySet()) {
+            rawPowers.put(entry.getKey(), computeRawPower(entry.getValue()));
         }
 
-        return baseScore;
+        // Rank by raw power (highest = rank 1)
+        List<Map.Entry<String, Double>> ranked = new ArrayList<>(rawPowers.entrySet());
+        ranked.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
+
+        int n = ranked.size();
+        Map<String, Double> scores = new LinkedHashMap<>();
+        for (int i = 0; i < n; i++) {
+            String name = ranked.get(i).getKey();
+            double rawPower = ranked.get(i).getValue();
+            int rank = i + 1;
+            // Top-ranked gets full power, bottom gets power/N
+            double score = rawPower * (n - rank + 1.0) / n;
+            scores.put(name, score);
+        }
+
+        return scores;
     }
 
-    private double computeBaseScore(Nation nation) {
+    private double computeRawPower(Nation nation) {
         int cities = cityDao.getNumberOfCities(nation);
         List<Unit> units = unitDao.getUnits(nation);
         long aliveUnits = units.stream().filter(Unit::isAlive).count();

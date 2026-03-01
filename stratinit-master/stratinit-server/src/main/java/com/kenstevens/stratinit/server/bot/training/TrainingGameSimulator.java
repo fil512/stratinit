@@ -231,11 +231,8 @@ public class TrainingGameSimulator {
             turnsPlayed++;
         }
 
-        // Score all nations
-        Map<String, Double> scores = new LinkedHashMap<>();
-        for (Map.Entry<String, Nation> entry : nations.entrySet()) {
-            scores.put(entry.getKey(), scorer.score(entry.getValue(), actionLog));
-        }
+        // Score all nations using relative power ranking
+        Map<String, Double> scores = scorer.scoreAll(nations);
 
         // Cleanup game from cache and database to prevent OOM across generations
         cleanup(game);
