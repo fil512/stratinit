@@ -4,16 +4,19 @@ Train bot AI weights using evolutionary reinforcement learning.
 
 Run the bot RL training simulation to improve `bot-weights.json` weights used by live bot players.
 
-### Step 1: Configure generations
+### Step 1: Configure training parameters
 
-Ask the user how many generations to train. Offer options: 10 (quick test), 20 (short run), 30 (meaningful run ~1 minute), 50 (thorough ~2 minutes), 100 (extended). Minimum 10.
+Ask the user two questions (in a single AskUserQuestion call):
+
+1. **Generations**: How many generations to train. Offer options: 10 (quick test), 20 (short run), 30 (meaningful run), 50 (thorough), 100 (extended). Minimum 10.
+2. **Ticks per game**: How many simulation ticks per game. Offer options: 960 (fast, ~10s/game, less cross-island combat), 1440 (balanced, ~20s/game, recommended default), 2880 (full game, ~120s/game, most realistic but slow). Default 1440.
 
 ### Step 2: Run training
 
-Run the training with the requested generation count via `-Dtraining.generations=N`:
+Run the training with both parameters via system properties:
 
 ```bash
-mvn test -pl stratinit-server -Dtest=BotRLTrainingTest -Dtraining.generations=30
+mvn test -pl stratinit-server -Dtest=BotRLTrainingTest -Dtraining.generations=N -Dtraining.ticks=T
 ```
 
 ### Step 3: Extract and display results
