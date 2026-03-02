@@ -105,8 +105,7 @@ public class BotActionGenerator {
                 // Check if this is a good build site (regardless of current mobility)
                 Sector engSector = world.getSectorOrNull(unit.getCoords());
                 boolean serverAllows = engSector != null && cityService.canEstablishCity(nation, engSector);
-                boolean spacedOut = state.distanceToNearestCity(unit.getCoords()) >= 2;
-                boolean goodBuildSite = serverAllows && spacedOut;
+                boolean goodBuildSite = serverAllows;
 
                 if (goodBuildSite) {
                     // At a valid build site — build if we have mobility, otherwise wait
@@ -148,9 +147,9 @@ public class BotActionGenerator {
         // Infantry/tanks move to coast for transport pickup (always, to pre-position)
         generateMoveToCoastActions(state, nation, actions, false);
 
-        // Transport loading guarantee: when idle empty transport exists,
+        // Transport loading guarantee: when idle empty transport exists or units are heading to coast,
         // generate high-priority actions to connect infantry to transport
-        if (state.hasIdleEmptyTransport()) {
+        if (state.hasIdleEmptyTransport() || !state.getUnitsMovingToCoast().isEmpty()) {
             generateTransportLoadingGuarantee(state, nation, actions);
         }
     }
@@ -199,12 +198,12 @@ public class BotActionGenerator {
         int gameSize = state.getGame().getGamesize();
         SectorCoords unitCoords = unit.getCoords();
 
-        List<BotWorldState.BuildSite> sites = state.findBuildSites(2);
+        List<BotWorldState.BuildSite> sites = state.findBuildSites(1);
         if (!sites.isEmpty()) {
             // Move toward known build sites — sort by distance, take nearest 3
             sites.sort(Comparator.comparingInt(
                     s -> SectorCoords.distance(gameSize, unitCoords, s.coords())));
-            int limit = Math.min(3, sites.size());
+            int limit = Math.min(1, sites.size());
             for (int i = 0; i < limit; i++) {
                 BotWorldState.BuildSite site = sites.get(i);
                 int distance = SectorCoords.distance(gameSize, unitCoords, site.coords());
@@ -307,17 +306,25 @@ public class BotActionGenerator {
         List<Unit> emptyTransports = state.getIdleNavalUnits().stream()
                 .filter(u -> u.carriesUnits() && !loadedCoords.contains(u.getCoords()))
                 .collect(Collectors.toList());
-        if (emptyTransports.isEmpty()) return;
 
-        // Find idle land units on land (infantry/tank)
-        List<Unit> landUnits = new ArrayList<>(state.getIdleLandUnits().stream()
-                .filter(u -> u.getType() == UnitType.INFANTRY || u.getType() == UnitType.TANK)
-                .filter(u -> {
-                    Sector s = world.getSectorOrNull(u.getCoords());
-                    return s != null && !s.isWater();
-                })
-                .collect(Collectors.toList()));
-        if (landUnits.isEmpty()) return;
+        // Build combined passenger candidate list: idle coastal units + en-route-to-coast units
+        record PassengerCandidate(Unit unit, SectorCoords effectiveCoords, boolean enRoute) {}
+        List<PassengerCandidate> candidates = new ArrayList<>();
+
+        // Idle land units on land (infantry/tank)
+        for (Unit u : state.getIdleLandUnits()) {
+            if (u.getType() != UnitType.INFANTRY && u.getType() != UnitType.TANK) continue;
+            Sector s = world.getSectorOrNull(u.getCoords());
+            if (s == null || s.isWater()) continue;
+            candidates.add(new PassengerCandidate(u, u.getCoords(), false));
+        }
+
+        // En-route-to-coast units: use their move destination as effective position
+        for (Unit u : state.getUnitsMovingToCoast()) {
+            candidates.add(new PassengerCandidate(u, u.getUnitMove().getCoords(), true));
+        }
+
+        if (candidates.isEmpty() || emptyTransports.isEmpty()) return;
 
         // Track which land units have been paired so each transport gets a unique unit
         Set<Integer> pairedUnitIds = new HashSet<>();
@@ -332,36 +339,40 @@ public class BotActionGenerator {
             }
             if (coastalTiles.isEmpty()) continue;
 
-            // Find nearest unpaired land unit to any of these coastal tiles
-            Unit bestUnit = null;
+            // Find nearest unpaired candidate to any of these coastal tiles
+            PassengerCandidate bestCandidate = null;
             SectorCoords bestCoastalTile = null;
             int bestDist = Integer.MAX_VALUE;
-            for (Unit landUnit : landUnits) {
-                if (pairedUnitIds.contains(landUnit.getId())) continue;
+            for (PassengerCandidate candidate : candidates) {
+                if (pairedUnitIds.contains(candidate.unit().getId())) continue;
                 for (SectorCoords coastal : coastalTiles) {
-                    int dist = SectorCoords.distance(gameSize, landUnit.getCoords(), coastal);
+                    int dist = SectorCoords.distance(gameSize, candidate.effectiveCoords(), coastal);
                     if (dist < bestDist) {
                         bestDist = dist;
-                        bestUnit = landUnit;
+                        bestCandidate = candidate;
                         bestCoastalTile = coastal;
                     }
                 }
             }
-            if (bestUnit == null) continue;
-            pairedUnitIds.add(bestUnit.getId());
+            if (bestCandidate == null) continue;
+            pairedUnitIds.add(bestCandidate.unit().getId());
 
-            if (bestDist == 0) {
-                // Land unit is already on coast next to transport — board it
-                actions.add(new BoardTransportAction(bestUnit, transport.getCoords(), nation, moveService));
-            } else {
-                // Guarantee: move infantry toward the coastal tile near the transport
-                // Uses high utility (engineerGuaranteeMultiplier) to beat normal expansion
-                actions.add(new MoveToTransportGuaranteeAction(bestUnit, bestCoastalTile, bestDist,
-                        nation, moveService));
+            // For idle units: generate unit-side actions (move to coast or board)
+            if (!bestCandidate.enRoute()) {
+                if (bestDist == 0) {
+                    // Land unit is already on coast next to transport — board it
+                    actions.add(new BoardTransportAction(bestCandidate.unit(), transport.getCoords(), nation, moveService));
+                } else {
+                    // Guarantee: move infantry toward the coastal tile near the transport
+                    actions.add(new MoveToTransportGuaranteeAction(bestCandidate.unit(), bestCoastalTile, bestDist,
+                            nation, moveService));
+                }
             }
+            // For en-route units: skip unit-side action (they already have a move order)
 
-            // Also try to move transport toward nearest land unit (if it has water neighbors within range)
-            for (Sector neighbour : world.getNeighbours(bestUnit.getCoords())) {
+            // Move transport toward the candidate's effective position (converge on where unit WILL BE)
+            SectorCoords targetLand = bestCandidate.effectiveCoords();
+            for (Sector neighbour : world.getNeighbours(targetLand)) {
                 if (!neighbour.isWater()) continue;
                 int distToNeighbour = SectorCoords.distance(gameSize, transport.getCoords(), neighbour.getCoords());
                 if (distToNeighbour <= transport.getMobility()) {
@@ -583,6 +594,18 @@ public class BotActionGenerator {
                         }
                     }
                 }
+                // Also converge on en-route-to-coast units using their move destination
+                for (Unit enRouteUnit : state.getUnitsMovingToCoast()) {
+                    SectorCoords targetCoords = enRouteUnit.getUnitMove().getCoords();
+                    for (Sector neighbour : world.getNeighbours(targetCoords)) {
+                        if (!neighbour.isWater()) continue;
+                        int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
+                        if (distance <= myUnit.getMobility() * 3) {
+                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), nation, moveService));
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -724,6 +747,10 @@ public class BotActionGenerator {
             if (world.isCoastal(landSector)) {
                 coastalLandUnitCoords.add(landUnit.getCoords());
             }
+        }
+        // Also include destinations of en-route-to-coast units
+        for (Unit enRouteUnit : state.getUnitsMovingToCoast()) {
+            coastalLandUnitCoords.add(enRouteUnit.getUnitMove().getCoords());
         }
 
         List<Unit> emptyTransports = state.getIdleNavalUnits().stream()

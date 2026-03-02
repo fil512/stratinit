@@ -260,6 +260,18 @@ public class BotWorldState {
         return countLandUnitsInRangeOf(target) > 0;
     }
 
+    public List<Unit> getUnitsMovingToCoast() {
+        return myUnits.stream()
+                .filter(u -> u.isAlive() && u.getUnitMove() != null)
+                .filter(u -> u.getType() == UnitType.INFANTRY || u.getType() == UnitType.TANK)
+                .filter(u -> {
+                    SectorCoords target = u.getUnitMove().getCoords();
+                    Sector targetSector = world.getSectorOrNull(target);
+                    return targetSector != null && !targetSector.isWater() && world.isCoastal(targetSector);
+                })
+                .collect(Collectors.toList());
+    }
+
     // --- Island expansion query methods ---
 
     public int distanceToNearestCity(SectorCoords coords) {

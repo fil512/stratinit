@@ -154,8 +154,12 @@ public class SetCityProductionAction implements BotAction {
         } else if (unitType == UnitType.INFANTRY) {
             utility *= weights.infantryDesire;
         } else if (unitType == UnitType.ENGINEER) {
-            if (!state.hasEngineerUnit() && !state.hasEngineerInProduction()) {
+            long aliveEngineers = state.countAliveUnitsOfType(UnitType.ENGINEER);
+            long buildingEngineers = state.countCitiesBuildingType(UnitType.ENGINEER);
+            if (aliveEngineers == 0 && buildingEngineers == 0) {
                 utility = weights.economyBaseWeight * weights.engineerGuaranteeMultiplier;
+            } else if (aliveEngineers + buildingEngineers >= 2) {
+                utility = 0;
             } else {
                 utility *= weights.engineerDesire;
             }
