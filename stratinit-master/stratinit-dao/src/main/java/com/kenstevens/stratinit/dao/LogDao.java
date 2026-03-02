@@ -25,6 +25,7 @@ public class LogDao {
 
 	public void save(BattleLog battleLog) {
 		if (CacheDao.isTrainingMode()) {
+			battleLog.setId(CacheDao.nextSyntheticId());
 			return;
 		}
 		if (battleLog instanceof UnitAttackedBattleLog) {

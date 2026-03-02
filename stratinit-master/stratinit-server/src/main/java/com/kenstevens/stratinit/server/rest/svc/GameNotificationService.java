@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.server.rest.svc;
 
+import com.kenstevens.stratinit.dao.CacheDao;
 import com.kenstevens.stratinit.dto.SIBattleLog;
 import com.kenstevens.stratinit.type.SectorCoords;
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class GameNotificationService {
     private SimpMessagingTemplate messagingTemplate;
 
     public void notifyGameUpdate(int gameId, int actingNationId) {
-        if (messagingTemplate == null) {
+        if (messagingTemplate == null || CacheDao.isTrainingMode()) {
             return;
         }
         logger.debug("Sending game update for game {} from nation {}", gameId, actingNationId);
@@ -28,7 +29,7 @@ public class GameNotificationService {
     }
 
     public void notifyBattleLog(int gameId, List<SIBattleLog> logs) {
-        if (messagingTemplate == null) {
+        if (messagingTemplate == null || CacheDao.isTrainingMode()) {
             return;
         }
         logger.debug("Sending battle logs for game {}", gameId);
@@ -36,7 +37,7 @@ public class GameNotificationService {
     }
 
     public void notifyBattle(int gameId, SectorCoords coords) {
-        if (messagingTemplate == null) {
+        if (messagingTemplate == null || CacheDao.isTrainingMode()) {
             return;
         }
         logger.debug("Sending battle notification for game {} at {}", gameId, coords);

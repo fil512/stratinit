@@ -29,7 +29,9 @@ import java.util.stream.Collectors;
 @Service
 public class TrainingGameSimulator {
     // 2880 ticks = full blitz game (2 hours real time, bot turn every 2.5 sec)
-    private static final int MAX_TURNS = 2880;
+    // Default 1440 (half game) balances training speed with cross-island combat coverage
+    private static final int DEFAULT_MAX_TURNS = 1440;
+    private static final int MAX_TURNS = Integer.getInteger("training.ticks", DEFAULT_MAX_TURNS);
     private static final int PLAYERS_PER_GAME = 8;
     private static final String TRAINING_GAME_PREFIX = "Training-";
 

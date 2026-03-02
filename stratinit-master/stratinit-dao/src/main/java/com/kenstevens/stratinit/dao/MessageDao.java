@@ -23,6 +23,9 @@ public class MessageDao {
     RelationChangeAuditRepo relationChangeAuditRepo;
 
     public void save(Mail mail) {
+        if (CacheDao.isTrainingMode()) {
+            return;
+        }
         mailRepo.save(mail);
     }
 
