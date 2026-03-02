@@ -321,7 +321,10 @@ public class BotActionGenerator {
 
         // En-route-to-coast units: use their move destination as effective position
         for (Unit u : state.getUnitsMovingToCoast()) {
-            candidates.add(new PassengerCandidate(u, u.getUnitMove().getCoords(), true));
+            var move = u.getUnitMove();
+            if (move != null) {
+                candidates.add(new PassengerCandidate(u, move.getCoords(), true));
+            }
         }
 
         if (candidates.isEmpty() || emptyTransports.isEmpty()) return;
@@ -596,7 +599,9 @@ public class BotActionGenerator {
                 }
                 // Also converge on en-route-to-coast units using their move destination
                 for (Unit enRouteUnit : state.getUnitsMovingToCoast()) {
-                    SectorCoords targetCoords = enRouteUnit.getUnitMove().getCoords();
+                    var enRouteMove = enRouteUnit.getUnitMove();
+                    if (enRouteMove == null) continue;
+                    SectorCoords targetCoords = enRouteMove.getCoords();
                     for (Sector neighbour : world.getNeighbours(targetCoords)) {
                         if (!neighbour.isWater()) continue;
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
@@ -750,7 +755,10 @@ public class BotActionGenerator {
         }
         // Also include destinations of en-route-to-coast units
         for (Unit enRouteUnit : state.getUnitsMovingToCoast()) {
-            coastalLandUnitCoords.add(enRouteUnit.getUnitMove().getCoords());
+            var enRouteMove = enRouteUnit.getUnitMove();
+            if (enRouteMove != null) {
+                coastalLandUnitCoords.add(enRouteMove.getCoords());
+            }
         }
 
         List<Unit> emptyTransports = state.getIdleNavalUnits().stream()

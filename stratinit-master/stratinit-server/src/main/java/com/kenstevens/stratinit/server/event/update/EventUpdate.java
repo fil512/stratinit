@@ -25,6 +25,10 @@ public abstract class EventUpdate {
             checkRunning();
             game = gameDao.findGame(gameId);
             GameCache gameCache = dataCache.getGameCache(game);
+            if (gameCache == null) {
+                // Game has been cleaned up (e.g. training game removed between ticks)
+                return;
+            }
             synchronized (gameCache) {
                 executeWrite();
             }

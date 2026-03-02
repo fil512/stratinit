@@ -12,11 +12,6 @@ import java.util.*;
 
 @Service
 public class TrainingScorer {
-    private static final double CITY_WEIGHT = 10.0;
-    private static final double UNIT_WEIGHT = 1.0;
-    private static final double TECH_WEIGHT = 0.5;
-    private static final double EXPLORATION_WEIGHT = 0.1;
-
     @Autowired
     private CityDao cityDao;
     @Autowired
@@ -28,29 +23,61 @@ public class TrainingScorer {
         return computeRawPower(nation);
     }
 
-    public Map<String, Double> scoreAll(Map<String, Nation> nations) {
-        // Compute raw power for each nation
-        Map<String, Double> rawPowers = new LinkedHashMap<>();
+    /**
+     * Score all nations using milestone-based scoring with z-score normalization.
+     * Returns z-score normalized scores (mean=0, stddev=1) so map layout bias cancels out.
+     */
+    public Map<String, Double> scoreAll(Map<String, Nation> nations, TrainingActionLog actionLog) {
+        Map<String, Double> rawScores = new LinkedHashMap<>();
         for (Map.Entry<String, Nation> entry : nations.entrySet()) {
-            rawPowers.put(entry.getKey(), computeRawPower(entry.getValue()));
+            rawScores.put(entry.getKey(), computeMilestoneScore(entry.getValue(), entry.getKey(), actionLog));
+        }
+        return zScoreNormalize(rawScores);
+    }
+
+    /**
+     * Legacy scoring without milestones (for backward compatibility).
+     */
+    public Map<String, Double> scoreAll(Map<String, Nation> nations) {
+        Map<String, Double> rawScores = new LinkedHashMap<>();
+        for (Map.Entry<String, Nation> entry : nations.entrySet()) {
+            rawScores.put(entry.getKey(), computeRawPower(entry.getValue()));
+        }
+        return zScoreNormalize(rawScores);
+    }
+
+    private double computeMilestoneScore(Nation nation, String playerName, TrainingActionLog actionLog) {
+        int cities = cityDao.getNumberOfCities(nation);
+        List<Unit> units = unitDao.getUnits(nation);
+        long aliveUnits = units.stream().filter(Unit::isAlive).count();
+        double tech = nation.getTech();
+
+        double score = 0;
+        score += 5.0 * cities;
+        score += 0.5 * aliveUnits;
+        score += 0.3 * tech;
+
+        // Milestone bonuses
+        if (actionLog.hasExpandedOffHomeIsland(playerName)) {
+            score += 15.0;
+        }
+        score += 5.0 * Math.min(actionLog.getCitiesOnNonHomeIslands(playerName), 3);
+        if (actionLog.hasLoadedTransport(playerName)) {
+            score += 5.0;
+        }
+        score += 2.0 * Math.min(actionLog.getEnemyUnitsKilled(playerName), 10);
+
+        // Tempo bonuses — reward doing things earlier
+        int firstCaptureTurn = actionLog.getFirstCityCapturedTurn(playerName);
+        if (firstCaptureTurn < Integer.MAX_VALUE) {
+            score += Math.max(0, 3.0 - (firstCaptureTurn / 400.0));
+        }
+        int firstTransportTurn = actionLog.getFirstTransportLoadedTurn(playerName);
+        if (firstTransportTurn < Integer.MAX_VALUE) {
+            score += Math.max(0, 2.0 - (firstTransportTurn / 600.0));
         }
 
-        // Rank by raw power (highest = rank 1)
-        List<Map.Entry<String, Double>> ranked = new ArrayList<>(rawPowers.entrySet());
-        ranked.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
-
-        int n = ranked.size();
-        Map<String, Double> scores = new LinkedHashMap<>();
-        for (int i = 0; i < n; i++) {
-            String name = ranked.get(i).getKey();
-            double rawPower = ranked.get(i).getValue();
-            int rank = i + 1;
-            // Top-ranked gets full power, bottom gets power/N
-            double score = rawPower * (n - rank + 1.0) / n;
-            scores.put(name, score);
-        }
-
-        return scores;
+        return score;
     }
 
     private double computeRawPower(Nation nation) {
@@ -58,10 +85,33 @@ public class TrainingScorer {
         List<Unit> units = unitDao.getUnits(nation);
         long aliveUnits = units.stream().filter(Unit::isAlive).count();
         double tech = nation.getTech();
-
         int explored = sectorDao.getSectorsSeen(nation).size();
 
-        return CITY_WEIGHT * cities + UNIT_WEIGHT * aliveUnits + TECH_WEIGHT * tech + EXPLORATION_WEIGHT * explored;
+        return 10.0 * cities + 1.0 * aliveUnits + 0.5 * tech + 0.1 * explored;
+    }
+
+    /**
+     * Z-score normalize scores: (x - mean) / stddev.
+     * If stddev is 0 (all scores equal), returns all zeros.
+     */
+    static Map<String, Double> zScoreNormalize(Map<String, Double> raw) {
+        double sum = 0;
+        for (double v : raw.values()) sum += v;
+        double mean = sum / raw.size();
+
+        double variance = 0;
+        for (double v : raw.values()) variance += (v - mean) * (v - mean);
+        double stddev = Math.sqrt(variance / raw.size());
+
+        Map<String, Double> normalized = new LinkedHashMap<>();
+        for (Map.Entry<String, Double> entry : raw.entrySet()) {
+            if (stddev > 0) {
+                normalized.put(entry.getKey(), (entry.getValue() - mean) / stddev);
+            } else {
+                normalized.put(entry.getKey(), 0.0);
+            }
+        }
+        return normalized;
     }
 
     public int getCitiesOwned(Nation nation) {

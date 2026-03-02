@@ -13,12 +13,15 @@ class BotRLTrainingTest extends StratInitDaoBase {
     @Autowired
     private TrainingSession trainingSession;
 
+    @Autowired
+    private PhasedBotWeights phasedBotWeights;
+
     @Test
     void trainBotsAndVerifyImprovement() {
-        // Load seed weights (from file if available, otherwise defaults)
-        PhasedBotWeights seedWeights = TrainingSession.loadBestWeights();
+        // Seed from production bot-weights.json (injected by BotWeightsConfig)
+        PhasedBotWeights seedWeights = PhasedBotWeights.fromJson(phasedBotWeights.toJson());
 
-        int generations = Integer.getInteger("training.generations", 3);
+        int generations = Integer.getInteger("training.generations", 2);
         TrainingResult result = trainingSession.train(seedWeights, generations);
 
         // Verify we got results
@@ -32,10 +35,5 @@ class BotRLTrainingTest extends StratInitDaoBase {
         System.out.println("Score history: " + result.scoreHistory());
         System.out.println("Best weights:");
         System.out.println(result.bestWeights().toJson());
-
-        // Verify scores are non-negative
-        for (double score : result.scoreHistory()) {
-            assert score >= 0 : "Scores should be non-negative";
-        }
     }
 }

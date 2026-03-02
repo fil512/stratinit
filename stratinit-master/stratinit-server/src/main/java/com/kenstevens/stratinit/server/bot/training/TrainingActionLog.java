@@ -7,6 +7,14 @@ public class TrainingActionLog {
     private final Map<String, Map<String, Integer>> nationMilestones = new LinkedHashMap<>();
     private final Map<String, TurnSnapshot> currentTurn = new HashMap<>();
 
+    // Scoring milestone accumulators (per nation)
+    private final Map<String, Boolean> expandedOffHomeIsland = new HashMap<>();
+    private final Map<String, Integer> citiesOnNonHomeIslands = new HashMap<>();
+    private final Map<String, Boolean> loadedTransport = new HashMap<>();
+    private final Map<String, Integer> enemyUnitsKilled = new HashMap<>();
+    private final Map<String, Integer> firstCityCapturedTurn = new HashMap<>();
+    private final Map<String, Integer> firstTransportLoadedTurn = new HashMap<>();
+
     public void recordTurnStart(String nationName, int turnNumber, TurnStateMetrics metrics) {
         TurnSnapshot snapshot = new TurnSnapshot(turnNumber, metrics);
         currentTurn.put(nationName, snapshot);
@@ -30,6 +38,51 @@ public class TrainingActionLog {
     public void recordMilestone(String nationName, String milestoneName, int turnNumber) {
         nationMilestones.computeIfAbsent(nationName, k -> new LinkedHashMap<>())
                 .putIfAbsent(milestoneName, turnNumber);
+    }
+
+    public void recordExpandedOffHomeIsland(String nationName) {
+        expandedOffHomeIsland.put(nationName, true);
+    }
+
+    public void recordCitiesOnNonHomeIslands(String nationName, int count) {
+        citiesOnNonHomeIslands.put(nationName, count);
+    }
+
+    public void recordTransportLoaded(String nationName, int turn) {
+        loadedTransport.put(nationName, true);
+        firstTransportLoadedTurn.putIfAbsent(nationName, turn);
+    }
+
+    public void recordEnemyKill(String nationName) {
+        enemyUnitsKilled.merge(nationName, 1, Integer::sum);
+    }
+
+    public void recordFirstCityCapture(String nationName, int turn) {
+        firstCityCapturedTurn.putIfAbsent(nationName, turn);
+    }
+
+    public boolean hasExpandedOffHomeIsland(String nationName) {
+        return expandedOffHomeIsland.getOrDefault(nationName, false);
+    }
+
+    public int getCitiesOnNonHomeIslands(String nationName) {
+        return citiesOnNonHomeIslands.getOrDefault(nationName, 0);
+    }
+
+    public boolean hasLoadedTransport(String nationName) {
+        return loadedTransport.getOrDefault(nationName, false);
+    }
+
+    public int getEnemyUnitsKilled(String nationName) {
+        return enemyUnitsKilled.getOrDefault(nationName, 0);
+    }
+
+    public int getFirstCityCapturedTurn(String nationName) {
+        return firstCityCapturedTurn.getOrDefault(nationName, Integer.MAX_VALUE);
+    }
+
+    public int getFirstTransportLoadedTurn(String nationName) {
+        return firstTransportLoadedTurn.getOrDefault(nationName, Integer.MAX_VALUE);
     }
 
     public Map<String, List<TurnSnapshot>> getNationTurns() {

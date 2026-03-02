@@ -7,10 +7,8 @@ import com.kenstevens.stratinit.cache.DataCache;
 import com.kenstevens.stratinit.dao.CacheDao;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
-import com.kenstevens.stratinit.dao.NationDao;
 import com.kenstevens.stratinit.dao.SectorDao;
 import com.kenstevens.stratinit.dao.UnitDao;
-import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.UnitType;
 import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotExecutor;
@@ -44,8 +42,6 @@ public class TrainingGameSimulator {
     @Autowired
     private GameDao gameDao;
     @Autowired
-    private NationDao nationDao;
-    @Autowired
     private CityDao cityDao;
     @Autowired
     private UnitDao unitDao;
@@ -65,20 +61,16 @@ public class TrainingGameSimulator {
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
     public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights) {
-        return simulate(playerWeights, Collections.emptyMap());
-    }
-
-    public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
         CacheDao.setTrainingMode(true);
         CacheDao.resetSyntheticIds();
         try {
-            return doSimulate(playerWeights, playerPersonalities);
+            return doSimulate(playerWeights);
         } finally {
             CacheDao.setTrainingMode(false);
         }
     }
 
-    private TrainingGameResult doSimulate(Map<String, PhasedBotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
+    private TrainingGameResult doSimulate(Map<String, PhasedBotWeights> playerWeights) {
         long simStartTime = System.nanoTime();
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         String gameName = TRAINING_GAME_PREFIX + System.currentTimeMillis();
@@ -110,10 +102,8 @@ public class TrainingGameSimulator {
                 throw new RuntimeException("Failed to join game: " + result);
             }
             Nation nation = result.getValue();
-            BotPersonality personality = playerPersonalities.get(name);
-            if (personality != null) {
-                nation.setBotPersonality(personality);
-            }
+            // Don't set botPersonality on Nation — it bypasses weight-based production
+            // logic in SetCityProductionAction. Track personality externally for analysis only.
             nations.put(name, nation);
         }
 
@@ -152,8 +142,20 @@ public class TrainingGameSimulator {
 
         // Track previous city counts per nation for milestone detection
         Map<String, Integer> prevCityCounts = new LinkedHashMap<>();
+        // Track home island IDs per nation
+        Map<String, Integer> homeIslandIds = new LinkedHashMap<>();
+        World startWorld = sectorDao.getWorld(game);
         for (Map.Entry<String, Nation> entry : nations.entrySet()) {
             prevCityCounts.put(entry.getKey(), cityDao.getNumberOfCities(entry.getValue()));
+            // Determine home island from starting city
+            Collection<City> startCities = cityDao.getCities(entry.getValue());
+            for (City c : startCities) {
+                Sector s = startWorld.getSectorOrNull(c.getCoords());
+                if (s != null && s.getIsland() >= 0) {
+                    homeIslandIds.put(entry.getKey(), s.getIsland());
+                    break;
+                }
+            }
         }
 
         // Timing accumulators (nanoseconds)
@@ -265,11 +267,37 @@ public class TrainingGameSimulator {
                 int newCities = cityDao.getNumberOfCities(nation);
                 if (newCities > prevCityCounts.getOrDefault(playerName, 0)) {
                     actionLog.recordMilestone(playerName, "firstNonHomeCityCapture", turn);
+                    actionLog.recordFirstCityCapture(playerName, turn);
                 }
                 prevCityCounts.put(playerName, newCities);
 
                 if (hasTransport) {
                     actionLog.recordMilestone(playerName, "firstTransportBuilt", turn);
+                }
+
+                // Detect transport loading from action log
+                TrainingActionLog.TurnSnapshot currentSnapshot = actionLog.getNationTurns()
+                        .getOrDefault(playerName, Collections.emptyList())
+                        .stream().reduce((a, b) -> b).orElse(null);
+                if (currentSnapshot != null && currentSnapshot.getExecutedCounts()
+                        .containsKey("LoadTransportAction")) {
+                    actionLog.recordTransportLoaded(playerName, turn);
+                }
+
+                // Detect island expansion: check if any city is on a non-home island
+                int homeIsland = homeIslandIds.getOrDefault(playerName, -1);
+                if (homeIsland >= 0) {
+                    int nonHomeIslandCities = 0;
+                    for (City c : cityDao.getCities(nation)) {
+                        Sector s = simWorld.getSectorOrNull(c.getCoords());
+                        if (s != null && s.getIsland() >= 0 && s.getIsland() != homeIsland) {
+                            nonHomeIslandCities++;
+                        }
+                    }
+                    if (nonHomeIslandCities > 0) {
+                        actionLog.recordExpandedOffHomeIsland(playerName);
+                    }
+                    actionLog.recordCitiesOnNonHomeIslands(playerName, nonHomeIslandCities);
                 }
 
                 // Detect engineer swim milestone: any live engineer on a water sector
@@ -298,8 +326,8 @@ public class TrainingGameSimulator {
         logger.info("  Total sim:    {} ms", (cityBuildNs + unitUpdateNs + gameUpdateNs + botTurnNs + metricsNs) / 1_000_000);
         botExecutor.logTimers();
 
-        // Score all nations using relative power ranking
-        Map<String, Double> scores = scorer.scoreAll(nations);
+        // Score all nations using milestone-based scoring with z-score normalization
+        Map<String, Double> scores = scorer.scoreAll(nations, actionLog);
 
         // Cleanup game from cache and database to prevent OOM across generations
         cleanup(game, playerNames);

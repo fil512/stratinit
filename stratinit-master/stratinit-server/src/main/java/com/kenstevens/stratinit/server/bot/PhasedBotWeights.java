@@ -13,8 +13,8 @@ public class PhasedBotWeights {
     private static final ObjectMapper mapper = new ObjectMapper();
     private static final Map<BotPersonality, PhasedBotWeights> PERSONALITY_CACHE = new EnumMap<>(BotPersonality.class);
 
-    public double[] thresholds = {3.0, 6.0, 10.0};
-    public BotWeights[] phases = {new BotWeights(), new BotWeights(), new BotWeights(), new BotWeights()};
+    public double[] thresholds = {6.0};
+    public BotWeights[] phases = {new BotWeights(), new BotWeights()};
 
     static {
         for (BotPersonality p : BotPersonality.values()) {
@@ -107,6 +107,9 @@ public class PhasedBotWeights {
 
     private static PhasedBotWeights createForPersonality(BotPersonality personality) {
         PhasedBotWeights pw = new PhasedBotWeights();
+        // Personalities use 4 phases with 3 thresholds
+        pw.thresholds = new double[]{3.0, 6.0, 10.0};
+        pw.phases = new BotWeights[]{new BotWeights(), new BotWeights(), new BotWeights(), new BotWeights()};
         switch (personality) {
             case TECH -> {
                 // EARLY: turtle up, research hard
