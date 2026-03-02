@@ -60,7 +60,9 @@ public class NationDao extends CacheDao {
     }
 
     public void save(Nation nation) {
-        nationRepo.save(nation);
+        if (!skipDb()) {
+            nationRepo.save(nation);
+        }
         getGameCache(nation.getGameId()).add(nation);
     }
 

@@ -106,6 +106,10 @@ public class DataCache extends Updatable {
 		return retval;
 	}
 
+	public void putGameCache(GameCache gameCache) {
+		gameMap.put(gameCache.getGameId(), gameCache);
+	}
+
 	public void remove(Game game) {
 		gameMap.remove(game.getId());
 	}

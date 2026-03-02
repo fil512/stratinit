@@ -63,14 +63,18 @@ public class SectorDao extends CacheDao {
     }
 
     public void save(SectorSeen sectorSeen) {
-        sectorSeenRepo.save(sectorSeen);
+        if (!skipDb()) {
+            sectorSeenRepo.save(sectorSeen);
+        }
         getNationCache(sectorSeen.getNation()).add(sectorSeen);
     }
 
     @Transactional
     public void save(World world) {
-        for (Sector sector : world.getSectors()) {
-            sectorRepo.save(sector);
+        if (!skipDb()) {
+            for (Sector sector : world.getSectors()) {
+                sectorRepo.save(sector);
+            }
         }
         getGameCache(world.getGame()).setWorld(world);
     }

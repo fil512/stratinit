@@ -119,6 +119,9 @@ public class GameLoader {
     }
 
     public void flush(GameCache gameCache) {
+        if (com.kenstevens.stratinit.dao.CacheDao.isTrainingMode()) {
+            return;
+        }
         gameCache.flush(gameRepo, relationRepo, sectorRepo);
         for (NationCache nationCache : gameCache.getNationCaches()) {
             nationCache.flush(gameCache.getGameId());

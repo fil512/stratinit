@@ -28,15 +28,27 @@ public class PlayerDao {
 	}
 
 	public void save(Player player) {
-		playerRepo.save(player);
+		if (CacheDao.isTrainingMode()) {
+			player.setId(CacheDao.nextSyntheticId());
+		} else {
+			playerRepo.save(player);
+		}
 		dataCache.add(player);
 	}
 
 	public void save(PlayerRole playerRole) {
+		if (CacheDao.isTrainingMode()) {
+			return;
+		}
 		playerRoleRepo.save(playerRole);
 	}
 
 	public Player find(String username) {
+		if (CacheDao.isTrainingMode()) {
+			return dataCache.getAllPlayers().stream()
+					.filter(p -> username.equals(p.getUsername()))
+					.findFirst().orElse(null);
+		}
 		return playerRepo.findByUsername(username);
 	}
 

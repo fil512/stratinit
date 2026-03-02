@@ -26,6 +26,9 @@ public class EventLogService {
 
 	public void logUserEvent(Nation nation, GameEventType eventType, String description,
 							 SectorCoords coords, String detail) {
+		if (com.kenstevens.stratinit.dao.CacheDao.isTrainingMode()) {
+			return;
+		}
 		Integer x = coords != null ? coords.x : null;
 		Integer y = coords != null ? coords.y : null;
 		GameEventLog log = new GameEventLog(nation.getGameId(), nation.getName(), new Date(),
@@ -44,6 +47,9 @@ public class EventLogService {
 
 	public void logServerEvent(int gameId, String nationName, GameEventType eventType,
 							   String description, SectorCoords coords, String detail) {
+		if (com.kenstevens.stratinit.dao.CacheDao.isTrainingMode()) {
+			return;
+		}
 		Integer x = coords != null ? coords.x : null;
 		Integer y = coords != null ? coords.y : null;
 		GameEventLog log = new GameEventLog(gameId, nationName, new Date(),

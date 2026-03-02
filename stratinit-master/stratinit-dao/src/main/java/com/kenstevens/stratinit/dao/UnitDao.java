@@ -167,7 +167,9 @@ public class UnitDao extends CacheDao {
         if (unit.isAlive()) {
             getNationCache(unit.getNation()).setUnitCacheModified(true);
         } else {
-            unitRepo.save(unit);
+            if (!skipDb()) {
+                unitRepo.save(unit);
+            }
             getGameCache(unit.getParentGame()).remove(unit);
         }
     }
@@ -176,39 +178,60 @@ public class UnitDao extends CacheDao {
         if (unitSeen.isEnabled()) {
             getNationCache(unitSeen.getNation()).setUnitSeenModified(true);
         } else {
-            unitSeenRepo.save(unitSeen);
+            if (!skipDb()) {
+                unitSeenRepo.save(unitSeen);
+            }
             getNationCache(unitSeen.getNation()).remove(unitSeen);
         }
     }
 
     public void save(Unit unit) {
-        unitRepo.save(unit);
+        if (skipDb()) {
+            unit.setId(nextSyntheticId());
+        } else {
+            unitRepo.save(unit);
+        }
         getGameCache(unit.getParentGame()).add(unit);
     }
 
     public void save(LaunchedSatellite satellite) {
-        launchedSatelliteRepo.save(satellite);
+        if (skipDb()) {
+            satellite.setSatelliteId(nextSyntheticId());
+        } else {
+            launchedSatelliteRepo.save(satellite);
+        }
         getNationCache(satellite.getNation()).add(satellite);
     }
 
     public void save(UnitSeen unitSeen) {
-        unitSeenRepo.save(unitSeen);
+        if (!skipDb()) {
+            unitSeenRepo.save(unitSeen);
+        }
         getNationCache(unitSeen.getNation()).add(unitSeen);
     }
 
     public void save(@Nonnull UnitMove unitMove) {
-        unitMoveRepo.save(unitMove);
+        if (skipDb()) {
+            unitMove.setId(nextSyntheticId());
+        } else {
+            unitMoveRepo.save(unitMove);
+        }
         getNationCache(unitMove.getUnit().getNation()).add(unitMove);
     }
 
     public void save(UnitBuildAudit unitBuildAudit) {
+        if (skipDb()) {
+            return;
+        }
         unitBuildAuditRepo.save(unitBuildAudit);
     }
 
     @Transactional
     public void delete(Unit unit) {
-        unitSeenRepo.deleteAll(unitSeenRepo.findAll(QUnitSeen.unitSeen.unitSeenPK.unit.eq(unit)));
-        unitRepo.delete(unit);
+        if (!skipDb()) {
+            unitSeenRepo.deleteAll(unitSeenRepo.findAll(QUnitSeen.unitSeen.unitSeenPK.unit.eq(unit)));
+            unitRepo.delete(unit);
+        }
         getGameCache(unit.getParentGame()).remove(unit);
     }
 
@@ -219,12 +242,16 @@ public class UnitDao extends CacheDao {
     }
 
     public void delete(UnitSeen unitSeen) {
-        unitSeenRepo.delete(unitSeen);
+        if (!skipDb()) {
+            unitSeenRepo.delete(unitSeen);
+        }
         getNationCache(unitSeen.getNation()).remove(unitSeen);
     }
 
     public void delete(UnitMove unitMove) {
-        unitMoveRepo.delete(unitMove);
+        if (!skipDb()) {
+            unitMoveRepo.delete(unitMove);
+        }
         getNationCache(unitMove.getUnit().getNation()).remove(unitMove);
     }
 
@@ -267,7 +294,9 @@ public class UnitDao extends CacheDao {
 
     @Transactional
     public void clearUnitMove(Unit unit) {
-        unitMoveRepo.deleteByUnit(unit);
+        if (!skipDb()) {
+            unitMoveRepo.deleteByUnit(unit);
+        }
         unit.setUnitMove(null);
     }
 

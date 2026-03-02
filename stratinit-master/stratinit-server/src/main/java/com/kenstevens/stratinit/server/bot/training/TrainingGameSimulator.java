@@ -3,6 +3,8 @@ package com.kenstevens.stratinit.server.bot.training;
 import com.kenstevens.stratinit.client.model.*;
 import com.kenstevens.stratinit.client.util.GameScheduleHelper;
 import com.kenstevens.stratinit.client.util.UpdateCalculator;
+import com.kenstevens.stratinit.cache.DataCache;
+import com.kenstevens.stratinit.dao.CacheDao;
 import com.kenstevens.stratinit.dao.CityDao;
 import com.kenstevens.stratinit.dao.GameDao;
 import com.kenstevens.stratinit.dao.NationDao;
@@ -23,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TrainingGameSimulator {
@@ -56,6 +60,8 @@ public class TrainingGameSimulator {
     @Autowired
     private TrainingScorer scorer;
     @Autowired
+    private DataCache dataCache;
+    @Autowired
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
     public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights) {
@@ -63,6 +69,18 @@ public class TrainingGameSimulator {
     }
 
     public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
+        CacheDao.setTrainingMode(true);
+        CacheDao.resetSyntheticIds();
+        try {
+            return doSimulate(playerWeights, playerPersonalities);
+        } finally {
+            CacheDao.setTrainingMode(false);
+        }
+    }
+
+    private TrainingGameResult doSimulate(Map<String, PhasedBotWeights> playerWeights, Map<String, BotPersonality> playerPersonalities) {
+        long simStartTime = System.nanoTime();
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         String gameName = TRAINING_GAME_PREFIX + System.currentTimeMillis();
 
         // Create game and players
@@ -138,10 +156,17 @@ public class TrainingGameSimulator {
             prevCityCounts.put(entry.getKey(), cityDao.getNumberOfCities(entry.getValue()));
         }
 
+        // Timing accumulators (nanoseconds)
+        long cityBuildNs = 0, unitUpdateNs = 0, gameUpdateNs = 0, botTurnNs = 0, metricsNs = 0;
+        long setupNs = System.nanoTime() - simStartTime;
+        logger.info("  Setup time:   {} ms", setupNs / 1_000_000);
+        botExecutor.resetTimers();
+
         for (int turn = 0; turn < MAX_TURNS; turn++) {
             simulatedTime += tickInterval;
             Date simDate = new Date(simulatedTime);
 
+            long t0 = System.nanoTime();
             // Process city builds
             for (City city : cityDao.getCities(game)) {
                 long period = UpdateCalculator.shrinkTime(true, city.getUpdatePeriodMilliseconds());
@@ -156,6 +181,8 @@ public class TrainingGameSimulator {
                     }
                 }
             }
+            long t1 = System.nanoTime();
+            cityBuildNs += t1 - t0;
 
             // Process unit updates (copy to avoid ConcurrentModificationException)
             for (Unit unit : new ArrayList<>(unitDao.getUnits(game))) {
@@ -172,6 +199,8 @@ public class TrainingGameSimulator {
                     }
                 }
             }
+            long t2 = System.nanoTime();
+            unitUpdateNs += t2 - t1;
 
             // Update game (tech, command points)
             try {
@@ -179,14 +208,34 @@ public class TrainingGameSimulator {
             } catch (Exception e) {
                 logger.debug("Game update failed: {}", e.getMessage());
             }
+            long t3 = System.nanoTime();
+            gameUpdateNs += t3 - t2;
 
-            // Execute bot turns with logging
-            World simWorld = sectorDao.getWorld(game);
-            for (Map.Entry<String, Nation> entry : nations.entrySet()) {
-                String playerName = entry.getKey();
+            // Prepare all bot turns in parallel (read-only phase)
+            long tb0 = System.nanoTime();
+            List<Map.Entry<String, Nation>> nationEntries = new ArrayList<>(nations.entrySet());
+            List<CompletableFuture<BotExecutor.PreparedTurn>> futures = new ArrayList<>();
+            for (Map.Entry<String, Nation> entry : nationEntries) {
                 Nation nation = entry.getValue();
-                PhasedBotWeights weights = playerWeights.get(playerName);
+                PhasedBotWeights weights = playerWeights.get(entry.getKey());
+                long simTimeCapture = simulatedTime;
+                futures.add(CompletableFuture.supplyAsync(
+                        () -> botExecutor.prepareTurn(nation, weights, simTimeCapture), executor));
+            }
+            List<BotExecutor.PreparedTurn> preparedTurns = futures.stream()
+                    .map(CompletableFuture::join)
+                    .collect(Collectors.toList());
+            long tb1 = System.nanoTime();
+            botTurnNs += tb1 - tb0;
 
+            // Execute actions sequentially + collect metrics + detect milestones
+            World simWorld = sectorDao.getWorld(game);
+            for (int i = 0; i < nationEntries.size(); i++) {
+                String playerName = nationEntries.get(i).getKey();
+                Nation nation = nationEntries.get(i).getValue();
+                BotExecutor.PreparedTurn prepared = preparedTurns.get(i);
+
+                long tm0 = System.nanoTime();
                 // Record turn start metrics
                 int cities = cityDao.getNumberOfCities(nation);
                 List<Unit> nationUnits = unitDao.getUnits(nation);
@@ -198,12 +247,19 @@ public class TrainingGameSimulator {
 
                 actionLog.recordTurnStart(playerName, turn,
                         new TrainingActionLog.TurnStateMetrics(cities, (int) aliveUnits, explored, tech, hasTransport));
+                long tm1 = System.nanoTime();
+                metricsNs += tm1 - tm0;
 
-                try {
-                    botExecutor.executeTurn(nation, weights, simulatedTime, actionLog);
-                } catch (Exception e) {
-                    logger.debug("Bot turn failed for {}: {}", playerName, e.getMessage());
+                long te0 = System.nanoTime();
+                if (prepared != null) {
+                    try {
+                        botExecutor.executeActions(prepared, actionLog);
+                    } catch (Exception e) {
+                        logger.debug("Bot turn failed for {}: {}", playerName, e.getMessage());
+                    }
                 }
+                long te1 = System.nanoTime();
+                botTurnNs += te1 - te0;
 
                 // Detect milestones
                 int newCities = cityDao.getNumberOfCities(nation);
@@ -231,11 +287,22 @@ public class TrainingGameSimulator {
             turnsPlayed++;
         }
 
+        executor.shutdown();
+
+        logger.info("=== Simulation Timing (1 game, {} turns) ===", turnsPlayed);
+        logger.info("  City builds:  {} ms", cityBuildNs / 1_000_000);
+        logger.info("  Unit updates: {} ms", unitUpdateNs / 1_000_000);
+        logger.info("  Game updates: {} ms", gameUpdateNs / 1_000_000);
+        logger.info("  Bot turns:    {} ms", botTurnNs / 1_000_000);
+        logger.info("  Metrics:      {} ms", metricsNs / 1_000_000);
+        logger.info("  Total sim:    {} ms", (cityBuildNs + unitUpdateNs + gameUpdateNs + botTurnNs + metricsNs) / 1_000_000);
+        botExecutor.logTimers();
+
         // Score all nations using relative power ranking
         Map<String, Double> scores = scorer.scoreAll(nations);
 
         // Cleanup game from cache and database to prevent OOM across generations
-        cleanup(game);
+        cleanup(game, playerNames);
 
         return new TrainingGameResult(scores, playerWeights, turnsPlayed, actionLog);
     }
@@ -248,9 +315,16 @@ public class TrainingGameSimulator {
         return botPeriod;
     }
 
-    public void cleanup(Game game) {
+    public void cleanup(Game game, List<String> playerNames) {
         try {
             gameDao.remove(game);
+            // Remove synthetic players from cache
+            for (String name : playerNames) {
+                Player player = playerDao.find(name);
+                if (player != null && player.getId() < 0) {
+                    dataCache.remove(player);
+                }
+            }
         } catch (Exception e) {
             logger.warn("Failed to cleanup training game: {}", e.getMessage());
         }

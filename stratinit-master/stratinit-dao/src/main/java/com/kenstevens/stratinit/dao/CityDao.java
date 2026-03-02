@@ -95,12 +95,16 @@ public class CityDao extends CacheDao {
     }
 
     public void save(City city) {
-        cityRepo.save(city);
+        if (!skipDb()) {
+            cityRepo.save(city);
+        }
         getGameCache(city.getParentGame()).add(city);
     }
 
     public void delete(City city) {
-        cityRepo.delete(city);
+        if (!skipDb()) {
+            cityRepo.delete(city);
+        }
         getGameCache(city.getParentGame()).remove(city);
     }
 
@@ -112,7 +116,14 @@ public class CityDao extends CacheDao {
     }
 
     public void clearCityMove(City city) {
-        List<CityMove> cityMoves = cityMoveRepo.findByCity(city);
+        List<CityMove> cityMoves;
+        if (skipDb()) {
+            cityMoves = getNationCache(city.getNation()).getCityMoves().stream()
+                    .filter(cm -> cm.getCity().getCoords().equals(city.getCoords()))
+                    .collect(Collectors.toList());
+        } else {
+            cityMoves = cityMoveRepo.findByCity(city);
+        }
         city.setCityMove(null);
         for (CityMove cityMove : cityMoves) {
             delete(cityMove);
@@ -120,7 +131,9 @@ public class CityDao extends CacheDao {
     }
 
     public void markCacheModified(CityMove cityMove) {
-        cityMoveRepo.save(cityMove);
+        if (!skipDb()) {
+            cityMoveRepo.save(cityMove);
+        }
     }
 
     public void save(CityMove cityMove) {
@@ -128,12 +141,18 @@ public class CityDao extends CacheDao {
         if (city == null) {
             return;
         }
-        cityMoveRepo.save(cityMove);
+        if (skipDb()) {
+            cityMove.setId(nextSyntheticId());
+        } else {
+            cityMoveRepo.save(cityMove);
+        }
         getNationCache(city.getNation()).add(cityMove);
     }
 
     public void delete(CityMove cityMove) {
-        cityMoveRepo.delete(cityMove);
+        if (!skipDb()) {
+            cityMoveRepo.delete(cityMove);
+        }
         getNationCache(cityMove.getCity().getNation()).remove(cityMove);
     }
 }

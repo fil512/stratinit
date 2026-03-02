@@ -24,6 +24,9 @@ public class LogDao {
 	ErrorLogRepo errorLogRepo;
 
 	public void save(BattleLog battleLog) {
+		if (CacheDao.isTrainingMode()) {
+			return;
+		}
 		if (battleLog instanceof UnitAttackedBattleLog) {
 			unitAttackedBattleLogRepo.save((UnitAttackedBattleLog) battleLog);
 		} else if (battleLog instanceof CityCapturedBattleLog) {
@@ -117,6 +120,9 @@ public class LogDao {
 	}
 
 	public void save(ErrorLog errorLog) {
+		if (CacheDao.isTrainingMode()) {
+			return;
+		}
 		errorLogRepo.save(errorLog);
 	}
 }

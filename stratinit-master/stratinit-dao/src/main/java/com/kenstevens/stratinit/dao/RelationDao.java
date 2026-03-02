@@ -23,16 +23,23 @@ public class RelationDao extends CacheDao {
     private RelationChangeAuditRepo relationChangeAuditRepo;
 
     public void save(Relation relation) {
-        relationRepo.save(relation);
+        if (!skipDb()) {
+            relationRepo.save(relation);
+        }
         getGameCache(relation.getGame()).add(relation);
     }
 
     public void save(RelationChangeAudit relationChangeAudit) {
+        if (skipDb()) {
+            return;
+        }
         relationChangeAuditRepo.save(relationChangeAudit);
     }
 
     public void remove(Relation relation) {
-        relationRepo.delete(relation);
+        if (!skipDb()) {
+            relationRepo.delete(relation);
+        }
     }
 
 

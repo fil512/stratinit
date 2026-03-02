@@ -25,8 +25,7 @@ public class UnitMove {
 		this.coords = nextCoords;
 	}
 
-	@SuppressWarnings("unused")
-	private void setId(Integer id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

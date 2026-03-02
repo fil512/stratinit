@@ -357,6 +357,9 @@ public class GameService {
     }
 
     private void takeSnapshots(Game game, Date lastUpdated) {
+        if (com.kenstevens.stratinit.dao.CacheDao.isTrainingMode()) {
+            return;
+        }
         int tickNumber = computeTickNumber(game, lastUpdated);
         List<Nation> nations = nationDao.getNations(game);
         for (Nation nation : nations) {

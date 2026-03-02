@@ -1,5 +1,6 @@
 package com.kenstevens.stratinit.dao;
 
+import com.kenstevens.stratinit.cache.CacheFactory;
 import com.kenstevens.stratinit.cache.GameCache;
 import com.kenstevens.stratinit.cache.GameLoader;
 import com.kenstevens.stratinit.client.model.*;
@@ -22,6 +23,8 @@ public class GameDao extends CacheDao {
     private CityRepo cityRepo;
     @Autowired
     private GameLoader gameLoader;
+    @Autowired
+    private CacheFactory cacheFactory;
     @Autowired
     private SectorRepo sectorRepo;
     @Autowired
@@ -58,6 +61,9 @@ public class GameDao extends CacheDao {
     }
 
     public void flush() {
+        if (skipDb()) {
+            return;
+        }
         for (GameCache gameCache : dataCache.getGameCaches()) {
             gameLoader.flush(gameCache);
         }
@@ -71,7 +77,9 @@ public class GameDao extends CacheDao {
         if (game.isEnabled()) {
             getGameCache(game).setModified(true);
         } else {
-            gameRepo.save(game);
+            if (!skipDb()) {
+                gameRepo.save(game);
+            }
             dataCache.remove(game);
         }
     }
@@ -82,8 +90,14 @@ public class GameDao extends CacheDao {
         if (game.getGamename() == null) {
             game.setGamename("");
         }
-        gameRepo.save(game);
-        getGameCache(game.getId());
+        if (skipDb()) {
+            game.setId(nextSyntheticId());
+            GameCache gameCache = cacheFactory.newGameCache(game, new ArrayList<>());
+            dataCache.putGameCache(gameCache);
+        } else {
+            gameRepo.save(game);
+            getGameCache(game.getId());
+        }
         if (game.getGamename().isEmpty()) {
             game.setGamename(GameNameFile.getName(game.getId()));
         }
@@ -91,6 +105,10 @@ public class GameDao extends CacheDao {
 
     @Transactional
     public void remove(Game game) {
+        if (skipDb()) {
+            dataCache.remove(game);
+            return;
+        }
         // Delete in FK dependency order: children before parents
         // Battle logs reference Unit and Nation
         unitAttackedBattleLogRepo.deleteAll(unitAttackedBattleLogRepo.findAll(
@@ -144,6 +162,9 @@ public class GameDao extends CacheDao {
     }
 
     public void remove(City city) {
+        if (skipDb()) {
+            return;
+        }
         cityRepo.delete(city);
     }
 }

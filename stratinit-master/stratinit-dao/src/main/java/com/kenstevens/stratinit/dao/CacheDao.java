@@ -7,9 +7,34 @@ import com.kenstevens.stratinit.client.model.Game;
 import com.kenstevens.stratinit.client.model.Nation;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class CacheDao {
+	private static volatile boolean trainingMode = false;
+	private static final AtomicInteger syntheticIdCounter = new AtomicInteger(-1);
+
 	@Autowired
 	protected DataCache dataCache;
+
+	public static void setTrainingMode(boolean enabled) {
+		trainingMode = enabled;
+	}
+
+	public static boolean isTrainingMode() {
+		return trainingMode;
+	}
+
+	protected static boolean skipDb() {
+		return trainingMode;
+	}
+
+	protected static int nextSyntheticId() {
+		return syntheticIdCounter.getAndDecrement();
+	}
+
+	public static void resetSyntheticIds() {
+		syntheticIdCounter.set(-1);
+	}
 
 	protected GameCache getGameCache(int gameId) {
 		return dataCache.getGameCache(gameId);
