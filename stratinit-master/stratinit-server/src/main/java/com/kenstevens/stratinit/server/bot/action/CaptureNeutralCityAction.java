@@ -8,6 +8,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotWeights;
 import com.kenstevens.stratinit.server.bot.BotWorldState;
 import com.kenstevens.stratinit.server.svc.MoveService;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
 
@@ -37,6 +38,13 @@ public class CaptureNeutralCityAction implements BotAction {
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.expansionBaseWeight * weights.neutralCityCaptureDesire;
+
+        // RUSH: capturing neutral cities early is high priority for faster aggression
+        BotPersonality personality = state.getNation().getBotPersonality();
+        if (personality == BotPersonality.RUSH) {
+            utility = 3.0;
+        }
+
         // Distance penalty: multiplicative to avoid zeroing out
         utility /= (1.0 + distance * weights.distancePenalty);
         return utility;

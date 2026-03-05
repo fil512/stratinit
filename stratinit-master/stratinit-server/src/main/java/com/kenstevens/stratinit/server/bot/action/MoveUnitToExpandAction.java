@@ -8,8 +8,10 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotWeights;
 import com.kenstevens.stratinit.server.bot.BotWorldState;
 import com.kenstevens.stratinit.server.svc.MoveService;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.type.SectorCoords;
+import com.kenstevens.stratinit.type.UnitType;
 
 import java.util.Collections;
 
@@ -44,6 +46,21 @@ public class MoveUnitToExpandAction implements BotAction {
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
         double utility = weights.expansionBaseWeight;
+
+        // Personality-specific expansion overrides
+        BotPersonality personality = state.getNation().getBotPersonality();
+        if (personality != null) {
+            // TECH and TURTLE engineers need high expansion utility to reach build sites
+            if (unit.getType() == UnitType.ENGINEER
+                    && (personality == BotPersonality.TECH || personality == BotPersonality.TURTLE)) {
+                utility = 3.0;
+            }
+            // RUSH infantry should explore home island aggressively to find neutral cities
+            if (unit.getType() == UnitType.INFANTRY && personality == BotPersonality.RUSH && isHomeIsland) {
+                utility = 2.0;
+            }
+        }
+
         // Distance penalty: multiplicative to avoid zeroing out
         utility /= (1.0 + distance * weights.distancePenalty);
         // Home island exploration bonus

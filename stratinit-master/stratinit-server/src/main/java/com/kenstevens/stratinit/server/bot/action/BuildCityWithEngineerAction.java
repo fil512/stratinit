@@ -7,6 +7,7 @@ import com.kenstevens.stratinit.remote.Result;
 import com.kenstevens.stratinit.server.bot.BotWeights;
 import com.kenstevens.stratinit.server.bot.BotWorldState;
 import com.kenstevens.stratinit.server.service.CityService;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.Constants;
 
 public class BuildCityWithEngineerAction implements BotAction {
@@ -34,6 +35,11 @@ public class BuildCityWithEngineerAction implements BotAction {
         // Check if the server will actually allow city placement here
         if (!canBuild) {
             return 0;
+        }
+        // TECH and TURTLE: building cities is their primary early goal — use high fixed utility
+        BotPersonality personality = state.getNation().getBotPersonality();
+        if (personality == BotPersonality.TECH || personality == BotPersonality.TURTLE) {
+            return 10.0;
         }
         double utility = weights.expansionBaseWeight * weights.buildCityDesire;
         // Coastal city bonus: boost when engineer is on a coastal sector and bot has no port

@@ -451,8 +451,12 @@ public class BotActionGenerator {
             for (Unit unit : state.getIdleLandUnits()) {
                 // Engineers are builders, not captors — skip them
                 if (unit.getType() == UnitType.ENGINEER) continue;
+                // Skip units on water (riding transports)
+                Sector unitSector = state.getWorld().getSectorOrNull(unit.getCoords());
+                if (unitSector != null && unitSector.isWater()) continue;
                 int distance = SectorCoords.distance(gameSize, unit.getCoords(), cityCoords);
-                if (distance <= unit.getMobility() * 3) {
+                // Allow targeting neutral cities up to 12 hexes away (multi-turn moves)
+                if (distance <= 12) {
                     actions.add(new CaptureNeutralCityAction(unit, cityCoords, distance, nation, moveService));
                 }
             }
@@ -471,6 +475,7 @@ public class BotActionGenerator {
 
     private void generateMilitaryActions(BotWorldState state, Nation nation, List<BotAction> actions) {
         List<Unit> enemies = state.getEnemyUnits();
+        List<City> enemyCities = state.getEnemyCities();
         int gameSize = state.getGame().getGamesize();
 
         for (Unit myUnit : state.getIdleUnits()) {
@@ -479,14 +484,27 @@ public class BotActionGenerator {
             }
             // Engineers are builders, not fighters
             if (myUnit.getType() == UnitType.ENGINEER) continue;
+
+            // Skip units on water (riding transports)
+            Sector unitSector = state.getWorld().getSectorOrNull(myUnit.getCoords());
+            if (unitSector != null && unitSector.isWater()) continue;
+
+            // Attack enemy land units
             for (Unit enemy : enemies) {
                 if (!enemy.getUnitBase().isLand()) {
                     continue;
                 }
                 int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemy.getCoords());
-                // Consider enemies within extended range (will take multiple turns to reach)
                 if (distance <= myUnit.getMobility() * 3) {
                     actions.add(new AttackEnemyAction(myUnit, enemy, distance, nation, moveService));
+                }
+            }
+
+            // Capture enemy cities — the critical "take the city" action after bombing
+            for (City enemyCity : enemyCities) {
+                int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemyCity.getCoords());
+                if (distance <= 12) {
+                    actions.add(new CaptureEnemyCityAction(myUnit, enemyCity, distance, nation, moveService));
                 }
             }
         }

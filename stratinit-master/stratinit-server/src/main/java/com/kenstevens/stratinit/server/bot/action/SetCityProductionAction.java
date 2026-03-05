@@ -70,24 +70,35 @@ public class SetCityProductionAction implements BotAction {
     }
 
     private double computeTechUtility(BotWorldState state, int cityCount, double tech) {
-        // Phase 1 (< 4 cities): All cities build ENGINEER
-        if (cityCount < 4) {
-            return unitType == UnitType.ENGINEER ? 10.0 : 0;
+        // Phase 1 (< 8 cities): All cities build ENGINEER to max out start island
+        if (cityCount < 8) {
+            // But only if we actually have engineers in production or alive — if none are
+            // building and none exist, some cities should still build engineers
+            long aliveEngineers = state.countAliveUnitsOfType(UnitType.ENGINEER);
+            long buildingEngineers = state.countCitiesBuildingType(UnitType.ENGINEER);
+            if (aliveEngineers + buildingEngineers > 0 || unitType == UnitType.ENGINEER) {
+                return unitType == UnitType.ENGINEER ? 10.0 : 0;
+            }
+            // No engineers anywhere — fall through to research phase
         }
         // All phases: ensure at least 1 transport from coastal cities
         if (state.isCoastalCity(city) && !state.hasTransportCapability()) {
             return unitType == UnitType.TRANSPORT ? 12.0 : 0;
         }
-        // Phase 2 (>= 4 cities, tech < 10): Research-heavy, but build some military
+        // Phase 2 (tech < 10): Research-heavy, but build some military
         if (tech < 10) {
             if (unitType == UnitType.RESEARCH) return 10.0;
             if (unitType == UnitType.INFANTRY) return 4.0;
             return 0;
         }
-        // Phase 3 (tech >= 10): Mix of strategic + military
+        // Phase 3 (tech >= 10): Satellites first for visibility, then ICBMs at each tier
+        if (unitType == UnitType.SATELLITE && state.countAliveUnitsOfType(UnitType.SATELLITE) == 0
+                && state.countCitiesBuildingType(UnitType.SATELLITE) == 0) return 11.0;
+        if (unitType == UnitType.ICBM_3 && tech >= 16) return 10.0;
+        if (unitType == UnitType.ICBM_2 && tech >= 14 && tech < 16) return 10.0;
+        if (unitType == UnitType.ICBM_1 && tech >= 12 && tech < 14) return 10.0;
         if (unitType == UnitType.HEAVY_BOMBER) return 9.0;
         if (unitType == UnitType.SATELLITE) return 8.0;
-        if (unitType == UnitType.ICBM_3 && tech >= 16) return 8.0;
         if (unitType == UnitType.INFANTRY) return 5.0;
         if (unitType == UnitType.RESEARCH) return 6.0;
         if (unitType == UnitType.TRANSPORT && state.isCoastalCity(city)
