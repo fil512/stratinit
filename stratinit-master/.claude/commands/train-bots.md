@@ -8,8 +8,8 @@ Run the bot RL training simulation to improve `bot-weights.json` weights used by
 
 Ask the user two questions (in a single AskUserQuestion call):
 
-1. **Generations**: How many generations to train. Offer options: 10 (quick test), 20 (short run), 30 (meaningful run), 50 (thorough), 100 (extended). Minimum 10.
-2. **Ticks per game**: How many simulation ticks per game. Offer options: 960 (fast, ~10s/game, less cross-island combat), 1440 (balanced, ~20s/game, recommended default), 2880 (full game, ~120s/game, most realistic but slow). Default 1440.
+1. **Generations**: How many generations to train. Offer options: 1 (single game, debug), 10 (quick test), 20 (short run), 30 (meaningful run), 50 (thorough), 100 (extended). Minimum 1.
+2. **Ticks per game**: How many simulation ticks per game. Offer options: 960 (fast, ~10s/game, less cross-island combat), 1440 (balanced, ~20s/game, recommended default), 1800 (medium, ~40s/game, more cross-island combat), 2880 (full game, ~120s/game, most realistic but slow). Default 1440.
 
 ### Step 2: Run training
 

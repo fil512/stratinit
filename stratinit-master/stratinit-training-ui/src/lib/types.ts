@@ -9,6 +9,7 @@ export interface TickEvent {
 	explored: number;
 	tech: number;
 	hasTransport: boolean;
+	nationsFound: number;
 	actions?: Record<string, number>;
 }
 
@@ -47,6 +48,8 @@ export interface NationSnapshot {
 	units: number;
 	explored: number;
 	tech: number;
+	nationsFound: number;
+	icbmsLaunched: number;
 	attacks: number;
 	captures: number;
 }
@@ -64,7 +67,7 @@ export interface TrainingState {
 	// Per-nation time series for current game
 	nationSeries: Record<string, NationSnapshot[]>;
 	// Cumulative action counts per nation for current game
-	nationActionTotals: Record<string, { attacks: number; captures: number }>;
+	nationActionTotals: Record<string, { attacks: number; captures: number; icbmsLaunched: number }>;
 	// Game results for current generation
 	gameResults: GameResultEvent[];
 }

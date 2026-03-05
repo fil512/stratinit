@@ -256,14 +256,21 @@ public class TrainingGameSimulator {
                 boolean hasTransport = nationUnits.stream()
                         .anyMatch(u -> u.isAlive() && u.getType() == UnitType.TRANSPORT);
 
-                TrainingActionLog.TurnStateMetrics turnMetrics =
-                        new TrainingActionLog.TurnStateMetrics(cities, (int) aliveUnits, explored, tech, hasTransport);
-                actionLog.recordTurnStart(playerName, turn, turnMetrics);
+                // Count distinct other nations visible (from seen units and seen cities)
+                Set<Nation> seenNations = new HashSet<>();
+                unitDao.getSeenUnits(nation).stream()
+                        .map(Unit::getNation)
+                        .filter(n -> n != null && !n.equals(nation))
+                        .forEach(seenNations::add);
+                cityDao.getSeenCities(nation).stream()
+                        .filter(c -> c.getNation() != null && !c.getNation().equals(nation))
+                        .map(City::getNation)
+                        .forEach(seenNations::add);
+                int nationsFound = seenNations.size();
 
-                // Publish tick metrics to Redis (subsampled)
-                if (metricsPublisher != null) {
-                    metricsPublisher.publishTick(generation, gameNum, turn, playerName, turnMetrics, null);
-                }
+                TrainingActionLog.TurnStateMetrics turnMetrics =
+                        new TrainingActionLog.TurnStateMetrics(cities, (int) aliveUnits, explored, tech, hasTransport, nationsFound);
+                actionLog.recordTurnStart(playerName, turn, turnMetrics);
 
                 long tm1 = System.nanoTime();
                 metricsNs += tm1 - tm0;
@@ -278,6 +285,16 @@ public class TrainingGameSimulator {
                 }
                 long te1 = System.nanoTime();
                 botTurnNs += te1 - te0;
+
+                // Publish tick metrics to Redis after execution (so action counts are available)
+                if (metricsPublisher != null) {
+                    TrainingActionLog.TurnSnapshot currentSnapshotForPublish = actionLog.getNationTurns()
+                            .getOrDefault(playerName, Collections.emptyList())
+                            .stream().reduce((a, b) -> b).orElse(null);
+                    Map<String, Integer> executedCounts = currentSnapshotForPublish != null
+                            ? currentSnapshotForPublish.getExecutedCounts() : null;
+                    metricsPublisher.publishTick(generation, gameNum, turn, playerName, turnMetrics, executedCounts);
+                }
 
                 // Detect milestones
                 int newCities = cityDao.getNumberOfCities(nation);

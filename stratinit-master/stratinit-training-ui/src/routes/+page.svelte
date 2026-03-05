@@ -93,6 +93,20 @@
 				<div class="chart-card">
 					<GameChart
 						nationSeries={state.nationSeries}
+						metric="nationsFound"
+						title="Nations Found"
+					/>
+				</div>
+				<div class="chart-card">
+					<GameChart
+						nationSeries={state.nationSeries}
+						metric="icbmsLaunched"
+						title="ICBMs Launched"
+					/>
+				</div>
+				<div class="chart-card">
+					<GameChart
+						nationSeries={state.nationSeries}
 						metric="attacks"
 						title="Attacks per Nation"
 					/>

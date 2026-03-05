@@ -68,6 +68,7 @@ public class TrainingMetricsPublisher {
         payload.put("explored", metrics.explored());
         payload.put("tech", metrics.tech());
         payload.put("hasTransport", metrics.hasTransport());
+        payload.put("nationsFound", metrics.nationsFound());
         if (executedCounts != null && !executedCounts.isEmpty()) {
             payload.put("actions", executedCounts);
         }

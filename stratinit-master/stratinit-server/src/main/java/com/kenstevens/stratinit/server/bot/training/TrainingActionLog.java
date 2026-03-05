@@ -93,7 +93,7 @@ public class TrainingActionLog {
         return nationMilestones;
     }
 
-    public record TurnStateMetrics(int cities, int units, int explored, double tech, boolean hasTransport) {}
+    public record TurnStateMetrics(int cities, int units, int explored, double tech, boolean hasTransport, int nationsFound) {}
 
     public static class TurnSnapshot {
         private final int turnNumber;

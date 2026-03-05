@@ -45,6 +45,7 @@ function createTrainingStore() {
 
 	const ATTACK_ACTIONS = ['AttackEnemyAction', 'AttackNavalAction', 'AttackWithAirAction'];
 	const CAPTURE_ACTIONS = ['CaptureNeutralCityAction'];
+	const ICBM_ACTIONS = ['LaunchICBMAction'];
 
 	function handleTick(state: TrainingState, event: TickEvent): TrainingState {
 		const newState = { ...state };
@@ -62,7 +63,7 @@ function createTrainingStore() {
 		// Accumulate action counts
 		const totals = { ...newState.nationActionTotals };
 		if (!totals[event.nation]) {
-			totals[event.nation] = { attacks: 0, captures: 0 };
+			totals[event.nation] = { attacks: 0, captures: 0, icbmsLaunched: 0 };
 		}
 		const nationTotal = { ...totals[event.nation] };
 		if (event.actions) {
@@ -71,6 +72,9 @@ function createTrainingStore() {
 			}
 			for (const action of CAPTURE_ACTIONS) {
 				nationTotal.captures += event.actions[action] || 0;
+			}
+			for (const action of ICBM_ACTIONS) {
+				nationTotal.icbmsLaunched += event.actions[action] || 0;
 			}
 		}
 		totals[event.nation] = nationTotal;
@@ -82,6 +86,8 @@ function createTrainingStore() {
 			units: event.units,
 			explored: event.explored,
 			tech: event.tech,
+			nationsFound: event.nationsFound || 0,
+			icbmsLaunched: nationTotal.icbmsLaunched,
 			attacks: nationTotal.attacks,
 			captures: nationTotal.captures
 		};
