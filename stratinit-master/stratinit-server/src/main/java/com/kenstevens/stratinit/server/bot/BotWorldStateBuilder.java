@@ -37,7 +37,8 @@ public class BotWorldStateBuilder {
 
         World world = sectorDao.getWorld(game);
         Set<SectorCoords> coastalCityCoords = computeCoastalCityCoords(myCities, world);
-        List<City> enemyCities = computeSeenEnemyCities(nation, myRelations);
+        List<City> allSeenCities = cityDao.getSeenCities(nation);
+        List<City> enemyCities = computeSeenEnemyCities(nation, myRelations, allSeenCities);
         Set<SectorCoords> scoutedCoords = computeScoutedCoords(nation);
         List<SectorCoords> neutralCityCoords = computeNeutralCityCoords(nation);
 
@@ -51,6 +52,7 @@ public class BotWorldStateBuilder {
                 theirRelations,
                 coastalCityCoords,
                 enemyCities,
+                allSeenCities,
                 world,
                 scoutedCoords,
                 neutralCityCoords
@@ -66,7 +68,8 @@ public class BotWorldStateBuilder {
 
         World world = sectorDao.getWorld(game);
         Set<SectorCoords> coastalCityCoords = computeCoastalCityCoords(myCities, world);
-        List<City> enemyCities = computeSeenEnemyCities(nation, myRelations);
+        List<City> allSeenCities = cityDao.getSeenCities(nation);
+        List<City> enemyCities = computeSeenEnemyCities(nation, myRelations, allSeenCities);
         Set<SectorCoords> scoutedCoords = computeScoutedCoords(nation);
         List<SectorCoords> neutralCityCoords = computeNeutralCityCoords(nation);
 
@@ -80,6 +83,7 @@ public class BotWorldStateBuilder {
                 theirRelations,
                 coastalCityCoords,
                 enemyCities,
+                allSeenCities,
                 world,
                 scoutedCoords,
                 neutralCityCoords,
@@ -112,8 +116,7 @@ public class BotWorldStateBuilder {
                 .collect(Collectors.toList());
     }
 
-    private List<City> computeSeenEnemyCities(Nation nation, Map<Nation, RelationType> myRelations) {
-        List<City> seenCities = cityDao.getSeenCities(nation);
+    private List<City> computeSeenEnemyCities(Nation nation, Map<Nation, RelationType> myRelations, List<City> seenCities) {
         return seenCities.stream()
                 .filter(c -> c.getNation() != null && !c.getNation().equals(nation))
                 .filter(c -> {

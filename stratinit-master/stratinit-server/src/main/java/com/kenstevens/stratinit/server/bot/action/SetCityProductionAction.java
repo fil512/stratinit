@@ -74,20 +74,25 @@ public class SetCityProductionAction implements BotAction {
         if (cityCount < 4) {
             return unitType == UnitType.ENGINEER ? 10.0 : 0;
         }
-        // Phase 2 (>= 4 cities, tech < 16): All cities build RESEARCH
-        if (tech < 16) {
-            return unitType == UnitType.RESEARCH ? 10.0 : 0;
+        // All phases: ensure at least 1 transport from coastal cities
+        if (state.isCoastalCity(city) && !state.hasTransportCapability()) {
+            return unitType == UnitType.TRANSPORT ? 12.0 : 0;
         }
-        // Phase 3 (tech >= 16): Half SATELLITE, half ICBM_3
-        if (unitType != UnitType.SATELLITE && unitType != UnitType.ICBM_3) {
+        // Phase 2 (>= 4 cities, tech < 10): Research-heavy, but build some military
+        if (tech < 10) {
+            if (unitType == UnitType.RESEARCH) return 10.0;
+            if (unitType == UnitType.INFANTRY) return 4.0;
             return 0;
         }
-        long satCount = state.countCitiesBuildingType(UnitType.SATELLITE);
-        long icbmCount = state.countCitiesBuildingType(UnitType.ICBM_3);
-        if (unitType == UnitType.SATELLITE) {
-            return satCount <= icbmCount ? 10.0 : 5.0;
-        }
-        return icbmCount <= satCount ? 10.0 : 5.0;
+        // Phase 3 (tech >= 10): Mix of strategic + military
+        if (unitType == UnitType.HEAVY_BOMBER) return 9.0;
+        if (unitType == UnitType.SATELLITE) return 8.0;
+        if (unitType == UnitType.ICBM_3 && tech >= 16) return 8.0;
+        if (unitType == UnitType.INFANTRY) return 5.0;
+        if (unitType == UnitType.RESEARCH) return 6.0;
+        if (unitType == UnitType.TRANSPORT && state.isCoastalCity(city)
+                && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) return 7.0;
+        return 0;
     }
 
     private double computeRushUtility(BotWorldState state) {
@@ -100,26 +105,46 @@ public class SetCityProductionAction implements BotAction {
             if (effectiveTransports == 0 || (infantryCount / Math.max(1, effectiveTransports)) >= 6) {
                 return unitType == UnitType.TRANSPORT ? 10.0 : (unitType == UnitType.INFANTRY ? 5.0 : 0);
             }
+            // Also build destroyers to escort transports
+            if (unitType == UnitType.DESTROYER && state.countAliveUnitsOfType(UnitType.DESTROYER) == 0) return 7.0;
             return unitType == UnitType.INFANTRY ? 10.0 : (unitType == UnitType.TRANSPORT ? 3.0 : 0);
         }
-        // Non-coastal cities: always INFANTRY
-        return unitType == UnitType.INFANTRY ? 10.0 : 0;
+        // Non-coastal cities: infantry + some tanks and fighters
+        if (unitType == UnitType.INFANTRY) return 10.0;
+        if (unitType == UnitType.TANK && !state.hasTankUnit() && !state.hasTankInProduction()) return 8.0;
+        if (unitType == UnitType.FIGHTER && state.countAliveUnitsOfType(UnitType.FIGHTER) == 0
+                && state.countCitiesBuildingType(UnitType.FIGHTER) == 0) return 6.0;
+        return 0;
     }
 
     private double computeBoomUtility(BotWorldState state) {
-        // TECH cities: build ENGINEER (always)
-        if (city.getBuild() == UnitType.RESEARCH) {
-            return unitType == UnitType.ENGINEER ? 10.0 : 0;
-        }
-        // Coastal cities: ZEPPELIN or PATROL (for scouting)
-        if (state.isCoastalCity(city)) {
-            if (unitType == UnitType.ZEPPELIN) return 10.0;
-            if (unitType == UnitType.PATROL) return 8.0;
-            if (unitType == UnitType.ENGINEER) return 6.0;
+        int cityCount = state.getMyCities().size();
+        double tech = state.getTech();
+        // Phase 1 (< 4 cities): Engineers to expand
+        if (cityCount < 4) {
+            if (unitType == UnitType.ENGINEER) return 10.0;
+            if (unitType == UnitType.ZEPPELIN && !state.hasZeppelinUnit() && !state.hasZeppelinInProduction()) return 8.0;
             return 0;
         }
-        // Non-coastal cities: build ENGINEER
-        return unitType == UnitType.ENGINEER ? 10.0 : 0;
+        // Ensure transport from coastal cities
+        if (state.isCoastalCity(city) && !state.hasTransportCapability()) {
+            return unitType == UnitType.TRANSPORT ? 12.0 : 0;
+        }
+        // Phase 2 (>= 4 cities): Balanced economy + military
+        if (state.isCoastalCity(city)) {
+            if (unitType == UnitType.TRANSPORT && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) return 8.0;
+            if (unitType == UnitType.BATTLESHIP && state.countAliveUnitsOfType(UnitType.BATTLESHIP) == 0
+                    && state.countCitiesBuildingType(UnitType.BATTLESHIP) == 0) return 7.0;
+            if (unitType == UnitType.ZEPPELIN) return 6.0;
+            if (unitType == UnitType.INFANTRY) return 5.0;
+            return 0;
+        }
+        // Non-coastal: engineers, research, military mix
+        if (unitType == UnitType.ENGINEER && state.countAliveUnitsOfType(UnitType.ENGINEER) < 2) return 10.0;
+        if (unitType == UnitType.RESEARCH) return 8.0;
+        if (unitType == UnitType.HEAVY_BOMBER && tech >= 4) return 7.0;
+        if (unitType == UnitType.INFANTRY) return 5.0;
+        return 0;
     }
 
     private double computeTurtleUtility(BotWorldState state, int cityCount) {
@@ -129,7 +154,16 @@ public class SetCityProductionAction implements BotAction {
         if ((engineerCount + engineerBuilding) < 2) {
             return unitType == UnitType.ENGINEER ? 10.0 : 0;
         }
-        // Phase 2: Alternate RESEARCH / INFANTRY / FIGHTER across cities
+        // Ensure transport from coastal cities
+        if (state.isCoastalCity(city) && !state.hasTransportCapability()) {
+            return unitType == UnitType.TRANSPORT ? 12.0 : 0;
+        }
+        // Phase 2: Alternate RESEARCH / INFANTRY / FIGHTER + transport from coast
+        if (state.isCoastalCity(city)) {
+            if (unitType == UnitType.TRANSPORT && state.countCitiesBuildingType(UnitType.TRANSPORT) == 0) return 7.0;
+            if (unitType == UnitType.DESTROYER && state.countAliveUnitsOfType(UnitType.DESTROYER) == 0
+                    && state.countCitiesBuildingType(UnitType.DESTROYER) == 0) return 6.0;
+        }
         long researchCount = state.countCitiesBuildingType(UnitType.RESEARCH);
         long infantryCount = state.countCitiesBuildingType(UnitType.INFANTRY);
         long fighterCount = state.countCitiesBuildingType(UnitType.FIGHTER);

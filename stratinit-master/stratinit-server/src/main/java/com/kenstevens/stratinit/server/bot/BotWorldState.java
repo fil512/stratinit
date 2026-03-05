@@ -19,6 +19,7 @@ public class BotWorldState {
     private final double gameTimePercent;
     private final Set<SectorCoords> coastalCityCoords;
     private final List<City> enemyCities;
+    private final List<City> allSeenCities;
     private final World world;
     private final Set<SectorCoords> scoutedCoords;
     private final List<SectorCoords> neutralCityCoords;
@@ -29,11 +30,12 @@ public class BotWorldState {
                          Map<Nation, RelationType> theirRelations,
                          Set<SectorCoords> coastalCityCoords,
                          List<City> enemyCities,
+                         List<City> allSeenCities,
                          World world,
                          Set<SectorCoords> scoutedCoords,
                          List<SectorCoords> neutralCityCoords) {
         this(nation, game, myUnits, myCities, allVisibleUnits, myRelations, theirRelations,
-                coastalCityCoords, enemyCities, world, scoutedCoords, neutralCityCoords,
+                coastalCityCoords, enemyCities, allSeenCities, world, scoutedCoords, neutralCityCoords,
                 System.currentTimeMillis());
     }
 
@@ -43,6 +45,7 @@ public class BotWorldState {
                          Map<Nation, RelationType> theirRelations,
                          Set<SectorCoords> coastalCityCoords,
                          List<City> enemyCities,
+                         List<City> allSeenCities,
                          World world,
                          Set<SectorCoords> scoutedCoords,
                          List<SectorCoords> neutralCityCoords,
@@ -56,6 +59,7 @@ public class BotWorldState {
         this.theirRelations = new HashMap<>(theirRelations);
         this.coastalCityCoords = new HashSet<>(coastalCityCoords);
         this.enemyCities = new ArrayList<>(enemyCities);
+        this.allSeenCities = new ArrayList<>(allSeenCities);
         this.world = world;
         this.scoutedCoords = new HashSet<>(scoutedCoords);
         this.neutralCityCoords = new ArrayList<>(neutralCityCoords);
@@ -534,9 +538,9 @@ public class BotWorldState {
         for (Unit u : allVisibleUnits) {
             if (u.getNation().equals(other)) return true;
         }
-        // Check if we can see any of their cities
-        for (City c : enemyCities) {
-            if (c.getNation().equals(other)) return true;
+        // Check if we can see any of their cities (unfiltered by relation)
+        for (City c : allSeenCities) {
+            if (c.getNation() != null && c.getNation().equals(other)) return true;
         }
         return false;
     }
