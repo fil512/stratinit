@@ -63,22 +63,24 @@ public class TrainingGameSimulator {
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
     public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights) {
-        return simulate(playerWeights, -1, -1, null);
+        return simulate(playerWeights, Collections.emptyMap(), -1, -1, null);
     }
 
     public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights,
+                                       Map<String, com.kenstevens.stratinit.type.BotPersonality> playerPersonalities,
                                        int generation, int gameNum,
                                        TrainingMetricsPublisher metricsPublisher) {
         CacheDao.setTrainingMode(true);
         CacheDao.resetSyntheticIds();
         try {
-            return doSimulate(playerWeights, generation, gameNum, metricsPublisher);
+            return doSimulate(playerWeights, playerPersonalities, generation, gameNum, metricsPublisher);
         } finally {
             CacheDao.setTrainingMode(false);
         }
     }
 
     private TrainingGameResult doSimulate(Map<String, PhasedBotWeights> playerWeights,
+                                            Map<String, com.kenstevens.stratinit.type.BotPersonality> playerPersonalities,
                                             int generation, int gameNum,
                                             TrainingMetricsPublisher metricsPublisher) {
         long simStartTime = System.nanoTime();
@@ -111,8 +113,11 @@ public class TrainingGameSimulator {
                 throw new RuntimeException("Failed to join game: " + result);
             }
             Nation nation = result.getValue();
-            // Don't set botPersonality on Nation — it bypasses weight-based production
-            // logic in SetCityProductionAction. Track personality externally for analysis only.
+            // Set personality so personality-specific production logic runs
+            com.kenstevens.stratinit.type.BotPersonality personality = playerPersonalities.get(name);
+            if (personality != null) {
+                nation.setBotPersonality(personality);
+            }
             nations.put(name, nation);
         }
 

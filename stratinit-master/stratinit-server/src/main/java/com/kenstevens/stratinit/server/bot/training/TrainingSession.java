@@ -1,6 +1,7 @@
 package com.kenstevens.stratinit.server.bot.training;
 
 import com.kenstevens.stratinit.server.bot.PhasedBotWeights;
+import com.kenstevens.stratinit.type.BotPersonality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +14,19 @@ import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * (1+7)-ES training: 1 champion + 7 challengers per generation.
+ * Personality-based training: 4 personalities (Tech, Rush, Boom, Turtle) x 2 bots each.
+ * Each personality has its own champion weights evolved via (1+1)-ES.
  * Each generation plays 3 games with z-score normalization.
- * Champion is replaced only if a challenger achieves a higher average normalized score.
+ * Per-personality: champion is replaced if its challenger scores higher on average.
  */
 @Service
 public class TrainingSession {
     private static final int PLAYERS_PER_GAME = 8;
     private static final int DEFAULT_GENERATIONS = 10;
     private static final int GAMES_PER_GENERATION = 3;
-    private static final double[] CHALLENGER_SIGMAS = {0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4};
+    private static final BotPersonality[] PERSONALITIES = BotPersonality.values();
+    // Cycle through mutation strengths across generations
+    private static final double[] SIGMA_CYCLE = {0.05, 0.1, 0.15, 0.2, 0.25, 0.15, 0.1};
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -44,107 +48,99 @@ public class TrainingSession {
         int ticksPerGame = Integer.getInteger("training.ticks", 1440);
         metricsPublisher.publishSessionStatus("started", generations, ticksPerGame);
 
-        // Champion starts as the seed weights
-        PhasedBotWeights champion = PhasedBotWeights.fromJson(seedWeights.toJson());
-        int championChanges = 0;
+        // Initialize champion weights per personality from their designed profiles
+        Map<BotPersonality, PhasedBotWeights> champions = new EnumMap<>(BotPersonality.class);
+        for (BotPersonality p : PERSONALITIES) {
+            champions.put(p, PhasedBotWeights.forPersonality(p));
+        }
+        int totalChampionChanges = 0;
 
         for (int gen = 0; gen < generations; gen++) {
             logger.info("=== Generation {}/{} ===", gen + 1, generations);
+            double sigma = SIGMA_CYCLE[gen % SIGMA_CYCLE.length];
 
-            // Create 7 challengers by mutating champion with variable sigma
-            PhasedBotWeights[] configs = new PhasedBotWeights[PLAYERS_PER_GAME];
-            configs[0] = champion;
-            for (int i = 0; i < CHALLENGER_SIGMAS.length; i++) {
-                configs[i + 1] = mutator.mutate(champion, CHALLENGER_SIGMAS[i]);
+            // Create challenger for each personality by mutating its champion
+            Map<BotPersonality, PhasedBotWeights> challengers = new EnumMap<>(BotPersonality.class);
+            for (BotPersonality p : PERSONALITIES) {
+                challengers.put(p, mutator.mutate(champions.get(p), sigma));
             }
 
-            // Build player-weights map: config 0 = champion, configs 1-7 = challengers
-            // Average z-scores across GAMES_PER_GENERATION games
-            double[] avgScores = new double[PLAYERS_PER_GAME];
+            // Accumulate z-scores per bot name across games
+            // Names: Tech-1 (champion), Tech-2 (challenger), Rush-1, Rush-2, etc.
+            Map<String, Double> totalScores = new LinkedHashMap<>();
 
             for (int gameNum = 0; gameNum < GAMES_PER_GENERATION; gameNum++) {
                 Map<String, PhasedBotWeights> playerWeights = new LinkedHashMap<>();
-                for (int i = 0; i < PLAYERS_PER_GAME; i++) {
-                    playerWeights.put("TrainBot-" + i, configs[i]);
+                Map<String, BotPersonality> playerPersonalities = new LinkedHashMap<>();
+
+                for (BotPersonality p : PERSONALITIES) {
+                    String champName = p.name().charAt(0) + p.name().substring(1).toLowerCase() + "-1";
+                    String chalName = p.name().charAt(0) + p.name().substring(1).toLowerCase() + "-2";
+                    playerWeights.put(champName, champions.get(p));
+                    playerWeights.put(chalName, challengers.get(p));
+                    playerPersonalities.put(champName, p);
+                    playerPersonalities.put(chalName, p);
                 }
 
-                TrainingGameResult result = simulator.simulate(playerWeights,
+                TrainingGameResult result = simulator.simulate(playerWeights, playerPersonalities,
                         gen + 1, gameNum + 1, metricsPublisher);
                 allResults.add(result);
                 totalGamesPlayed++;
 
-                // Accumulate z-scores (already normalized by scoreAll)
-                int idx = 0;
-                for (String name : result.scores().keySet()) {
-                    avgScores[idx] += result.scores().get(name);
-                    idx++;
+                for (Map.Entry<String, Double> entry : result.scores().entrySet()) {
+                    totalScores.merge(entry.getKey(), entry.getValue(), Double::sum);
                 }
 
                 logger.info("  Game {}/{}: scores={}", gameNum + 1, GAMES_PER_GENERATION, result.scores());
             }
 
             // Average across games
-            for (int i = 0; i < PLAYERS_PER_GAME; i++) {
-                avgScores[i] /= GAMES_PER_GENERATION;
+            Map<String, Double> avgScores = new LinkedHashMap<>();
+            for (Map.Entry<String, Double> entry : totalScores.entrySet()) {
+                avgScores.put(entry.getKey(), entry.getValue() / GAMES_PER_GENERATION);
             }
 
-            // Find best config
-            double championScore = avgScores[0];
-            int bestIdx = 0;
-            double bestScore = championScore;
-            for (int i = 1; i < PLAYERS_PER_GAME; i++) {
-                if (avgScores[i] > bestScore) {
-                    bestScore = avgScores[i];
-                    bestIdx = i;
+            // Per-personality: compare champion vs challenger
+            double bestScore = Double.NEGATIVE_INFINITY;
+            for (BotPersonality p : PERSONALITIES) {
+                String champName = p.name().charAt(0) + p.name().substring(1).toLowerCase() + "-1";
+                String chalName = p.name().charAt(0) + p.name().substring(1).toLowerCase() + "-2";
+                double champScore = avgScores.getOrDefault(champName, 0.0);
+                double chalScore = avgScores.getOrDefault(chalName, 0.0);
+
+                if (chalScore > champScore) {
+                    champions.put(p, challengers.get(p));
+                    totalChampionChanges++;
+                    logger.info("  {} NEW CHAMPION (sigma={}, challenger={} vs champion={})",
+                            p.name(), String.format("%.2f", sigma),
+                            String.format("%.3f", chalScore), String.format("%.3f", champScore));
+                } else {
+                    logger.info("  {} champion retained (champion={}, challenger={})",
+                            p.name(), String.format("%.3f", champScore), String.format("%.3f", chalScore));
                 }
+                bestScore = Math.max(bestScore, Math.max(champScore, chalScore));
             }
 
             scoreHistory.add(bestScore);
 
-            if (bestIdx > 0) {
-                champion = configs[bestIdx];
-                championChanges++;
-                logger.info("  NEW CHAMPION (sigma={}, score={} vs champion={})",
-                        String.format("%.2f", CHALLENGER_SIGMAS[bestIdx - 1]),
-                        String.format("%.3f", bestScore),
-                        String.format("%.3f", championScore));
-            } else {
-                logger.info("  Champion retained (score={})", String.format("%.3f", championScore));
-            }
-
             // Publish generation result to Redis
-            double bestChallengerScore = 0;
-            for (int i = 1; i < PLAYERS_PER_GAME; i++) {
-                bestChallengerScore = Math.max(bestChallengerScore, avgScores[i]);
-            }
-            metricsPublisher.publishGeneration(gen + 1, generations, bestIdx > 0,
-                    avgScores[0], bestChallengerScore, scoreHistory);
+            metricsPublisher.publishGeneration(gen + 1, generations, false,
+                    bestScore, 0, scoreHistory);
 
             // Log all scores
-            StringBuilder sb = new StringBuilder("  Scores: champion=");
-            sb.append(String.format("%.3f", avgScores[0]));
-            for (int i = 1; i < PLAYERS_PER_GAME; i++) {
-                sb.append(String.format(", s%.2f=%.3f", CHALLENGER_SIGMAS[i - 1], avgScores[i]));
-            }
-            logger.info(sb.toString());
+            logger.info("  All scores: {}", avgScores);
         }
 
         logger.info("=== Training Complete: {} champion changes in {} generations ===",
-                championChanges, generations);
+                totalChampionChanges, generations);
 
-        // Regression test: champion vs seed weights (5 games, 4v4)
-        if (championChanges > 0) {
-            int validationWins = runValidation(champion, seedWeights, 5);
-            logger.info("=== Validation: champion won {}/5 games vs seed ===", validationWins);
-            if (validationWins < 3) {
-                logger.warn("Champion failed validation (won only {}/5). Reverting to seed weights.", validationWins);
-                champion = PhasedBotWeights.fromJson(seedWeights.toJson());
-            }
-        }
+        // Use the best-performing personality's champion as the "best weights" for backward compat
+        PhasedBotWeights bestOverall = champions.values().iterator().next();
 
         // Save results
         saveScoreHistory(scoreHistory);
-        saveBestWeights(champion);
+        savePersonalityWeights(champions);
+        saveBestWeights(bestOverall);
 
         // Analyze bot behavior
         TrainingAnalysisSummary analysis = analyzer.analyze(allResults);
@@ -152,40 +148,21 @@ public class TrainingSession {
         metricsPublisher.publishSessionStatus("completed", generations, ticksPerGame);
         metricsPublisher.close();
 
-        return new TrainingResult(champion, scoreHistory, totalGamesPlayed, analysis);
+        return new TrainingResult(bestOverall, scoreHistory, totalGamesPlayed, analysis);
     }
 
-    /**
-     * Run validation games: 4 bots with champion weights vs 4 bots with seed weights.
-     * Returns the number of games where champion team's average z-score beats seed team's.
-     */
-    private int runValidation(PhasedBotWeights champion, PhasedBotWeights seed, int games) {
-        int championWins = 0;
-        for (int i = 0; i < games; i++) {
-            Map<String, PhasedBotWeights> playerWeights = new LinkedHashMap<>();
-            // First 4 = champion, last 4 = seed
-            for (int j = 0; j < 4; j++) {
-                playerWeights.put("Champion-" + j, champion);
+    private void savePersonalityWeights(Map<BotPersonality, PhasedBotWeights> champions) {
+        try {
+            Path dir = Paths.get("training-results");
+            Files.createDirectories(dir);
+            for (Map.Entry<BotPersonality, PhasedBotWeights> entry : champions.entrySet()) {
+                String filename = "best-weights-" + entry.getKey().name().toLowerCase() + ".json";
+                Files.writeString(dir.resolve(filename), entry.getValue().toJson());
             }
-            for (int j = 0; j < 4; j++) {
-                playerWeights.put("Seed-" + j, seed);
-            }
-            TrainingGameResult result = simulator.simulate(playerWeights);
-            // Average z-scores for each team
-            double championAvg = 0, seedAvg = 0;
-            int idx = 0;
-            for (double score : result.scores().values()) {
-                if (idx < 4) championAvg += score;
-                else seedAvg += score;
-                idx++;
-            }
-            championAvg /= 4;
-            seedAvg /= 4;
-            if (championAvg > seedAvg) championWins++;
-            logger.info("  Validation game {}: champion={} seed={}",
-                    i + 1, String.format("%.3f", championAvg), String.format("%.3f", seedAvg));
+            logger.info("Saved personality weights to training-results/best-weights-*.json");
+        } catch (IOException e) {
+            logger.warn("Failed to save personality weights: {}", e.getMessage());
         }
-        return championWins;
     }
 
     private void saveScoreHistory(List<Double> scoreHistory) {

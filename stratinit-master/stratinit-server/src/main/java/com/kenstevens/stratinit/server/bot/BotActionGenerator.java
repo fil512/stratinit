@@ -6,6 +6,7 @@ import com.kenstevens.stratinit.type.Constants;
 import com.kenstevens.stratinit.server.service.CityService;
 import com.kenstevens.stratinit.server.service.RelationService;
 import com.kenstevens.stratinit.server.svc.MoveService;
+import com.kenstevens.stratinit.type.BotPersonality;
 import com.kenstevens.stratinit.type.RelationType;
 import com.kenstevens.stratinit.type.SectorCoords;
 import com.kenstevens.stratinit.type.SectorType;
@@ -531,7 +532,15 @@ public class BotActionGenerator {
         }
 
         // Proactive war declaration: declare war on neutral nations whose units/cities we can see
-        if (state.getTech() >= 1.0) {
+        // Threshold varies by personality: Rush/Boom are aggressive, Tech/Turtle wait
+        double warTechThreshold = 1.0;
+        BotPersonality personality = nation.getBotPersonality();
+        if (personality == BotPersonality.TECH) {
+            warTechThreshold = 2.0;
+        } else if (personality == BotPersonality.TURTLE) {
+            warTechThreshold = 3.0;
+        }
+        if (state.getTech() >= warTechThreshold) {
             for (Map.Entry<Nation, RelationType> entry : myRelations.entrySet()) {
                 Nation other = entry.getKey();
                 RelationType myStance = entry.getValue();
