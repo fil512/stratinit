@@ -1,23 +1,25 @@
 package com.kenstevens.stratinit.cache;
 
 import com.kenstevens.stratinit.client.model.City;
+import com.kenstevens.stratinit.type.SectorCoords;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CityCache extends Cacheable {
-	private final List<City> cities = new ArrayList<City>();
+	private final Map<SectorCoords, City> cityMap = new ConcurrentHashMap<>();
 
 	public List<City> getCities() {
-		return Collections.unmodifiableList(cities);
+		return new ArrayList<>(cityMap.values());
 	}
 
 	public void add(City city) {
-		cities.add(city);
+		cityMap.put(city.getCoords(), city);
 	}
 
 	public void remove(City city) {
-		cities.remove(city);
+		cityMap.remove(city.getCoords());
 	}
 }

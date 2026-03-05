@@ -2,12 +2,11 @@ package com.kenstevens.stratinit.cache;
 
 import com.kenstevens.stratinit.client.model.UnitMove;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class UnitMoveCache extends Cacheable {
-	private final Map<Integer, UnitMove> unitMoveMap = new HashMap<>();
+	private final Map<Integer, UnitMove> unitMoveMap = new ConcurrentHashMap<>();
 
 	public void add(UnitMove unitMove) {
 		unitMoveMap.put(unitMove.getUnit().getId(), unitMove);
@@ -18,7 +17,7 @@ public class UnitMoveCache extends Cacheable {
 	}
 
 	public Collection<UnitMove> getUnitsMove() {
-		return unitMoveMap.values();
+		return new ArrayList<>(unitMoveMap.values());
 	}
 
 	public void remove(int id) {

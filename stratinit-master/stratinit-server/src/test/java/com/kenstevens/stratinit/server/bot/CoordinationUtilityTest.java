@@ -120,8 +120,10 @@ class CoordinationUtilityTest {
         assertTrue(utilWithGround > utilNoGround,
                 "Air strike should get bonus when ground forces nearby: " +
                         utilWithGround + " > " + utilNoGround);
-        assertEquals(utilWithGround - utilNoGround, weights.airSupportBonus, 0.001,
-                "Bonus should equal airSupportBonus weight");
+        // Bonus is attenuated by distance penalty: bonus / (1 + distance * distancePenalty)
+        double expectedBonus = weights.airSupportBonus / (1.0 + 1 * weights.distancePenalty);
+        assertEquals(utilWithGround - utilNoGround, expectedBonus, 0.001,
+                "Bonus should equal airSupportBonus weight (distance-adjusted)");
     }
 
     @Test
@@ -145,8 +147,9 @@ class CoordinationUtilityTest {
         assertTrue(airWithGround > airAlone,
                 "Air utility with ground support (" + airWithGround +
                         ") should exceed air alone (" + airAlone + ")");
-        assertEquals(weights.airSupportBonus, airWithGround - airAlone, 0.001,
-                "Boost should equal airSupportBonus");
+        double expectedBoost = weights.airSupportBonus / (1.0 + 1 * weights.distancePenalty);
+        assertEquals(expectedBoost, airWithGround - airAlone, 0.001,
+                "Boost should equal airSupportBonus (distance-adjusted)");
     }
 
     @Test
@@ -168,8 +171,10 @@ class CoordinationUtilityTest {
         assertTrue(utilWithTransport > utilNoTransport,
                 "Naval attack should get escort bonus near transport: " +
                         utilWithTransport + " > " + utilNoTransport);
-        assertEquals(utilWithTransport - utilNoTransport, weights.navalEscortBonus, 0.001,
-                "Bonus should equal navalEscortBonus weight");
+        // Bonus is attenuated by distance penalty: bonus / (1 + distance * distancePenalty)
+        double expectedBonus = weights.navalEscortBonus / (1.0 + 1 * weights.distancePenalty);
+        assertEquals(utilWithTransport - utilNoTransport, expectedBonus, 0.001,
+                "Bonus should equal navalEscortBonus weight (distance-adjusted)");
     }
 
     @Test

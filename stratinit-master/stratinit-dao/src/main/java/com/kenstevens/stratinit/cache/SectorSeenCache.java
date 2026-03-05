@@ -5,13 +5,12 @@ import com.kenstevens.stratinit.client.model.SectorSeen;
 import com.kenstevens.stratinit.client.model.World;
 import com.kenstevens.stratinit.type.SectorCoords;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class SectorSeenCache extends Cacheable {
-	private final Map<SectorCoords, SectorSeen> sectorSeenMap = new HashMap<SectorCoords, SectorSeen>();
+	private final Map<SectorCoords, SectorSeen> sectorSeenMap = new ConcurrentHashMap<>();
 
 	public void add(SectorSeen sectorSeen) {
 		sectorSeenMap.put(sectorSeen.getCoords(), sectorSeen);
@@ -22,12 +21,12 @@ public class SectorSeenCache extends Cacheable {
 	}
 
 	public Collection<Sector> getSectorsSeenSectors(final World world) {
-		return sectorSeenMap.values().stream()
+		return new ArrayList<>(sectorSeenMap.values()).stream()
 				.map(sectorSeen -> world.getSectorOrNull(sectorSeen.getCoords()))
 				.collect(Collectors.toList());
 	}
 
 	public Collection<SectorSeen> getSectorsSeen() {
-		return sectorSeenMap.values();
+		return new ArrayList<>(sectorSeenMap.values());
 	}
 }

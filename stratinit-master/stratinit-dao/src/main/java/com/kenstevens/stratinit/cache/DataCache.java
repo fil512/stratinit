@@ -82,7 +82,7 @@ public class DataCache extends Updatable {
 	}
 
 	public List<GameCache> getGameCaches() {
-		return gameMap.values().stream()
+		return new ArrayList<>(gameMap.values()).stream()
 				.filter(gameCache -> gameCache.getGame().isEnabled())
 				.sorted(Comparator.comparingInt(gc -> gc.getGame().getId()))
 				.collect(Collectors.toList());

@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,14 +27,14 @@ public class GameCache extends Cacheable {
 
 	private final Game game;
 	private WorldCache worldCache;
-	private final List<NationCache> nationCaches = new ArrayList<NationCache>();
+	private final List<NationCache> nationCaches = new CopyOnWriteArrayList<>();
 	private final List<Relation> relations;
-	private final Map<SectorCoords, City> cityMap = new HashMap<SectorCoords, City>();
-	private final Map<Integer, Unit> unitMap = new TreeMap<Integer, Unit>();
+	private final Map<SectorCoords, City> cityMap = new ConcurrentHashMap<>();
+	private final Map<Integer, Unit> unitMap = new ConcurrentSkipListMap<>();
 
 	public GameCache(Game game, List<Relation> relations) {
 		this.game = game;
-		this.relations = relations;
+		this.relations = new CopyOnWriteArrayList<>(relations);
 	}
 
 	public int getGameId() {
@@ -69,7 +72,7 @@ public class GameCache extends Cacheable {
 	}
 
 	public List<NationCache> getNationCaches() {
-		return Collections.unmodifiableList(nationCaches);
+		return new ArrayList<>(nationCaches);
     }
 
     public Nation getNation(Player player) {
@@ -101,7 +104,7 @@ public class GameCache extends Cacheable {
 	}
 
 	public List<Relation> getRelations() {
-		return Collections.unmodifiableList(relations);
+		return new ArrayList<>(relations);
 	}
 
 	public Relation findRelation(RelationPK relationPK) {
@@ -134,11 +137,11 @@ public class GameCache extends Cacheable {
     }
 
     public Collection<City> getCities() {
-        return cityMap.values();
+        return new ArrayList<>(cityMap.values());
     }
 
     public Map<SectorCoords, City> getCityMap() {
-		return Collections.unmodifiableMap(cityMap);
+		return new HashMap<>(cityMap);
 	}
 
 	public List<Sector> getSectors() {
@@ -231,7 +234,7 @@ public class GameCache extends Cacheable {
     }
 
     public Collection<Unit> getUnits() {
-        return unitMap.values();
+        return new ArrayList<>(unitMap.values());
     }
 
     public void setLaunchedSatellites(Iterable<LaunchedSatellite> satellites) {

@@ -63,18 +63,25 @@ public class TrainingGameSimulator {
     private com.kenstevens.stratinit.dao.PlayerDao playerDao;
 
     public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights) {
+        return simulate(playerWeights, -1, -1, null);
+    }
+
+    public TrainingGameResult simulate(Map<String, PhasedBotWeights> playerWeights,
+                                       int generation, int gameNum,
+                                       TrainingMetricsPublisher metricsPublisher) {
         CacheDao.setTrainingMode(true);
         CacheDao.resetSyntheticIds();
         try {
-            return doSimulate(playerWeights);
+            return doSimulate(playerWeights, generation, gameNum, metricsPublisher);
         } finally {
             CacheDao.setTrainingMode(false);
         }
     }
 
-    private TrainingGameResult doSimulate(Map<String, PhasedBotWeights> playerWeights) {
+    private TrainingGameResult doSimulate(Map<String, PhasedBotWeights> playerWeights,
+                                            int generation, int gameNum,
+                                            TrainingMetricsPublisher metricsPublisher) {
         long simStartTime = System.nanoTime();
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         String gameName = TRAINING_GAME_PREFIX + System.currentTimeMillis();
 
         // Create game and players
@@ -188,8 +195,8 @@ public class TrainingGameSimulator {
             long t1 = System.nanoTime();
             cityBuildNs += t1 - t0;
 
-            // Process unit updates (copy to avoid ConcurrentModificationException)
-            for (Unit unit : new ArrayList<>(unitDao.getUnits(game))) {
+            // Process unit updates
+            for (Unit unit : unitDao.getUnits(game)) {
                 if (!unit.isAlive()) continue;
                 long period = UpdateCalculator.shrinkTime(true, unit.getUpdatePeriodMilliseconds());
                 if (period > 0 && unit.getLastUpdated() != null) {
@@ -215,20 +222,15 @@ public class TrainingGameSimulator {
             long t3 = System.nanoTime();
             gameUpdateNs += t3 - t2;
 
-            // Prepare all bot turns in parallel (read-only phase)
+            // Prepare all bot turns sequentially (cache state is shared and mutable)
             long tb0 = System.nanoTime();
             List<Map.Entry<String, Nation>> nationEntries = new ArrayList<>(nations.entrySet());
-            List<CompletableFuture<BotExecutor.PreparedTurn>> futures = new ArrayList<>();
+            List<BotExecutor.PreparedTurn> preparedTurns = new ArrayList<>();
             for (Map.Entry<String, Nation> entry : nationEntries) {
                 Nation nation = entry.getValue();
                 PhasedBotWeights weights = playerWeights.get(entry.getKey());
-                long simTimeCapture = simulatedTime;
-                futures.add(CompletableFuture.supplyAsync(
-                        () -> botExecutor.prepareTurn(nation, weights, simTimeCapture), executor));
+                preparedTurns.add(botExecutor.prepareTurn(nation, weights, simulatedTime));
             }
-            List<BotExecutor.PreparedTurn> preparedTurns = futures.stream()
-                    .map(CompletableFuture::join)
-                    .collect(Collectors.toList());
             long tb1 = System.nanoTime();
             botTurnNs += tb1 - tb0;
 
@@ -249,8 +251,15 @@ public class TrainingGameSimulator {
                 boolean hasTransport = nationUnits.stream()
                         .anyMatch(u -> u.isAlive() && u.getType() == UnitType.TRANSPORT);
 
-                actionLog.recordTurnStart(playerName, turn,
-                        new TrainingActionLog.TurnStateMetrics(cities, (int) aliveUnits, explored, tech, hasTransport));
+                TrainingActionLog.TurnStateMetrics turnMetrics =
+                        new TrainingActionLog.TurnStateMetrics(cities, (int) aliveUnits, explored, tech, hasTransport);
+                actionLog.recordTurnStart(playerName, turn, turnMetrics);
+
+                // Publish tick metrics to Redis (subsampled)
+                if (metricsPublisher != null) {
+                    metricsPublisher.publishTick(generation, gameNum, turn, playerName, turnMetrics, null);
+                }
+
                 long tm1 = System.nanoTime();
                 metricsNs += tm1 - tm0;
 
@@ -317,8 +326,6 @@ public class TrainingGameSimulator {
             turnsPlayed++;
         }
 
-        executor.shutdown();
-
         logger.info("=== Simulation Timing (1 game, {} turns) ===", turnsPlayed);
         logger.info("  City builds:  {} ms", cityBuildNs / 1_000_000);
         logger.info("  Unit updates: {} ms", unitUpdateNs / 1_000_000);
@@ -330,6 +337,12 @@ public class TrainingGameSimulator {
 
         // Score all nations using milestone-based scoring with z-score normalization
         Map<String, Double> scores = scorer.scoreAll(nations, actionLog);
+
+        // Publish game result to Redis
+        if (metricsPublisher != null) {
+            metricsPublisher.publishGameResult(generation, gameNum, turnsPlayed,
+                    scores, actionLog.getNationMilestones());
+        }
 
         // Cleanup game from cache and database to prevent OOM across generations
         cleanup(game, playerNames);

@@ -40,6 +40,9 @@ public class TrainingSession {
         List<TrainingGameResult> allResults = new ArrayList<>();
         int totalGamesPlayed = 0;
         WeightMutator mutator = new WeightMutator();
+        TrainingMetricsPublisher metricsPublisher = new TrainingMetricsPublisher();
+        int ticksPerGame = Integer.getInteger("training.ticks", 1440);
+        metricsPublisher.publishSessionStatus("started", generations, ticksPerGame);
 
         // Champion starts as the seed weights
         PhasedBotWeights champion = PhasedBotWeights.fromJson(seedWeights.toJson());
@@ -65,7 +68,8 @@ public class TrainingSession {
                     playerWeights.put("TrainBot-" + i, configs[i]);
                 }
 
-                TrainingGameResult result = simulator.simulate(playerWeights);
+                TrainingGameResult result = simulator.simulate(playerWeights,
+                        gen + 1, gameNum + 1, metricsPublisher);
                 allResults.add(result);
                 totalGamesPlayed++;
 
@@ -108,6 +112,14 @@ public class TrainingSession {
                 logger.info("  Champion retained (score={})", String.format("%.3f", championScore));
             }
 
+            // Publish generation result to Redis
+            double bestChallengerScore = 0;
+            for (int i = 1; i < PLAYERS_PER_GAME; i++) {
+                bestChallengerScore = Math.max(bestChallengerScore, avgScores[i]);
+            }
+            metricsPublisher.publishGeneration(gen + 1, generations, bestIdx > 0,
+                    avgScores[0], bestChallengerScore, scoreHistory);
+
             // Log all scores
             StringBuilder sb = new StringBuilder("  Scores: champion=");
             sb.append(String.format("%.3f", avgScores[0]));
@@ -136,6 +148,9 @@ public class TrainingSession {
 
         // Analyze bot behavior
         TrainingAnalysisSummary analysis = analyzer.analyze(allResults);
+
+        metricsPublisher.publishSessionStatus("completed", generations, ticksPerGame);
+        metricsPublisher.close();
 
         return new TrainingResult(champion, scoreHistory, totalGamesPlayed, analysis);
     }

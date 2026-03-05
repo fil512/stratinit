@@ -4,22 +4,23 @@ import com.kenstevens.stratinit.client.model.Unit;
 
 import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 public class UnitCache extends Cacheable {
-	private final List<Unit> units = new ArrayList<Unit>();
+	private final Map<Integer, Unit> unitMap = new ConcurrentSkipListMap<>();
 
 	@Nonnull
 	public List<Unit> getUnits() {
-		return Collections.unmodifiableList(units);
+		return new ArrayList<>(unitMap.values());
 	}
 
 	public void add(Unit unit) {
-		units.add(unit);
+		unitMap.put(unit.getId(), unit);
 	}
 
 	public void remove(Unit unit) {
-		units.remove(unit);
+		unitMap.remove(unit.getId());
 	}
 }

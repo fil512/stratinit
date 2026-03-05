@@ -49,16 +49,16 @@ public class BotWorldState {
                          long nowMillis) {
         this.nation = nation;
         this.game = game;
-        this.myUnits = myUnits;
-        this.myCities = myCities;
-        this.allVisibleUnits = allVisibleUnits;
-        this.myRelations = myRelations;
-        this.theirRelations = theirRelations;
-        this.coastalCityCoords = coastalCityCoords;
-        this.enemyCities = enemyCities;
+        this.myUnits = new ArrayList<>(myUnits);
+        this.myCities = new ArrayList<>(myCities);
+        this.allVisibleUnits = new ArrayList<>(allVisibleUnits);
+        this.myRelations = new HashMap<>(myRelations);
+        this.theirRelations = new HashMap<>(theirRelations);
+        this.coastalCityCoords = new HashSet<>(coastalCityCoords);
+        this.enemyCities = new ArrayList<>(enemyCities);
         this.world = world;
-        this.scoutedCoords = scoutedCoords;
-        this.neutralCityCoords = neutralCityCoords;
+        this.scoutedCoords = new HashSet<>(scoutedCoords);
+        this.neutralCityCoords = new ArrayList<>(neutralCityCoords);
 
         // Calculate game time progress (0.0 = start, 1.0 = end)
         if (game.getStartTime() != null && game.getEnds() != null) {

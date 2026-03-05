@@ -3,12 +3,11 @@ package com.kenstevens.stratinit.cache;
 import com.kenstevens.stratinit.client.model.CityMove;
 import com.kenstevens.stratinit.type.SectorCoords;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CityMoveCache extends Cacheable {
-	private final Map<SectorCoords, CityMove> cityMoveMap = new HashMap<>();
+	private final Map<SectorCoords, CityMove> cityMoveMap = new ConcurrentHashMap<>();
 
 	public void add(CityMove cityMove) {
 		cityMoveMap.put(cityMove.getCity().getCoords(), cityMove);
@@ -19,7 +18,7 @@ public class CityMoveCache extends Cacheable {
 	}
 
 	public Collection<CityMove> getCityMoves() {
-		return cityMoveMap.values();
+		return new ArrayList<>(cityMoveMap.values());
 	}
 
 	public void remove(SectorCoords coords) {

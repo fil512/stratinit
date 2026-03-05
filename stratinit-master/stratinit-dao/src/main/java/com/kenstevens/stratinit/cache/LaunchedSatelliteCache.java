@@ -3,21 +3,22 @@ package com.kenstevens.stratinit.cache;
 import com.kenstevens.stratinit.client.model.LaunchedSatellite;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LaunchedSatelliteCache extends Cacheable {
-	private final List<LaunchedSatellite> satellites = new ArrayList<LaunchedSatellite>();
+	private final Map<Integer, LaunchedSatellite> satelliteMap = new ConcurrentHashMap<>();
 
 	public List<LaunchedSatellite> getLaunchedSatellites() {
-		return Collections.unmodifiableList(satellites);
+		return new ArrayList<>(satelliteMap.values());
 	}
 
 	public void add(LaunchedSatellite sat) {
-		satellites.add(sat);
+		satelliteMap.put(sat.getSatelliteId(), sat);
 	}
 
 	public void remove(LaunchedSatellite sat) {
-		satellites.remove(sat);
+		satelliteMap.remove(sat.getSatelliteId());
 	}
 }
