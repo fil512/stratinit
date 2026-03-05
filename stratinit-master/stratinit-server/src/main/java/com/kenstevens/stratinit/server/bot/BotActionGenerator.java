@@ -451,7 +451,7 @@ public class BotActionGenerator {
                 // Engineers are builders, not captors — skip them
                 if (unit.getType() == UnitType.ENGINEER) continue;
                 int distance = SectorCoords.distance(gameSize, unit.getCoords(), cityCoords);
-                if (distance <= unit.getMobility()) {
+                if (distance <= unit.getMobility() * 3) {
                     actions.add(new CaptureNeutralCityAction(unit, cityCoords, distance, nation, moveService));
                 }
             }
@@ -504,7 +504,7 @@ public class BotActionGenerator {
             if (unit.getType() == UnitType.ENGINEER) continue;
             for (City city : undefended) {
                 int distance = SectorCoords.distance(gameSize, unit.getCoords(), city.getCoords());
-                if (distance <= unit.getMobility() && distance > 0) {
+                if (distance <= unit.getMobility() * 2 && distance > 0) {
                     actions.add(new DefendCityAction(unit, city, nation, moveService));
                 }
             }
@@ -531,7 +531,7 @@ public class BotActionGenerator {
         }
 
         // Proactive war declaration: declare war on neutral nations whose units/cities we can see
-        if (state.getTech() >= 3.0) {
+        if (state.getTech() >= 1.0) {
             for (Map.Entry<Nation, RelationType> entry : myRelations.entrySet()) {
                 Nation other = entry.getKey();
                 RelationType myStance = entry.getValue();

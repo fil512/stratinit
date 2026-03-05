@@ -65,16 +65,16 @@ public class TrainingScorer {
         if (actionLog.hasLoadedTransport(playerName)) {
             score += 5.0;
         }
-        score += 2.0 * Math.min(actionLog.getEnemyUnitsKilled(playerName), 10);
+        score += 5.0 * Math.min(actionLog.getEnemyUnitsKilled(playerName), 10);
 
         // Tempo bonuses — reward doing things earlier
         int firstCaptureTurn = actionLog.getFirstCityCapturedTurn(playerName);
         if (firstCaptureTurn < Integer.MAX_VALUE) {
-            score += Math.max(0, 3.0 - (firstCaptureTurn / 400.0));
+            score += Math.max(0, 10.0 - (firstCaptureTurn / 100.0));
         }
         int firstTransportTurn = actionLog.getFirstTransportLoadedTurn(playerName);
         if (firstTransportTurn < Integer.MAX_VALUE) {
-            score += Math.max(0, 2.0 - (firstTransportTurn / 600.0));
+            score += Math.max(0, 5.0 - (firstTransportTurn / 300.0));
         }
 
         return score;

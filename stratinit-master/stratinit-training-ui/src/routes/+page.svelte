@@ -93,6 +93,20 @@
 				<div class="chart-card">
 					<GameChart
 						nationSeries={state.nationSeries}
+						metric="attacks"
+						title="Attacks per Nation"
+					/>
+				</div>
+				<div class="chart-card">
+					<GameChart
+						nationSeries={state.nationSeries}
+						metric="captures"
+						title="City Captures per Nation"
+					/>
+				</div>
+				<div class="chart-card">
+					<GameChart
+						nationSeries={state.nationSeries}
 						metric="cities"
 						title="Cities per Nation"
 					/>

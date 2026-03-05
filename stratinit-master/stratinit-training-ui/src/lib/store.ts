@@ -20,6 +20,7 @@ function createTrainingStore() {
 		scoreHistory: [],
 		championChanges: [],
 		nationSeries: {},
+		nationActionTotals: {},
 		gameResults: []
 	};
 
@@ -42,24 +43,47 @@ function createTrainingStore() {
 		});
 	}
 
+	const ATTACK_ACTIONS = ['AttackEnemyAction', 'AttackNavalAction', 'AttackWithAirAction'];
+	const CAPTURE_ACTIONS = ['CaptureNeutralCityAction'];
+
 	function handleTick(state: TrainingState, event: TickEvent): TrainingState {
 		const newState = { ...state };
 
 		// Reset nation series on new game
 		if (event.gameNum !== state.currentGameNum || event.generation !== state.currentGeneration) {
 			newState.nationSeries = {};
+			newState.nationActionTotals = {};
 			newState.currentGameNum = event.gameNum;
 			newState.currentGeneration = event.generation;
 		}
 
 		newState.currentTick = event.tick;
 
+		// Accumulate action counts
+		const totals = { ...newState.nationActionTotals };
+		if (!totals[event.nation]) {
+			totals[event.nation] = { attacks: 0, captures: 0 };
+		}
+		const nationTotal = { ...totals[event.nation] };
+		if (event.actions) {
+			for (const action of ATTACK_ACTIONS) {
+				nationTotal.attacks += event.actions[action] || 0;
+			}
+			for (const action of CAPTURE_ACTIONS) {
+				nationTotal.captures += event.actions[action] || 0;
+			}
+		}
+		totals[event.nation] = nationTotal;
+		newState.nationActionTotals = totals;
+
 		const snapshot = {
 			tick: event.tick,
 			cities: event.cities,
 			units: event.units,
 			explored: event.explored,
-			tech: event.tech
+			tech: event.tech,
+			attacks: nationTotal.attacks,
+			captures: nationTotal.captures
 		};
 
 		const series = { ...newState.nationSeries };

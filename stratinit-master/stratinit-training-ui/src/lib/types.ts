@@ -47,6 +47,8 @@ export interface NationSnapshot {
 	units: number;
 	explored: number;
 	tech: number;
+	attacks: number;
+	captures: number;
 }
 
 export interface TrainingState {
@@ -61,6 +63,8 @@ export interface TrainingState {
 	championChanges: number[];
 	// Per-nation time series for current game
 	nationSeries: Record<string, NationSnapshot[]>;
+	// Cumulative action counts per nation for current game
+	nationActionTotals: Record<string, { attacks: number; captures: number }>;
 	// Game results for current generation
 	gameResults: GameResultEvent[];
 }

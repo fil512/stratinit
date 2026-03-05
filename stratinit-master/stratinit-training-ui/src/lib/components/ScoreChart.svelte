@@ -10,9 +10,9 @@
 	let canvas: HTMLCanvasElement;
 	let chart: Chart | null = null;
 
-	$: if (chart && scoreHistory.length > 0) {
+	$: if (chart) {
 		chart.data.labels = scoreHistory.map((_, i) => `Gen ${i + 1}`);
-		const ds = chart.data.datasets[0] as Record<string, unknown>;
+		const ds = chart.data.datasets[0] as unknown as Record<string, unknown>;
 		ds.data = scoreHistory;
 		// Mark champion changes with point styles
 		ds.pointBackgroundColor = scoreHistory.map((_, i) =>

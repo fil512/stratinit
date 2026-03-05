@@ -6,7 +6,7 @@
 	Chart.register(...registerables);
 
 	export let nationSeries: Record<string, NationSnapshot[]> = {};
-	export let metric: 'cities' | 'units' | 'explored' | 'tech' = 'cities';
+	export let metric: 'cities' | 'units' | 'explored' | 'tech' | 'attacks' | 'captures' = 'cities';
 	export let title: string = 'Cities';
 
 	const COLORS = [
