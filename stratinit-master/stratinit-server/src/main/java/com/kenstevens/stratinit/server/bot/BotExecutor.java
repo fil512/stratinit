@@ -95,7 +95,7 @@ public class BotExecutor {
         List<ScoredAction> scored = new ArrayList<>();
         for (BotAction action : candidates) {
             double utility = action.computeUtility(state, weights);
-            if (utility > 0) {
+            if (utility > 0 && Double.isFinite(utility)) {
                 scored.add(new ScoredAction(action, utility));
             }
         }
