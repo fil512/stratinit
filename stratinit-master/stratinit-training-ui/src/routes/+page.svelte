@@ -93,13 +93,6 @@
 				<div class="chart-card">
 					<GameChart
 						nationSeries={state.nationSeries}
-						metric="nationsFound"
-						title="Nations Found"
-					/>
-				</div>
-				<div class="chart-card">
-					<GameChart
-						nationSeries={state.nationSeries}
 						metric="icbmsLaunched"
 						title="ICBMs Launched"
 					/>
@@ -144,6 +137,13 @@
 						nationSeries={state.nationSeries}
 						metric="tech"
 						title="Tech Level"
+					/>
+				</div>
+				<div class="chart-card">
+					<GameChart
+						nationSeries={state.nationSeries}
+						metric="nationsFound"
+						title="Nations Found"
 					/>
 				</div>
 			{/if}
