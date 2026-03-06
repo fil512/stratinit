@@ -23,6 +23,7 @@ public class BotWorldState {
     private final World world;
     private final Set<SectorCoords> scoutedCoords;
     private final List<SectorCoords> neutralCityCoords;
+    private final Set<SectorCoords> recentlyBombedCities;
 
     public BotWorldState(Nation nation, Game game, List<Unit> myUnits, List<City> myCities,
                          Collection<Unit> allVisibleUnits,
@@ -63,6 +64,7 @@ public class BotWorldState {
         this.world = world;
         this.scoutedCoords = new HashSet<>(scoutedCoords);
         this.neutralCityCoords = new ArrayList<>(neutralCityCoords);
+        this.recentlyBombedCities = new HashSet<>();
 
         // Calculate game time progress (0.0 = start, 1.0 = end)
         if (game.getStartTime() != null && game.getEnds() != null) {
@@ -564,5 +566,13 @@ public class BotWorldState {
                     return s != null && s.getIsland() == islandId;
                 })
                 .count();
+    }
+
+    public void markCityBombed(SectorCoords coords) {
+        recentlyBombedCities.add(coords);
+    }
+
+    public boolean wasCityRecentlyBombed(SectorCoords coords) {
+        return recentlyBombedCities.contains(coords);
     }
 }

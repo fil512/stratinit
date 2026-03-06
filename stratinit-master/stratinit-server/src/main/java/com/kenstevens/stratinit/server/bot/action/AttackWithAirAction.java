@@ -73,6 +73,18 @@ public class AttackWithAirAction implements BotAction {
     }
 
     @Override
+    public void onSuccess(BotWorldState state) {
+        if (isBombingCity) {
+            state.markCityBombed(targetCoords);
+        }
+    }
+
+    @Override
+    public String getActionType() {
+        return isBombingCity ? "BombCityWithAirAction" : "AttackWithAirAction";
+    }
+
+    @Override
     public String describe() {
         String action = isBombingCity ? "Bomb city" : "Air strike";
         return action + " at " + targetCoords + " with " + airUnit.toMyString();

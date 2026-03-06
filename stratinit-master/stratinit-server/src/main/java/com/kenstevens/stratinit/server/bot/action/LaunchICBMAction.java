@@ -60,6 +60,11 @@ public class LaunchICBMAction implements BotAction {
     }
 
     @Override
+    public void onSuccess(BotWorldState state) {
+        state.markCityBombed(targetCity.getCoords());
+    }
+
+    @Override
     public String describe() {
         return "Launch " + icbm.toMyString() + " at city " + targetCity.getCoords();
     }

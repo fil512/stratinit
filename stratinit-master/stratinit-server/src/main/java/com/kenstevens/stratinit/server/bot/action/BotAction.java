@@ -21,4 +21,8 @@ public interface BotAction {
     default String getActionType() {
         return getClass().getSimpleName();
     }
+
+    default void onSuccess(BotWorldState state) {
+        // Override in actions that affect shared state (e.g., bombing marks cities)
+    }
 }

@@ -16,12 +16,18 @@ import java.util.Collections;
 public class LoadTransportAction implements BotAction {
     private final Unit transport;
     private final SectorCoords pickupCoords;
+    private final int distance;
     private final Nation nation;
     private final MoveService moveService;
 
     public LoadTransportAction(Unit transport, SectorCoords pickupCoords, Nation nation, MoveService moveService) {
+        this(transport, pickupCoords, 0, nation, moveService);
+    }
+
+    public LoadTransportAction(Unit transport, SectorCoords pickupCoords, int distance, Nation nation, MoveService moveService) {
         this.transport = transport;
         this.pickupCoords = pickupCoords;
+        this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -33,7 +39,12 @@ public class LoadTransportAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.navalBaseWeight * weights.transportLoadDesire;
+        // Higher base utility so transports actively seek out waiting units
+        double utility = Math.max(1.0, weights.navalBaseWeight * weights.transportLoadDesire);
+        // Close pickups are higher priority
+        if (distance > 0) {
+            utility /= (1.0 + distance * weights.distancePenalty);
+        }
         return utility;
     }
 

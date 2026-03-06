@@ -165,6 +165,8 @@ public class BotExecutor {
                     if (cost > 0) {
                         nation.decreaseCommandPoints(cost);
                     }
+                    // Track bombed/ICBM'd cities so ground units get a capture bonus
+                    action.onSuccess(state);
                     logger.debug("Bot {} executed: {}", nation.getName(), action.describe());
                 }
             } catch (Exception e) {

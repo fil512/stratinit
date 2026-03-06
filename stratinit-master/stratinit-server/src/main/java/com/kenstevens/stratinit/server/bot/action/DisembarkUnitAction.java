@@ -37,7 +37,8 @@ public class DisembarkUnitAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        double utility = weights.expansionBaseWeight * weights.disembarkDesire;
+        // Minimum floor: disembarking should almost always happen when transport reaches land
+        double utility = Math.max(1.5, weights.expansionBaseWeight * weights.disembarkDesire);
         if (isCity) {
             utility *= (1.0 + weights.neutralCityCaptureDesire);
         }

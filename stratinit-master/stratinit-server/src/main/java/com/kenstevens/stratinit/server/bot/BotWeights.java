@@ -59,6 +59,7 @@ public class BotWeights {
     // Island expansion weights
     public double zeppelinScoutDesire = 1.0;
     public double homeIslandExplorationBonus = 0.5;
+    public double foreignIslandExplorationBonus = 1.5;
     public double researchGuaranteeMultiplier = 3.0;
     public double coastalCityDesire = 1.2;
     public double moveToCoastDesire = 0.6;

@@ -62,6 +62,11 @@ public class BombardCityAction implements BotAction {
     }
 
     @Override
+    public void onSuccess(BotWorldState state) {
+        state.markCityBombed(targetCoords);
+    }
+
+    @Override
     public String describe() {
         return "Bombard city at " + targetCoords + " with " + battleship.toMyString();
     }

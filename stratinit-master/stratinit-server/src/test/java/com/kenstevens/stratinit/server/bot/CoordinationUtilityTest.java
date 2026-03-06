@@ -49,7 +49,7 @@ class CoordinationUtilityTest {
                 Collections.emptyList(),
                 Collections.emptyMap(), Collections.emptyMap(),
                 Collections.emptySet(), Collections.emptyList(),
-                world, Collections.emptySet(), Collections.emptyList(),
+                Collections.emptyList(), world, Collections.emptySet(), Collections.emptyList(),
                 500000L // mid-game
         );
     }

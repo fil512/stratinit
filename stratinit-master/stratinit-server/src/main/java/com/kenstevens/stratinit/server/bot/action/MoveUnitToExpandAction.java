@@ -22,20 +22,27 @@ public class MoveUnitToExpandAction implements BotAction {
     private final MoveService moveService;
     private final int distance;
     private final boolean isHomeIsland;
+    private final boolean isForeignIsland;
 
     public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
                                   Nation nation, MoveService moveService) {
-        this(unit, target, distance, nation, moveService, false);
+        this(unit, target, distance, nation, moveService, false, false);
     }
 
     public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
                                   Nation nation, MoveService moveService, boolean isHomeIsland) {
+        this(unit, target, distance, nation, moveService, isHomeIsland, false);
+    }
+
+    public MoveUnitToExpandAction(Unit unit, SectorCoords target, int distance,
+                                  Nation nation, MoveService moveService, boolean isHomeIsland, boolean isForeignIsland) {
         this.unit = unit;
         this.target = target;
         this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
         this.isHomeIsland = isHomeIsland;
+        this.isForeignIsland = isForeignIsland;
     }
 
     @Override
@@ -66,6 +73,10 @@ public class MoveUnitToExpandAction implements BotAction {
         // Home island exploration bonus
         if (isHomeIsland) {
             utility += weights.homeIslandExplorationBonus;
+        }
+        // Foreign island exploration bonus — push units toward enemy cities
+        if (isForeignIsland) {
+            utility += weights.foreignIslandExplorationBonus;
         }
         return utility;
     }

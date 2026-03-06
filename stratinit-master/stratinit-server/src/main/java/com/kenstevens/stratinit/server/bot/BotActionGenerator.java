@@ -127,6 +127,9 @@ public class BotActionGenerator {
                 // Home island exploration priority
                 if (state.isOnHomeIsland(unit) && hasUnexploredHome) {
                     generateHomeIslandExpansionMoves(unit, state, nation, actions, homeIslandId);
+                } else if (!state.isOnHomeIsland(unit)) {
+                    // Foreign island: explore aggressively to find enemy cities
+                    generateForeignIslandExpansionMoves(unit, state, nation, actions);
                 } else {
                     generateSmartExpansionMoves(unit, state, nation, actions, true, false);
                 }
@@ -387,6 +390,50 @@ public class BotActionGenerator {
         }
     }
 
+    private void generateForeignIslandExpansionMoves(Unit unit, BotWorldState state, Nation nation,
+                                                      List<BotAction> actions) {
+        int gameSize = state.getGame().getGamesize();
+        World world = state.getWorld();
+        SectorCoords unitCoords = unit.getCoords();
+
+        // Find the island ID of the unit's current sector
+        Sector unitSector = world.getSectorOrNull(unitCoords);
+        int islandId = (unitSector != null) ? unitSector.getIsland() : -1;
+
+        // Find frontier targets on THIS island (land sectors next to unexplored)
+        List<SectorCoords> frontierTargets = new ArrayList<>();
+        for (int x = 0; x < gameSize; x++) {
+            for (int y = 0; y < gameSize; y++) {
+                SectorCoords coords = new SectorCoords(x, y);
+                if (!state.isExplored(coords)) continue;
+                Sector sector = world.getSectorOrNull(coords);
+                if (sector == null || sector.isWater()) continue;
+                if (islandId >= 0 && sector.getIsland() != islandId) continue;
+                for (SectorCoords neighbour : coords.neighbours(gameSize)) {
+                    if (!state.isExplored(neighbour)) {
+                        frontierTargets.add(coords);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Sort by distance to unit, take nearest 4
+        frontierTargets.sort(Comparator.comparingInt(
+                c -> SectorCoords.distance(gameSize, unitCoords, c)));
+        int limit = Math.min(4, frontierTargets.size());
+        for (int i = 0; i < limit; i++) {
+            SectorCoords target = frontierTargets.get(i);
+            int distance = SectorCoords.distance(gameSize, unitCoords, target);
+            actions.add(new MoveUnitToExpandAction(unit, target, distance, nation, moveService, false, true));
+        }
+
+        // Fallback: if no frontier found on this island, use general smart expansion
+        if (frontierTargets.isEmpty()) {
+            generateSmartExpansionMoves(unit, state, nation, actions, true, false);
+        }
+    }
+
     private void generateSmartExpansionMoves(Unit unit, BotWorldState state, Nation nation,
                                               List<BotAction> actions, boolean isLand, boolean isHomeIsland) {
         int gameSize = state.getGame().getGamesize();
@@ -619,7 +666,7 @@ public class BotActionGenerator {
                         if (!neighbour.isWater()) continue;
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
                         if (distance <= myUnit.getMobility() * 3) {
-                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), nation, moveService));
+                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), distance, nation, moveService));
                             break;
                         }
                     }
@@ -633,7 +680,7 @@ public class BotActionGenerator {
                         if (!neighbour.isWater()) continue;
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
                         if (distance <= myUnit.getMobility() * 3) {
-                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), nation, moveService));
+                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), distance, nation, moveService));
                             break;
                         }
                     }

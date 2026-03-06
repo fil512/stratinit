@@ -44,6 +44,11 @@ public class CaptureEnemyCityAction implements BotAction {
             utility += weights.airSupportBonus;
         }
 
+        // Recently bombed/ICBM'd city — high priority to capture while weakened
+        if (state.wasCityRecentlyBombed(targetCity.getCoords())) {
+            utility += weights.bombardCityDesire;
+        }
+
         // Coordination bonus: multiple ground units converging
         int alliesInRange = state.countLandUnitsInRangeOf(targetCity.getCoords()) - 1;
         if (alliesInRange > 0) {
