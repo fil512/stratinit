@@ -156,11 +156,13 @@ public class TrainingGameSimulator {
 
         // Track previous city counts per nation for milestone detection
         Map<String, Integer> prevCityCounts = new LinkedHashMap<>();
+        Map<String, Integer> cumulativeCaptures = new LinkedHashMap<>();
         // Track home island IDs per nation
         Map<String, Integer> homeIslandIds = new LinkedHashMap<>();
         World startWorld = sectorDao.getWorld(game);
         for (Map.Entry<String, Nation> entry : nations.entrySet()) {
             prevCityCounts.put(entry.getKey(), cityDao.getNumberOfCities(entry.getValue()));
+            cumulativeCaptures.put(entry.getKey(), 0);
             // Determine home island from starting city
             Collection<City> startCities = cityDao.getCities(entry.getValue());
             for (City c : startCities) {
@@ -286,23 +288,27 @@ public class TrainingGameSimulator {
                 long te1 = System.nanoTime();
                 botTurnNs += te1 - te0;
 
-                // Publish tick metrics to Redis after execution (so action counts are available)
+                // Detect milestones and track city captures
+                int newCities = cityDao.getNumberOfCities(nation);
+                int prevCities = prevCityCounts.getOrDefault(playerName, 0);
+                if (newCities > prevCities) {
+                    int gained = newCities - prevCities;
+                    cumulativeCaptures.merge(playerName, gained, Integer::sum);
+                    actionLog.recordMilestone(playerName, "firstNonHomeCityCapture", turn);
+                    actionLog.recordFirstCityCapture(playerName, turn);
+                }
+                prevCityCounts.put(playerName, newCities);
+
+                // Publish tick metrics to Redis after execution (so action counts and captures are available)
                 if (metricsPublisher != null) {
                     TrainingActionLog.TurnSnapshot currentSnapshotForPublish = actionLog.getNationTurns()
                             .getOrDefault(playerName, Collections.emptyList())
                             .stream().reduce((a, b) -> b).orElse(null);
                     Map<String, Integer> executedCounts = currentSnapshotForPublish != null
                             ? currentSnapshotForPublish.getExecutedCounts() : null;
-                    metricsPublisher.publishTick(generation, gameNum, turn, playerName, turnMetrics, executedCounts);
+                    metricsPublisher.publishTick(generation, gameNum, turn, playerName, turnMetrics, executedCounts,
+                            cumulativeCaptures.getOrDefault(playerName, 0));
                 }
-
-                // Detect milestones
-                int newCities = cityDao.getNumberOfCities(nation);
-                if (newCities > prevCityCounts.getOrDefault(playerName, 0)) {
-                    actionLog.recordMilestone(playerName, "firstNonHomeCityCapture", turn);
-                    actionLog.recordFirstCityCapture(playerName, turn);
-                }
-                prevCityCounts.put(playerName, newCities);
 
                 if (hasTransport) {
                     actionLog.recordMilestone(playerName, "firstTransportBuilt", turn);

@@ -10,6 +10,7 @@ export interface TickEvent {
 	tech: number;
 	hasTransport: boolean;
 	nationsFound: number;
+	captures: number;
 	actions?: Record<string, number>;
 }
 

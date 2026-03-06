@@ -54,7 +54,8 @@ public class TrainingMetricsPublisher {
 
     public void publishTick(int generation, int gameNum, int tick, String nationName,
                             TrainingActionLog.TurnStateMetrics metrics,
-                            Map<String, Integer> executedCounts) {
+                            Map<String, Integer> executedCounts,
+                            int captures) {
         if (!available || tick % TICK_SUBSAMPLE != 0) return;
 
         Map<String, Object> payload = new LinkedHashMap<>();
@@ -69,6 +70,7 @@ public class TrainingMetricsPublisher {
         payload.put("tech", metrics.tech());
         payload.put("hasTransport", metrics.hasTransport());
         payload.put("nationsFound", metrics.nationsFound());
+        payload.put("captures", captures);
         if (executedCounts != null && !executedCounts.isEmpty()) {
             payload.put("actions", executedCounts);
         }

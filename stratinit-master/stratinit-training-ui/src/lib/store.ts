@@ -44,7 +44,6 @@ function createTrainingStore() {
 	}
 
 	const ATTACK_ACTIONS = ['AttackEnemyAction', 'AttackNavalAction', 'AttackWithAirAction'];
-	const CAPTURE_ACTIONS = ['CaptureNeutralCityAction'];
 	const ICBM_ACTIONS = ['LaunchICBMAction'];
 
 	function handleTick(state: TrainingState, event: TickEvent): TrainingState {
@@ -70,13 +69,12 @@ function createTrainingStore() {
 			for (const action of ATTACK_ACTIONS) {
 				nationTotal.attacks += event.actions[action] || 0;
 			}
-			for (const action of CAPTURE_ACTIONS) {
-				nationTotal.captures += event.actions[action] || 0;
-			}
 			for (const action of ICBM_ACTIONS) {
 				nationTotal.icbmsLaunched += event.actions[action] || 0;
 			}
 		}
+		// Use server-side cumulative capture count (tracks actual city ownership changes)
+		nationTotal.captures = event.captures || 0;
 		totals[event.nation] = nationTotal;
 		newState.nationActionTotals = totals;
 
