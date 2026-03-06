@@ -637,28 +637,41 @@ public class BotActionGenerator {
                 }
             }
 
-            // Battleship bombardment: shell enemy cities from adjacent water
+            // Battleship bombardment and approach: shell enemy cities or move toward them
             if (myUnit.getUnitBase().isNavyCanAttackLand() && myUnit.getAttack() > 0) {
                 for (City enemyCity : state.getEnemyCities()) {
                     // Check if city is adjacent to water (battleship can reach)
                     boolean cityNearWater = false;
+                    SectorCoords bestWaterTile = null;
+                    int bestWaterDist = Integer.MAX_VALUE;
                     for (Sector neighbour : world.getNeighbours(enemyCity.getCoords())) {
                         if (neighbour.isWater()) {
                             cityNearWater = true;
-                            break;
+                            int d = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
+                            if (d < bestWaterDist) {
+                                bestWaterDist = d;
+                                bestWaterTile = neighbour.getCoords();
+                            }
                         }
                     }
                     if (cityNearWater) {
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), enemyCity.getCoords());
-                        if (distance <= myUnit.getMobility() * 2) {
+                        if (distance <= myUnit.getMobility() * 3) {
                             actions.add(new BombardCityAction(myUnit, enemyCity.getCoords(), distance, nation, moveService));
+                        } else if (bestWaterTile != null && bestWaterDist <= myUnit.getMobility() * 6) {
+                            // Too far to bombard — move toward the city's adjacent water tile
+                            actions.add(new MoveBattleshipToTargetAction(myUnit, bestWaterTile, bestWaterDist, nation, moveService));
                         }
                     }
                 }
             }
 
-            // Transport loading: move transport to water tile adjacent to idle land units
+            // Transport loading: move transport to water tile adjacent to nearest idle land units
             if (myUnit.getUnitBase().getCapacity() > 0) {
+                // Collect candidates with distances, then take nearest 3 to avoid combinatorial explosion
+                record LoadCandidate(SectorCoords waterCoords, int distance) {}
+                List<LoadCandidate> loadCandidates = new ArrayList<>();
+
                 for (Unit landUnit : state.getIdleLandUnits()) {
                     Sector landSector = world.getSectorOrNull(landUnit.getCoords());
                     if (landSector == null || landSector.isWater()) continue;
@@ -666,7 +679,7 @@ public class BotActionGenerator {
                         if (!neighbour.isWater()) continue;
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
                         if (distance <= myUnit.getMobility() * 3) {
-                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), distance, nation, moveService));
+                            loadCandidates.add(new LoadCandidate(neighbour.getCoords(), distance));
                             break;
                         }
                     }
@@ -680,10 +693,17 @@ public class BotActionGenerator {
                         if (!neighbour.isWater()) continue;
                         int distance = SectorCoords.distance(gameSize, myUnit.getCoords(), neighbour.getCoords());
                         if (distance <= myUnit.getMobility() * 3) {
-                            actions.add(new LoadTransportAction(myUnit, neighbour.getCoords(), distance, nation, moveService));
+                            loadCandidates.add(new LoadCandidate(neighbour.getCoords(), distance));
                             break;
                         }
                     }
+                }
+                // Take nearest 3 candidates to avoid N×M action explosion
+                loadCandidates.sort(Comparator.comparingInt(LoadCandidate::distance));
+                int limit = Math.min(3, loadCandidates.size());
+                for (int i = 0; i < limit; i++) {
+                    LoadCandidate c = loadCandidates.get(i);
+                    actions.add(new LoadTransportAction(myUnit, c.waterCoords, c.distance, nation, moveService));
                 }
             }
         }

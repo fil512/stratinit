@@ -219,12 +219,10 @@ public class SetCityProductionAction implements BotAction {
             }
         } else if (unitType == UnitType.TRANSPORT) {
             if (!state.hasTransportCapability() && state.isCoastalCity(city)) {
-                utility = weights.economyBaseWeight * weights.coastalCityDesire * 2.0;
-                if (state.hasDiscoveredNonHomeIsland()) {
-                    utility *= 1.5;
-                }
-                if (state.getGameTimePercent() > 0.2) {
-                    utility = weights.economyBaseWeight * weights.coastalCityDesire * 3.0;
+                // First transport is critical — guarantee it with high utility
+                utility = weights.economyBaseWeight * weights.coastalCityDesire * 3.0;
+                if (state.getGameTimePercent() > 0.1) {
+                    utility = weights.economyBaseWeight * weights.coastalCityDesire * 5.0;
                 }
             } else if (state.isCoastalCity(city) && state.hasDiscoveredNonHomeIsland()
                     && !state.hasTransportEnRoute()
