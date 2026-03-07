@@ -93,8 +93,10 @@ export default function SectorTab() {
   const isMyCity = city && city.nationId === myNationId
   const myNation = update.nations.find(n => n.nationId === myNationId)
   const myTech = myNation?.tech ?? 0
+  const bs = state.boardSize
+  const wrap = (v: number) => ((v % bs) + bs) % bs
   const isCoastal = isMyCity && [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]].some(([dx,dy]) => {
-    const s = getSectorAt(selectedCoords.x + dx, selectedCoords.y + dy)
+    const s = getSectorAt(wrap(selectedCoords.x + dx), wrap(selectedCoords.y + dy))
     return s && s.type === 'WATER'
   })
   const buildableUnits = isMyCity

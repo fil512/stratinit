@@ -48,6 +48,13 @@ public class BuildUnitTest extends BaseStratInitControllerTest {
     }
 
     @Test
+    public void noWaterNextBuild() {
+        sicity.nextBuild = UnitType.PATROL;
+        assertThrows(CommandFailedException.class,
+                () -> cityController.updateCity(new UpdateCityJson(sicity, CityFieldToUpdateEnum.NEXT_BUILD)));
+    }
+
+    @Test
     public void insufficientTech() {
         sicity.build = UnitType.TANK;
         assertThrows(CommandFailedException.class,
