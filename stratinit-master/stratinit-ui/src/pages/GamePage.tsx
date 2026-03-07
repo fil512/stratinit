@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useState, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useGame } from '../context/GameContext'
 import { useGameSocket, GameSocketMessage } from '../hooks/useGameSocket'
@@ -72,6 +72,8 @@ export default function GamePage() {
   const { state, initGame, refreshState, commandError, commandMessage } = useGame()
   const gameIdNum = gameId ? parseInt(gameId, 10) : null
   const [lobbyGame, setLobbyGame] = useState<SIGame | null>(null)
+  const [battleToast, setBattleToast] = useState<string | null>(null)
+  const seenLogIdsRef = useRef<Set<number>>(new Set())
   const passedGame = (location.state as { game?: SIGame } | null)?.game
 
   useEffect(() => {
@@ -141,6 +143,32 @@ export default function GamePage() {
     return () => clearTimeout(timer)
   }, [state.update?.gameEnds, gameIdNum, navigate])
 
+  // Detect new battle logs and show as toast
+  useEffect(() => {
+    if (!state.update?.log) return
+    const seen = seenLogIdsRef.current
+    const newLogs = state.update.log.filter(l => !seen.has(l.id))
+    if (seen.size === 0) {
+      // First load — seed all existing IDs without toasting
+      for (const l of state.update.log) seen.add(l.id)
+      return
+    }
+    if (newLogs.length === 0) return
+    for (const l of newLogs) seen.add(l.id)
+    const lines = newLogs.map(l => {
+      const parts: string[] = []
+      parts.push(`${l.attackerUnit} vs ${l.defenderUnit} at (${l.coords.x},${l.coords.y})`)
+      if (l.damage > 0) parts.push(`${l.damage} dmg`)
+      if (l.returnDamage > 0) parts.push(`${l.returnDamage} return dmg`)
+      if (l.attackerDied) parts.push(`${l.attackerUnit} destroyed`)
+      if (l.defenderDied) parts.push(`${l.defenderUnit} destroyed`)
+      if (l.flak > 0) parts.push(`flak: ${l.flak}`)
+      return parts.join(' — ')
+    })
+    setBattleToast(lines.join('\n'))
+    setTimeout(() => setBattleToast(null), 5000)
+  }, [state.update?.log])
+
   // Polling fallback: refresh every 10s in case WebSocket is disconnected
   useEffect(() => {
     if (!state.update) return
@@ -178,6 +206,11 @@ export default function GamePage() {
       {commandMessage && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-gray-800/95 text-gray-100 px-4 py-2 rounded shadow-lg text-sm border border-gray-600 whitespace-pre-line max-w-md">
           {commandMessage}
+        </div>
+      )}
+      {battleToast && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-yellow-900/95 text-yellow-100 px-4 py-2 rounded shadow-lg text-sm border border-yellow-600 whitespace-pre-line max-w-md">
+          {battleToast}
         </div>
       )}
     </div>
