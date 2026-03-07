@@ -29,8 +29,18 @@ function buildLookups(update: SIUpdate): LookupMaps {
     sectorMap.set(coordsKey(s.coords), s)
   }
   const unitMap = new Map<string, SIUnit[]>()
-  for (const u of [...update.units, ...update.seenUnits]) {
+  for (const u of update.units) {
     const key = coordsKey(u.coords)
+    const list = unitMap.get(key)
+    if (list) list.push(u)
+    else unitMap.set(key, [u])
+  }
+  // Add seen units, but skip any whose position overlaps with our own units
+  // (seen unit positions reflect live coords, which may be stale/misleading)
+  const myUnitCoords = new Set(update.units.filter(u => u.nationId === update.nationId).map(u => coordsKey(u.coords)))
+  for (const u of update.seenUnits) {
+    const key = coordsKey(u.coords)
+    if (myUnitCoords.has(key)) continue
     const list = unitMap.get(key)
     if (list) list.push(u)
     else unitMap.set(key, [u])
