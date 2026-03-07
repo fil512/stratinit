@@ -25,9 +25,21 @@ const RELATION_COLORS: Record<string, string> = {
   ME: '#00e5ff', WAR: '#ff2222', FRIENDLY: '#ffdd00', ALLIED: '#ffa500', NEUTRAL: '#c0c0c0',
 }
 
-function relationColor(relation: RelationType | null): string {
-  return relation ? (RELATION_COLORS[relation] ?? '#c0c0c0') : '#c0c0c0'
+// Distinct colors for enemy nations (avoiding cyan=ME, yellow=FRIENDLY, orange=ALLIED)
+const NATION_PALETTE = [
+  '#ff2222', '#e040fb', '#7c4dff', '#00c853', '#ff6d00',
+  '#18ffff', '#ffab00', '#69f0ae', '#ea80fc', '#ff3d00',
+]
+
+function nationColor(nationId: number, myNationId: number, relation: RelationType | null): string {
+  if (relation === 'ME' || nationId === myNationId) return RELATION_COLORS.ME
+  if (relation === 'FRIENDLY') return RELATION_COLORS.FRIENDLY
+  if (relation === 'ALLIED') return RELATION_COLORS.ALLIED
+  if (!relation || relation === 'NEUTRAL') return RELATION_COLORS.NEUTRAL
+  // WAR: assign distinct color per nationId
+  return NATION_PALETTE[nationId % NATION_PALETTE.length]
 }
+
 
 function hpBarColor(ratio: number): string {
   if (ratio >= 0.8) return '#00ff00'
@@ -201,7 +213,7 @@ function drawMap(p: DrawParams) {
       const sector = getSector(col, row)
       if (!sector?.cityType) continue
       const [cx, cy] = screenPos(col, row)
-      ctx.fillStyle = relationColor(sector.myRelation)
+      ctx.fillStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
       const insetR = r * 0.8
       drawHex(ctx, cx, cy, insetR)
       ctx.fill()
@@ -215,7 +227,7 @@ function drawMap(p: DrawParams) {
       const sector = getSector(col, row)
       if (!sector?.topUnitType) continue
       const [cx, cy] = screenPos(col, row)
-      ctx.fillStyle = relationColor(sector.myRelation)
+      ctx.fillStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
       const insetR = r * 0.6
       drawHex(ctx, cx, cy, insetR)
       ctx.fill()
@@ -376,7 +388,7 @@ function drawMap(p: DrawParams) {
         if (sector.type === 'WATER' || sector.type === 'UNKNOWN' || sector.type === 'WASTELAND') continue
         if (!sector.cityType && !sector.topUnitType) continue
         const [cx, cy] = screenPos(col, row)
-        ctx.strokeStyle = relationColor(sector.myRelation)
+        ctx.strokeStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
         ctx.lineWidth = 1.5
         drawHex(ctx, cx, cy, r * 0.95)
         ctx.stroke()
