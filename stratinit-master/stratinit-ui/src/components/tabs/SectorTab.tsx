@@ -94,9 +94,25 @@ export default function SectorTab() {
   const myNation = update.nations.find(n => n.nationId === myNationId)
   const myTech = myNation?.tech ?? 0
   const bs = state.boardSize
-  const wrap = (v: number) => ((v % bs) + bs) % bs
-  const isCoastal = isMyCity && [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]].some(([dx,dy]) => {
-    const s = getSectorAt(wrap(selectedCoords.x + dx), wrap(selectedCoords.y + dy))
+  const norm = (a: number) => ((a % bs) + bs) % bs
+  // Even-Q hex neighbors matching server's SectorCoords.sectorsWithin
+  const hexNeighbors = (x: number, y: number): [number, number][] => {
+    const cx = x
+    const cz = y - ((x + (x & 1)) >> 1)
+    const result: [number, number][] = []
+    for (let dq = -1; dq <= 1; dq++) {
+      for (let dr = Math.max(-1, -dq - 1); dr <= Math.min(1, -dq + 1); dr++) {
+        if (dq === 0 && dr === 0) continue
+        const ds = -dq - dr
+        const col = cx + dq
+        const row = (cz + ds) + ((col + (col & 1)) >> 1)
+        result.push([norm(col), norm(row)])
+      }
+    }
+    return result
+  }
+  const isCoastal = isMyCity && hexNeighbors(selectedCoords.x, selectedCoords.y).some(([nx, ny]) => {
+    const s = getSectorAt(nx, ny)
     return s && s.type === 'WATER'
   })
   const buildableUnits = isMyCity
