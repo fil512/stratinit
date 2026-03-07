@@ -156,6 +156,9 @@ export default function GamePage() {
     if (newLogs.length === 0) return
     for (const l of newLogs) seen.add(l.id)
     const lines = newLogs.map(l => {
+      if (l.messages && l.messages.length > 0) {
+        return l.messages.join(' — ')
+      }
       const parts: string[] = []
       parts.push(`${l.attackerUnit} vs ${l.defenderUnit} at (${l.coords.x},${l.coords.y})`)
       if (l.damage > 0) parts.push(`${l.damage} dmg`)
