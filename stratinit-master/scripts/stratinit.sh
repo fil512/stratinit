@@ -49,11 +49,61 @@ stop_process() {
     echo "$name killed"
 }
 
+check_postgres() {
+    if ! docker ps --filter name=ken-postgres --format '{{.Status}}' 2>/dev/null | grep -q "Up"; then
+        echo "PostgreSQL container is not running. Starting it..."
+        if docker start ken-postgres >/dev/null 2>&1; then
+            echo "PostgreSQL container started, waiting for readiness..."
+            for _ in $(seq 1 30); do
+                if docker exec ken-postgres pg_isready -U postgres >/dev/null 2>&1; then
+                    echo "PostgreSQL is ready"
+                    return 0
+                fi
+                sleep 1
+            done
+            echo "PostgreSQL did not become ready in 30s"
+            return 1
+        else
+            echo "Failed to start PostgreSQL container. Create it with:"
+            echo "  docker run -p 5432:5432 --name ken-postgres --restart unless-stopped -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgr3S -e POSTGRES_DB=stratinit -d postgres"
+            return 1
+        fi
+    fi
+    return 0
+}
+
+clear_port() {
+    local port="$1"
+    local stale_pid
+    stale_pid=$(lsof -ti:"$port" 2>/dev/null) || return 0
+    # Check if the stale process matches our tracked PID
+    local tracked_pid=""
+    [ -f "$REST_PID" ] && tracked_pid=$(cat "$REST_PID" 2>/dev/null)
+    if [ -n "$tracked_pid" ] && [ "$stale_pid" = "$tracked_pid" ]; then
+        return 1  # it's our tracked process, still running
+    fi
+    echo "Port $port is held by stale process $stale_pid — killing it..."
+    kill "$stale_pid" 2>/dev/null || true
+    sleep 2
+    if lsof -ti:"$port" >/dev/null 2>&1; then
+        kill -9 "$stale_pid" 2>/dev/null || true
+        sleep 1
+    fi
+    if lsof -ti:"$port" >/dev/null 2>&1; then
+        echo "ERROR: Could not free port $port"
+        return 1
+    fi
+    echo "Port $port freed"
+    return 0
+}
+
 start_rest() {
     if pid=$(get_pid "$REST_PID"); then
         echo "REST server is already running (PID $pid)"
         return 1
     fi
+    check_postgres || return 1
+    clear_port 8081 || return 1
     echo "Starting REST server..."
     nohup mvn spring-boot:run -pl stratinit-rest -f "$BASE_DIR/pom.xml" >> "$REST_LOG" 2>&1 &
     echo $! > "$REST_PID"

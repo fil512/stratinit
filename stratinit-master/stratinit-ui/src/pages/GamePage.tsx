@@ -69,7 +69,7 @@ export default function GamePage() {
   const { gameId } = useParams<{ gameId: string }>()
   const navigate = useNavigate()
   const location = useLocation()
-  const { state, initGame, refreshState, commandError } = useGame()
+  const { state, initGame, refreshState, commandError, commandMessage } = useGame()
   const gameIdNum = gameId ? parseInt(gameId, 10) : null
   const [lobbyGame, setLobbyGame] = useState<SIGame | null>(null)
   const passedGame = (location.state as { game?: SIGame } | null)?.game
@@ -173,6 +173,11 @@ export default function GamePage() {
       {commandError && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-red-900/90 text-red-100 px-4 py-2 rounded shadow-lg text-sm">
           {commandError}
+        </div>
+      )}
+      {commandMessage && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-gray-800/95 text-gray-100 px-4 py-2 rounded shadow-lg text-sm border border-gray-600 whitespace-pre-line max-w-md">
+          {commandMessage}
         </div>
       )}
     </div>

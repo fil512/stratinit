@@ -69,7 +69,9 @@ export default function UnitControls() {
               }`}
               title={canBuildCity ? undefined : `Needs ${MOB_COST_BUILD_CITY} mobility`}
             >
-              Build City (128 CP)
+              {canBuildCity
+                ? 'Build City (128 CP)'
+                : `Build City (need ${MOB_COST_BUILD_CITY} mob)`}
             </button>
             <button
               data-testid="units-switch-terrain-button"
@@ -82,7 +84,9 @@ export default function UnitControls() {
               }`}
               title={canSwitchTerrain ? undefined : `Needs ${MOB_COST_SWITCH_TERRAIN} mobility`}
             >
-              Switch Terrain (16 CP)
+              {canSwitchTerrain
+                ? 'Switch Terrain (16 CP)'
+                : `Switch Terrain (need ${MOB_COST_SWITCH_TERRAIN} mob)`}
             </button>
           </>
         )}

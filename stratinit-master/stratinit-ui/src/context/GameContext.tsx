@@ -29,7 +29,7 @@ function buildLookups(update: SIUpdate): LookupMaps {
     sectorMap.set(coordsKey(s.coords), s)
   }
   const unitMap = new Map<string, SIUnit[]>()
-  for (const u of update.units) {
+  for (const u of [...update.units, ...update.seenUnits]) {
     const key = coordsKey(u.coords)
     const list = unitMap.get(key)
     if (list) list.push(u)
@@ -54,6 +54,7 @@ interface GameState {
   loading: boolean
   error: string | null
   commandError: string | null
+  commandMessage: string | null
   sectorSelectedAt: number
 }
 
@@ -68,6 +69,7 @@ const initialState: GameState = {
   loading: false,
   error: null,
   commandError: null,
+  commandMessage: null,
   sectorSelectedAt: 0,
 }
 
@@ -85,6 +87,8 @@ type GameAction =
   | { type: 'CLEAR_UNIT_SELECTION' }
   | { type: 'SET_COMMAND_ERROR'; error: string }
   | { type: 'CLEAR_COMMAND_ERROR' }
+  | { type: 'SET_COMMAND_MESSAGE'; message: string }
+  | { type: 'CLEAR_COMMAND_MESSAGE' }
 
 function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
@@ -123,6 +127,10 @@ function reducer(state: GameState, action: GameAction): GameState {
       return { ...state, commandError: action.error }
     case 'CLEAR_COMMAND_ERROR':
       return { ...state, commandError: null }
+    case 'SET_COMMAND_MESSAGE':
+      return { ...state, commandMessage: action.message }
+    case 'CLEAR_COMMAND_MESSAGE':
+      return { ...state, commandMessage: null }
     default:
       return state
   }
@@ -149,6 +157,7 @@ interface GameContextValue {
   changeRelation: (nationId: number, relationType: RelationType) => Promise<void>
   concedeGame: () => Promise<void>
   commandError: string | null
+  commandMessage: string | null
   getSectorAt: (x: number, y: number) => SISector | undefined
   getUnitsAt: (x: number, y: number) => SIUnit[]
   getCityAt: (x: number, y: number) => SICityUpdate | undefined
@@ -266,6 +275,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setTimeout(() => dispatch({ type: 'CLEAR_COMMAND_ERROR' }), 4000)
   }, [])
 
+  const showCommandMessage = useCallback((msg: string) => {
+    dispatch({ type: 'SET_COMMAND_MESSAGE', message: msg })
+    setTimeout(() => dispatch({ type: 'CLEAR_COMMAND_MESSAGE' }), 5000)
+  }, [])
+
   const moveSelectedUnits = useCallback(async (target: SectorCoords) => {
     if (state.selectedUnitIds.size === 0 || !state.update) return
     const allUnits = state.update.units
@@ -276,7 +290,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatchUpdate(update)
       dispatch({ type: 'CLEAR_SELECTION' })
       if (update.messages && update.messages.length > 0) {
-        showCommandError(update.messages.join('; '))
+        showCommandMessage(update.messages.join('\n'))
       }
     } catch (err) {
       showCommandError(err instanceof Error ? err.message : 'Move failed')
@@ -427,6 +441,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     changeRelation,
     concedeGame,
     commandError: state.commandError,
+    commandMessage: state.commandMessage,
     getSectorAt,
     getUnitsAt,
     getCityAt,
