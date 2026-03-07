@@ -3,6 +3,7 @@ import { useGame } from '../../context/GameContext'
 import type { SIUnit } from '../../types/game'
 import UnitControls from './UnitControls'
 import { shrinkTime, formatCountdownShort } from '../../utils/time'
+import { unitIconPath } from '../../types/units'
 
 type GroupBy = 'sector' | 'type'
 
@@ -50,6 +51,7 @@ function UnitRow({ u, selected, onToggle, requiresFuel, blitz }: { u: SIUnit; se
       }`}
     >
       <div className="flex items-center">
+        <img src={unitIconPath(u.type, 'aqua')} alt="" className="w-4 h-4 mr-1" />
         <span className="font-semibold">{u.type}</span>
         <MobilityProgress lastUpdated={u.lastUpdated} blitz={blitz} />
       </div>
@@ -79,6 +81,7 @@ function UnitRowCompact({ u, selected, onToggle, showCoords, requiresFuel, blitz
       }`}
     >
       <div className="flex items-center flex-wrap">
+        <img src={unitIconPath(u.type, 'aqua')} alt="" className="w-4 h-4 mr-1" />
         <span className="font-semibold">{u.type}</span>
         {showCoords && <span className="text-gray-500 ml-1">({u.coords.x},{u.coords.y})</span>}
         <span className="text-gray-400 ml-1">

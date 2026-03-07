@@ -3,6 +3,7 @@ import { useGame } from '../../context/GameContext'
 import type { CityFieldToUpdate } from '../../types/game'
 import UnitControls from './UnitControls'
 import { shrinkTime, formatCountdownShort } from '../../utils/time'
+import { unitIconPath, cityIconPath } from '../../types/units'
 
 function BuildProgressBar({ lastUpdated, productionTime, tickIntervalMs }: {
   lastUpdated: string | null
@@ -135,7 +136,7 @@ export default function SectorTab() {
           Sector ({selectedCoords.x}, {selectedCoords.y})
         </h3>
         <p>Terrain: {sector.type}</p>
-        {sector.cityType && <p>City: {sector.cityType}{(() => {
+        {sector.cityType && <p className="flex items-center">City: <img src={cityIconPath(sector.cityType, 'aqua')} alt="" className="w-4 h-4 mx-1" />{sector.cityType}{(() => {
           if (!city) return null
           if (city.nationId === myNationId) return null
           const owner = update.nations.find(n => n.nationId === city.nationId)
@@ -160,6 +161,7 @@ export default function SectorTab() {
               }`}
             >
               <div className="flex items-center flex-wrap">
+                <img src={unitIconPath(u.type, 'aqua')} alt="" className="w-4 h-4 mr-1" />
                 <span className="font-semibold">{u.type}</span>
                 <span className="text-gray-400 ml-1">
                   HP:{u.hp} Mob:{u.mobility} A:{u.ammo}{unitBases.find(ub => ub.type === u.type)?.requiresFuel ? ` F:${u.fuel}` : ''}
@@ -179,7 +181,8 @@ export default function SectorTab() {
         <div>
           <h4 className="font-semibold text-gray-300">Enemy Units ({enemyUnits.length})</h4>
           {enemyUnits.map(u => (
-            <div key={u.id} className="text-xs py-0.5 text-red-400">
+            <div key={u.id} className="text-xs py-0.5 text-red-400 flex items-center">
+              <img src={unitIconPath(u.type, 'red')} alt="" className="w-4 h-4 mr-1" />
               {u.type} HP:{u.hp} Mob:{u.mobility}
             </div>
           ))}

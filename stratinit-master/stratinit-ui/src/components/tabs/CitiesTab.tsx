@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useGame } from '../../context/GameContext'
 import type { CityFieldToUpdate, SICityUpdate, SIUnitBase } from '../../types/game'
 import { shrinkTime, formatCountdown } from '../../utils/time'
+import { cityIconPath } from '../../types/units'
 
 function BuildProgress({ city, unitBase, blitz, powerBlocked }: { city: SICityUpdate; unitBase: SIUnitBase | undefined; blitz: boolean; powerBlocked: boolean }) {
   const [now, setNow] = useState(Date.now())
@@ -81,6 +82,7 @@ export default function CitiesTab() {
               className="flex items-center cursor-pointer hover:text-blue-400"
               onClick={() => selectSector(city.coords)}
             >
+              <img src={cityIconPath(city.type, 'aqua')} alt="" className="w-4 h-4 mr-1" />
               <span className="font-semibold">
                 {city.type} ({city.coords.x}, {city.coords.y})
               </span>

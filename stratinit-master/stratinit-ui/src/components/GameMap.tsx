@@ -214,8 +214,7 @@ function drawMap(p: DrawParams) {
       if (!sector?.cityType) continue
       const [cx, cy] = screenPos(col, row)
       ctx.fillStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
-      const insetR = r * 0.8
-      drawHex(ctx, cx, cy, insetR)
+      drawHex(ctx, cx, cy, r)
       ctx.fill()
       drawCityDetails(ctx, sector, cx, cy, cs, r, lookups)
     }
@@ -228,9 +227,8 @@ function drawMap(p: DrawParams) {
       if (!sector?.topUnitType) continue
       const [cx, cy] = screenPos(col, row)
       ctx.fillStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
-      const insetR = r * 0.6
-      drawHex(ctx, cx, cy, insetR)
-      ctx.fill()
+      const s = r * 0.9
+      ctx.fillRect(Math.round(cx - s / 2), Math.round(cy - s / 2), Math.round(s), Math.round(s))
       const gx = wrapCoord(col, bs)
       const gy = bs - 1 - wrapCoord(row, bs)
       drawUnitDetails(ctx, sector, cx, cy, cs, r, { unitMap: lookups.unitMap }, unitBaseMap, gx, gy)
@@ -371,8 +369,8 @@ function drawMap(p: DrawParams) {
         const gy = bs - 1 - wrapCoord(row, bs)
         if (!outOfSupplyCoords.has(`${gx},${gy}`)) continue
         const [cx, cy] = screenPos(col, row)
-        drawHex(ctx, cx, cy, r * 0.6)
-        ctx.stroke()
+        const s = r * 0.9
+        ctx.strokeRect(Math.round(cx - s / 2), Math.round(cy - s / 2), Math.round(s), Math.round(s))
       }
     }
     ctx.restore()
@@ -595,6 +593,12 @@ export default function GameMap() {
       })
     })
   }, [])
+
+  // ── Redraw when canvas icons finish loading ──
+  useEffect(() => {
+    _imagesLoadedCallback = requestRedraw
+    return () => { _imagesLoadedCallback = null }
+  }, [requestRedraw])
 
   // ── Viewport size tracking via ResizeObserver ──
   useEffect(() => {
@@ -1048,6 +1052,36 @@ export default function GameMap() {
   )
 }
 
+// ── Image cache for canvas icons ──
+
+const canvasImageCache = new Map<string, HTMLImageElement>()
+let _imagesLoadedCallback: (() => void) | null = null
+
+;(function preloadCanvasImages() {
+  const unitNames = [
+    'infantry', 'tank', 'patrol', 'transport', 'destroyer', 'supply',
+    'battleship', 'submarine', 'carrier', 'cruiser', 'fighter', 'naval_bomber',
+    'helicopter', 'heavy_bomber', 'zeppelin', 'satellite', 'icbm_1', 'icbm_2',
+    'icbm_3', 'base', 'engineer', 'cargo_plane', 'research',
+  ]
+  const cityNames = ['fort', 'port', 'airport', 'tech', 'base']
+  const paths: string[] = []
+  for (const n of unitNames) paths.push(`/images/unit/${n}.png`)
+  for (const n of cityNames) paths.push(`/images/city/${n}.png`)
+  let pending = paths.length
+  for (const p of paths) {
+    const img = new Image()
+    img.onload = () => {
+      canvasImageCache.set(p, img)
+      if (--pending === 0 && _imagesLoadedCallback) _imagesLoadedCallback()
+    }
+    img.onerror = () => {
+      if (--pending === 0 && _imagesLoadedCallback) _imagesLoadedCallback()
+    }
+    img.src = p
+  }
+})()
+
 // ── Detail rendering helpers ──
 
 function drawCityDetails(
@@ -1057,10 +1091,16 @@ function drawCityDetails(
 ) {
   if (!sector.cityType) return
   if (cs >= 16) {
-    const label = CITY_SHORT[sector.cityType] ?? ''
-    ctx.font = `bold ${Math.max(8, Math.round(cs * 0.4))}px monospace`
-    ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-    ctx.fillText(label, cx, cy)
+    const img = canvasImageCache.get(`/images/city/${sector.cityType.toLowerCase()}.png`)
+    if (img) {
+      const size = Math.round(cs * 0.6)
+      ctx.drawImage(img, Math.round(cx - size / 2), Math.round(cy - size / 2), size, size)
+    } else {
+      const label = CITY_SHORT[sector.cityType] ?? ''
+      ctx.font = `bold ${Math.max(8, Math.round(cs * 0.4))}px monospace`
+      ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText(label, cx, cy)
+    }
   }
   if (cs >= 48) {
     const city = lookups.cityMap.get(`${sector.coords.x},${sector.coords.y}`)
@@ -1083,10 +1123,16 @@ function drawUnitDetails(
 ) {
   if (!sector.topUnitType) return
   if (cs >= 16) {
-    const label = UNIT_SHORT[sector.topUnitType] ?? ''
-    ctx.font = `bold ${Math.max(7, Math.round(cs * 0.35))}px monospace`
-    ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
-    ctx.fillText(label, cx, cy)
+    const img = canvasImageCache.get(`/images/unit/${sector.topUnitType.toLowerCase()}.png`)
+    if (img) {
+      const size = Math.round(cs * 0.5)
+      ctx.drawImage(img, Math.round(cx - size / 2), Math.round(cy - size / 2), size, size)
+    } else {
+      const label = UNIT_SHORT[sector.topUnitType] ?? ''
+      ctx.font = `bold ${Math.max(7, Math.round(cs * 0.35))}px monospace`
+      ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+      ctx.fillText(label, cx, cy)
+    }
   }
 
   const units = lookups.unitMap.get(`${gx},${gy}`)
@@ -1104,7 +1150,6 @@ function drawUnitDetails(
   if (cs >= 32 && top) {
     const fs = Math.max(7, Math.round(cs * 0.22))
     ctx.font = `${fs}px monospace`; ctx.textBaseline = 'top'
-    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'left'; ctx.fillText(`${top.hp}`, cx - r * 0.7, cy - r * 0.7)
     if (sector.flak > 0 || sector.cannons > 0) {
       ctx.textAlign = 'right'; ctx.fillStyle = '#ffaa00'
       ctx.fillText(sector.flak > 0 ? `F${sector.flak}` : `C${sector.cannons}`, cx + r * 0.7, cy - r * 0.7)
@@ -1117,11 +1162,5 @@ function drawUnitDetails(
       ctx.fillStyle = '#ff8800'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
       ctx.fillText('!A', cx - r * 0.7, cy + r * 0.7)
     }
-  }
-
-  if (cs >= 48 && top) {
-    ctx.font = `${Math.max(7, Math.round(cs * 0.18))}px monospace`
-    ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'
-    ctx.fillText(`${top.hp}/${top.ammo}/${top.fuel}/${top.mobility}`, cx, cy + r * 0.85)
   }
 }
