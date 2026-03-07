@@ -16,12 +16,15 @@ import java.util.Collections;
 public class LaunchSatelliteAction implements BotAction {
     private final Unit satellite;
     private final SectorCoords target;
+    private final int unexploredCount;
     private final Nation nation;
     private final MoveService moveService;
 
-    public LaunchSatelliteAction(Unit satellite, SectorCoords target, Nation nation, MoveService moveService) {
+    public LaunchSatelliteAction(Unit satellite, SectorCoords target, int unexploredCount, Nation nation,
+                                 MoveService moveService) {
         this.satellite = satellite;
         this.target = target;
+        this.unexploredCount = unexploredCount;
         this.nation = nation;
         this.moveService = moveService;
     }
@@ -33,7 +36,9 @@ public class LaunchSatelliteAction implements BotAction {
 
     @Override
     public double computeUtility(BotWorldState state, BotWeights weights) {
-        return weights.economyBaseWeight * weights.satelliteLaunchDesire;
+        // Scale utility by how much new territory this satellite reveals
+        double coverageBonus = Math.min(unexploredCount / 20.0, 2.0);
+        return weights.economyBaseWeight * weights.satelliteLaunchDesire * (1.0 + coverageBonus);
     }
 
     @Override

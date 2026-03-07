@@ -659,8 +659,8 @@ public class BotActionGenerator {
                         if (distance <= myUnit.getMobility() * 3) {
                             actions.add(new BombardCityAction(myUnit, enemyCity.getCoords(), distance, nation, moveService));
                         } else if (bestWaterTile != null && bestWaterDist <= myUnit.getMobility() * 6) {
-                            // Too far to bombard — move toward the city's adjacent water tile
-                            actions.add(new MoveBattleshipToTargetAction(myUnit, bestWaterTile, bestWaterDist, nation, moveService));
+                            // Too far to bombard — approach and attack city (pathfinder routes via water)
+                            actions.add(new MoveBattleshipToTargetAction(myUnit, enemyCity.getCoords(), bestWaterDist, nation, moveService));
                         }
                     }
                 }
@@ -1072,9 +1072,9 @@ public class BotActionGenerator {
             UnitBase unitBase = unit.getUnitBase();
 
             if (unit.getType() == UnitType.SATELLITE) {
-                List<SectorCoords> targets = findBestSatelliteTargets(state, 3);
-                for (SectorCoords target : targets) {
-                    actions.add(new LaunchSatelliteAction(unit, target, nation, moveService));
+                List<Map.Entry<SectorCoords, Integer>> targets = findBestSatelliteTargets(state, 3);
+                for (Map.Entry<SectorCoords, Integer> target : targets) {
+                    actions.add(new LaunchSatelliteAction(unit, target.getKey(), target.getValue(), nation, moveService));
                 }
             } else if (unitBase.getDevastates()) {
                 // ICBM: target each enemy city
@@ -1085,7 +1085,7 @@ public class BotActionGenerator {
         }
     }
 
-    private List<SectorCoords> findBestSatelliteTargets(BotWorldState state, int count) {
+    private List<Map.Entry<SectorCoords, Integer>> findBestSatelliteTargets(BotWorldState state, int count) {
         int gameSize = state.getGame().getGamesize();
         World world = state.getWorld();
         int step = 4;
@@ -1109,14 +1109,14 @@ public class BotActionGenerator {
 
         candidates.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
 
-        List<SectorCoords> result = new ArrayList<>();
+        List<Map.Entry<SectorCoords, Integer>> result = new ArrayList<>();
         for (int i = 0; i < Math.min(count, candidates.size()); i++) {
-            result.add(candidates.get(i).getKey());
+            result.add(candidates.get(i));
         }
 
         // Fallback to map center if no unexplored areas found
         if (result.isEmpty()) {
-            result.add(new SectorCoords(gameSize / 2, gameSize / 2));
+            result.add(Map.entry(new SectorCoords(gameSize / 2, gameSize / 2), 0));
         }
 
         return result;

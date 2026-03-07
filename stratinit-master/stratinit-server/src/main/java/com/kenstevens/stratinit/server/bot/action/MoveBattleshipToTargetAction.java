@@ -15,15 +15,15 @@ import java.util.Collections;
 
 public class MoveBattleshipToTargetAction implements BotAction {
     private final Unit battleship;
-    private final SectorCoords targetCoords;
+    private final SectorCoords cityCoords;
     private final int distance;
     private final Nation nation;
     private final MoveService moveService;
 
-    public MoveBattleshipToTargetAction(Unit battleship, SectorCoords targetCoords, int distance,
+    public MoveBattleshipToTargetAction(Unit battleship, SectorCoords cityCoords, int distance,
                                          Nation nation, MoveService moveService) {
         this.battleship = battleship;
-        this.targetCoords = targetCoords;
+        this.cityCoords = cityCoords;
         this.distance = distance;
         this.nation = nation;
         this.moveService = moveService;
@@ -45,7 +45,8 @@ public class MoveBattleshipToTargetAction implements BotAction {
     @Override
     public boolean execute() {
         SIUnit siUnit = new SIUnit(battleship);
-        Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), targetCoords);
+        // Target the city — pathfinder routes to adjacent water and attacks if in range
+        Result<MoveCost> result = moveService.move(nation, Collections.singletonList(siUnit), cityCoords);
         return result.isSuccess();
     }
 
@@ -61,6 +62,6 @@ public class MoveBattleshipToTargetAction implements BotAction {
 
     @Override
     public String describe() {
-        return "Move battleship " + battleship.toMyString() + " toward enemy coastal city at " + targetCoords;
+        return "Move battleship " + battleship.toMyString() + " toward enemy coastal city at " + cityCoords;
     }
 }
