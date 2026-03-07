@@ -226,11 +226,22 @@ function drawMap(p: DrawParams) {
       const sector = getSector(col, row)
       if (!sector?.topUnitType) continue
       const [cx, cy] = screenPos(col, row)
-      ctx.fillStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
+      const color = nationColor(sector.nationId, update.nationId, sector.myRelation)
       const s = r * 0.9
-      ctx.fillRect(Math.round(cx - s / 2), Math.round(cy - s / 2), Math.round(s), Math.round(s))
       const gx = wrapCoord(col, bs)
       const gy = bs - 1 - wrapCoord(row, bs)
+      const unitCount = lookups.unitMap.get(`${gx},${gy}`)?.length ?? 1
+      // Stack offset shadows for multiple units
+      if (unitCount > 1) {
+        const off = Math.max(2, Math.round(cs * 0.08))
+        ctx.fillStyle = 'rgba(0,0,0,0.3)'
+        if (unitCount > 2) {
+          ctx.fillRect(Math.round(cx - s / 2 + off * 2), Math.round(cy - s / 2 - off * 2), Math.round(s), Math.round(s))
+        }
+        ctx.fillRect(Math.round(cx - s / 2 + off), Math.round(cy - s / 2 - off), Math.round(s), Math.round(s))
+      }
+      ctx.fillStyle = color
+      ctx.fillRect(Math.round(cx - s / 2), Math.round(cy - s / 2), Math.round(s), Math.round(s))
       drawUnitDetails(ctx, sector, cx, cy, cs, r, { unitMap: lookups.unitMap }, unitBaseMap, gx, gy)
     }
   }
@@ -1137,6 +1148,23 @@ function drawUnitDetails(
 
   const units = lookups.unitMap.get(`${gx},${gy}`)
   const top = units?.[0]
+  const unitCount = units?.length ?? 0
+
+  // Unit count badge
+  if (cs >= 24 && unitCount > 1) {
+    const s = r * 0.9
+    const fs = Math.max(7, Math.round(cs * 0.24))
+    const label = `${unitCount}`
+    ctx.font = `bold ${fs}px monospace`
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top'
+    const bx = Math.round(cx + s / 2), by = Math.round(cy - s / 2)
+    const tw = ctx.measureText(label).width
+    const pad = Math.round(cs * 0.05)
+    ctx.fillStyle = 'rgba(0,0,0,0.7)'
+    ctx.fillRect(bx - tw - pad * 2, by, tw + pad * 2, fs + pad)
+    ctx.fillStyle = '#ffffff'
+    ctx.fillText(label, bx - pad, by + Math.round(pad * 0.5))
+  }
 
   if (cs >= 24 && top) {
     const barW = r * 1.4, barH = Math.max(2, Math.round(cs * 0.1))
