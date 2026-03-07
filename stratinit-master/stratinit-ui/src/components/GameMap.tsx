@@ -207,6 +207,17 @@ function drawMap(p: DrawParams) {
     }
   }
 
+  // Determine selected unit categories for flak/cannon display
+  let selectedHasAir = false, selectedHasNavy = false
+  if (selectedUnitIds.size > 0) {
+    for (const u of update.units) {
+      if (!selectedUnitIds.has(u.id)) continue
+      const ub = unitBaseMap.get(u.type)
+      if (ub?.builtIn === 'AIRPORT') selectedHasAir = true
+      if (ub?.builtIn === 'PORT') selectedHasNavy = true
+    }
+  }
+
   // Layer 2: Cities
   for (let col = colMin; col <= colMax; col++) {
     for (let row = rowMin; row <= rowMax; row++) {
@@ -216,7 +227,7 @@ function drawMap(p: DrawParams) {
       ctx.fillStyle = nationColor(sector.nationId, update.nationId, sector.myRelation)
       drawHex(ctx, cx, cy, r)
       ctx.fill()
-      drawCityDetails(ctx, sector, cx, cy, cs, r, lookups)
+      drawCityDetails(ctx, sector, cx, cy, cs, r, lookups, selectedHasAir, selectedHasNavy)
     }
   }
 
@@ -1093,12 +1104,57 @@ let _imagesLoadedCallback: (() => void) | null = null
   }
 })()
 
+// ── Icon drawing helpers ──
+
+function drawBullet(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  const w = size * 0.4, h = size
+  ctx.beginPath()
+  ctx.moveTo(x - w / 2, y + h / 2)
+  ctx.lineTo(x - w / 2, y - h * 0.15)
+  ctx.lineTo(x, y - h / 2)
+  ctx.lineTo(x + w / 2, y - h * 0.15)
+  ctx.lineTo(x + w / 2, y + h / 2)
+  ctx.closePath()
+  ctx.fill()
+}
+
+function drawFuelDrop(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  const h = size
+  ctx.beginPath()
+  ctx.moveTo(x, y - h / 2)
+  ctx.quadraticCurveTo(x + h * 0.45, y + h * 0.1, x, y + h / 2)
+  ctx.quadraticCurveTo(x - h * 0.45, y + h * 0.1, x, y - h / 2)
+  ctx.closePath()
+  ctx.fill()
+}
+
+function drawFlakBurst(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  const r = size / 2, spikes = 6
+  ctx.beginPath()
+  for (let i = 0; i < spikes * 2; i++) {
+    const angle = (i * Math.PI) / spikes - Math.PI / 2
+    const rad = i % 2 === 0 ? r : r * 0.45
+    const px = x + Math.cos(angle) * rad
+    const py = y + Math.sin(angle) * rad
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py)
+  }
+  ctx.closePath()
+  ctx.fill()
+}
+
+function drawCannonball(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  ctx.beginPath()
+  ctx.arc(x, y, size / 2, 0, Math.PI * 2)
+  ctx.fill()
+}
+
 // ── Detail rendering helpers ──
 
 function drawCityDetails(
   ctx: CanvasRenderingContext2D, sector: SISector,
   cx: number, cy: number, cs: number, r: number,
   lookups: { cityMap: Map<string, SICityUpdate> },
+  selectedHasAir: boolean, selectedHasNavy: boolean,
 ) {
   if (!sector.cityType) return
   if (cs >= 16) {
@@ -1111,6 +1167,24 @@ function drawCityDetails(
       ctx.font = `bold ${Math.max(8, Math.round(cs * 0.4))}px monospace`
       ctx.fillStyle = '#000000'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
       ctx.fillText(label, cx, cy)
+    }
+  }
+  // Flak/cannon icons on enemy cities when relevant unit is selected
+  if (cs >= 32 && sector.myRelation !== 'ME') {
+    const iconSize = Math.max(5, Math.round(cs * 0.18))
+    const spacing = iconSize * 1.3
+    if (selectedHasAir && sector.flak > 0) {
+      ctx.fillStyle = '#ffaa00'
+      const count = Math.min(sector.flak, 6)
+      for (let i = 0; i < count; i++) {
+        drawFlakBurst(ctx, cx + r * 0.7 - i * spacing, cy - r * 0.65, iconSize)
+      }
+    } else if (selectedHasNavy && sector.cannons > 0) {
+      ctx.fillStyle = '#ffaa00'
+      const count = Math.min(sector.cannons, 6)
+      for (let i = 0; i < count; i++) {
+        drawCannonball(ctx, cx + r * 0.7 - i * spacing, cy - r * 0.65, iconSize)
+      }
     }
   }
   if (cs >= 48) {
@@ -1175,20 +1249,16 @@ function drawUnitDetails(
     ctx.fillStyle = hpBarColor(hpRatio); ctx.fillRect(bx, by, barW * hpRatio, barH)
   }
 
-  if (cs >= 32 && top) {
-    const fs = Math.max(7, Math.round(cs * 0.22))
-    ctx.font = `${fs}px monospace`; ctx.textBaseline = 'top'
-    if (sector.flak > 0 || sector.cannons > 0) {
-      ctx.textAlign = 'right'; ctx.fillStyle = '#ffaa00'
-      ctx.fillText(sector.flak > 0 ? `F${sector.flak}` : `C${sector.cannons}`, cx + r * 0.7, cy - r * 0.7)
-    }
+  // Low fuel/ammo warnings (bottom-left, own units only)
+  if (cs >= 32 && top && sector.myRelation === 'ME') {
+    const iconSize = Math.max(5, Math.round(cs * 0.18))
     const ub = unitBaseMap.get(top.type)
     if (ub?.requiresFuel && top.fuel >= 0 && top.fuel <= 2) {
-      ctx.fillStyle = '#ff4444'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
-      ctx.fillText('!F', cx - r * 0.7, cy + r * 0.7)
+      ctx.fillStyle = '#ff4444'
+      drawFuelDrop(ctx, cx - r * 0.55, cy + r * 0.55, iconSize * 1.3)
     } else if (top.ammo === 0) {
-      ctx.fillStyle = '#ff8800'; ctx.textAlign = 'left'; ctx.textBaseline = 'bottom'
-      ctx.fillText('!A', cx - r * 0.7, cy + r * 0.7)
+      ctx.fillStyle = '#ff8800'
+      drawBullet(ctx, cx - r * 0.55, cy + r * 0.55, iconSize * 1.3)
     }
   }
 }
