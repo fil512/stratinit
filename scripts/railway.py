@@ -3,6 +3,7 @@
 Railway API client for the stratinit project.
 
 Usage:
+    python scripts/railway.py setup               # Create Railway project + configure everything (run once)
     python scripts/railway.py status              # Show deployment status
     python scripts/railway.py logs [-n 50]        # Show deployment logs
     python scripts/railway.py deployments         # List recent deployments
@@ -288,6 +289,111 @@ def trigger_deployment():
     })
 
 
+def create_project(name):
+    """Create a new Railway project."""
+    query = """
+    mutation CreateProject($input: ProjectCreateInput!) {
+        projectCreate(input: $input) {
+            id
+            environments { edges { node { id name } } }
+        }
+    }
+    """
+    return graphql_query(query, {"input": {"name": name}})
+
+
+def create_service(project_id, name, repo=None, branch="master"):
+    """Create a service in a project, optionally connected to a GitHub repo."""
+    source = {}
+    if repo:
+        source = {"repo": repo, "branch": branch}
+    query = """
+    mutation CreateService($input: ServiceCreateInput!) {
+        serviceCreate(input: $input) {
+            id
+            name
+        }
+    }
+    """
+    inp = {"name": name, "projectId": project_id}
+    if source:
+        inp["source"] = source
+    return graphql_query(query, {"input": inp})
+
+
+def set_variable_explicit(project_id, environment_id, service_id, name, value):
+    """Set an environment variable with explicit IDs (for use during setup)."""
+    query = """
+    mutation SetVariable($input: VariableUpsertInput!) {
+        variableUpsert(input: $input)
+    }
+    """
+    return graphql_query(query, {
+        "input": {
+            "projectId": project_id,
+            "environmentId": environment_id,
+            "serviceId": service_id,
+            "name": name,
+            "value": value
+        }
+    })
+
+
+def create_domain_explicit(service_id, environment_id):
+    """Generate a Railway subdomain with explicit IDs."""
+    query = """
+    mutation CreateDomain($serviceId: String!, $environmentId: String!) {
+        serviceDomainCreate(input: {serviceId: $serviceId, environmentId: $environmentId}) {
+            domain
+        }
+    }
+    """
+    return graphql_query(query, {
+        "serviceId": service_id,
+        "environmentId": environment_id,
+    })
+
+
+def trigger_deployment_explicit(project_id, environment_id, service_id):
+    """Trigger a deployment with explicit IDs."""
+    query = """
+    mutation TriggerDeploy($input: EnvironmentTriggersDeployInput!) {
+        environmentTriggersDeploy(input: $input)
+    }
+    """
+    return graphql_query(query, {
+        "input": {
+            "environmentId": environment_id,
+            "projectId": project_id,
+            "serviceId": service_id
+        }
+    })
+
+
+def add_postgres_explicit(project_id, environment_id):
+    """Add PostgreSQL to a project with explicit IDs."""
+    query = """
+    mutation AddPostgres($projectId: String!, $environmentId: String!) {
+        templateDeploy(input: {
+            projectId: $projectId,
+            environmentId: $environmentId,
+            services: [{
+                name: "Postgres",
+                source: { image: "ghcr.io/railwayapp-templates/postgres-ssl:16" }
+            }],
+            templateCode: "postgres"
+        }) {
+            projectId
+            workflowId
+        }
+    }
+    """
+    return graphql_query(query, {
+        "projectId": project_id,
+        "environmentId": environment_id,
+    })
+
+
 # ============ Command Handlers ============
 
 def cmd_status(args):
@@ -548,6 +654,123 @@ def cmd_add_postgres(args):
         print("✗ Failed to add PostgreSQL")
 
 
+def cmd_setup(args):
+    """Create and configure the stratinit Railway project from scratch."""
+    import secrets
+    import re
+
+    GITHUB_REPO = "fil512/stratinit"
+    GITHUB_BRANCH = "master"
+    SCRIPT_PATH = os.path.abspath(__file__)
+
+    print("=== stratinit Railway Setup ===\n")
+
+    # Step 1: Create project
+    print("Step 1: Creating project 'stratinit'...")
+    result = create_project("stratinit")
+    if not result or not result.get("projectCreate"):
+        print("✗ Failed to create project")
+        print("  If 'stratinit' already exists, run 'railway.py projects' to get its ID")
+        print("  then manually update PROJECT_ID/ENVIRONMENT_ID in this script.")
+        sys.exit(1)
+
+    proj = result["projectCreate"]
+    project_id = proj["id"]
+    envs = proj["environments"]["edges"]
+    environment_id = envs[0]["node"]["id"]
+    env_name = envs[0]["node"]["name"]
+    print(f"✓ Project ID:     {project_id}")
+    print(f"✓ Environment ID: {environment_id} ({env_name})")
+
+    # Step 2: Create server service connected to GitHub
+    print(f"\nStep 2: Creating 'server' service (GitHub: {GITHUB_REPO}@{GITHUB_BRANCH})...")
+    svc_result = create_service(project_id, "server", repo=GITHUB_REPO, branch=GITHUB_BRANCH)
+    if not svc_result or not svc_result.get("serviceCreate"):
+        print("✗ Failed to create service")
+        sys.exit(1)
+    service_id = svc_result["serviceCreate"]["id"]
+    print(f"✓ Service ID: {service_id}")
+
+    # Step 3: Add Postgres
+    print("\nStep 3: Adding PostgreSQL...")
+    pg_result = add_postgres_explicit(project_id, environment_id)
+    if pg_result and pg_result.get("templateDeploy"):
+        print("✓ PostgreSQL provisioning started")
+        print("  (DATABASE_URL will be available as a Railway reference variable)")
+    else:
+        print("⚠ PostgreSQL setup may have failed — check Railway dashboard")
+
+    # Step 4: Generate JWT secret and set env vars
+    print("\nStep 4: Setting environment variables...")
+    jwt_secret = secrets.token_hex(32)
+    vars_to_set = [
+        ("PORT", "8081"),
+        ("STRATINIT_JWT_SECRET", jwt_secret),
+        ("SPRING_DATASOURCE_URL", "${{Postgres.DATABASE_URL}}"),
+    ]
+    for name, value in vars_to_set:
+        r = set_variable_explicit(project_id, environment_id, service_id, name, value)
+        if r and r.get("variableUpsert"):
+            display = value if "SECRET" not in name else value[:8] + "..."
+            print(f"  ✓ {name}={display}")
+        else:
+            print(f"  ✗ Failed to set {name}")
+
+    # Step 5: Create public domain
+    print("\nStep 5: Creating public domain...")
+    domain_result = create_domain_explicit(service_id, environment_id)
+    public_url = ""
+    if domain_result and domain_result.get("serviceDomainCreate"):
+        domain = domain_result["serviceDomainCreate"]["domain"]
+        public_url = f"https://{domain}"
+        print(f"✓ Domain: {public_url}")
+    else:
+        print("⚠ Domain creation failed — create one in the Railway dashboard")
+
+    # Step 6: Trigger first deploy
+    print("\nStep 6: Triggering first deployment...")
+    dep_result = trigger_deployment_explicit(project_id, environment_id, service_id)
+    if dep_result:
+        print("✓ Deployment triggered")
+    else:
+        print("⚠ Could not trigger deployment — push to GitHub to deploy")
+
+    # Step 7: Update this script with the new IDs
+    print("\nStep 7: Updating scripts/railway.py with project IDs...")
+    with open(SCRIPT_PATH, "r") as f:
+        content = f.read()
+
+    content = re.sub(r'PROJECT_ID = ""', f'PROJECT_ID = "{project_id}"', content)
+    content = re.sub(r'ENVIRONMENT_ID = ""  # production', f'ENVIRONMENT_ID = "{environment_id}"  # production', content)
+    content = re.sub(r'"server": "",  # Spring Boot backend service ID', f'"server": "{service_id}",  # Spring Boot backend service ID', content)
+    if public_url:
+        content = re.sub(r'PUBLIC_URL = ""', f'PUBLIC_URL = "{public_url}"', content)
+
+    with open(SCRIPT_PATH, "w") as f:
+        f.write(content)
+    print("✓ scripts/railway.py updated with project IDs")
+
+    print(f"""
+=== Setup Complete ===
+
+Project ID:     {project_id}
+Environment ID: {environment_id}
+Service ID:     {service_id}
+Public URL:     {public_url or "(not set)"}
+
+IMPORTANT — save this JWT secret somewhere safe:
+  STRATINIT_JWT_SECRET = {jwt_secret}
+
+Next steps:
+  1. Commit the updated scripts/railway.py:
+       git add scripts/railway.py && git commit -m 'chore: add Railway project IDs'
+  2. Check deployment progress:
+       python scripts/railway.py status
+  3. Once deployed, verify health:
+       python scripts/railway.py health
+""")
+
+
 def cmd_projects(args):
     """List all projects."""
     query = """
@@ -639,6 +862,9 @@ Examples:
     )
     subparsers = parser.add_subparsers(dest="command", help="Command")
 
+    # setup (one-time project creation)
+    subparsers.add_parser("setup", help="Create Railway project and configure it (run once)")
+
     # status
     subparsers.add_parser("status", help="Show deployment status")
 
@@ -700,6 +926,7 @@ Examples:
     _active_service = args.service
 
     commands = {
+        "setup": cmd_setup,
         "status": cmd_status,
         "logs": cmd_logs,
         "deployments": cmd_deployments,
