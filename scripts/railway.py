@@ -26,16 +26,16 @@ RAILWAY_API_URL = "https://backboard.railway.com/graphql/v2"
 
 # stratinit project constants (from Railway dashboard)
 # Run 'python scripts/railway.py projects' to populate these after project creation
-PROJECT_ID = ""
-ENVIRONMENT_ID = ""  # production
+PROJECT_ID = "cfb32fea-e2d2-44a5-b472-bcafc34f2302"
+ENVIRONMENT_ID = "cb547852-cf04-4270-9a19-b90f05a20a07"  # production
 
 # Service IDs
 SERVICES = {
-    "server": "",  # Spring Boot backend service ID
+    "server": "9f295e77-912d-4928-a740-4e4d36700c8a",  # Spring Boot backend service ID
 }
 
 # Public URL (fill in after running 'domain create')
-PUBLIC_URL = ""
+PUBLIC_URL = "https://server-production-fb33.up.railway.app"
 
 # Active service (set by --service flag)
 _active_service = "server"
@@ -250,26 +250,27 @@ def get_domains():
 
 
 def add_postgres_plugin():
-    """Add a PostgreSQL database to the project via a database service."""
+    """Add a PostgreSQL database to the project via a service with Postgres image."""
     query = """
-    mutation AddPostgres($projectId: String!, $environmentId: String!) {
-        templateDeploy(input: {
-            projectId: $projectId,
-            environmentId: $environmentId,
-            services: [{
-                name: "Postgres",
-                source: { image: "ghcr.io/railwayapp-templates/postgres-ssl:16" }
-            }],
-            templateCode: "postgres"
-        }) {
-            projectId
-            workflowId
+    mutation AddPostgres($input: ServiceCreateInput!) {
+        serviceCreate(input: $input) {
+            id
+            name
         }
     }
     """
     return graphql_query(query, {
-        "projectId": PROJECT_ID,
-        "environmentId": ENVIRONMENT_ID,
+        "input": {
+            "name": "Postgres",
+            "projectId": PROJECT_ID,
+            "source": {"image": "postgres:16"},
+            "variables": {
+                "POSTGRES_DB": "stratinit",
+                "POSTGRES_USER": "stratinit",
+                "POSTGRES_PASSWORD": "stratinit",
+                "PGDATA": "/var/lib/postgresql/data/pgdata",
+            }
+        }
     })
 
 
@@ -291,6 +292,15 @@ def trigger_deployment():
 
 def create_project(name):
     """Create a new Railway project."""
+    # Get workspaceId first (required by Railway API)
+    ws_data = graphql_query("query { me { workspaces { id name } } }")
+    workspace_id = None
+    if ws_data and ws_data.get("me", {}).get("workspaces"):
+        workspace_id = ws_data["me"]["workspaces"][0]["id"]
+    if not workspace_id:
+        print("✗ Could not determine workspace ID", file=sys.stderr)
+        sys.exit(1)
+
     query = """
     mutation CreateProject($input: ProjectCreateInput!) {
         projectCreate(input: $input) {
@@ -299,14 +309,11 @@ def create_project(name):
         }
     }
     """
-    return graphql_query(query, {"input": {"name": name}})
+    return graphql_query(query, {"input": {"name": name, "workspaceId": workspace_id}})
 
 
 def create_service(project_id, name, repo=None, branch="master"):
     """Create a service in a project, optionally connected to a GitHub repo."""
-    source = {}
-    if repo:
-        source = {"repo": repo, "branch": branch}
     query = """
     mutation CreateService($input: ServiceCreateInput!) {
         serviceCreate(input: $input) {
@@ -316,8 +323,9 @@ def create_service(project_id, name, repo=None, branch="master"):
     }
     """
     inp = {"name": name, "projectId": project_id}
-    if source:
-        inp["source"] = source
+    if repo:
+        inp["source"] = {"repo": repo}
+        inp["branch"] = branch
     return graphql_query(query, {"input": inp})
 
 
@@ -373,24 +381,19 @@ def trigger_deployment_explicit(project_id, environment_id, service_id):
 def add_postgres_explicit(project_id, environment_id):
     """Add PostgreSQL to a project with explicit IDs."""
     query = """
-    mutation AddPostgres($projectId: String!, $environmentId: String!) {
-        templateDeploy(input: {
-            projectId: $projectId,
-            environmentId: $environmentId,
-            services: [{
-                name: "Postgres",
-                source: { image: "ghcr.io/railwayapp-templates/postgres-ssl:16" }
-            }],
-            templateCode: "postgres"
-        }) {
-            projectId
-            workflowId
+    mutation AddPostgres($input: ServiceCreateInput!) {
+        serviceCreate(input: $input) {
+            id
+            name
         }
     }
     """
     return graphql_query(query, {
-        "projectId": project_id,
-        "environmentId": environment_id,
+        "input": {
+            "name": "Postgres",
+            "projectId": project_id,
+            "source": {"image": "postgres:16"},
+        }
     })
 
 
@@ -645,11 +648,10 @@ def cmd_add_postgres(args):
     """Add a PostgreSQL database to the project."""
     print("Adding PostgreSQL database to project...")
     result = add_postgres_plugin()
-    if result and result.get("templateDeploy"):
-        print("✓ PostgreSQL service created")
-        print("  The database is being provisioned. Once ready:")
-        print("  1. Run 'railway.py projects' to find the Postgres service ID")
-        print("  2. Set DATABASE_URL on server: railway.py setvar DATABASE_URL '${{Postgres.DATABASE_URL}}'")
+    if result and result.get("serviceCreate"):
+        svc_id = result["serviceCreate"]["id"]
+        print(f"✓ PostgreSQL service created (ID: {svc_id})")
+        print("  Set DATABASE_URL on server: railway.py setvar DATABASE_URL '${{Postgres.DATABASE_URL}}'")
     else:
         print("✗ Failed to add PostgreSQL")
 
@@ -665,40 +667,72 @@ def cmd_setup(args):
 
     print("=== stratinit Railway Setup ===\n")
 
-    # Step 1: Create project
-    print("Step 1: Creating project 'stratinit'...")
-    result = create_project("stratinit")
-    if not result or not result.get("projectCreate"):
-        print("✗ Failed to create project")
-        print("  If 'stratinit' already exists, run 'railway.py projects' to get its ID")
-        print("  then manually update PROJECT_ID/ENVIRONMENT_ID in this script.")
-        sys.exit(1)
+    # Step 1: Find or create project
+    print("Step 1: Looking for existing 'stratinit' project...")
+    projects_data = graphql_query("""
+    query {
+        projects(first: 20) {
+            edges { node { id name environments { edges { node { id name } } } services { edges { node { id name } } } } }
+        }
+    }
+    """)
+    existing = None
+    if projects_data:
+        for edge in projects_data.get("projects", {}).get("edges", []):
+            if edge["node"]["name"] == "stratinit":
+                existing = edge["node"]
+                break
 
-    proj = result["projectCreate"]
-    project_id = proj["id"]
-    envs = proj["environments"]["edges"]
-    environment_id = envs[0]["node"]["id"]
-    env_name = envs[0]["node"]["name"]
+    if existing:
+        project_id = existing["id"]
+        envs = existing["environments"]["edges"]
+        environment_id = envs[0]["node"]["id"]
+        env_name = envs[0]["node"]["name"]
+        print(f"  Found existing project.")
+        svcs = existing.get("services", {}).get("edges", [])
+        existing_services = {s["node"]["name"]: s["node"]["id"] for s in svcs}
+    else:
+        print("  Not found — creating...")
+        result = create_project("stratinit")
+        if not result or not result.get("projectCreate"):
+            print("✗ Failed to create project")
+            sys.exit(1)
+        proj = result["projectCreate"]
+        project_id = proj["id"]
+        envs = proj["environments"]["edges"]
+        environment_id = envs[0]["node"]["id"]
+        env_name = envs[0]["node"]["name"]
+        existing_services = {}
+
     print(f"✓ Project ID:     {project_id}")
     print(f"✓ Environment ID: {environment_id} ({env_name})")
 
     # Step 2: Create server service connected to GitHub
-    print(f"\nStep 2: Creating 'server' service (GitHub: {GITHUB_REPO}@{GITHUB_BRANCH})...")
-    svc_result = create_service(project_id, "server", repo=GITHUB_REPO, branch=GITHUB_BRANCH)
-    if not svc_result or not svc_result.get("serviceCreate"):
-        print("✗ Failed to create service")
-        sys.exit(1)
-    service_id = svc_result["serviceCreate"]["id"]
+    print(f"\nStep 2: Setting up 'server' service (GitHub: {GITHUB_REPO}@{GITHUB_BRANCH})...")
+    if "server" in existing_services:
+        service_id = existing_services["server"]
+        print(f"  Found existing service.")
+    else:
+        svc_result = create_service(project_id, "server", repo=GITHUB_REPO, branch=GITHUB_BRANCH)
+        if not svc_result or not svc_result.get("serviceCreate"):
+            print("✗ Failed to create service")
+            sys.exit(1)
+        service_id = svc_result["serviceCreate"]["id"]
     print(f"✓ Service ID: {service_id}")
 
-    # Step 3: Add Postgres
+    # Step 3: Add Postgres (skip if already exists)
     print("\nStep 3: Adding PostgreSQL...")
-    pg_result = add_postgres_explicit(project_id, environment_id)
-    if pg_result and pg_result.get("templateDeploy"):
-        print("✓ PostgreSQL provisioning started")
-        print("  (DATABASE_URL will be available as a Railway reference variable)")
+    if "Postgres" in existing_services:
+        postgres_id = existing_services["Postgres"]
+        print(f"  Found existing Postgres service.")
     else:
-        print("⚠ PostgreSQL setup may have failed — check Railway dashboard")
+        pg_result = add_postgres_explicit(project_id, environment_id)
+        if pg_result and pg_result.get("serviceCreate"):
+            postgres_id = pg_result["serviceCreate"]["id"]
+            print(f"✓ PostgreSQL service created (ID: {postgres_id})")
+        else:
+            postgres_id = None
+            print("⚠ PostgreSQL setup may have failed — check Railway dashboard")
 
     # Step 4: Generate JWT secret and set env vars
     print("\nStep 4: Setting environment variables...")
@@ -740,11 +774,11 @@ def cmd_setup(args):
     with open(SCRIPT_PATH, "r") as f:
         content = f.read()
 
-    content = re.sub(r'PROJECT_ID = ""', f'PROJECT_ID = "{project_id}"', content)
-    content = re.sub(r'ENVIRONMENT_ID = ""  # production', f'ENVIRONMENT_ID = "{environment_id}"  # production', content)
-    content = re.sub(r'"server": "",  # Spring Boot backend service ID', f'"server": "{service_id}",  # Spring Boot backend service ID', content)
+    content = re.sub(r'PROJECT_ID = "cfb32fea-e2d2-44a5-b472-bcafc34f2302"', f'PROJECT_ID = "{project_id}"', content)
+    content = re.sub(r'ENVIRONMENT_ID = "cb547852-cf04-4270-9a19-b90f05a20a07"  # production', f'ENVIRONMENT_ID = "{environment_id}"  # production', content)
+    content = re.sub(r'"server": "9f295e77-912d-4928-a740-4e4d36700c8a",  # Spring Boot backend service ID', f'"server": "{service_id}",  # Spring Boot backend service ID', content)
     if public_url:
-        content = re.sub(r'PUBLIC_URL = ""', f'PUBLIC_URL = "{public_url}"', content)
+        content = re.sub(r'PUBLIC_URL = "https://server-production-fb33.up.railway.app"', f'PUBLIC_URL = "{public_url}"', content)
 
     with open(SCRIPT_PATH, "w") as f:
         f.write(content)
