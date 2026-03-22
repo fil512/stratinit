@@ -37,7 +37,7 @@ function App() {
             }
           />
         </Route>
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/games" replace />} />
       </Routes>
     </BrowserRouter>
   )

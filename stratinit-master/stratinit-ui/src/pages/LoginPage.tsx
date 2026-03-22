@@ -1,12 +1,18 @@
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, FormEvent } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { login } from '../api/auth'
+import { login, isLoggedIn } from '../api/auth'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      navigate('/games', { replace: true })
+    }
+  }, [navigate])
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
