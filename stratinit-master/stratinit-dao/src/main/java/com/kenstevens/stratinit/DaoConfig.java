@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.net.URI;
 import java.util.Properties;
 
 @Configuration
@@ -31,11 +32,34 @@ public class DaoConfig {
     public DataSource dataSource() {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(env.getProperty("jdbc.driverClassName"));
-        dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
-        dataSource.setUsername(env.getProperty("jdbc.user"));
-        dataSource.setPassword(env.getProperty("jdbc.pass"));
-        dataSource.setMaximumPoolSize(10);
 
+        // Railway injects DATABASE_URL as postgres://user:pass@host:port/dbname.
+        // Individual env vars JDBC_URL / JDBC_USER / JDBC_PASS can also override
+        // the defaults in persistence.properties via Spring's relaxed binding.
+        String databaseUrl = System.getenv("DATABASE_URL");
+        if (databaseUrl != null && !databaseUrl.isBlank()) {
+            try {
+                URI uri = URI.create(databaseUrl.replaceFirst("^postgres(ql)?://", "http://"));
+                String jdbcUrl = "jdbc:postgresql://" + uri.getHost()
+                        + (uri.getPort() > 0 ? ":" + uri.getPort() : "")
+                        + uri.getPath();
+                String userInfo = uri.getUserInfo();
+                int colon = userInfo != null ? userInfo.indexOf(':') : -1;
+                String username = colon >= 0 ? userInfo.substring(0, colon) : userInfo;
+                String password = colon >= 0 ? userInfo.substring(colon + 1) : "";
+                dataSource.setJdbcUrl(jdbcUrl);
+                dataSource.setUsername(username);
+                dataSource.setPassword(password);
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to parse DATABASE_URL: " + databaseUrl, e);
+            }
+        } else {
+            dataSource.setJdbcUrl(env.getProperty("jdbc.url"));
+            dataSource.setUsername(env.getProperty("jdbc.user"));
+            dataSource.setPassword(env.getProperty("jdbc.pass"));
+        }
+
+        dataSource.setMaximumPoolSize(10);
         return dataSource;
     }
 

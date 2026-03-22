@@ -9,7 +9,7 @@ logging:
       springframework:
         security: INFO
 server:
-  port: 8081
+  port: ${PORT:8081}
 stratinit:
   version: 1.2.8
   email:
@@ -21,7 +21,9 @@ stratinit:
     enabled: true
   mode: TEST
   jwt:
+    # Override in production via STRATINIT_JWT_SECRET env var
     secret: dGhpcyBpcyBhIDI1NiBiaXQgc2VjcmV0IGtleSBmb3Igand0IHNpZ25pbmc=
     expiration-ms: 86400000
   cors:
+    # Override in production via STRATINIT_CORS_ALLOWED_ORIGINS env var
     allowed-origins: http://localhost:5173

@@ -1,0 +1,8 @@
+[build]
+builder = "dockerfile"
+
+[deploy]
+healthcheckPath = "/stratinit/version"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3

@@ -1,0 +1,21 @@
+# Build artifacts
+**/target/
+**/dist/
+**/node_modules/
+
+# Git
+.git/
+.github/
+
+# IDE and local config
+.idea/
+*.iml
+.vscode/
+.claude/
+
+# Local env files
+.env
+.env.*
+
+# Docs
+*.md
