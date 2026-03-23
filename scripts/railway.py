@@ -274,19 +274,27 @@ def add_postgres_plugin():
     })
 
 
-def trigger_deployment():
-    """Trigger a new deployment for the active service."""
+def trigger_deployment(commit_sha=None):
+    """Trigger a new deployment for the active service, optionally at a specific commit."""
+    if commit_sha:
+        query = """
+        mutation Deploy($commitSha: String!, $environmentId: String!, $serviceId: String!) {
+            serviceInstanceDeployV2(commitSha: $commitSha, environmentId: $environmentId, serviceId: $serviceId)
+        }
+        """
+        return graphql_query(query, {
+            "commitSha": commit_sha,
+            "environmentId": ENVIRONMENT_ID,
+            "serviceId": get_service_id()
+        })
     query = """
-    mutation TriggerDeploy($input: EnvironmentTriggersDeployInput!) {
-        environmentTriggersDeploy(input: $input)
+    mutation Redeploy($environmentId: String!, $serviceId: String!) {
+        serviceInstanceRedeploy(environmentId: $environmentId, serviceId: $serviceId)
     }
     """
     return graphql_query(query, {
-        "input": {
-            "environmentId": ENVIRONMENT_ID,
-            "projectId": PROJECT_ID,
-            "serviceId": get_service_id()
-        }
+        "environmentId": ENVIRONMENT_ID,
+        "serviceId": get_service_id()
     })
 
 
@@ -431,11 +439,11 @@ def cmd_status(args):
 
     if status == "SUCCESS" and PUBLIC_URL:
         try:
-            req = urllib.request.Request(f"{PUBLIC_URL}/health", method="GET")
+            req = urllib.request.Request(f"{PUBLIC_URL}/stratinit/version", method="GET")
             req.add_header("User-Agent", "stratinit-railway-client/1.0")
             with urllib.request.urlopen(req, timeout=5) as resp:
-                health = json.loads(resp.read().decode("utf-8"))
-                print(f"  Health: ✓ {health}")
+                body = resp.read().decode("utf-8").strip()
+                print(f"  Health: ✓ {body}")
         except Exception as e:
             print(f"  Health: ✗ unreachable ({e})")
 
@@ -556,8 +564,12 @@ def cmd_delvar(args):
 
 def cmd_redeploy(args):
     """Trigger a new deployment."""
-    print(f"Triggering deployment for {_active_service}...")
-    result = trigger_deployment()
+    commit = getattr(args, 'commit', None)
+    if commit:
+        print(f"Deploying {_active_service} at commit {commit[:12]}...")
+    else:
+        print(f"Redeploying {_active_service}...")
+    result = trigger_deployment(commit)
     if result:
         print("✓ Deployment triggered")
         print("  Run 'railway.py status' to check progress")
@@ -572,16 +584,17 @@ def cmd_health(args):
         print("Then update PUBLIC_URL in scripts/railway.py")
         sys.exit(1)
     try:
-        req = urllib.request.Request(f"{PUBLIC_URL}/health", method="GET")
+        req = urllib.request.Request(f"{PUBLIC_URL}/stratinit/version", method="GET")
         req.add_header("User-Agent", "stratinit-railway-client/1.0")
         with urllib.request.urlopen(req, timeout=10) as resp:
-            health = json.loads(resp.read().decode("utf-8"))
-            print(json.dumps(health, indent=2))
+            body = resp.read().decode("utf-8")
+            print(f"✓ {PUBLIC_URL}/stratinit/version")
+            print(f"  {body.strip()}")
     except urllib.error.HTTPError as e:
-        print(f"HTTP Error {e.code}: {e.reason}")
+        print(f"✗ HTTP Error {e.code}: {e.reason}")
         sys.exit(1)
     except urllib.error.URLError as e:
-        print(f"Connection Error: {e.reason}")
+        print(f"✗ Connection Error: {e.reason}")
         sys.exit(1)
 
 
@@ -940,7 +953,8 @@ Examples:
     subparsers.add_parser("add-postgres", help="Add PostgreSQL database to project")
 
     # redeploy
-    subparsers.add_parser("redeploy", help="Trigger a new deployment")
+    redeploy_parser = subparsers.add_parser("redeploy", help="Trigger a new deployment")
+    redeploy_parser.add_argument("--commit", help="Deploy a specific commit SHA (default: redeploy current)")
 
     # health
     subparsers.add_parser("health", help="Check health endpoint")
