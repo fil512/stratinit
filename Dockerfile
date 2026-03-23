@@ -4,7 +4,7 @@ WORKDIR /workspace
 
 COPY stratinit-master/ ./
 
-RUN mvn clean package -DskipTests -pl stratinit-rest -am -B -Dgit.failOnNoGitDirectory=false \
+RUN mvn clean package -DskipTests -pl stratinit-rest -am -B \
     && find stratinit-rest/target -name "stratinit-rest-*.jar" ! -name "*-plain.jar" \
        -exec cp {} /app.jar \;
 
