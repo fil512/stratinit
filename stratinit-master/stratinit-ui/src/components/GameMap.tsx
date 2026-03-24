@@ -5,7 +5,7 @@ import { UNIT_SHORT } from '../types/units'
 
 // Zoom bounds and animation
 const MIN_CELL = 8
-const MAX_CELL = 48
+const MAX_CELL = 80
 const ZOOM_FACTOR = 1.2      // multiplier per wheel notch
 const LERP_SPEED = 0.18      // per-frame exponential lerp (0–1, higher = faster)
 const SNAP_THRESHOLD = 0.003 // fraction of target to snap
