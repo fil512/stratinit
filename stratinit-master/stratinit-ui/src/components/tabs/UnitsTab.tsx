@@ -92,7 +92,8 @@ export default function UnitsTab() {
     if (!selectedCoords || selectedCoords.x !== u.coords.x || selectedCoords.y !== u.coords.y) {
       selectSector(u.coords)
     }
-    if (e.shiftKey) {
+    // Shift-click (desktop) or tap when units already selected at same sector → toggle
+    if (e.shiftKey || (selectedUnitIds.size > 0 && selectedCoords?.x === u.coords.x && selectedCoords?.y === u.coords.y)) {
       toggleUnit(u.id)
     } else {
       selectOnlyUnit(u.id)
