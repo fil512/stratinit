@@ -828,30 +828,68 @@ export default function GameMap() {
     return () => container.removeEventListener('wheel', onWheel)
   }, [zoomToward])
 
-  // ── Click-drag panning (camera offset) ──
+  // ── Pointer-based panning (mouse + touch) ──
+  const primaryPointerRef = useRef<number | null>(null)
+
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
-    const onMouseDown = (e: MouseEvent) => {
-      if (e.button !== 0) return
+    const onPointerDown = (e: PointerEvent) => {
       if ((e.target as HTMLElement).closest('[data-zoom-btn]')) return
-      dragRef.current = {
-        startX: e.clientX, startY: e.clientY,
-        cameraStartX: cameraRef.current.x, cameraStartY: cameraRef.current.y,
-        isDragging: false,
+
+      // Track all touch pointers for pinch
+      if (e.pointerType === 'touch') {
+        pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+        if (pointersRef.current.size === 2) {
+          const pts = Array.from(pointersRef.current.values())
+          pinchStartDistRef.current = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y)
+          pinchStartCellRef.current = targetCellRef.current
+          // Cancel any in-progress single-finger drag when second finger arrives
+          dragRef.current = null
+          return
+        }
+      } else if (e.button !== 0) {
+        return
       }
-      container.style.cursor = 'grab'
+
+      // Start drag (single pointer: mouse button 0, or single touch finger)
+      if (pointersRef.current.size <= 1) {
+        primaryPointerRef.current = e.pointerId
+        dragRef.current = {
+          startX: e.clientX, startY: e.clientY,
+          cameraStartX: cameraRef.current.x, cameraStartY: cameraRef.current.y,
+          isDragging: false,
+        }
+        if (e.pointerType !== 'touch') container.style.cursor = 'grab'
+      }
     }
 
-    const onMouseMove = (e: MouseEvent) => {
+    const onPointerMove = (e: PointerEvent) => {
+      // Update touch pointer for pinch tracking
+      if (e.pointerType === 'touch' && pointersRef.current.has(e.pointerId)) {
+        pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+        if (pointersRef.current.size === 2 && pinchStartDistRef.current !== null) {
+          const pts = Array.from(pointersRef.current.values())
+          const dist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y)
+          const ratio = dist / pinchStartDistRef.current
+          const midX = (pts[0].x + pts[1].x) / 2
+          const midY = (pts[0].y + pts[1].y) / 2
+          zoomToward(pinchStartCellRef.current * ratio, midX, midY)
+          return
+        }
+      }
+
+      // Single-pointer drag (pan)
+      if (e.pointerId !== primaryPointerRef.current) return
       const drag = dragRef.current
       if (!drag) return
       const dx = e.clientX - drag.startX
       const dy = e.clientY - drag.startY
       if (!drag.isDragging && Math.hypot(dx, dy) >= DRAG_THRESHOLD) {
         drag.isDragging = true
-        container.style.cursor = 'grabbing'
+        if (e.pointerType !== 'touch') container.style.cursor = 'grabbing'
       }
       if (drag.isDragging) {
         cameraRef.current = {
@@ -862,62 +900,82 @@ export default function GameMap() {
       }
     }
 
-    const onMouseUp = (_e: MouseEvent) => {
+    const onPointerUp = (e: PointerEvent) => {
+      // Clean up touch tracking
+      if (e.pointerType === 'touch') {
+        pointersRef.current.delete(e.pointerId)
+        if (pointersRef.current.size < 2) pinchStartDistRef.current = null
+      }
+
+      if (e.pointerId !== primaryPointerRef.current) return
       const drag = dragRef.current
+      const wasDragging = drag?.isDragging ?? false
       dragRef.current = null
+      primaryPointerRef.current = null
       container.style.cursor = ''
-      if (drag?.isDragging) {
+
+      if (wasDragging) {
+        // Suppress the click that follows a drag on mouse
         const suppress = (ce: MouseEvent) => { ce.stopPropagation(); ce.preventDefault() }
         container.addEventListener('click', suppress, { capture: true, once: true })
+      } else if (e.pointerType === 'touch') {
+        // Tap (no drag) on touch: select sector or move units
+        const canvas = canvasRef.current
+        if (!canvas || !boardSize) return
+        const rect = canvas.getBoundingClientRect()
+        const r = currentCellRef.current / 2
+        const cam = cameraRef.current
+        const worldX = (e.clientX - rect.left) + cam.x
+        const worldY = (e.clientY - rect.top) + cam.y
+        const col = Math.round((worldX - r) / (1.5 * r))
+        const rowOffset = (col & 1) ? SQRT3 / 2 * r : 0
+        const adjustedPy = worldY - SQRT3 / 2 * r - rowOffset
+        const row = Math.round(adjustedPy / (SQRT3 * r))
+        let bestGx = 0, bestGy = 0, bestDist = Infinity
+        for (let dc = -1; dc <= 1; dc++) {
+          for (let dr = -1; dr <= 1; dr++) {
+            const cc = col + dc, rr = row + dr
+            const [hx, hy] = unwrappedHexCenter(cc, rr, r)
+            const d = (worldX - hx) ** 2 + (worldY - hy) ** 2
+            if (d < bestDist) { bestDist = d; bestGx = wrapCoord(cc, boardSize); bestGy = boardSize - 1 - wrapCoord(rr, boardSize) }
+          }
+        }
+        const coords = { x: bestGx, y: bestGy }
+        if (selectedUnitIds.size > 0) {
+          moveSelectedUnits(coords)
+        } else {
+          selectSectorFromMap(coords)
+        }
       }
     }
 
-    container.addEventListener('mousedown', onMouseDown)
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseup', onMouseUp)
-    return () => {
-      container.removeEventListener('mousedown', onMouseDown)
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseup', onMouseUp)
+    const onPointerCancel = (e: PointerEvent) => {
+      pointersRef.current.delete(e.pointerId)
+      if (pointersRef.current.size < 2) pinchStartDistRef.current = null
+      if (e.pointerId === primaryPointerRef.current) {
+        dragRef.current = null
+        primaryPointerRef.current = null
+        container.style.cursor = ''
+      }
     }
-  }, [requestRedraw])
 
-  // ── Double-click to zoom in ──
+    container.addEventListener('pointerdown', onPointerDown)
+    window.addEventListener('pointermove', onPointerMove)
+    window.addEventListener('pointerup', onPointerUp)
+    window.addEventListener('pointercancel', onPointerCancel)
+    return () => {
+      container.removeEventListener('pointerdown', onPointerDown)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
+      window.removeEventListener('pointercancel', onPointerCancel)
+    }
+  }, [requestRedraw, zoomToward, boardSize, selectedUnitIds, moveSelectedUnits, selectSectorFromMap])
+
+  // ── Double-click/double-tap to zoom in ──
   const handleDoubleClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
     e.preventDefault()
     zoomToward(targetCellRef.current * 2, e.clientX, e.clientY)
   }, [zoomToward])
-
-  // ── Pinch-to-zoom (touch) ──
-  const onPointerDown = useCallback((e: React.PointerEvent) => {
-    if (e.pointerType !== 'touch') return
-    pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
-    if (pointersRef.current.size === 2) {
-      const pts = Array.from(pointersRef.current.values())
-      pinchStartDistRef.current = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y)
-      pinchStartCellRef.current = targetCellRef.current
-    }
-  }, [])
-
-  const onPointerMove = useCallback((e: React.PointerEvent) => {
-    if (e.pointerType !== 'touch') return
-    if (!pointersRef.current.has(e.pointerId)) return
-    pointersRef.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
-
-    if (pointersRef.current.size === 2 && pinchStartDistRef.current !== null) {
-      const pts = Array.from(pointersRef.current.values())
-      const dist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y)
-      const ratio = dist / pinchStartDistRef.current
-      const midX = (pts[0].x + pts[1].x) / 2
-      const midY = (pts[0].y + pts[1].y) / 2
-      zoomToward(pinchStartCellRef.current * ratio, midX, midY)
-    }
-  }, [zoomToward])
-
-  const onPointerUp = useCallback((e: React.PointerEvent) => {
-    pointersRef.current.delete(e.pointerId)
-    if (pointersRef.current.size < 2) pinchStartDistRef.current = null
-  }, [])
 
   // ── Convert screen pixel → game coordinates (toroidal) ──
   const eventToGameCoords = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -1018,10 +1076,6 @@ export default function GameMap() {
         style={{ touchAction: 'none', overflow: 'hidden' }}
         tabIndex={0}
         onKeyDown={handleKeyDown}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
       >
         <canvas
           ref={canvasRef}
