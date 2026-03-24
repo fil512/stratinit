@@ -74,7 +74,7 @@ class RestWebSecurityAdapterConfig {
                         .requestMatchers("/stratinit/auth/**").permitAll()
                         .requestMatchers("/stratinit/version").permitAll()
                         .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/index.html", "/assets/**", "/favicon.ico", "/").permitAll()
+                        .requestMatchers("/index.html", "/assets/**", "/images/**", "/favicon.ico", "/").permitAll()
                         .requestMatchers("/stratinit/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
                         .requestMatchers("/stratinit/**").hasAuthority(PlayerRole.ROLE_USER)
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasAnyAuthority(PlayerRole.ROLE_ADMIN, PlayerRole.ROLE_USER)
