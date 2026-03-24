@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useGame } from '../../context/GameContext'
-import type { CityFieldToUpdate } from '../../types/game'
+import type { SIUnit, CityFieldToUpdate } from '../../types/game'
 import UnitControls from './UnitControls'
-import { shrinkTime, formatCountdownShort } from '../../utils/time'
 import { unitIconPath, cityIconPath } from '../../types/units'
 
 function BuildProgressBar({ lastUpdated, productionTime, tickIntervalMs }: {
@@ -42,34 +41,53 @@ function BuildProgressBar({ lastUpdated, productionTime, tickIntervalMs }: {
   )
 }
 
-function MobilityProgress({ lastUpdated, blitz }: { lastUpdated: string | null; blitz: boolean }) {
-  const [now, setNow] = useState(Date.now())
+function hpBarColor(ratio: number): string {
+  if (ratio > 0.6) return '#22c55e'
+  if (ratio > 0.3) return '#eab308'
+  return '#ef4444'
+}
 
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(timer)
-  }, [])
-
-  if (!lastUpdated) return null
-
-  const period = shrinkTime(blitz, 4 * 3600_000)
-  const lastUpdatedMs = new Date(lastUpdated).getTime()
-  const elapsed = now - lastUpdatedMs
-  const elapsedInPeriod = elapsed % period
-  const remaining = period - elapsedInPeriod
-  const progress = Math.min(elapsedInPeriod / period, 1)
+function UnitTile({ u, selected, onToggle, maxHp, requiresFuel, color }: {
+  u: SIUnit; selected: boolean; onToggle: (e: React.MouseEvent) => void
+  maxHp: number; requiresFuel: boolean; color: string
+}) {
+  const hpRatio = Math.max(0, Math.min(1, u.hp / maxHp))
 
   return (
-    <div className="flex items-center gap-1 ml-1 min-w-0">
-      <div className="w-16 h-1.5 bg-gray-700 rounded-full overflow-hidden flex-shrink-0">
+    <div
+      data-testid={`sector-unit-${u.id}`}
+      onClick={onToggle}
+      className={`relative w-14 h-14 rounded cursor-pointer flex-shrink-0 flex flex-col items-center justify-center ${
+        selected
+          ? 'bg-blue-900 ring-1 ring-blue-400'
+          : 'bg-gray-800 hover:bg-gray-700'
+      }`}
+      title={`${u.type} HP:${u.hp}/${maxHp} Mob:${u.mobility} A:${u.ammo}${requiresFuel ? ` F:${u.fuel}` : ''}${u.nextCoords ? ` → (${u.nextCoords.x},${u.nextCoords.y})` : ''}`}
+    >
+      <img
+        src={unitIconPath(u.type, color)}
+        alt={u.type}
+        className="w-7 h-7"
+        draggable={false}
+      />
+      <div className="w-10 h-1 bg-gray-600 rounded-full mt-0.5 overflow-hidden">
         <div
-          className="h-full bg-green-500 rounded-full transition-[width] duration-1000 ease-linear"
-          style={{ width: `${progress * 100}%` }}
+          className="h-full rounded-full"
+          style={{ width: `${hpRatio * 100}%`, backgroundColor: hpBarColor(hpRatio) }}
         />
       </div>
-      <span className="text-[10px] text-gray-400 font-mono tabular-nums flex-shrink-0">
-        {formatCountdownShort(remaining)}
-      </span>
+      <div className="text-[9px] text-gray-300 font-mono leading-tight">
+        {u.mobility}
+      </div>
+      {u.nextCoords && (
+        <div className="absolute top-0 right-0.5 text-yellow-400 text-[9px] font-bold">→</div>
+      )}
+      {requiresFuel && u.fuel >= 0 && u.fuel <= 2 && (
+        <div className="absolute top-0 left-0.5 text-red-500 text-[9px] font-bold">!</div>
+      )}
+      {!requiresFuel && u.ammo === 0 && (
+        <div className="absolute top-0 left-0.5 text-orange-400 text-[9px] font-bold">!</div>
+      )}
     </div>
   )
 }
@@ -119,9 +137,18 @@ export default function SectorTab() {
   const buildableUnits = isMyCity
     ? unitBases.filter(ub => ub.type !== 'BASE' && ub.tech <= myTech && (ub.builtIn !== 'PORT' || isCoastal))
     : []
-  const blitz = update.blitz ?? false
   const myUnits = units.filter(u => u.nationId === myNationId)
   const enemyUnits = units.filter(u => u.nationId !== myNationId)
+  const ubMap = new Map(unitBases.map(ub => [ub.type, ub]))
+
+  function handleToggle(u: SIUnit, e: React.MouseEvent) {
+    // Tap when units already selected → toggle (for iPad multi-select)
+    if (e.shiftKey || selectedUnitIds.size > 0) {
+      toggleUnit(u.id)
+    } else {
+      selectOnlyUnit(u.id)
+    }
+  }
 
   function handleBuildChange(field: CityFieldToUpdate, value: string) {
     if (city) {
@@ -149,30 +176,19 @@ export default function SectorTab() {
       {myUnits.length > 0 && (
         <div>
           <h4 className="font-semibold text-gray-300">My Units ({myUnits.length})</h4>
-          {myUnits.map(u => (
-            <div
-              key={u.id}
-              data-testid={`sector-unit-${u.id}`}
-              onClick={(e) => e.shiftKey ? toggleUnit(u.id) : selectOnlyUnit(u.id)}
-              className={`text-xs py-0.5 px-1 rounded cursor-pointer ${
-                selectedUnitIds.has(u.id)
-                  ? 'bg-blue-900 border border-blue-500'
-                  : 'hover:bg-gray-700'
-              }`}
-            >
-              <div className="flex items-center flex-wrap">
-                <img src={unitIconPath(u.type, 'aqua')} alt="" className="w-4 h-4 mr-1" />
-                <span className="font-semibold">{u.type}</span>
-                <span className="text-gray-400 ml-1">
-                  HP:{u.hp} Mob:{u.mobility} A:{u.ammo}{unitBases.find(ub => ub.type === u.type)?.requiresFuel ? ` F:${u.fuel}` : ''}
-                </span>
-                <MobilityProgress lastUpdated={u.lastUpdated} blitz={blitz} />
-                {u.nextCoords && (
-                  <span className="text-yellow-400 ml-1">→ ({u.nextCoords.x},{u.nextCoords.y})</span>
-                )}
-              </div>
-            </div>
-          ))}
+          <div className="flex flex-wrap gap-1 mt-1">
+            {myUnits.map(u => (
+              <UnitTile
+                key={u.id}
+                u={u}
+                selected={selectedUnitIds.has(u.id)}
+                onToggle={(e) => handleToggle(u, e)}
+                maxHp={ubMap.get(u.type)?.hp ?? 10}
+                requiresFuel={ubMap.get(u.type)?.requiresFuel ?? false}
+                color="aqua"
+              />
+            ))}
+          </div>
           <UnitControls />
         </div>
       )}
@@ -180,12 +196,19 @@ export default function SectorTab() {
       {enemyUnits.length > 0 && (
         <div>
           <h4 className="font-semibold text-gray-300">Enemy Units ({enemyUnits.length})</h4>
-          {enemyUnits.map(u => (
-            <div key={u.id} className="text-xs py-0.5 text-red-400 flex items-center">
-              <img src={unitIconPath(u.type, 'red')} alt="" className="w-4 h-4 mr-1" />
-              {u.type} HP:{u.hp} Mob:{u.mobility}
-            </div>
-          ))}
+          <div className="flex flex-wrap gap-1 mt-1">
+            {enemyUnits.map(u => (
+              <UnitTile
+                key={u.id}
+                u={u}
+                selected={false}
+                onToggle={() => {}}
+                maxHp={ubMap.get(u.type)?.hp ?? 10}
+                requiresFuel={ubMap.get(u.type)?.requiresFuel ?? false}
+                color="red"
+              />
+            ))}
+          </div>
         </div>
       )}
 

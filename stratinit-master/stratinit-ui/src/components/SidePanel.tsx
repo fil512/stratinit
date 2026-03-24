@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import SectorTab from './tabs/SectorTab'
 import UnitsTab from './tabs/UnitsTab'
 import CitiesTab from './tabs/CitiesTab'
@@ -8,10 +8,16 @@ import MessagesTab from './tabs/MessagesTab'
 import NewsTab from './tabs/NewsTab'
 import { useGame } from '../context/GameContext'
 
-const TABS = ['Sector', 'Units', 'Cities', 'Battle', 'Players', 'Mail', 'News'] as const
-type TabName = typeof TABS[number]
+const ALL_TABS = ['Sector', 'Units', 'Cities', 'Battle', 'Players', 'Mail', 'News'] as const
+type TabName = typeof ALL_TABS[number]
+
+function useIsTouchDevice() {
+  return useMemo(() => 'ontouchstart' in window || navigator.maxTouchPoints > 0, [])
+}
 
 export default function SidePanel() {
+  const isTouch = useIsTouchDevice()
+  const tabs = useMemo(() => isTouch ? ALL_TABS.filter(t => t !== 'Units') : ALL_TABS, [isTouch])
   const [activeTab, setActiveTab] = useState<TabName>('Sector')
   const { state } = useGame()
   const { sectorSelectedAt } = state
@@ -25,7 +31,7 @@ export default function SidePanel() {
   return (
     <div data-testid="side-panel" className="w-80 flex flex-col border-l border-gray-600 bg-gray-900 text-gray-100 text-sm">
       <div className="flex border-b border-gray-700">
-        {TABS.map(tab => (
+        {tabs.map(tab => (
           <button
             key={tab}
             data-testid={`tab-${tab.toLowerCase()}`}
