@@ -78,10 +78,10 @@ class RestWebSecurityAdapterConfig {
                         .requestMatchers("/stratinit/admin/**").hasAuthority(PlayerRole.ROLE_ADMIN)
                         .requestMatchers("/stratinit/**").hasAuthority(PlayerRole.ROLE_USER)
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasAnyAuthority(PlayerRole.ROLE_ADMIN, PlayerRole.ROLE_USER)
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .httpBasic(httpBasic -> {})
-                .formLogin(formLogin -> formLogin.permitAll())
+                .formLogin(formLogin -> formLogin.disable())
                 .logout(logout -> logout.permitAll())
                 .csrf(csrf -> csrf.disable());
         return http.build();
