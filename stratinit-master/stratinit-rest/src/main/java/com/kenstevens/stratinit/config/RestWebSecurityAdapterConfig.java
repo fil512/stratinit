@@ -80,7 +80,7 @@ class RestWebSecurityAdapterConfig {
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").hasAnyAuthority(PlayerRole.ROLE_ADMIN, PlayerRole.ROLE_USER)
                         .anyRequest().permitAll()
                 )
-                .httpBasic(httpBasic -> {})
+                .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(formLogin -> formLogin.disable())
                 .logout(logout -> logout.permitAll())
                 .csrf(csrf -> csrf.disable());
